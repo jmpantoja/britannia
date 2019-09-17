@@ -1,4 +1,4 @@
-# config/routes.yaml
-blog_list:
+home:
     path:     /
     controller: Britannia\Infraestructure\Symfony\Controller\HomeController::index
+

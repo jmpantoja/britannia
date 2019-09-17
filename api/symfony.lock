@@ -14,6 +14,9 @@
     "api-platform/schema-generator": {
         "version": "v2.1.0-beta.1"
     },
+    "behat/transliterator": {
+        "version": "v1.2.0"
+    },
     "cocur/slugify": {
         "version": "v3.2"
     },
@@ -92,6 +95,9 @@
     "easyrdf/easyrdf": {
         "version": "0.9.1"
     },
+    "fig/link-util": {
+        "version": "1.0.0"
+    },
     "friendsofphp/php-cs-fixer": {
         "version": "2.2",
         "recipe": {
@@ -100,6 +106,9 @@
             "version": "2.2",
             "ref": "bb31a3bbec00a8fc8aa1c9fbf9b0ef9fc492f93d"
         }
+    },
+    "gedmo/doctrine-extensions": {
+        "version": "v2.4.37"
     },
     "guzzlehttp/guzzle": {
         "version": "6.3.0"
@@ -121,6 +130,27 @@
     },
     "league/html-to-markdown": {
         "version": "4.6.2"
+    },
+    "league/tactician": {
+        "version": "v1.0.3"
+    },
+    "league/tactician-bundle": {
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "1.0",
+            "ref": "222c3d39d38378bc6a9790a0b5baf841ba6679b9"
+        }
+    },
+    "league/tactician-container": {
+        "version": "2.0.0"
+    },
+    "league/tactician-doctrine": {
+        "version": "v1.1.1"
+    },
+    "league/tactician-logger": {
+        "version": "v0.10.0"
     },
     "nelmio/cors-bundle": {
         "version": "1.5",
@@ -146,14 +176,26 @@
     "phpdocumentor/type-resolver": {
         "version": "0.4.0"
     },
+    "planb/ddd": {
+        "version": "dev-master"
+    },
+    "planb/ddd-bundle": {
+        "version": "dev-master"
+    },
     "psr/cache": {
         "version": "1.0.1"
     },
     "psr/container": {
         "version": "1.0.0"
     },
+    "psr/event-dispatcher": {
+        "version": "1.0.0"
+    },
     "psr/http-message": {
         "version": "1.0.1"
+    },
+    "psr/link": {
+        "version": "1.0.0"
     },
     "psr/log": {
         "version": "1.0.2"
@@ -211,6 +253,15 @@
     },
     "sonata-project/exporter": {
         "version": "2.0.1"
+    },
+    "stof/doctrine-extensions-bundle": {
+        "version": "1.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "1.2",
+            "ref": "6c1ceb662f8997085f739cd089bfbef67f245983"
+        }
     },
     "symfony/asset": {
         "version": "v4.0.3"
@@ -397,6 +448,9 @@
     },
     "symfony/var-exporter": {
         "version": "v4.2.1"
+    },
+    "symfony/web-link": {
+        "version": "v4.2.11"
     },
     "symfony/web-profiler-bundle": {
         "version": "3.3",

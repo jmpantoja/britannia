@@ -28,13 +28,16 @@ services:
         resource: '../src/Britannia/Infraestructure/Symfony/Controller/*'
         tags: ['controller.service_arguments']
 
+#
+#    Britannia\Application\UseCase\StaffMember\UpdatePasswordUseCase:
+#        tags:
+#        - { name: tactician.handler, typehints: true }
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
 
-    admin.staff:
-        class: Britannia\Domain\Model\Admin\StaffAdmin
-        arguments: [~, Britannia\Domain\Entity\Staff\Staff, ~]
+    admin.staff_member:
+        class: Britannia\Infraestructure\Symfony\Admin\StaffMemberAdmin
+        arguments: [~, Britannia\Domain\Entity\Staff\StaffMember, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Staff }
+        - { name: sonata.admin, manager_type: orm, group: admin, label: StaffMember  }
         public: true
+

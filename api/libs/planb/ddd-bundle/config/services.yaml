@@ -1,0 +1,35 @@
+---
+
+services:
+
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.    
+
+
+    planb.ddd.normalizer.entity_id:
+        class: PlanB\DDDBundle\Symfony\Normalizer\EntityIdNormalizer
+        tags: ['serializer.normalizer']
+
+
+    planb.ddd.api_platform.data_persister:
+        class: PlanB\DDDBundle\ApiPlattform\DataPersister
+        tags:
+        - {name: 'api_platform.data_persister'}
+
+
+    planb.ddd.sonata.model_manager:
+        class: \PlanB\DDDBundle\Sonata\ModelManager
+
+
+    PlanB\DDD\Domain\Event\DomainEventCollectorInterface:
+        class: PlanB\DDDBundle\Symfony\DomainEventCollector
+
+    planb.ddd.domain_event.collector:
+        alias: PlanB\DDD\Domain\Event\DomainEventCollectorInterface
+
+
+    planb.ddd.domain_event.subscriber:
+        alias: PlanB\DDDBundle\Doctrine\DomainEventSubscriber
+        
+

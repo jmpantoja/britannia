@@ -1,0 +1,37 @@
+{
+    "name": "planb/ddd-bundle",
+    "type": "symfony-bundle",
+    "description": "Api Platform and Sonata Admin Integration",
+    "keywords": [
+        "Admin Generator",
+        "admin",
+        "sonata",
+        "Api Platfomr"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jose Manuel Pantoja",
+            "email": "jmpantoja@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^7.2",
+        "api-platform/core": "^2.4",
+        "doctrine/event-manager": "^1.0",
+        "symfony/http-kernel": "^4.2"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "PlanB\\DDDBundle\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "PlanB\\DDDBundle\\Tests\\": "tests/"
+        }
+    }
+}

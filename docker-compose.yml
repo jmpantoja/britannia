@@ -2,31 +2,30 @@ version: '3.4'
 
 services:
   php:
-    image: ${CONTAINER_REGISTRY_BASE}/php
+    image: quay.io/api-platform/php
     build:
       context: ./api
       target: api_platform_php
       cache_from:
-      - ${CONTAINER_REGISTRY_BASE}/php
-      - ${CONTAINER_REGISTRY_BASE}/nginx
-      - ${CONTAINER_REGISTRY_BASE}/varnish
+      - quay.io/api-platform/php
+      - quay.io/api-platform/nginx
+      - quay.io/api-platform/varnish
     depends_on:
     - db
     # Comment out these volumes in production
     volumes:
-    - ./api:/srv/api:rw,cached
-    # If you develop on Linux, uncomment the following line to use a bind-mounted host directory instead
-    # - ./api/var:/srv/api/var:rw
+    - ./api:/srv/api:rw
+    - ./api/var:/srv/api/var:rw
 
   api:
-    image: ${CONTAINER_REGISTRY_BASE}/nginx
+    image: quay.io/api-platform/nginx
     build:
       context: ./api
       target: api_platform_nginx
       cache_from:
-      - ${CONTAINER_REGISTRY_BASE}/php
-      - ${CONTAINER_REGISTRY_BASE}/nginx
-      - ${CONTAINER_REGISTRY_BASE}/varnish
+      - quay.io/api-platform/php
+      - quay.io/api-platform/nginx
+      - quay.io/api-platform/varnish
     depends_on:
     - php
     # Comment out this volume in production
@@ -34,14 +33,14 @@ services:
     - ./api/public:/srv/api/public:ro
 
   cache-proxy:
-    image: ${CONTAINER_REGISTRY_BASE}/varnish
+    image: quay.io/api-platform/varnish
     build:
       context: ./api
       target: api_platform_varnish
       cache_from:
-      - ${CONTAINER_REGISTRY_BASE}/php
-      - ${CONTAINER_REGISTRY_BASE}/nginx
-      - ${CONTAINER_REGISTRY_BASE}/varnish
+      - quay.io/api-platform/php
+      - quay.io/api-platform/nginx
+      - quay.io/api-platform/varnish
     depends_on:
     - api
     volumes:
@@ -53,14 +52,12 @@ services:
     # In production, you may want to use a managed database service
     image: postgres:10-alpine
     environment:
-    - POSTGRES_DB=api
-    - POSTGRES_USER=api-platform
-    # You should definitely change the password in production
-    - POSTGRES_PASSWORD=!ChangeMe!
+    - POSTGRES_DB=${POSTGRES_DB}
+    - POSTGRES_USER=${POSTGRES_USER}
+    - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     volumes:
-    - db-data:/var/lib/postgresql/data:rw
-    # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
-    # - ./docker/db/data:/var/lib/postgresql/data:rw
+    - ./data/database:/var/lib/postgresql/data:rw
+
 
   proxy:
     image: steveltn/https-portal:1
@@ -79,6 +76,5 @@ services:
     environment:
       CLIENT_MAX_BODY_SIZE: 64M
       DOMAINS: 'www.academiabritannia.es -> http://api:80 #production'
+#      DOMAINS: 'www.academiabritannia.es -> http://cache-proxy:80 #production'
 
-volumes:
-  db-data: {}

@@ -4,6 +4,9 @@ sonata_admin:
         blocks:
             - { type: sonata.admin.block.admin_list, position: left }
 
+    options:
+        html5_validate: false
+
 sonata_block:
     blocks:
         sonata.admin.block.admin_list:
