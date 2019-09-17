@@ -15,11 +15,10 @@ doctrine:
         url: '%env(resolve:DATABASE_URL)%'
         
         types:
-            uuid:  Ramsey\Uuid\Doctrine\UuidType
-            StaffId:  Britannia\Infraestructure\Doctrine\Entity\Staff\StaffId
+            StaffMemberId:  Britannia\Infraestructure\Doctrine\Entity\Staff\StaffMemberId
             
         mapping_types:
-            StaffId: StaffId
+            StaffMemberId: StaffMemberId
     orm:
         auto_generate_proxy_classes: true
         naming_strategy: doctrine.orm.naming_strategy.underscore

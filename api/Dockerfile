@@ -70,9 +70,9 @@ ARG APP_ENV=prod
 COPY composer.json composer.lock symfony.lock ./
 # do not use .env files in production
 RUN echo '<?php return [];' > .env.local.php
-RUN set -eux; \
-	composer install --prefer-dist --no-dev --no-autoloader --no-scripts --no-progress --no-suggest; \
-	composer clear-cache
+#RUN set -eux; \
+#	composer install --prefer-dist --no-dev --no-autoloader --no-scripts --no-progress --no-suggest; \
+#	composer clear-cache
 
 # copy only specifically what we need
 COPY bin bin/
@@ -82,8 +82,8 @@ COPY src src/
 
 RUN set -eux; \
 	mkdir -p var/cache var/log; \
-	composer dump-autoload --classmap-authoritative --no-dev; \
-	composer run-script --no-dev post-install-cmd; \
+#	composer dump-autoload --classmap-authoritative --no-dev; \
+#	composer run-script --no-dev post-install-cmd; \
 	chmod +x bin/console; sync
 VOLUME /srv/api/var
 
@@ -96,6 +96,7 @@ CMD ["php-fpm"]
 FROM nginx:${NGINX_VERSION}-alpine AS api_platform_nginx
 
 COPY docker/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
+
 
 WORKDIR /srv/api
 

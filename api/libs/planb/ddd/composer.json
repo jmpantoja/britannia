@@ -1,0 +1,32 @@
+{
+    "name": "planb/ddd",
+    "type": "library",
+    "description": "DDD Utils",
+    "keywords": [
+        "DDD"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jose Manuel Pantoja",
+            "email": "jmpantoja@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^7.2",
+        "ramsey/uuid-doctrine": "^1.5"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "PlanB\\DDD\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "PlanB\\DDD\\Tests\\": "tests/"
+        }
+    }
+}
