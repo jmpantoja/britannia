@@ -32,8 +32,6 @@ class StaffMemberRepository extends ServiceEntityRepository implements StaffMemb
     public function save(StaffMember $member)
     {
         $this->getEntityManager()->persist($member);
-
-        $this->getEntityManager()->flush($member);
     }
 
 

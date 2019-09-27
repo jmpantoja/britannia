@@ -14,7 +14,8 @@ declare(strict_types=1);
 namespace PlanB\DDDBundle\Symfony\Normalizer;
 
 
-use Britannia\Domain\Entity\EntityId;
+
+use PlanB\DDD\Domain\Model\EntityId;
 use Symfony\Component\Serializer\Exception\CircularReferenceException;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Exception\LogicException;

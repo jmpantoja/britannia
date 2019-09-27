@@ -15,13 +15,12 @@ namespace Britannia\Infraestructure\Symfony\Form;
 
 
 use Britannia\Infraestructure\Symfony\Service\Security\RoleService;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\ChoiceList\Loader\ChoiceLoaderInterface;
 use Symfony\Component\Form\ChoiceList\Loader\IntlCallbackChoiceLoader;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class RoleType extends AbstractType implements ChoiceLoaderInterface
 {
@@ -53,6 +52,8 @@ class RoleType extends AbstractType implements ChoiceLoaderInterface
             },
             'choice_translation_domain' => false,
             'choice_translation_locale' => null,
+            'multiple' => true,
+            'expanded' => true
         ]);
 
         $resolver->setAllowedTypes('choice_translation_locale', ['null', 'string']);

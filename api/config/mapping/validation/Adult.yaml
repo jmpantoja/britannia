@@ -1,0 +1,4 @@
+Britannia\Domain\Entity\Student\Adult:
+    properties:
+#        dni:
+#        - NotBlank: ~

@@ -13,7 +13,6 @@ use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 final class StaffMemberAdmin extends AbstractAdmin
 {
@@ -83,12 +82,11 @@ final class StaffMemberAdmin extends AbstractAdmin
                 ->end()
             ->end()
             ->with('Permisos', ['tab' => true])
-                ->add('roles', RoleType::class, [
-                    'multiple' => true,
-                    'expanded' => true
-                ])
+                ->add('roles', RoleType::class)
                 ->end()
             ->end();
+
+
     }
 
     protected function configureShowFields(ShowMapper $showMapper): void
@@ -107,11 +105,4 @@ final class StaffMemberAdmin extends AbstractAdmin
             ->add('id');
     }
 
-    public function toString($object)
-    {
-        $pieces = explode('\\', $this->getClass());
-        $name = array_pop($pieces);
-
-        return sprintf('%s [%s]', $name, $object->getId());
-    }
 }

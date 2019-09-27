@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xmlns:gedmo="http://gediminasm.org/schemas/orm/doctrine-extensions-mapping"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+
+    <entity name="Britannia\Domain\Entity\Student\Student" table="students" inheritance-type="JOINED">
+
+        <discriminator-column name="type" type="string"/>
+        <discriminator-map>
+            <discriminator-mapping value="child" class="Britannia\Domain\Entity\Student\Child"/>
+            <discriminator-mapping value="adult" class="Britannia\Domain\Entity\Student\Adult"/>
+        </discriminator-map>
+
+        <id name="id" type="StudentId" column="id">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
+        </id>
+
+        <field name="active" type="boolean" column="active"/>
+
+        <embedded name="fullName" class="PlanB\DDD\Domain\VO\FullName" use-column-prefix="false"/>
+
+        <field name="birthDate" column="birth_date" type="date"/>
+
+        <field name="email" column="email" length="256" type="email"/>
+
+        <embedded name="address" class="PlanB\DDD\Domain\VO\PostalAddress" use-column-prefix="false"/>
+
+        <field name="phoneNumbers" column="phone_numbers" type="json"/>
+
+        <many-to-many field="relatives" target-entity="Student">
+            <cascade>
+                <cascade-all/>
+            </cascade>
+        </many-to-many>
+
+
+        <field name="createdAt" type="datetime">
+            <gedmo:timestampable on="create"/>
+        </field>
+
+        <field name="updatedAt" type="datetime">
+            <gedmo:timestampable on="update"/>
+        </field>
+
+
+    </entity>
+
+</doctrine-mapping>

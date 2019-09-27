@@ -1,0 +1,22 @@
+---
+doctrine:
+    dbal:
+        types:
+            email: PlanB\DDDBundle\Doctrine\DBAL\Type\EmailType
+            phone_number: PlanB\DDDBundle\Doctrine\DBAL\Type\PhoneNumberType
+            postal_code: PlanB\DDDBundle\Doctrine\DBAL\Type\PostalCodeType
+            dni: PlanB\DDDBundle\Doctrine\DBAL\Type\DNIType
+
+        mapping_types:
+            email: string
+            phone_number: string
+            postal_code: string
+            dni: string
+    orm:
+        mappings:
+            PlanBDDDBundle:
+                is_bundle: true     
+                type: xml
+                prefix: PlanB\DDD\Domain
+                dir: '../config/mapping/doctrine'
+                alias: PlanB\DDD\Domain

@@ -1,0 +1,19 @@
+{% extends '@SonataAdmin/CRUD/base_list_field.html.twig' %}
+
+{% block field %}
+    <div>
+        <div>
+        <a href="{{ admin.generateUrl('edit', {id:object.id}) }}"><strong>{{ object.fullName }}</strong></a>
+        </div>
+
+        <div>
+            {% for phoneNumber in object.phoneNumbers %}
+                <p class="phone">
+                    <i class="fa fa-phone" aria-hidden="true"></i>
+                    <span> {{ phoneNumber }} </span>
+                </p>
+            {% endfor %}
+        </div>
+
+    </div>
+{% endblock %}

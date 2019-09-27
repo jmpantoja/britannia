@@ -28,11 +28,6 @@ services:
         resource: '../src/Britannia/Infraestructure/Symfony/Controller/*'
         tags: ['controller.service_arguments']
 
-#
-#    Britannia\Application\UseCase\StaffMember\UpdatePasswordUseCase:
-#        tags:
-#        - { name: tactician.handler, typehints: true }
-
 
     admin.staff_member:
         class: Britannia\Infraestructure\Symfony\Admin\StaffMemberAdmin
@@ -41,3 +36,14 @@ services:
         - { name: sonata.admin, manager_type: orm, group: admin, label: StaffMember  }
         public: true
 
+
+
+    admin.student:
+        class: Britannia\Infraestructure\Symfony\Admin\StudentAdmin
+        arguments: [~, Britannia\Domain\Entity\Student\Student, ~]
+        public: true
+        tags:
+        - { name: sonata.admin, manager_type: orm, group: admin, label: Student }
+        calls:
+        - [setSubClasses, [{child: Britannia\Domain\Entity\Student\Child, adult: Britannia\Domain\Entity\Student\Adult}]]
+        

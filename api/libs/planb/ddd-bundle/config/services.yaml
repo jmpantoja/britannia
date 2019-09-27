@@ -7,9 +7,21 @@ services:
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.    
 
 
-    planb.ddd.normalizer.entity_id:
-        class: PlanB\DDDBundle\Symfony\Normalizer\EntityIdNormalizer
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    PlanB\DDDBundle\Symfony\Form\Type\:
+        resource: '../src/Symfony/Form/Type/*'
+        tags: ['form.type']
+
+
+
+    PlanB\DDDBundle\Symfony\Normalizer\:
+        resource: '../src/Symfony/Normalizer/*'
         tags: ['serializer.normalizer']
+        
+#    planb.ddd.normalizer.dni:
+#        class: PlanB\DDDBundle\Symfony\Normalizer\DNINormalizer
+#        tags: ['serializer.normalizer']        
 
 
     planb.ddd.api_platform.data_persister:
@@ -20,7 +32,9 @@ services:
 
     planb.ddd.sonata.model_manager:
         class: \PlanB\DDDBundle\Sonata\ModelManager
-
+        
+    PlanB\DDDBundle\Sonata\ModelManager:
+        alias: planb.ddd.sonata.model_manager 
 
     PlanB\DDD\Domain\Event\DomainEventCollectorInterface:
         class: PlanB\DDDBundle\Symfony\DomainEventCollector
@@ -31,5 +45,6 @@ services:
 
     planb.ddd.domain_event.subscriber:
         alias: PlanB\DDDBundle\Doctrine\DomainEventSubscriber
-        
+
+
 

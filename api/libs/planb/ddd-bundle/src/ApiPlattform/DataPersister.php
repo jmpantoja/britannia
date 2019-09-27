@@ -36,10 +36,10 @@ class DataPersister implements DataPersisterInterface
      */
     public function supports($data): bool
     {
+
         if(!($data instanceof AggregateRoot)){
             return false;
         }
-
         $this->collector->notifyEntity($data);
         return !$this->collector->isEmpty();
     }
@@ -53,7 +53,6 @@ class DataPersister implements DataPersisterInterface
      */
     public function persist($data)
     {
-
         $this->collector->dispatch();
 
     }
@@ -63,6 +62,6 @@ class DataPersister implements DataPersisterInterface
      */
     public function remove($data)
     {
-        // TODO: Implement remove() method.
+        $this->collector->dispatch();
     }
 }

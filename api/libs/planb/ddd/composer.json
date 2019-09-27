@@ -14,6 +14,7 @@
     ],
     "require": {
         "php": "^7.2",
+        "beberlei/assert": "^3.2",
         "ramsey/uuid-doctrine": "^1.5"
     },
     "config": {
@@ -21,7 +22,7 @@
     },
     "autoload": {
         "psr-4": {
-            "PlanB\\DDD\\": "src/"
+            "PlanB\\DDD\\": "src/PlanB/DDD/"
         }
     },
     "autoload-dev": {

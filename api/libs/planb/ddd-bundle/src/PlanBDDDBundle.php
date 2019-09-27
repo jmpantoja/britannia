@@ -15,6 +15,7 @@ namespace PlanB\DDDBundle;
 
 use PlanB\DDDBundle\DependencyInjection\Compiler\ModelManagerCompilerPass;
 use PlanB\DDDBundle\DependencyInjection\DDDExtension;
+use Respect\Validation\Validator;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -28,7 +29,12 @@ class PlanBDDDBundle extends Bundle
     {
         parent::build($container);
 
+        Validator::with('PlanB\DDD\Domain\VO\Rules');
+
         $container->addCompilerPass(new ModelManagerCompilerPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 10);
+
+        $pathToDir = realpath(__DIR__ . '/..');
+        $container->setParameter('planb.ddd.bundle_dir', $pathToDir);
     }
 
     public function getContainerExtension()
