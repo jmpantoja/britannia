@@ -24,6 +24,7 @@ class PersonNameRule extends AbstractRule
     {
         return Validator::charset('UTF-8')
             ->regex('/^[\p{Latin} -.]*$/u')
+            ->length(3)
             ->validate($input);
 
     }

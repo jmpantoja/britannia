@@ -53,6 +53,10 @@ class DNIType extends Type
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
+        if(!($value instanceof DNI)){
+            return null;
+        }
+
         return $value->getIdentityCode();
     }
 

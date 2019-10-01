@@ -22,7 +22,7 @@
 
         <embedded name="fullName" class="PlanB\DDD\Domain\VO\FullName" use-column-prefix="false"/>
 
-        <field name="birthDate" column="birth_date" type="date"/>
+        <field name="birthDate" column="birth_date" type="date" nullable="true"/>
 
         <field name="email" column="email" length="256" type="email"/>
 

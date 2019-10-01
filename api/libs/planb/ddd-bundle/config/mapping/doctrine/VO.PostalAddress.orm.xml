@@ -6,8 +6,8 @@
 
 
     <embeddable name="PlanB\DDD\Domain\VO\PostalAddress">
-        <field name="address" />
-        <field name="postalCode" type="postal_code" />
+        <field name="address" nullable="true"/>
+        <field name="postalCode" type="postal_code" nullable="true"/>
     </embeddable>
 </doctrine-mapping>
 

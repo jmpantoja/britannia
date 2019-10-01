@@ -14,80 +14,25 @@ declare(strict_types=1);
 namespace PlanB\DDDBundle\Symfony\Form\Type;
 
 
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\DataTransformerInterface;
-use Symfony\Component\Form\Exception\TransformationFailedException;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\FormBuilderInterface;
-use PlanB\DDD\Domain\VO;
+use PlanB\DDD\Domain\VO\PhoneNumber;
+use PlanB\DDDBundle\Symfony\Form\FormDataMapper;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 
-class PhoneNumberType extends AbstractType implements DataTransformerInterface
+class PhoneNumberType extends AbstractSingleType
 {
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+
+    public function customOptions(OptionsResolver $resolver)
     {
-
-        if ('' === $options['empty_data']) {
-            $builder->addViewTransformer($this);
-        }
-
-        $builder->addModelTransformer($this);
 
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getParent()
+    public function customMapping(FormDataMapper $mapper)
     {
-        return TextType::class;
-    }
-
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getBlockPrefix()
-    {
-        return 'planb.phone_number';
-    }
-
-    /**
-     *
-     * @param mixed $value The value in the original representation
-     *
-     * @return mixed The value in the transformed representation
-     *
-     * @throws TransformationFailedException when the transformation fails
-     */
-    public function transform($value)
-    {
-        return (string)$value;
-    }
-
-    /**
-     *
-     * @param mixed $value The value in the transformed representation
-     *
-     * @return mixed The value in the original representation
-     *
-     * @throws TransformationFailedException when the transformation fails
-     */
-    public function reverseTransform($value)
-    {
-        if (is_null($value)) {
-            return $value;
-        }
-
-        try {
-            return VO\PhoneNumber::make((string)$value);
-        } catch (\Exception $exception) {
-            $failure = new TransformationFailedException($exception->getMessage());
-            $failure->setInvalidMessage('Número de teléfono incorrecto (ej: 999 99 99 99)');
-
-            throw $failure;
-        }
-
+        $mapper
+            ->try(function ($value) {
+                return PhoneNumber::make($value);
+            });
     }
 }

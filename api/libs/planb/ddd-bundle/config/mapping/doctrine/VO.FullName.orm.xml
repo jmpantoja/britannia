@@ -6,8 +6,8 @@
 
 
     <embeddable name="PlanB\DDD\Domain\VO\FullName">
-        <field name="firstName"/>
-        <field name="lastName"/>
+        <field name="firstName" nullable="true"/>
+        <field name="lastName"  nullable="true"/>
     </embeddable>
 
 </doctrine-mapping>

@@ -22,63 +22,44 @@ use PlanB\DDD\Domain\VO\PostalCode;
 use PlanB\OrigamiBundle\Api\DataPersister;
 use Sonata\AdminBundle\Form\Type\AdminType;
 
-class StudentFixtures extends Fixture
+class StudentFixtures extends BaseFixture
 {
 
-    /**
-     * @var DataPersister
-     */
-    private $dataPersister;
-
-    public function __construct(DataPersisterInterface $dataPersister)
+    public function loadData(DataPersisterInterface $dataPersister): void
     {
-        $this->dataPersister = $dataPersister;
-    }
+        $this->createMany(Adult::class, 20, function (Adult $adult, int $count) {
 
-    public function load(ObjectManager $manager)
-    {
+            $adult->setFullName(FullName::make(...[
+                $this->faker->name(),
+                $this->faker->lastName()
+            ]));
 
+            $adult->addPhoneNumber(PhoneNumber::make(...[
+                $this->faker->phoneNumber()
+            ]));
 
-        for ($i = 0; $i < 1; $i++) {
-            $adult = new Adult();
+            $adult->setBirthDate(
+                $this->faker->dateTimeBetween('-60 years', '-18 years')
+            );
 
-            $adult->setFullName(FullName::make('pepe', 'lopez'));
+            $adult->setEmail(Email::make(...[
+                $this->faker->email()
+            ]));
 
-            $adult->addPhoneNumber(PhoneNumber::make('999 12 31 23'));
+            $adult->setAddress(PostalAddress::make(...[
+                $this->faker->address(),
+                PostalCode::make(...[
+                    $this->faker->postcode()
+                ])
+            ]));;
+            $adult->setDni(DNI::make(...[
+                $this->faker->dni()
+            ]));
 
-            $adult->setBirthDate(new \DateTime('03-06-1975'));
+            $adult->setActive($this->faker->boolean());
 
-            $adult->setEmail(Email::make('pepe@botika.es'));
+            $adult->setJob(Job::make($this->faker->jobTitle(), JobStatus::EMPLOYED()));
 
-            $adult->setAddress(PostalAddress::make('calle del arroyo, num 12', PostalCode::make('11500')));
-
-            $adult->setDni(DNI::make('17346689C'));
-//
-//
-//            $adult->setJob(Job::make('artista', JobStatus::EMPLOYED() ));
-//
-//            $adult->setActive(true);
-
-            $this->dataPersister->persist($adult);
-        }
-
-//
-//        for ($i = 0; $i < 1; $i++) {
-//            $child = new Child();
-//
-//
-//            $child->setFullName(FullName::make('child', 'niño'));
-//
-//            $child->addPhoneNumber(PhoneNumber::make('999 12 31 23'));
-//            $child->setBirthDate(new \DateTimeImmutable('03-06-2010'));
-//            $child->setEmail(Email::make('pepe@botika.es'));
-//
-//            $child->setAddress(PostalAddress::make('calle del arroyo, num 12', PostalCode::make('11500')));
-//
-//            $child->setActive(true);
-//
-//            $this->dataPersister->persist($child);
-//        }
-
+        });
     }
 }

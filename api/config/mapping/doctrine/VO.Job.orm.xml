@@ -4,9 +4,6 @@
                   xmlns:gedmo="http://gediminasm.org/schemas/orm/doctrine-extensions-mapping"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-
-
-
     <embeddable name="Britannia\Domain\VO\Job">
         <field name="name" nullable="true" />
         <field name="status"  type="JobStatus" nullable="true" />

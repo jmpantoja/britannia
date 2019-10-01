@@ -18,15 +18,11 @@ use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Entity\Student\StudentId;
 use PlanB\DDDBundle\Sonata\ModelManager;
 use Sonata\AdminBundle\Form\Type\ModelType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 class RelativesType extends ModelType
 {
-
     /**
      * @var ModelManager
      */
@@ -50,7 +46,8 @@ class RelativesType extends ModelType
         $resolver->setDefaults([
             'by_reference' => false,
             'multiple' => true,
-            'expanded' => false
+            'expanded' => false,
+            'property' => 'fullName.reversedMode'
         ]);
 
         $resolver->setNormalizer('query', function (OptionsResolver $resolver) {
@@ -65,7 +62,7 @@ class RelativesType extends ModelType
     private function getRelativeQuery(StudentId $studentId)
     {
         $query = $this->modelManager->createQuery(Student::class)
-            ->where('o.active = true and o.id != :id')
+            ->where('o.id != :id')
             ->setParameter('id', $studentId)
             ->getQuery();
         return $query;

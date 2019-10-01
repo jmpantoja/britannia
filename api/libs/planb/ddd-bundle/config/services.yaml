@@ -18,10 +18,6 @@ services:
     PlanB\DDDBundle\Symfony\Normalizer\:
         resource: '../src/Symfony/Normalizer/*'
         tags: ['serializer.normalizer']
-        
-#    planb.ddd.normalizer.dni:
-#        class: PlanB\DDDBundle\Symfony\Normalizer\DNINormalizer
-#        tags: ['serializer.normalizer']        
 
 
     planb.ddd.api_platform.data_persister:

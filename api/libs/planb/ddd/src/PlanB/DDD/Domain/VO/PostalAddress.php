@@ -2,6 +2,7 @@
 
 namespace PlanB\DDD\Domain\VO;
 
+use Respect\Validation\Exceptions\AllOfException;
 use Respect\Validation\Validator;
 
 /**
@@ -20,16 +21,19 @@ class PostalAddress
     private $postalCode;
 
 
-    public static function make(string $address, PostalCode $postalCode): self
+    public static function make($address, $postalCode): self
     {
 
-        $validator = Validator::key('address', Validator::notEmpty());
+        $validator = Validator::create();
+
+        $validator->key('address', Validator::notEmpty());
+        $validator->key('postalCode', Validator::postalCode('ES'));
+
 
         $validator->assert([
             'address' => $address,
-            'postalCode' => $postalCode
+            'postalCode' => (string)$postalCode
         ]);
-
 
         return new self($address, $postalCode);
     }
@@ -57,7 +61,7 @@ class PostalAddress
         return $this;
     }
 
-    public function getAddress(): string
+    public function getAddress(): ?string
     {
         return $this->address;
     }

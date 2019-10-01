@@ -5,9 +5,22 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
 
-    <entity name="Britannia\Domain\Entity\Student\Adult" table="students_adult">
-        <field name="dni" column="dni" type="dni"/>
+    <entity name="Britannia\Domain\Entity\Borrame" table="borrame">
+
+        <id name="id" type="StaffMemberId" column="id">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
+        </id>
+
+
+        <embedded name="fullName" class="PlanB\DDD\Domain\VO\FullName" use-column-prefix="false"/>
+
+        <embedded name="address" class="PlanB\DDD\Domain\VO\PostalAddress" use-column-prefix="false" />
+
         <embedded name="job" class="Britannia\Domain\VO\Job" />
+
+
+        <field name="dni" column="dni" type="dni" />
 
     </entity>
 

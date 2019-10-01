@@ -15,52 +15,22 @@ namespace PlanB\DDDBundle\Symfony\Form\Type;
 
 
 use PlanB\DDD\Domain\VO\PostalCode;
-use Symfony\Component\Form\Exception\TransformationFailedException;
+use PlanB\DDDBundle\Symfony\Form\FormDataMapper;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 
 class PostalCodeType extends AbstractSingleType
 {
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getBlockPrefix()
+    public function customOptions(OptionsResolver $resolver)
     {
-        return 'planb.postal_code';
+
     }
 
-    /**
-     *
-     * @param mixed $value The value in the original representation
-     *
-     * @return mixed The value in the transformed representation
-     *
-     * @throws TransformationFailedException when the transformation fails
-     */
-    public function transform($value)
+    public function customMapping(FormDataMapper $mapper)
     {
-
-        return (string)$value;
-    }
-
-    /**
-     *
-     * @param mixed $value The value in the transformed representation
-     *
-     * @return mixed The value in the original representation
-     *
-     * @throws TransformationFailedException when the transformation fails
-     */
-    public function reverseTransform($value)
-    {
-        return $this->resolve($value, function ($value) {
-            return PostalCode::make((string)$value);
-        });
-    }
-
-
-    protected function getRequiredErrorMessage(): string
-    {
-        return 'El código postal es requerido';
+        $mapper
+            ->try(function ($value) {
+                return PostalCode::make($value);
+            });
     }
 }

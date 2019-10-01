@@ -17,63 +17,30 @@ namespace PlanB\DDDBundle\Symfony\Form\Type;
 use PlanB\DDD\Domain\VO\DNI;
 use PlanB\DDD\Domain\VO\Exception\InvalidDNIFormatException;
 use PlanB\DDD\Domain\VO\Exception\InvalidDNILetterException;
-use Respect\Validation\Exceptions\AllOfException;
-use Respect\Validation\Exceptions\ValidationException;
-
-use Symfony\Component\DependencyInjection\Tests\Compiler\D;
+use PlanB\DDDBundle\Symfony\Form\FormDataMapper;
 use Symfony\Component\Form\DataTransformerInterface;
-use Symfony\Component\Form\Exception\TransformationFailedException;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 
 class DNIType extends AbstractSingleType implements DataTransformerInterface
 {
 
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getBlockPrefix()
+    public function customOptions(OptionsResolver $resolver)
     {
-        return 'planb.dni';
-    }
-
-    /**
-     *
-     * @param mixed $value The value in the original representation
-     *
-     * @return mixed The value in the transformed representation
-     *
-     * @throws TransformationFailedException when the transformation fails
-     */
-    public function transform($value)
-    {
-
-        return (string)$value;
+        $resolver->setDefaults([
+            'required_message' => 'El DNI es requerido'
+        ]);
     }
 
 
-    /**
-     *
-     * @param mixed $value The value in the transformed representation
-     *
-     * @return mixed The value in the original representation
-     *
-     * @throws \ReflectionException
-     */
-    public function reverseTransform($value)
+    public function customMapping(FormDataMapper $mapper)
     {
-
-        return $this->resolve($value, function($value){
-            return DNI::make($value);
-        });
-
-
+        $mapper
+            ->try(function ($value) {
+                return DNI::make($value);
+            });
     }
 
-    protected function getRequiredErrorMessage(): string
-    {
-        return 'El dni es requerido';
-    }
+
 }

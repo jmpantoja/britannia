@@ -13,21 +13,82 @@ declare(strict_types=1);
 
 namespace PlanB\DDDBundle\Symfony\Form\Type;
 
-
-use PlanB\DDDBundle\Symfony\Form\FormMapper;
+use PlanB\DDDBundle\Symfony\Form\FormDataMapper;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\DataMapperInterface;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormError;
-use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 abstract class AbstractCompoundType extends AbstractType implements DataMapperInterface
 {
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    private $options;
+
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParent()
+    {
+        return TextType::class;
+    }
+
+    final public function getBlockPrefix()
+    {
+        return parent::getBlockPrefix();
+    }
+
+    final public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $this->options = $options;
         $builder->setDataMapper($this);
+
+        $this->customForm($builder, $options);
+    }
+
+    abstract public function customForm(FormBuilderInterface $builder, array $options);
+
+    /**
+     * {@inheritdoc}
+     */
+    final public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setRequired([
+            'data_class',
+            'error_bubbling',
+            'required'
+        ]);
+
+        $resolver->setDefaults([
+            'compound' => true,
+            'empty_data' => null,
+            'error_bubbling' => false,
+            'required' => true,
+            'required_message' => 'Se necesita un valor completo'
+
+        ]);
+
+        $this->customOptions($resolver);
+    }
+
+
+    /**
+     * @param mixed $data
+     * @param FormInterface[]|\Traversable $forms
+     *
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     */
+    final public function mapDataToForms($data, $forms): void
+    {
+        $className = $this->options['data_class'];
+
+        if (!($data instanceof $className)) {
+            return;
+        }
+
+        $this->dataToForms($data, $forms);
+
     }
 
     /**
@@ -50,23 +111,22 @@ abstract class AbstractCompoundType extends AbstractType implements DataMapperIn
 
             $form->setData($value);
         }
-
     }
 
-    protected function isRequired()
+
+    /**
+     * @param FormInterface[]|\Traversable $forms
+     * @param $data
+     */
+    final public function mapFormsToData($forms, &$data): void
     {
-        return $this->options['required'] ?? true;
+        $mapper = FormDataMapper::compound($forms)
+            ->setOptions($this->options);
+
+        $this->customMapping($mapper);
+        $data = $mapper->run();
+
     }
 
-
-    protected function mapper(\RecursiveIteratorIterator $forms, array $defaults = [])
-    {
-
-        return FormMapper::make($forms, $defaults)
-            ->setRequired($this->isRequired())
-            ->setRequiredErrorMessage($this->getRequiredErrorMessage());
-    }
-
-    abstract protected function getRequiredErrorMessage(): string;
-
+    abstract public function customMapping(FormDataMapper $mapper);
 }

@@ -15,6 +15,9 @@ namespace PlanB\DDD\Domain\VO;
 
 
 use Britannia\Domain\VO\Rules\FirstNameRule;
+use PlanB\DDD\Domain\VO\Rules\FullNameRule;
+use PlanB\DDD\Domain\VO\Rules\PersonNameRule;
+use PlanB\DDDBundle\Symfony\Form\Type\FullNameType;
 use Respect\Validation\Validator;
 
 class FullName
@@ -22,48 +25,53 @@ class FullName
     /**
      * @var string
      */
-    private $firstName;
+    private $firstName = '';
 
     /**
      * @var string
      */
-    private $lastName;
+    private $lastName = '';
 
     public static function byDefault(): self
     {
         return new self('', '');
     }
 
-    public static function make(string $firstName, string $lastName): self
+    public static function make($firstName = null, $lastName = null): self
     {
-        return new self($firstName, $lastName);
-    }
+        self::ensureIsValid($firstName, $lastName);
 
-    private function __construct(string $firstName, string $lastName)
-    {
-        $this->ensureIsValid($firstName, $lastName);
-
-        $this->setFirstName($firstName);
-        $this->setLastName($lastName);
+        return new self((string)$firstName, (string)$lastName);
     }
 
 
     /**
      * @param $input
      */
-    private function ensureIsValid(string $firstName, string $lastName): void
+    private static function ensureIsValid($firstName, $lastName): void
     {
+
         Validator::with(__NAMESPACE__ . '\Rules');
 
         $validator = Validator::create();
+
         $validator
-            ->key('firstName', Validator::personNameRule()->notEmpty())
-            ->key('lastName', Validator::personNameRule()->notEmpty());
+            ->key('firstName', Validator::personNameRule())
+            ->key('lastName', Validator::personNameRule());
 
         $validator->assert([
             'firstName' => $firstName,
             'lastName' => $lastName,
         ]);
+    }
+
+    public function __construct(string $firstName, string $lastName)
+    {
+
+        $this->ensureIsValid($firstName, $lastName);
+
+        $this->setFirstName($firstName);
+        $this->setLastName($lastName);
     }
 
 
@@ -99,7 +107,7 @@ class FullName
     /**
      * @return string
      */
-    public function getFirstName(): string
+    public function getFirstName(): ?string
     {
         return $this->firstName;
     }
@@ -107,7 +115,7 @@ class FullName
     /**
      * @return string
      */
-    public function getLastName(): string
+    public function getLastName(): ?string
     {
         return $this->lastName;
     }

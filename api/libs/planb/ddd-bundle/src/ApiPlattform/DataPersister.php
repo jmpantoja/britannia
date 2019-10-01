@@ -36,7 +36,6 @@ class DataPersister implements DataPersisterInterface
      */
     public function supports($data): bool
     {
-
         if(!($data instanceof AggregateRoot)){
             return false;
         }

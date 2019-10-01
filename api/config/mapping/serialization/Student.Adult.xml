@@ -9,30 +9,30 @@
             <group>read</group>
         </attribute>
 
-        <!--<attribute name="email">-->
-            <!--<group>read</group>-->
-            <!--<group>write</group>-->
-        <!--</attribute>-->
+        <attribute name="email">
+            <group>read</group>
+            <group>write</group>
+        </attribute>
 
-        <!--<attribute name="dni">-->
-            <!--<group>read</group>-->
-            <!--<group>write</group>-->
-        <!--</attribute>-->
+        <attribute name="dni">
+            <group>read</group>
+            <group>write</group>
+        </attribute>
 
-        <!--<attribute name="fullName">-->
-            <!--<group>read</group>-->
-            <!--<group>write</group>-->
-        <!--</attribute>-->
+        <attribute name="fullName">
+            <group>read</group>
+            <group>write</group>
+        </attribute>
 
-        <!--<attribute name="birthDate">-->
-            <!--<group>read</group>-->
-            <!--<group>write</group>-->
-        <!--</attribute>-->
+        <attribute name="birthDate">
+            <group>read</group>
+            <group>write</group>
+        </attribute>
 
-        <!--<attribute name="address">-->
-            <!--<group>read</group>-->
-            <!--<group>write</group>-->
-        <!--</attribute>-->
+        <attribute name="address">
+            <group>read</group>
+            <group>write</group>
+        </attribute>
 
 
 

@@ -66,6 +66,7 @@ abstract class Student extends AggregateRoot
         $this->createdAt = new \DateTimeImmutable();
         $this->phoneNumbers = [];
         $this->relatives = new ArrayCollection();
+
     }
 
     /**
@@ -179,7 +180,7 @@ abstract class Student extends AggregateRoot
     /**
      * @return PhoneNumber[]
      */
-    public function getPhoneNumbers(): Collection
+    public function getPhoneNumbers(): array
     {
         return $this->phoneNumbers;
     }
@@ -190,7 +191,7 @@ abstract class Student extends AggregateRoot
      */
     public function setPhoneNumbers(array $phoneNumbers): Student
     {
-        $this->phoneNumbers->clear();
+        $this->phoneNumbers = [];
         foreach ($phoneNumbers as $phoneNumber) {
             $this->addPhoneNumber($phoneNumber);
         }
@@ -221,45 +222,31 @@ abstract class Student extends AggregateRoot
      * @param Student[] $relatives
      * @return Student
      */
-    public function setRelatives(array $relatives): Student
+    public function setRelatives(Collection $relatives): Student
     {
         $this->relatives = $relatives;
         return $this;
     }
 
-    /**
-     * @return \DateTimeImmutable
-     */
-    public function getCreatedAt(): \DateTimeImmutable
+    public function addRelative(Student $relative): self
     {
-        return $this->createdAt;
-    }
+        if (!$this->relatives->contains($relative)) {
+            $this->relatives[] = $relative;
 
-    /**
-     * @param \DateTimeImmutable $createdAt
-     * @return Student
-     */
-    public function setCreatedAt(\DateTimeImmutable $createdAt): Student
-    {
-        $this->createdAt = $createdAt;
+            $relative->addRelative($this);
+        }
+
         return $this;
     }
 
-    /**
-     * @return \DateTimeImmutable
-     */
-    public function getUpdatedAt(): \DateTimeImmutable
+    public function removeRelative(Student $relative): self
     {
-        return $this->updatedAt;
-    }
+        if ($this->relatives->contains($relative)) {
+            $this->relatives->removeElement($relative);
 
-    /**
-     * @param \DateTimeImmutable $updatedAt
-     * @return Student
-     */
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): Student
-    {
-        $this->updatedAt = $updatedAt;
+            $relative->removeRelative($this);
+        }
+
         return $this;
     }
 

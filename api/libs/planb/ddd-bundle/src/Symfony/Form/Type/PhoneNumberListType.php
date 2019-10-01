@@ -13,16 +13,11 @@ declare(strict_types=1);
 
 namespace PlanB\DDDBundle\Symfony\Form\Type;
 
-use ApiPlatform\Core\DataPersister\DataPersisterInterface;
 use PlanB\DDD\Domain\VO\PhoneNumber;
-use PlanB\DDDBundle\ApiPlattform\DataPersister;
-use Sonata\AdminBundle\Form\Type\CollectionType as SymfonyCollectionType;
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\DataTransformerInterface;
+use PlanB\DDDBundle\Symfony\Form\FormDataMapper;
+use Sonata\AdminBundle\Form\Type\CollectionType;
 use Symfony\Component\Form\Exception\TransformationFailedException;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Validation;
 
 //use Symfony\Component\Form\Extension\Core\Type\CollectionType as SymfonyCollectionType;
 
@@ -34,101 +29,70 @@ use Symfony\Component\Validator\Validation;
  *
  * @author Andrej Hudec <pulzarraider@gmail.com>
  */
-class PhoneNumberListType extends AbstractType implements DataTransformerInterface
+//class PhoneNumberListType extends AbstractType implements DataTransformerInterface
+class PhoneNumberListType extends AbstractSingleType
 {
-
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {
-        $builder->addModelTransformer($this);
-
-    }
 
     public function getParent()
     {
-        return SymfonyCollectionType::class;
+        return CollectionType::class;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function configureOptions(OptionsResolver $resolver)
+    public function customOptions(OptionsResolver $resolver)
     {
 
         $resolver->setDefaults([
-            'required' => false,
+            'required' => true,
             'by_reference' => false,
             'allow_add' => true,
             'allow_delete' => true,
             'prototype' => true,
-            'entry_type' => PhoneNumberType::class
+            'error_bubbling' => false,
+            'entry_type' => PhoneNumberType::class,
+            'required_message' => 'Se necesita al menos un número de teléfono'
+
         ]);
     }
 
-    /**
-     * NEXT_MAJOR: Remove when dropping Symfony <2.8 support.
-     *
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return $this->getBlockPrefix();
-    }
-
-    public function getBlockPrefix()
-    {
-        return '';
-    }
-
-
-    /**
-     *
-     * @param mixed $value The value in the original representation
-     *
-     * @return mixed The value in the transformed representation
-     *
-     * @throws TransformationFailedException when the transformation fails
-     */
     public function transform($value)
     {
-        return (array)$value;
-    }
-
-    /**
-     *
-     * @param mixed $value The value in the transformed representation
-     *
-     * @return mixed The value in the original representation
-     *
-     * @throws TransformationFailedException when the transformation fails
-     */
-    public function reverseTransform($value)
-    {
-
-        if (is_null($value)) {
-            return $value;
-        }
-
-        $value = array_filter($value);
-
-        try {
-            $value = $this->convertToPhoneNumberList($value);
-        } catch (\Exception $exception) {
-            throw new TransformationFailedException($exception->getMessage());
-        }
-
         return $value;
     }
 
+
+    public function customMapping(FormDataMapper $mapper)
+    {
+        $mapper
+            ->try(function ($value) {
+                return $this->convertToPhoneNumberList($value);
+            });
+    }
+
     /**
-     * @param $value
+     * @param $phoneNumbers
      * @return array
      */
-    protected function convertToPhoneNumberList($value): array
+    protected function convertToPhoneNumberList($phoneNumbers): array
     {
-        $value = array_map(function ($item) {
-            return PhoneNumber::make((string)$item);
-        }, $value);
-        return $value;
+        return array_map(function ($phoneNumber) {
+            return $this->convertToPhoneNumber($phoneNumber);
+        }, $phoneNumbers);
+    }
+
+    /**
+     * @param $phoneNumber
+     * @return PhoneNumber
+     */
+    protected function convertToPhoneNumber($phoneNumber): PhoneNumber
+    {
+        if ($phoneNumber instanceof PhoneNumber) {
+            return $phoneNumber;
+        }
+
+        return PhoneNumber::make((string)$phoneNumber);
     }
 
 

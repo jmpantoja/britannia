@@ -15,93 +15,49 @@ namespace PlanB\DDDBundle\Symfony\Form\Type;
 
 
 use PlanB\DDD\Domain\VO\PostalAddress;
-use PlanB\DDD\Domain\VO\PostalCode;
-use PlanB\DDDBundle\Symfony\Form\FormMapper;
-use PlanB\DDDBundle\Symfony\Form\ReflectionDoubleMaker;
-use Respect\Validation\Exceptions\AllOfException;
-use Respect\Validation\Validator;
+use PlanB\DDDBundle\Symfony\Form\FormDataMapper;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 
 class PostalAddressType extends AbstractCompoundType
 {
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function customForm(FormBuilderInterface $builder, array $options)
     {
-        parent::buildForm($builder, $options);
 
         $builder
             ->add('address', TextType::class)
             ->add('postalCode', PostalCodeType::class, [
-                'required' => $this->isRequired(),
+                'required' => $options['required'],
                 'error_bubbling' => true,
             ]);
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function customOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'compound' => true,
             'error_bubbling' => false,
             'data_class' => PostalAddress::class,
-            'empty_data' => null,
         ]);
     }
 
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getBlockPrefix()
-    {
-        return 'planb.postal_address';
-    }
-
-    /**
-     * @param $data
-     * @param FormInterface[]|\Traversable $forms A list of {@link FormInterface} instances
-     *
-     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
-     */
-    public function mapDataToForms($data, $forms): void
+    public function customMapping(FormDataMapper $mapper)
     {
 
-        if (!($data instanceof PostalAddress)) {
-            return;
-        }
-
-        $this->dataToForms($data, $forms);
-    }
-
-    /**
-     *
-     * @param FormInterface[]|\Traversable $forms A list of {@link FormInterface} instances
-     * @param $data
-     * @throws \ReflectionException
-     */
-    public function mapFormsToData($forms, &$data): void
-    {
-
-        $mapper = $this->mapper($forms, [
-            'address' => '',
-            'postalCode' => '',
-        ]);
-
-        $data = $mapper
-            ->cast('postalCode', PostalCode::class)
-            ->resolve(function (array $values) {
+        $mapper
+            ->try(function (array $data) {
                 return PostalAddress::make(...[
-                    $values['address'],
-                    $values['postalCode']
+                    $data['address'],
+                    $data['postalCode']
                 ]);
+            })
+            ->catch(function ($messages) {
+                $messages['postalCode'] = 'No es un código postal correcto (ej. 11500)';
+                return $messages;
             });
-    }
 
-    protected function getRequiredErrorMessage(): string
-    {
-        return 'La dirección completa es requerida';
     }
 }

@@ -15,54 +15,27 @@ namespace PlanB\DDDBundle\Symfony\Form\Type;
 
 
 use PlanB\DDD\Domain\VO\Email;
+use PlanB\DDDBundle\Symfony\Form\FormDataMapper;
 use Respect\Validation\Exceptions\AllOfException;
 use Symfony\Component\Form\Exception\TransformationFailedException;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 
 class EmailType extends AbstractSingleType
 {
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getBlockPrefix()
-    {
-        return 'planb.email';
-    }
 
-    /**
-     *
-     * @param mixed $value The value in the original representation
-     *
-     * @return mixed The value in the transformed representation
-     *
-     * @throws TransformationFailedException when the transformation fails
-     */
-    public function transform($value)
+    public function customOptions(OptionsResolver $resolver)
     {
-
-        return (string)$value;
-    }
-
-    /**
-     *
-     * @param mixed $value The value in the transformed representation
-     *
-     * @return mixed The value in the original representation
-     *
-     * @throws TransformationFailedException when the transformation fails
-     */
-    public function reverseTransform($value)
-    {
-        return $this->resolve($value, function($value){
-            return Email::make($value);
-        });
 
     }
 
-
-    protected function getRequiredErrorMessage(): string
+    public function customMapping(FormDataMapper $mapper)
     {
-        return 'El email es requerido';
+        $mapper
+            ->try(function ($value) {
+
+                return Email::make($value);
+            });
     }
 }

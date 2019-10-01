@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Britannia\Domain\VO;
 
 
+use Respect\Validation\Validator;
+
 class Job
 {
     /**
@@ -25,27 +27,42 @@ class Job
      */
     private $status;
 
-    public static function make(?string $name, ?JobStatus $status): self
+    public static function make($name, $status): self
     {
-        return new self($name, $status);
+        self::ensureIsValid($name, $status);
+
+        return new self($name, JobStatus::byName($status));
     }
 
-    private function __construct(?string $name, ?JobStatus $status)
+    /**
+     * @param $name
+     * @param $status
+     */
+    private static function ensureIsValid($name, $status): void
     {
+        $validator = Validator::create();
 
+        $validator->key('name', Validator::alnum(' .-'));
+        $validator->key('status', Validator::in(JobStatus::getNames()));
+
+        $validator->assert([
+            'name' => $name,
+            'status' => $status
+        ]);
+    }
+
+    private function __construct(string $name, JobStatus $status)
+    {
         $this->setName($name);
         $this->status = $status;
     }
-
 
     /**
      * @param string $name
      * @return Job
      */
-    private function setName(?string $name): Job
+    private function setName(string $name): Job
     {
-        $name = !empty($name) ? $name : null;
-
         $this->name = $name;
         return $this;
     }
@@ -65,5 +82,12 @@ class Job
     public function getStatus(): ?JobStatus
     {
         return $this->status;
+    }
+
+    public function setStatus($status): self
+    {
+        $this->status = $status;
+
+        return $this;
     }
 }

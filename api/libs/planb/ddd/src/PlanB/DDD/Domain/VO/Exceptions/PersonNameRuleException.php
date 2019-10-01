@@ -20,7 +20,7 @@ class PersonNameRuleException extends ValidationException
 {
     public static $defaultTemplates = [
         self::MODE_DEFAULT => [
-            self::STANDARD => 'Solo se admiten letras (a-z), guiones (-) o puntos (.)',
+            self::STANDARD => 'Se necesitan al menos tres letras (a-z), guiones (-) o puntos (.)',
         ],
         self::MODE_NEGATIVE => [
             self::STANDARD => 'No se admite letras (a-z), guiones (-) ni puntos (.)',

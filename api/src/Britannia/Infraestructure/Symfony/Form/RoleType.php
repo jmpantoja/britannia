@@ -22,7 +22,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class RoleType extends AbstractType implements ChoiceLoaderInterface
+class RoleType extends AbstractType //implements ChoiceLoaderInterface
 {
 
 
@@ -73,36 +73,6 @@ class RoleType extends AbstractType implements ChoiceLoaderInterface
     public function getBlockPrefix()
     {
         return 'role';
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @deprecated since Symfony 4.1
-     */
-    public function loadChoiceList($value = null)
-    {
-        @trigger_error(sprintf('The "%s()" method is deprecated since Symfony 4.1, use the "choice_loader" option instead.', __METHOD__), E_USER_DEPRECATED);
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @deprecated since Symfony 4.1
-     */
-    public function loadChoicesForValues(array $values, $value = null)
-    {
-        @trigger_error(sprintf('The "%s()" method is deprecated since Symfony 4.1, use the "choice_loader" option instead.', __METHOD__), E_USER_DEPRECATED);
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @deprecated since Symfony 4.1
-     */
-    public function loadValuesForChoices(array $choices, $value = null)
-    {
-        @trigger_error(sprintf('The "%s()" method is deprecated since Symfony 4.1, use the "choice_loader" option instead.', __METHOD__), E_USER_DEPRECATED);
     }
 
 }

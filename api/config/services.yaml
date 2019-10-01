@@ -46,4 +46,10 @@ services:
         - { name: sonata.admin, manager_type: orm, group: admin, label: Student }
         calls:
         - [setSubClasses, [{child: Britannia\Domain\Entity\Student\Child, adult: Britannia\Domain\Entity\Student\Adult}]]
-        
+
+    admin.borrame:
+        class: Britannia\Infraestructure\Symfony\Admin\BorrameAdmin
+        arguments: [~, Britannia\Domain\Entity\Borrame, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Borrame }
+        public: true
