@@ -8,6 +8,13 @@ sonata_admin:
         html5_validate: false
         use_select2:    true
 
+    assets:
+        extra_stylesheets:
+        - css/admin/forms.css
+
+        extra_javascripts:
+            - js/admin/forms.js
+
 sonata_block:
     blocks:
         sonata.admin.block.admin_list:

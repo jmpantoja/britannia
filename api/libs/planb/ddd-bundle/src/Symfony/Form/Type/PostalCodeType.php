@@ -15,6 +15,7 @@ namespace PlanB\DDDBundle\Symfony\Form\Type;
 
 
 use PlanB\DDD\Domain\VO\PostalCode;
+use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\FormDataMapper;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -23,14 +24,16 @@ class PostalCodeType extends AbstractSingleType
 {
     public function customOptions(OptionsResolver $resolver)
     {
-
     }
 
-    public function customMapping(FormDataMapper $mapper)
+    public function buildConstraint(array $options): ?Constraint
     {
-        $mapper
-            ->try(function ($value) {
-                return PostalCode::make($value);
-            });
+        return PostalCode::buildConstraint($options);
     }
+
+    public function customMapping($data)
+    {
+        return PostalCode::make((string)$data);
+    }
+
 }

@@ -7,21 +7,11 @@
 
     <entity name="Britannia\Domain\Entity\Borrame" table="borrame">
 
-        <id name="id" type="StaffMemberId" column="id">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO"></generator>
         </id>
 
-
-        <embedded name="fullName" class="PlanB\DDD\Domain\VO\FullName" use-column-prefix="false"/>
-
-        <embedded name="address" class="PlanB\DDD\Domain\VO\PostalAddress" use-column-prefix="false" />
-
-        <embedded name="job" class="Britannia\Domain\VO\Job" />
-
-
-        <field name="dni" column="dni" type="dni" />
-
+        <embedded name="fullName" class="PlanB\DDD\Domain\VO\FullName"/>
     </entity>
 
 </doctrine-mapping>

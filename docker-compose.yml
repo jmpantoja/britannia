@@ -70,8 +70,8 @@ services:
     restart: always
     volumes:
     - ./proxy/ssl_certs:/var/lib/https-portal
-    - ./proxy/conf/default.conf.erb:/var/lib/nginx-conf/default.conf.erb:ro
-    - ./proxy/conf/default.ssl.conf.erb:/var/lib/nginx-conf/default.ssl.conf.erb:ro
+#    - ./proxy/conf/default.conf.erb:/var/lib/nginx-conf/default.conf.erb:ro
+#    - ./proxy/conf/default.ssl.conf.erb:/var/lib/nginx-conf/default.ssl.conf.erb:ro
 
     environment:
       CLIENT_MAX_BODY_SIZE: 64M

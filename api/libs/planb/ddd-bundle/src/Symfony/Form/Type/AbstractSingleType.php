@@ -13,28 +13,32 @@ declare(strict_types=1);
 
 namespace PlanB\DDDBundle\Symfony\Form\Type;
 
-use PlanB\DDDBundle\Symfony\Form\FormDataMapper;
-use Respect\Validation\Exceptions\AllOfException;
-use Respect\Validation\Exceptions\ValidationException;
+use PlanB\DDD\Domain\VO\Validator\Constraint;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Validation;
 
 abstract class AbstractSingleType extends AbstractType implements DataTransformerInterface
 {
+
     /**
-     * @var array
+     * @var FormBuilderInterface
      */
-    protected $options;
+    private $builder;
 
     final public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $this->options = $options;
+
+        $this->builder = $builder;
         $builder->addModelTransformer($this);
         $this->customForm($builder, $options);
+
     }
 
     public function customForm(FormBuilderInterface $builder, array $options)
@@ -70,7 +74,6 @@ abstract class AbstractSingleType extends AbstractType implements DataTransforme
             'empty_data' => null,
             'error_bubbling' => false,
             'required' => true,
-            'required_message' => 'El valor es requerido'
 
         ]);
 
@@ -78,7 +81,6 @@ abstract class AbstractSingleType extends AbstractType implements DataTransforme
     }
 
     abstract public function customOptions(OptionsResolver $resolver);
-
 
 
     /**
@@ -92,7 +94,22 @@ abstract class AbstractSingleType extends AbstractType implements DataTransforme
     public function transform($value)
     {
 
+        if (is_null($value)) {
+            return $value;
+        }
+
+        $options = $this->builder->getOptions();
+
+        if (!class_exists((string)$options['data_class'])) {
+            return (string)$value;
+        }
+
+        if (is_a($value, $options['data_class'])) {
+            return $value;
+        }
+
         return (string)$value;
+
     }
 
 
@@ -106,16 +123,60 @@ abstract class AbstractSingleType extends AbstractType implements DataTransforme
      */
     final public function reverseTransform($value)
     {
-        die('sss');
-        $mapper = FormDataMapper::single($value)
-            ->setOptions($this->options);
+        $options = $this->builder->getOptions();
+
+        $constraint = $this->buildConstraint($options);
 
 
-        $this->customMapping($mapper);
-        return $mapper->run();
+        if (!($constraint instanceof Constraint)) {
+            return $this->customMapping($value);
+        }
+
+        if ($constraint->isEmptyAndOptional($value)) {
+            return null;
+        }
+
+        if ($this->validate($value, $constraint)) {
+            return $this->customMapping($value);
+        }
     }
 
 
-    abstract public function customMapping(FormDataMapper $mapper);
+    private function validate($data, Constraint $constraint): bool
+    {
+        $validator = Validation::createValidator();
+        $violationList = $validator->validate($data, $constraint);
+
+        if (count($violationList) === 0) {
+            return true;
+        }
+
+        throw $this->createException($violationList);
+    }
+
+    /**
+     * @param $violationList
+     * @return TransformationFailedException
+     */
+    private function createException($violationList): TransformationFailedException
+    {
+        $messages = [];
+
+        foreach ($violationList as $name => $violation) {
+            $messages[] = $violation->getMessage();
+        }
+
+        $message = implode("\n", $messages);
+        $failure = new TransformationFailedException((string)$violationList);
+        $failure->setInvalidMessage($message);
+        return $failure;
+    }
+
+    /**
+     * @return \Britannia\Infraestructure\Symfony\Validator\FullName
+     */
+    abstract public function buildConstraint(array $options): ?Constraint;
+
+    abstract public function customMapping($data);
 
 }

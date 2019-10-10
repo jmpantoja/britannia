@@ -14,22 +14,30 @@ declare(strict_types=1);
 namespace PlanB\DDD\Domain\VO;
 
 
-use Assert\Assert;
-use Assert\Assertion;
-use Assert\InvalidArgumentException;
-use Respect\Validation\Validator;
+use PlanB\DDD\Domain\VO\Traits\Validable;
+use PlanB\DDD\Domain\VO\Validator\Constraint;
+use PlanB\DDD\Domain\VO\Validator;
 
 class PhoneNumber
 {
 
+    use Validable;
     /**
      * @var string
      */
     private $phoneNumber;
 
 
+    public static function buildConstraint(array $options = []): Constraint
+    {
+        return new Validator\PhoneNumber([
+            'required' => $options['required'] ?? true
+        ]);
+    }
+
     public static function make(string $phoneNumber): self
     {
+        $phoneNumber = self::assert($phoneNumber);
         return new self($phoneNumber);
     }
 
@@ -40,52 +48,8 @@ class PhoneNumber
 
     private function setPhoneNumber(string $phoneNumber): self
     {
-
-        Validator::phone('ES')
-            ->assert($phoneNumber);
-
-        $phoneNumber = $this->normalize($phoneNumber);
-
         $this->phoneNumber = $phoneNumber;
         return $this;
-    }
-
-    private function normalize(string $phoneNumber): string
-    {
-        $phoneNumber = preg_replace('/[\s|\+]/', '', $phoneNumber);
-        $phoneNumber = $this->normalizeNormal($phoneNumber);
-        $phoneNumber = $this->normalizePrefix($phoneNumber);
-
-        return $phoneNumber;
-
-    }
-
-    private function normalizeNormal(string $phoneNumber)
-    {
-        $matches = [];
-
-        if (!preg_match('/^(\d{3})(\d{2})(\d{2})(\d{2})$/', $phoneNumber, $matches)) {
-            return $phoneNumber;
-        }
-
-        unset($matches[0]);
-        return sprintf('+34 %s %s %s %s', ...$matches);
-
-    }
-
-    private function normalizePrefix(string $phoneNumber)
-    {
-        $matches = [];
-
-        if (!preg_match('/^(\d{2})(\d{3})(\d{2})(\d{2})(\d{2})$/', $phoneNumber, $matches)) {
-            return $phoneNumber;
-        }
-
-        unset($matches[0]);
-
-
-        return sprintf('+%s %s %s %s %s', ...$matches);
-
     }
 
     /**

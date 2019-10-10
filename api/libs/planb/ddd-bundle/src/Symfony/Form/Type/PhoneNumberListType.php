@@ -14,10 +14,13 @@ declare(strict_types=1);
 namespace PlanB\DDDBundle\Symfony\Form\Type;
 
 use PlanB\DDD\Domain\VO\PhoneNumber;
+use PlanB\DDD\Domain\VO\Validator\ArrayLenght;
+use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\FormDataMapper;
 use Sonata\AdminBundle\Form\Type\CollectionType;
-use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Count;
+use Symfony\Component\Validator\Constraints\Length;
 
 //use Symfony\Component\Form\Extension\Core\Type\CollectionType as SymfonyCollectionType;
 
@@ -52,8 +55,14 @@ class PhoneNumberListType extends AbstractSingleType
             'prototype' => true,
             'error_bubbling' => false,
             'entry_type' => PhoneNumberType::class,
-            'required_message' => 'Se necesita al menos un número de teléfono'
-
+            'constraints' => [
+                new Count([
+                    'min' => 1,
+                    'minMessage' => 'Se necesita {{ limit }} número de teléfono como mínimo.|Se necesitan {{ limit }} números de teléfono como mínimo.',
+                    'maxMessage' => 'Se necesita {{ limit }} número de teléfono como máximo.|Se necesitan {{ limit }} números de teléfono como máximo.',
+                    'exactMessage' => 'Se necesita exactamente {{ limit }} número de teléfono.|Se necesitan exactamente {{ limit }} números de teléfono.',
+                ])
+            ]
         ]);
     }
 
@@ -62,38 +71,13 @@ class PhoneNumberListType extends AbstractSingleType
         return $value;
     }
 
-
-    public function customMapping(FormDataMapper $mapper)
+    public function buildConstraint(array $options): ?Constraint
     {
-        $mapper
-            ->try(function ($value) {
-                return $this->convertToPhoneNumberList($value);
-            });
+        return null;
     }
 
-    /**
-     * @param $phoneNumbers
-     * @return array
-     */
-    protected function convertToPhoneNumberList($phoneNumbers): array
+    public function customMapping($data)
     {
-        return array_map(function ($phoneNumber) {
-            return $this->convertToPhoneNumber($phoneNumber);
-        }, $phoneNumbers);
+        return (array)$data;
     }
-
-    /**
-     * @param $phoneNumber
-     * @return PhoneNumber
-     */
-    protected function convertToPhoneNumber($phoneNumber): PhoneNumber
-    {
-        if ($phoneNumber instanceof PhoneNumber) {
-            return $phoneNumber;
-        }
-
-        return PhoneNumber::make((string)$phoneNumber);
-    }
-
-
 }

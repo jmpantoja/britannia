@@ -14,17 +14,23 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity;
 
 
-use Britannia\Domain\VO\Job;
+use PlanB\DDD\Domain\VO\DNI;
 use PlanB\DDD\Domain\VO\FullName;
 
 class Borrame
 {
-    private $id;
-    private $fullName;
-    private $address;
-    private $dni;
 
-    private $job;
+    private $id;
+
+    /**
+     * @var FullName
+     */
+    private $fullName;
+
+    /**
+     * @var DNI
+     */
+    private $dni;
 
     /**
      * @return mixed
@@ -35,17 +41,7 @@ class Borrame
     }
 
     /**
-     * @param mixed $id
-     * @return Borrame
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-        return $this;
-    }
-
-    /**
-     * @return mixed
+     * @return FullName
      */
     public function getFullName(): ?FullName
     {
@@ -53,71 +49,32 @@ class Borrame
     }
 
     /**
-     * @param mixed $fullName
+     * @param FullName $fullName
      * @return Borrame
      */
-    public function setFullName(?FullName $fullName)
+    public function setFullName(FullName $fullName): Borrame
     {
-
         $this->fullName = $fullName;
         return $this;
     }
 
     /**
-     * @return mixed
+     * @return DNI
      */
-    public function getAddress()
-    {
-        return $this->address;
-    }
-
-    /**
-     * @param mixed $address
-     * @return Borrame
-     */
-    public function setAddress($address)
-    {
-        $this->address = $address;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getDni()
+    public function getDni(): ?DNI
     {
         return $this->dni;
     }
 
     /**
-     * @param mixed $dni
+     * @param DNI $dni
      * @return Borrame
      */
-    public function setDni($dni)
+    public function setDni(DNI $dni): Borrame
     {
         $this->dni = $dni;
         return $this;
     }
-
-    /**
-     * @return mixed
-     */
-    public function getJob(): ?Job
-    {
-        return $this->job;
-    }
-
-    /**
-     * @param mixed $job
-     * @return Borrame
-     */
-    public function setJob(?Job $job)
-    {
-        $this->job = $job;
-        return $this;
-    }
-
-
 
 
 }

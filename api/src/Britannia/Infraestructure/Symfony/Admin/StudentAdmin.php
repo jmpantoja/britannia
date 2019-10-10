@@ -8,12 +8,12 @@ use Britannia\Domain\Entity\Student\Adult;
 use Britannia\Infraestructure\Symfony\Form\JobType;
 use Britannia\Infraestructure\Symfony\Form\PaymentType;
 use Britannia\Infraestructure\Symfony\Form\RelativesType;
+use PlanB\DDD\Domain\VO\Validator\DNI;
 use PlanB\DDDBundle\Symfony\Form\Type\DateType;
 use PlanB\DDDBundle\Symfony\Form\Type\DNIType;
 use PlanB\DDDBundle\Symfony\Form\Type\EmailType;
 use PlanB\DDDBundle\Symfony\Form\Type\FullNameType;
 use PlanB\DDDBundle\Symfony\Form\Type\PhoneNumberListType;
-use PlanB\DDDBundle\Symfony\Form\Type\PhoneNumberType;
 use PlanB\DDDBundle\Symfony\Form\Type\PostalAddressType;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -21,7 +21,6 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Type\DatePickerType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 final class StudentAdmin extends AbstractAdmin
 {
@@ -56,16 +55,35 @@ final class StudentAdmin extends AbstractAdmin
         $subject = $this->getSubject();
         $isAdult = $subject instanceof Adult;
 
+
         $formMapper
+            ->with('Pago', ['tab' => true])
+                ->with('Descuento', ['class' => 'col-md-4'])
+                    ->add('relatives', RelativesType::class, [
+                        'label' => 'Familiares',
+                        'studentId' => $subject->getId()
+                    ])
+                ->end()
+                ->with('Forma de pago', ['class'=>'col-md-8'])
+//                    ->add('payment', PaymentType::class, [
+//                        'label' => false,
+//                        'required' => true
+//                    ])
+                ->end()
+            ->end()
+
             ->with('Personal', ['tab' => true])
-                ->with('Alumno', ['class' => 'col-md-4'])
+                ->with('Datos personales', ['class' => 'col-md-4'])
                     ->add('fullName', FullNameType::class, [
-                        'label' => false,
+                        'sonata_help'=> 'Escriba el nombre y apellidos del alumno',
+                        'label' => 'Nombre y apellidos',
                         'required' => true
                     ])
                     ->add('birthDate', DatePickerType::class, [
-                        'required' => true
-
+                        'label' => 'Fecha de nacimiento',
+                        'required' => true,
+                        'format' => \IntlDateFormatter::LONG,
+                        'empty_data' => "\r"
                     ])
                     ->ifTrue($isAdult)
                         ->add('dni', DNIType::class, [
@@ -76,8 +94,9 @@ final class StudentAdmin extends AbstractAdmin
                 ->end()
                 ->with('Contacto', ['class' => 'col-md-4'])
                     ->add('address', PostalAddressType::class, [
-                        'label' => false,
-                        'required' => true
+                        'sonata_help'=>'Escriba una dirección postal',
+                        'label' => 'Dirección Postal',
+                        'required' => true,
                     ])
                     ->add('email', EmailType::class, [
                         'required' => true
@@ -88,16 +107,13 @@ final class StudentAdmin extends AbstractAdmin
                 ->end()
                 ->with('Profesión', ['class' => 'col-md-4'])
                     ->add('job', JobType::class, [
-                        'required' => true
+                        'sonata_help'=>'Escriba una ocupación y una situación laboral',
+                        'required' => false,
+                        'label'=>'Ocupación'
                     ])
                 ->end()
+
             ->end()
-            ->with('Familiares', ['tab' => true])
-                ->add('relatives', RelativesType::class, [
-                    'studentId' => $subject->getId()
-                ])
-                ->end()
-           ->end()
         ;
     }
 

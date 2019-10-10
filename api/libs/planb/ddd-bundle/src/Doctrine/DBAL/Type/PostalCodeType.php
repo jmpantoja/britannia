@@ -41,6 +41,7 @@ class PostalCodeType extends Type
             return null;
         }
 
+
         return PostalCode::make($value);
 
     }

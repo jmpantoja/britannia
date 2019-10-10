@@ -14,123 +14,107 @@ declare(strict_types=1);
 namespace PlanB\DDD\Domain\VO;
 
 
-use Britannia\Domain\VO\Rules\FirstNameRule;
-use PlanB\DDD\Domain\VO\Rules\FullNameRule;
-use PlanB\DDD\Domain\VO\Rules\PersonNameRule;
-use PlanB\DDDBundle\Symfony\Form\Type\FullNameType;
-use Respect\Validation\Validator;
+use Symfony\Component\Validator\Constraint;
+use Symfony\Component\Validator\ConstraintViolationList;
+use Symfony\Component\Validator\Validation;
 
 class FullName
 {
-    /**
-     * @var string
-     */
-    private $firstName = '';
 
-    /**
-     * @var string
-     */
-    private $lastName = '';
+    use Traits\Validable;
 
-    public static function byDefault(): self
+    private $firstName;
+    private $lastName;
+
+
+    public static function buildConstraint(array $options = []): Constraint
     {
-        return new self('', '');
-    }
-
-    public static function make($firstName = null, $lastName = null): self
-    {
-        self::ensureIsValid($firstName, $lastName);
-
-        return new self((string)$firstName, (string)$lastName);
-    }
-
-
-    /**
-     * @param $input
-     */
-    private static function ensureIsValid($firstName, $lastName): void
-    {
-
-        Validator::with(__NAMESPACE__ . '\Rules');
-
-        $validator = Validator::create();
-
-        $validator
-            ->key('firstName', Validator::personNameRule())
-            ->key('lastName', Validator::personNameRule());
-
-        $validator->assert([
-            'firstName' => $firstName,
-            'lastName' => $lastName,
+        return new Validator\FullName([
+            'required' => $options['required'] ?? true
         ]);
     }
 
-    public function __construct(string $firstName, string $lastName)
+    public static function make(string $firstName, string $lastName)
     {
+        self::assert([
+            'firstName' => $firstName,
+            'lastName' => $lastName
+        ]);
 
-        $this->ensureIsValid($firstName, $lastName);
+        return new self($firstName, $lastName);
+    }
 
+
+    private function __construct(string $firstName, string $lastName)
+    {
         $this->setFirstName($firstName);
         $this->setLastName($lastName);
     }
 
 
     /**
-     * @param string $firstName
-     * @return FullName
-     * @throws \Assert\AssertionFailedException
+     * @return mixed
      */
-    private function setFirstName(string $firstName): FullName
-    {
-
-        $this->firstName = $this->normalize($firstName);
-        return $this;
-    }
-
-    /**
-     * @param string $lastName
-     * @return FullName
-     * @throws \Assert\AssertionFailedException
-     */
-    private function setLastName(string $lastName): FullName
-    {
-        $this->lastName = $this->normalize($lastName);
-        return $this;
-    }
-
-    private function normalize($name): string
-    {
-        return ucwords($name);
-    }
-
-
-    /**
-     * @return string
-     */
-    public function getFirstName(): ?string
+    public function getFirstName()
     {
         return $this->firstName;
     }
 
     /**
-     * @return string
+     * @param mixed $firstName
+     * @return FullName
      */
-    public function getLastName(): ?string
+    private function setFirstName($firstName)
+    {
+        $this->firstName = $this->normalize($firstName);
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLastName()
     {
         return $this->lastName;
     }
 
+    /**
+     * @param mixed $lastName
+     * @return FullName
+     */
+    private function setLastName($lastName)
+    {
+        $this->lastName = $this->normalize($lastName);
+        return $this;
+    }
+
+    private function normalize(string $name): string
+    {
+        $pieces = preg_split("/\s+/", $name);
+
+        $pieces = array_map(function (string $piece) {
+            return $this->format($piece);
+        }, $pieces);
+
+
+        return implode(" ", $pieces);
+    }
+
+    private function format(string $name): string
+    {
+        if (strlen($name) <= 3) {
+            return $name;
+        }
+
+        return ucfirst(strtolower($name));
+    }
 
     public function getReversedMode(): string
     {
-        return sprintf('%s, %s', $this->lastName, $this->firstName);
+        return sprintf('%s, %s', ...[
+            $this->getLastName(),
+            $this->getFirstName()
+        ]);
     }
-
-
-    public function __toString()
-    {
-        return $this->getReversedMode();
-    }
-
 
 }

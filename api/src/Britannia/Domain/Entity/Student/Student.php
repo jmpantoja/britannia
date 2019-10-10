@@ -3,6 +3,7 @@
 namespace Britannia\Domain\Entity\Student;
 
 
+use Britannia\Domain\VO\Payment;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use PlanB\DDD\Domain\Model\AggregateRoot;
@@ -48,6 +49,11 @@ abstract class Student extends AggregateRoot
      * @var Student[]
      */
     private $relatives;
+
+    /**
+     * @var Payment
+     */
+    private $payment;
 
     /**
      * @var \DateTimeImmutable
@@ -247,6 +253,24 @@ abstract class Student extends AggregateRoot
             $relative->removeRelative($this);
         }
 
+        return $this;
+    }
+
+    /**
+     * @return Payment
+     */
+    public function getPayment(): ?Payment
+    {
+        return $this->payment;
+    }
+
+    /**
+     * @param Payment $payment
+     * @return Student
+     */
+    public function setPayment(Payment $payment): Student
+    {
+        $this->payment = $payment;
         return $this;
     }
 

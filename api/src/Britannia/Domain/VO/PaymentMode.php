@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Britannia\Domain\VO;
 
 
+use MabeEnum\Enum;
+
 class PaymentMode extends Enum
 {
     public const CASH = 'Al contado';

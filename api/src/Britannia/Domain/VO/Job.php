@@ -14,10 +14,15 @@ declare(strict_types=1);
 namespace Britannia\Domain\VO;
 
 
-use Respect\Validation\Validator;
+use PlanB\DDD\Domain\VO\Traits\Validable;
+use PlanB\DDD\Domain\VO\Validator\Constraint;
+use Britannia\Domain\VO\Validator;
+
 
 class Job
 {
+    use Validable;
+
     /**
      * @var string
      */
@@ -27,11 +32,26 @@ class Job
      */
     private $status;
 
-    public static function make($name, $status): self
-    {
-        self::ensureIsValid($name, $status);
 
-        return new self($name, JobStatus::byName($status));
+    public static function buildConstraint(array $options = []): Constraint
+    {
+        return new Validator\Job([
+            'required' => $options['required'] ?? true
+        ]);
+    }
+
+    public static function make(?string $name, JobStatus $status): self
+    {
+        self::assert([
+            'name' => $name,
+            'status' => $status
+        ]);
+
+        if (is_string($status)) {
+            $status = JobStatus::byName($status);
+        }
+
+        return new self((string)$name, $status);
     }
 
     /**
@@ -90,4 +110,5 @@ class Job
 
         return $this;
     }
+
 }

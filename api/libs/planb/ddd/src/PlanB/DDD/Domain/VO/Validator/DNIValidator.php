@@ -11,12 +11,10 @@
 
 declare(strict_types=1);
 
-namespace PlanB\DDD\Domain\VO\Rules;
+namespace PlanB\DDD\Domain\VO\Validator;
 
 
-use Respect\Validation\Rules\AbstractRule;
-
-class DniRule extends AbstractRule
+class DNIValidator extends ConstraintValidator
 {
 
     public const DNI_FORMAT_REGEX = '/^(\d{8})([A-Z]{1})$/';
@@ -27,55 +25,63 @@ class DniRule extends AbstractRule
 
     private const NIE_LETTERS = ['X' => 0, 'Y' => 1, 'Z' => 2];
 
-
-    public function validate($dni)
+    /**
+     * @return string
+     */
+    public function getConstraintType(): string
     {
-        $prefix = substr($dni, 0, 1);
-
-        if (isset(self::NIE_LETTERS[$prefix])) {
-            return $this->validateNIE($dni);
-        }
-
-        return $this->validateDNI($dni);
+        return DNI::class;
     }
 
-    private function validateDNI(string $dni): bool
+
+    public function handle($value, Constraint $constraint)
+    {
+        $prefix = substr($value, 0, 1);
+
+        if (isset(self::NIE_LETTERS[$prefix])) {
+            $this->validateNIE($value);
+            return;
+        }
+
+        $this->validateDNI($value);
+    }
+
+    private function validateDNI(string $dni): void
     {
         $matches = [];
         if (!preg_match(self::DNI_FORMAT_REGEX, $dni, $matches)) {
-            $this->setTemplate('DNI incorrecto (ej. 99 99 99 99 A)');
-            return false;
+            $this->addViolation('DNI incorrecto (ej. 99 99 99 99 A)');
+            return;
         }
 
         list(, $number, $letter) = $matches;
-        return $this->checkLetter($number, $letter);
+        $this->checkLetter($number, $letter);
 
     }
 
-    private function checkLetter(string $number, $letter): bool
+    private function checkLetter(string $number, $letter)
     {
         $module = ((int)$number) % 23;
         $control = substr(self::CONTROL_LETTERS, $module, 1);
 
         if ($control !== $letter) {
-            $this->setTemplate('Letra de control incorrecta');
-            return false;
+            $this->addViolation('Letra de control incorrecta');
         }
 
-        return true;
     }
 
-    private function validateNIE(string $nie): bool
+    private function validateNIE(string $nie)
     {
         $matches = [];
         if (!preg_match(self::NIE_FORMAT_REGEX, $nie, $matches)) {
-            $this->setTemplate('NIE incorrecto (ej. X9 99 99 99 A)');
+            $this->addViolation('NIE incorrecto (ej. X9 99 99 99 A)');
             return false;
         }
 
         list(, $prefix, $number, $letter) = $matches;
         $number = sprintf('%s%s', self::NIE_LETTERS[$prefix], $number);
 
-        return $this->checkLetter($number, $letter);
+        $this->checkLetter($number, $letter);
     }
+
 }

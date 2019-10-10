@@ -8,13 +8,18 @@ use Britannia\Domain\Entity\Staff\User;
 use Britannia\Domain\Entity\Student\Adult;
 use Britannia\Domain\Entity\Student\Child;
 
+use Britannia\Domain\VO\BankAccount;
 use Britannia\Domain\VO\Employment;
 use Britannia\Domain\VO\Job;
 use Britannia\Domain\VO\JobStatus;
+use Britannia\Domain\VO\Payment;
+use Britannia\Domain\VO\PaymentMode;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
+use PlanB\DDD\Domain\VO\CityAddress;
 use PlanB\DDD\Domain\VO\DNI;
 use PlanB\DDD\Domain\VO\FullName;
+use PlanB\DDD\Domain\VO\Iban;
 use PlanB\DDD\Domain\VO\PostalAddress;
 use PlanB\DDD\Domain\VO\Email;
 use PlanB\DDD\Domain\VO\PhoneNumber;
@@ -58,7 +63,28 @@ class StudentFixtures extends BaseFixture
 
             $adult->setActive($this->faker->boolean());
 
-            $adult->setJob(Job::make($this->faker->jobTitle(), JobStatus::EMPLOYED()));
+            $adult->setJob(Job::make(...[
+                $this->faker->jobTitle(),
+                JobStatus::EMPLOYED()
+            ]));
+
+            $adult->setPayment(Payment::make(...[
+                PaymentMode::CASH(),
+                null
+//                BankAccount::make(...[
+//                    FullName::make(...[
+//                        $this->faker->name(),
+//                        $this->faker->lastName(),
+//                    ]),
+//                    CityAddress::make(...[
+//                        $this->faker->city,
+//                        'Cadiz',
+//                    ]),
+//                    Iban::make('ES9820385778983000760236'),
+//                    $this->faker->numberBetween(0, 90)
+//                ])
+
+            ]));
 
         });
     }

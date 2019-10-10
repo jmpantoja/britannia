@@ -11,12 +11,16 @@
 
 declare(strict_types=1);
 
-namespace PlanB\DDD\Domain\VO\Exceptions;
+namespace Britannia\Domain\VO\Validator;
 
 
-use Respect\Validation\Exceptions\ValidationException;
+use PlanB\DDD\Domain\VO\Validator\Constraint;
 
-class DniRuleException extends ValidationException
+class Job extends Constraint
 {
 
+    public function isValidType($value): bool
+    {
+        return is_array($value) || $value instanceof \Britannia\Domain\VO\Job;
+    }
 }

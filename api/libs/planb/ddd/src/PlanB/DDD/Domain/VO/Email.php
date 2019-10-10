@@ -13,17 +13,30 @@ declare(strict_types=1);
 
 namespace PlanB\DDD\Domain\VO;
 
-use Respect\Validation\Validator;
+use PlanB\DDD\Domain\VO\Traits\Validable;
+use PlanB\DDD\Domain\VO\Validator\Constraint;
+
 
 class Email
 {
+    use Validable;
+
     /**
      * @var string
      */
     private $email = '';
 
+
+    public static function buildConstraint(array $options = []): Constraint
+    {
+        return new Validator\Email([
+            'required' => $options['required'] ?? true
+        ]);
+    }
+
     public static function make(string $email)
     {
+        self::assert($email);
         return new self($email);
     }
 
@@ -39,11 +52,6 @@ class Email
      */
     private function setEmail(string $email): Email
     {
-
-        Validator::email()
-            ->setTemplate('Email incorrecto (ej. username@example.com)')
-            ->assert($email);
-
         $this->email = $email;
         return $this;
     }

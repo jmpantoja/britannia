@@ -18,12 +18,16 @@ doctrine:
             StaffMemberId:  Britannia\Infraestructure\Doctrine\DBAL\Type\StaffMemberIdType
             StudentId: Britannia\Infraestructure\Doctrine\DBAL\Type\StudentIdType
             JobStatus: Britannia\Infraestructure\Doctrine\DBAL\Type\JobStatusType
+            PaymentMode: Britannia\Infraestructure\Doctrine\DBAL\Type\PaymentModeType
+            BankAccount: Britannia\Infraestructure\Doctrine\DBAL\Type\BankAccountType
 
 
         mapping_types:
             StaffMemberId: StaffMemberId
             StudentId: StudentId
             JobStatus: JobStatus
+            PaymentMode: PaymentMode
+            BankAccount: BankAccount
     orm:
         auto_generate_proxy_classes: true
         naming_strategy: doctrine.orm.naming_strategy.underscore

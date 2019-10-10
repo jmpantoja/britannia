@@ -16,7 +16,8 @@ namespace PlanB\DDDBundle\Symfony\Form\Type;
 
 use PlanB\DDD\Domain\VO\Exceptions\FullNameRuleException;
 use PlanB\DDD\Domain\VO\FullName;
-use PlanB\DDDBundle\Symfony\Form\FormDataMapper;
+
+use PlanB\DDD\Domain\VO\Validator\Constraint;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -28,30 +29,35 @@ class FullNameType extends AbstractCompoundType
     public function customForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('firstName', TextType::class)
-            ->add('lastName', TextType::class);
+            ->add('firstName', TextType::class, [
+                'label' => 'Nombre'
+            ])
+            ->add('lastName', TextType::class, [
+                'label' => 'Apellidos',
+            ]);
     }
 
     public function customOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => FullName::class,
-            'required_message' => 'Se necesita un nombre completo'
+            'data_class' => FullName::class
         ]);
     }
 
-
-    public function customMapping(FormDataMapper $mapper)
+    /**
+     * @return \Britannia\Infraestructure\Symfony\Validator\FullName
+     */
+    public function buildConstraint(array $options): ?Constraint
     {
-        $mapper
-            ->try(function (array $data) {
-                return FullName::make(...[
-                    $data['firstName'],
-                    $data['lastName'],
-                ]);
-            });
-
+        return FullName::buildConstraint($options);
     }
 
+    public function customMapping(array $values)
+    {
+        return FullName::make(...[
+            (string)$values['firstName'],
+            (string)$values['lastName'],
+        ]);
+    }
 }
 

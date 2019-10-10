@@ -15,9 +15,8 @@ namespace PlanB\DDDBundle\Symfony\Form\Type;
 
 
 use PlanB\DDD\Domain\VO\Email;
-use PlanB\DDDBundle\Symfony\Form\FormDataMapper;
-use Respect\Validation\Exceptions\AllOfException;
-use Symfony\Component\Form\Exception\TransformationFailedException;
+
+use PlanB\DDD\Domain\VO\Validator\Constraint;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 
@@ -30,12 +29,17 @@ class EmailType extends AbstractSingleType
 
     }
 
-    public function customMapping(FormDataMapper $mapper)
+    /**
+     * @param array $options
+     * @return null|Constraint
+     */
+    public function buildConstraint(array $options): ?Constraint
     {
-        $mapper
-            ->try(function ($value) {
+        return Email::buildConstraint($options);
+    }
 
-                return Email::make($value);
-            });
+    public function customMapping($data)
+    {
+        return Email::make($data);
     }
 }

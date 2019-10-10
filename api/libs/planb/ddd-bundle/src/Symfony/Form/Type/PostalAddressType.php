@@ -15,6 +15,7 @@ namespace PlanB\DDDBundle\Symfony\Form\Type;
 
 
 use PlanB\DDD\Domain\VO\PostalAddress;
+use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\FormDataMapper;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -26,38 +27,36 @@ class PostalAddressType extends AbstractCompoundType
 
     public function customForm(FormBuilderInterface $builder, array $options)
     {
-
         $builder
-            ->add('address', TextType::class)
+            ->add('address', TextType::class, [
+                'label'=>'Dirección',
+            ])
             ->add('postalCode', PostalCodeType::class, [
-                'required' => $options['required'],
-                'error_bubbling' => true,
+                'label'=>'Código postal',
+                'required' => $options['required']
             ]);
     }
 
     public function customOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'error_bubbling' => false,
             'data_class' => PostalAddress::class,
         ]);
     }
 
-
-    public function customMapping(FormDataMapper $mapper)
+    /**
+     * @return \Britannia\Infraestructure\Symfony\Validator\FullName
+     */
+    public function buildConstraint(array $options): ?Constraint
     {
+        return PostalAddress::buildConstraint($options);
+    }
 
-        $mapper
-            ->try(function (array $data) {
-                return PostalAddress::make(...[
-                    $data['address'],
-                    $data['postalCode']
-                ]);
-            })
-            ->catch(function ($messages) {
-                $messages['postalCode'] = 'No es un código postal correcto (ej. 11500)';
-                return $messages;
-            });
-
+    public function customMapping(array $data)
+    {
+        return PostalAddress::make(...[
+            $data['address'],
+            $data['postalCode']
+        ]);
     }
 }

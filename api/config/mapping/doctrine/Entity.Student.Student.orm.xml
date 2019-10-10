@@ -28,6 +28,8 @@
 
         <embedded name="address" class="PlanB\DDD\Domain\VO\PostalAddress" use-column-prefix="false"/>
 
+        <embedded name="payment" class="Britannia\Domain\VO\Payment" />
+
         <field name="phoneNumbers" column="phone_numbers" type="json"/>
 
         <many-to-many field="relatives" target-entity="Student">

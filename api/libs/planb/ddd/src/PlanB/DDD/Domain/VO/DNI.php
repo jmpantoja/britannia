@@ -13,12 +13,13 @@ declare(strict_types=1);
 
 namespace PlanB\DDD\Domain\VO;
 
+use Symfony\Component\Validator\Constraint;
 
-use Respect\Validation\Exceptions\AllOfException;
-use Respect\Validation\Validator;
+use PlanB\DDD\Domain\VO\Validator;
 
 class DNI
 {
+    use Traits\Validable;
     /**
      * @var string
      */
@@ -43,38 +44,20 @@ class DNI
 
     public static function make(string $dni): self
     {
+        self::assert($dni);
 
         return new self($dni);
     }
 
+    public static function buildConstraint(array $options = []): Constraint
+    {
+        return new Validator\DNI($options);
+    }
+
+
     public function __construct(string $dni)
     {
-        $dni = $this->sanitize($dni);
-
-        $this->ensureIsValid($dni);
-
         $this->setIdentityCode($dni);
-    }
-
-    /**
-     * @param string $dni
-     * @return null|string|string[]
-     */
-    private function sanitize(string $dni)
-    {
-        $dni = strtoupper($dni);
-        return preg_replace('/(\s)/', '', $dni);
-    }
-
-    private function ensureIsValid(string $dni): void
-    {
-
-        Validator::with(__NAMESPACE__ . '\Rules');
-        $validator = Validator::create();
-
-        $validator::dniRule()
-            ->assert($dni);
-
     }
 
     /**
@@ -119,7 +102,6 @@ class DNI
     }
 
 
-
     /**
      * @return string
      */
@@ -161,7 +143,6 @@ class DNI
     {
         return (string)$this->getIdentityCode();
     }
-
 
 }
 

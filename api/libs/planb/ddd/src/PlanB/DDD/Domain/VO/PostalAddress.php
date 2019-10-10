@@ -2,14 +2,14 @@
 
 namespace PlanB\DDD\Domain\VO;
 
-use Respect\Validation\Exceptions\AllOfException;
-use Respect\Validation\Validator;
+use Symfony\Component\Validator\Constraint;
 
 /**
  * Address
  */
 class PostalAddress
 {
+    use Traits\Validable;
     /**
      * @var string
      */
@@ -20,19 +20,19 @@ class PostalAddress
      */
     private $postalCode;
 
-
-    public static function make($address, $postalCode): self
+    public static function buildConstraint(array $options = []): Constraint
     {
+        return new Validator\PostalAddress([
+            'required' => $options['required'] ?? true
+        ]);
+    }
 
-        $validator = Validator::create();
 
-        $validator->key('address', Validator::notEmpty());
-        $validator->key('postalCode', Validator::postalCode('ES'));
-
-
-        $validator->assert([
+    public static function make(string $address, PostalCode $postalCode): self
+    {
+        self::assert([
             'address' => $address,
-            'postalCode' => (string)$postalCode
+            'postalCode' => $postalCode
         ]);
 
         return new self($address, $postalCode);
@@ -83,5 +83,6 @@ class PostalAddress
     {
         return $this->getFullAddress();
     }
+
 
 }

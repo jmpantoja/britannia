@@ -2,7 +2,7 @@
 
 namespace PlanB\DDD\Domain\VO;
 
-use Respect\Validation\Validator;
+use Symfony\Component\Validator\Constraint;
 
 /**
  * Address
@@ -10,14 +10,25 @@ use Respect\Validation\Validator;
 class PostalCode
 {
 
+    use Traits\Validable;
+
     /**
      * @var string
      */
     private $postalCode;
 
+    public static function buildConstraint(array $options = []): Constraint
+    {
+        return new Validator\PostalCode([
+            'required' => $options['required'] ?? false
+        ]);
+    }
+
 
     public static function make(string $postalCode): self
     {
+        $postalCode = self::assert($postalCode);
+
         return new self($postalCode);
     }
 
@@ -33,13 +44,6 @@ class PostalCode
      */
     private function setPostalCode(string $postalCode): self
     {
-        $postalCode = preg_replace('/\s/', '', $postalCode);
-
-        Validator::postalCode('ES')
-            ->setTemplate("'{{name}}' is an invalid postal code")
-            ->assert($postalCode);
-
-
         $this->postalCode = $postalCode;
         return $this;
     }
@@ -49,12 +53,13 @@ class PostalCode
      */
     public function getPostalCode(): string
     {
-        return (string)$this->postalCode;
+        return $this->postalCode;
     }
 
     public function __toString()
     {
         return $this->getPostalCode();
     }
+
 
 }

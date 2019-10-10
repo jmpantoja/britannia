@@ -30,6 +30,7 @@ RUN set -eux; \
 		intl \
 		pdo_pgsql \
 		zip \
+		bcmath \
 	; \
 	pecl install \
 		apcu-${APCU_VERSION} \
