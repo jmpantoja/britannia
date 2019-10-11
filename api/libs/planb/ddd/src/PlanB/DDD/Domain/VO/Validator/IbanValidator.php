@@ -11,12 +11,10 @@
 
 declare(strict_types=1);
 
-namespace PlanB\DDD\Domain\VO\Rules;
+namespace PlanB\DDD\Domain\VO\Validator;
 
 
-use Respect\Validation\Rules\AbstractRule;
-
-class IbanRule extends AbstractRule
+class IbanValidator extends ConstraintValidator
 {
 
     public const IBAN_REGEX_PATTERN = '/^(([A-Z]{2})(\d{2}))?((\d{4})(\d{4})(\d{2})(\d{10}))$/';
@@ -25,27 +23,31 @@ class IbanRule extends AbstractRule
 
     private const CCC_WEIGHTS = [1, 2, 4, 8, 5, 10, 9, 7, 3, 6];
 
-    private const INVALID_IBAN_MESSAGE = 'IBAN incorrecto (ej. ES00 9999 9999 9999 9999 9999)';
+    /**
+     * @return string
+     */
+    public function getConstraintType(): string
+    {
+        return Iban::class;
+    }
 
-    private const INVALID_IBAN_DIGIT_CONTROL_MESSAGE = 'Digito de Control IBAN incorrecto';
-
-    private const INVALID_CCC_DIGIT_CONTROL_MESSAGE = 'Digito de Control CCC incorrecto';
-
-
-    public function validate($iban): bool
+    public function handle($value, Constraint $constraint)
     {
 
-        $iban = (string)$iban;
+        if($value instanceof \PlanB\DDD\Domain\VO\Iban){
+            return;
+        }
+
         $matches = [];
-        if (!preg_match(self::IBAN_REGEX_PATTERN, $iban, $matches)) {
-            $this->setTemplate(self::INVALID_IBAN_MESSAGE);
+        if (!preg_match(self::IBAN_REGEX_PATTERN, $value, $matches)) {
+            $this->addViolation($constraint->message);
             return false;
         }
 
         list(, , $country, $control, $ccc, $entity, $office, $dc, $account) = $matches;
 
-        return $this->validateIBAN($country, $control, $ccc)
-            && $this->validateCCC($entity, $office, $dc, $account);
+        return $this->validateIBAN($country, $control, $ccc, $constraint)
+            && $this->validateCCC($entity, $office, $dc, $account, $constraint);
     }
 
 
@@ -55,7 +57,7 @@ class IbanRule extends AbstractRule
      * @param string $ccc
      * @return bool
      */
-    private function validateIBAN(string $country, string $control, string $ccc): bool
+    private function validateIBAN(string $country, string $control, string $ccc, Iban $constraint): bool
     {
 
         if (empty($country) && empty($control)) {
@@ -75,7 +77,7 @@ class IbanRule extends AbstractRule
         $expected = sprintf('%02s', $expected);
 
         if ($expected !== $control) {
-            $this->setTemplate(self::INVALID_IBAN_DIGIT_CONTROL_MESSAGE);
+            $this->addViolation($constraint->controlDigitIBANMessage);
             return false;
         }
 
@@ -89,7 +91,7 @@ class IbanRule extends AbstractRule
      * @param string $account
      * @return bool
      */
-    private function validateCCC(string $entity, string $office, string $dc, string $account): bool
+    private function validateCCC(string $entity, string $office, string $dc, string $account, Iban $constraint): bool
     {
         $code1 = sprintf('00%s%s', $entity, $office);
         $code2 = $account;
@@ -100,7 +102,7 @@ class IbanRule extends AbstractRule
         ]);
 
         if ($expected !== $dc) {
-            $this->setTemplate(self::INVALID_CCC_DIGIT_CONTROL_MESSAGE);
+            $this->addViolation($constraint->controlDigitCCCMessage);
             return false;
         }
 
@@ -128,4 +130,5 @@ class IbanRule extends AbstractRule
 
         return $code;
     }
+
 }

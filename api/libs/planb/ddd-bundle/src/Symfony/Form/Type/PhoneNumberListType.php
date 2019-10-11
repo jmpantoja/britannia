@@ -78,6 +78,24 @@ class PhoneNumberListType extends AbstractSingleType
 
     public function customMapping($data)
     {
+        return array_map(function ($phoneNumber) {
+            return $this->toPhoneNumber($phoneNumber);
+        }, $data);
+
         return (array)$data;
     }
+
+    /**
+     * @param $phoneNumber
+     * @return PhoneNumber
+     */
+    protected function toPhoneNumber($phoneNumber): PhoneNumber
+    {
+        if ($phoneNumber instanceof PhoneNumber) {
+            return $phoneNumber;
+        }
+
+        return PhoneNumber::make((string)$phoneNumber);
+    }
+
 }

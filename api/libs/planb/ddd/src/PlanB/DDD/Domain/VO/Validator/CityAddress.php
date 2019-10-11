@@ -15,21 +15,20 @@ namespace PlanB\DDD\Domain\VO\Validator;
 
 
 use PlanB\DDD\Domain\Filter\ProperName;
+use Zend\Filter\StringToUpper;
 
-class FullName extends Constraint
+class CityAddress extends Constraint
 {
-    public $requiredMessage = 'Se necesitan un nombre y apellidos';
 
-    public $firstNameRequiredMessage = 'Se necesita un nombre';
-    public $lastNameRequiredMessage = 'Se necesitan unos apellidos';
+    public $cityRequiredMessage = 'Se necesita una ciudad';
+    public $provinceRequiredMessage = 'Se necesita una provincia';
 
     public $lengthMessage = 'Se necesita {{ limit }} caracter o más.|Se necesitan {{ limit }} o más caracteres.';
-    public $regexMessage = 'Solo se admiten letras, guiones (-) o puntos (.)';
-
+    public $regexMessage = 'Solo se admiten letras o guiones (-)';
 
     public function isValidType($value): bool
     {
-        return is_array($value) || $value instanceof \PlanB\DDD\Domain\VO\FullName;
+        return is_array($value) || $value instanceof \PlanB\DDD\Domain\VO\CityAddress;
     }
 
     public function normalize($value)
@@ -42,4 +41,5 @@ class FullName extends Constraint
 
         return $value;
     }
+
 }

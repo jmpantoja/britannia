@@ -2,14 +2,16 @@
 
 namespace PlanB\DDD\Domain\VO;
 
-use Respect\Validation\Exceptions\AllOfException;
-use Respect\Validation\Validator;
+use PlanB\DDD\Domain\VO\Traits\Validable;
+use PlanB\DDD\Domain\VO\Validator\Constraint;
+use PlanB\DDD\Domain\VO\Validator;
 
 /**
  * Address
  */
 class CityAddress
 {
+    use Validable;
     /**
      * @var string
      */
@@ -20,23 +22,22 @@ class CityAddress
      */
     private $province;
 
+    public static function buildConstraint(array $options = []): Constraint
+    {
+        return new Validator\CityAddress([
+            'required' => $options['required'] ?? true
+        ]);
+
+    }
 
     public static function make(string $city, string $province): self
     {
-
-        Validator::with(__NAMESPACE__ . '\Rules');
-        $validator = Validator::create();
-
-        $validator->key('city', Validator::notEmpty());
-        $validator->key('province', Validator::notEmpty());
-
-
-        $validator->assert([
+        $data = self::assert([
             'city' => $city,
             'province' => $province
         ]);
 
-        return new self($city, $province);
+        return new self($data['city'], $data['province']);
     }
 
     private function __construct(string $city, string $province)

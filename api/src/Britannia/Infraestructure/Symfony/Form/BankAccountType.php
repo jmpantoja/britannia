@@ -21,6 +21,8 @@ use PlanB\DDDBundle\Symfony\Form\Type\AbstractCompoundType;
 use PlanB\DDDBundle\Symfony\Form\Type\CityAddressType;
 use PlanB\DDDBundle\Symfony\Form\Type\FullNameType;
 use PlanB\DDDBundle\Symfony\Form\Type\IbanType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -34,21 +36,21 @@ class BankAccountType extends AbstractCompoundType
 
         $builder
             ->add('fullName', FullNameType::class, [
-                'label' => false,
-                'required' => false
+                'label' => 'Titular',
+                'required' => $options['required']
             ])
             ->add('iban', IbanType::class, [
-                'required' => false
+                'required' => $options['required']
             ])
             ->add('number', TextType::class, [
-                'required' => false,
+                'label' => 'Nº domiciliado',
+                'required' => $options['required'],
+                'invalid_message' => 'Se necesita un número'
             ])
             ->add('cityAddress', CityAddressType::class, [
-                'label' => false,
-                'required' => false
+                'label' => 'Dirección',
+                'required' => $options['required']
             ]);
-
-
     }
 
     public function customOptions(OptionsResolver $resolver)
@@ -57,49 +59,15 @@ class BankAccountType extends AbstractCompoundType
             'data_class' => BankAccount::class,
             'error_bubbling' => false,
             'required' => false,
-            'required_error' => 'Se necesita una cuenta bancaria completa',
         ]);
     }
-//
-//    protected function dataToForms($data, $forms): void
-//    {
-//        $forms = iterator_to_array($forms);
-//
-//        foreach ($forms as $name => $form) {
-//
-//            $method = sprintf('get%s', ucfirst($name));
-//
-//            $value = null;
-//            if (is_callable([$data, $method])) {
-//                $value = $data->{$method}();
-//            }
-//
-//            $form->setData($value);
-//        }
-//    }
-//
-//
-//    public function customMapping(FormDataMapper $mapper)
-//    {
-//
-//        $mapper
-//            ->try(function (array $data) {
-//
-//                return BankAccount::make(...[
-//                    $data['fullName'],
-//                    $data['cityAddress'],
-//                    $data['iban'],
-//                    (int)$data['number']
-//                ]);
-//            });
-//
-//    }
+
     /**
      * @return \Britannia\Infraestructure\Symfony\Validator\FullName
      */
     public function buildConstraint(array $options): ?Constraint
     {
-        return null;
+        return BankAccount::buildConstraint($options);
     }
 
     public function customMapping(array $data)

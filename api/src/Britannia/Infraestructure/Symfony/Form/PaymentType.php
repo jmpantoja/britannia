@@ -49,7 +49,7 @@ class PaymentType extends AbstractCompoundType
      */
     public function buildConstraint(array $options): ?Constraint
     {
-        return null;
+        return Payment::buildConstraint($options);
     }
 
     public function customMapping(array $data)

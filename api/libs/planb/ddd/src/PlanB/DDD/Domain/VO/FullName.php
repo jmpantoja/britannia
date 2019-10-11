@@ -15,8 +15,6 @@ namespace PlanB\DDD\Domain\VO;
 
 
 use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\ConstraintViolationList;
-use Symfony\Component\Validator\Validation;
 
 class FullName
 {
@@ -36,12 +34,11 @@ class FullName
 
     public static function make(string $firstName, string $lastName)
     {
-        self::assert([
+        $data = self::assert([
             'firstName' => $firstName,
             'lastName' => $lastName
         ]);
-
-        return new self($firstName, $lastName);
+        return new self($data['firstName'], $data['lastName']);
     }
 
 
@@ -64,9 +61,9 @@ class FullName
      * @param mixed $firstName
      * @return FullName
      */
-    private function setFirstName($firstName)
+    private function setFirstName(string $firstName): self
     {
-        $this->firstName = $this->normalize($firstName);
+        $this->firstName = $firstName;
         return $this;
     }
 
@@ -82,32 +79,12 @@ class FullName
      * @param mixed $lastName
      * @return FullName
      */
-    private function setLastName($lastName)
+    private function setLastName(string $lastName): self
     {
-        $this->lastName = $this->normalize($lastName);
+        $this->lastName = $lastName;
         return $this;
     }
 
-    private function normalize(string $name): string
-    {
-        $pieces = preg_split("/\s+/", $name);
-
-        $pieces = array_map(function (string $piece) {
-            return $this->format($piece);
-        }, $pieces);
-
-
-        return implode(" ", $pieces);
-    }
-
-    private function format(string $name): string
-    {
-        if (strlen($name) <= 3) {
-            return $name;
-        }
-
-        return ucfirst(strtolower($name));
-    }
 
     public function getReversedMode(): string
     {

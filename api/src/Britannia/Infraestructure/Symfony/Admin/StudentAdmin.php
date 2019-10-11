@@ -57,21 +57,6 @@ final class StudentAdmin extends AbstractAdmin
 
 
         $formMapper
-            ->with('Pago', ['tab' => true])
-                ->with('Descuento', ['class' => 'col-md-4'])
-                    ->add('relatives', RelativesType::class, [
-                        'label' => 'Familiares',
-                        'studentId' => $subject->getId()
-                    ])
-                ->end()
-                ->with('Forma de pago', ['class'=>'col-md-8'])
-//                    ->add('payment', PaymentType::class, [
-//                        'label' => false,
-//                        'required' => true
-//                    ])
-                ->end()
-            ->end()
-
             ->with('Personal', ['tab' => true])
                 ->with('Datos personales', ['class' => 'col-md-4'])
                     ->add('fullName', FullNameType::class, [
@@ -113,6 +98,21 @@ final class StudentAdmin extends AbstractAdmin
                     ])
                 ->end()
 
+            ->end()
+
+            ->with('Pago', ['tab' => true])
+                ->with('Descuento', ['class' => 'col-md-4'])
+                    ->add('relatives', RelativesType::class, [
+                        'label' => 'Familiares',
+                        'studentId' => $subject->getId()
+                    ])
+                 ->end()
+                ->with('Forma de pago', ['class'=>'col-md-8'])
+                    ->add('payment', PaymentType::class, [
+                        'label' => false,
+                        'required' => true
+                    ])
+                ->end()
             ->end()
         ;
     }

@@ -39,7 +39,7 @@ class IbanType extends AbstractSingleType
      */
     public function buildConstraint(array $options): ?Constraint
     {
-        return null;
+        return Iban::buildConstraint($options);
     }
 
     public function customMapping($data)

@@ -14,16 +14,30 @@ declare(strict_types=1);
 namespace Britannia\Domain\VO;
 
 
+use PlanB\DDD\Domain\VO\Traits\Validable;
+use PlanB\DDD\Domain\VO\Validator\Constraint;
+use Britannia\Domain\VO\Validator;
+
 class Payment
 {
+
+    use Validable;
 
     private $mode;
 
     private $account;
 
+    public static function buildConstraint(array $options = []): Constraint
+    {
+        return new Validator\Payment([
+            'required' => $options['required']
+        ]);
+    }
+
+
     public static function make(PaymentMode $mode, ?BankAccount $account)
     {
-      return  new self($mode, $account);
+        return new self($mode, $account);
     }
 
     private function __construct($mode, $account)
@@ -70,6 +84,5 @@ class Payment
     {
         return $this->account;
     }
-
 
 }

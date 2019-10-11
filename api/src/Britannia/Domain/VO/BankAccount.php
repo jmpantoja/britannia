@@ -17,9 +17,14 @@ namespace Britannia\Domain\VO;
 use PlanB\DDD\Domain\VO\CityAddress;
 use PlanB\DDD\Domain\VO\FullName;
 use PlanB\DDD\Domain\VO\Iban;
+use PlanB\DDD\Domain\VO\Traits\Validable;
+use PlanB\DDD\Domain\VO\Validator\Constraint;
+use Britannia\Domain\VO\Validator;
 
 class BankAccount
 {
+
+    use Validable;
     /**
      * @var FullName
      */
@@ -36,6 +41,13 @@ class BankAccount
      * @var int
      */
     private $number = 0;
+
+    public static function buildConstraint(array $options = []): Constraint
+    {
+        return new Validator\BankAccount([
+            'required' => $options['required']
+        ]);
+    }
 
     public static function make(FullName $fullName, CityAddress $cityAddress, Iban $iban, int $number): self
     {

@@ -1,3 +1,6 @@
+{% extends 'form/form_admin.html.twig' %}
+
+
 {% block full_name_widget %}
     <div class="col-md-6 no-padding">
         {{ form_row(form.firstName) }}
@@ -18,6 +21,28 @@
 {% endblock %}
 
 
+{% block dni_widget %}
+    <div class='input-group date'>
+        {{ block('form_widget_simple') }}
+    </div>
+{% endblock %}
+
+{% block email_widget %}
+
+    <div class='input-group date'>
+        <span class="input-group-addon"><span class="fa fa-envelope"></span></span>
+        {{ block('form_widget_simple') }}
+    </div>
+{% endblock %}
+
+
+{% block phone_number_widget %}
+
+    <div class='input-group date'>
+        <span class="input-group-addon"><span class="fa fa-phone"></span></span>
+        {{ block('form_widget_simple') }}
+    </div>
+{% endblock %}
 
 {% block job_widget %}
 
@@ -31,128 +56,51 @@
 {% endblock %}
 
 
-{#{% block postal_address_widget %}#}
+{% block city_address_widget %}
 
-    {#<fieldset {{ block('widget_container_attributes') }}>#}
+    <div class="col-md-8 no-padding">
+        {{ form_row(form.city) }}
+    </div>
+    <div class="col-md-4">
+        {{ form_row(form.province) }}
+    </div>
 
-        {#<legend>{{ form_label(form) }}</legend>#}
-        {#{{- block('sonata_help') -}}#}
-
-        {#{%- if form is rootform -%}#}
-            {#{{ form_errors(form) }}#}
-        {#{%- endif -%}#}
-
-        {#<div class="col-md-6 no-padding">#}
-            {#{{ form_row(form.address) }}#}
-        {#</div>#}
-        {#<div class="col-md-6">#}
-            {#{{ form_row(form.postalCode) }}#}
-        {#</div>#}
-
-        {#{{- form_rest(form) -}}#}
-
-    {#</fieldset>#}
+{% endblock %}
 
 
-{#{% endblock postal_address_widget %}#}
 
-{#{% block dni_widget %}#}
-    {#<div class='input-group date'>#}
-        {#{{ block('form_widget_simple') }}#}
-    {#</div>#}
-{#{% endblock dni_widget %}#}
+{% block payment_widget %}
 
-{#{% block email_address_widget %}#}
+    <script>
+        {% autoescape 'js' %}
 
-    {#<div class='input-group date'>#}
-        {#<span class="input-group-addon"><span class="fa fa-envelope"></span></span>#}
-        {#{{ block('form_widget_simple') }}#}
-    {#</div>#}
-{#{% endblock email_address_widget %}#}
-
-
-{#{% block phone_number_widget %}#}
-
-    {#<div class='input-group date'>#}
-        {#<span class="input-group-addon"><span class="fa fa-phone"></span></span>#}
-        {#{{ block('form_widget_simple') }}#}
-    {#</div>#}
-{#{% endblock phone_number_widget %}#}
-
-
-{#{% block job_widget %}#}
-
-    {#<div class="col-md-4 no-padding">#}
-        {#{{ form_row(form.status) }}#}
-    {#</div>#}
-    {#<div class="col-md-8">#}
-        {#{{ form_row(form.name) }}#}
-    {#</div>#}
-
-{#{% endblock job_widget %}#}
-
-{#{% block city_address_widget %}#}
-
-    {#<div class="col-md-8 no-padding">#}
-        {#{{ form_row(form.city) }}#}
-    {#</div>#}
-    {#<div class="col-md-4">#}
-        {#{{ form_row(form.province) }}#}
-    {#</div>#}
-
-{#{% endblock city_address_widget %}#}
-
-
-{#{% block payment_widget %}#}
-
-    {#<script>#}
-        {#{% autoescape 'js' %}#}
-
-        {#jQuery(function ($) {#}
+        jQuery(function ($) {
             {#$('#sonata-ba-field-container-{{ id }}')#}
-                {#.toggle_field({#}
-                    {#hide_values: ['CASH'],#}
-                    {#children: '.bank_account'#}
-                {#})#}
-        {#})#}
-        {#{% endautoescape %}#}
-    {#</script>#}
+            {#.toggle_field({#}
+            {#hide_values: ['CASH'],#}
+            {#children: '.bank_account'#}
+            {#})#}
+        })
+        {% endautoescape %}
+    </script>
 
-    {#<div class="row">#}
-        {#<div class="col-md-3">#}
+    <div class="row">
+        <div class="col-md-3">
+            {{ form_row(form.mode) }}
+        </div>
 
-            {#{{ form_row(form.mode) }}#}
-        {#</div>#}
+    </div>
 
-    {#</div>#}
-
-    {#<div class="bank_account row col-md-8">#}
-        {#<div class="row group">#}
-
-            {#<p class="group-title">Titular</p>#}
-            {#{{ form_row(form.account.fullName) }}#}
-
-        {#</div>#}
-        {#<div class="row group">#}
-            {#<p class="group-title">Cuenta Bancaria</p>#}
-
-            {#<div class="col-md-5 no-padding">#}
-                {#{{ form_row(form.account.iban) }}#}
-            {#</div>#}
-            {#<div class="col-md-2">#}
-                {#{{ form_row(form.account.number) }}#}
-            {#</div>#}
-
-            {#<div class="col-md-10 no-padding">#}
-                {#{{ form_row(form.account.cityAddress) }}#}
-                {#{{ form_errors(form.account.cityAddress) }}#}
-            {#</div>#}
+    <div class="row col-md-8">
 
 
-        {#</div>#}
-        {#{{ form_errors(form.account) }}#}
+        {{ form_row(form.account.fullName) }}
+        {{ form_row(form.account.iban) }}
+        {{ form_row(form.account.number) }}
 
-        {#{{ form_rest(form) }}#}
-    {#</div>#}
+        {{ form_row(form.account.cityAddress) }}
+        {{ form_errors(form.account.cityAddress) }}
 
-{#{% endblock payment_widget %}#}
+    </div>
+
+{% endblock %}

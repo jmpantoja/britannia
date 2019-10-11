@@ -96,15 +96,34 @@
             {% endif %}
 
 
-            <legend{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
-            {% if translation_domain is same as(false) %}
-                {{- label -}}
-            {% elseif not sonata_admin.admin %}
-                {{- label|trans({}, translation_domain) -}}
+
+            {% if not compound %}
+
+                <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
+                {% if translation_domain is same as(false) %}
+                    {{- label -}}
+                {% elseif not sonata_admin.admin %}
+                    {{- label|trans({}, translation_domain) -}}
+                {% else %}
+                    {{ label|trans({}, sonata_admin.field_description.translationDomain ?: admin.translationDomain) }}
+                {% endif %}
+                </label>
+
+
+
             {% else %}
-                {{ label|trans({}, sonata_admin.field_description.translationDomain ?: admin.translationDomain) }}
+
+                <legend{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
+                {% if translation_domain is same as(false) %}
+                    {{- label -}}
+                {% elseif not sonata_admin.admin %}
+                    {{- label|trans({}, translation_domain) -}}
+                {% else %}
+                    {{ label|trans({}, sonata_admin.field_description.translationDomain ?: admin.translationDomain) }}
+                {% endif %}
+                </legend>
+
             {% endif %}
-            </legend>
 
         {% endif %}
     {% endapply %}

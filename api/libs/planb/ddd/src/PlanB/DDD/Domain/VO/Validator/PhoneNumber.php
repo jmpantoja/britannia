@@ -27,7 +27,8 @@ class PhoneNumber extends Constraint
 
     public function sanitize($value)
     {
-        return preg_replace('/[\s|\+]/', '', $value);
+        $pattern = '/[\s \-]+/';
+        return preg_replace($pattern, '', $value);
     }
 
     public function normalize($value)

@@ -15,54 +15,43 @@ namespace PlanB\DDD\Domain\VO;
 
 
 use PlanB\DDD\Domain\VO\Rules\IbanRule;
-use Respect\Validation\Exceptions\AllOfException;
-use Respect\Validation\Validator;
+use PlanB\DDD\Domain\VO\Traits\Validable;
+use PlanB\DDD\Domain\VO\Validator\Constraint;
+use PlanB\DDD\Domain\VO\Validator;
 
 class Iban
 {
+    use Validable;
+
     /**
      * @var string
      */
     private $iban;
     private $ccc;
-
     private $entity;
     private $office;
     private $digitOfControl;
     private $account;
 
+    public static function buildConstraint(array $options = []): Constraint
+    {
+        return new Validator\Iban([
+            'required' => $options['required'] ?? true
+        ]);
+    }
+
 
     public static function make(string $iban): self
     {
-
+        $iban = self::assert($iban);
         return new self($iban);
     }
 
     public function __construct(string $iban)
     {
-        $iban = $this->sanitize($iban);
-        $this->ensureIsValid($iban);
         $this->initialize($iban);
     }
 
-    /**
-     * @param string $iban
-     * @return null|string|string[]
-     */
-    private function sanitize(string $iban)
-    {
-        $iban = strtoupper($iban);
-        return preg_replace('/(\s)/', '', $iban);
-    }
-
-    private function ensureIsValid(string $iban): void
-    {
-        Validator::with(__NAMESPACE__ . '\Rules');
-        $validator = Validator::create();
-
-        $validator->ibanRule()
-            ->assert($iban);
-    }
 
     /**
      * @param string $iban
@@ -71,8 +60,7 @@ class Iban
      */
     private function initialize(string $iban): self
     {
-        preg_match(IbanRule::IBAN_REGEX_PATTERN, $iban, $matches);
-
+        preg_match(Validator\IbanValidator::IBAN_REGEX_PATTERN, $iban, $matches);
 
         $this->setIban($matches[1]);
         $this->setCcc($matches[4]);

@@ -43,8 +43,7 @@ class CityAddressType extends AbstractCompoundType
     public function customOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => CityAddress::class,
-            'required_message' => 'Ciudad y provincias son requeridas'
+            'data_class' => CityAddress::class
         ]);
     }
 
@@ -54,14 +53,14 @@ class CityAddressType extends AbstractCompoundType
      */
     public function buildConstraint(array $options): ?Constraint
     {
-        return null;
+        return CityAddress::buildConstraint($options);
     }
 
     public function customMapping(array $data)
     {
         return CityAddress::make(...[
-            (string)$data['city'],
-            (string)$data['province'],
+            $data['city'],
+            $data['province'],
         ]);
     }
 }

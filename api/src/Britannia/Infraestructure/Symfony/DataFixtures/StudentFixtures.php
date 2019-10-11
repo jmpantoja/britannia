@@ -34,13 +34,14 @@ class StudentFixtures extends BaseFixture
     {
         $this->createMany(Adult::class, 20, function (Adult $adult, int $count) {
 
+
             $adult->setFullName(FullName::make(...[
                 $this->faker->name(),
                 $this->faker->lastName()
             ]));
 
             $adult->addPhoneNumber(PhoneNumber::make(...[
-                $this->faker->phoneNumber()
+                $this->faker->numerify('###-##-##-##')
             ]));
 
             $adult->setBirthDate(
@@ -56,7 +57,8 @@ class StudentFixtures extends BaseFixture
                 PostalCode::make(...[
                     $this->faker->postcode()
                 ])
-            ]));;
+            ]));
+
             $adult->setDni(DNI::make(...[
                 $this->faker->dni()
             ]));
@@ -69,21 +71,19 @@ class StudentFixtures extends BaseFixture
             ]));
 
             $adult->setPayment(Payment::make(...[
-                PaymentMode::CASH(),
-                null
-//                BankAccount::make(...[
-//                    FullName::make(...[
-//                        $this->faker->name(),
-//                        $this->faker->lastName(),
-//                    ]),
-//                    CityAddress::make(...[
-//                        $this->faker->city,
-//                        'Cadiz',
-//                    ]),
-//                    Iban::make('ES9820385778983000760236'),
-//                    $this->faker->numberBetween(0, 90)
-//                ])
-
+                PaymentMode::DAY_1(),
+                BankAccount::make(...[
+                    FullName::make(...[
+                        $this->faker->name(),
+                        $this->faker->lastName(),
+                    ]),
+                    CityAddress::make(...[
+                        'el puerto de santa maria',
+                        'cádiz',
+                    ]),
+                    Iban::make('ES9820385778983000760236'),
+                    $this->faker->numberBetween(0, 90)
+                ])
             ]));
 
         });
