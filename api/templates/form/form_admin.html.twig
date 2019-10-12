@@ -2,7 +2,16 @@
 
 {% block form_row %}
     {% set show_label = show_label ?? true %}
-    <fieldset class="form-group{% if errors|length > 0 %} has-error{% endif %}" id="sonata-ba-field-container-{{ id }}">
+
+    {% set isChild = form.isChild ?? false %}
+    {% set use_legend = legend ?? (isChild is not same as (true) or compound) %}
+
+    {% set tag = 'div' %}
+    {% if use_legend %}
+        {% set tag = 'fieldset' %}
+    {% endif %}
+
+    <{{ tag }} class="form-group{% if errors|length > 0 %} has-error{% endif %}" id="sonata-ba-field-container-{{ id }}">
         {% if sonata_admin.field_description.options is defined %}
             {% set label = sonata_admin.field_description.options.name|default(label) %}
         {% endif %}
@@ -27,14 +36,13 @@
         {% endif %}
 
         {% if show_label %}
-            {{ form_label(form, label|default(null)) }}
+            {{ form_label(form, label|default(null), {'use_legend': use_legend}) }}
         {% endif %}
 
         {% if sonata_help is defined and sonata_help %}
             <span class="help-block sonata-ba-field-widget-help">
-                    {#<i class="fa fa-question-circle-o" aria-hidden="true"></i>#}
                 {{ sonata_help|raw }}
-                </span>
+            </span>
         {% endif %}
 
         {% if sonata_admin is defined and sonata_admin_enabled %}
@@ -55,19 +63,23 @@
             {% endif %}
 
             {% if sonata_admin is defined and sonata_admin_enabled and sonata_admin.field_description.help|default(false) %}
-                <span class="help-block sonata-ba-field-help">{{ sonata_admin.field_description.help|trans({}, sonata_admin.field_description.translationDomain ?: admin.translationDomain)|raw }}</span>
+                <span
+                    class="help-block sonata-ba-field-help">{{ sonata_admin.field_description.help|trans({}, sonata_admin.field_description.translationDomain ?: admin.translationDomain)|raw }}</span>
             {% endif %}
         </div>
-    </fieldset>
+
+    </{{ tag }}>
+
+{% endblock %}
 
 
-{% endblock form_row %}
 
 {% block sonata_help %}
 {% endblock %}
 
 {% block form_label %}
     {% apply spaceless %}
+
         {% if label is not same as(false) and sonata_admin.options['form_type'] == 'horizontal' %}
             {% set label_class = 'col-sm-3' %}
         {% endif %}
@@ -95,9 +107,18 @@
                 {%- endif -%}
             {% endif %}
 
+            {% if use_legend ?? false %}
+                <legend{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
+                {% if translation_domain is same as(false) %}
+                    {{- label -}}
+                {% elseif not sonata_admin.admin %}
+                    {{- label|trans({}, translation_domain) -}}
+                {% else %}
+                    {{ label|trans({}, sonata_admin.field_description.translationDomain ?: admin.translationDomain) }}
+                {% endif %}
+                </legend>
 
-
-            {% if not compound %}
+            {% else %}
 
                 <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
                 {% if translation_domain is same as(false) %}
@@ -108,20 +129,6 @@
                     {{ label|trans({}, sonata_admin.field_description.translationDomain ?: admin.translationDomain) }}
                 {% endif %}
                 </label>
-
-
-
-            {% else %}
-
-                <legend{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
-                {% if translation_domain is same as(false) %}
-                    {{- label -}}
-                {% elseif not sonata_admin.admin %}
-                    {{- label|trans({}, translation_domain) -}}
-                {% else %}
-                    {{ label|trans({}, sonata_admin.field_description.translationDomain ?: admin.translationDomain) }}
-                {% endif %}
-                </legend>
 
             {% endif %}
 

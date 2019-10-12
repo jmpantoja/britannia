@@ -21,14 +21,17 @@ RUN set -eux; \
 		$PHPIZE_DEPS \
 		icu-dev \
 		libzip-dev \
-		postgresql-dev \
+#		postgresql-dev \
 		zlib-dev \
 	; \
 	\
 	docker-php-ext-configure zip --with-libzip; \
 	docker-php-ext-install -j$(nproc) \
 		intl \
-		pdo_pgsql \
+#		pdo_pgsql \
+		mysqli \
+		pdo \
+		pdo_mysql \
 		zip \
 		bcmath \
 	; \
@@ -39,6 +42,7 @@ RUN set -eux; \
 	docker-php-ext-enable \
 		apcu \
 		opcache \
+		mysqli \
 	; \
 	\
 	runDeps="$( \

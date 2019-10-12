@@ -135,5 +135,9 @@ class BankAccount
         return $this;
     }
 
+    public function __toString()
+    {
+        return $this->getIban()->getElectronicFormat();
+    }
 
 }

@@ -47,7 +47,7 @@ class BankAccountType extends Type
             'number' => $value->getNumber()
         ];
 
-        return json_encode($json);
+        return json_encode($json, JSON_UNESCAPED_UNICODE);
     }
 
     public function convertToPHPValue($value, AbstractPlatform $platform)

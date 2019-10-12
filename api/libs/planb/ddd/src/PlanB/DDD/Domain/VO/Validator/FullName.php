@@ -36,7 +36,7 @@ class FullName extends Constraint
     {
         $filter = new ProperName();
 
-        return array_map(function ($word) use ($filter) {
+        return array_map(static function ($word) use ($filter) {
             return $filter->filter($word);
         }, $value);
 

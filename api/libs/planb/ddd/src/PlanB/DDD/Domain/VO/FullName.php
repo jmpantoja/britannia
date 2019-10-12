@@ -24,7 +24,6 @@ class FullName
     private $firstName;
     private $lastName;
 
-
     public static function buildConstraint(array $options = []): Constraint
     {
         return new Validator\FullName([

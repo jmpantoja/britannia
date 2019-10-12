@@ -2,6 +2,7 @@
 
 
 {% block full_name_widget %}
+
     <div class="col-md-6 no-padding">
         {{ form_row(form.firstName) }}
     </div>
@@ -68,39 +69,56 @@
 {% endblock %}
 
 
-
 {% block payment_widget %}
 
     <script>
         {% autoescape 'js' %}
 
         jQuery(function ($) {
-            {#$('#sonata-ba-field-container-{{ id }}')#}
-            {#.toggle_field({#}
-            {#hide_values: ['CASH'],#}
-            {#children: '.bank_account'#}
-            {#})#}
+            $('#sonata-ba-field-container-{{ id }}')
+                .toggle_field({
+                    hide_values: ['CASH'],
+                    children: '.bank_account'
+                })
         })
         {% endautoescape %}
     </script>
 
     <div class="row">
         <div class="col-md-3">
-            {{ form_row(form.mode) }}
+            {{ form_row(form.mode, {legend: true}) }}
         </div>
-
     </div>
 
-    <div class="row col-md-8">
-
-
-        {{ form_row(form.account.fullName) }}
-        {{ form_row(form.account.iban) }}
-        {{ form_row(form.account.number) }}
-
-        {{ form_row(form.account.cityAddress) }}
-        {{ form_errors(form.account.cityAddress) }}
-
+    <div class="row col-md-8 bank_account">
+        {{ form_row(form.account, {legend: true}) }}
     </div>
+
+
+{% endblock %}
+
+{% block bank_account_widget %}
+    <div class="row">
+        <div class="col-md-12">
+            {{ form_row(form.fullName) }}
+        </div>
+    </div>
+
+    <legend>Nº de cuenta</legend>
+    <div class="row">
+        <div class="col-md-9">
+            {{ form_row(form.iban) }}
+        </div>
+        <div class="col-md-3">
+            {{ form_row(form.number) }}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            {{ form_row(form.cityAddress) }}
+        </div>
+    </div>
+
 
 {% endblock %}

@@ -11,23 +11,23 @@ $.widget('britannia.toggle_field', {
       this.toggle(event.val);
     }.bind(this))
 
-
   },
 
   toggle: function (value) {
     if (this.shouldBeVisible(value)) {
-
-//      this.children.show();
-
+      this.children.show();
     }
     else {
-//      this.children.hide();
-
+      this.children.hide();
     }
   },
 
   shouldBeVisible: function (value) {
-    return $.inArray(value, this.options.hide_values) < 0;
+
+    var hasErrors = this.children.find('.sonata-ba-field-error').length > 0;
+    var isHideValue = $.inArray(value, this.options.hide_values) >= 0
+
+    return hasErrors || !isHideValue;
   }
 
 })

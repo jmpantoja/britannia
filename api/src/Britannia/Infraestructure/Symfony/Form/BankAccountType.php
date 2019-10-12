@@ -48,7 +48,7 @@ class BankAccountType extends AbstractCompoundType
                 'invalid_message' => 'Se necesita un número'
             ])
             ->add('cityAddress', CityAddressType::class, [
-                'label' => 'Dirección',
+                'label' => 'Localidad',
                 'required' => $options['required']
             ]);
     }

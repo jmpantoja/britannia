@@ -48,15 +48,25 @@ services:
     tmpfs:
     - /usr/local/var/varnish:exec
 
+  #  db:
+  #    # In production, you may want to use a managed database service
+  #    image: postgres:10-alpine
+  #    environment:
+  #    - POSTGRES_DB=${POSTGRES_DB}
+  #    - POSTGRES_USER=${POSTGRES_USER}
+  #    - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+  #    volumes:
+  #    - ./data/database:/var/lib/postgresql/data:rw
+
   db:
-    # In production, you may want to use a managed database service
-    image: postgres:10-alpine
+    image: mysql:5.7
     environment:
-    - POSTGRES_DB=${POSTGRES_DB}
-    - POSTGRES_USER=${POSTGRES_USER}
-    - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
     volumes:
-    - ./data/database:/var/lib/postgresql/data:rw
+    - "./data/mysql:/var/lib/mysql"      
 
 
   proxy:
@@ -70,8 +80,8 @@ services:
     restart: always
     volumes:
     - ./proxy/ssl_certs:/var/lib/https-portal
-#    - ./proxy/conf/default.conf.erb:/var/lib/nginx-conf/default.conf.erb:ro
-#    - ./proxy/conf/default.ssl.conf.erb:/var/lib/nginx-conf/default.ssl.conf.erb:ro
+    #    - ./proxy/conf/default.conf.erb:/var/lib/nginx-conf/default.conf.erb:ro
+    #    - ./proxy/conf/default.ssl.conf.erb:/var/lib/nginx-conf/default.ssl.conf.erb:ro
 
     environment:
       CLIENT_MAX_BODY_SIZE: 64M

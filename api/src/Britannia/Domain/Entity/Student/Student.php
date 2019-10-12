@@ -56,20 +56,20 @@ abstract class Student extends AggregateRoot
     private $payment;
 
     /**
-     * @var \DateTimeImmutable
+     * @var \DateImmutable
      */
     private $createdAt;
 
     /**
-     * @var \DateTimeImmutable
+     * @var \DateImmutable
      */
     private $updatedAt;
 
     public function __construct()
     {
         $this->id = new StudentId();
-        $this->updatedAt = new \DateTimeImmutable();
-        $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTime();
+        $this->createdAt = new \DateTime();
         $this->phoneNumbers = [];
         $this->relatives = new ArrayCollection();
 
@@ -273,6 +273,23 @@ abstract class Student extends AggregateRoot
         $this->payment = $payment;
         return $this;
     }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedAt(): \DateTime
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getUpdatedAt(): \DateTime
+    {
+        return $this->updatedAt;
+    }
+
 
 
 }

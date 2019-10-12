@@ -16,14 +16,23 @@
     font-weight: 400;
 }
 
-
-fieldset.form-group {
-    margin-bottom: 2.5em;
-    display: block;
+fieldset legend {
+    border: none;
     clear: both;
 
-    padding-bottom: 2em;
-    border-bottom: solid 1px #dbdbdb;
+    font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 1.5em;
+    font-weight: 400;
+    overflow: hidden;
+
+    margin-bottom: 0;
+
+}
+
+fieldset.form-group {
+    margin-bottom: 1.5em;
+    display: block;
+    clear: both;
 }
 
 .sonata-ba-collapsed-fields .form-group:last-child{
@@ -31,19 +40,17 @@ fieldset.form-group {
 }
 
 
-fieldset.form-group > legend {
-    border: none;
-    clear: both;
+/*fieldset.form-group > legend {*/
+    /*border: none;*/
+    /*clear: both;*/
 
-    font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 1.5em;
-    font-weight: 400;
-    margin-bottom: 0;
+    /*font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;*/
+    /*font-size: 1.5em;*/
+    /*font-weight: 400;*/
+    /*margin-bottom: 0;*/
 
-    overflow: hidden;
-
-
-}
+    /*overflow: hidden;*/
+/*}*/
 
 fieldset.form-group .sonata-ba-field {
     clear: both;
@@ -58,23 +65,23 @@ fieldset .help-block {
 }
 
 
-fieldset.form-group fieldset.form-group {
-    margin-bottom: 5px;
-    display: block;
-    clear: both;
+/*fieldset.form-group fieldset.form-group {*/
+    /*margin-bottom: 5px;*/
+    /*display: block;*/
+    /*clear: both;*/
 
-    padding-bottom: 0;
-    border: none;
-}
+    /*padding-bottom: 0;*/
+    /*border: none;*/
+/*}*/
 
-fieldset.form-group fieldset.form-group > legend {
-    font-size: 1.1em;
-    font-weight: 600;
-    float: none;
+/*fieldset.form-group fieldset.form-group > legend {*/
+    /*font-size: 1.1em;*/
+    /*font-weight: 600;*/
+    /*float: none;*/
 
-    margin-top: 0.8em;
-    margin-bottom: 0;
+    /*margin-top: 0.8em;*/
+    /*margin-bottom: 0;*/
 
-    border: none;
-    width: available;
-}
+    /*border: none;*/
+    /*width: available;*/
+/*}*/

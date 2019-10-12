@@ -13,30 +13,22 @@ declare(strict_types=1);
 
 namespace PlanB\DDDBundle\Symfony\Form\Type;
 
-use Britannia\Infraestructure\Symfony\Form\JobStatusType;
-use Britannia\Infraestructure\Symfony\Form\JobType;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\DataMapperInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Component\Validator\Validation;
 
 abstract class AbstractCompoundType extends AbstractType implements DataMapperInterface
 {
 
-    /**
-     * @var FormBuilder
-     */
-    private $builder;
-
+    private $options;
 
     /**
      * {@inheritdoc}
@@ -52,10 +44,30 @@ abstract class AbstractCompoundType extends AbstractType implements DataMapperIn
     }
 
 
+    /**
+     * @param $forms
+     * @return array
+     */
+    protected function getOptions($forms): array
+    {
+        $parent = $this->getParentForm($forms);
+        $options = $parent->getConfig()->getOptions();
+        return $options;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function finishView(FormView $view, FormInterface $form, array $options)
+    {
+        foreach ($view->children as $child) {
+            $child->isChild = true;
+        }
+    }
+
+
     final public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $this->builder = $builder;
-
         $builder->setDataMapper($this);
         $this->customForm($builder, $options);
 
@@ -84,6 +96,7 @@ abstract class AbstractCompoundType extends AbstractType implements DataMapperIn
         $this->customOptions($resolver);
     }
 
+
     abstract public function customOptions(OptionsResolver $resolver);
 
     /**
@@ -94,8 +107,9 @@ abstract class AbstractCompoundType extends AbstractType implements DataMapperIn
      */
     final public function mapDataToForms($data, $forms): void
     {
+        $forms = iterator_to_array($forms);
 
-        $options = $this->builder->getOptions();
+        $options = $this->getOptions($forms);
         $className = $options['data_class'];
 
         if (!($data instanceof $className)) {
@@ -111,12 +125,9 @@ abstract class AbstractCompoundType extends AbstractType implements DataMapperIn
      * @param $forms
      * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
      */
-    protected function dataToForms($data, $forms): void
+    protected function dataToForms($data, array $forms): void
     {
-        $forms = iterator_to_array($forms);
-
         foreach ($forms as $name => $form) {
-
             $method = sprintf('get%s', ucfirst($name));
 
             $value = null;
@@ -142,7 +153,9 @@ abstract class AbstractCompoundType extends AbstractType implements DataMapperIn
             return $form->getData();
         }, $forms);
 
-        $constraint = $this->buildConstraint($this->builder->getOptions());
+        $options = $this->getOptions($forms);
+
+        $constraint = $this->buildConstraint($options);
 
         if (!($constraint instanceof Constraint)) {
             $data = $this->customMapping($values);
@@ -244,4 +257,5 @@ abstract class AbstractCompoundType extends AbstractType implements DataMapperIn
     abstract public function buildConstraint(array $options): ?Constraint;
 
     abstract public function customMapping(array $data);
+
 }

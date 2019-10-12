@@ -30,12 +30,12 @@ class PostalAddress
 
     public static function make(string $address, PostalCode $postalCode): self
     {
-        self::assert([
+        $data = self::assert([
             'address' => $address,
             'postalCode' => $postalCode
         ]);
 
-        return new self($address, $postalCode);
+        return new self($data['address'], $data['postalCode']);
     }
 
     private function __construct(string $address, PostalCode $postalCode)
