@@ -3,9 +3,15 @@
 namespace Britannia\Domain\Entity\Student;
 
 
+use Britannia\Domain\Entity\Academy\Academy;
+use Britannia\Domain\VO\ContactMode;
+use Britannia\Domain\VO\NumOfYears;
+use Britannia\Domain\VO\OtherAcademy;
+use Britannia\Domain\VO\PartOfDay;
 use Britannia\Domain\VO\Payment;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use phpDocumentor\Reflection\DocBlock\Tags\Since;
 use PlanB\DDD\Domain\Model\AggregateRoot;
 use PlanB\DDD\Domain\VO\Email;
 use PlanB\DDD\Domain\VO\FullName;
@@ -56,6 +62,47 @@ abstract class Student extends AggregateRoot
     private $payment;
 
     /**
+     * @var PartOfDay
+     */
+    private $preferredPartOfDay;
+
+    /**
+     * @var ContactMode
+     */
+    private $preferredContactMode;
+
+    /**
+     * @var Academy
+     */
+    private $academy;
+
+    /**
+     * @var NumOfYears
+     */
+    private $academyNumOfYears;
+
+
+    /**
+     * @var string|null
+     */
+    private $firstContact;
+
+    /**
+     * @var bool
+     */
+    private $termsOfUseAcademy = false;
+
+    /**
+     * @var bool
+     */
+    private $termsOfUseStudent = false;
+
+    /**
+     * @var bool
+     */
+    private $termsOfUseImageRigths = false;
+
+    /**
      * @var \DateImmutable
      */
     private $createdAt;
@@ -83,15 +130,6 @@ abstract class Student extends AggregateRoot
         return $this->id;
     }
 
-    /**
-     * @param StudentId $id
-     * @return Student
-     */
-    public function setId(StudentId $id): Student
-    {
-        $this->id = $id;
-        return $this;
-    }
 
     /**
      * @return bool
@@ -275,6 +313,164 @@ abstract class Student extends AggregateRoot
     }
 
     /**
+     * @return PartOfDay
+     */
+    public function getPreferredPartOfDay(): ?PartOfDay
+    {
+        return $this->preferredPartOfDay;
+    }
+
+    /**
+     * @param PartOfDay $preferredPartOfDay
+     * @return Student
+     */
+    public function setPreferredPartOfDay(?PartOfDay $preferredPartOfDay): self
+    {
+        $this->preferredPartOfDay = $preferredPartOfDay;
+        return $this;
+    }
+
+    /**
+     * @return ContactMode
+     */
+    public function getPreferredContactMode(): ?ContactMode
+    {
+        return $this->preferredContactMode;
+    }
+
+    /**
+     * @param ContactMode $preferredContactMode
+     * @return Student
+     */
+    public function setPreferredContactMode(?ContactMode $preferredContactMode): self
+    {
+        $this->preferredContactMode = $preferredContactMode;
+        return $this;
+    }
+
+    /**
+     * @return Academy
+     */
+    public function getAcademy(): ?Academy
+    {
+        return $this->academy;
+    }
+
+    /**
+     * @return NumOfYears
+     */
+    public function getAcademyNumOfYears(): ?NumOfYears
+    {
+        return $this->academyNumOfYears;
+    }
+
+
+    /**
+     * @return OtherAcademy
+     */
+    public function getOtherAcademy(): ?OtherAcademy
+    {
+        if (!($this->academy instanceof Academy)) {
+            return null;
+        }
+        return OtherAcademy::make($this->academy, $this->academyNumOfYears);
+
+    }
+
+    /**
+     * @param OtherAcademy $otherAcademy
+     * @return Student
+     */
+    public function setOtherAcademy(?OtherAcademy $otherAcademy): self
+    {
+        if (!($otherAcademy instanceof OtherAcademy)) {
+            $this->academy = null;
+            $this->academyNumOfYears = null;
+            return $this;
+        }
+
+        $this->academy = $otherAcademy->getAcademy();
+        $this->academyNumOfYears = $otherAcademy->getNumOfYears();
+        return $this;
+
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getFirstContact(): ?string
+    {
+        return $this->firstContact;
+    }
+
+    /**
+     * @param null|string $firstContact
+     * @return Student
+     */
+    public function setFirstContact(?string $firstContact): self
+    {
+        $this->firstContact = $firstContact;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isTermsOfUseAcademy(): bool
+    {
+        return $this->termsOfUseAcademy;
+    }
+
+    /**
+     * @param bool $termsOfUseAcademy
+     * @return Student
+     */
+    public function setTermsOfUseAcademy(bool $termsOfUseAcademy): self
+    {
+        $this->termsOfUseAcademy = $termsOfUseAcademy;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isTermsOfUseStudent(): bool
+    {
+        return $this->termsOfUseStudent;
+    }
+
+    /**
+     * @param bool $termsOfUseStudent
+     * @return Student
+     */
+    public function setTermsOfUseStudent(bool $termsOfUseStudent): self
+    {
+        $this->termsOfUseStudent = $termsOfUseStudent;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isTermsOfUseImageRigths(): bool
+    {
+        return $this->termsOfUseImageRigths;
+    }
+
+    /**
+     * @param bool $termsOfUseImageRigths
+     * @return Student
+     */
+    public function setTermsOfUseImageRigths(bool $termsOfUseImageRigths): self
+    {
+        $this->termsOfUseImageRigths = $termsOfUseImageRigths;
+        return $this;
+    }
+
+
+
+
+    /**
      * @return \DateTime
      */
     public function getCreatedAt(): \DateTime
@@ -289,7 +485,6 @@ abstract class Student extends AggregateRoot
     {
         return $this->updatedAt;
     }
-
 
 
 }

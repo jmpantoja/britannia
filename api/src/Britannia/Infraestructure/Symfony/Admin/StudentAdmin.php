@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Admin;
 
 use Britannia\Domain\Entity\Student\Adult;
+use Britannia\Infraestructure\Symfony\Form\ContactModeType;
 use Britannia\Infraestructure\Symfony\Form\JobType;
+use Britannia\Infraestructure\Symfony\Form\OtherAcademyType;
+use Britannia\Infraestructure\Symfony\Form\PartOfDayType;
 use Britannia\Infraestructure\Symfony\Form\PaymentType;
 use Britannia\Infraestructure\Symfony\Form\RelativesType;
-use PlanB\DDD\Domain\VO\Validator\DNI;
 use PlanB\DDDBundle\Symfony\Form\Type\DateType;
 use PlanB\DDDBundle\Symfony\Form\Type\DNIType;
 use PlanB\DDDBundle\Symfony\Form\Type\EmailType;
@@ -19,8 +21,12 @@ use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Form\Type\ModelListType;
+use Sonata\AdminBundle\Form\Type\ModelReferenceType;
+use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Type\DatePickerType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 final class StudentAdmin extends AbstractAdmin
 {
@@ -60,6 +66,8 @@ final class StudentAdmin extends AbstractAdmin
 
     protected function configureFormFields(FormMapper $formMapper): void
     {
+
+
         $subject = $this->getSubject();
         $isAdult = $subject instanceof Adult;
 
@@ -105,24 +113,58 @@ final class StudentAdmin extends AbstractAdmin
                     ])
                 ->end()
             ->end()
+
             ->with('Pago', ['tab' => true])
-                ->with('Descuento', ['class' => 'col-md-4'])
-                    ->add('relatives', RelativesType::class, [
-                        'label' => 'Familiares',
-                        'studentId' => $subject->getId()
-                    ])
-                 ->end()
-                ->with('Forma de pago', ['class'=>'col-md-8'])
+                ->with('Forma de pago', ['class'=>'col-md-6'])
                     ->add('payment', PaymentType::class, [
                         'label' => false,
                         'required' => true
                     ])
                 ->end()
+                ->with('Descuento', ['class' => 'col-md-6'])
+                    ->add('relatives', RelativesType::class, [
+                        'label' => 'Familiares',
+                        'studentId' => $subject->getId()
+                    ])
+                ->end()
+            ->end()
+
+            ->with('Extra', ['tab' => true])
+                ->with('Preferencias', ['class'=>'col-md-4'])
+                    ->add('preferredPartOfDay', PartOfDayType::class, [
+                        'label' => 'Horario'
+                    ])
+                    ->add('preferredContactMode', ContactModeType::class, [
+                        'label' => 'Contacto'
+                    ])
+                ->end()
+                ->with('Estadísticas', ['class'=>'col-md-4'])
+                        ->add('otherAcademy', OtherAcademyType::class, [
+                            'required' => false,
+                            'label' => 'Ha estudiado antes en...',
+                            'sonata_admin' => $this
+                        ])
+                        ->add('firstContact', TextType::class, [
+                            'required' => false,
+                            'label' => '¿Como nos conociste?.'
+                        ])
+
+                        //como nos conociste
+                ->end()
+                ->with('Condiciones', ['class'=>'col-md-4'])
+                        ->add('termsOfUseAcademy', null, [
+                            'label'=>'Acepta las condiciones de uso de la academia'
+                        ])
+                        ->add('termsOfUseStudent', null, [
+                            'label'=>'Acepta las condiciones de uso de la academia'
+                        ])
+                        ->add('termsOfUseImageRigths', null, [
+                            'label'=>'Consentimiento de Imagen'
+                        ])
+                ->end()
             ->end()
         ;
     }
-
-
 
     protected function configureShowFields(ShowMapper $showMapper): void
     {

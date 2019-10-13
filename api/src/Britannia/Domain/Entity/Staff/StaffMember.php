@@ -34,7 +34,7 @@ class StaffMember extends AggregateRoot implements UserInterface
 
     private $id;
 
-    const DEFAULT_ROLE = 'ROLE_STAFF_MEMBER';
+    const DEFAULT_ROLE = 'ROLE_USER';
 
     public function __construct()
     {

@@ -1,8 +1,11 @@
 $.widget('britannia.toggle_field', {
 
-  options: {},
+  options: {
+    select: 'select:first'
+  },
+
   _create: function () {
-    this.select = this.element.find('select');
+    this.select = this.element.find(this.options.select);
     this.children = this.element.find(this.options.children);
 
     this.toggle(this.select.val());
@@ -23,11 +26,10 @@ $.widget('britannia.toggle_field', {
   },
 
   shouldBeVisible: function (value) {
-
     var hasErrors = this.children.find('.sonata-ba-field-error').length > 0;
     var isHideValue = $.inArray(value, this.options.hide_values) >= 0
 
     return hasErrors || !isHideValue;
   }
 
-})
+});

@@ -15,6 +15,9 @@ sonata_admin:
         extra_javascripts:
             - js/admin/forms.js
 
+    security:
+        handler: sonata.admin.security.handler.role
+
 sonata_block:
     blocks:
         sonata.admin.block.admin_list:

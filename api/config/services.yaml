@@ -33,7 +33,7 @@ services:
         class: Britannia\Infraestructure\Symfony\Admin\StaffMemberAdmin
         arguments: [~, Britannia\Domain\Entity\Staff\StaffMember, ~]
         tags:
-        - { name: sonata.admin, manager_type: orm, group: admin, label: StaffMember  }
+        - { name: sonata.admin, manager_type: orm, group: Usuarios, label: Personal }
         public: true
 
 
@@ -43,13 +43,13 @@ services:
         arguments: [~, Britannia\Domain\Entity\Student\Student, ~]
         public: true
         tags:
-        - { name: sonata.admin, manager_type: orm, group: admin, label: Student }
+        - { name: sonata.admin, manager_type: orm, group: Alumnos, label: Alumnos }
         calls:
         - [setSubClasses, [{child: Britannia\Domain\Entity\Student\Child, adult: Britannia\Domain\Entity\Student\Adult}]]
 
-    admin.borrame:
-        class: Britannia\Infraestructure\Symfony\Admin\BorrameAdmin
-        arguments: [~, Britannia\Domain\Entity\Borrame, ~]
+    admin.academy:
+        class: Britannia\Infraestructure\Symfony\Admin\AcademyAdmin
+        arguments: [~, Britannia\Domain\Entity\Academy\Academy, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Borrame }
+        - { name: sonata.admin, manager_type: orm, group: Extra, label: Otras academias }
         public: true

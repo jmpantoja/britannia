@@ -56,11 +56,12 @@ abstract class BaseFixture extends Fixture
     {
         for ($i = 0; $i < $count; $i++) {
             $entity = new $className();
-            $callback($entity, $i);
+            $reference = $callback($entity, $i) ?? $i;
+
 
             $this->dataPersister->persist($entity);
 
-            $this->addReference($className . '_' . $i, $entity);
+            $this->addReference($className . '_' . $reference, $entity);
         }
     }
 }

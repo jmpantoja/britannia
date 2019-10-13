@@ -36,6 +36,10 @@ class EntityIdType extends UuidType
 
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
+        if(is_null($value)){
+            return $value;
+        }
+
         $className = $this->getNamespace() . '\\' . $this->getName();
 
         return new $className($value);

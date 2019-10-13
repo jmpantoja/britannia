@@ -228,16 +228,15 @@ abstract class AbstractCompoundType extends AbstractType implements DataMapperIn
      * @param array $forms
      * @return array
      */
-    private function getParentForm(array $forms): ?FormInterface
+    protected function getParentForm(array $forms): ?FormInterface
     {
 
         $parent = null;
-        $form = next($forms);
+        $form = reset($forms);
         if ($form) {
             $parent = $form->getParent();
         }
 
-        reset($forms);
         return $parent;
     }
 

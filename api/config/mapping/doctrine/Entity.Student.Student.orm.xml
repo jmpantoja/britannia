@@ -28,8 +28,6 @@
 
         <embedded name="address" class="PlanB\DDD\Domain\VO\PostalAddress" use-column-prefix="false"/>
 
-        <embedded name="payment" class="Britannia\Domain\VO\Payment" />
-
         <field name="phoneNumbers" column="phone_numbers" type="json"/>
 
         <many-to-many field="relatives" target-entity="Student">
@@ -37,6 +35,26 @@
                 <cascade-all/>
             </cascade>
         </many-to-many>
+
+        <embedded name="payment" class="Britannia\Domain\VO\Payment"/>
+
+        <field name="preferredPartOfDay" column="preferredPartOfDay" type="PartOfDay"/>
+
+        <field name="preferredContactMode" column="preferredContactMode" type="ContactMode"/>
+
+        <many-to-one field="academy" target-entity="Britannia\Domain\Entity\Academy\Academy">
+            <join-column name="other_academy_id" nullable="true"></join-column>
+        </many-to-one>
+
+        <field name="academyNumOfYears" column="other_academy_time" type="NumOfYears"/>
+
+        <field name="firstContact" nullable="true"/>
+
+        <field name="termsOfUseAcademy" type="boolean"/>
+
+        <field name="termsOfUseStudent" type="boolean"/>
+
+        <field name="termsOfUseImageRigths" type="boolean"/>
 
 
         <field name="createdAt" type="datetime">

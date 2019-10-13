@@ -5,13 +5,14 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
 
-    <entity name="Britannia\Domain\Entity\Borrame" table="borrame">
+    <entity name="Britannia\Domain\Entity\Academy\Academy" table="other_academy">
 
-        <id name="id" type="integer" column="id">
-            <generator strategy="AUTO"></generator>
+        <id name="id" type="AcademyId" column="id">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
         </id>
 
-        <embedded name="fullName" class="PlanB\DDD\Domain\VO\FullName"/>
+        <field name="name"/>
     </entity>
 
 </doctrine-mapping>

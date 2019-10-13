@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace PlanB\DDD\Domain\Model;
 
 
+use Britannia\Domain\Entity\Academy\AcademyId;
 use Ramsey\Uuid\Uuid;
 
 class EntityId
@@ -47,13 +48,12 @@ class EntityId
     }
 
     /**
-     * @param UserId $userId
-     *
+     * @param EntityId $entityId
      * @return bool
      */
-    public function equals(UserId $userId)
+    public function equals(EntityId $entityId)
     {
-        return $this->id() === $userId->id();
+        return $this->id() === $entityId->id();
     }
 
     /**
