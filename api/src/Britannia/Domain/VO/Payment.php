@@ -30,7 +30,7 @@ class Payment
     public static function buildConstraint(array $options = []): Constraint
     {
         return new Validator\Payment([
-            'required' => $options['required']
+            'required' => $options['required'] ?? true
         ]);
     }
 

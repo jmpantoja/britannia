@@ -24,11 +24,11 @@
 
         <field name="birthDate" column="birth_date" type="date" nullable="true"/>
 
-        <field name="email" column="email" length="256" type="email"/>
+        <field name="emails" column="emails" type="email_list"/>
 
         <embedded name="address" class="PlanB\DDD\Domain\VO\PostalAddress" use-column-prefix="false"/>
 
-        <field name="phoneNumbers" column="phone_numbers" type="json"/>
+        <field name="phoneNumbers" column="phone_numbers" type="phone_number_list"/>
 
         <many-to-many field="relatives" target-entity="Student">
             <cascade>
@@ -55,16 +55,6 @@
         <field name="termsOfUseStudent" type="boolean"/>
 
         <field name="termsOfUseImageRigths" type="boolean"/>
-
-
-        <field name="createdAt" type="datetime">
-            <gedmo:timestampable on="create"/>
-        </field>
-
-        <field name="updatedAt" type="datetime">
-            <gedmo:timestampable on="update"/>
-        </field>
-
 
     </entity>
 

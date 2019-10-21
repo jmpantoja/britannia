@@ -20,16 +20,27 @@ security:
     role_hierarchy:
         ROLE_MANAGER:             
             - ROLE_SONATA_ADMIN
+            
             - ROLE_ADMIN_STAFF_MEMBER_ALL
             - ROLE_ADMIN_STUDENT_ALL
             - ROLE_ADMIN_ACADEMY_ALL
+            - ROLE_ADMIN_SCHOOL_ALL
+            - ROLE_ADMIN_TUTOR_ALL
 
         ROLE_RECEPTION:
-        - ROLE_SONATA_ADMIN
-        - ROLE_ADMIN_STUDENT_LIST
-        - ROLE_ADMIN_STUDENT_CREATE
-        - ROLE_ADMIN_STUDENT_EDIT
-        - ROLE_ADMIN_ACADEMY_ALL
+            - ROLE_SONATA_ADMIN
+            
+            - ROLE_ADMIN_STUDENT_LIST
+            - ROLE_ADMIN_STUDENT_CREATE
+            - ROLE_ADMIN_STUDENT_EDIT
+            
+            - ROLE_ADMIN_TUTOR_LIST
+            - ROLE_ADMIN_TUTOR_CREATE
+            - ROLE_ADMIN_TUTOR_EDIT
+            
+            - ROLE_ADMIN_ACADEMY_ALL
+            - ROLE_ADMIN_SCHOOL_ALL
+            
 
         ROLE_TEACHER:
         - ROLE_SONATA_ADMIN

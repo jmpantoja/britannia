@@ -19,4 +19,5 @@ return [
     Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle::class => ['all' => true],
     League\Tactician\Bundle\TacticianBundle::class => ['all' => true],
     PlanB\DDDBundle\PlanBDDDBundle::class => ['all' => true],
+    Symfony\Bundle\MonologBundle\MonologBundle::class => ['all' => true],
 ];

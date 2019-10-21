@@ -33,11 +33,12 @@ class Iban extends Constraint
     public function sanitize($value)
     {
 
-        if(!is_string($value)){
+        if (!is_string($value)) {
             return $value;
         }
 
         $value = strtoupper($value);
+        $value = str_replace('-', '', $value);
         return preg_replace('/(\s)/', '', $value);
     }
 }

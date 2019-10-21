@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace PlanB\DDD\Domain\VO\Validator;
 
 
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Regex;
 
 class PhoneNumberValidator extends ConstraintValidator
@@ -29,12 +30,23 @@ class PhoneNumberValidator extends ConstraintValidator
 
     public function handle($value, Constraint $constraint)
     {
-        $this->validateValue($value, [
+
+        $this->validateField('phoneNumber', $value['phoneNumber'], [
+            new NotBlank([
+                'message' => $constraint->requiredMessage
+            ]),
             new Regex([
                 'message' => $constraint->message,
                 'pattern' => '/^\d{9}$/'
             ])
         ]);
+
+//        $this->validateValue($value, [
+//            new Regex([
+//                'message' => $constraint->message,
+//                'pattern' => '/^\d{9}$/'
+//            ])
+//        ]);
 
     }
 }

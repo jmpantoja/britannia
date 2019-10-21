@@ -29,7 +29,7 @@ class Adult extends Student
      * @param DNI $dni
      * @return Adult
      */
-    public function setDni(DNI $dni): Adult
+    public function setDni(?DNI $dni): Adult
     {
         $this->dni = $dni;
         return $this;

@@ -37,11 +37,13 @@ class PhoneNumberType extends Type
 
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
+        die(__METHOD__);
         return PhoneNumber::make($value);
     }
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
+        die(__METHOD__);
         return (string)$value;
     }
 

@@ -7,17 +7,46 @@ parameters:
 
 doctrine:
     dbal:
-        # configure these for your database server
-        driver: 'mysql'
-        server_version: '10'
+        default_connection: default
+        connections:
 
-        # With Symfony 3.3, remove the `resolve:` prefix
-        url: '%env(resolve:DATABASE_URL)%'
+            original:
+                # configure these for your database server
+                driver: 'mysql'
+                server_version: '5.7'
 
+                # With Symfony 3.3, remove the `resolve:` prefix
+                url: '%env(resolve:DATABASE_OLD_URL)%'
+                charset: 'UTF8'
+                
+            default: 
+                # configure these for your database server
+                driver: 'mysql'
+                server_version: '5.7'
+                charset: 'UTF8'
+        
+                # With Symfony 3.3, remove the `resolve:` prefix
+                url: '%env(resolve:DATABASE_URL)%'
+                
+                mapping_types:
+                    StaffMemberId: StaffMemberId
+                    AcademyId: AcademyId
+                    SchoolId: SchoolId
+                    StudentId: StudentId
+                    TutorId: TutorId
+                    JobStatus: JobStatus
+                    PartOfDay: PartOfDay
+                    NumOfYears: NumOfYears
+                    ContactMode: ContactMode
+                    PaymentMode: PaymentMode
+                    BankAccount: BankAccount
+        
         types:
             StaffMemberId:  Britannia\Infraestructure\Doctrine\DBAL\Type\StaffMemberIdType
             AcademyId:  Britannia\Infraestructure\Doctrine\DBAL\Type\AcademyIdType
+            SchoolId:  Britannia\Infraestructure\Doctrine\DBAL\Type\SchoolIdType
             StudentId: Britannia\Infraestructure\Doctrine\DBAL\Type\StudentIdType
+            TutorId: Britannia\Infraestructure\Doctrine\DBAL\Type\TutorIdType
             JobStatus: Britannia\Infraestructure\Doctrine\DBAL\Type\JobStatusType
             PartOfDay: Britannia\Infraestructure\Doctrine\DBAL\Type\PartOfDayType
             NumOfYears: Britannia\Infraestructure\Doctrine\DBAL\Type\NumOfYearsType
@@ -25,17 +54,7 @@ doctrine:
             PaymentMode: Britannia\Infraestructure\Doctrine\DBAL\Type\PaymentModeType
             BankAccount: Britannia\Infraestructure\Doctrine\DBAL\Type\BankAccountType
 
-        mapping_types:
-            StaffMemberId: StaffMemberId
-            AcademyId: AcademyId
-            StudentId: StudentId
-            JobStatus: JobStatus
-            PartOfDay: PartOfDay
-            NumOfYears: NumOfYears
-            ContactMode: ContactMode
-            PaymentMode: PaymentMode
-            BankAccount: BankAccount
-            
+
     orm:
         auto_generate_proxy_classes: true
         naming_strategy: doctrine.orm.naming_strategy.underscore

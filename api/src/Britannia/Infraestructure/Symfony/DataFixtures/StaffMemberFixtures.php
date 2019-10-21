@@ -3,72 +3,31 @@
 namespace Britannia\Infraestructure\Symfony\DataFixtures;
 
 use ApiPlatform\Core\DataPersister\DataPersisterInterface;
-
 use Britannia\Domain\Entity\Staff\StaffMember;
 use Britannia\Domain\Entity\Staff\User;
-use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\DBAL\Query\QueryBuilder;
 use PlanB\OrigamiBundle\Api\DataPersister;
 
 class StaffMemberFixtures extends BaseFixture
 {
 
-
-//    /**
-//     * @var DataPersister
-//     */
-//    private $dataPersister;
-//
-//    public function __construct(DataPersisterInterface $dataPersister)
-//    {
-//        $this->dataPersister = $dataPersister;
-//    }
-//
-//    public function load(ObjectManager $manager)
-//    {
-//        $user = new StaffMember();
-//        $user->setUserName('manager');
-//
-//        $user->setFirstName('pepe');
-//        $user->setLastName('botika');
-//
-//        $user->setPlainPassword('1234');
-//        $user->setPassword('1234');
-//        $user->setEmail('manager@britannia.es');
-//        $user->setActive(true);
-//
-//        $user->setRoles([
-//            'ROLE_MANAGER'
-//        ]);
-//
-//        $this->dataPersister->persist($user);
-//
-//
-////        for ($i = 0; $i < 1; $i++) {
-////            $user = new StaffMember();
-////
-////            $name = sprintf('user-%02d', $i + 1);
-////            $email = sprintf('%s@britannia.es', $name);
-////
-////            $user->setUserName($name);
-////
-////            $user->setFirstName($name);
-////            $user->setLastName('britannia');
-////
-////            $user->setPlainPassword('1234');
-////
-////
-////            $user->setEmail($email);
-////            $user->setActive(true);
-////
-////            $this->dataPersister->persist($user);
-////
-////        }
-//
-//    }
-
     public function loadData(DataPersisterInterface $dataPersister): void
     {
+
+//        $builder = $this->getQueryBuilder();
+//        $builder->select('*')
+//            ->from('user');
+//
+//        $this->import($builder, StaffMember::class, function (StaffMember $member, $data) {
+//
+//            $member->setFirstName($data['name']);
+//            $member->setLastName('');
+//            $member->setUserName($data['user']);
+//            $member->setPlainPassword('1234');
+//
+//            $member->setEmail($data['email']);
+//        });
+
         $this->createMany(StaffMember::class, 2, function (StaffMember $member, int $count) {
 
             $userName = sprintf('manager-%02d', $count);
@@ -97,6 +56,7 @@ class StaffMemberFixtures extends BaseFixture
         });
 
     }
+
 
     public function create(StaffMember $member, string $userName, array $roles)
     {

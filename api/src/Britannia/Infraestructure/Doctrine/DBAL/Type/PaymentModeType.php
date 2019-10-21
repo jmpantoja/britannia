@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Doctrine\DBAL\Type;
 
 
-use Britannia\Domain\VO\JobStatus;
 use Britannia\Domain\VO\PaymentMode;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;

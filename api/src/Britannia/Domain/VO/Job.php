@@ -54,34 +54,17 @@ class Job
         return new self((string)$name, $status);
     }
 
-    /**
-     * @param $name
-     * @param $status
-     */
-    private static function ensureIsValid($name, $status): void
-    {
-        $validator = Validator::create();
-
-        $validator->key('name', Validator::alnum(' .-'));
-        $validator->key('status', Validator::in(JobStatus::getNames()));
-
-        $validator->assert([
-            'name' => $name,
-            'status' => $status
-        ]);
-    }
-
     private function __construct(string $name, JobStatus $status)
     {
         $this->setName($name);
-        $this->status = $status;
+        $this->setStatus($status);
     }
 
     /**
      * @param string $name
      * @return Job
      */
-    private function setName(string $name): Job
+    private function setName(string $name): self
     {
         $this->name = $name;
         return $this;
@@ -104,7 +87,7 @@ class Job
         return $this->status;
     }
 
-    public function setStatus($status): self
+    private function setStatus(JobStatus $status): self
     {
         $this->status = $status;
 

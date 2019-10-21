@@ -33,6 +33,7 @@ class StudentFixtures extends BaseFixture
 
     public function loadData(DataPersisterInterface $dataPersister): void
     {
+
         $this->createMany(Adult::class, 10, function (Adult $adult, int $count) {
 
             $this->create($adult);
@@ -46,6 +47,13 @@ class StudentFixtures extends BaseFixture
                 JobStatus::EMPLOYED()
             ]));
 
+            $adult->setActive(false);
+        });
+
+        $this->createMany(Child::class, 3, function (Child $child, int $count) {
+
+            $this->create($child);
+            $child->setActive(true);
         });
     }
 
@@ -65,9 +73,10 @@ class StudentFixtures extends BaseFixture
             $this->faker->dateTimeBetween('-60 years', '-18 years')
         );
 
-        $student->setEmail(Email::make(...[
+        $student->addEmail(Email::make(...[
             $this->faker->email()
         ]));
+
 
         $student->setAddress(PostalAddress::make(...[
             $this->faker->address(),

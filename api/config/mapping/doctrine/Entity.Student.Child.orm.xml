@@ -7,6 +7,12 @@
 
     <entity name="Britannia\Domain\Entity\Student\Child" table="students_child">
 
+        <many-to-one field="school" target-entity="Britannia\Domain\Entity\School\School"/>
+        <field name="schoolCourse" nullable="true"/>
+
+        <many-to-one field="firstTutor" target-entity="Britannia\Domain\Entity\Student\Tutor" />
+        <many-to-one field="secondTutor" target-entity="Britannia\Domain\Entity\Student\Tutor"/>
+
     </entity>
 
 </doctrine-mapping>

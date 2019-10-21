@@ -93,4 +93,8 @@ class FullName
         ]);
     }
 
+    public function __toString()
+    {
+        return $this->getReversedMode();
+    }
 }

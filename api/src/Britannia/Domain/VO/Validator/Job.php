@@ -23,4 +23,10 @@ class Job extends Constraint
     {
         return is_array($value) || $value instanceof \Britannia\Domain\VO\Job;
     }
+
+    public function sanitize($value)
+    {
+        $value['name'] = !empty($value['name']) ? $value['name'] : null;
+        return $value;
+    }
 }

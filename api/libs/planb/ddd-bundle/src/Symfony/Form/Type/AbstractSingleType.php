@@ -101,6 +101,7 @@ abstract class AbstractSingleType extends AbstractType implements DataTransforme
         $options = $this->builder->getOptions();
 
         if (!class_exists((string)$options['data_class'])) {
+
             return (string)$value;
         }
 

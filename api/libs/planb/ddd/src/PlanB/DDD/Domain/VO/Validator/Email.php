@@ -23,4 +23,14 @@ class Email extends Constraint
     {
         return is_scalar($value) || $value instanceof \PlanB\DDD\Domain\VO\Email;
     }
+
+    public function sanitize($value)
+    {
+        if ($value instanceof \PlanB\DDD\Domain\VO\Email) {
+            return $value;
+        }
+        return trim((string)$value);
+    }
+
+
 }

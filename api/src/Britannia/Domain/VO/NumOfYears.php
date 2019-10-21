@@ -18,10 +18,9 @@ use MabeEnum\Enum;
 
 class NumOfYears extends Enum
 {
-    public const LESS_ONE_YEAR = 'Menos de un año';
-    public const BETWEEN_ONE_AND_TWO_YEARS = 'Entre uno y dos años';
-    public const BETWEEN_TWO_AND_FIVE_YEARS = 'Entre dos y cinco años';
-    public const MORE_FIVE_YEARS = 'Más de cinco años';
-
-
+    public const ONE_YEAR = 'Un año';
+    public const TWO_YEARS = 'Dos años';
+    public const THREE_YEARS = 'Tres años';
+    public const FOUR_YEARS = 'Cuatro años';
+    public const FIVE_YEARS_OR_MORE = 'Cinco años o más';
 }

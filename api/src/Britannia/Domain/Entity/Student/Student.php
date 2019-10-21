@@ -11,7 +11,6 @@ use Britannia\Domain\VO\PartOfDay;
 use Britannia\Domain\VO\Payment;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use phpDocumentor\Reflection\DocBlock\Tags\Since;
 use PlanB\DDD\Domain\Model\AggregateRoot;
 use PlanB\DDD\Domain\VO\Email;
 use PlanB\DDD\Domain\VO\FullName;
@@ -37,9 +36,9 @@ abstract class Student extends AggregateRoot
     private $birthDate;
 
     /**
-     * @var Email
+     * @var Email[]
      */
-    private $email;
+    private $emails = [];
 
     /**
      * @var PostalAddress
@@ -49,7 +48,7 @@ abstract class Student extends AggregateRoot
     /**
      * @var PhoneNumber[]
      */
-    private $phoneNumbers;
+    private $phoneNumbers = [];
 
     /**
      * @var Student[]
@@ -102,22 +101,9 @@ abstract class Student extends AggregateRoot
      */
     private $termsOfUseImageRigths = false;
 
-    /**
-     * @var \DateImmutable
-     */
-    private $createdAt;
-
-    /**
-     * @var \DateImmutable
-     */
-    private $updatedAt;
-
     public function __construct()
     {
         $this->id = new StudentId();
-        $this->updatedAt = new \DateTime();
-        $this->createdAt = new \DateTime();
-        $this->phoneNumbers = [];
         $this->relatives = new ArrayCollection();
 
     }
@@ -186,20 +172,31 @@ abstract class Student extends AggregateRoot
     }
 
     /**
-     * @return Email
+     * @return Email[]
      */
-    public function getEmail(): ?Email
+    public function getEmails(): array
     {
-        return $this->email;
+        return $this->emails;
     }
 
     /**
-     * @param Email $email
+     * @param Email[] $emails
      * @return Student
      */
-    public function setEmail(Email $email): Student
+    public function setEmails(array $emails): Student
     {
-        $this->email = $email;
+        $this->emails = [];
+        foreach ($emails as $email) {
+            $this->addEmail($email);
+        }
+        return $this;
+    }
+
+    public function addEmail(Email $email): Student
+    {
+        $address = (string)$email;
+        $this->emails[$address] = $email;
+
         return $this;
     }
 
@@ -246,11 +243,8 @@ abstract class Student extends AggregateRoot
     public function addPhoneNumber(PhoneNumber $phoneNumber): Student
     {
         $number = $phoneNumber->getPhoneNumber();
-        if (in_array($number, $this->phoneNumbers, true)) {
-            return $this;
-        }
+        $this->phoneNumbers[$number] = $phoneNumber;
 
-        $this->phoneNumbers[] = $number;
         return $this;
     }
 
@@ -468,23 +462,9 @@ abstract class Student extends AggregateRoot
     }
 
 
-
-
-    /**
-     * @return \DateTime
-     */
-    public function getCreatedAt(): \DateTime
+    public function __toString()
     {
-        return $this->createdAt;
+        return (string)$this->getFullName();
     }
-
-    /**
-     * @return \DateTime
-     */
-    public function getUpdatedAt(): \DateTime
-    {
-        return $this->updatedAt;
-    }
-
 
 }

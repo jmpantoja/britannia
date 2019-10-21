@@ -20,7 +20,7 @@ class PostalCode
     public static function buildConstraint(array $options = []): Constraint
     {
         return new Validator\PostalCode([
-            'required' => $options['required'] ?? false
+            'required' => $options['required'] ?? true
         ]);
     }
 

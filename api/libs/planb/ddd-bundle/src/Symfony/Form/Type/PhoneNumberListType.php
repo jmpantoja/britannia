@@ -68,6 +68,7 @@ class PhoneNumberListType extends AbstractSingleType
 
     public function transform($value)
     {
+
         return $value;
     }
 
@@ -82,7 +83,6 @@ class PhoneNumberListType extends AbstractSingleType
             return $this->toPhoneNumber($phoneNumber);
         }, $data);
 
-        return (array)$data;
     }
 
     /**
@@ -90,6 +90,7 @@ class PhoneNumberListType extends AbstractSingleType
      * @return PhoneNumber
      */
     protected function toPhoneNumber($phoneNumber): PhoneNumber
+
     {
         if ($phoneNumber instanceof PhoneNumber) {
             return $phoneNumber;

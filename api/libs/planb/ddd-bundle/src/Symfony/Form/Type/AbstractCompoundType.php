@@ -157,6 +157,7 @@ abstract class AbstractCompoundType extends AbstractType implements DataMapperIn
 
         $constraint = $this->buildConstraint($options);
 
+
         if (!($constraint instanceof Constraint)) {
             $data = $this->customMapping($values);
             return;

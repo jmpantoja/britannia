@@ -15,6 +15,7 @@ namespace PlanB\DDD\Domain\VO\Validator;
 
 
 use PlanB\DDD\Domain\VO;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Regex;
 
 
@@ -34,6 +35,7 @@ class PostalCodeValidator extends ConstraintValidator
         }
 
         $this->validateValue($value, [
+            new NotBlank(),
             new Regex([
                 'pattern' => self::POSTAL_CODE_REGEX,
                 'message' => $constraint->message

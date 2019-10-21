@@ -17,6 +17,7 @@ namespace PlanB\DDD\Domain\VO;
 use PlanB\DDD\Domain\VO\Traits\Validable;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDD\Domain\VO\Validator;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 class PhoneNumber
 {
@@ -26,6 +27,10 @@ class PhoneNumber
      * @var string
      */
     private $phoneNumber;
+    /**
+     * @var string
+     */
+    private $description;
 
 
     public static function buildConstraint(array $options = []): Constraint
@@ -35,15 +40,23 @@ class PhoneNumber
         ]);
     }
 
-    public static function make(string $phoneNumber): self
+    public static function make(string $phoneNumber, string $description = null): self
     {
-        $phoneNumber = self::assert($phoneNumber);
-        return new self($phoneNumber);
+        $data = self::assert([
+            'phoneNumber' => $phoneNumber,
+            'description' => $description
+        ]);
+
+        return new self(...[
+            $data['phoneNumber'],
+            (string)$data['description']
+        ]);
     }
 
-    private function __construct(string $phoneNumber)
+    private function __construct(string $phoneNumber, string $description)
     {
         $this->setPhoneNumber($phoneNumber);
+        $this->setDescription($description);
     }
 
     private function setPhoneNumber(string $phoneNumber): self
@@ -59,6 +72,25 @@ class PhoneNumber
     {
         return $this->phoneNumber;
     }
+
+    /**
+     * @return string
+     */
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     * @return PhoneNumber
+     */
+    private function setDescription(string $description): PhoneNumber
+    {
+        $this->description = $description;
+        return $this;
+    }
+
 
     public function __toString()
     {

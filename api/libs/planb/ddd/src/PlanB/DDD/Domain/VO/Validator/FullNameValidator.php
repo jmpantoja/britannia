@@ -27,7 +27,7 @@ class FullNameValidator extends ConstraintValidator
      * @param mixed $value The value that should be validated
      * @param Constraint $constraint The constraint for the validation
      */
-    public const REGEX_PATTERN = '/^[\p{L}\-\. ]*$/u';
+    public const REGEX_PATTERN = '/^[\p{L}\-\. \(\)]*$/u';
 
     /**
      * @return string
@@ -64,7 +64,7 @@ class FullNameValidator extends ConstraintValidator
                 'message' => $constraint->lastNameRequiredMessage
             ]),
             new Length([
-                'min' => 4,
+                'min' => 3,
                 'minMessage' => $constraint->lengthMessage
             ]),
             new Regex([

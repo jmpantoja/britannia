@@ -6,16 +6,21 @@ doctrine:
             phone_number: PlanB\DDDBundle\Doctrine\DBAL\Type\PhoneNumberType
             postal_code: PlanB\DDDBundle\Doctrine\DBAL\Type\PostalCodeType
             dni: PlanB\DDDBundle\Doctrine\DBAL\Type\DNIType
+            phone_number_list: PlanB\DDDBundle\Doctrine\DBAL\Type\PhoneNumberListType
+            email_list: PlanB\DDDBundle\Doctrine\DBAL\Type\EmailListType
 
         mapping_types:
             email: string
+            email_list: string
             phone_number: string
+            phone_number_list: string
             postal_code: string
             dni: string
+            
     orm:
         mappings:
             PlanBDDDBundle:
-                is_bundle: true     
+                is_bundle: true
                 type: xml
                 prefix: PlanB\DDD\Domain
                 dir: '../config/mapping/doctrine'

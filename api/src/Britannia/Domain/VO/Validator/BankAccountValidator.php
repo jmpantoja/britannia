@@ -17,7 +17,6 @@ namespace Britannia\Domain\VO\Validator;
 use PlanB\DDD\Domain\VO\Validator\CityAddress;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDD\Domain\VO\Validator\ConstraintValidator;
-use PlanB\DDD\Domain\VO\Validator\FullName;
 use PlanB\DDD\Domain\VO\Validator\Iban;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Positive;
@@ -36,8 +35,10 @@ class BankAccountValidator extends ConstraintValidator
     public function handle($value, Constraint $constraint)
     {
 
-        $this->validateField('fullName', $value['fullName'], [
-            new FullName()
+        $this->validateField('titular', $value['titular'], [
+            new NotBlank([
+                'message' => 'Se necesita un titular'
+            ])
         ]);
 
         $this->validateField('iban', $value['iban'], [

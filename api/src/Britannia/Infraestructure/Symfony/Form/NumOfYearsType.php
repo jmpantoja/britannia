@@ -42,7 +42,8 @@ class NumOfYearsType extends AbstractSingleType
     }
 
     /**
-     * @return \Britannia\Infraestructure\Symfony\Validator\FullName
+     * @param array $options
+     * @return null|Constraint
      */
     public function buildConstraint(array $options): ?Constraint
     {

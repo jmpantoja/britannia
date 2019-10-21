@@ -5,15 +5,19 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Admin;
 
 use Britannia\Domain\Entity\Student\Adult;
+use Britannia\Domain\VO\SchoolCourse;
 use Britannia\Infraestructure\Symfony\Form\ContactModeType;
 use Britannia\Infraestructure\Symfony\Form\JobType;
 use Britannia\Infraestructure\Symfony\Form\OtherAcademyType;
 use Britannia\Infraestructure\Symfony\Form\PartOfDayType;
 use Britannia\Infraestructure\Symfony\Form\PaymentType;
 use Britannia\Infraestructure\Symfony\Form\RelativesType;
+use Britannia\Infraestructure\Symfony\Form\SchoolCourseType;
+use Britannia\Infraestructure\Symfony\Form\SchoolCourseTypeextends;
+use Britannia\Infraestructure\Symfony\Form\TutorType;
 use PlanB\DDDBundle\Symfony\Form\Type\DateType;
 use PlanB\DDDBundle\Symfony\Form\Type\DNIType;
-use PlanB\DDDBundle\Symfony\Form\Type\EmailType;
+use PlanB\DDDBundle\Symfony\Form\Type\EmailListType;
 use PlanB\DDDBundle\Symfony\Form\Type\FullNameType;
 use PlanB\DDDBundle\Symfony\Form\Type\PhoneNumberListType;
 use PlanB\DDDBundle\Symfony\Form\Type\PostalAddressType;
@@ -21,8 +25,6 @@ use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Form\Type\ModelListType;
-use Sonata\AdminBundle\Form\Type\ModelReferenceType;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Type\DatePickerType;
@@ -37,7 +39,6 @@ final class StudentAdmin extends AbstractAdmin
         unset($fields['payment.account']);
         return $fields;
     }
-
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
@@ -98,19 +99,34 @@ final class StudentAdmin extends AbstractAdmin
                         'label' => 'Dirección Postal',
                         'required' => true,
                     ])
-                    ->add('email', EmailType::class, [
-                        'required' => true
+                    ->add('emails', EmailListType::class, [
+                        'required' => true,
+                        'label' => 'Correos Electrónicos',
                     ])
                     ->add('phoneNumbers', PhoneNumberListType::class, [
-                        'required' => true
+                        'required' => true,
+                        'label' => 'Números de teléfono',
                     ])
                 ->end()
-                ->with('Profesión', ['class' => 'col-md-4'])
-                    ->add('job', JobType::class, [
-                        'sonata_help'=>'Escriba una ocupación y una situación laboral',
-                        'required' => false,
-                        'label'=>'Ocupación'
-                    ])
+                ->with($isAdult ? 'Profesión' : 'Colegio', ['class' => 'col-md-4'])
+                    ->ifTrue($isAdult)
+                        ->add('job', JobType::class, [
+                            'sonata_help'=>'Escriba una ocupación y una situación laboral',
+                            'required' => false,
+                            'label'=>'Ocupación'
+                        ])
+                    ->ifEnd()
+
+                    ->ifFalse($isAdult)
+                        ->add('school', ModelType::class, [
+                            'label' => 'Colegio',
+                            'btn_add'=>'Nuevo colegio',
+                            'placeholder' => ''
+                        ])
+                        ->add('schoolCourse', TextType::class, [
+                            'label' => 'Próximo curso escolar',
+                        ])
+                    ->ifEnd()
                 ->end()
             ->end()
 
@@ -123,13 +139,27 @@ final class StudentAdmin extends AbstractAdmin
                 ->end()
                 ->with('Descuento', ['class' => 'col-md-6'])
                     ->add('relatives', RelativesType::class, [
+                        'btn_add' => false,
                         'label' => 'Familiares',
                         'studentId' => $subject->getId()
                     ])
                 ->end()
             ->end()
-
-            ->with('Extra', ['tab' => true])
+            ->ifFalse($isAdult)
+                ->with('Tutores', ['tab' => true])
+                    ->with('Tutores')
+                        ->add('firstTutor', TutorType::class, [
+                            'label' => 'Tutor A',
+                            'required' => true
+                        ])
+                        ->add('secondTutor', TutorType::class, [
+                            'label' => 'Tutor B',
+                            'required' => false
+                        ])
+                    ->end()
+                ->end()
+            ->ifEnd()
+            ->with('Información Extra', ['tab' => true])
                 ->with('Preferencias', ['class'=>'col-md-4'])
                     ->add('preferredPartOfDay', PartOfDayType::class, [
                         'label' => 'Horario'
@@ -148,8 +178,6 @@ final class StudentAdmin extends AbstractAdmin
                             'required' => false,
                             'label' => '¿Como nos conociste?.'
                         ])
-
-                        //como nos conociste
                 ->end()
                 ->with('Condiciones', ['class'=>'col-md-4'])
                         ->add('termsOfUseAcademy', null, [

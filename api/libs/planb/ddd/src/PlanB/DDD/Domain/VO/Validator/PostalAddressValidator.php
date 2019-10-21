@@ -17,6 +17,7 @@ namespace PlanB\DDD\Domain\VO\Validator;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Type;
 
 class PostalAddressValidator extends ConstraintValidator
 {
@@ -45,7 +46,8 @@ class PostalAddressValidator extends ConstraintValidator
             new NotBlank([
                 'message' => $constraint->postalCodeRequiredMessage
             ]),
-            new PostalCode()
+
+            new Type(\PlanB\DDD\Domain\VO\PostalCode::class)
         ]);
     }
 }

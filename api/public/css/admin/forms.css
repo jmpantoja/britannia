@@ -39,19 +39,6 @@ fieldset.form-group {
     border: none;
 }
 
-
-/*fieldset.form-group > legend {*/
-    /*border: none;*/
-    /*clear: both;*/
-
-    /*font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;*/
-    /*font-size: 1.5em;*/
-    /*font-weight: 400;*/
-    /*margin-bottom: 0;*/
-
-    /*overflow: hidden;*/
-/*}*/
-
 fieldset.form-group .sonata-ba-field {
     clear: both;
     overflow: hidden;
@@ -62,26 +49,5 @@ fieldset .help-block {
     font-style: italic;
     font-size: 1em;
     margin-top: -0.3em;
+    clear:both;
 }
-
-
-/*fieldset.form-group fieldset.form-group {*/
-    /*margin-bottom: 5px;*/
-    /*display: block;*/
-    /*clear: both;*/
-
-    /*padding-bottom: 0;*/
-    /*border: none;*/
-/*}*/
-
-/*fieldset.form-group fieldset.form-group > legend {*/
-    /*font-size: 1.1em;*/
-    /*font-weight: 600;*/
-    /*float: none;*/
-
-    /*margin-top: 0.8em;*/
-    /*margin-bottom: 0;*/
-
-    /*border: none;*/
-    /*width: available;*/
-/*}*/

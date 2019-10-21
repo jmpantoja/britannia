@@ -39,10 +39,17 @@
 
 {% block phone_number_widget %}
 
-    <div class='input-group date'>
-        <span class="input-group-addon"><span class="fa fa-phone"></span></span>
-        {{ block('form_widget_simple') }}
+    <div class="col-md-4 no-padding">
+        {{ form_row(form.phoneNumber) }}
     </div>
+    <div class="col-md-8">
+        {{ form_row(form.description) }}
+    </div>
+
+    {#<div class='input-group date'>#}
+        {#<span class="input-group-addon"><span class="fa fa-phone"></span></span>#}
+        {#{{ block('form_widget_simple') }}#}
+    {#</div>#}
 {% endblock %}
 
 {% block job_widget %}
@@ -100,7 +107,7 @@
 {% block bank_account_widget %}
     <div class="row">
         <div class="col-md-12">
-            {{ form_row(form.fullName) }}
+            {{ form_row(form.titular) }}
         </div>
     </div>
 

@@ -30,15 +30,12 @@ class BankAccountType extends Type
             return null;
         }
 
-        $fullName = $value->getFullName();
+        $titular = $value->getTitular();
         $city = $value->getCityAddress();
         $iban = $value->getIban();
 
         $json = [
-            'fullName' => [
-                'firstName' => $fullName->getFirstName(),
-                'lastName' => $fullName->getLastName()
-            ],
+            'titular' => $titular,
             'cityAddress' => [
                 'city' => $city->getCity(),
                 'province' => $city->getProvince()
@@ -59,10 +56,7 @@ class BankAccountType extends Type
         $json = json_decode($value);
 
         return BankAccount::make(...[
-            FullName::make(...[
-                $json->fullName->firstName,
-                $json->fullName->lastName
-            ]),
+            $json->titular,
             CityAddress::make(...[
                     $json->cityAddress->city,
                     $json->cityAddress->province,

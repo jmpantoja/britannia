@@ -17,13 +17,27 @@ namespace PlanB\DDDBundle\Symfony\Form\Type;
 use PlanB\DDD\Domain\VO\PhoneNumber;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\FormDataMapper;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 
-class PhoneNumberType extends AbstractSingleType
+class PhoneNumberType extends AbstractCompoundType
 {
+    public function customForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder
+            ->add('phoneNumber', TextType::class)
+            ->add('description', TextType::class, [
+                'required' => false
+            ]);
+    }
+
     public function customOptions(OptionsResolver $resolver)
     {
+        $resolver->setDefaults([
+            'data_class' => PhoneNumber::class
+        ]);
     }
 
     /**
@@ -34,8 +48,14 @@ class PhoneNumberType extends AbstractSingleType
         return PhoneNumber::buildConstraint($options);
     }
 
-    public function customMapping($data)
+
+
+
+    public function customMapping(array $data)
     {
-        return PhoneNumber::make($data);
+        return PhoneNumber::make(...[
+            $data['phoneNumber'],
+            $data['description']
+        ]);
     }
 }

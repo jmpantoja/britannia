@@ -17,8 +17,12 @@ namespace Britannia\Infraestructure\Symfony\DataFixtures;
 use ApiPlatform\Core\DataPersister\DataPersisterInterface;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\DBAL\Driver\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 use Faker\Factory;
 use Faker\Generator;
+use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 abstract class BaseFixture extends Fixture
 {
@@ -33,10 +37,13 @@ abstract class BaseFixture extends Fixture
      */
     protected $faker;
 
+    private $olderConnection;
+
     public function __construct(DataPersisterInterface $dataPersister)
     {
         $this->dataPersister = $dataPersister;
     }
+
 
     /**
      * Load data fixtures with the passed EntityManager
@@ -52,16 +59,18 @@ abstract class BaseFixture extends Fixture
 
     abstract public function loadData(DataPersisterInterface $dataPersister): void;
 
+
     protected function createMany(string $className, int $count, callable $callback)
     {
         for ($i = 0; $i < $count; $i++) {
             $entity = new $className();
-            $reference = $callback($entity, $i) ?? $i;
 
+            $reference = $callback($entity, $i) ?? $i;
 
             $this->dataPersister->persist($entity);
 
             $this->addReference($className . '_' . $reference, $entity);
         }
     }
+
 }

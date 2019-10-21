@@ -22,24 +22,32 @@ class PhoneNumber extends Constraint
 
     public function isValidType($value): bool
     {
-        return is_scalar($value) || $value instanceof \PlanB\DDD\Domain\VO\PhoneNumber;
+        return is_array($value) || $value instanceof \PlanB\DDD\Domain\VO\PhoneNumber;
     }
 
     public function sanitize($value)
     {
+        if (empty($value)) {
+            return $value;
+        }
+
         $pattern = '/[\s \-]+/';
-        return preg_replace($pattern, '', $value);
+        $value['phoneNumber'] = preg_replace($pattern, '', $value['phoneNumber']);
+
+        return $value;
     }
 
     public function normalize($value)
     {
         $matches = [];
-        if (!preg_match('/^(\d{3})(\d{2})(\d{2})(\d{2})$/', $value, $matches)) {
+        if (!preg_match('/^(\d{3})(\d{2})(\d{2})(\d{2})$/', $value['phoneNumber'], $matches)) {
             return $value;
         }
 
         unset($matches[0]);
-        return sprintf('%s %s %s %s', ...$matches);
+        $value['phoneNumber'] = sprintf('%s %s %s %s', ...$matches);
+
+        return $value;
     }
 
 }

@@ -26,9 +26,9 @@ class BankAccount
 
     use Validable;
     /**
-     * @var FullName
+     * @var string
      */
-    private $fullName;
+    private $titular;
     /**
      * @var IBAN
      */
@@ -45,18 +45,18 @@ class BankAccount
     public static function buildConstraint(array $options = []): Constraint
     {
         return new Validator\BankAccount([
-            'required' => $options['required']
+            'required' => $options['required'] ?? true
         ]);
     }
 
-    public static function make(FullName $fullName, CityAddress $cityAddress, Iban $iban, int $number): self
+    public static function make(string $titular, CityAddress $cityAddress, Iban $iban, int $number): self
     {
-        return new self($fullName, $cityAddress, $iban, $number);
+        return new self($titular, $cityAddress, $iban, $number);
     }
 
-    private function __construct(FullName $fullName, CityAddress $cityAddress, Iban $iban, int $number)
+    private function __construct(string $titular, CityAddress $cityAddress, Iban $iban, int $number)
     {
-        $this->setFullName($fullName);
+        $this->setTitular($titular);
         $this->setIban($iban);
         $this->setCityAddress($cityAddress);
         $this->setNumber($number);
@@ -64,20 +64,20 @@ class BankAccount
     }
 
     /**
-     * @return FullName
+     * @return string
      */
-    public function getFullName(): FullName
+    public function getTitular(): string
     {
-        return $this->fullName;
+        return $this->titular;
     }
 
     /**
-     * @param FullName $fullName
+     * @param string $titular
      * @return BankAccount
      */
-    public function setFullName(FullName $fullName): BankAccount
+    public function setTitular(string $titular): BankAccount
     {
-        $this->fullName = $fullName;
+        $this->titular = $titular;
         return $this;
     }
 

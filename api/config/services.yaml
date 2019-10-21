@@ -29,6 +29,19 @@ services:
         tags: ['controller.service_arguments']
 
 
+
+    Britannia\Infraestructure\Symfony\Importer\Etl\:
+        resource: '../src/Britannia/Infraestructure/Symfony/Importer/Etl/*'
+        arguments: 
+            - '@doctrine.dbal.original_connection'
+#            - '@doctrine.dbal.default_connection'
+
+
+    Britannia\Infraestructure\Symfony\Importer\ImporterManager:
+        calls:
+        - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\StudentEtl']]
+
+
     admin.staff_member:
         class: Britannia\Infraestructure\Symfony\Admin\StaffMemberAdmin
         arguments: [~, Britannia\Domain\Entity\Staff\StaffMember, ~]
@@ -47,9 +60,26 @@ services:
         calls:
         - [setSubClasses, [{child: Britannia\Domain\Entity\Student\Child, adult: Britannia\Domain\Entity\Student\Adult}]]
 
+    admin.tutor:
+        class: Britannia\Infraestructure\Symfony\Admin\TutorAdmin
+        arguments: [~, Britannia\Domain\Entity\Student\Tutor, ~]
+        tags:
+        - { name: sonata.admin, manager_type: orm, group: Alumnos, label: Tutores }
+
+        public: true
+
     admin.academy:
         class: Britannia\Infraestructure\Symfony\Admin\AcademyAdmin
         arguments: [~, Britannia\Domain\Entity\Academy\Academy, ~]
         tags:
-        - { name: sonata.admin, manager_type: orm, group: Extra, label: Otras academias }
+        - { name: sonata.admin, manager_type: orm, group: Datos Extra, label: Otras academias }
         public: true
+
+    admin.school:
+        class: Britannia\Infraestructure\Symfony\Admin\SchoolAdmin
+        arguments: [~, Britannia\Domain\Entity\School\School, ~]
+        tags:
+        - { name: sonata.admin, manager_type: orm, group: Datos Extra, label: Escuelas }
+        public: true
+
+

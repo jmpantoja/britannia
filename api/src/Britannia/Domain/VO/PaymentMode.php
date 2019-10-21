@@ -22,4 +22,9 @@ class PaymentMode extends Enum
     public const DAY_1 = 'Domiciliado Día 1';
     public const DAY_10 = 'Domiciliado Día 10';
 
+
+    public function isCash(): bool
+    {
+        return $this->is(PaymentMode::CASH());
+    }
 }

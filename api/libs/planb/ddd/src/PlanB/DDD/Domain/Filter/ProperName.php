@@ -40,6 +40,7 @@ class ProperName implements FilterInterface
      */
     public function filter($value)
     {
+        $value = trim($value);
         $pieces = preg_split('/\s+/', $value);
 
         $pieces = array_map(function (string $word) {

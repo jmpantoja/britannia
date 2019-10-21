@@ -24,6 +24,7 @@
         "symfony/flex": "^1.1",
         "symfony/framework-bundle": "4.3.*",
         "symfony/maker-bundle": "^1.13",
+        "symfony/monolog-bundle": "^3.4",
         "symfony/yaml": "4.3.*",
         "zendframework/zend-filter": "^2.9"
     },
