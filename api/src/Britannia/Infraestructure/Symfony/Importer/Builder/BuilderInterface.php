@@ -19,7 +19,7 @@ use Britannia\Infraestructure\Symfony\Importer\Resume;
 interface BuilderInterface
 {
 
-    public function build(): object;
+    public function build(): ?object;
 
     public function resume(): Resume;
 

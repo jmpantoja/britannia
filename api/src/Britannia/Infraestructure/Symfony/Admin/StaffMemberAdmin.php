@@ -4,7 +4,13 @@ declare(strict_types=1);
 
 namespace Britannia\Infraestructure\Symfony\Admin;
 
+use Britannia\Domain\Entity\Staff\StaffMember;
 use Britannia\Infraestructure\Symfony\Form\RoleType;
+use PlanB\DDD\Domain\VO\PostalAddress;
+use PlanB\DDDBundle\Symfony\Form\Type\EmailListType;
+use PlanB\DDDBundle\Symfony\Form\Type\FullNameType;
+use PlanB\DDDBundle\Symfony\Form\Type\PhoneNumberListType;
+use PlanB\DDDBundle\Symfony\Form\Type\PostalAddressType;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -25,9 +31,6 @@ final class StaffMemberAdmin extends AbstractAdmin
                 'editable' => true
             ])
             ->add('password')
-            ->add('email')
-            ->add('firstName')
-            ->add('lastName')
             ->add('active')
             ->add('roles')
             ->add('createdAt')
@@ -39,15 +42,11 @@ final class StaffMemberAdmin extends AbstractAdmin
     {
         $listMapper
             ->addIdentifier('userName')
-            ->add('email')
-            ->add('firstName')
-            ->add('lastName')
+            ->add('fullName')
             ->add('teacher', null, [
                 'editable' => true
             ])
-            ->add('active', null, [
-                'editable' => true
-            ])
+            ->add('active')
             ->add('_action', null, [
                 'actions' => [
                     'show' => [],
@@ -61,11 +60,11 @@ final class StaffMemberAdmin extends AbstractAdmin
     {
 
         $atCreated = (bool) $this->isCurrentRoute('create');
+        $subject = $this->getSubject();
 
         $formMapper
             ->with('Personal', ['tab' => true])
-                ->with('Acceso', ['class' => 'col-md-6'])
-                    ->add('active')
+                ->with('Acceso', ['class' => 'col-md-3'])
                     ->add('userName')
                     ->add('plain_password', RepeatedType::class, [
                         'type' => PasswordType::class,
@@ -74,19 +73,25 @@ final class StaffMemberAdmin extends AbstractAdmin
                         'first_options'  => ['label' => 'Password'],
                         'second_options' => ['label' => 'Repeat Password'],
                     ])
+                    ->add('roles', RoleType::class)
                 ->end()
-                ->with('Contacto', ['class' => 'col-md-6'])
-                    ->add('firstName')
-                    ->add('lastName')
-                    ->add('email', EmailType::class)
+                ->with('Contacto', ['class' => 'col-md-5'])
+                    ->add('fullName', FullNameType::class)
+                    ->add('address', PostalAddressType::class, [
+                        'required' => false
+                    ])
+                    ->add('emails', EmailListType::class)
+                    ->add('phoneNumbers', PhoneNumberListType::class)
                 ->end()
+
+                ->ifTrue($subject->getTeacher())
+                ->with('Cursos', ['class' => 'col-md-4'])
+                    ->add('courses')
+                ->end()
+                ->ifEnd()
+
             ->end()
-            ->with('Permisos', ['tab' => true])
-                ->add('roles', RoleType::class)
-                ->end()
-            ->end();
-
-
+        ;
     }
 
     protected function configureShowFields(ShowMapper $showMapper): void
@@ -96,8 +101,7 @@ final class StaffMemberAdmin extends AbstractAdmin
             ->add('userName')
             ->add('password')
             ->add('email')
-            ->add('firstName')
-            ->add('lastName')
+            ->add('fullName')
             ->add('active')
             ->add('roles')
             ->add('createdAt')

@@ -10,7 +10,10 @@
         <many-to-one field="school" target-entity="Britannia\Domain\Entity\School\School"/>
         <field name="schoolCourse" nullable="true"/>
 
-        <many-to-one field="firstTutor" target-entity="Britannia\Domain\Entity\Student\Tutor" />
+        <field name="firstTutorDescription" column="first_tutor_description" nullable="true"></field>
+        <many-to-one field="firstTutor" target-entity="Britannia\Domain\Entity\Student\Tutor"/>
+
+        <field name="secondTutorDescription" column="second_tutor_description" nullable="true"></field>
         <many-to-one field="secondTutor" target-entity="Britannia\Domain\Entity\Student\Tutor"/>
 
     </entity>

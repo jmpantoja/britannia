@@ -17,7 +17,7 @@ namespace PlanB\DDDBundle\Symfony\Form\Type;
 use PlanB\DDD\Domain\VO\PhoneNumber;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\FormDataMapper;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+//use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -27,8 +27,10 @@ class PhoneNumberType extends AbstractCompoundType
     public function customForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('phoneNumber', TextType::class)
-            ->add('description', TextType::class, [
+            ->add('phoneNumber', InputType::class, [
+                'pre_icon' => 'fa fa-phone'
+            ])
+            ->add('description', InputType::class, [
                 'required' => false
             ]);
     }
@@ -36,7 +38,7 @@ class PhoneNumberType extends AbstractCompoundType
     public function customOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => PhoneNumber::class
+            'data_class' => PhoneNumber::class,
         ]);
     }
 
@@ -47,9 +49,6 @@ class PhoneNumberType extends AbstractCompoundType
     {
         return PhoneNumber::buildConstraint($options);
     }
-
-
-
 
     public function customMapping(array $data)
     {

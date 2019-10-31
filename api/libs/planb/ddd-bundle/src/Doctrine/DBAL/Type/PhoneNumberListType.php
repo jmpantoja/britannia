@@ -40,6 +40,11 @@ class PhoneNumberListType extends Type
 
         $data = json_decode($value, true);
 
+        if(is_null($data)){
+            return [];
+        }
+
+
         return array_map(function ($item) {
             return PhoneNumber::make(...[
                 $item['phoneNumber'],

@@ -3,12 +3,29 @@
 namespace Britannia\Domain\Entity\Staff;
 
 
+use Britannia\Domain\Entity\Course\Course;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use PlanB\DDD\Domain\Model\AggregateRoot;
+use PlanB\DDD\Domain\VO\DNI;
+use PlanB\DDD\Domain\VO\Email;
+use PlanB\DDD\Domain\VO\FullName;
+use PlanB\DDD\Domain\VO\PhoneNumber;
+use PlanB\DDD\Domain\VO\PostalAddress;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 
 class StaffMember extends AggregateRoot implements UserInterface
 {
+
+    /**
+     * @var int
+     */
+    private $oldId;
+
+    private $active = true;
+
+    private $teacher = false;
 
     private $userName;
 
@@ -16,13 +33,36 @@ class StaffMember extends AggregateRoot implements UserInterface
 
     private $plainPassword;
 
-    private $email;
+    /**
+     * @var null|FullName
+     */
+    private $fullName;
 
-    private $firstName;
+    /**
+     * @var null|PostalAddress
+     */
+    private $address;
 
-    private $lastName;
+    /**
+     * @var null|DNI
+     */
+    private $dni;
 
-    private $teacher = false;
+
+    /**
+     * @var null|Email[]
+     */
+    private $emails;
+
+    /**
+     * @var null|PhoneNumber[]
+     */
+    private $phoneNumbers;
+
+    /**
+     * @var Collection
+     */
+    private $courses;
 
     private $roles;
 
@@ -30,11 +70,10 @@ class StaffMember extends AggregateRoot implements UserInterface
 
     private $updatedAt;
 
-    private $active = true;
 
     private $id;
 
-    const DEFAULT_ROLE = 'ROLE_USER';
+    const DEFAULT_ROLE = 'ROLE_SONATA_ADMIN';
 
     public function __construct()
     {
@@ -42,7 +81,44 @@ class StaffMember extends AggregateRoot implements UserInterface
         $this->createdAt = new \DateTime();
         $this->updatedAt = new \DateTime();
         $this->roles = [self::DEFAULT_ROLE];
+        $this->courses = new ArrayCollection();
 
+    }
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getOldId(): int
+    {
+        return $this->oldId;
+    }
+
+    /**
+     * @param int $oldId
+     * @return StaffMember
+     */
+    public function setOldId(int $oldId): StaffMember
+    {
+        $this->oldId = $oldId;
+        return $this;
+    }
+
+
+    public function getTeacher(): ?bool
+    {
+        return $this->teacher;
+    }
+
+    public function setTeacher(bool $teacher): self
+    {
+        $this->teacher = $teacher;
+
+        return $this;
     }
 
     public function getUserName(): ?string
@@ -69,53 +145,98 @@ class StaffMember extends AggregateRoot implements UserInterface
         return $this;
     }
 
-    public function getEmail(): ?string
+    /**
+     * @return FullName
+     */
+    public function getFullName(): FullName
     {
-        return $this->email;
+        return $this->fullName;
     }
 
-    public function setEmail(string $email): self
+    /**
+     * @param FullName $fullName
+     * @return StaffMember
+     */
+    public function setFullName(FullName $fullName): StaffMember
     {
-        $this->email = $email;
-
+        $this->fullName = $fullName;
         return $this;
     }
 
-    public function getFirstName(): ?string
+    /**
+     * @return null|PostalAddress
+     */
+    public function getAddress(): ?PostalAddress
     {
-        return $this->firstName;
+        return $this->address;
     }
 
-    public function setFirstName(string $firstName): self
+    /**
+     * @param null|PostalAddress $address
+     * @return StaffMember
+     */
+    public function setAddress(?PostalAddress $address): StaffMember
     {
-        $this->firstName = $firstName;
-
+        $this->address = $address;
         return $this;
     }
 
-    public function getLastName(): ?string
+    /**
+     * @return null|DNI
+     */
+    public function getDni(): ?DNI
     {
-        return $this->lastName;
+        return $this->dni;
     }
 
-    public function setLastName(string $lastName): self
+    /**
+     * @param null|DNI $dni
+     * @return StaffMember
+     */
+    public function setDni(?DNI $dni): StaffMember
     {
-        $this->lastName = $lastName;
-
+        $this->dni = $dni;
         return $this;
     }
 
-    public function getTeacher(): ?bool
+
+
+    /**
+     * @return null|Email[]
+     */
+    public function getEmails(): ?array
     {
-        return $this->teacher;
+        return $this->emails;
     }
 
-    public function setTeacher(bool $teacher): self
+    /**
+     * @param null|Email[] $emails
+     * @return StaffMember
+     */
+    public function setEmails(?array $emails): StaffMember
     {
-        $this->teacher = $teacher;
-
+        $this->emails = $emails;
         return $this;
     }
+
+    /**
+     * @return null|PhoneNumber[]
+     */
+    public function getPhoneNumbers(): ?array
+    {
+        return $this->phoneNumbers;
+    }
+
+    /**
+     * @param null|PhoneNumber[] $phoneNumbers
+     * @return StaffMember
+     */
+    public function setPhoneNumbers(?array $phoneNumbers): StaffMember
+    {
+        $this->phoneNumbers = $phoneNumbers;
+        return $this;
+    }
+
 
     public function getCreatedAt(): ?\DateTimeInterface
     {
@@ -141,10 +262,6 @@ class StaffMember extends AggregateRoot implements UserInterface
         return $this;
     }
 
-    public function getId()
-    {
-        return $this->id;
-    }
 
     public function getRoles(): ?array
     {
@@ -159,6 +276,37 @@ class StaffMember extends AggregateRoot implements UserInterface
 
         return $this;
     }
+
+    /**
+     * @return Collection
+     */
+    public function getCourses(): Collection
+    {
+        return $this->courses;
+    }
+
+    /**
+     * @param Collection $courses
+     * @return StaffMember
+     */
+    public function setCourses(Collection $courses): StaffMember
+    {
+        foreach ($courses as $course) {
+            $this->addCourse($course);
+        }
+        return $this;
+    }
+
+    public function addCourse(Course $course)
+    {
+        if ($this->courses->contains($course)) {
+            return $this;
+        }
+
+        $this->courses->add($course);
+        $course->addTeacher($this);
+    }
+
 
     /**
      * Returns the salt that was originally used to encode the password.
@@ -214,8 +362,15 @@ class StaffMember extends AggregateRoot implements UserInterface
         return $this;
     }
 
+    public function update(): self
+    {
+
+        $this->teacher = in_array('ROLE_TEACHER', $this->getRoles(), true);
+        return $this;
+    }
+
     public function __toString()
     {
-        return sprintf('%s, %s', $this->lastName, $this->firstName);
+        return (string)$this->fullName;
     }
 }

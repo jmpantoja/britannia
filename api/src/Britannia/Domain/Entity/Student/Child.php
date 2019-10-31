@@ -21,14 +21,26 @@ class Child extends Student
     private $schoolCourse;
 
     /**
+     * @var string
+     */
+    private $firstTutorDescription;
+
+    /**
      * @var Tutor
      */
     private $firstTutor;
 
     /**
+     * @var string
+     */
+    private $secondTutorDescription;
+
+    /**
      * @var Tutor
      */
     private $secondTutor;
+
+
 
     public function __construct()
     {
@@ -72,6 +84,24 @@ class Child extends Student
         return $this;
     }
 
+    /**
+     * @return string
+     */
+    public function getFirstTutorDescription(): ?string
+    {
+        return $this->firstTutorDescription;
+    }
+
+    /**
+     * @param string $firstTutorDescription
+     * @return Child
+     */
+    public function setFirstTutorDescription(?string $firstTutorDescription): self
+    {
+        $this->firstTutorDescription = $firstTutorDescription;
+        return $this;
+    }
+
 
     /**
      * @return mixed
@@ -90,6 +120,25 @@ class Child extends Student
         $this->firstTutor = $firstTutor;
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function getSecondTutorDescription(): ?string
+    {
+        return $this->secondTutorDescription;
+    }
+
+    /**
+     * @param string $secondTutorDescription
+     * @return Child
+     */
+    public function setSecondTutorDescription(?string $secondTutorDescription): self
+    {
+        $this->secondTutorDescription = $secondTutorDescription;
+        return $this;
+    }
+
 
     /**
      * @return mixed

@@ -43,7 +43,6 @@ abstract class AbstractCompoundType extends AbstractType implements DataMapperIn
         return parent::getBlockPrefix();
     }
 
-
     /**
      * @param $forms
      * @return array
@@ -53,6 +52,15 @@ abstract class AbstractCompoundType extends AbstractType implements DataMapperIn
         $parent = $this->getParentForm($forms);
         $options = $parent->getConfig()->getOptions();
         return $options;
+    }
+
+
+    public function buildView(FormView $view, FormInterface $form, array $options)
+    {
+        $view->vars['pre_icon'] = $options['pre_icon'];
+        $view->vars['post_icon'] = $options['post_icon'];
+
+        parent::buildView($view, $form, $options);
     }
 
     /**
@@ -87,6 +95,8 @@ abstract class AbstractCompoundType extends AbstractType implements DataMapperIn
         ]);
 
         $resolver->setDefaults([
+            'pre_icon' => null,
+            'post_icon' => null,
             'compound' => true,
             'empty_data' => null,
             'error_bubbling' => false,

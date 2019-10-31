@@ -5,7 +5,7 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
 
-    <entity name="Britannia\Domain\Entity\School\School" table="school">
+    <entity name="Britannia\Domain\Entity\School\School" table="schools">
 
         <id name="id" type="SchoolId" column="id">
             <generator strategy="CUSTOM"/>

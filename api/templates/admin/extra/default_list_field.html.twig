@@ -1,0 +1,11 @@
+{% extends '@SonataAdmin/CRUD/base_list_field.html.twig' %}
+
+{% block field %}
+    <div class="planb_row">
+        <div class="resume">
+            <div class="header">
+                <a href="{{ admin.generateUrl('edit', {id:object.id}) }}"><strong>{{ object.name }}</strong></a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

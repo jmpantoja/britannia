@@ -1,5 +1,7 @@
 /helm/api/charts
 
+/src/Britannia/Infraestructure/Symfony/DataFixtures/dumps
+
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.*.local
@@ -12,3 +14,4 @@
 .php_cs
 .php_cs.cache
 ###< friendsofphp/php-cs-fixer ###
+

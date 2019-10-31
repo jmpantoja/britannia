@@ -1,0 +1,27 @@
+.planb_row{
+
+}
+
+.planb_row .btn-arrow{
+    margin: 0 1em;
+    float: left;
+    transform: rotate(180deg) ;
+}
+
+.planb_row .btn-arrow .collapsed{
+    transform: rotate(90deg) ;
+}
+
+.planb_row .resume{
+    margin: 1em 1em 1em 2em;
+}
+
+
+.planb_row .resume .header{
+
+}
+
+.planb_row .resume .body{
+    margin-top: 1em;
+}
+

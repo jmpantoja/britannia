@@ -54,11 +54,25 @@ abstract class BaseFixture extends Fixture
     {
         $this->faker = Factory::create('es_ES');
 
+        $this->import($manager);
         $this->loadData($this->dataPersister);
+    }
+
+    public function import(ObjectManager $manager): void
+    {
+        $paths = $this->getBackupFiles();
+
+        foreach ($paths as $path) {
+            $sql = file_get_contents($path);
+            $manager->getConnection()->exec($sql);
+        }
+        $manager->flush();
     }
 
     abstract public function loadData(DataPersisterInterface $dataPersister): void;
 
+
+    abstract public function getBackupFiles(): array;
 
     protected function createMany(string $className, int $count, callable $callback)
     {

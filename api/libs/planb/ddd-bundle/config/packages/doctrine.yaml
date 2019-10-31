@@ -8,6 +8,8 @@ doctrine:
             dni: PlanB\DDDBundle\Doctrine\DBAL\Type\DNIType
             phone_number_list: PlanB\DDDBundle\Doctrine\DBAL\Type\PhoneNumberListType
             email_list: PlanB\DDDBundle\Doctrine\DBAL\Type\EmailListType
+            positive_integer: PlanB\DDDBundle\Doctrine\DBAL\Type\PositiveIntegerType
+            price: PlanB\DDDBundle\Doctrine\DBAL\Type\PriceType
 
         mapping_types:
             email: string
@@ -16,7 +18,9 @@ doctrine:
             phone_number_list: string
             postal_code: string
             dni: string
-            
+            positive_integer: integer
+            price: float
+
     orm:
         mappings:
             PlanBDDDBundle:

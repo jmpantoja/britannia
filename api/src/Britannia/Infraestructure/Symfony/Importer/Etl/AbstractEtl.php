@@ -67,16 +67,16 @@ abstract class AbstractEtl implements EtlInterface
 
     public function run(Reporter $reporter): void
     {
-        $data = $this->extract();
+        $data = $this->extract($this->builder);
         foreach ($data as $row) {
             $resume = $this->load($row);
             $reporter->dump($resume);
         }
     }
 
-    protected function extract(): array
+    protected function extract(QueryBuilder $builder): array
     {
-        $this->configureDataLoader($this->builder);
+        $this->configureDataLoader($builder);
 
         $data = $this->builder
             ->execute()
@@ -87,8 +87,6 @@ abstract class AbstractEtl implements EtlInterface
 
     protected function load(array $input): Resume
     {
-
-
         try {
             $builder = $this->createBuilder($input, $this->entityManager);
 

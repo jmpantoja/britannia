@@ -53,8 +53,10 @@ class RoleService
     {
 
         $list = [];
-        $values = array_values($hierarchy);
-        $roles = call_user_func_array('array_merge', $values);
+        unset($hierarchy['ROLE_SUPER_ADMIN']);
+        $roles = array_keys($hierarchy);
+
+//        $roles = call_user_func_array('array_merge', $values);
 
         foreach ($roles as $role) {
             $label = $this->beautify($role);

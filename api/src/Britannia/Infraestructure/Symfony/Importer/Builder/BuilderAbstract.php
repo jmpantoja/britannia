@@ -21,8 +21,6 @@ use Symfony\Component\Validator\ConstraintViolationList;
 abstract class BuilderAbstract implements BuilderInterface
 {
 
-    use Maker;
-
     /**
      * @var EntityManagerInterface
      */
@@ -43,15 +41,15 @@ abstract class BuilderAbstract implements BuilderInterface
 
     abstract public function initResume(array $input): Resume;
 
-    protected function findOne(object $entity, array $criteria): ?object
+    protected function findOneOrCreate(object $entity, array $criteria): ?object
     {
         $founded = null;
-        if(!empty($criteria)){
+        if (!empty($criteria)) {
             $founded = $this->entityManager->getRepository(get_class($entity))
                 ->findOneBy($criteria);
         }
 
-        if(!is_null($founded) ){
+        if (!is_null($founded)) {
             return $founded;
         }
 
@@ -59,6 +57,18 @@ abstract class BuilderAbstract implements BuilderInterface
         $this->entityManager->flush();
 
         return $entity;
+    }
+
+    protected function findOneOrNull(string $className, array $criteria): ?object
+    {
+        $founded = null;
+        if (!empty($criteria)) {
+            $founded = $this->entityManager->getRepository($className)
+                ->findOneBy($criteria);
+        }
+
+        return $founded;
+
     }
 
 

@@ -25,8 +25,12 @@ security:
             - ROLE_ADMIN_STUDENT_ALL
             - ROLE_ADMIN_ACADEMY_ALL
             - ROLE_ADMIN_SCHOOL_ALL
+            - ROLE_ADMIN_CLASSROOM_ALL
+            - ROLE_ADMIN_BOOK_ALL
             - ROLE_ADMIN_TUTOR_ALL
-
+            - ROLE_ADMIN_COURSE_ALL
+            - ROLE_ADMIN_LEVEL_ALL
+            
         ROLE_RECEPTION:
             - ROLE_SONATA_ADMIN
             
@@ -40,8 +44,7 @@ security:
             
             - ROLE_ADMIN_ACADEMY_ALL
             - ROLE_ADMIN_SCHOOL_ALL
-            
-
+                            
         ROLE_TEACHER:
         - ROLE_SONATA_ADMIN
                     

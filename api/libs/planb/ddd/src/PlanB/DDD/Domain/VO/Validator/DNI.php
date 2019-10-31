@@ -27,6 +27,7 @@ class DNI extends Constraint
     public function sanitize($value)
     {
         $value = strtoupper((string)$value);
-        return preg_replace('/(\s)/', '', $value);
+
+        return preg_replace('/(\s|\-)/', '', $value);
     }
 }

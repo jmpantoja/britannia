@@ -18,41 +18,69 @@ doctrine:
                 # With Symfony 3.3, remove the `resolve:` prefix
                 url: '%env(resolve:DATABASE_OLD_URL)%'
                 charset: 'UTF8'
-                
-            default: 
+
+            default:
                 # configure these for your database server
                 driver: 'mysql'
                 server_version: '5.7'
                 charset: 'UTF8'
-        
+
                 # With Symfony 3.3, remove the `resolve:` prefix
                 url: '%env(resolve:DATABASE_URL)%'
-                
+
                 mapping_types:
                     StaffMemberId: StaffMemberId
                     AcademyId: AcademyId
                     SchoolId: SchoolId
                     StudentId: StudentId
                     TutorId: TutorId
+                    ClassRoomId: ClassRoomId
+
                     JobStatus: JobStatus
                     PartOfDay: PartOfDay
+                    DayOfWeek: DayOfWeek
                     NumOfYears: NumOfYears
                     ContactMode: ContactMode
                     PaymentMode: PaymentMode
                     BankAccount: BankAccount
-        
+                    LevelId: LevelId
+                    CourseId: CourseId
+                    BookId: BookId
+                    BookCategory: BookCategory
+                    Examiner: Examiner
+                    Age: Age
+                    LessonDefinitionList: LessonDefinitionList
+                    Periodicity: Periodicity
+                    Intensive: Intensive
+                    HoursPerWeek: HoursPerWeek
+
+
         types:
             StaffMemberId:  Britannia\Infraestructure\Doctrine\DBAL\Type\StaffMemberIdType
             AcademyId:  Britannia\Infraestructure\Doctrine\DBAL\Type\AcademyIdType
             SchoolId:  Britannia\Infraestructure\Doctrine\DBAL\Type\SchoolIdType
             StudentId: Britannia\Infraestructure\Doctrine\DBAL\Type\StudentIdType
             TutorId: Britannia\Infraestructure\Doctrine\DBAL\Type\TutorIdType
+            ClassRoomId: Britannia\Infraestructure\Doctrine\DBAL\Type\ClassRoomIdType
+
             JobStatus: Britannia\Infraestructure\Doctrine\DBAL\Type\JobStatusType
             PartOfDay: Britannia\Infraestructure\Doctrine\DBAL\Type\PartOfDayType
+            DayOfWeek: Britannia\Infraestructure\Doctrine\DBAL\Type\DayOfWeekType
             NumOfYears: Britannia\Infraestructure\Doctrine\DBAL\Type\NumOfYearsType
             ContactMode: Britannia\Infraestructure\Doctrine\DBAL\Type\ContactModeType
             PaymentMode: Britannia\Infraestructure\Doctrine\DBAL\Type\PaymentModeType
             BankAccount: Britannia\Infraestructure\Doctrine\DBAL\Type\BankAccountType
+            LevelId: Britannia\Infraestructure\Doctrine\DBAL\Type\LevelId
+            CourseId: Britannia\Infraestructure\Doctrine\DBAL\Type\CourseId
+            BookId: Britannia\Infraestructure\Doctrine\DBAL\Type\BookIdType
+            BookCategory: Britannia\Infraestructure\Doctrine\DBAL\Type\BookCategoryType
+
+            Examiner: Britannia\Infraestructure\Doctrine\DBAL\Type\ExaminerType
+            Age: Britannia\Infraestructure\Doctrine\DBAL\Type\AgeType
+            LessonDefinitionList: Britannia\Infraestructure\Doctrine\DBAL\Type\LessonDefinitionListType
+            Periodicity: Britannia\Infraestructure\Doctrine\DBAL\Type\PeriodicityType
+            Intensive: Britannia\Infraestructure\Doctrine\DBAL\Type\IntensiveType
+            HoursPerWeek: Britannia\Infraestructure\Doctrine\DBAL\Type\HoursPerWeekType
 
 
     orm:

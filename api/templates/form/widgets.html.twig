@@ -1,56 +1,3 @@
-{% extends 'form/form_admin.html.twig' %}
-
-
-{% block full_name_widget %}
-
-    <div class="col-md-6 no-padding">
-        {{ form_row(form.firstName) }}
-    </div>
-    <div class="col-md-6">
-        {{ form_row(form.lastName) }}
-    </div>
-
-{% endblock %}
-
-{% block postal_address_widget %}
-    <div class="col-md-8 no-padding">
-        {{ form_row(form.address) }}
-    </div>
-    <div class="col-md-4">
-        {{ form_row(form.postalCode) }}
-    </div>
-{% endblock %}
-
-
-{% block dni_widget %}
-    <div class='input-group date'>
-        {{ block('form_widget_simple') }}
-    </div>
-{% endblock %}
-
-{% block email_widget %}
-
-    <div class='input-group date'>
-        <span class="input-group-addon"><span class="fa fa-envelope"></span></span>
-        {{ block('form_widget_simple') }}
-    </div>
-{% endblock %}
-
-
-{% block phone_number_widget %}
-
-    <div class="col-md-4 no-padding">
-        {{ form_row(form.phoneNumber) }}
-    </div>
-    <div class="col-md-8">
-        {{ form_row(form.description) }}
-    </div>
-
-    {#<div class='input-group date'>#}
-        {#<span class="input-group-addon"><span class="fa fa-phone"></span></span>#}
-        {#{{ block('form_widget_simple') }}#}
-    {#</div>#}
-{% endblock %}
 
 {% block job_widget %}
 
@@ -154,6 +101,40 @@
 
         <div class="col-md-6 numOfYears">
             {{ form_row(form.numOfYears) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block course_interval_widget %}
+    <div class="row">
+        <div class="col-md-6">
+            {{ form_row(form.start) }}
+        </div>
+
+        <div class="col-md-6">
+            {{ form_row(form.end) }}
+        </div>
+        Mostrar aqui los campos calculados horas / semana y horas totales
+    </div>
+{% endblock %}
+
+
+{% block lesson_definition_widget %}
+    <div class="row">
+        <div class="col-md-3">
+            {{ form_row(form.dayOfWeek) }}
+        </div>
+
+        <div class="col-md-3">
+            {{ form_row(form.startTime) }}
+        </div>
+
+        <div class="col-md-3">
+            {{ form_row(form.length) }}
+        </div>
+
+        <div class="col-md-3">
+            {{ form_row(form.classroomId) }}
         </div>
     </div>
 {% endblock %}

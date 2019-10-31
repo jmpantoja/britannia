@@ -18,6 +18,21 @@
             <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
         </id>
 
+
+        <many-to-many field="courses" target-entity="Britannia\Domain\Entity\Course\Course" inversed-by="students">
+            <join-table name="courses_students">
+                <join-columns>
+                    <join-column name="student_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="course_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+        </many-to-many>
+
+
+        <field name="oldId" column="old_id" type="integer"></field>
+
         <field name="active" type="boolean" column="active"/>
 
         <embedded name="fullName" class="PlanB\DDD\Domain\VO\FullName" use-column-prefix="false"/>
@@ -36,6 +51,7 @@
             </cascade>
         </many-to-many>
 
+
         <embedded name="payment" class="Britannia\Domain\VO\Payment"/>
 
         <field name="preferredPartOfDay" column="preferredPartOfDay" type="PartOfDay"/>
@@ -49,6 +65,10 @@
         <field name="academyNumOfYears" column="other_academy_time" type="NumOfYears"/>
 
         <field name="firstContact" nullable="true"/>
+
+        <field name="firstComment" column="first_comment" nullable="true" type="text"></field>
+
+        <field name="secondComment" column="second_comment" nullable="true" type="text"></field>
 
         <field name="termsOfUseAcademy" type="boolean"/>
 

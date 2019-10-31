@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Britannia\Infraestructure\Symfony\Importer\Builder;
+namespace Britannia\Infraestructure\Symfony\Importer\Builder\Traits;
 
 
 use Britannia\Domain\Entity\Academy\Academy;
@@ -35,7 +35,7 @@ use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Validation;
 
-trait Maker
+trait StudentMaker
 {
 
     abstract protected function watchForErrors(ConstraintViolationList $violationList, array $input = null): bool;
@@ -44,10 +44,18 @@ trait Maker
 
     abstract protected function hasViolations(ConstraintViolationList $violationList): bool;
 
-    abstract protected function findOne(object $entity, array $criteria): ?object;
+    abstract protected function findOneOrCreate(object $entity, array $criteria): ?object;
+
+    abstract protected function findOneOrNull(string $className, array $criteria): ?object;
 
     public function toFullName(array $input): ?FullName
     {
+        $input = $this->cleanFullName((string)$input['firstName'], (string)$input['lastName']);
+
+        if (empty($input['firstName']) || empty($input['lastName'])) {
+            return null;
+        }
+
         $violations = FullName::validate($input);
 
         if ($this->watchForErrors($violations)) {
@@ -60,6 +68,35 @@ trait Maker
         ]);
     }
 
+    public function cleanFullName(string $firstName, string $lastName): array
+    {
+
+        $firstName = trim($firstName);
+        $lastName = trim($lastName);
+
+        if (empty($firstName)) {
+            $firstName = $lastName;
+            $lastName = '';
+        }
+
+        if (empty($lastName)) {
+
+            $pieces = preg_split('/( |,)/', $firstName);
+            $pieces = array_filter($pieces);
+
+            $lastName = array_pop($pieces);
+            $firstName = implode(' ', $pieces);
+        }
+
+        $firstName = str_replace([','], '', $firstName);
+        $lastName = str_replace([','], '', $lastName);
+
+        return [
+            'firstName' => $firstName,
+            'lastName' => $lastName
+        ];
+    }
+
     public function toDni(string $dni): ?DNI
     {
         if (empty($dni)) {
@@ -68,7 +105,7 @@ trait Maker
 
         $violations = DNI::validate($dni);
 
-        if ($this->watchForErrors($violations)) {
+        if ($this->watchForWarnings($violations)) {
             return null;
         }
 
@@ -89,8 +126,8 @@ trait Maker
             'account' => $account
         ]);
 
-        if ($this->watchForErrors($violations, $input)) {
-            return null;
+        if ($this->watchForWarnings($violations, $input)) {
+            return Payment::make(PaymentMode::CASH(), null);
         }
 
         return Payment::make($mode, $account);
@@ -167,7 +204,7 @@ trait Maker
             ])
         ]);
 
-        if ($this->watchForErrors($violations)) {
+        if ($this->watchForWarnings($violations)) {
             return null;
         }
 
@@ -245,6 +282,7 @@ trait Maker
 
         $time = preg_replace('/\D/', '', $time);
 
+        $numOfYears = null;
         switch ($time * 1) {
             case 1:
                 $numOfYears = NumOfYears::ONE_YEAR();
@@ -275,7 +313,7 @@ trait Maker
         $academy = new Academy();
         $academy->setName($name);
 
-        $academy = $this->findOne($academy, [
+        $academy = $this->findOneOrCreate($academy, [
             'name' => $name
         ]);
         return $academy;
@@ -322,7 +360,7 @@ trait Maker
         $school = new School();
         $school->setName($name);
 
-        return $this->findOne($school, [
+        return $this->findOneOrCreate($school, [
             'name' => $name
         ]);
     }
@@ -369,22 +407,17 @@ trait Maker
 
     protected function toTutor(array $data): ?Tutor
     {
-        $data['lastName'] = trim($data['lastName']);
-
-        if (empty($data['lastName'])) {
-            $pieces = explode(',', $data['firstName']);
-
-            $data['lastName'] = array_pop($pieces);
-            $data['firstName'] = implode(' ', $pieces);
-        }
-
-//        $data['firstName'] = str_replace(',', ' ', $data['firstName']);
+        $data['firstName'] = $this->cleanName((string) $data['firstName']);
+        $data['lastName'] = $this->cleanName((string) $data['lastName']);
 
         $fullName = $this->toFullName([
-            'firstName' => $data['firstName'],
-            'lastName' => $data['lastName']
+            'firstName' => (string)$data['firstName'],
+            'lastName' => (string)$data['lastName']
         ]);
 
+        if (is_null($fullName)) {
+            return null;
+        }
 
         $dni = $this->toDni((string)$data['dni']);
 
@@ -392,7 +425,6 @@ trait Maker
             (string)$data['address'],
             (string)$data['postalCode'],
         ]);
-
 
         $jobStatus = $this->toJobStatus((string)$data['jobStatus']);
 
@@ -404,15 +436,11 @@ trait Maker
         $phoneNumbers = $this->toPhoneNumbers((string)$data['phone'], (string)$data['phone2'], (string)$data['extra']);
 
         $emails = [];
-        $emails[] = $this->toEmail($data['email']);
+        $emails[] = $this->toEmail((string)$data['email']);
 
         if (false !== strpos((string)$data['extra'], '@')) {
-
-            $emails[] = $this->toEmail($data['extra']);
+            $emails[] = $this->toEmail((string)$data['extra']);
         }
-
-        dump($data['extra'], $emails);
-
 
         $emails = array_filter($emails);
 
@@ -425,9 +453,15 @@ trait Maker
         $tutor->setEmails($emails);
 
 
-        return $this->findOne($tutor, [
+        return $this->findOneOrCreate($tutor, [
 
         ]);
 
+    }
+
+    private function cleanName(string $name): ?string
+    {
+        $name = preg_replace("/[[:punct:]]|\d/u", '', $name);
+        return trim($name);
     }
 }

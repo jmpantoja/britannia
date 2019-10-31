@@ -22,11 +22,14 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class EmailType extends AbstractSingleType
 {
-
-
     public function customOptions(OptionsResolver $resolver)
     {
 
+    }
+
+    public function getBlockPrefix()
+    {
+        return 'email_address';
     }
 
     /**

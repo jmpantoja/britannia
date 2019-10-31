@@ -2,7 +2,7 @@ sonata_admin:
     title: 'Sonata Admin'
     dashboard:
         blocks:
-            - { type: sonata.admin.block.admin_list, position: left }
+        - { type: sonata.admin.block.admin_list, position: left }
 
     options:
         html5_validate: false
@@ -11,9 +11,20 @@ sonata_admin:
     assets:
         extra_stylesheets:
         - css/admin/forms.css
+        - css/admin/datagrid.css
+        - bundles/sonataformatter/markitup/skins/sonata/style.css
+        - bundles/sonataformatter/markitup/sets/markdown/style.css
+        - bundles/sonataformatter/markitup/sets/html/style.css
+        - bundles/sonataformatter/markitup/sets/textile/style.css
 
         extra_javascripts:
-            - js/admin/forms.js
+        - js/admin/forms.js
+        - bundles/fosckeditor/ckeditor.js
+        - bundles/sonataformatter/vendor/markitup-markitup/markitup/jquery.markitup.js
+        - bundles/sonataformatter/markitup/sets/markdown/set.js
+        - bundles/sonataformatter/markitup/sets/html/set.js
+        - bundles/sonataformatter/markitup/sets/textile/set.js
+
 
     security:
         handler: sonata.admin.security.handler.role

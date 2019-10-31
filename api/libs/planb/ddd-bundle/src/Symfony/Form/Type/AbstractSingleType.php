@@ -46,6 +46,14 @@ abstract class AbstractSingleType extends AbstractType implements DataTransforme
 
     }
 
+    public function buildView(FormView $view, FormInterface $form, array $options)
+    {
+        $view->vars['pre_icon'] = $options['pre_icon'];
+        $view->vars['post_icon'] = $options['post_icon'];
+
+        parent::buildView($view, $form, $options);
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -71,6 +79,8 @@ abstract class AbstractSingleType extends AbstractType implements DataTransforme
         ]);
 
         $resolver->setDefaults([
+            'pre_icon' => null,
+            'post_icon' => null,
             'empty_data' => null,
             'error_bubbling' => false,
             'required' => true,
@@ -101,7 +111,6 @@ abstract class AbstractSingleType extends AbstractType implements DataTransforme
         $options = $this->builder->getOptions();
 
         if (!class_exists((string)$options['data_class'])) {
-
             return (string)$value;
         }
 

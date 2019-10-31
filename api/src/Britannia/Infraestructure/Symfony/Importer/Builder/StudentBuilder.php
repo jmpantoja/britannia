@@ -14,23 +14,24 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Importer\Builder;
 
 
-use Britannia\Domain\Entity\Academy\Academy;
-use Britannia\Domain\Entity\School\School;
 use Britannia\Domain\Entity\Student\Adult;
 use Britannia\Domain\Entity\Student\Child;
+use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\VO\ContactMode;
 use Britannia\Domain\VO\Job;
-use Britannia\Domain\VO\JobStatus;
-use Britannia\Domain\VO\NumOfYears;
 use Britannia\Domain\VO\OtherAcademy;
 use Britannia\Domain\VO\PartOfDay;
+use Britannia\Infraestructure\Symfony\Importer\Builder\Traits\StudentMaker;
 use Britannia\Infraestructure\Symfony\Importer\Maker\FullNameMaker;
 use Britannia\Infraestructure\Symfony\Importer\Resume;
-use PlanB\DDD\Domain\VO\PhoneNumber;
 
 class StudentBuilder extends BuilderAbstract
 {
+    use StudentMaker;
+
     private const TYPE = 'Alumno';
+
+    private $id;
 
     private $className;
 
@@ -62,6 +63,12 @@ class StudentBuilder extends BuilderAbstract
     private $firstTutor;
     private $secondTutor;
 
+    private $firstComment;
+    private $secondComment;
+
+    private $firstTutorDescription;
+    private $secondTutorDescription;
+
 
     public function initResume(array $input): Resume
     {
@@ -71,6 +78,12 @@ class StudentBuilder extends BuilderAbstract
         ]);
 
         return Resume::make((int)$input['id'], self::TYPE, $title);
+    }
+
+    public function withId($id): self
+    {
+        $this->id = $id;
+        return $this;
     }
 
     public function withType(string $type): self
@@ -208,6 +221,13 @@ class StudentBuilder extends BuilderAbstract
 
     }
 
+    public function withComments(string $firstComment, string $secondComment): self
+    {
+        $this->firstComment = $firstComment;
+        $this->secondComment = $secondComment;
+        return $this;
+    }
+
     public function withTerms(string $academia, string $alumno, string $imagen): self
     {
         $this->termsOfUseAcademy = (bool)$academia;
@@ -237,20 +257,26 @@ class StudentBuilder extends BuilderAbstract
 
     public function withFirstTutor(array $data): self
     {
+        $this->firstTutorDescription = $data['texto'];
         $this->firstTutor = $this->toTutor($data);
         return $this;
     }
 
     public function withSecondTutor(array $data): self
     {
+        $this->secondTutorDescription = $data['texto'];
         $this->secondTutor = $this->toTutor($data);
         return $this;
     }
 
 
-    public function build(): object
+    public function build(): ?object
     {
+
+        /** @var Student $child */
         $child = new $this->className();
+
+        $child->setOldId(1 * $this->id);
 
         $child->setFullName($this->fullName);
         $child->setBirthDate($this->birthDate);
@@ -264,6 +290,9 @@ class StudentBuilder extends BuilderAbstract
         $child->setOtherAcademy($this->otherAcademy);
         $child->setFirstContact($this->firstContact);
 
+        $child->setFirstComment($this->firstComment);
+        $child->setSecondComment($this->secondComment);
+
         $child->setTermsOfUseStudent($this->termsOfUseStudent);
         $child->setTermsOfUseAcademy($this->termsOfUseAcademy);
         $child->setTermsOfUseImageRigths($this->termsOfUseImage);
@@ -271,6 +300,7 @@ class StudentBuilder extends BuilderAbstract
         $child->setPayment($this->payment);
 
         if ($child instanceof Adult) {
+
             $child->setDni($this->dni);
             $child->setJob($this->job);
         }
@@ -279,8 +309,12 @@ class StudentBuilder extends BuilderAbstract
             $child->setSchool($this->school);
             $child->setSchoolCourse($this->schoolCourse);
 
+            $child->setFirstTutorDescription($this->firstTutorDescription);
             $child->setFirstTutor($this->firstTutor);
+
+            $child->setSecondTutorDescription($this->secondTutorDescription);
             $child->setSecondTutor($this->secondTutor);
+
         }
 
         return $child;

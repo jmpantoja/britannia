@@ -1,0 +1,47 @@
+{% block full_name_widget %}
+
+    <div class="col-md-6 no-padding">
+        {{ form_row(form.firstName) }}
+    </div>
+    <div class="col-md-6">
+        {{ form_row(form.lastName) }}
+    </div>
+
+{% endblock %}
+
+{% block postal_address_widget %}
+    <div class="col-md-8 no-padding">
+        {{ form_row(form.address) }}
+    </div>
+    <div class="col-md-4">
+        {{ form_row(form.postalCode) }}
+    </div>
+{% endblock %}
+
+
+{% block dni_widget %}
+    <div class='input-group date'>
+        {{ block('form_widget_simple') }}
+    </div>
+{% endblock %}
+
+{% block email_address_widget %}
+    <div class='input-group date'>
+        <span class="input-group-addon"><span class="fa fa-envelope"></span></span>
+        {{ block('form_widget_simple') }}
+    </div>
+{% endblock %}
+
+
+{% block phone_number_widget %}
+
+    <div class="col-md-4 no-padding">
+        <div class='input-group'>
+            {{ form_row(form.phoneNumber) }}
+        </div>
+    </div>
+    <div class="col-md-8">
+        {{ form_row(form.description) }}
+    </div>
+
+{% endblock %}

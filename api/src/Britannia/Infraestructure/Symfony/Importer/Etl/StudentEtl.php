@@ -37,8 +37,8 @@ class StudentEtl extends AbstractEtl
     {
 
         $offset = 0;
-        $limit = 10;
-        $id = 375;
+        $limit = null;
+        $id = null;
 
         $builder->select('*')
             ->from('alumnos')
@@ -58,6 +58,7 @@ class StudentEtl extends AbstractEtl
         $builder = StudentBuilder::make($input, $entityManager);
 
         $builder
+            ->withId($input['id'])
             ->withType($input['tipo'])
             ->withFullName([
                 'firstName' => $input['nombre'],
@@ -72,34 +73,37 @@ class StudentEtl extends AbstractEtl
             ->withPreferredContactMode((string)$input['tipoContacto'])
             ->withOtherAcademy((string)$input['nombreAcademia'], (string)$input['tiempoAcademia'])
             ->withFirstContact((string)$input['conociste'])
+            ->withComments((string)$input['observaciones'], (string)$input['observaciones2'])
             ->withTerms((string)$input['checkAceptoCondicionesAcademia'], (string)$input['checkAceptoCondicionesAlumno'], (string)$input['permisosImagen'])
             ->withJob((string)$input['profesion'], (string)$input['situacion'])
             ->withSchool((string)$input['colegio'], (string)$input['proxCurso'])
             ->withFirstTutor([
+                'texto' => $input['textoTutor1'],
                 'firstName' => $input['nombreTutor'],
                 'lastName' => sprintf('%s %s', $input['apellidoTutor'], $input['apellido2Tutor']),
-                'dni' =>$input['dniTutor'],
-                'phone' =>$input['telefonoTutor'],
-                'phone2' =>$input['telefono2Tutor'],
-                'extra' =>$input['adicionalTutor'],
-                'email' =>$input['correoTutor'],
-                'jobStatus' =>$input['situacionTutor'],
-                'jobName' =>$input['profesionTutor'],
-                'address' =>$input['domicilioTutor'],
-                'postalCode' =>$input['codigoTutor'],
+                'dni' => $input['dniTutor'],
+                'phone' => $input['telefonoTutor'],
+                'phone2' => $input['telefono2Tutor'],
+                'extra' => $input['adicionalTutor'],
+                'email' => $input['correoTutor'],
+                'jobStatus' => $input['situacionTutor'],
+                'jobName' => $input['profesionTutor'],
+                'address' => $input['domicilioTutor'],
+                'postalCode' => $input['codigoTutor'],
             ])
             ->withSecondTutor([
+                'texto' => $input['textoTutor2'],
                 'firstName' => $input['nombreTutor2'],
                 'lastName' => sprintf('%s %s', $input['apellidoTutor2'], $input['apellido2Tutor2']),
-                'dni' =>$input['dniTutor2'],
-                'phone' =>$input['telefonoTutor2'],
-                'phone2' =>$input['telefono2Tutor2'],
-                'extra' =>$input['adicionalTutor2'],
-                'email' =>$input['correoTutor2'],
-                'jobStatus' =>$input['situacionTutor2'],
-                'jobName' =>$input['profesionTutor2'],
-                'address' =>$input['domicilioTutor2'],
-                'postalCode' =>$input['codigoTutor2'],
+                'dni' => $input['dniTutor2'],
+                'phone' => $input['telefonoTutor2'],
+                'phone2' => $input['telefono2Tutor2'],
+                'extra' => $input['adicionalTutor2'],
+                'email' => $input['correoTutor2'],
+                'jobStatus' => $input['situacionTutor2'],
+                'jobName' => $input['profesionTutor2'],
+                'address' => $input['domicilioTutor2'],
+                'postalCode' => $input['codigoTutor2'],
             ])
             ->withPayment([
                 'mode' => $input['pago'],

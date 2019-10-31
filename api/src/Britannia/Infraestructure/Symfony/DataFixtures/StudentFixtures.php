@@ -7,7 +7,6 @@ use Britannia\Domain\Entity\Employment\Situation;
 use Britannia\Domain\Entity\Staff\User;
 use Britannia\Domain\Entity\Student\Adult;
 use Britannia\Domain\Entity\Student\Child;
-
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\VO\BankAccount;
 use Britannia\Domain\VO\Employment;
@@ -15,51 +14,76 @@ use Britannia\Domain\VO\Job;
 use Britannia\Domain\VO\JobStatus;
 use Britannia\Domain\VO\Payment;
 use Britannia\Domain\VO\PaymentMode;
-use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use PlanB\DDD\Domain\VO\CityAddress;
 use PlanB\DDD\Domain\VO\DNI;
+use PlanB\DDD\Domain\VO\Email;
 use PlanB\DDD\Domain\VO\FullName;
 use PlanB\DDD\Domain\VO\Iban;
-use PlanB\DDD\Domain\VO\PostalAddress;
-use PlanB\DDD\Domain\VO\Email;
 use PlanB\DDD\Domain\VO\PhoneNumber;
+use PlanB\DDD\Domain\VO\PostalAddress;
 use PlanB\DDD\Domain\VO\PostalCode;
 use PlanB\OrigamiBundle\Api\DataPersister;
-use Sonata\AdminBundle\Form\Type\AdminType;
 
 class StudentFixtures extends BaseFixture
 {
 
+    /**
+     * @return array
+     */
+    public function getBackupFiles(): array
+    {
+        return [
+            sprintf('%s/dumps/britannia_other_academies.sql', __DIR__),
+            sprintf('%s/dumps/britannia_schools.sql', __DIR__),
+            sprintf('%s/dumps/britannia_student_student.sql', __DIR__),
+            sprintf('%s/dumps/britannia_students.sql', __DIR__),
+            sprintf('%s/dumps/britannia_students_adult.sql', __DIR__),
+            sprintf('%s/dumps/britannia_students_child.sql', __DIR__),
+            sprintf('%s/dumps/britannia_tutors.sql', __DIR__),
+            sprintf('%s/dumps/britannia_courses_students.sql', __DIR__),
+        ];
+    }
+
+    public function getDependencies()
+    {
+        return array(
+            CourseFixtures::class
+        );
+    }
+
     public function loadData(DataPersisterInterface $dataPersister): void
     {
 
-        $this->createMany(Adult::class, 10, function (Adult $adult, int $count) {
-
-            $this->create($adult);
-
-            $adult->setDni(DNI::make(...[
-                $this->faker->dni()
-            ]));
-
-            $adult->setJob(Job::make(...[
-                $this->faker->jobTitle(),
-                JobStatus::EMPLOYED()
-            ]));
-
-            $adult->setActive(false);
-        });
-
-        $this->createMany(Child::class, 3, function (Child $child, int $count) {
-
-            $this->create($child);
-            $child->setActive(true);
-        });
+//        $this->createMany(Adult::class, 10, function (Adult $adult, int $count) {
+//
+//            $this->create($adult);
+//
+//            $adult->setDni(DNI::make(...[
+//                $this->faker->dni()
+//            ]));
+//
+//            $adult->setJob(Job::make(...[
+//                $this->faker->jobTitle(),
+//                JobStatus::EMPLOYED()
+//            ]));
+//
+//            $adult->setActive(false);
+//        });
+//
+//        $this->createMany(Child::class, 3, function (Child $child, int $count) {
+//
+//            $this->create($child);
+//            $child->setActive(true);
+//        });
     }
+
+
 
 
     private function create(Student $student)
     {
+
         $student->setFullName(FullName::make(...[
             $this->faker->name(),
             $this->faker->lastName()
@@ -103,4 +127,5 @@ class StudentFixtures extends BaseFixture
             ])
         ]));
     }
+
 }

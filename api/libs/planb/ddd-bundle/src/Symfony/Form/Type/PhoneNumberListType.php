@@ -19,10 +19,7 @@ use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\FormDataMapper;
 use Sonata\AdminBundle\Form\Type\CollectionType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\Count;
-use Symfony\Component\Validator\Constraints\Length;
 
-//use Symfony\Component\Form\Extension\Core\Type\CollectionType as SymfonyCollectionType;
 
 /**
  * This type wrap native `collection` form type and render `add` and `delete`
@@ -55,14 +52,14 @@ class PhoneNumberListType extends AbstractSingleType
             'prototype' => true,
             'error_bubbling' => false,
             'entry_type' => PhoneNumberType::class,
-            'constraints' => [
-                new Count([
-                    'min' => 1,
-                    'minMessage' => 'Se necesita {{ limit }} número de teléfono como mínimo.|Se necesitan {{ limit }} números de teléfono como mínimo.',
-                    'maxMessage' => 'Se necesita {{ limit }} número de teléfono como máximo.|Se necesitan {{ limit }} números de teléfono como máximo.',
-                    'exactMessage' => 'Se necesita exactamente {{ limit }} número de teléfono.|Se necesitan exactamente {{ limit }} números de teléfono.',
-                ])
-            ]
+//            'constraints' => [
+//                new Count([
+//                    'min' => 1,
+//                    'minMessage' => 'Se necesita {{ limit }} número de teléfono como mínimo.|Se necesitan {{ limit }} números de teléfono como mínimo.',
+//                    'maxMessage' => 'Se necesita {{ limit }} número de teléfono como máximo.|Se necesitan {{ limit }} números de teléfono como máximo.',
+//                    'exactMessage' => 'Se necesita exactamente {{ limit }} número de teléfono.|Se necesitan exactamente {{ limit }} números de teléfono.',
+//                ])
+//            ]
         ]);
     }
 

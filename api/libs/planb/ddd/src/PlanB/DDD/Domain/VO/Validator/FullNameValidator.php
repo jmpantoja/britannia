@@ -49,7 +49,7 @@ class FullNameValidator extends ConstraintValidator
                 'message' => $constraint->firstNameRequiredMessage
             ]),
             new Length([
-                'min' => 3,
+                'min' => 1,
                 'minMessage' => $constraint->lengthMessage
             ]),
             new Regex([
@@ -64,7 +64,7 @@ class FullNameValidator extends ConstraintValidator
                 'message' => $constraint->lastNameRequiredMessage
             ]),
             new Length([
-                'min' => 3,
+                'min' => 1,
                 'minMessage' => $constraint->lengthMessage
             ]),
             new Regex([

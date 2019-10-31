@@ -13,40 +13,39 @@ use Sonata\AdminBundle\Show\ShowMapper;
 final class SchoolAdmin extends AbstractAdmin
 {
 
+    public function getBatchActions()
+    {
+        $actions = parent::getBatchActions();
+        unset($actions['delete']);
+
+        return $actions;
+    }
+
+
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
-            ->add('name')
-            ->add('id')
-            ;
+            ->add('name');
     }
 
     protected function configureListFields(ListMapper $listMapper): void
     {
         $listMapper
-            ->add('name')
-            ->add('id')
-            ->add('_action', null, [
-                'actions' => [
-                    'show' => [],
-                    'edit' => [],
-                    'delete' => [],
-                ],
+            ->addIdentifier('name', null, [
+                'template' => 'admin/extra/default_list_field.html.twig',
             ]);
     }
 
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $formMapper
-            ->add('name')
-            ;
+            ->add('name');
     }
 
     protected function configureShowFields(ShowMapper $showMapper): void
     {
         $showMapper
             ->add('name')
-            ->add('id')
-            ;
+            ->add('id');
     }
 }

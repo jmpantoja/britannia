@@ -43,7 +43,6 @@ class DNIType extends Type
         }
 
         return DNI::make($value);
-
     }
 
     /**

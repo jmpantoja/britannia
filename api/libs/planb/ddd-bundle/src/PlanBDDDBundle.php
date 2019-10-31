@@ -29,8 +29,6 @@ class PlanBDDDBundle extends Bundle
     {
         parent::build($container);
 
-        Validator::with('PlanB\DDD\Domain\VO\Rules');
-
         $container->addCompilerPass(new ModelManagerCompilerPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 10);
 
         $pathToDir = realpath(__DIR__ . '/..');

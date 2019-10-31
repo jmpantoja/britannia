@@ -44,7 +44,7 @@ class DNI
 
     public static function make(string $dni): self
     {
-        self::assert($dni);
+        $dni = self::assert($dni);
 
         return new self($dni);
     }

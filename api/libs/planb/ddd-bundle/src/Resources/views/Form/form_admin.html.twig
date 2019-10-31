@@ -54,7 +54,14 @@
         {% endif %}
 
         <div class="{{ div_class }}">
-            {{ form_widget(form, {'horizontal': false, 'horizontal_input_wrapper_class': ''}) }}
+
+
+            {{ block('decorated_widget') }}
+
+            {#<div class='input-group'>#}
+
+                {#<span class="input-group-addon"><span class="fa fa-euro"></span></span>#}
+            {#</div>#}
 
             {% if errors|length > 0 %}
                 <div class="help-block sonata-ba-field-error-messages">
@@ -72,6 +79,28 @@
 
 {% endblock %}
 
+{% block decorated_widget %}
+    {% set pre_icon = pre_icon | default(false) %}
+    {% set post_icon = post_icon | default(false) %}
+
+    {% if pre_icon or post_icon %}
+        <div class='input-group'>
+            {% if pre_icon %}
+                <span class="input-group-addon"><span class="{{ pre_icon }}"></span></span>
+            {% endif %}
+            {{ form_widget(form, {'horizontal': false}) }}
+            {% if post_icon %}
+                <span class="input-group-addon"><span class="{{ post_icon }}"></span></span>
+            {% endif %}
+        </div>
+
+    {% else %}
+        {{ form_widget(form, {'horizontal': false, 'horizontal_input_wrapper_class': ''}) }}
+    {% endif %}
+
+
+
+{% endblock %}
 
 
 {% block sonata_help %}

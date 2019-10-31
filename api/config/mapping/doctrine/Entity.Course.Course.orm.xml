@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xmlns:gedmo="http://gediminasm.org/schemas/orm/doctrine-extensions-mapping"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+
+    <entity name="Britannia\Domain\Entity\Course\Course" table="courses">
+
+        <id name="id" type="CourseId" column="id">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
+        </id>
+
+        <field name="oldId" column="old_id" type="integer"></field>
+
+        <field name="name"/>
+        <field name="schoolCourse" nullable="true"/>
+
+        <field name="examiner" type="Examiner" nullable="true"/>
+        <many-to-one field="level" target-entity="Britannia\Domain\Entity\Course\Level"></many-to-one>
+
+
+        <field name="numOfPlaces" type="positive_integer"/>
+        <field name="periodicity" type="Periodicity"/>
+        <field name="hoursPerWeek" type="HoursPerWeek"/>
+
+        <field name="intensive" type="Intensive"/>
+        <field name="age" type="Age"/>
+
+
+        <field name="enrolmentPayment" type="price"></field>
+        <field name="monthlyPayment" type="price"></field>
+
+        <many-to-many field="books" target-entity="Britannia\Domain\Entity\Book\Book" inversed-by="courses">
+            <join-table name="courses_books">
+                <join-columns>
+                    <join-column name="course_id" referenced-column-name="id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="book_id" referenced-column-name="id"/>
+                </inverse-join-columns>
+            </join-table>
+        </many-to-many>
+
+        <many-to-many field="students" target-entity="Britannia\Domain\Entity\Student\Student" mapped-by="courses" />
+
+        <many-to-many field="teachers" target-entity="Britannia\Domain\Entity\Staff\StaffMember" mapped-by="courses" />
+
+
+        <field name="startDate" type="date" nullable="true"/>
+        <field name="endDate" type="date" nullable="true"/>
+
+        <field name="lessons" type="LessonDefinitionList" nullable="true"/>
+
+
+        <lifecycle-callbacks>
+            <lifecycle-callback type="prePersist" method="update"/>
+            <lifecycle-callback type="preUpdate" method="update"/>
+        </lifecycle-callbacks>
+    </entity>
+
+</doctrine-mapping>

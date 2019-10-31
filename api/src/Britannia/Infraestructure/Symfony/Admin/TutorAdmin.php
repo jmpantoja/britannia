@@ -22,6 +22,14 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 final class TutorAdmin extends AbstractAdmin
 {
 
+    public function getBatchActions()
+    {
+        $actions = parent::getBatchActions();
+        unset($actions['delete']);
+
+        return $actions;
+    }
+
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
@@ -39,21 +47,12 @@ final class TutorAdmin extends AbstractAdmin
     protected function configureListFields(ListMapper $listMapper): void
     {
         $listMapper
-            ->add('dni')
-            ->add('id')
-            ->add('fullName.firstName')
-            ->add('fullName.lastName')
-            ->add('address.address')
-            ->add('address.postalCode')
-            ->add('job.name')
-            ->add('job.status')
-            ->add('_action', null, [
-                'actions' => [
-                    'show' => [],
-                    'edit' => [],
-                    'delete' => [],
-                ],
+
+            ->addIdentifier('id', 'string', [
+                'template' => 'admin/student/tutor_list_field.html.twig',
+                'label' => 'Tutor'
             ]);
+
     }
 
     protected function configureFormFields(FormMapper $formMapper): void

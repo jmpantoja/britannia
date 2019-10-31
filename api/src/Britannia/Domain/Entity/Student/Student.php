@@ -4,6 +4,7 @@ namespace Britannia\Domain\Entity\Student;
 
 
 use Britannia\Domain\Entity\Academy\Academy;
+use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\VO\ContactMode;
 use Britannia\Domain\VO\NumOfYears;
 use Britannia\Domain\VO\OtherAcademy;
@@ -20,7 +21,18 @@ use PlanB\DDD\Domain\VO\PostalAddress;
 
 abstract class Student extends AggregateRoot
 {
+    /**
+     * @var int
+     */
+    private $oldId;
+
     private $id;
+
+
+    /**
+     * @var ArrayCollection
+     */
+    private $courses;
 
     /**
      * @var bool
@@ -86,6 +98,18 @@ abstract class Student extends AggregateRoot
      */
     private $firstContact;
 
+
+    /**
+     * @var string
+     */
+    private $firstComment;
+
+    /**
+     * @var string
+     */
+    private $secondComment;
+
+
     /**
      * @var bool
      */
@@ -101,12 +125,14 @@ abstract class Student extends AggregateRoot
      */
     private $termsOfUseImageRigths = false;
 
+
     public function __construct()
     {
         $this->id = new StudentId();
         $this->relatives = new ArrayCollection();
-
+        $this->courses = new ArrayCollection();
     }
+
 
     /**
      * @return StudentId
@@ -114,6 +140,57 @@ abstract class Student extends AggregateRoot
     public function getId(): ?StudentId
     {
         return $this->id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getOldId(): int
+    {
+        return $this->oldId;
+    }
+
+    /**
+     * @param int $oldId
+     * @return Student
+     */
+    public function setOldId(int $oldId): Student
+    {
+        $this->oldId = $oldId;
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getCourses(): Collection
+    {
+        return $this->courses;
+    }
+
+    /**
+     * @param ArrayCollection $courses
+     * @return Student
+     */
+    public function setCourses(Collection $courses): Student
+    {
+        foreach ($courses as $course) {
+            $this->addCourse($course);
+        }
+        return $this;
+    }
+
+    public function addCourse(Course $course): Student
+    {
+
+        if ($this->courses->contains($course)) {
+            return $this;
+        }
+
+        $this->courses->add($course);
+        $course->addStudent($this);
+
+        return $this;
     }
 
 
@@ -165,7 +242,7 @@ abstract class Student extends AggregateRoot
      * @param \DateTime $birthDate
      * @return Student
      */
-    public function setBirthDate(\DateTime $birthDate): Student
+    public function setBirthDate(?\DateTime $birthDate): Student
     {
         $this->birthDate = $birthDate;
         return $this;
@@ -406,6 +483,43 @@ abstract class Student extends AggregateRoot
         $this->firstContact = $firstContact;
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function getFirstComment(): string
+    {
+        return $this->firstComment;
+    }
+
+    /**
+     * @param string $firstComment
+     * @return Student
+     */
+    public function setFirstComment(string $firstComment): Student
+    {
+        $this->firstComment = $firstComment;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSecondComment(): string
+    {
+        return $this->secondComment;
+    }
+
+    /**
+     * @param string $secondComment
+     * @return Student
+     */
+    public function setSecondComment(string $secondComment): Student
+    {
+        $this->secondComment = $secondComment;
+        return $this;
+    }
+
 
     /**
      * @return bool

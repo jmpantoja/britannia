@@ -19,7 +19,7 @@ use PlanB\DDD\Domain\VO\Validator\Constraint;
 class PartOfDay extends Constraint
 {
 
-    public $requiredMessage = 'Se necesita una preferencia horaria';
+    public $requiredMessage = 'Se necesita una parte del día';
 
     public function isValidType($value): bool
     {
