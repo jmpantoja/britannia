@@ -13,6 +13,10 @@ use Sonata\AdminBundle\Show\ShowMapper;
 final class SchoolAdmin extends AbstractAdmin
 {
 
+    protected $datagridValues = [
+        '_sort_by' => 'fullName.lastName',
+    ];
+    
     public function getBatchActions()
     {
         $actions = parent::getBatchActions();
@@ -32,7 +36,7 @@ final class SchoolAdmin extends AbstractAdmin
     {
         $listMapper
             ->addIdentifier('name', null, [
-                'template' => 'admin/extra/default_list_field.html.twig',
+                'template' => 'admin/core/resume_column.html.twig',
             ]);
     }
 

@@ -40,6 +40,11 @@ class Course
     private $id;
 
     /**
+     * @var null|bool
+     */
+    private $active = true;
+
+    /**
      * @var null|string
      */
     private $name;
@@ -159,6 +164,14 @@ class Course
     {
         $this->id = $id;
         return $this;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function isActive(): ?bool
+    {
+        return $this->active;
     }
 
     /**
@@ -454,6 +467,19 @@ class Course
         return $this;
     }
 
+    public function removeStudent(Student $student): Course
+    {
+        if (!$this->students->contains($student)) {
+            return $this;
+        }
+
+        $this->students->removeElement($student);
+        $student->removeCourse($this);
+
+
+        return $this;
+    }
+
     /**
      * @return Collection
      */
@@ -527,6 +553,8 @@ class Course
     public function update(): Course
     {
 
+        $this->updateStatus(new \DateTime());
+
         if (!empty($this->name)) {
             return $this;
         }
@@ -543,6 +571,16 @@ class Course
         $pieces = array_filter($pieces);
 
         $this->name = implode(' / ', $pieces);
+
+        return $this;
+    }
+
+    public function updateStatus(\DateTime $date): Course
+    {
+
+        $diff = $date->diff($this->endDate);
+
+        $this->active = (1 !== $diff->invert);
 
         return $this;
     }

@@ -68,6 +68,7 @@ class StudentBuilder extends BuilderAbstract
 
     private $firstTutorDescription;
     private $secondTutorDescription;
+    private $createdAt;
 
 
     public function initResume(array $input): Resume
@@ -270,6 +271,14 @@ class StudentBuilder extends BuilderAbstract
     }
 
 
+    public function withCreateAt($date): self{
+
+        $dateTime = \DateTime::createFromFormat('Y-m-d H:i:s', $date);
+        $this->createdAt = $dateTime;
+
+        return $this;
+    }
+
     public function build(): ?object
     {
 
@@ -279,6 +288,7 @@ class StudentBuilder extends BuilderAbstract
         $child->setOldId(1 * $this->id);
 
         $child->setFullName($this->fullName);
+
         $child->setBirthDate($this->birthDate);
         $child->setEmails($this->emails);
         $child->setAddress($this->address);
@@ -298,6 +308,7 @@ class StudentBuilder extends BuilderAbstract
         $child->setTermsOfUseImageRigths($this->termsOfUseImage);
 
         $child->setPayment($this->payment);
+        $child->setCreatedAt($this->createdAt);
 
         if ($child instanceof Adult) {
 

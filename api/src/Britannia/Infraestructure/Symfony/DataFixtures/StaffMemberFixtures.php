@@ -16,38 +16,40 @@ class StaffMemberFixtures extends BaseFixture
 
     public function getBackupFiles(): array
     {
-        return [];
+        return [
+            sprintf('%s/dumps/britannia_staff_members.sql', __DIR__)
+        ];
     }
 
     public function loadData(DataPersisterInterface $dataPersister): void
     {
 
-        $this->createMany(StaffMember::class, 2, function (StaffMember $member, int $count) {
-
-            $userName = sprintf('manager-%02d', $count);
-            $this->create($member, $userName, [
-                'ROLE_MANAGER'
-            ]);
-            return $userName;
-        });
-
-        $this->createMany(StaffMember::class, 5, function (StaffMember $member, int $count) {
-            $userName = sprintf('reception-%02d', $count);
-            $this->create($member, $userName, [
-                'ROLE_RECEPTION'
-            ]);
-            return $userName;
-        });
-
-
-        $this->createMany(StaffMember::class, 15, function (StaffMember $member, int $count) {
-            $userName = sprintf('teacher-%02d', $count);
-            $this->create($member, $userName, [
-                'ROLE_TEACHER'
-            ]);
-
-            return $userName;
-        });
+//        $this->createMany(StaffMember::class, 2, function (StaffMember $member, int $count) {
+//
+//            $userName = sprintf('manager-%02d', $count);
+//            $this->create($member, $userName, [
+//                'ROLE_MANAGER'
+//            ]);
+//            return $userName;
+//        });
+//
+//        $this->createMany(StaffMember::class, 5, function (StaffMember $member, int $count) {
+//            $userName = sprintf('reception-%02d', $count);
+//            $this->create($member, $userName, [
+//                'ROLE_RECEPTION'
+//            ]);
+//            return $userName;
+//        });
+//
+//
+//        $this->createMany(StaffMember::class, 15, function (StaffMember $member, int $count) {
+//            $userName = sprintf('teacher-%02d', $count);
+//            $this->create($member, $userName, [
+//                'ROLE_TEACHER'
+//            ]);
+//
+//            return $userName;
+//        });
 
     }
 

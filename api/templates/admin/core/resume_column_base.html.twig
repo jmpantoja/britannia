@@ -1,0 +1,46 @@
+{% extends '@SonataAdmin/CRUD/base_list_field.html.twig' %}
+
+
+{% set body = block('body') | striptags | trim %}
+{% set hasBody = (body | length) > 0 %}
+
+{% block field %}
+
+    <div class="planb_row">
+        {% if hasBody %}
+            {{ block('caret') }}
+        {% endif %}
+
+        <div class="resume">
+            <div class="header">
+                {{ block('header') }}
+            </div>
+
+        {% if hasBody %}
+            <div id="collapse-{{ object.id }}" class="body collapse row">
+                {{ block('body') }}
+            </div>
+        {% endif %}
+
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block caret %}
+    <a class="btn-arrow collapsed" data-toggle="collapse" href="#collapse-{{ object.id }}">
+        <span class="fa fa-caret-up"></span>
+    </a>
+{% endblock %}
+
+{% block header %}
+    <a href="{{ admin.generateUrl('edit', {id:object.id}) }}">
+        <strong>{{ block('title') }}</strong>
+    </a>
+{% endblock %}
+
+{% block title %}
+    {{ object.name }}
+{% endblock %}
+
+{% block body %}{% endblock %}

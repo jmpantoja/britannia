@@ -17,10 +17,16 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 final class TutorAdmin extends AbstractAdmin
 {
+
+    protected $datagridValues = [
+        '_sort_by' => 'fullName.lastName',
+    ];
+
 
     public function getBatchActions()
     {
@@ -49,7 +55,7 @@ final class TutorAdmin extends AbstractAdmin
         $listMapper
 
             ->addIdentifier('id', 'string', [
-                'template' => 'admin/student/tutor_list_field.html.twig',
+                'template' => 'admin/student/tutor_resume_column.html.twig',
                 'label' => 'Tutor'
             ]);
 

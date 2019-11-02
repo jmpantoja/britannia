@@ -196,6 +196,11 @@ trait StudentMaker
 
     public function toDate(string $date): ?\DateTime
     {
+
+        if (empty($date)) {
+            return null;
+        }
+
         $validator = Validation::createValidator();
 
         $violations = $validator->validate($date, [
@@ -407,8 +412,8 @@ trait StudentMaker
 
     protected function toTutor(array $data): ?Tutor
     {
-        $data['firstName'] = $this->cleanName((string) $data['firstName']);
-        $data['lastName'] = $this->cleanName((string) $data['lastName']);
+        $data['firstName'] = $this->cleanName((string)$data['firstName']);
+        $data['lastName'] = $this->cleanName((string)$data['lastName']);
 
         $fullName = $this->toFullName([
             'firstName' => (string)$data['firstName'],

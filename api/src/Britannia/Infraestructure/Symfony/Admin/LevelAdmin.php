@@ -14,6 +14,19 @@ use Sonata\AdminBundle\Show\ShowMapper;
 final class LevelAdmin extends AbstractAdmin
 {
 
+    protected $datagridValues = [
+        '_sort_by' => 'name',
+    ];
+
+    public function getBatchActions()
+    {
+        $actions = parent::getBatchActions();
+        unset($actions['delete']);
+
+        return $actions;
+    }
+
+
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
@@ -24,13 +37,9 @@ final class LevelAdmin extends AbstractAdmin
     protected function configureListFields(ListMapper $listMapper): void
     {
         $listMapper
-            ->add('name')
-            ->add('_action', null, [
-                'actions' => [
-                    'show' => [],
-                    'edit' => [],
-                    'delete' => [],
-                ],
+            ->addIdentifier('name', null, [
+                'label' => 'Nivel',
+                'template' => 'admin/core/resume_column.html.twig',
             ]);
     }
 

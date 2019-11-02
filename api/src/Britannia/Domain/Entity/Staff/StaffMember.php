@@ -109,7 +109,7 @@ class StaffMember extends AggregateRoot implements UserInterface
     }
 
 
-    public function getTeacher(): ?bool
+    public function isTeacher(): ?bool
     {
         return $this->teacher;
     }
@@ -198,7 +198,6 @@ class StaffMember extends AggregateRoot implements UserInterface
         $this->dni = $dni;
         return $this;
     }
-
 
 
     /**
@@ -364,9 +363,17 @@ class StaffMember extends AggregateRoot implements UserInterface
 
     public function update(): self
     {
-
         $this->teacher = in_array('ROLE_TEACHER', $this->getRoles(), true);
         return $this;
+    }
+
+    public function isEqual($object): bool
+    {
+        if(!($object instanceof StaffMember)){
+            return false;
+        }
+
+        return $this->getId()->equals($object->getId());
     }
 
     public function __toString()

@@ -126,6 +126,16 @@ abstract class Student extends AggregateRoot
     private $termsOfUseImageRigths = false;
 
 
+    /**
+     * @var \DateTime
+     */
+    private $createdAt;
+
+    /**
+     * @var \DateTime
+     */
+    private $updatedAt;
+
     public function __construct()
     {
         $this->id = new StudentId();
@@ -160,6 +170,17 @@ abstract class Student extends AggregateRoot
         return $this;
     }
 
+
+    public function getType(): string
+    {
+        switch (static::class) {
+            case Adult::class;
+                return 'Adulto';
+            case Child::class;
+                return 'Niño';
+        }
+    }
+
     /**
      * @return ArrayCollection
      */
@@ -174,6 +195,7 @@ abstract class Student extends AggregateRoot
      */
     public function setCourses(Collection $courses): Student
     {
+
         foreach ($courses as $course) {
             $this->addCourse($course);
         }
@@ -194,6 +216,19 @@ abstract class Student extends AggregateRoot
     }
 
 
+    public function removeCourse(Course $course): Student
+    {
+        if (!$course->isActive() || !$this->courses->contains($course)) {
+            return $this;
+        }
+
+        $this->courses->removeElement($course);
+        $course->removeStudent($this);
+
+        return $this;
+    }
+
+
     /**
      * @return bool
      */
@@ -206,7 +241,7 @@ abstract class Student extends AggregateRoot
      * @param bool $active
      * @return Student
      */
-    public function setActive(bool $active): Student
+    private function setActive(bool $active): Student
     {
         $this->active = $active;
         return $this;
@@ -572,6 +607,60 @@ abstract class Student extends AggregateRoot
     public function setTermsOfUseImageRigths(bool $termsOfUseImageRigths): self
     {
         $this->termsOfUseImageRigths = $termsOfUseImageRigths;
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedAt(): \DateTime
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param \DateTime $createdAt
+     * @return Student
+     */
+    public function setCreatedAt(\DateTime $createdAt): Student
+    {
+        $this->createdAt = $createdAt;
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getUpdatedAt(): \DateTime
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @param \DateTime $updatedAt
+     * @return Student
+     */
+    private function setUpdatedAt(\DateTime $updatedAt): Student
+    {
+        $this->updatedAt = $updatedAt;
+
+        if (is_null($this->createdAt)) {
+            $this->setCreatedAt($updatedAt);
+        }
+
+        return $this;
+    }
+
+    public function update(): Student
+    {
+        $this->setUpdatedAt(new \DateTime());
+
+        $courses = $this->courses->filter(function (Course $course) {
+            return $course->isActive();
+        });
+
+
+        $this->active = $courses->count() > 0;
         return $this;
     }
 

@@ -109,7 +109,7 @@ class StudentFixtures extends BaseFixture
             ])
         ]));
 
-        $student->setActive($this->faker->boolean());
+        //$student->setActive($this->faker->boolean());
 
         $student->setPayment(Payment::make(...[
             PaymentMode::DAY_1(),

@@ -76,6 +76,15 @@
 
         <field name="termsOfUseImageRigths" type="boolean"/>
 
+
+        <lifecycle-callbacks>
+            <lifecycle-callback type="prePersist" method="update"/>
+            <lifecycle-callback type="preUpdate" method="update"/>
+        </lifecycle-callbacks>
+
+        <field name="createdAt" type="datetime" />
+        <field name="updatedAt" type="datetime" />
+
     </entity>
 
 </doctrine-mapping>

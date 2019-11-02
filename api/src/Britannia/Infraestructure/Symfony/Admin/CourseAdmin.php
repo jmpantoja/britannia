@@ -4,14 +4,11 @@ declare(strict_types=1);
 
 namespace Britannia\Infraestructure\Symfony\Admin;
 
-use Britannia\Domain\Entity\Staff\StaffMember;
-use Britannia\Domain\Entity\Student\Student;
 use Britannia\Infraestructure\Symfony\Form\AgeType;
 use Britannia\Infraestructure\Symfony\Form\ExaminerType;
 use Britannia\Infraestructure\Symfony\Form\HoursPerWeekType;
 use Britannia\Infraestructure\Symfony\Form\IntensiveType;
 use Britannia\Infraestructure\Symfony\Form\LessonDefinitionListType;
-use Britannia\Infraestructure\Symfony\Form\LessonDefinitionType;
 use Britannia\Infraestructure\Symfony\Form\PeriodicityType;
 use Doctrine\ORM\EntityRepository;
 use PlanB\DDDBundle\Symfony\Form\Type\PositiveIntegerType;
@@ -20,38 +17,55 @@ use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Form\Type\ModelListType;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\Form\Type\DatePickerType;
 use Sonata\Form\Type\DateRangePickerType;
-use Sonata\Form\Type\DateRangeType;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\DateIntervalType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 final class CourseAdmin extends AbstractAdmin
 {
 
+    public function createQuery($context = 'list')
+    {
+        $queryBuilder = $this->getModelManager()
+            ->getEntityManager($this->getClass())
+            ->createQueryBuilder();
+
+        $queryBuilder->select('p')
+            ->from($this->getClass(), 'p')
+            ->orderBy('p.active', 'DESC')
+            ->orderBy('p.startDate', 'DESC')
+        ;
+
+        return new ProxyQuery($queryBuilder);
+    }
+
+    public function getBatchActions()
+    {
+        $actions = parent::getBatchActions();
+        unset($actions['delete']);
+        return $actions;
+    }
+
+
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
-            ->add('name')
-            ->add('examiner')
-            ->add('age');
+            ->add('name');
     }
 
     protected function configureListFields(ListMapper $listMapper): void
     {
         $listMapper
-            ->add('name')
-            ->add('_action', null, [
-                'actions' => [
-                    'show' => [],
-                    'edit' => [],
-                    'delete' => [],
-                ],
-            ]);
+            ->addIdentifier('fullName.lastName', 'string', [
+                'template' => 'admin/course/course_list_field.html.twig',
+                'label' => 'Cursos'
+            ])
+            ->add('active', null, [
+                'header_style' => 'width:30px',
+                'row_align' => 'center'
+            ]);;
     }
 
     protected function configureFormFields(FormMapper $formMapper): void

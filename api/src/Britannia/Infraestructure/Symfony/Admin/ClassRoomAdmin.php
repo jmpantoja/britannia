@@ -21,6 +21,20 @@ use Symfony\Component\Validator\Constraints\Type;
 final class ClassRoomAdmin extends AbstractAdmin
 {
 
+
+    protected $datagridValues = [
+        '_sort_by' => 'name',
+    ];
+
+    public function getBatchActions()
+    {
+        $actions = parent::getBatchActions();
+        unset($actions['delete']);
+
+        return $actions;
+    }
+
+
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
@@ -31,14 +45,8 @@ final class ClassRoomAdmin extends AbstractAdmin
     protected function configureListFields(ListMapper $listMapper): void
     {
         $listMapper
-            ->add('name')
-            ->add('capacity')
-            ->add('_action', null, [
-                'actions' => [
-                    'show' => [],
-                    'edit' => [],
-                    'delete' => [],
-                ],
+            ->addIdentifier('name', null, [
+                'template' => 'admin/core/resume_column.html.twig',
             ]);
     }
 

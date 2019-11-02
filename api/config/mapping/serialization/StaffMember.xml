@@ -23,7 +23,6 @@
             <group>write</group>
         </attribute>
 
-
         <attribute name="firstName">
             <group>read</group>
             <group>write</group>

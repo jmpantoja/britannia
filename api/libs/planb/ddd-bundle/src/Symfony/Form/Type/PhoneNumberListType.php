@@ -52,14 +52,6 @@ class PhoneNumberListType extends AbstractSingleType
             'prototype' => true,
             'error_bubbling' => false,
             'entry_type' => PhoneNumberType::class,
-//            'constraints' => [
-//                new Count([
-//                    'min' => 1,
-//                    'minMessage' => 'Se necesita {{ limit }} número de teléfono como mínimo.|Se necesitan {{ limit }} números de teléfono como mínimo.',
-//                    'maxMessage' => 'Se necesita {{ limit }} número de teléfono como máximo.|Se necesitan {{ limit }} números de teléfono como máximo.',
-//                    'exactMessage' => 'Se necesita exactamente {{ limit }} número de teléfono.|Se necesitan exactamente {{ limit }} números de teléfono.',
-//                ])
-//            ]
         ]);
     }
 

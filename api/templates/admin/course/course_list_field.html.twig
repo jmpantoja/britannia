@@ -4,8 +4,13 @@
     <div class="planb_row">
         <div class="resume">
             <div class="header">
-                <a href="{{ admin.generateUrl('edit', {id:object.id}) }}"><strong>{{ object.name }}</strong></a>
+                {{ block('header') }}
             </div>
         </div>
     </div>
+{% endblock %}
+
+
+{% block header %}
+    <a href="{{ admin.generateUrl('edit', {id:object.id}) }}"><strong>{{ object.name }}</strong></a>
 {% endblock %}
