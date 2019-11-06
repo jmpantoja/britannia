@@ -23,7 +23,7 @@ use Britannia\Domain\VO\BankAccount;
 use Britannia\Domain\VO\DayOfWeek;
 use Britannia\Domain\VO\Job;
 use Britannia\Domain\VO\JobStatus;
-use Britannia\Domain\VO\LessonDefinition;
+use Britannia\Domain\VO\TimeSheet;
 use Britannia\Domain\VO\LessonLength;
 use Britannia\Domain\VO\NumOfYears;
 use Britannia\Domain\VO\Payment;
@@ -106,7 +106,7 @@ trait CourseMaker
 
         $temp = [];
         foreach ($days as $day) {
-            $temp[] = LessonDefinition::make($day, $start, $length, $classRoomId);
+            $temp[] = TimeSheet::make($day, $start, $length, $classRoomId);
         }
 
         return $temp;
@@ -167,7 +167,7 @@ trait CourseMaker
                     $temp[] = DayOfWeek::WEDNESDAY();
                     break;
                 case 'J':
-                    $temp[] = DayOfWeek::THUSDAY();
+                    $temp[] = DayOfWeek::THURSDAY();
                     break;
                 case 'V':
                     $temp[] = DayOfWeek::FRIDAY();

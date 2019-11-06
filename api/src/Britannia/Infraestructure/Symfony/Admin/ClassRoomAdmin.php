@@ -10,6 +10,7 @@ use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
@@ -34,6 +35,11 @@ final class ClassRoomAdmin extends AbstractAdmin
         return $actions;
     }
 
+    protected function configureRoutes(RouteCollection $collection)
+    {
+        $collection->clearExcept(['list', 'edit', 'create']);
+        return $collection;
+    }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {

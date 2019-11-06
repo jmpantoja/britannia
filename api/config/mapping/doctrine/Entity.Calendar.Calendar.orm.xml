@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xmlns:gedmo="http://gediminasm.org/schemas/orm/doctrine-extensions-mapping"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+
+    <entity name="Britannia\Domain\Entity\Calendar\Calendar"
+            repository-class="Britannia\Infraestructure\Doctrine\Repository\CalendarRepository"
+            table="calendar">
+
+        <id name="id" type="string"/>
+        <field name="date" type="date_immutable"/>
+        <field name="weekday" type="DayOfWeek"/>
+        <field name="month" type="integer"/>
+        <field name="year" type="integer"/>
+        <field name="day" type="integer"/>
+
+        <field name="workDay" type="boolean"/>
+    </entity>
+
+</doctrine-mapping>

@@ -28,18 +28,6 @@ class StaffMemberRepository extends ServiceEntityRepository implements StaffMemb
 
     }
 
-
-    public function save(StaffMember $member)
-    {
-        $this->getEntityManager()->persist($member);
-    }
-
-
-    public function remove(StaffMember $member)
-    {
-        $this->getEntityManager()->remove($member);
-    }
-
     /**
      * Loads the user for the given username.
      *

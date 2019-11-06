@@ -78,7 +78,7 @@ class Child extends Student
      * @param string $schoolCourse
      * @return Child
      */
-    public function setSchoolCourse(string $schoolCourse): self
+    public function setSchoolCourse(?string $schoolCourse): self
     {
         $this->schoolCourse = $schoolCourse;
         return $this;

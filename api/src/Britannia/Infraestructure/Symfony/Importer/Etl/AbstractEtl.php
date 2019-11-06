@@ -65,6 +65,14 @@ abstract class AbstractEtl implements EtlInterface
         return $this;
     }
 
+    protected function loadSql(string ...$paths)
+    {
+        foreach ($paths as $path) {
+            $sql = file_get_contents($path);
+            $this->default->exec($sql);
+        }
+    }
+
     public function run(Reporter $reporter): void
     {
         $data = $this->extract($this->builder);
@@ -102,9 +110,19 @@ abstract class AbstractEtl implements EtlInterface
         if ($builder->isValid()) {
             $entity = $builder->build();
             $this->dataPersister->persist($entity);
+
+            $this->postPersist($entity);
+
+            $this->entityManager->flush();
+            $this->entityManager->clear();
         }
 
         return $builder->resume();
+    }
+
+    public function postPersist($entity)
+    {
+
     }
 
 }

@@ -21,8 +21,36 @@ class DayOfWeek extends Enum
     public const MONDAY = 'Lunes';
     public const TUESDAY = 'Martes';
     public const WEDNESDAY = 'Miércoles';
-    public const THUSDAY = 'Jueves';
+    public const THURSDAY = 'Jueves';
     public const FRIDAY = 'Viernes';
     public const SATURDAY = 'Sábado';
     public const SUNDAY = 'Domingo';
+
+    public static function fromDate(\DateTimeImmutable $dateTime): self
+    {
+
+        $day = $dateTime->format('l');
+        $day = strtoupper($day);
+
+        return static::byName($day);
+    }
+
+    public function getShortName(): string
+    {
+
+        if ($this->is(self::WEDNESDAY())) {
+            return 'X';
+        }
+
+        $value = $this->getValue();
+
+        $initial = substr($value, 0, 1);
+        return strtoupper($initial);
+    }
+
+    public function isWeekEnd(): bool
+    {
+
+        return $this->is(static::SATURDAY) || $this->is(static::SUNDAY);
+    }
 }

@@ -39,6 +39,7 @@ class ExaminerType  extends AbstractSingleType
             'required' => false,
             'choice_loader' => new CallbackChoiceLoader(function () {
                 $values = array_flip(Examiner::getConstants());
+                asort($values);
                 return array_merge(['' => ''], $values);
             }),
             'attr'=>[

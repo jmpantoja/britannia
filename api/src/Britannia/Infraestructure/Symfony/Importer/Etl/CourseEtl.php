@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Importer\Etl;
 
 
+use ApiPlatform\Core\DataPersister\DataPersisterInterface;
+use Britannia\Domain\Service\Course\TimeSheetUpdater;
 use Britannia\Infraestructure\Symfony\Importer\Builder\BuilderInterface;
 use Britannia\Infraestructure\Symfony\Importer\Builder\CourseBuilder;
 use Britannia\Infraestructure\Symfony\Importer\Builder\StudentBuilder;
@@ -23,15 +25,37 @@ use Britannia\Infraestructure\Symfony\Importer\DataCollector;
 use Britannia\Infraestructure\Symfony\Importer\Normalizer\ChildNormalizer;
 use Britannia\Infraestructure\Symfony\Importer\Normalizer\NormalizerInterface;
 use Britannia\Infraestructure\Symfony\Importer\Normalizer\StudentNormalizer;
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\ORM\EntityManagerInterface;
 
 class CourseEtl extends AbstractEtl
 {
+    /**
+     * @var TimeSheetUpdater
+     */
+    private $timeSheetUpdater;
+
+    public function __construct(
+        Connection $original,
+        EntityManagerInterface $entityManager,
+        DataPersisterInterface $dataPersister,
+        TimeSheetUpdater $timeSheetUpdater
+    )
+    {
+        parent::__construct($original, $entityManager, $dataPersister);
+        $this->timeSheetUpdater = $timeSheetUpdater;
+    }
+
 
     public function clean(): void
     {
-        $this->truncate('courses', 'classrooms');
+        $this->truncate('courses', 'course_lessons', 'classrooms');
+
+        $this->loadSql(...[
+            sprintf('%s/../../DataFixtures/dumps/britannia_calendar.sql', __DIR__),
+            sprintf('%s/../../DataFixtures/dumps/britannia_classrooms.sql', __DIR__)
+        ]);
     }
 
     public function configureDataLoader(QueryBuilder $builder): void
@@ -70,7 +94,7 @@ class CourseEtl extends AbstractEtl
             ->withId($input['id'])
             ->withName((string)$input['nombre'])
             ->withSchoolCourse((string)$input['curso'])
-            ->withInterval((string) $input['fecha_inicio'], (string) $input['fecha_final'])
+            ->withInterval((string)$input['fecha_inicio'], (string)$input['fecha_final'])
             ->withEnrolmentPayment((float)$input['matricula'])
             ->withMonthlyPayment((float)$input['precio'])
             ->withPeriodicity((int)$input['periocidad'])
@@ -78,8 +102,12 @@ class CourseEtl extends AbstractEtl
             ->withLessons((string)$input['horario'], (string)$input['materiales'], (string)$input['numeroAula'])
             ->withCategories($categories);
 
-
         return $builder;
+    }
+
+    public function postPersist($entity)
+    {
+        $this->timeSheetUpdater->updateCourseLessons($entity);
     }
 
 }

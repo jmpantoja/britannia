@@ -8,6 +8,7 @@ use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
 
 final class AcademyAdmin extends AbstractAdmin
@@ -17,6 +18,11 @@ final class AcademyAdmin extends AbstractAdmin
         '_sort_by' => 'fullName.lastName',
     ];
 
+    protected function configureRoutes(RouteCollection $collection)
+    {
+        $collection->clearExcept(['list', 'edit', 'create']);
+        return $collection;
+    }
 
     public function getBatchActions()
     {

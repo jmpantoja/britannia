@@ -6,6 +6,7 @@ namespace Britannia\Infraestructure\Symfony\Admin;
 
 use Britannia\Domain\Entity\Staff\StaffMember;
 use Britannia\Infraestructure\Symfony\Form\RoleType;
+use Doctrine\ORM\EntityRepository;
 use PlanB\DDDBundle\Symfony\Form\Type\EmailListType;
 use PlanB\DDDBundle\Symfony\Form\Type\FullNameType;
 use PlanB\DDDBundle\Symfony\Form\Type\PhoneNumberListType;
@@ -14,6 +15,7 @@ use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -55,15 +57,17 @@ final class StaffMemberAdmin extends AbstractAdmin
         unset($actions['delete']);
         return $actions;
     }
-
+    protected function configureRoutes(RouteCollection $collection)
+    {
+        $collection->clearExcept(['list', 'edit', 'create']);
+        return $collection;
+    }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
             ->add('userName')
-            ->add('teacher', null, [
-                'editable' => true
-            ])
+            ->add('teacher')
             ->add('password')
             ->add('active')
             ->add('roles')
@@ -79,6 +83,10 @@ final class StaffMemberAdmin extends AbstractAdmin
             ->addIdentifier('fullName.lastName', 'string', [
                 'template' => 'admin/staff/staff_resume_column.html.twig',
                 'label' => 'Alumnos'
+            ])
+            ->add('userName', null, [
+                'header_style' => 'width:30px',
+                'row_align' => 'center'
             ])
             ->add('active', null, [
                 'header_style' => 'width:30px',
@@ -123,8 +131,16 @@ final class StaffMemberAdmin extends AbstractAdmin
         ->end();
 
         if($hasAccess && $subject->isTeacher()){
-            $formMapper->with('Cursos', ['class' => 'col-md-4'])
-                ->add('courses')
+            $formMapper->with('Cursos en Activo', ['class' => 'col-md-4'])
+                ->add('courses', null, [
+                    'label' => false,
+                    'by_reference' => false,
+                    'query_builder' => function (EntityRepository $er) {
+                        return $er->createQueryBuilder('m')
+                            ->where('m.active = :param')
+                            ->setParameter('param', true);
+                    }
+                ])
                 ->end();
         }
 

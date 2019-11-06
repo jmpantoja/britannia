@@ -34,8 +34,8 @@ class UpdateCourseStatusUseCase implements UseCaseInterface
     public function handle(UpdateCourseStatus $status)
     {
         $date = $status->getDate();
-
         $courses = $this->repository->findUpdateStatusPending($date);
+
         foreach ($courses as $course){
             $course->updateStatus($date);
         }

@@ -16,13 +16,14 @@ namespace Britannia\Domain\VO\Validator;
 
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 
-class HoursPerWeek extends Constraint
+class TimeSheet extends Constraint
 {
 
-    public $requiredMessage = 'Se necesita un número de horas semanales';
+    public $requiredMessage = 'La clase no es correcta';
 
     public function isValidType($value): bool
     {
-        return is_scalar($value) || $value instanceof \Britannia\Domain\VO\HoursPerWeek;
+        return is_array($value) || $value instanceof \Britannia\Domain\VO\TimeSheet;
     }
+
 }

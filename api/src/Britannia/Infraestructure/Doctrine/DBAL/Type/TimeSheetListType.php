@@ -16,13 +16,13 @@ namespace Britannia\Infraestructure\Doctrine\DBAL\Type;
 
 use Britannia\Domain\Entity\ClassRoom\ClassRoomId;
 use Britannia\Domain\VO\DayOfWeek;
-use Britannia\Domain\VO\LessonDefinition;
+use Britannia\Domain\VO\TimeSheet;
 use Britannia\Domain\VO\LessonLength;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 use PlanB\DDD\Domain\VO\PositiveInteger;
 
-class LessonDefinitionListType extends Type
+class TimeSheetListType extends Type
 {
 
     /**
@@ -57,7 +57,7 @@ class LessonDefinitionListType extends Type
 
             $classRoom = new ClassRoomId($item['classroom']);
 
-            return LessonDefinition::make(...[
+            return TimeSheet::make(...[
                 $dayOfWeek,
                 $hour,
                 $length,
@@ -68,7 +68,8 @@ class LessonDefinitionListType extends Type
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
-        $value = array_map(function (LessonDefinition $lessonDefinition) {
+
+        $value = array_map(function (TimeSheet $lessonDefinition) {
             return [
                 'dayOfWeek' => $lessonDefinition->getDayOfWeek()->getName(),
                 'hour' => $lessonDefinition->getStartTime()->getTimestamp(),
@@ -82,6 +83,8 @@ class LessonDefinitionListType extends Type
     }
 
 
+
+
     /**
      * Gets the name of this type.
      *
@@ -91,6 +94,6 @@ class LessonDefinitionListType extends Type
      */
     public function getName()
     {
-        return 'LessonDefinitionList';
+        return 'TimeSheetList';
     }
 }

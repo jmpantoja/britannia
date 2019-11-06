@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Form;
 
 
-use Britannia\Domain\VO\LessonDefinition;
+use Britannia\Domain\VO\TimeSheet;
 use Doctrine\ORM\EntityManagerInterface;
 use PlanB\DDD\Domain\VO\PositiveInteger;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
@@ -28,7 +28,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 
-class LessonDefinitionType extends AbstractCompoundType
+class TimeSheetType extends AbstractCompoundType
 {
 
     /**
@@ -46,24 +46,30 @@ class LessonDefinitionType extends AbstractCompoundType
     {
 
         $builder
-            ->add('dayOfWeek', DayOfWeekType::class)
+            ->add('dayOfWeek', DayOfWeekType::class, [
+                'disabled' => $options['locked']
+            ])
             ->add('startTime', DateTimePickerType::class, [
                 'label' => 'Hora',
                 'dp_pick_date' => false,
                 'format' => 'h:mm a', //YYYY-MM-D h:mm:ss a
                 'dp_minute_stepping' => 5,
-                'required' => false
+                'required' => false,
+                'disabled' => $options['locked']
             ])
             ->add('length', PositiveIntegerType::class, [
-
+                'disabled' => $options['locked']
             ])
-            ->add('classroomId', ClassRoomType::class);
+            ->add('classroomId', ClassRoomType::class, [
+                'disabled' => $options['locked']
+            ]);
     }
 
     public function customOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => LessonDefinition::class
+            'data_class' => TimeSheet::class,
+            'locked' => false
         ]);
     }
 
@@ -72,12 +78,12 @@ class LessonDefinitionType extends AbstractCompoundType
      */
     public function buildConstraint(array $options): ?Constraint
     {
-        return LessonDefinition::buildConstraint($options);
+        return TimeSheet::buildConstraint($options);
     }
 
     public function customMapping(array $data)
     {
-        return LessonDefinition::make(...[
+        return TimeSheet::make(...[
             $data['dayOfWeek'],
             $data['startTime'],
             $data['length'],

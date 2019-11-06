@@ -27,11 +27,15 @@ class CourseRepository extends ServiceEntityRepository implements CourseReposito
      */
     public function findUpdateStatusPending(\DateTime $date): array
     {
-        $criteria = new Criteria();
 
-        $criteria->where($criteria->expr()->eq('active', true));
-        $criteria->andwhere($criteria->expr()->lt('endDate', $date));
 
-        return $this->matching($criteria)->toArray();
+        $query = $this->createQueryBuilder('A')
+            ->where('A.active = 1 and A.endDate < :date')
+            ->orWhere('A.active = 0 and A.endDate >= :date')
+            ->setParameters(['date' => $date])
+            ->getQuery();
+
+        return $query->getResult();
+
     }
 }

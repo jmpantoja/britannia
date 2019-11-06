@@ -1,13 +1,60 @@
 sonata_admin:
     title: 'Britannia'
     title_logo: '/images/admin/logo.png'
-        
     
     show_mosaic_button: false
     
     dashboard:
+#        groups:
+#            admin.group.content:
+#                label: app.admin.group.content
+#                label_catalogue: App
+#                items:
+#                - admin.student
+#                - admin.tutor
+        
         blocks:
-        - { type: sonata.admin.block.admin_list, position: left }
+#        - { type: sonata.admin.block.admin_list, position: left }
+        -
+            class:    col-lg-3 col-xs-6          
+            position: top                        
+            type:     sonata.admin.block.stats
+            roles: ['ROLE_RECEPTION', 'ROLE_MANAGER']
+            settings:
+                code:  admin.student             
+                icon:  fa-graduation-cap
+                text:  Alumnos                   
+                color: bg-green                  
+                filters:                         
+                    active: { value: 1 }
+                    
+        -
+            class:    col-lg-3 col-xs-6
+            position: top
+            type:     sonata.admin.block.stats
+            roles: ['ROLE_RECEPTION', 'ROLE_MANAGER']
+            settings:
+                code:  admin.course
+                icon:  fa-book
+                text:  Cursos
+                color: bg-blue
+                filters:
+                    active: { value: 1 }
+
+        -
+            class:    col-lg-3 col-xs-6
+            position: top
+            type:     sonata.admin.block.stats
+            roles: ['ROLE_RECEPTION', 'ROLE_MANAGER']
+            settings:
+                code:  admin.staff_member
+                icon:  fa-user
+                text:  Profesores
+                color: bg-aqua
+                filters:
+                    teacher: { value: 1 }
+                    
+
 
     options:
         html5_validate: false
@@ -44,3 +91,9 @@ sonata_block:
     blocks:
         sonata.admin.block.admin_list:
             contexts: [admin]
+
+
+sonata_intl:
+    timezone:
+        locales:
+            fr:    Europe/Paris

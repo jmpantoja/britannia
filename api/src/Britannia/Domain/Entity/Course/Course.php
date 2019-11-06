@@ -17,16 +17,20 @@ namespace Britannia\Domain\Entity\Course;
 use Britannia\Domain\Entity\Staff\StaffMember;
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\VO\Age;
+use Britannia\Domain\VO\DayOfWeek;
 use Britannia\Domain\VO\Examiner;
 use Britannia\Domain\VO\HoursPerWeek;
 use Britannia\Domain\VO\Intensive;
 use Britannia\Domain\VO\Periodicity;
+use Britannia\Domain\VO\TimeSheet;
+use Britannia\Domain\VO\TimeSheetList;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use PlanB\DDD\Domain\Model\AggregateRoot;
 use PlanB\DDD\Domain\VO\PositiveInteger;
 use PlanB\DDD\Domain\VO\Price;
 
-class Course
+class Course extends AggregateRoot
 {
 
     /**
@@ -82,11 +86,6 @@ class Course
     private $periodicity;
 
     /**
-     * @var null|HoursPerWeek
-     */
-    private $hoursPerWeek;
-
-    /**
      * @var null|Age
      */
     private $age;
@@ -119,7 +118,25 @@ class Course
     private $books;
 
 
-    private $lessons = [];
+    /**
+     * @var TimeSheet[]
+     */
+    private $timeSheet = [];
+
+    /**
+     * @var Collection
+     */
+    private $lessons;
+
+    /**
+     * @var int
+     */
+    private $hoursPerWeek = 0;
+
+    /**
+     * @var int
+     */
+    private $hoursTotal = 0;
 
     public function __construct()
     {
@@ -127,6 +144,7 @@ class Course
         $this->students = new ArrayCollection();
         $this->teachers = new ArrayCollection();
         $this->books = new ArrayCollection();
+        $this->lessons = new ArrayCollection();
     }
 
     /**
@@ -302,24 +320,6 @@ class Course
         return $this;
     }
 
-    /**
-     * @return HoursPerWeek|null
-     */
-    public function getHoursPerWeek(): ?HoursPerWeek
-    {
-        return $this->hoursPerWeek;
-    }
-
-    /**
-     * @param HoursPerWeek|null $hoursPerWeek
-     * @return Course
-     */
-    public function setHoursPerWeek(?HoursPerWeek $hoursPerWeek): Course
-    {
-        $this->hoursPerWeek = $hoursPerWeek;
-        return $this;
-    }
-
 
     /**
      * @return Intensive|null
@@ -357,6 +357,8 @@ class Course
      */
     public function setInterval(?array $dates): Course
     {
+        $this->notify(TimeSheetWasChanged::make($this));
+
         $this->startDate = $dates['start'];
         $this->endDate = $dates['end'];
 
@@ -532,29 +534,105 @@ class Course
     }
 
     /**
-     * @return array
+     * @return TimeSheet[]
      */
-    public function getLessons(): array
+    public function getTimeSheet(): array
+    {
+        return $this->timeSheet;
+    }
+
+    /**
+     * @param array $timeSheet
+     * @return Course
+     */
+    public function setTimeSheet(array $timeSheet): Course
+    {
+        $list = TimeSheetList::make($timeSheet);
+
+        if (!$list->isEqual($this->timeSheet) && !$this->isStarted()) {
+            $this->notify(TimeSheetWasChanged::make($this));
+        }
+
+        $this->hoursPerWeek = $list->getHoursPerWeek();
+        $this->timeSheet = $list->toArray();
+        return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getLessons(): Collection
     {
         return $this->lessons;
     }
 
     /**
-     * @param array $lessons
+     * @param Collection $lessons
      * @return Course
      */
-    public function setLessons(array $lessons): Course
+    public function setLessons(LessonList $lessons): Course
     {
-        $this->lessons = $lessons;
+
+        $this->hoursTotal = $lessons->getTotalHours();
+        $this->lessons = $lessons->toArray();
+
         return $this;
     }
 
+    /**
+     * @return int
+     */
+    public function getHoursPerWeek(): float
+    {
+        return $this->hoursPerWeek;
+    }
+
+    /**
+     * @return int
+     */
+    public function getHoursTotal(): float
+    {
+        return $this->hoursTotal;
+    }
+
+    /**
+     *
+     * @return DayOfWeek[]
+     */
+    public function getDaysOfWeek(): array
+    {
+        return array_map(function (TimeSheet $lesson) {
+            return $lesson->getDayOfWeek();
+        }, $this->getTimeSheet());
+    }
+
+    public function getTimeSheetFromDay(DayOfWeek $day): ?TimeSheet
+    {
+        foreach ($this->getTimeSheet() as $lesson) {
+            if ($day->is($lesson->getDayOfWeek())) {
+                return $lesson;
+            }
+        }
+
+        return null;
+    }
+
+    public function isStarted(): bool
+    {
+        if (is_null($this->startDate)) {
+            return false;
+        }
+
+        $today = new \DateTimeImmutable();
+        return $today->getTimestamp() >= $this->startDate->getTimestamp();
+    }
+
+    public function getAvailablePlaces(): int {
+        return $this->numOfPlaces->getNumber() - $this->students->count();
+    }
 
     public function update(): Course
     {
-
-        $this->updateStatus(new \DateTime());
-
         if (!empty($this->name)) {
             return $this;
         }
@@ -575,13 +653,18 @@ class Course
         return $this;
     }
 
+    public function persist(): Course
+    {
+        $this->updateStatus(new \DateTime());
+        //$this->notify(TimeSheetWasChanged::make($this));
+        return $this;
+    }
+
+
     public function updateStatus(\DateTime $date): Course
     {
-
         $diff = $date->diff($this->endDate);
-
         $this->active = (1 !== $diff->invert);
-
         return $this;
     }
 
@@ -589,5 +672,6 @@ class Course
     {
         return (string)$this->getName();
     }
+
 
 }

@@ -2,6 +2,7 @@
 
 namespace Britannia\Infraestructure\Symfony\Command;
 
+use Britannia\Application\UseCase\Calendar\UpdateCalendar;
 use Britannia\Application\UseCase\Course\UpdateCourseStatus;
 use League\Tactician\CommandBus;
 use Symfony\Component\Console\Command\Command;
@@ -33,17 +34,19 @@ class BritanniaCronCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
-//
-//        $date = (new \DateTime())->setTime(0, 0, 0);
-//        $endDate= (new \DateTime())->setTime(0, 0, 0)->sub(new \DateInterval('P1D'));
-//
-//        dump($date, $endDate, $date->diff($endDate));
-//
-//        die();
+        $date = new \DateTime();
+
+        $date->setDate(2010,1,1);
+
+        $date->add(new \DateInterval('P1D'));
+
         $this->commandBus->handle(UpdateCourseStatus::make(...[
-            new \DateTime()
+            $date
         ]));
 
+        $this->commandBus->handle(UpdateCalendar::make(...[
+            $date
+        ]));
 
     }
 }

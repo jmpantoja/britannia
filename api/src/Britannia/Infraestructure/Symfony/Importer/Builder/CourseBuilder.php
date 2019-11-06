@@ -33,6 +33,7 @@ class CourseBuilder extends BuilderAbstract
     private const TYPE = 'Curso';
 
     private $id;
+
     private $name;
 
     private $enrolmentPayment;
@@ -77,8 +78,8 @@ class CourseBuilder extends BuilderAbstract
 
     public function withInterval(string $start, string $end): self
     {
-        $this->startDate = \DateTime::createFromFormat('Y-m-d H:i:s', '2016-2-5 10:59:26');
-        $this->endDate = \DateTime::createFromFormat('Y-m-d H:i:s', '2016-2-5 10:59:26');
+        $this->startDate = \DateTime::createFromFormat('Y-m-d H:i:s', $start);
+        $this->endDate = \DateTime::createFromFormat('Y-m-d H:i:s', $end);
 
         return $this;
     }
@@ -118,30 +119,6 @@ class CourseBuilder extends BuilderAbstract
 
         if (in_array(14, $values, true)) {
             $this->intensive = Intensive::INTENSIVE();
-        }
-
-        if (in_array(21, $values, true)) {
-            $this->hoursPerWeek = HoursPerWeek::TWO_HOURS_AND_HALF();
-        }
-
-        if (in_array(20, $values, true)) {
-            $this->hoursPerWeek = HoursPerWeek::TWO_HOURS();
-        }
-
-        if (in_array(19, $values, true)) {
-            $this->hoursPerWeek = HoursPerWeek::THREE_HOURS();
-        }
-
-        if (in_array(24, $values, true)) {
-            $this->hoursPerWeek = HoursPerWeek::FOUR_HOURS();
-        }
-
-        if (in_array(22, $values, true)) {
-            $this->hoursPerWeek = HoursPerWeek::SIX_HOURS();
-        }
-
-        if (in_array(23, $values, true)) {
-            $this->hoursPerWeek = HoursPerWeek::NINE_HOURS();
         }
 
         return $this;
@@ -197,8 +174,7 @@ class CourseBuilder extends BuilderAbstract
         $course->setStartDate($this->startDate);
         $course->setEndDate($this->endDate);
         $course->setIntensive($this->intensive);
-        $course->setHoursPerWeek($this->hoursPerWeek);
-        $course->setLessons($this->lessons);
+        $course->setTimeSheet($this->lessons);
 
         return $course;
     }

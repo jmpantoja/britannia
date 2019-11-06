@@ -8,6 +8,7 @@ use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
 
 final class SchoolAdmin extends AbstractAdmin
@@ -25,6 +26,11 @@ final class SchoolAdmin extends AbstractAdmin
         return $actions;
     }
 
+    protected function configureRoutes(RouteCollection $collection)
+    {
+        $collection->clearExcept(['list', 'edit', 'create']);
+        return $collection;
+    }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {

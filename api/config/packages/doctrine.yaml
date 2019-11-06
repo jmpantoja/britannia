@@ -35,6 +35,7 @@ doctrine:
                     StudentId: StudentId
                     TutorId: TutorId
                     ClassRoomId: ClassRoomId
+                    LessonId: LessonId
 
                     JobStatus: JobStatus
                     PartOfDay: PartOfDay
@@ -49,11 +50,9 @@ doctrine:
                     BookCategory: BookCategory
                     Examiner: Examiner
                     Age: Age
-                    LessonDefinitionList: LessonDefinitionList
+                    TimeSheetList: TimeSheetList
                     Periodicity: Periodicity
                     Intensive: Intensive
-                    HoursPerWeek: HoursPerWeek
-
 
         types:
             StaffMemberId:  Britannia\Infraestructure\Doctrine\DBAL\Type\StaffMemberIdType
@@ -62,6 +61,7 @@ doctrine:
             StudentId: Britannia\Infraestructure\Doctrine\DBAL\Type\StudentIdType
             TutorId: Britannia\Infraestructure\Doctrine\DBAL\Type\TutorIdType
             ClassRoomId: Britannia\Infraestructure\Doctrine\DBAL\Type\ClassRoomIdType
+            LessonId: Britannia\Infraestructure\Doctrine\DBAL\Type\LessonIdType
 
             JobStatus: Britannia\Infraestructure\Doctrine\DBAL\Type\JobStatusType
             PartOfDay: Britannia\Infraestructure\Doctrine\DBAL\Type\PartOfDayType
@@ -77,11 +77,9 @@ doctrine:
 
             Examiner: Britannia\Infraestructure\Doctrine\DBAL\Type\ExaminerType
             Age: Britannia\Infraestructure\Doctrine\DBAL\Type\AgeType
-            LessonDefinitionList: Britannia\Infraestructure\Doctrine\DBAL\Type\LessonDefinitionListType
+            TimeSheetList: Britannia\Infraestructure\Doctrine\DBAL\Type\TimeSheetListType
             Periodicity: Britannia\Infraestructure\Doctrine\DBAL\Type\PeriodicityType
             Intensive: Britannia\Infraestructure\Doctrine\DBAL\Type\IntensiveType
-            HoursPerWeek: Britannia\Infraestructure\Doctrine\DBAL\Type\HoursPerWeekType
-
 
     orm:
         auto_generate_proxy_classes: true

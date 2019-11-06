@@ -1,6 +1,3 @@
-@import url("http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700");
-
-
 .logo img {
     display: inline;
     padding-bottom: 4px;
@@ -27,14 +24,11 @@
 .skin-black .main-header .navbar .nav .open > a,
 .skin-black .main-header .navbar .nav .open > a:hover,
 .skin-black .main-header .navbar .nav .open > a:focus,
-.skin-black .main-header .navbar .nav > .active > a
-{
+.skin-black .main-header .navbar .nav > .active > a {
     background-color: #3782AD;
     color: gainsboro;
 }
 
-
 .breadcrumb > .active {
     color: #333;
 }
-

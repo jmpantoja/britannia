@@ -5,6 +5,7 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: es
+    
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -39,10 +40,10 @@ services:
 
     Britannia\Infraestructure\Symfony\Importer\ImporterManager:
         calls:
-#        - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\StudentEtl']]
-#        - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\CourseEtl']]
-#        - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\StudentCoursesEtl']]
-#        - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\StaffEtl']]
+        # - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\StudentEtl']]
+        # - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\CourseEtl']]
+        #- [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\StudentCoursesEtl']]
+        #- [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\StaffEtl']]
 
 
     admin.staff_member:
@@ -62,7 +63,7 @@ services:
         - { name: sonata.admin, manager_type: orm, group: Alumnos, label: Alumnos, pager_type: 'simple' }
         calls:
         - [setSubClasses, [{child: Britannia\Domain\Entity\Student\Child, adult: Britannia\Domain\Entity\Student\Adult}]]
-        
+
     admin.tutor:
         class: Britannia\Infraestructure\Symfony\Admin\TutorAdmin
         arguments: [~, Britannia\Domain\Entity\Student\Tutor, ~]
@@ -83,6 +84,13 @@ services:
         arguments: [~, Britannia\Domain\Entity\Book\Book, ~]
         tags:
         - { name: sonata.admin, manager_type: orm, group: Cursos, label: Libros, pager_type: 'simple' }
+        public: true
+
+    admin.level:
+        class: Britannia\Infraestructure\Symfony\Admin\LevelAdmin
+        arguments: [~, Britannia\Domain\Entity\Course\Level, ~]
+        tags:
+        - { name: sonata.admin, manager_type: orm, group: Cursos, label: Niveles, pager_type: 'simple'}
         public: true
 
     admin.academy:
@@ -106,10 +114,10 @@ services:
         - { name: sonata.admin, manager_type: orm, group: Datos Extra, label: Aulas, pager_type: 'simple' }
         public: true
 
-    admin.level:
-        class: Britannia\Infraestructure\Symfony\Admin\LevelAdmin
-        arguments: [~, Britannia\Domain\Entity\Course\Level, ~]
-        tags:
-        - { name: sonata.admin, manager_type: orm, group: Cursos, label: Niveles, pager_type: 'simple'}
-        public: true
 
+    admin.calendar:
+        class: Britannia\Infraestructure\Symfony\Admin\CalendarAdmin
+        arguments: [~, Britannia\Domain\Entity\Calendar\Calendar, Britannia\Infraestructure\Symfony\Controller\Admin\CalendarController]
+        tags:
+        - { name: sonata.admin, manager_type: orm, group: Datos Extra, label: Calendario }
+        public: true

@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Form;
 
 
-use Britannia\Domain\VO\LessonDefinition;
+use Britannia\Domain\VO\TimeSheet;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\FormDataMapper;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
@@ -23,7 +23,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Count;
 
 
-class LessonDefinitionListType extends AbstractSingleType
+class TimeSheetListType extends AbstractSingleType
 {
 
     public function getParent()
@@ -39,21 +39,28 @@ class LessonDefinitionListType extends AbstractSingleType
 
         $resolver->setDefaults([
             'required' => true,
+            'locked' => false,
             'by_reference' => false,
             'allow_add' => true,
             'allow_delete' => true,
             'prototype' => true,
             'error_bubbling' => false,
-            'entry_type' => LessonDefinitionType::class,
-//            'constraints' => [
-//                new Count([
-//                    'min' => 1,
-//                    'minMessage' => 'Se necesita {{ limit }} clase como mínimo.|Se necesitan {{ limit }} clase como mínimo.',
-//                    'maxMessage' => 'Se necesita {{ limit }} clases como máximo.|Se necesitan {{ limit }} clases como máximo.',
-//                    'exactMessage' => 'Se necesita exactamente {{ limit }} clases.|Se necesitan exactamente {{ limit }} clases.',
-//                ])
-//            ]
+            'entry_type' => TimeSheetType::class
         ]);
+
+        $resolver->setNormalizer('allow_add', function (OptionsResolver $resolver) {
+            return !$resolver['locked'];
+        });
+
+        $resolver->setNormalizer('allow_delete', function (OptionsResolver $resolver) {
+            return !$resolver['locked'];
+        });
+
+        $resolver->setNormalizer('entry_options', function (OptionsResolver $resolver, $values) {
+            $values['locked'] = $resolver['locked'];
+            return $values;
+        });
+
     }
 
     public function transform($value)
@@ -77,11 +84,11 @@ class LessonDefinitionListType extends AbstractSingleType
 
     /**
      * @param $lessonDefinition
-     * @return LessonDefinition|null
+     * @return TimeSheet|null
      */
-    protected function toLessonDefinition($lessonDefinition): ?LessonDefinition
+    protected function toLessonDefinition($lessonDefinition): ?TimeSheet
     {
-        if (!($lessonDefinition instanceof LessonDefinition)) {
+        if (!($lessonDefinition instanceof TimeSheet)) {
             return null;
         }
 

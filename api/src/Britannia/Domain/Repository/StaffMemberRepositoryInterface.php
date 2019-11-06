@@ -20,8 +20,8 @@ use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 interface StaffMemberRepositoryInterface extends UserLoaderInterface
 {
 
-    public function save(StaffMember $member);
-
-    public function remove(StaffMember $member);
+//    public function save(StaffMember $member);
+//
+//    public function remove(StaffMember $member);
 
 }

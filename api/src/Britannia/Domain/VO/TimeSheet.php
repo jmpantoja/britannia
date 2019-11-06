@@ -19,7 +19,7 @@ use PlanB\DDD\Domain\VO\PositiveInteger;
 use PlanB\DDD\Domain\VO\Traits\Validable;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 
-class LessonDefinition
+class TimeSheet
 {
     use Validable;
 
@@ -42,14 +42,13 @@ class LessonDefinition
 
     public static function buildConstraint(array $options = []): Constraint
     {
-        return new Validator\LessonDefinition([
+        return new Validator\TimeSheet([
             'required' => $options['required'] ?? true
         ]);
     }
 
     public static function make(DayOfWeek $dayOfWeek, \DateTime $hour, PositiveInteger $length, ClassRoomId $classRoomId): self
     {
-
         return new self($dayOfWeek, $hour, $length, $classRoomId);
     }
 
@@ -71,9 +70,9 @@ class LessonDefinition
 
     /**
      * @param DayOfWeek $dayOfWeek
-     * @return LessonDefinition
+     * @return TimeSheet
      */
-    private function setDayOfWeek(DayOfWeek $dayOfWeek): LessonDefinition
+    private function setDayOfWeek(DayOfWeek $dayOfWeek): TimeSheet
     {
         $this->dayOfWeek = $dayOfWeek;
         return $this;
@@ -89,9 +88,9 @@ class LessonDefinition
 
     /**
      * @param \DateTime $startTime
-     * @return LessonDefinition
+     * @return TimeSheet
      */
-    private function setStartTime(\DateTime $startTime): LessonDefinition
+    private function setStartTime(\DateTime $startTime): TimeSheet
     {
         $this->startTime = $startTime;
         return $this;
@@ -105,11 +104,18 @@ class LessonDefinition
         return $this->length;
     }
 
+    public function getLengthInterval(): \DateInterval
+    {
+        $spec = sprintf('PT%sM', $this->length);
+
+        return new \DateInterval($spec);
+    }
+
     /**
      * @param LessonLength $length
-     * @return LessonDefinition
+     * @return TimeSheet
      */
-    private function setLength(PositiveInteger $length): LessonDefinition
+    private function setLength(PositiveInteger $length): TimeSheet
     {
         $this->length = $length;
         return $this;
@@ -125,9 +131,9 @@ class LessonDefinition
 
     /**
      * @param ClassRoomId $classRoom
-     * @return LessonDefinition
+     * @return TimeSheet
      */
-    private function setClassRoom(ClassRoomId $classRoom): LessonDefinition
+    private function setClassRoom(ClassRoomId $classRoom): TimeSheet
     {
         $this->classRoomId = $classRoom;
         return $this;

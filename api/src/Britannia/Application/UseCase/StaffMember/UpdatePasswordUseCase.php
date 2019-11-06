@@ -25,15 +25,10 @@ class UpdatePasswordUseCase implements UseCaseInterface
      * @var EncoderFactoryInterface
      */
     private $encoderFactory;
-    /**
-     * @var StaffMemberRepositoryInterface
-     */
-    private $memberRepository;
 
-    public function __construct(EncoderFactoryInterface $encoderFactory, StaffMemberRepositoryInterface $memberRepository)
+    public function __construct(EncoderFactoryInterface $encoderFactory)
     {
         $this->encoderFactory = $encoderFactory;
-        $this->memberRepository = $memberRepository;
     }
 
     public function handle(UpdatePassword $command)
@@ -43,8 +38,6 @@ class UpdatePasswordUseCase implements UseCaseInterface
         $newPassword = $command->getNewPassword();
 
         $this->updatePassword($member, $newPassword);
-
-        $this->memberRepository->save($member);
     }
 
     /**

@@ -39,8 +39,11 @@ class DataPersister implements DataPersisterInterface
         if(!($data instanceof AggregateRoot)){
             return false;
         }
+
         $this->collector->notifyEntity($data);
-        return !$this->collector->isEmpty();
+        $this->collector->dispatch();
+        return false;
+        //return !$this->collector->isEmpty();
     }
 
     /**
@@ -53,7 +56,6 @@ class DataPersister implements DataPersisterInterface
     public function persist($data)
     {
         $this->collector->dispatch();
-
     }
 
     /**

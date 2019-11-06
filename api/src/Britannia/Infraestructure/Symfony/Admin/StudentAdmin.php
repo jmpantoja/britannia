@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Britannia\Infraestructure\Symfony\Admin;
 
-use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Student\Adult;
 use Britannia\Domain\VO\SchoolCourse;
 use Britannia\Infraestructure\Symfony\Form\ContactModeType;
@@ -29,13 +28,11 @@ use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Form\Type\ModelListType;
 use Sonata\AdminBundle\Form\Type\ModelType;
+use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\Form\Type\DatePickerType;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 final class StudentAdmin extends AbstractAdmin
@@ -64,6 +61,11 @@ final class StudentAdmin extends AbstractAdmin
         return $actions;
     }
 
+    protected function configureRoutes(RouteCollection $collection)
+    {
+        $collection->clearExcept(['list', 'edit', 'create']);
+        return $collection;
+    }
 
     public function getExportFields()
     {
@@ -184,6 +186,7 @@ final class StudentAdmin extends AbstractAdmin
             ])
             ->add('schoolCourse', TextType::class, [
                 'label' => 'Próximo curso escolar',
+                'required' => false
             ])
             ->ifEnd()
             ->end()

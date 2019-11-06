@@ -16,6 +16,7 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
+use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -36,6 +37,12 @@ final class TutorAdmin extends AbstractAdmin
         return $actions;
     }
 
+    protected function configureRoutes(RouteCollection $collection)
+    {
+        $collection->clearExcept(['list', 'edit', 'create']);
+        return $collection;
+    }
+
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
@@ -46,14 +53,12 @@ final class TutorAdmin extends AbstractAdmin
             ->add('address.address')
             ->add('address.postalCode')
             ->add('job.name')
-            ->add('job.status')
-            ;
+            ->add('job.status');
     }
 
     protected function configureListFields(ListMapper $listMapper): void
     {
         $listMapper
-
             ->addIdentifier('id', 'string', [
                 'template' => 'admin/student/tutor_resume_column.html.twig',
                 'label' => 'Tutor'
@@ -66,41 +71,40 @@ final class TutorAdmin extends AbstractAdmin
 
         $formMapper
             ->with('Personal', ['tab' => true])
-                ->with('Datos personales', ['class' => 'col-md-4'])
-                    ->add('fullName', FullNameType::class, [
-                        'sonata_help'=> 'Escriba el nombre y apellidos del alumno',
-                        'label' => 'Nombre y apellidos',
-                        'required' => true
-                    ])
-                    ->add('dni', DNIType::class, [
-                        'empty_data' => null,
-                        'required' => false
-                    ])
-                ->end()
-                ->with('Contacto', ['class' => 'col-md-4'])
-                    ->add('address', PostalAddressType::class, [
-                        'sonata_help'=>'Escriba una dirección postal',
-                        'label' => 'Dirección Postal',
-                        'required' => false,
-                    ])
-                    ->add('emails', EmailListType::class, [
-                        'required' => true,
-                        'label' => 'Correos Electrónicos',
-                    ])
-                    ->add('phoneNumbers', PhoneNumberListType::class, [
-                        'required' => false,
-                        'label' => 'Números de teléfono',
-                    ])
-                ->end()
-                ->with( 'Profesión' , ['class' => 'col-md-4'])
-                    ->add('job', JobType::class, [
-                        'sonata_help'=>'Escriba una ocupación y una situación laboral',
-                        'required' => false,
-                        'label'=>'Ocupación'
-                    ])
-                ->end()
+            ->with('Datos personales', ['class' => 'col-md-4'])
+            ->add('fullName', FullNameType::class, [
+                'sonata_help' => 'Escriba el nombre y apellidos del alumno',
+                'label' => 'Nombre y apellidos',
+                'required' => true
+            ])
+            ->add('dni', DNIType::class, [
+                'empty_data' => null,
+                'required' => false
+            ])
             ->end()
-        ;
+            ->with('Contacto', ['class' => 'col-md-4'])
+            ->add('address', PostalAddressType::class, [
+                'sonata_help' => 'Escriba una dirección postal',
+                'label' => 'Dirección Postal',
+                'required' => false,
+            ])
+            ->add('emails', EmailListType::class, [
+                'required' => true,
+                'label' => 'Correos Electrónicos',
+            ])
+            ->add('phoneNumbers', PhoneNumberListType::class, [
+                'required' => false,
+                'label' => 'Números de teléfono',
+            ])
+            ->end()
+            ->with('Profesión', ['class' => 'col-md-4'])
+            ->add('job', JobType::class, [
+                'sonata_help' => 'Escriba una ocupación y una situación laboral',
+                'required' => false,
+                'label' => 'Ocupación'
+            ])
+            ->end()
+            ->end();
 
     }
 
@@ -114,8 +118,7 @@ final class TutorAdmin extends AbstractAdmin
             ->add('address.address')
             ->add('address.postalCode')
             ->add('job.name')
-            ->add('job.status')
-            ;
+            ->add('job.status');
     }
 
 }

@@ -23,7 +23,7 @@ use Britannia\Domain\VO;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Type;
 
-class LessonDefinitionValidator extends ConstraintValidator
+class TimeSheetValidator extends ConstraintValidator
 {
 
     /**
@@ -31,12 +31,12 @@ class LessonDefinitionValidator extends ConstraintValidator
      */
     public function getConstraintType(): string
     {
-        return LessonDefinition::class;
+        return TimeSheet::class;
     }
 
     public function handle($value, Constraint $constraint)
     {
-        if ($value instanceof VO\LessonDefinition) {
+        if ($value instanceof VO\TimeSheet) {
             return;
         }
 

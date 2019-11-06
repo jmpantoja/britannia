@@ -15,6 +15,7 @@ namespace Britannia\Infraestructure\Symfony\EventSubscriber;
 
 
 use Britannia\Application\UseCase\StaffMember\UpdatePassword;
+use Britannia\Domain\Entity\Course\TimeSheetWasChanged;
 use Britannia\Domain\Entity\Staff\PasswordWasChanged;
 
 class StaffMemberSubscriber extends DomainEventSubscriber
@@ -35,8 +36,5 @@ class StaffMemberSubscriber extends DomainEventSubscriber
     {
         $command = UpdatePassword::fromEvent($event);
         $this->handle($command);
-
     }
-
-
 }
