@@ -5,7 +5,7 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: es
-    
+
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -40,10 +40,12 @@ services:
 
     Britannia\Infraestructure\Symfony\Importer\ImporterManager:
         calls:
-        # - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\StudentEtl']]
+        #        - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\StudentEtl']]
+        #- [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\RelativesEtl']]
         # - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\CourseEtl']]
-        #- [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\StudentCoursesEtl']]
-        #- [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\StaffEtl']]
+        # - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\StudentCoursesEtl']]
+        # - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\StaffEtl']]
+
 
 
     admin.staff_member:
@@ -77,6 +79,13 @@ services:
         arguments: [~, Britannia\Domain\Entity\Course\Course, ~]
         tags:
         - { name: sonata.admin, manager_type: orm, group: Cursos, label: Cursos, pager_type: 'simple' }
+        public: true
+
+    admin.lesson:
+        class: Britannia\Infraestructure\Symfony\Admin\LessonAdmin
+        arguments: [~, Britannia\Domain\Entity\Course\Lesson, ~]
+        tags:
+        - { name: sonata.admin, manager_type: orm, group: Cursos, label: Control de Asistencia, pager_type: 'simple' }
         public: true
 
     admin.book:
@@ -120,4 +129,11 @@ services:
         arguments: [~, Britannia\Domain\Entity\Calendar\Calendar, Britannia\Infraestructure\Symfony\Controller\Admin\CalendarController]
         tags:
         - { name: sonata.admin, manager_type: orm, group: Datos Extra, label: Calendario }
+        public: true
+
+    admin.attendance:
+        class: Britannia\Infraestructure\Symfony\Admin\AttendanceAdmin
+        arguments: [~, Britannia\Domain\Entity\Course\Attendance, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Attendance }
         public: true

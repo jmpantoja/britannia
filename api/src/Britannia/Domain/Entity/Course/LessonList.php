@@ -15,7 +15,11 @@ namespace Britannia\Domain\Entity\Course;
 
 
 use Britannia\Domain\Entity\Calendar\Calendar;
+use Britannia\Domain\Entity\ClassRoom\ClassRoom;
 use Britannia\Domain\VO\TimeSheet;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Traversable;
 
 class LessonList
 {
@@ -23,39 +27,78 @@ class LessonList
 
     private $length = 0;
 
-    private $lessons = [];
+    private $lessons;
 
-    public static function make(array $lessons = []): self
+    /** @var \DateTime|null */
+    private $limitDay;
+
+    public static function make(Course $course): self
     {
-        return new self($lessons);
+        return new self($course);
     }
 
-    private function __construct(array $lessons)
+    private function __construct(Course $course)
     {
-        $this->setLessons($lessons);
-    }
+        $this->lessons = new ArrayCollection();
+        $this->rejected = new ArrayCollection();
+        $this->limitDay = $this->calculeLimitDay($course);
 
-    public function setLessons(array $lessons): self
-    {
+        $lessons = $course->getLessons();
         foreach ($lessons as $lesson) {
-            $this->addLesson($lesson);
+            if ($this->isPast($lesson)) {
+                $this->lessons->add($lesson);
+            } else {
+                $this->rejected->add($lesson);
+            }
         }
 
-        return $this;
+        $this->count = $this->lessons->count();
     }
 
+    private function calculeLimitDay(Course $course): \DateTime
+    {
+        $lessons = $course->getLessons();
 
-    public function addLesson(Course $course, TimeSheet $timeSheet, Calendar $day): self
+        if ($lessons->isEmpty()) {
+            return $course->getStartDate();
+        }
+
+        if (!$course->isActive()) {
+            return $course->getEndDate()->add(new \DateInterval('P1D'));
+        }
+
+        return new \DateTime();
+    }
+
+    private function isPast(Lesson $lesson): bool
+    {
+        $day = $lesson->getDay();
+
+        return $day->getTimestamp() <= $this->limitDay->getTimestamp();
+    }
+
+    public function createLesson(Course $course, ClassRoom $classRoom, TimeSheet $timeSheet, Calendar $day): self
     {
 
         $start = $this->getStartDateTime($day, $timeSheet);
         $interval = $timeSheet->getLengthInterval();
 
-        $this->lessons[] = Lesson::make($this->count, $course, $start, $interval);
+        $lesson = Lesson::make($this->count, $course, $classRoom, $start, $interval);
 
-        $this->length += $timeSheet->getLength()->getNumber();
+        $this->addLesson($lesson);
+        return $this;
+    }
 
+    private function addLesson(Lesson $lesson): self
+    {
+        if ($this->isPast($lesson)) {
+            return $this;
+        }
+
+        $this->lessons->add($lesson);
+        $this->length += $lesson->getLength();
         $this->count++;
+
         return $this;
     }
 
@@ -64,7 +107,7 @@ class LessonList
      * @param TimeSheet $timeSheet
      * @return \DateTimeImmutable
      */
-    protected function getStartDateTime(Calendar $day, TimeSheet $timeSheet): \DateTimeImmutable
+    private function getStartDateTime(Calendar $day, TimeSheet $timeSheet): \DateTimeImmutable
     {
         $time = $timeSheet->getStartTime();
 
@@ -77,6 +120,7 @@ class LessonList
         return $start;
     }
 
+
     /**
      * @return float
      */
@@ -85,8 +129,27 @@ class LessonList
         return round($this->length / 60, 2);
     }
 
-    public function toArray(): array
+    /**
+     * @return \DateTime|null
+     */
+    public function getLimitDay(): ?\DateTime
+    {
+        return $this->limitDay;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getRejected(): ArrayCollection
+    {
+        return $this->rejected;
+    }
+
+
+    public function toCollection(): Collection
     {
         return $this->lessons;
     }
+
+
 }

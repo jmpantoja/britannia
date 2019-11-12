@@ -26,17 +26,17 @@ final class LevelAdmin extends AbstractAdmin
 
         return $actions;
     }
+
     protected function configureRoutes(RouteCollection $collection)
     {
-        $collection->clearExcept(['list', 'edit', 'create']);
+        $collection->clearExcept(['list', 'edit', 'create', 'delete', 'export']);
         return $collection;
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
-            ->add('name')
-            ;
+            ->add('name');
     }
 
     protected function configureListFields(ListMapper $listMapper): void
@@ -51,17 +51,17 @@ final class LevelAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $formMapper
-            ->with('Nivel', ['class'=>'col-md-4'])
-                ->add('name')
-            ->end()
-            ;
+            ->with('Nivel', ['tab' => true])
+                ->with('', ['class' => 'col-md-4'])
+                    ->add('name')
+                ->end()
+            ->end();
     }
 
     protected function configureShowFields(ShowMapper $showMapper): void
     {
         $showMapper
             ->add('name')
-            ->add('id')
-            ;
+            ->add('id');
     }
 }

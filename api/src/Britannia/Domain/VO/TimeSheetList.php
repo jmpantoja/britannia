@@ -44,7 +44,9 @@ class TimeSheetList
         $this->days[$dayName] = $timeSheet;
         $this->hash[$dayName] = [
             $timeSheet->getStartTime()->getTimestamp(),
-            $timeSheet->getLengthInterval()
+            $timeSheet->getLengthInterval(),
+            $timeSheet->getClassRoomId(),
+            $timeSheet->getDayOfWeek()->getValue()
         ];
 
         $this->length[$dayName] = $timeSheet->getLength()->getNumber();

@@ -16,58 +16,63 @@ namespace Britannia\Domain\Service\Course;
 
 use ApiPlatform\Core\DataPersister\DataPersisterInterface;
 use Britannia\Domain\Entity\Calendar\Calendar;
+use Britannia\Domain\Entity\ClassRoom\ClassRoom;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Course\Lesson;
 use Britannia\Domain\Entity\Course\LessonList;
 use Britannia\Domain\Repository\CalendarRepositoryInterface;
+use Britannia\Domain\Repository\ClassRoomRepositoryInterface;
 use Britannia\Domain\VO\TimeSheet;
 use Doctrine\Common\Collections\ArrayCollection;
 
 class TimeSheetUpdater
 {
     /**
+     * @var array
+     */
+    private $cache = [];
+
+    /**
      * @var CalendarRepositoryInterface
      */
     private $calendar;
 
-    private $cache = [];
+    /**
+     * @var ClassRoomRepositoryInterface
+     */
+    private $classRoomRepository;
+
     /**
      * @var DataPersisterInterface
      */
     private $persister;
 
     public function __construct(CalendarRepositoryInterface $calendar,
+                                ClassRoomRepositoryInterface $classRoomRepository,
                                 DataPersisterInterface $persister)
     {
         $this->calendar = $calendar;
+        $this->classRoomRepository = $classRoomRepository;
         $this->persister = $persister;
+
     }
 
     public function updateCourseLessons(Course $course)
     {
-        $this->updateCourse($course);
-        $this->persister->persist($course);
+
+        $lessonList = LessonList::make($course);
+
+        $this->clear($lessonList);
+        $this->populate($course, $lessonList);
+
+        $course->setLessons($lessonList);
+
     }
 
+    private function clear(LessonList $lessonList){
+        $rejected = $lessonList->getRejected();
 
-    /**
-     * @param Course $course
-     */
-    protected function updateCourse(Course $course): void
-    {
-        $lessons = $this->calculeLessons($course);
-
-        $this->clearLessons($course);
-        $course->setLessons($lessons);
-    }
-
-    /**
-     * @param Course $course
-     */
-    protected function clearLessons(Course $course): void
-    {
-        $lessons = $course->getLessons();
-        foreach ($lessons as $lesson) {
+        foreach ($rejected as $lesson){
             $this->persister->remove($lesson);
         }
     }
@@ -76,18 +81,22 @@ class TimeSheetUpdater
      * @param Course $course
      * @return array
      */
-    protected function calculeLessons(Course $course): LessonList
+    private function populate(Course $course, LessonList $lessonList): LessonList
     {
-        $days = $this->calendar->getLessonDaysFromCourse($course);
+        $limitDay = $lessonList->getLimitDay();
 
-        $lessonList = LessonList::make();
+        $days = $this->calendar->getLessonDaysFromCourse($course, $limitDay);
 
         foreach ($days as $number => $day) {
             $timeSheet = $this->pickUpTimeSheetFromDay($day, $course);
-            $lessonList->addLesson($course, $timeSheet, $day);
+            $classRoom = $this->getClassRoomByTimeSheet($timeSheet);
+
+            $lessonList->createLesson($course, $classRoom, $timeSheet, $day);
         }
+
         return $lessonList;
     }
+
 
     /**
      * @param Calendar $day
@@ -106,6 +115,13 @@ class TimeSheetUpdater
         $this->cache[$dayName] = $lesson;
 
         return $this->cache[$dayName];
+    }
+
+    private function getClassRoomByTimeSheet(TimeSheet $timeSheet): ?ClassRoom
+    {
+        $classRoomId = $timeSheet->getClassRoomId();
+
+        return $this->classRoomRepository->find($classRoomId);
     }
 
 }

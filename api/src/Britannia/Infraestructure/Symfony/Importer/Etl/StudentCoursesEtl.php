@@ -32,11 +32,14 @@ class StudentCoursesEtl extends AbstractEtl
 
     public function clean(): void
     {
-//        $this->truncate('courses', 'classrooms');
+        $this->truncate('courses_students');
     }
 
     public function configureDataLoader(QueryBuilder $builder): void
     {
+        ini_set('memory_limit', '512M');
+
+
         $offset = 0;
         $limit = null;
         $id = null;
@@ -61,7 +64,6 @@ class StudentCoursesEtl extends AbstractEtl
 
         $builder->withCourses((string)$input['curso']);
         $builder->withStudent((int)$input['id']);
-
 
         return $builder;
     }

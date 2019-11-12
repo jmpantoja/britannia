@@ -12,6 +12,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 final class BookAdmin extends AbstractAdmin
 {
@@ -30,7 +31,7 @@ final class BookAdmin extends AbstractAdmin
 
     protected function configureRoutes(RouteCollection $collection)
     {
-        $collection->clearExcept(['list', 'edit', 'create']);
+        $collection->clearExcept(['list', 'edit', 'create', 'delete', 'export']);
         return $collection;
     }
 
@@ -54,10 +55,20 @@ final class BookAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $formMapper
-            ->add('name')
-            ->add('category', BookCategoryType::class)
-            ->add('price', PriceType::class)
-            ->add('courses');
+            ->tab('Curso')
+                ->with('Nombre', ['class' => 'col-md-4'])
+                    ->add('name', TextType::class, [
+                        'attr' => [
+                            'style' => 'width: 300px'
+                        ]
+                    ])
+                    ->add('category', BookCategoryType::class)
+                ->end()
+                ->with('Precio', ['class' => 'col-md-4'])
+                    ->add('price', PriceType::class)
+                ->end()
+
+            ->end();
     }
 
     protected function configureShowFields(ShowMapper $showMapper): void

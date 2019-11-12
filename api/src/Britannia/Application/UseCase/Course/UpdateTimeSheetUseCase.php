@@ -46,6 +46,7 @@ class UpdateTimeSheetUseCase implements UseCaseInterface
     {
         $course = $updateTimeSheet->getCourse();
         $this->updater->updateCourseLessons($course);
+
     }
 
 }

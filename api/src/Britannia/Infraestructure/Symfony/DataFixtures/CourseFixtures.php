@@ -38,6 +38,7 @@ class CourseFixtures extends BaseFixture
             sprintf('%s/dumps/britannia_classrooms.sql', __DIR__),
             sprintf('%s/dumps/britannia_courses.sql', __DIR__),
             sprintf('%s/dumps/britannia_course_lessons.sql', __DIR__),
+//            sprintf('%s/dumps/britannia_attendance_control.sql', __DIR__),
         ];
     }
 

@@ -72,7 +72,6 @@ class StaffMemberFixtures extends BaseFixture
             Email::make($this->faker->email)
 
         ]);
-        $member->setActive(true);
 
         $member->setRoles($roles);
 

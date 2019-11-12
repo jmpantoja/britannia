@@ -148,7 +148,6 @@ trait CourseMaker
         $days = $this->fixDaysInterval($days);
 
         if (!preg_match('/^(L|M|X|J|V|\s){1,}$/', $days)) {
-            dump($days);
             return [];
         }
 

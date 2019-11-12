@@ -92,9 +92,10 @@ class CalendarRepository extends ServiceEntityRepository implements CalendarRepo
 
     /**
      * @param Course $course
+     * @param \DateTime|null $from
      * @return Calendar[]
      */
-    public function getLessonDaysFromCourse(Course $course): array
+    public function getLessonDaysFromCourse(Course $course, ?\DateTime $from): array
     {
 
         $daysOfWeek = $course->getDaysOfWeek();
@@ -105,13 +106,12 @@ class CalendarRepository extends ServiceEntityRepository implements CalendarRepo
             ->andWhere('A.workDay = true')
             ->andWhere('A.date >= :start AND A.date <= :end')
             ->orderBy('A.id', 'ASC')
-            ->setParameter('days', $daysOfWeek)
-            ->setParameter('start', $course->getStartDate())
-            ->setParameter('end', $course->getEndDate())
             ->getQuery();
 
-        return $query->execute();
+        return $query->execute([
+            'days' => $daysOfWeek,
+            'start' => $from,
+            'end' => $course->getEndDate(),
+        ]);
     }
-
-
 }

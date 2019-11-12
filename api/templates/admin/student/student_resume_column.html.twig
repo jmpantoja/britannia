@@ -1,13 +1,70 @@
 {% extends 'admin/core/resume_column_base.html.twig' %}
 
+{% use 'admin/attendance/attendance.html.twig' %}
+
 {% block title %}
     {{ object.fullName }}
 {% endblock %}
 
-
 {% block body %}
+    {% if object.type == 'Adulto' %}
+        {{ block('adult') }}
+    {% else %}
+        {{ block('child') }}
+    {% endif %}
+{% endblock %}
+
+{% block adult %}
+    {% if (object.phoneNumbers is not empty or object.emails is not empty) %}
+        <div class="col-md-3">
+            {% for phoneNumber in object.phoneNumbers %}
+                <p class="phone">
+                    <i class="fa fa-phone" aria-hidden="true"></i>
+                    <span> {{ phoneNumber }} </span>
+                    {% if phoneNumber.description %}
+                        <span> ({{ phoneNumber.description }})</span>
+                    {% endif %}
+                </p>
+            {% endfor %}
+
+            {% for email in object.emails %}
+                <p class="mail">
+                    <i class="fa fa-envelope" aria-hidden="true"></i>
+                    <span> {{ email }} </span>
+                </p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if object.active %}
+        {{ block('courses') }}
+    {% endif %}
+
+{% endblock %}
+
+{% block child %}
+    {% if  object.firstTutor %}
+        {% with {'tutor': object.firstTutor} %}
+            {{ block('tutor') }}
+        {% endwith %}
+    {% endif %}
+
+    {% if  object.secondTutor %}
+        {% with {'tutor': object.secondTutor} %}
+            {{ block('tutor') }}
+        {% endwith %}
+
+    {% endif %}
+    {% if object.active %}
+        {{ block('courses') }}
+    {% endif %}
+
+{% endblock %}
+
+{% block tutor %}
     <div class="col-md-3">
-        {% for phoneNumber in object.phoneNumbers %}
+        <strong>{{ tutor }} </strong>
+        {% for phoneNumber in tutor.phoneNumbers %}
             <p class="phone">
                 <i class="fa fa-phone" aria-hidden="true"></i>
                 <span> {{ phoneNumber }} </span>
@@ -17,16 +74,37 @@
             </p>
         {% endfor %}
 
-    </div>
-
-    <div class="col-md-3">
-        {% for email in object.emails %}
+        {% for email in tutor.emails %}
             <p class="mail">
                 <i class="fa fa-envelope" aria-hidden="true"></i>
                 <span> {{ email }} </span>
             </p>
         {% endfor %}
+    </div>
+{% endblock %}
 
+{% block courses %}
+    <div class="col-md-3">
+        {% for course in object.activeCourses %}
+            {{ block('course') }}
+        {% endfor %}
+    </div>
+{% endblock %}
+
+
+{% block course %}
+    <div class="course">
+        {% set adminCourse = admin.configurationPool.adminByAdminCode('admin.course') %}
+
+        {% if  adminCourse.hasAccess('edit', course) %}
+            <a href="{{ adminCourse.generateUrl('edit', {id:course.id}) }}"><strong>{{ course.name }}</strong></a>
+        {% else %}
+            <strong>{{ course.name }}</strong>
+        {% endif %}
+
+        {% with {'student': object, 'course':course, 'limit': 5} %}
+            {{ block('attendance_sumary') }}
+        {% endwith %}
     </div>
 {% endblock %}
 

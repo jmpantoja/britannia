@@ -34,6 +34,6 @@ interface CalendarRepositoryInterface
      * @param Course $course
      * @return Calendar[]
      */
-    public function getLessonDaysFromCourse(Course $course): array;
+    public function getLessonDaysFromCourse(Course $course, ?\DateTime $from): array;
 }
 

@@ -46,7 +46,7 @@ final class CourseAdmin extends AbstractAdmin
 
     protected function configureRoutes(RouteCollection $collection)
     {
-        $collection->clearExcept(['list', 'edit', 'create']);
+        $collection->clearExcept(['list', 'edit', 'create', 'delete', 'export']);
         return $collection;
     }
 
@@ -83,7 +83,9 @@ final class CourseAdmin extends AbstractAdmin
         /** @var Course $course */
         $course = $this->getSubject();
 
+        $isFinished = !$course->isActive();
         $isStarted = $course->isStarted();
+
 
         $formMapper
             ->with('Ficha del curso', ['tab'=>true])
@@ -133,12 +135,19 @@ final class CourseAdmin extends AbstractAdmin
 
                 ->with('Horario', ['class' => 'col-md-6'])
                     ->add('interval', DateRangePickerType::class, [
+                        'field_options'=>[
+                            'dp_language'=>'es_ES'
+                        ],
+                        'field_options_start'=>[
+                            'disabled'=> $isStarted
+                        ],
                         'field_type' => DatePickerType::class,
                         'block_prefix' => 'course_interval',
-                        'disabled' => $isStarted
+                        'disabled' => $isFinished
+
                     ])
                     ->add('timeSheet', TimeSheetListType::class, [
-                        'locked' => $isStarted,
+                        'locked' => $isFinished,
                     ])
                 ->end()
             ->end()

@@ -6,6 +6,7 @@ namespace Britannia\Domain\Entity\Staff;
 use Britannia\Domain\Entity\Course\Course;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use PlanB\DDD\Domain\Model\AggregateRoot;
 use PlanB\DDD\Domain\VO\DNI;
 use PlanB\DDD\Domain\VO\Email;
@@ -15,7 +16,7 @@ use PlanB\DDD\Domain\VO\PostalAddress;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 
-class StaffMember extends AggregateRoot implements UserInterface
+class StaffMember extends AggregateRoot implements UserInterface, \Serializable
 {
 
     /**
@@ -284,6 +285,14 @@ class StaffMember extends AggregateRoot implements UserInterface
         return $this->courses;
     }
 
+    public function getActiveCourses(): array
+    {
+        return $this->courses->filter(function (Course $course) {
+            return $course->isActive();
+        })->toArray();
+
+    }
+
     /**
      * @param Collection $courses
      * @return StaffMember
@@ -296,7 +305,7 @@ class StaffMember extends AggregateRoot implements UserInterface
         return $this;
     }
 
-    public function addCourse(Course $course)
+    public function addCourse(Course $course): StaffMember
     {
         if ($this->courses->contains($course)) {
             return $this;
@@ -304,6 +313,18 @@ class StaffMember extends AggregateRoot implements UserInterface
 
         $this->courses->add($course);
         $course->addTeacher($this);
+        return $this;
+    }
+
+    public function removeCourse(Course $course): StaffMember
+    {
+        if (!$this->courses->contains($course)) {
+            return $this;
+        }
+
+        $this->courses->removeElement($course);
+        $course->removeTeacher($this);
+        return $this;
     }
 
 
@@ -335,7 +356,7 @@ class StaffMember extends AggregateRoot implements UserInterface
         return $this->active;
     }
 
-    public function setActive(bool $active): self
+    private function setActive(bool $active): self
     {
 
         $this->active = $active;
@@ -357,19 +378,21 @@ class StaffMember extends AggregateRoot implements UserInterface
      */
     public function setPlainPassword(?string $plainPassword): self
     {
-        $this->notify(new PasswordWasChanged($this, $plainPassword));
+        $this->notify(new PasswordHasChanged($this, $plainPassword));
         return $this;
     }
 
-    public function update(): self
+    public function onUpdate(): self
     {
         $this->teacher = in_array('ROLE_TEACHER', $this->getRoles(), true);
+        $this->active = 0 !== count($this->getActiveCourses());
+
         return $this;
     }
 
     public function isEqual($object): bool
     {
-        if(!($object instanceof StaffMember)){
+        if (!($object instanceof StaffMember)) {
             return false;
         }
 
@@ -378,6 +401,34 @@ class StaffMember extends AggregateRoot implements UserInterface
 
     public function __toString()
     {
-        return (string)$this->fullName;
+        return (string)$this->userName;
+    }
+
+    public function serialize()
+    {
+        return serialize(array(
+            $this->id,
+            $this->userName,
+            $this->password
+        ));
+    }
+
+    /**
+     * Constructs the object
+     * @link http://php.net/manual/en/serializable.unserialize.php
+     * @param string $serialized <p>
+     * The string representation of the object.
+     * </p>
+     * @return void
+     * @since 5.1.0
+     */
+    public function unserialize($serialized)
+    {
+        list (
+            $this->id,
+            $this->userName,
+            $this->password,
+            ) = unserialize($serialized, array('allowed_classes' => [StaffMemberId::class]));
+
     }
 }

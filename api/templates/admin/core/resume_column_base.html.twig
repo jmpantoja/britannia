@@ -6,9 +6,11 @@
 
 {% block field %}
     <div class="planb_row">
-        {% if hasBody %}
-            {{ block('caret') }}
-        {% endif %}
+        <div class="caret-col">
+            {% if hasBody %}
+                {{ block('caret') }}
+            {% endif %}
+        </div>
 
         <div class="resume">
             <div class="header">

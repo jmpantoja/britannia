@@ -21,10 +21,12 @@ class UpdateCalendar
      */
     private $date;
 
-    public static function make(\DateTime $date): self
+    public static function make(): self
     {
-        $date = $date->setTime(0, 0, 0);
-        return new self($date);
+        $today = \DateTime::createFromFormat('U', (string)$_SERVER['REQUEST_TIME']);
+        $today->setTime(0, 0, 0);
+
+        return new self($today);
     }
 
     private function __construct(\DateTime $date)

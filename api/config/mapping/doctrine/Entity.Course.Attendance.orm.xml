@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xmlns:gedmo="http://gediminasm.org/schemas/orm/doctrine-extensions-mapping"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+
+    <entity name="Britannia\Domain\Entity\Course\Attendance"
+            table="attendance_control"
+            repository-class="Britannia\Infraestructure\Doctrine\Repository\AttendanceRepository">
+
+        <id name="id" type="AttendanceId" column="id">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
+        </id>
+
+
+        <field name="number" type="integer"/>
+        <many-to-one field="lesson" target-entity="Britannia\Domain\Entity\Course\Lesson" inversed-by="attendances"/>
+        <many-to-one field="student" target-entity="Britannia\Domain\Entity\Student\Student"/>
+
+        <many-to-one field="course" target-entity="Britannia\Domain\Entity\Course\Course"/>
+
+        <field name="day" type="date_immutable"/>
+        <field name="reason" nullable="true"/>
+
+    </entity>
+
+</doctrine-mapping>

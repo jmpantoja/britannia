@@ -17,7 +17,7 @@ namespace Britannia\Domain\Entity\Staff;
 use PlanB\DDD\Domain\Event\DomainEvent;
 
 
-class PasswordWasChanged extends DomainEvent
+class PasswordHasChanged extends DomainEvent
 {
     private $occurredOn;
     /**

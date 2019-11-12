@@ -39,21 +39,26 @@ final class TutorAdmin extends AbstractAdmin
 
     protected function configureRoutes(RouteCollection $collection)
     {
-        $collection->clearExcept(['list', 'edit', 'create']);
+        $collection->clearExcept(['list', 'edit', 'create', 'delete', 'export']);
         return $collection;
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
-            ->add('dni')
-            ->add('id')
-            ->add('fullName.firstName')
-            ->add('fullName.lastName')
-            ->add('address.address')
-            ->add('address.postalCode')
-            ->add('job.name')
-            ->add('job.status');
+            ->add('Nombre', 'doctrine_orm_callback', [
+                'callback' => function (ProxyQuery $queryBuilder, $alias, $field, $value) {
+                    if (!$value['value']) {
+                        return;
+                    }
+
+                    $where = sprintf('%s.fullName.firstName like :name OR %s.fullName.lastName like :name', $alias, $alias);
+                    $queryBuilder
+                        ->andwhere($where)
+                        ->setParameter('name', sprintf('%%%s%%', $value['value']));
+                    return true;
+                }
+            ]);
     }
 
     protected function configureListFields(ListMapper $listMapper): void

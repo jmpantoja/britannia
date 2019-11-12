@@ -1,59 +1,56 @@
 sonata_admin:
     title: 'Britannia'
     title_logo: '/images/admin/logo.png'
-    
-    show_mosaic_button: false
-    
-    dashboard:
-#        groups:
-#            admin.group.content:
-#                label: app.admin.group.content
-#                label_catalogue: App
-#                items:
-#                - admin.student
-#                - admin.tutor
-        
-        blocks:
-#        - { type: sonata.admin.block.admin_list, position: left }
-        -
-            class:    col-lg-3 col-xs-6          
-            position: top                        
-            type:     sonata.admin.block.stats
-            roles: ['ROLE_RECEPTION', 'ROLE_MANAGER']
-            settings:
-                code:  admin.student             
-                icon:  fa-graduation-cap
-                text:  Alumnos                   
-                color: bg-green                  
-                filters:                         
-                    active: { value: 1 }
-                    
-        -
-            class:    col-lg-3 col-xs-6
-            position: top
-            type:     sonata.admin.block.stats
-            roles: ['ROLE_RECEPTION', 'ROLE_MANAGER']
-            settings:
-                code:  admin.course
-                icon:  fa-book
-                text:  Cursos
-                color: bg-blue
-                filters:
-                    active: { value: 1 }
 
-        -
-            class:    col-lg-3 col-xs-6
-            position: top
-            type:     sonata.admin.block.stats
-            roles: ['ROLE_RECEPTION', 'ROLE_MANAGER']
-            settings:
-                code:  admin.staff_member
-                icon:  fa-user
-                text:  Profesores
-                color: bg-aqua
-                filters:
-                    teacher: { value: 1 }
-                    
+    show_mosaic_button: false
+
+    dashboard:
+        #        groups:
+        #            admin.group.content:
+        #                label: app.admin.group.content
+        #                label_catalogue: App
+        #                items:
+        #                - admin.student
+        #                - admin.tutor
+
+        blocks:
+        #        - { type: sonata.admin.block.admin_list, position: left }
+        - class:    col-lg-3 col-xs-6
+          position: top
+          type:     sonata.admin.block.stats
+          roles: ['ROLE_RECEPTION', 'ROLE_MANAGER']
+          settings:
+              code:  admin.student
+              icon:  fa-graduation-cap
+              text:  Alumnos
+              color: bg-green
+              filters:
+                  active: { value: 1 }
+
+        - class:    col-lg-3 col-xs-6
+          position: top
+          type:     sonata.admin.block.stats
+          roles: ['ROLE_RECEPTION', 'ROLE_MANAGER']
+          settings:
+              code:  admin.course
+              icon:  fa-book
+              text:  Cursos
+              color: bg-blue
+              filters:
+                  active: { value: 1 }
+
+        - class:    col-lg-3 col-xs-6
+          position: top
+          type:     sonata.admin.block.stats
+          roles: ['ROLE_RECEPTION', 'ROLE_MANAGER']
+          settings:
+              code:  admin.staff_member
+              icon:  fa-user
+              text:  Profesores
+              color: bg-aqua
+              filters:
+                  teacher: { value: 1 }
+
 
 
     options:
@@ -64,13 +61,14 @@ sonata_admin:
     templates:
         user_block: admin/core/user_block.html.twig
         layout: admin/core/standard_layout.html.twig
-        
+
 
     assets:
         extra_stylesheets:
         - css/admin/core.css
         - css/admin/forms.css
         - css/admin/datagrid.css
+        - css/toggle/bootstrap-toggle.min.css        
         - bundles/sonataformatter/markitup/skins/sonata/style.css
         - bundles/sonataformatter/markitup/sets/markdown/style.css
         - bundles/sonataformatter/markitup/sets/html/style.css
@@ -78,6 +76,7 @@ sonata_admin:
 
         extra_javascripts:
         - js/admin/forms.js
+        - js/toggle/bootstrap-toggle.min.js
         - bundles/fosckeditor/ckeditor.js
         - bundles/sonataformatter/vendor/markitup-markitup/markitup/jquery.markitup.js
         - bundles/sonataformatter/markitup/sets/markdown/set.js
@@ -91,9 +90,3 @@ sonata_block:
     blocks:
         sonata.admin.block.admin_list:
             contexts: [admin]
-
-
-sonata_intl:
-    timezone:
-        locales:
-            fr:    Europe/Paris

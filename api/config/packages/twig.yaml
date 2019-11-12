@@ -3,8 +3,12 @@ twig:
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
 
-    form_themes:        
-    - '@SonataCore/Form/datepicker.html.twig'
+    globals:
+        attendances: '@Britannia\Infraestructure\Symfony\Service\Attendance\AttendanceService'
+
+    form_themes:
+    
     - '@SonataFormatter/Form/formatter.html.twig'
+    - '@SonataCore/Form/datepicker.html.twig'
 
     

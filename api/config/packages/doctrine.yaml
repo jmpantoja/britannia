@@ -36,6 +36,11 @@ doctrine:
                     TutorId: TutorId
                     ClassRoomId: ClassRoomId
                     LessonId: LessonId
+                    AttendanceId: AttendanceId
+                    LevelId: LevelId
+                    CourseId: CourseId
+                    RecordId: RecordId
+                    BookId: BookId
 
                     JobStatus: JobStatus
                     PartOfDay: PartOfDay
@@ -44,9 +49,6 @@ doctrine:
                     ContactMode: ContactMode
                     PaymentMode: PaymentMode
                     BankAccount: BankAccount
-                    LevelId: LevelId
-                    CourseId: CourseId
-                    BookId: BookId
                     BookCategory: BookCategory
                     Examiner: Examiner
                     Age: Age
@@ -62,17 +64,20 @@ doctrine:
             TutorId: Britannia\Infraestructure\Doctrine\DBAL\Type\TutorIdType
             ClassRoomId: Britannia\Infraestructure\Doctrine\DBAL\Type\ClassRoomIdType
             LessonId: Britannia\Infraestructure\Doctrine\DBAL\Type\LessonIdType
+            LevelId: Britannia\Infraestructure\Doctrine\DBAL\Type\LevelId
+            CourseId: Britannia\Infraestructure\Doctrine\DBAL\Type\CourseId
+            RecordId: Britannia\Infraestructure\Doctrine\DBAL\Type\RecordId
+            AttendanceId: Britannia\Infraestructure\Doctrine\DBAL\Type\AttendanceId
+            BookId: Britannia\Infraestructure\Doctrine\DBAL\Type\BookIdType            
+            
 
             JobStatus: Britannia\Infraestructure\Doctrine\DBAL\Type\JobStatusType
-            PartOfDay: Britannia\Infraestructure\Doctrine\DBAL\Type\PartOfDayType
+            PartOfDay: Britannia\Infraestructure\Doctrine\DBAL\Type\PartOfDayType       
             DayOfWeek: Britannia\Infraestructure\Doctrine\DBAL\Type\DayOfWeekType
             NumOfYears: Britannia\Infraestructure\Doctrine\DBAL\Type\NumOfYearsType
             ContactMode: Britannia\Infraestructure\Doctrine\DBAL\Type\ContactModeType
             PaymentMode: Britannia\Infraestructure\Doctrine\DBAL\Type\PaymentModeType
             BankAccount: Britannia\Infraestructure\Doctrine\DBAL\Type\BankAccountType
-            LevelId: Britannia\Infraestructure\Doctrine\DBAL\Type\LevelId
-            CourseId: Britannia\Infraestructure\Doctrine\DBAL\Type\CourseId
-            BookId: Britannia\Infraestructure\Doctrine\DBAL\Type\BookIdType
             BookCategory: Britannia\Infraestructure\Doctrine\DBAL\Type\BookCategoryType
 
             Examiner: Britannia\Infraestructure\Doctrine\DBAL\Type\ExaminerType

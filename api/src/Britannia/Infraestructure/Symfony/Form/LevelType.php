@@ -15,9 +15,6 @@ namespace Britannia\Infraestructure\Symfony\Form;
 
 
 use Britannia\Domain\Entity\Course\Level;
-use Britannia\Domain\Entity\Student\Student;
-use Britannia\Domain\Entity\Student\StudentId;
-use Doctrine\ORM\QueryBuilder;
 use PlanB\DDDBundle\Sonata\ModelManager;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -61,7 +58,6 @@ class LevelType extends ModelType
      */
     private function getQuery()
     {
-
         $query = $this->modelManager->createQuery(Level::class)
             ->getQueryBuilder()
             ->orderBy('o.name')

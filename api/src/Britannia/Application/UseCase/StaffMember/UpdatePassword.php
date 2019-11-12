@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Application\UseCase\StaffMember;
 
 
-use Britannia\Domain\Entity\Staff\PasswordWasChanged;
+use Britannia\Domain\Entity\Staff\PasswordHasChanged;
 use Britannia\Domain\Entity\Staff\StaffMember;
 
 class UpdatePassword
@@ -29,7 +29,7 @@ class UpdatePassword
      */
     private $newPassword;
 
-    public static function fromEvent(PasswordWasChanged $event)
+    public static function fromEvent(PasswordHasChanged $event)
     {
         return new self($event->getStaffMember(), $event->getNewPassword());
     }

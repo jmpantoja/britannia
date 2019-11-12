@@ -45,8 +45,7 @@ final class StaffMemberAdmin extends AbstractAdmin
         $queryBuilder->select('p')
             ->from($this->getClass(), 'p')
             ->orderBy('p.active', 'DESC')
-            ->orderBy('p.fullName.lastName', 'ASC')
-        ;
+            ->addOrderBy('p.fullName.lastName', 'ASC');
 
         return new ProxyQuery($queryBuilder);
     }
@@ -57,36 +56,50 @@ final class StaffMemberAdmin extends AbstractAdmin
         unset($actions['delete']);
         return $actions;
     }
+
     protected function configureRoutes(RouteCollection $collection)
     {
-        $collection->clearExcept(['list', 'edit', 'create']);
+
+        $collection->clearExcept(['list', 'edit', 'create', 'delete', 'export']);
         return $collection;
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
-            ->add('userName')
-            ->add('teacher')
-            ->add('password')
-            ->add('active')
-            ->add('roles')
-            ->add('createdAt')
-            ->add('updatedAt')
-            ->add('id');
+            ->add('active', null, [
+                'label' => 'Activo'
+            ])
+            ->add('teacher', null, [
+                'label' => 'Profesor'
+            ])
+            ->add('fullName', 'doctrine_orm_callback', [
+                'label' => 'Nombre',
+                'callback' => function (ProxyQuery $queryBuilder, $alias, $field, $value) {
+                    if (!$value['value']) {
+                        return;
+                    }
+
+                    $where = sprintf('%s.fullName.firstName like :name OR %s.fullName.lastName like :name', $alias, $alias);
+                    $queryBuilder
+                        ->andwhere($where)
+                        ->setParameter('name', sprintf('%%%s%%', $value['value']));
+                    return true;
+                }
+            ]);
     }
 
     protected function configureListFields(ListMapper $listMapper): void
     {
 
         $listMapper
-            ->addIdentifier('fullName.lastName', 'string', [
+            ->addIdentifier('username', 'string', [
                 'template' => 'admin/staff/staff_resume_column.html.twig',
                 'label' => 'Alumnos'
             ])
-            ->add('userName', null, [
-                'header_style' => 'width:30px',
-                'row_align' => 'center'
+            ->add('fullName', null, [
+                'header_style' => 'width:300px',
+                'row_align' => 'left'
             ])
             ->add('active', null, [
                 'header_style' => 'width:30px',
@@ -107,30 +120,33 @@ final class StaffMemberAdmin extends AbstractAdmin
         $formMapper
             ->with('Personal', ['tab' => true])
             ->with('Acceso', ['class' => 'col-md-3'])
-                ->add('userName')
-                ->add('plain_password', RepeatedType::class, [
-                    'type' => PasswordType::class,
-                    'invalid_message' => 'The password fields must match.',
-                    'required' => $atCreated,
-                    'first_options' => ['label' => 'Password'],
-                    'second_options' => ['label' => 'Repeat Password'],
-                ])
+            ->add('userName')
+            ->add('plain_password', RepeatedType::class, [
+                'type' => PasswordType::class,
+                'invalid_message' => 'The password fields must match.',
+                'required' => $atCreated,
+                'first_options' => ['label' => 'Password',
+                    'attr' => [
+                        'autocomplete' => 'new-password',
+                    ]],
+                'second_options' => ['label' => 'Repeat Password'],
+            ])
             ->ifTrue($hasAccess)
-                ->add('roles', RoleType::class)
+            ->add('roles', RoleType::class)
             ->ifEnd()
-        ->end();
+            ->end();
 
         $formMapper
             ->with('Contacto', ['class' => 'col-md-5'])
-                ->add('fullName', FullNameType::class)
-                ->add('address', PostalAddressType::class, [
-                    'required' => false
-                ])
-                ->add('emails', EmailListType::class)
-                ->add('phoneNumbers', PhoneNumberListType::class)
-        ->end();
+            ->add('fullName', FullNameType::class)
+            ->add('address', PostalAddressType::class, [
+                'required' => false
+            ])
+            ->add('emails', EmailListType::class)
+            ->add('phoneNumbers', PhoneNumberListType::class)
+            ->end();
 
-        if($hasAccess && $subject->isTeacher()){
+        if ($hasAccess && $subject->isTeacher()) {
             $formMapper->with('Cursos en Activo', ['class' => 'col-md-4'])
                 ->add('courses', null, [
                     'label' => false,
@@ -181,7 +197,7 @@ final class StaffMemberAdmin extends AbstractAdmin
             return;
         }
 
-        parent::checkAccess($action, $object); // TODO: Change the autogenerated stub
+        parent::checkAccess($action, $object);
     }
 
 }

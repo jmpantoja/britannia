@@ -16,28 +16,16 @@ namespace Britannia\Application\UseCase\Course;
 
 class UpdateCourseStatus
 {
-    /**
-     * @var \DateTime
-     */
-    private $date;
 
-    public static function make(\DateTime $date): self
+    public static function make(): self
     {
-        $date = $date->setTime(0, 0, 0);
-        return new self($date);
+        return new self();
     }
 
-    private function __construct(\DateTime $date)
+    private function __construct()
     {
-        $this->date = $date;
+
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getDate(): \DateTime
-    {
-        return $this->date;
-    }
 }
 

@@ -34,19 +34,9 @@ class BritanniaCronCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
-        $date = new \DateTime();
 
-        $date->setDate(2010,1,1);
 
-        $date->add(new \DateInterval('P1D'));
-
-        $this->commandBus->handle(UpdateCourseStatus::make(...[
-            $date
-        ]));
-
-        $this->commandBus->handle(UpdateCalendar::make(...[
-            $date
-        ]));
-
+        $this->commandBus->handle(UpdateCourseStatus::make());
+        $this->commandBus->handle(UpdateCalendar::make());
     }
 }

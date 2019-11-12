@@ -1,0 +1,9 @@
+{% extends '@SonataAdmin/CRUD/base_list_field.html.twig' %}
+
+{% block field %}
+    {% if object.type == 'Adulto' %}
+        <span class="label label-primary">Adulto</span>
+    {% else %}
+        <span class="label label-info">Niño</span>
+    {% endif %}
+{% endblock %}

@@ -16,6 +16,7 @@ namespace Britannia\Domain\Entity\Course;
 
 use Britannia\Domain\Entity\Staff\StaffMember;
 use Britannia\Domain\Entity\Student\Student;
+use Britannia\Domain\Entity\Student\StudentHasJoinedToCourse;
 use Britannia\Domain\VO\Age;
 use Britannia\Domain\VO\DayOfWeek;
 use Britannia\Domain\VO\Examiner;
@@ -357,7 +358,7 @@ class Course extends AggregateRoot
      */
     public function setInterval(?array $dates): Course
     {
-        $this->notify(TimeSheetWasChanged::make($this));
+        $this->notify(TimeSheetHasChanged::make($this));
 
         $this->startDate = $dates['start'];
         $this->endDate = $dates['end'];
@@ -459,6 +460,7 @@ class Course extends AggregateRoot
 
     public function addStudent(Student $student): Course
     {
+
         if ($this->students->contains($student)) {
             return $this;
         }
@@ -466,18 +468,20 @@ class Course extends AggregateRoot
         $this->students->add($student);
         $student->addCourse($this);
 
+        $this->notify(StudentHasJoinedToCourse::make($student, $this));
+
         return $this;
     }
 
     public function removeStudent(Student $student): Course
     {
+
         if (!$this->students->contains($student)) {
             return $this;
         }
 
         $this->students->removeElement($student);
         $student->removeCourse($this);
-
 
         return $this;
     }
@@ -515,6 +519,17 @@ class Course extends AggregateRoot
         return $this;
     }
 
+    public function removeTeacher(StaffMember $teacher): Course
+    {
+        if (!$this->teachers->contains($teacher)) {
+            return $this;
+        }
+
+        $this->teachers->removeElement($teacher);
+        $teacher->removeCourse($this);
+        return $this;
+    }
+
     /**
      * @return Collection
      */
@@ -549,8 +564,9 @@ class Course extends AggregateRoot
     {
         $list = TimeSheetList::make($timeSheet);
 
-        if (!$list->isEqual($this->timeSheet) && !$this->isStarted()) {
-            $this->notify(TimeSheetWasChanged::make($this));
+        if (!$list->isEqual($this->timeSheet)) {
+            $this->notify(TimeSheetHasChanged::make($this));
+
         }
 
         $this->hoursPerWeek = $list->getHoursPerWeek();
@@ -559,22 +575,38 @@ class Course extends AggregateRoot
     }
 
     /**
-     * @return Collection
+     * @return Lesson[]
      */
     public function getLessons(): Collection
     {
         return $this->lessons;
     }
 
-    /**
-     * @param Collection $lessons
-     * @return Course
-     */
-    public function setLessons(LessonList $lessons): Course
+    public function getPastLessons(): Collection
     {
 
-        $this->hoursTotal = $lessons->getTotalHours();
-        $this->lessons = $lessons->toArray();
+        return $this->lessons->filter(function (Lesson $lesson) {
+            return $lesson->isPast();
+        });
+
+    }
+
+    public function getFutureLessons(): Collection
+    {
+        return $this->lessons->filter(function (Lesson $lesson) {
+            return $lesson->isFuture();
+        });
+
+    }
+
+    /**
+     * @param Collection $lessonList
+     * @return Course
+     */
+    public function setLessons(LessonList $lessonList): Course
+    {
+        $this->lessons = $lessonList->toCollection();
+        $this->hoursTotal = $lessonList->getTotalHours();
 
         return $this;
     }
@@ -627,44 +659,23 @@ class Course extends AggregateRoot
         return $today->getTimestamp() >= $this->startDate->getTimestamp();
     }
 
-    public function getAvailablePlaces(): int {
+    public function getAvailablePlaces(): int
+    {
         return $this->numOfPlaces->getNumber() - $this->students->count();
     }
 
-    public function update(): Course
+    public function toSave(): Course
     {
-        if (!empty($this->name)) {
-            return $this;
-        }
-
-        $pieces = [
-            (string)$this->examiner,
-            (string)$this->level,
-            (string)$this->age,
-            (string)$this->intensive,
-            (string)$this->startDate,
-            (string)$this->endDate,
-        ];
-
-        $pieces = array_filter($pieces);
-
-        $this->name = implode(' / ', $pieces);
-
+        $this->updateStatus();
         return $this;
     }
 
-    public function persist(): Course
+    public function updateStatus(): self
     {
-        $this->updateStatus(new \DateTime());
-        //$this->notify(TimeSheetWasChanged::make($this));
-        return $this;
-    }
+        $today = \DateTime::createFromFormat('U', (string)$_SERVER['REQUEST_TIME']);
+        $today->setTime(0,0);
 
-
-    public function updateStatus(\DateTime $date): Course
-    {
-        $diff = $date->diff($this->endDate);
-        $this->active = (1 !== $diff->invert);
+        $this->active = $this->endDate->getTimestamp() > $today->getTimestamp();
         return $this;
     }
 

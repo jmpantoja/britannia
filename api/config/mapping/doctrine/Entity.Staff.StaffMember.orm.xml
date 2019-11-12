@@ -51,8 +51,8 @@
 
 
         <lifecycle-callbacks>
-            <lifecycle-callback type="prePersist" method="update"/>
-            <lifecycle-callback type="preUpdate" method="update"/>
+            <lifecycle-callback type="prePersist" method="onUpdate"/>
+            <lifecycle-callback type="preUpdate" method="onUpdate"/>
         </lifecycle-callbacks>
 
         <field name="createdAt" type="datetime">

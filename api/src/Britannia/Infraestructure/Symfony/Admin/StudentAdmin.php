@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Britannia\Infraestructure\Symfony\Admin;
 
+use Britannia\Domain\Entity\Course\Attendance;
 use Britannia\Domain\Entity\Student\Adult;
+use Britannia\Domain\Entity\Student\Student;
+use Britannia\Domain\Repository\AttendanceRepositoryInterface;
 use Britannia\Domain\VO\SchoolCourse;
 use Britannia\Infraestructure\Symfony\Form\ContactModeType;
 use Britannia\Infraestructure\Symfony\Form\CourseType;
@@ -17,6 +20,7 @@ use Britannia\Infraestructure\Symfony\Form\SchoolCourseType;
 use Britannia\Infraestructure\Symfony\Form\SchoolCourseTypeextends;
 use Britannia\Infraestructure\Symfony\Form\TutorType;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use PlanB\DDDBundle\Symfony\Form\Type\DateType;
 use PlanB\DDDBundle\Symfony\Form\Type\DNIType;
 use PlanB\DDDBundle\Symfony\Form\Type\EmailListType;
@@ -33,13 +37,30 @@ use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\Form\Type\DatePickerType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Validator\Constraints\Date;
 
 final class StudentAdmin extends AbstractAdmin
 {
+    /**
+     * @var AttendanceRepositoryInterface
+     */
+    private $attendanceRepository;
+
+    public function __construct(string $code,
+                                string $class,
+                                string $baseControllerName,
+                                AttendanceRepositoryInterface $attendanceRepository)
+    {
+        parent::__construct($code, $class, $baseControllerName);
+
+        $this->attendanceRepository = $attendanceRepository;
+    }
 
     public function createQuery($context = 'list')
     {
+        /** @var QueryBuilder $queryBuilder */
         $queryBuilder = $this->getModelManager()
             ->getEntityManager($this->getClass())
             ->createQueryBuilder();
@@ -47,8 +68,7 @@ final class StudentAdmin extends AbstractAdmin
         $queryBuilder->select('p')
             ->from($this->getClass(), 'p')
             ->orderBy('p.active', 'DESC')
-            ->orderBy('p.fullName.lastName', 'ASC')
-        ;
+            ->addOrderBy('p.fullName.lastName', 'ASC');
 
         return new ProxyQuery($queryBuilder);
     }
@@ -63,13 +83,14 @@ final class StudentAdmin extends AbstractAdmin
 
     protected function configureRoutes(RouteCollection $collection)
     {
-        $collection->clearExcept(['list', 'edit', 'create']);
+        $collection->clearExcept(['list', 'edit', 'create', 'delete', 'export']);
         return $collection;
     }
 
     public function getExportFields()
     {
         $fields = parent::getExportFields();
+
         unset($fields['payment.account']);
         return $fields;
     }
@@ -85,12 +106,44 @@ final class StudentAdmin extends AbstractAdmin
                         return;
                     }
 
+                    $where = sprintf('%s.fullName.firstName like :name OR %s.fullName.lastName like :name', $alias, $alias);
                     $queryBuilder
-                        ->andwhere('o.fullName.firstName like :name OR o.fullName.lastName like :name')
+                        ->andwhere($where)
                         ->setParameter('name', sprintf('%%%s%%', $value['value']));
                     return true;
                 }
+            ])
+            ->add('Cumple', 'doctrine_orm_callback', [
+                'callback' => function (ProxyQuery $queryBuilder, $alias, $field, $value) {
+                    if (!$value['value']) {
+                        return;
+                    }
+
+
+                    $where = sprintf('%s.birthMonth = :month', $alias);
+                    $queryBuilder
+                        ->andwhere($where)
+                        ->setParameter('month', $value['value']);
+                    return true;
+                }
+            ], ChoiceType::class, [
+                'choices' => [
+                    'Enero' => 1,
+                    'Febrero' => 2,
+                    'Marzo' => 3,
+                    'Abril' => 4,
+                    'Mayo' => 5,
+                    'Junio' => 6,
+                    'Julio' => 7,
+                    'Agosto' => 8,
+                    'Septiembre' => 9,
+                    'Octubre' => 10,
+                    'Noviembre' => 11,
+                    'Diciembre' => 12,
+                ],
+                'placeholder' => null
             ]);
+
     }
 
     protected function configureListFields(ListMapper $listMapper): void
@@ -103,7 +156,8 @@ final class StudentAdmin extends AbstractAdmin
             ])
             ->add('type', null, [
                 'header_style' => 'width:65px',
-                'row_align' => 'left'
+                'template' => 'admin/student/type_resume_column.html.twig',
+                'row_align' => 'center'
             ])
             ->add('active', null, [
                 'header_style' => 'width:30px',
@@ -113,23 +167,37 @@ final class StudentAdmin extends AbstractAdmin
 
     protected function configureFormFields(FormMapper $formMapper): void
     {
+        /** @var Student $subject */
         $subject = $this->getSubject();
         $isAdult = $subject instanceof Adult;
+
+
+        dump(...[
+            'COSAS PARA SEGUIR',
+            ' - permisos al modificar la asistencia de otro teacher',
+            ' - mejorar el mosaico de cursos de control de asistencia',
+            ' - type para mostrar el historial de un alumno',
+            ' - ............',
+            ' - Observaciones'
+        ]);
+
+
+        die();
 
         $formMapper
             ->with('Personal', ['tab' => true]);
 
         $formMapper
             ->with('Cursos en Activo ', ['class' => 'col-md-12'])
-                ->add('courses', null, [
-                    'label' => false,
-                    'by_reference' => false,
-                    'query_builder' => function (EntityRepository $er) {
-                        return $er->createQueryBuilder('m')
-                            ->where('m.active = :param')
-                            ->setParameter('param', true);
-                    }
-                ])
+            ->add('courses', null, [
+                'label' => false,
+                'by_reference' => false,
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('m')
+                        ->where('m.active = :param')
+                        ->setParameter('param', true);
+                }
+            ])
             ->end();
 
         $formMapper
@@ -215,7 +283,6 @@ final class StudentAdmin extends AbstractAdmin
             $formMapper
                 ->with('Tutores', ['tab' => true]);
             $formMapper
-
                 ->with('Tutores')
                 ->add('firstTutorDescription', TextType::class, [
                     'label' => 'Tipo',

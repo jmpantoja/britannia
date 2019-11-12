@@ -70,9 +70,8 @@
 
 
         <lifecycle-callbacks>
-            <lifecycle-callback type="prePersist" method="persist"/>
-            <lifecycle-callback type="prePersist" method="update"/>
-            <lifecycle-callback type="preUpdate" method="update"/>
+            <lifecycle-callback type="prePersist" method="toSave"/>
+            <lifecycle-callback type="preUpdate" method="toSave"/>
         </lifecycle-callbacks>
     </entity>
 

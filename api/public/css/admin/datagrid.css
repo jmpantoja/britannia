@@ -1,31 +1,62 @@
-.sonata-ba-list-field-header-batch{
+.sonata-ba-list-field-header-batch {
     width: 40px;
 }
 
-.planb_row{
+.planb_row {
 
 }
 
-.planb_row .btn-arrow{
+.planb_row .caret-col {
+    min-width: 3em;
+    min-height: 2em;
+    line-height: 2em;
+    float: left;
+
+}
+
+.planb_row .btn-arrow {
     margin: 0 1em;
     float: left;
-    transform: rotate(180deg) ;
+    transform: rotate(180deg);
 }
 
-.planb_row .btn-arrow .collapsed{
-    transform: rotate(90deg) ;
+.planb_row .btn-arrow .collapsed {
+    transform: rotate(90deg);
 }
 
-.planb_row .resume{
+.planb_row .resume {
     margin: 1em 1em 1em 2em;
 }
 
-
-.planb_row .resume .header{
+.planb_row .resume .header {
 
 }
 
-.planb_row .resume .body{
+.planb_row .resume .body {
     margin-top: 1em;
 }
 
+.course a, .course .attendance_sumary {
+    float: left;
+}
+
+.attendance_sumary {
+    margin-left: 1em;
+}
+
+.attendance_sumary span {
+    background-color: gainsboro;
+    display: inline-block;
+    margin: 0;
+    width: 1.5em;
+    height: 1.5em;
+}
+
+.attendance_sumary span.missed {
+    background-color: red;
+}
+
+
+.attendance_sumary span.attended {
+    background-color: green;
+}

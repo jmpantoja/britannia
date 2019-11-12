@@ -18,8 +18,7 @@ interface CourseRepositoryInterface
 {
 
     /**
-     * @param \DateTime $date
      * @return Course[]
      */
-    public function findUpdateStatusPending(\DateTime $date): array;
+    public function findUpdateStatusPending(): array;
 }

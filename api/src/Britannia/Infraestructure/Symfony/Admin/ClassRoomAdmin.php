@@ -37,7 +37,7 @@ final class ClassRoomAdmin extends AbstractAdmin
 
     protected function configureRoutes(RouteCollection $collection)
     {
-        $collection->clearExcept(['list', 'edit', 'create']);
+        $collection->clearExcept(['list', 'edit', 'create', 'delete', 'export']);
         return $collection;
     }
 
@@ -59,8 +59,12 @@ final class ClassRoomAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $formMapper
-            ->add('name')
-            ->add('capacity', PositiveIntegerType::class);
+            ->with('Nivel', ['tab' => true])
+                ->with('', ['class' => 'col-md-4'])
+                    ->add('name')
+                    ->add('capacity', PositiveIntegerType::class)
+                ->end()
+            ->end();
     }
 
     protected function configureShowFields(ShowMapper $showMapper): void

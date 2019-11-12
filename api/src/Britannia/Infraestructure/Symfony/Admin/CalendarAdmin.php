@@ -49,7 +49,6 @@ final class CalendarAdmin extends AbstractAdmin
                 'label' => 'A Laborable',
                 'ask_confirmation' => false
             ];
-
         }
 
         return $actions;

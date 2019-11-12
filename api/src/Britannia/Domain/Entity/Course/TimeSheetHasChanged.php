@@ -16,7 +16,7 @@ namespace Britannia\Domain\Entity\Course;
 
 use PlanB\DDD\Domain\Event\DomainEvent;
 
-class TimeSheetWasChanged extends DomainEvent
+class TimeSheetHasChanged extends DomainEvent
 {
 
     /**
@@ -31,10 +31,6 @@ class TimeSheetWasChanged extends DomainEvent
 
     private function __construct(Course $course)
     {
-        if ($course->isStarted()) {
-            throw new \LogicException('No se puede modificar el horario de un curso que ya ha comenzado');
-        }
-
         $this->course = $course;
     }
 

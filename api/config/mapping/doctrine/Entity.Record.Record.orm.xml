@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xmlns:gedmo="http://gediminasm.org/schemas/orm/doctrine-extensions-mapping"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+
+    <entity name="Britannia\Domain\Entity\Record\Record" table="student_records">
+
+
+        <id name="id" type="RecordId" column="id">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
+        </id>
+
+
+        <many-to-one field="student" target-entity="Britannia\Domain\Entity\Student\Student" inversed-by="records">
+
+        </many-to-one>
+        <many-to-one field="createdBy" target-entity="Britannia\Domain\Entity\Staff\StaffMember"/>
+
+        <field name="date" type="datetime_immutable"/>
+
+        <field name="description"/>
+
+    </entity>
+
+</doctrine-mapping>

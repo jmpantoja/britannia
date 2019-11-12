@@ -9,7 +9,6 @@
     border-bottom: solid 2px #3c8dbc;
 }
 
-
 .box-header h4.box-title {
     font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 2em;
@@ -35,7 +34,7 @@ fieldset.form-group {
     clear: both;
 }
 
-.sonata-ba-collapsed-fields .form-group:last-child{
+.sonata-ba-collapsed-fields .form-group:last-child {
     border: none;
 }
 
@@ -49,18 +48,39 @@ fieldset .help-block {
     font-style: italic;
     font-size: 1em;
     margin-top: -0.3em;
-    clear:both;
+    clear: both;
 }
 
-fieldset[id$=TutorDescription]{
+fieldset[id$=TutorDescription] {
     float: left;
     clear: left;
     min-width: 250px;
     margin-right: 1em;
 }
 
-fieldset[id$=Tutor]{
+fieldset[id$=Tutor] {
     float: left;
     clear: none;
 
+}
+
+fieldset[id$=attendances] p.fullName {
+    margin:1.3em  0 0 0 ;
+    padding: 0;
+    font-size: 1.5em;
+    line-height: 1.5em;
+    height: 1.5em;
+    text-align: right;
+}
+
+fieldset[id$=attendances] p.fullName::after {
+    content: ':';
+}
+
+fieldset[id$=attendances] .sonata-ba-field {
+    min-height: 3em;
+}
+
+fieldset[id$=attendances] .missed{
+    padding-top: 1.7em;
 }

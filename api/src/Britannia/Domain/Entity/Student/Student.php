@@ -136,11 +136,23 @@ abstract class Student extends AggregateRoot
      */
     private $updatedAt;
 
+    /**
+     * @var int
+     */
+    private $birthMonth;
+
+
+    /**
+     * @var Collection
+     */
+    private $records;
+
     public function __construct()
     {
         $this->id = new StudentId();
         $this->relatives = new ArrayCollection();
         $this->courses = new ArrayCollection();
+        $this->records = new ArrayCollection();
     }
 
 
@@ -190,12 +202,21 @@ abstract class Student extends AggregateRoot
     }
 
     /**
+     * @return ArrayCollection
+     */
+    public function getActiveCourses(): array
+    {
+        return $this->courses->filter(function (Course $course) {
+            return $course->isActive();
+        })->toArray();
+    }
+
+    /**
      * @param ArrayCollection $courses
      * @return Student
      */
     public function setCourses(Collection $courses): Student
     {
-
         foreach ($courses as $course) {
             $this->addCourse($course);
         }
@@ -211,6 +232,7 @@ abstract class Student extends AggregateRoot
 
         $this->courses->add($course);
         $course->addStudent($this);
+        $this->notify(StudentHasJoinedToCourse::make($this, $course));
 
         return $this;
     }
@@ -235,16 +257,6 @@ abstract class Student extends AggregateRoot
     public function isActive(): bool
     {
         return $this->active;
-    }
-
-    /**
-     * @param bool $active
-     * @return Student
-     */
-    private function setActive(bool $active): Student
-    {
-        $this->active = $active;
-        return $this;
     }
 
     /**
@@ -280,6 +292,12 @@ abstract class Student extends AggregateRoot
     public function setBirthDate(?\DateTime $birthDate): Student
     {
         $this->birthDate = $birthDate;
+
+        if (is_null($birthDate)) {
+            return $this;
+        }
+
+        $this->birthMonth = (int)$birthDate->format('m');
         return $this;
     }
 
@@ -610,6 +628,17 @@ abstract class Student extends AggregateRoot
         return $this;
     }
 
+//    public function setRecords(Collection $records): self
+//    {
+//        $this->records = $records;
+//        return $this;
+//    }
+
+    public function getRecords(): ?Collection
+    {
+        return $this->records;
+    }
+
     /**
      * @return \DateTime
      */
@@ -651,7 +680,7 @@ abstract class Student extends AggregateRoot
         return $this;
     }
 
-    public function update(): Student
+    public function toUpdate(): Student
     {
         $this->setUpdatedAt(new \DateTime());
 
@@ -659,9 +688,13 @@ abstract class Student extends AggregateRoot
             return $course->isActive();
         });
 
-
         $this->active = $courses->count() > 0;
         return $this;
+    }
+
+    public function isEqual(Student $student): bool
+    {
+        return $student->getId()->equals($this->getId());
     }
 
 

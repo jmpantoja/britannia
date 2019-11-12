@@ -16,7 +16,7 @@ namespace Britannia\Application\UseCase\Course;
 
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Course\CourseId;
-use Britannia\Domain\Entity\Course\TimeSheetWasChanged;
+use Britannia\Domain\Entity\Course\TimeSheetHasChanged;
 
 class UpdateTimeSheet
 {
@@ -25,7 +25,7 @@ class UpdateTimeSheet
      */
     private $course;
 
-    public static function fromEvent(TimeSheetWasChanged $event): self
+    public static function fromEvent(TimeSheetHasChanged $event): self
     {
         return new self($event->getCourse());
     }

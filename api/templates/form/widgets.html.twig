@@ -1,4 +1,3 @@
-
 {% block job_widget %}
 
     <div class="col-md-4 no-padding">
@@ -137,4 +136,58 @@
             {{ form_row(form.classroomId) }}
         </div>
     </div>
+{% endblock %}
+
+{% block attendance_widget %}
+    <div class="row">
+        <div class="col-md-3">
+            <p class="fullName">{{ student.fullName }}</p>
+        </div>
+        <div class="col-md-1 missed">
+            {{ form_row(form.missed) }}
+        </div>
+
+        <div class="col-md-3 reason">
+            {{ form_row(form.reason) }}
+        </div>
+
+        <script>
+            $(function() {
+                var reason = $('#{{ form.reason.vars.id }}').parents('.form-group:first');
+
+                $('#{{ form.missed.vars.id }}').change(function() {
+                    if($(this).prop('checked')){
+                        reason.show()
+                    }
+                    else{
+                        reason.hide()
+                    }
+                })
+
+                if($('#{{ form.missed.vars.id }}').prop('checked')){
+                    reason.show()
+                }
+                else{
+                    reason.hide()
+                }
+            })
+        </script>
+
+    </div>
+{% endblock %}
+
+
+{% block attendance_toggle_widget %}
+    {% set checked = '' %}
+
+    {% if value == "1" %}
+        {% set checked = 'checked' %}
+    {% endif %}
+
+    <input id="{{ id }}" name="{{ full_name }}"  {{ checked }} type="checkbox" data-toggle="toggle" data-on="Falta" data-off="Asiste"
+           data-onstyle="danger" data-offstyle="success">
+
+
+
+
 {% endblock %}

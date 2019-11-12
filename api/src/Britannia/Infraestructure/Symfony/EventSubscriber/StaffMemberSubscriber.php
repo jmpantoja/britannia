@@ -15,8 +15,8 @@ namespace Britannia\Infraestructure\Symfony\EventSubscriber;
 
 
 use Britannia\Application\UseCase\StaffMember\UpdatePassword;
-use Britannia\Domain\Entity\Course\TimeSheetWasChanged;
-use Britannia\Domain\Entity\Staff\PasswordWasChanged;
+use Britannia\Domain\Entity\Course\TimeSheetHasChanged;
+use Britannia\Domain\Entity\Staff\PasswordHasChanged;
 
 class StaffMemberSubscriber extends DomainEventSubscriber
 {
@@ -28,11 +28,11 @@ class StaffMemberSubscriber extends DomainEventSubscriber
     public static function getSubscribedEvents()
     {
         return [
-            PasswordWasChanged::class => 'onPasswordChanged'
+            PasswordHasChanged::class => 'onPasswordChanged'
         ];
     }
 
-    public function onPasswordChanged(PasswordWasChanged $event)
+    public function onPasswordChanged(PasswordHasChanged $event)
     {
         $command = UpdatePassword::fromEvent($event);
         $this->handle($command);

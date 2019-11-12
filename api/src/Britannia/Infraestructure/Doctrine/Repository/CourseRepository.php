@@ -25,14 +25,15 @@ class CourseRepository extends ServiceEntityRepository implements CourseReposito
      * @param \DateTime $date
      * @return Course[]
      */
-    public function findUpdateStatusPending(\DateTime $date): array
+    public function findUpdateStatusPending(): array
     {
 
+        $today = \DateTime::createFromFormat('U', (string)$_SERVER['REQUEST_TIME']);
 
         $query = $this->createQueryBuilder('A')
-            ->where('A.active = 1 and A.endDate < :date')
-            ->orWhere('A.active = 0 and A.endDate >= :date')
-            ->setParameters(['date' => $date])
+            ->where('A.startDate <= :today')
+            ->andWhere('A.endDate >= :today')
+            ->setParameters(['today' => $today])
             ->getQuery();
 
         return $query->getResult();

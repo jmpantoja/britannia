@@ -27,7 +27,6 @@ use Symfony\Component\Validator\Validation;
 
 abstract class AbstractCompoundType extends AbstractType implements DataMapperInterface
 {
-
     private $options;
 
     /**
@@ -47,13 +46,27 @@ abstract class AbstractCompoundType extends AbstractType implements DataMapperIn
      * @param $forms
      * @return array
      */
-    protected function getOptions($forms): array
+    protected function parseOptions($forms): array
     {
         $parent = $this->getParentForm($forms);
         $options = $parent->getConfig()->getOptions();
+
+        $this->options = $options;
         return $options;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getOptions(): array
+    {
+        return $this->options;
+    }
+
+    public function getOption(string $key, $default = null)
+    {
+        return $this->options[$key] ?? $default;
+    }
 
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
@@ -119,7 +132,8 @@ abstract class AbstractCompoundType extends AbstractType implements DataMapperIn
     {
         $forms = iterator_to_array($forms);
 
-        $options = $this->getOptions($forms);
+        $options = $this->parseOptions($forms);
+
         $className = $options['data_class'];
 
         if (!($data instanceof $className)) {
@@ -163,7 +177,7 @@ abstract class AbstractCompoundType extends AbstractType implements DataMapperIn
             return $form->getData();
         }, $forms);
 
-        $options = $this->getOptions($forms);
+        $options = $this->parseOptions($forms);
 
         $constraint = $this->buildConstraint($options);
 
