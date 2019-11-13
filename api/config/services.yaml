@@ -40,12 +40,11 @@ services:
 
     Britannia\Infraestructure\Symfony\Importer\ImporterManager:
         calls:
-        #        - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\StudentEtl']]
-        #- [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\RelativesEtl']]
-        # - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\CourseEtl']]
-        # - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\StudentCoursesEtl']]
-        # - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\StaffEtl']]
-
+        - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\StaffEtl']]
+        - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\StudentEtl']]
+        - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\RelativesEtl']]
+        - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\CourseEtl']]
+        - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\StudentCoursesEtl']]
 
 
     admin.staff_member:
@@ -66,6 +65,13 @@ services:
         calls:
         - [setSubClasses, [{child: Britannia\Domain\Entity\Student\Child, adult: Britannia\Domain\Entity\Student\Adult}]]
 
+    admin.record:
+        class: Britannia\Infraestructure\Symfony\Admin\RecordAdmin
+        arguments: [~, Britannia\Domain\Entity\Record\Record, ~]
+        tags:
+        - { name: sonata.admin, manager_type: orm, group: Alumnos, label: Historial, pager_type: 'simple' }
+        public: true
+
     admin.tutor:
         class: Britannia\Infraestructure\Symfony\Admin\TutorAdmin
         arguments: [~, Britannia\Domain\Entity\Student\Tutor, ~]
@@ -85,7 +91,9 @@ services:
         class: Britannia\Infraestructure\Symfony\Admin\LessonAdmin
         arguments: [~, Britannia\Domain\Entity\Course\Lesson, ~]
         tags:
-        - { name: sonata.admin, manager_type: orm, group: Cursos, label: Control de Asistencia, pager_type: 'simple' }
+        - { name: sonata.admin, manager_type: orm, group: Control de Asistencia, label: Asistencia, pager_type: 'simple' }
+        calls:
+        - [setTemplate, ['outer_list_rows_mosaic', 'admin/lesson/list_outer_rows_mosaic.html.twig']]
         public: true
 
     admin.book:
@@ -129,11 +137,4 @@ services:
         arguments: [~, Britannia\Domain\Entity\Calendar\Calendar, Britannia\Infraestructure\Symfony\Controller\Admin\CalendarController]
         tags:
         - { name: sonata.admin, manager_type: orm, group: Datos Extra, label: Calendario }
-        public: true
-
-    admin.attendance:
-        class: Britannia\Infraestructure\Symfony\Admin\AttendanceAdmin
-        arguments: [~, Britannia\Domain\Entity\Course\Attendance, ~]
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Attendance }
         public: true

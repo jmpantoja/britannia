@@ -60,3 +60,7 @@
 .attendance_sumary span.attended {
     background-color: green;
 }
+
+.cms-block-element .small-box .inner a{
+    color: #FFF;
+}

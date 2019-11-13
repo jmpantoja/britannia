@@ -171,19 +171,6 @@ final class StudentAdmin extends AbstractAdmin
         $subject = $this->getSubject();
         $isAdult = $subject instanceof Adult;
 
-
-        dump(...[
-            'COSAS PARA SEGUIR',
-            ' - permisos al modificar la asistencia de otro teacher',
-            ' - mejorar el mosaico de cursos de control de asistencia',
-            ' - type para mostrar el historial de un alumno',
-            ' - ............',
-            ' - Observaciones'
-        ]);
-
-
-        die();
-
         $formMapper
             ->with('Personal', ['tab' => true]);
 

@@ -51,7 +51,6 @@ final class LessonAdmin extends AbstractAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
-        $today = new \DateTime();
         $datagridMapper
             ->add('day',
                 CallbackFilter::class,
@@ -109,5 +108,29 @@ final class LessonAdmin extends AbstractAdmin
                 'label' => false
             ]);
     }
+
+    public function isGranted($name, $object = null)
+    {
+        $isGranted = parent::isGranted($name, $object);
+        if ($name !== 'EDIT') {
+            return $isGranted;
+        }
+
+        if ($isGranted) {
+            $user = $this->security->getUser();
+            $isGranted = $user->hasCourse($object->getCourse());
+        }
+
+        return $isGranted;
+    }
+
+    public function toString($object)
+    {
+        $date = $object->getDay()->format('d/m/Y');
+        $course = (string)$object->getCourse();
+
+        return sprintf('%s - %s', $date, $course);
+    }
+
 
 }

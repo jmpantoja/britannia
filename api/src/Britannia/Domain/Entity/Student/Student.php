@@ -5,6 +5,8 @@ namespace Britannia\Domain\Entity\Student;
 
 use Britannia\Domain\Entity\Academy\Academy;
 use Britannia\Domain\Entity\Course\Course;
+use Britannia\Domain\Entity\Record\StudentHasBeenCreated;
+use Britannia\Domain\Entity\Record\StudentHasJoinedToCourse;
 use Britannia\Domain\VO\ContactMode;
 use Britannia\Domain\VO\NumOfYears;
 use Britannia\Domain\VO\OtherAcademy;
@@ -540,7 +542,7 @@ abstract class Student extends AggregateRoot
     /**
      * @return string
      */
-    public function getFirstComment(): string
+    public function getFirstComment(): ?string
     {
         return $this->firstComment;
     }
@@ -558,7 +560,7 @@ abstract class Student extends AggregateRoot
     /**
      * @return string
      */
-    public function getSecondComment(): string
+    public function getSecondComment(): ?string
     {
         return $this->secondComment;
     }
@@ -628,12 +630,6 @@ abstract class Student extends AggregateRoot
         return $this;
     }
 
-//    public function setRecords(Collection $records): self
-//    {
-//        $this->records = $records;
-//        return $this;
-//    }
-
     public function getRecords(): ?Collection
     {
         return $this->records;
@@ -653,7 +649,12 @@ abstract class Student extends AggregateRoot
      */
     public function setCreatedAt(\DateTime $createdAt): Student
     {
-        $this->createdAt = $createdAt;
+
+        if (is_null($this->createdAt)) {
+            $this->createdAt = $createdAt;
+            $this->notify(StudentHasBeenCreated::make($this));
+        }
+
         return $this;
     }
 
@@ -673,9 +674,7 @@ abstract class Student extends AggregateRoot
     {
         $this->updatedAt = $updatedAt;
 
-        if (is_null($this->createdAt)) {
-            $this->setCreatedAt($updatedAt);
-        }
+        $this->setCreatedAt($updatedAt);
 
         return $this;
     }

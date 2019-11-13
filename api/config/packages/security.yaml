@@ -32,6 +32,7 @@ security:
         - ROLE_ADMIN_LEVEL_ALL
         - ROLE_ADMIN_CALENDAR_ALL
         - ROLE_ADMIN_LESSON_ALL
+        - ROLE_ADMIN_RECORD_ALL
 
         ROLE_RECEPTION:
         - ROLE_SONATA_ADMIN

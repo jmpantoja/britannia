@@ -11,12 +11,13 @@
 
 declare(strict_types=1);
 
-namespace Britannia\Domain\Entity\Student;
+namespace Britannia\Domain\Entity\Record;
 
 
-interface RecordEventInterface
+use MabeEnum\Enum;
+
+class TypeOfRecord extends Enum
 {
-    public function getStudent(): Student;
-
-    public function getDescription(): string;
+    public const CREATED = 'Altas';
+    public const COURSE = 'Cursos';
 }

@@ -43,7 +43,6 @@ class StaffMemberRepository extends ServiceEntityRepository implements StaffMemb
         return $this->createQueryBuilder('u')
             ->where('u.userName = :username')
             ->setParameter('username', $username)
-//            ->setParameter('email', $username)
             ->getQuery()
             ->getOneOrNullResult();
     }

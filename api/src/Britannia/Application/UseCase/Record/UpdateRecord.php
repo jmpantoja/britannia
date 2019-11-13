@@ -14,7 +14,8 @@ declare(strict_types=1);
 namespace Britannia\Application\UseCase\Record;
 
 
-use Britannia\Domain\Entity\Student\RecordEventInterface;
+use Britannia\Domain\Entity\Record\RecordEventInterface;
+use Britannia\Domain\Entity\Record\TypeOfRecord;
 use Britannia\Domain\Entity\Student\Student;
 
 class UpdateRecord
@@ -27,16 +28,21 @@ class UpdateRecord
      * @var string
      */
     private $description;
+    /**
+     * @var \DateTimeImmutable
+     */
+    private $date;
 
     public static function fromEvent(RecordEventInterface $event): self
     {
-        return new self($event->getStudent(), $event->getDescription());
+        return new self($event->getStudent(), $event->getType(), $event->getDate(), $event->getDescription());
     }
 
-    private function __construct(Student $student, string $description)
+    private function __construct(Student $student, TypeOfRecord $type, \DateTimeImmutable $date, string $description)
     {
-
         $this->student = $student;
+        $this->type = $type;
+        $this->date = $date;
         $this->description = $description;
     }
 
@@ -47,6 +53,23 @@ class UpdateRecord
     {
         return $this->student;
     }
+
+    /**
+     * @return TypeOfRecord
+     */
+    public function getType(): TypeOfRecord
+    {
+        return $this->type;
+    }
+
+    /**
+     * @return \DateTimeImmutable
+     */
+    public function getDate(): \DateTimeImmutable
+    {
+        return $this->date;
+    }
+
 
     /**
      * @return string

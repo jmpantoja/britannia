@@ -31,7 +31,7 @@
         </many-to-many>
 
 
-        <field name="oldId" column="old_id" type="integer"></field>
+        <field name="oldId" column="old_id" type="integer" nullable="true"></field>
 
         <field name="active" type="boolean" column="active"/>
 
@@ -65,7 +65,7 @@
         </many-to-one>
 
 
-        <one-to-many field="records" target-entity="Britannia\Domain\Entity\Record\Record" mapped-by="student"/>
+        <one-to-many field="records" target-entity="Britannia\Domain\Entity\Record\Record" mapped-by="student" orphan-removal="true"/>
 
         <field name="academyNumOfYears" column="other_academy_time" type="NumOfYears"/>
         <field name="firstContact" nullable="true"/>

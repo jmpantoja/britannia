@@ -15,7 +15,6 @@ namespace Britannia\Domain\Entity\Record;
 
 
 use Britannia\Domain\Entity\Staff\StaffMember;
-use Britannia\Domain\Entity\Student\RecordEventInterface;
 use Britannia\Domain\Entity\Student\Student;
 
 class Record
@@ -32,29 +31,52 @@ class Record
      * @var StaffMember
      */
     private $createdBy;
+
+    /**
+     * @var TypeOfRecord
+     */
+    private $type;
+
     /**
      * @var  \DateTimeImmutable
      */
     private $date;
 
     /**
+     * @var  \DateTimeImmutable
+     */
+    private $time;
+
+    /**
      * @var string
      */
     private $description;
 
-    public static function make(Student $student, StaffMember $createdBy, string $description): self
+
+    public static function make(Student $student,
+                                \DateTimeImmutable $date,
+                                TypeOfRecord $typeOfRecord,
+                                StaffMember $createdBy,
+                                string $description): self
     {
-        return new self($student, $createdBy, $description);
+        return new self($student, $date, $typeOfRecord, $createdBy, $description);
     }
 
-    private function __construct(Student $student, StaffMember $createdBy, string $description)
+    private function __construct(Student $student,
+                                 \DateTimeImmutable $date,
+                                 TypeOfRecord $typeOfRecord,
+                                 StaffMember $createdBy,
+                                 string $description)
     {
         $this->id = new RecordId();
 
         $this->student = $student;
+        $this->type = $typeOfRecord;
         $this->createdBy = $createdBy;
         $this->description = $description;
-        $this->date = new \DateTimeImmutable();
+
+        $this->date = $date;
+        $this->time = $date;
     }
 
     /**
@@ -82,11 +104,27 @@ class Record
     }
 
     /**
+     * @return TypeOfRecord
+     */
+    public function getType(): TypeOfRecord
+    {
+        return $this->type;
+    }
+
+    /**
      * @return \DateTimeImmutable
      */
     public function getDate(): \DateTimeImmutable
     {
         return $this->date;
+    }
+
+    /**
+     * @return \DateTimeImmutable
+     */
+    public function getTime(): \DateTimeImmutable
+    {
+        return $this->time;
     }
 
     /**

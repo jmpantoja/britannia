@@ -16,7 +16,7 @@ namespace Britannia\Domain\Entity\Course;
 
 use Britannia\Domain\Entity\Staff\StaffMember;
 use Britannia\Domain\Entity\Student\Student;
-use Britannia\Domain\Entity\Student\StudentHasJoinedToCourse;
+use Britannia\Domain\Entity\Record\StudentHasJoinedToCourse;
 use Britannia\Domain\VO\Age;
 use Britannia\Domain\VO\DayOfWeek;
 use Britannia\Domain\VO\Examiner;
@@ -673,10 +673,16 @@ class Course extends AggregateRoot
     public function updateStatus(): self
     {
         $today = \DateTime::createFromFormat('U', (string)$_SERVER['REQUEST_TIME']);
-        $today->setTime(0,0);
+        $today->setTime(0, 0);
 
         $this->active = $this->endDate->getTimestamp() > $today->getTimestamp();
         return $this;
+    }
+
+    public function isEqual(Course $course): bool
+    {
+
+        return $this->getId()->equals($course->getId());
     }
 
     public function __toString()

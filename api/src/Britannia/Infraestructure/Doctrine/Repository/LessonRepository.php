@@ -25,8 +25,6 @@ class LessonRepository extends ServiceEntityRepository implements LessonReposito
 
     public function getLastByCourse(Course $course, \DateTime $day, int $limit = 5): array
     {
-
-        $day->setDate(2019, 9, 15);
         $day->setTime(0, 0);
 
         $inPastLessons = $this->getInPastLessons($course, $day, $limit);

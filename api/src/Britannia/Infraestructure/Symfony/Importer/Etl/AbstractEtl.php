@@ -23,7 +23,6 @@ use Britannia\Infraestructure\Symfony\Importer\Traits\Loggable;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\ORM\EntityManagerInterface;
-use phpDocumentor\Reflection\Types\Nullable;
 
 abstract class AbstractEtl implements EtlInterface
 {

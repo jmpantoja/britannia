@@ -37,9 +37,6 @@ class StudentCoursesEtl extends AbstractEtl
 
     public function configureDataLoader(QueryBuilder $builder): void
     {
-        ini_set('memory_limit', '512M');
-
-
         $offset = 0;
         $limit = null;
         $id = null;

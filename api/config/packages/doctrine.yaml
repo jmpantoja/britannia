@@ -55,6 +55,7 @@ doctrine:
                     TimeSheetList: TimeSheetList
                     Periodicity: Periodicity
                     Intensive: Intensive
+                    TypeOfRecord: TypeOfRecord
 
         types:
             StaffMemberId:  Britannia\Infraestructure\Doctrine\DBAL\Type\StaffMemberIdType
@@ -68,11 +69,11 @@ doctrine:
             CourseId: Britannia\Infraestructure\Doctrine\DBAL\Type\CourseId
             RecordId: Britannia\Infraestructure\Doctrine\DBAL\Type\RecordId
             AttendanceId: Britannia\Infraestructure\Doctrine\DBAL\Type\AttendanceId
-            BookId: Britannia\Infraestructure\Doctrine\DBAL\Type\BookIdType            
-            
+            BookId: Britannia\Infraestructure\Doctrine\DBAL\Type\BookIdType
+
 
             JobStatus: Britannia\Infraestructure\Doctrine\DBAL\Type\JobStatusType
-            PartOfDay: Britannia\Infraestructure\Doctrine\DBAL\Type\PartOfDayType       
+            PartOfDay: Britannia\Infraestructure\Doctrine\DBAL\Type\PartOfDayType
             DayOfWeek: Britannia\Infraestructure\Doctrine\DBAL\Type\DayOfWeekType
             NumOfYears: Britannia\Infraestructure\Doctrine\DBAL\Type\NumOfYearsType
             ContactMode: Britannia\Infraestructure\Doctrine\DBAL\Type\ContactModeType
@@ -85,6 +86,8 @@ doctrine:
             TimeSheetList: Britannia\Infraestructure\Doctrine\DBAL\Type\TimeSheetListType
             Periodicity: Britannia\Infraestructure\Doctrine\DBAL\Type\PeriodicityType
             Intensive: Britannia\Infraestructure\Doctrine\DBAL\Type\IntensiveType
+
+            TypeOfRecord: Britannia\Infraestructure\Doctrine\DBAL\Type\TypeOfRecordType
 
     orm:
         auto_generate_proxy_classes: true

@@ -24,14 +24,34 @@ class StaffMember extends AggregateRoot implements UserInterface, \Serializable
      */
     private $oldId;
 
+    /**
+     * @var bool
+     */
     private $active = true;
 
+    /**
+     * @var bool
+     */
     private $teacher = false;
 
+    /**
+     * @var string
+     */
     private $userName;
 
+    /**
+     * @var  DNI
+     */
+    private $dni;
+
+    /**
+     * @var string
+     */
     private $password;
 
+    /**
+     * @var string
+     */
     private $plainPassword;
 
     /**
@@ -43,11 +63,6 @@ class StaffMember extends AggregateRoot implements UserInterface, \Serializable
      * @var null|PostalAddress
      */
     private $address;
-
-    /**
-     * @var null|DNI
-     */
-    private $dni;
 
 
     /**
@@ -149,7 +164,7 @@ class StaffMember extends AggregateRoot implements UserInterface, \Serializable
     /**
      * @return FullName
      */
-    public function getFullName(): FullName
+    public function getFullName(): ?FullName
     {
         return $this->fullName;
     }
@@ -325,6 +340,13 @@ class StaffMember extends AggregateRoot implements UserInterface, \Serializable
         $this->courses->removeElement($course);
         $course->removeTeacher($this);
         return $this;
+    }
+
+    public function hasCourse(Course $course): bool
+    {
+        return $this->courses->exists(function (int $index, Course $current) use ($course) {
+            return $current->isEqual($course);
+        });
     }
 
 

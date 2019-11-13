@@ -17,11 +17,15 @@ namespace Britannia\Domain\Repository;
 use Britannia\Domain\Entity\Staff\StaffMember;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 
+
+/**
+ *
+ * @method StaffMember|null findOneBy(array $criteria, array $orderBy = null)
+ * @method StaffMember[]    findAll()
+ * @method StaffMember[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ */
 interface StaffMemberRepositoryInterface extends UserLoaderInterface
 {
 
-//    public function save(StaffMember $member);
-//
-//    public function remove(StaffMember $member);
-
+    public function loadUserByUsername($username);
 }

@@ -13,7 +13,7 @@
             <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
         </id>
 
-        <field name="oldId" type="integer"/>
+        <field name="oldId" type="integer" nullable="true"/>
 
         <field name="active" type="boolean" column="active"/>
 

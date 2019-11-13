@@ -7,6 +7,7 @@ namespace Britannia\Infraestructure\Symfony\Admin;
 use Britannia\Domain\Entity\Staff\StaffMember;
 use Britannia\Infraestructure\Symfony\Form\RoleType;
 use Doctrine\ORM\EntityRepository;
+use PlanB\DDDBundle\Symfony\Form\Type\DNIType;
 use PlanB\DDDBundle\Symfony\Form\Type\EmailListType;
 use PlanB\DDDBundle\Symfony\Form\Type\FullNameType;
 use PlanB\DDDBundle\Symfony\Form\Type\PhoneNumberListType;
@@ -116,10 +117,24 @@ final class StaffMemberAdmin extends AbstractAdmin
 
         $hasAccess = parent::hasAccess('edit', $subject);
 
-
         $formMapper
-            ->with('Personal', ['tab' => true])
-            ->with('Acceso', ['class' => 'col-md-3'])
+            ->with('Personal', ['tab' => true]);
+
+        if ($hasAccess && $subject->isTeacher()) {
+            $formMapper->with('Cursos en Activo', ['class' => 'col-md-12'])
+                ->add('courses', null, [
+                    'label' => false,
+                    'by_reference' => false,
+                    'query_builder' => function (EntityRepository $er) {
+                        return $er->createQueryBuilder('m')
+                            ->where('m.active = :param')
+                            ->setParameter('param', true);
+                    }
+                ])
+                ->end();
+        }
+
+        $formMapper->with('Acceso', ['class' => 'col-md-3'])
             ->add('userName')
             ->add('plain_password', RepeatedType::class, [
                 'type' => PasswordType::class,
@@ -137,28 +152,21 @@ final class StaffMemberAdmin extends AbstractAdmin
             ->end();
 
         $formMapper
-            ->with('Contacto', ['class' => 'col-md-5'])
+            ->with('Personal', ['class' => 'col-md-5'])
             ->add('fullName', FullNameType::class)
             ->add('address', PostalAddressType::class, [
                 'required' => false
             ])
+            ->add('dni', DNIType::class, [
+                'required' => false
+            ])
+            ->end();
+
+        $formMapper
+            ->with('Contacto', ['class' => 'col-md-4'])
             ->add('emails', EmailListType::class)
             ->add('phoneNumbers', PhoneNumberListType::class)
             ->end();
-
-        if ($hasAccess && $subject->isTeacher()) {
-            $formMapper->with('Cursos en Activo', ['class' => 'col-md-4'])
-                ->add('courses', null, [
-                    'label' => false,
-                    'by_reference' => false,
-                    'query_builder' => function (EntityRepository $er) {
-                        return $er->createQueryBuilder('m')
-                            ->where('m.active = :param')
-                            ->setParameter('param', true);
-                    }
-                ])
-                ->end();
-        }
 
         $formMapper->end();
     }

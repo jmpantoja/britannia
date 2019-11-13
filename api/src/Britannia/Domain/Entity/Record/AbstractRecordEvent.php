@@ -11,33 +11,33 @@
 
 declare(strict_types=1);
 
-namespace Britannia\Domain\Entity\Student;
+namespace Britannia\Domain\Entity\Record;
 
 
-use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Student\Student;
 use PlanB\DDD\Domain\Event\DomainEvent;
 
-class StudentHasJoinedToCourse extends DomainEvent implements RecordEventInterface
+abstract class AbstractRecordEvent extends DomainEvent implements RecordEventInterface
 {
+
     /**
      * @var Student
      */
     private $student;
     /**
-     * @var Course
+     * @var string
      */
-    private $course;
+    private $description;
+    /**
+     * @var \DateTimeImmutable
+     */
+    private $date;
 
-    public static function make(Student $student, Course $course): self
-    {
-        return new self($student, $course);
-    }
-
-    private function __construct(Student $student, Course $course)
+    protected function __construct(Student $student, string $description, \DateTimeImmutable $date = null)
     {
         $this->student = $student;
-        $this->course = $course;
+        $this->description = $description;
+        $this->date = $date ?? new \DateTimeImmutable();
     }
 
     /**
@@ -50,6 +50,13 @@ class StudentHasJoinedToCourse extends DomainEvent implements RecordEventInterfa
 
     public function getDescription(): string
     {
-        return sprintf('Se une al curso %s', $this->course->getName());
+        return $this->description;
     }
+
+
+    public function getDate(): \DateTimeImmutable
+    {
+        return $this->date;
+    }
+
 }

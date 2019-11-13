@@ -3,6 +3,7 @@
 namespace Britannia\Infraestructure\Symfony\Command;
 
 
+use Britannia\Domain\Repository\StaffMemberRepositoryInterface;
 use Britannia\Infraestructure\Symfony\Importer\ImporterManager;
 use Britannia\Infraestructure\Symfony\Importer\Report\ConsoleReport;
 use Britannia\Infraestructure\Symfony\Importer\Report\PlainTextErrorReport;
@@ -16,6 +17,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class BritanniaImportDataCommand extends Command implements ContainerAwareInterface
 {
@@ -27,12 +29,24 @@ class BritanniaImportDataCommand extends Command implements ContainerAwareInterf
      * @var string
      */
     private $pathToReportDir;
+    /**
+     * @var StaffMemberRepositoryInterface
+     */
+    private $userRepository;
 
-    public function __construct(?string $name = null, ImporterManager $import)
+    /**
+     * @var ContainerInterface
+     */
+    private $container;
+
+    public function __construct(?string $name = null,
+                                ImporterManager $import,
+                                StaffMemberRepositoryInterface $userRepository)
     {
         parent::__construct($name);
 
         $this->importer = $import;
+        $this->userRepository = $userRepository;
     }
 
     protected function configure()
@@ -45,6 +59,9 @@ class BritanniaImportDataCommand extends Command implements ContainerAwareInterf
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        ini_set('memory_limit', '512M');
+        $this->login();
+
         $console = ConsoleReport::make($input, $output);
         $plainText = PlainTextReport::make($this->pathToReportDir);
 
@@ -52,6 +69,22 @@ class BritanniaImportDataCommand extends Command implements ContainerAwareInterf
             ->addReport($console)
             ->addReport($plainText)
             ->execute();
+    }
+
+    protected function login()
+    {
+        $user = $this->userRepository->findOneBy([
+            'userName' => 'cron'
+        ]);
+
+        $token = new UsernamePasswordToken(
+            $user,
+            null,
+            'main',
+            $user->getRoles());
+
+        $this->container->get('security.token_storage')->setToken($token);
+
     }
 
     /**
@@ -63,5 +96,7 @@ class BritanniaImportDataCommand extends Command implements ContainerAwareInterf
         $this->pathToReportDir = sprintf('%s/reports', dirname($pathToLogsDir));
 
         @chmod($this->pathToReportDir, 0777);
+
+        $this->container = $container;
     }
 }
