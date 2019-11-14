@@ -20,4 +20,5 @@ class TypeOfRecord extends Enum
 {
     public const CREATED = 'Altas';
     public const COURSE = 'Cursos';
+    public const ATTENDANCE = 'Asistencia';
 }

@@ -24,7 +24,8 @@ class StudentHasBeenCreated extends AbstractRecordEvent
         $description = sprintf('Nuevo alumno %s', $student->getFullName());
         $date = \DateTimeImmutable::createFromMutable($student->getCreatedAt());
 
-        return new self($student, $description, $date);
+
+        return new self($student, null, $description, $date);
     }
 
     public function getType(): TypeOfRecord

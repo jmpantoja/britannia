@@ -93,6 +93,14 @@ class FullName
         ]);
     }
 
+    public function getRegular(): string
+    {
+        return sprintf('%s %s', ...[
+            $this->getFirstName(),
+            $this->getLastName()
+        ]);
+    }
+
     public function __toString()
     {
         return $this->getReversedMode();

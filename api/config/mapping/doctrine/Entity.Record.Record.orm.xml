@@ -14,13 +14,11 @@
         </id>
 
 
-        <many-to-one field="student" target-entity="Britannia\Domain\Entity\Student\Student" inversed-by="records">
+        <many-to-one field="student" target-entity="Britannia\Domain\Entity\Student\Student" inversed-by="records"/>
+        <many-to-one field="course" target-entity="Britannia\Domain\Entity\Course\Course" inversed-by="records"/>
+        <many-to-one field="createdBy" target-entity="Britannia\Domain\Entity\Staff\StaffMember" />
 
-        </many-to-one>
-        <many-to-one field="createdBy" target-entity="Britannia\Domain\Entity\Staff\StaffMember">
-        </many-to-one>
-
-        <field name="type" type="TypeOfRecord" />
+        <field name="type" type="TypeOfRecord"/>
 
         <field name="date" type="date_immutable"/>
         <field name="time" type="time_immutable"/>

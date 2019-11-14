@@ -15,11 +15,13 @@ namespace Britannia\Domain\Entity\Course;
 
 
 use Britannia\Domain\Entity\ClassRoom\ClassRoom;
+use Britannia\Domain\Entity\Record\StudentHasMissedLesson;
 use Britannia\Domain\Entity\Student\Student;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use PlanB\DDD\Domain\Model\AggregateRoot;
 
-class Lesson
+class Lesson extends AggregateRoot
 {
 
     /**
@@ -166,7 +168,12 @@ class Lesson
 
     public function setAttendances(Collection $attendances): self
     {
+        foreach ($attendances as $attendance) {
+            $this->notify(StudentHasMissedLesson::make($attendance));
+
+        }
         $this->attendances = $attendances;
+        
         return $this;
     }
 

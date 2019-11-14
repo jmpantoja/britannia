@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Record;
 
 
+use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Student\Student;
 use PlanB\DDD\Domain\Event\DomainEvent;
 
@@ -24,6 +25,12 @@ abstract class AbstractRecordEvent extends DomainEvent implements RecordEventInt
      * @var Student
      */
     private $student;
+
+    /**
+     * @var Course|null
+     */
+    private $course;
+
     /**
      * @var string
      */
@@ -33,9 +40,11 @@ abstract class AbstractRecordEvent extends DomainEvent implements RecordEventInt
      */
     private $date;
 
-    protected function __construct(Student $student, string $description, \DateTimeImmutable $date = null)
+
+    protected function __construct(Student $student, ?Course $course, string $description, \DateTimeImmutable $date = null)
     {
         $this->student = $student;
+        $this->course = $course;
         $this->description = $description;
         $this->date = $date ?? new \DateTimeImmutable();
     }
@@ -47,6 +56,15 @@ abstract class AbstractRecordEvent extends DomainEvent implements RecordEventInt
     {
         return $this->student;
     }
+
+    /**
+     * @return Course|null
+     */
+    public function getCourse(): ?Course
+    {
+        return $this->course;
+    }
+
 
     public function getDescription(): string
     {

@@ -681,6 +681,7 @@ abstract class Student extends AggregateRoot
 
     public function toUpdate(): Student
     {
+
         $this->setUpdatedAt(new \DateTime());
 
         $courses = $this->courses->filter(function (Course $course) {

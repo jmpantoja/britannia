@@ -17,11 +17,25 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 final class RecordAdmin extends AbstractAdmin
 {
 
+    public function getExportFields()
+    {
+        $fields = parent::getExportFields();
+        $fields[] = 'student';
+
+        return $fields;
+    }
+
+
+    public function getBatchActions()
+    {
+        $actions = parent::getBatchActions();
+        unset($actions['delete']);
+        return $actions;
+    }
+
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
-        //$typeValues = array_
-
         $datagridMapper
             ->add('student', null, [
                     'label' => 'Alumno',
@@ -54,11 +68,15 @@ final class RecordAdmin extends AbstractAdmin
 
     protected function configureListFields(ListMapper $listMapper): void
     {
+
         $listMapper
-            ->add('date')
-            ->add('type')
-            ->add('student')
-            ->add('description');
+            ->add('date', null, [
+                'header_style' => 'width:120px',
+                'row_align' => 'center'
+            ])
+            ->add('student', 'string', [
+                'template' => 'admin/record/record_resume_column.html.twig',
+            ]);
     }
 
     protected function configureFormFields(FormMapper $formMapper): void

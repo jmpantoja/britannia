@@ -34,10 +34,6 @@ class UpdateRecordUseCase implements UseCaseInterface
      * @var DataPersisterInterface
      */
     private $persister;
-    /**
-     * @var StaffMemberRepositoryInterface
-     */
-    private $repository;
 
     private $defaultUser;
     /**
@@ -47,29 +43,25 @@ class UpdateRecordUseCase implements UseCaseInterface
 
     public function __construct(Security $security,
                                 DataPersisterInterface $persister,
-                                EntityManagerInterface $entityManager,
-                                StaffMemberRepositoryInterface $repository)
+                                EntityManagerInterface $entityManager)
     {
         $this->security = $security;
         $this->persister = $persister;
         $this->entityManager = $entityManager;
-        $this->repository = $repository;
-
     }
 
     public function handle(UpdateRecord $command)
     {
         $student = $command->getStudent();
         $type = $command->getType();
+        $course = $command->getCourse();
         $description = $command->getDescription();
         $date = $command->getDate();
-
-//        $createdBy = $this->security->getUser() ?? $this->repository->loadUserByUsername('cron');
 
         $createdBy = $this->ensureEntityIsManaged($this->security->getUser());
         $student = $this->ensureEntityIsManaged($student);
 
-        $record = Record::make($student, $date, $type, $createdBy, $description);
+        $record = Record::make($student, $course, $date, $type, $createdBy, $description);
 
         $this->persister->persist($record);
     }

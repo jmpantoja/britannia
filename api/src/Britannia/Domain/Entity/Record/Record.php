@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Record;
 
 
+use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Staff\StaffMember;
 use Britannia\Domain\Entity\Student\Student;
 
@@ -27,6 +28,13 @@ class Record
      * @var Student
      */
     private $student;
+
+
+    /**
+     * @var Course
+     */
+    private $course;
+
     /**
      * @var StaffMember
      */
@@ -54,15 +62,17 @@ class Record
 
 
     public static function make(Student $student,
+                                ?Course $course,
                                 \DateTimeImmutable $date,
                                 TypeOfRecord $typeOfRecord,
                                 StaffMember $createdBy,
                                 string $description): self
     {
-        return new self($student, $date, $typeOfRecord, $createdBy, $description);
+        return new self($student, $course, $date, $typeOfRecord, $createdBy, $description);
     }
 
     private function __construct(Student $student,
+                                 ?Course $course,
                                  \DateTimeImmutable $date,
                                  TypeOfRecord $typeOfRecord,
                                  StaffMember $createdBy,
@@ -71,6 +81,7 @@ class Record
         $this->id = new RecordId();
 
         $this->student = $student;
+        $this->course = $course;
         $this->type = $typeOfRecord;
         $this->createdBy = $createdBy;
         $this->description = $description;
@@ -93,6 +104,14 @@ class Record
     public function getStudent(): Student
     {
         return $this->student;
+    }
+
+    /**
+     * @return Course
+     */
+    public function getCourse(): ?Course
+    {
+        return $this->course;
     }
 
     /**

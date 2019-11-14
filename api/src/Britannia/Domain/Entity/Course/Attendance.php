@@ -14,8 +14,10 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Course;
 
 
+use Britannia\Domain\Entity\Record\StudentHasMissedLesson;
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\VO\StatusOfAttendance;
+use PlanB\DDD\Domain\Model\AggregateRoot;
 
 class Attendance
 {

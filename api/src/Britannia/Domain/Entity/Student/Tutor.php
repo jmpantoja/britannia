@@ -59,6 +59,7 @@ class Tutor extends AggregateRoot
     {
         $this->id = new TutorId();
         $this->phoneNumbers = [];
+        $this->emails= [];
         $this->children = new ArrayCollection();
     }
 

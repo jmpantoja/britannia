@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Record;
 
 
+use Britannia\Domain\Entity\Course\Course;
+
 use Britannia\Domain\Entity\Student\Student;
 
 interface RecordEventInterface
@@ -21,6 +23,8 @@ interface RecordEventInterface
     public function getType(): TypeOfRecord;
 
     public function getStudent(): Student;
+
+    public function getCourse(): ?Course;
 
     public function getDescription(): string;
 

@@ -31,7 +31,7 @@ class StudentHasJoinedToCourse extends AbstractRecordEvent
             $date = \DateTimeImmutable::createFromMutable($course->getEndDate());
         }
 
-        return new self($student, $description, $date);
+        return new self($student, $course, $description, $date);
     }
 
 

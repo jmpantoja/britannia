@@ -13,6 +13,7 @@ use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter;
 use Sonata\Form\Type\DatePickerType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Security\Core\Security;
 
 final class LessonAdmin extends AbstractAdmin
@@ -30,7 +31,7 @@ final class LessonAdmin extends AbstractAdmin
 
         $today = new \DateTime();
         $this->datagridValues = [
-            'day' => ['value' => $today->format('M d, Y')]
+            'day' => ['value' => $today->format('d M, Y')]
         ];
     }
 
