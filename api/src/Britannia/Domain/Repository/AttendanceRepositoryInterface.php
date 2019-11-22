@@ -16,6 +16,7 @@ namespace Britannia\Domain\Repository;
 use Britannia\Domain\Entity\Course\Attendance;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Student\Student;
+use Carbon\CarbonImmutable;
 
 /**
  *
@@ -28,9 +29,9 @@ interface AttendanceRepositoryInterface
     /**
      * @param Student $student
      * @param Course $course
-     * @param \DateTime $date
+     * @param CarbonImmutable $date
      * @param int $limit
      * @return Attendance[]
      */
-    public function findByStudent(Student $student, Course $course, \DateTime $date, int $limit = null): array;
+    public function findByStudent(Student $student, Course $course, CarbonImmutable $date, int $limit = null): array;
 }

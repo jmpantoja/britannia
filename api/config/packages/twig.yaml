@@ -6,9 +6,9 @@ twig:
     globals:
         attendances: '@Britannia\Infraestructure\Symfony\Service\Attendance\AttendanceService'
 
-    form_themes:
-    
+    form_themes:    
     - '@SonataFormatter/Form/formatter.html.twig'
     - '@SonataCore/Form/datepicker.html.twig'
+#    - '@SonataCore/Form/color.html.twig'
 
     

@@ -23,6 +23,7 @@ use Britannia\Domain\VO\JobStatus;
 use Britannia\Domain\VO\NumOfYears;
 use Britannia\Domain\VO\Payment;
 use Britannia\Domain\VO\PaymentMode;
+use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\VO\CityAddress;
 use PlanB\DDD\Domain\VO\DNI;
 use PlanB\DDD\Domain\VO\Email;
@@ -114,6 +115,7 @@ trait StudentMaker
 
     public function toPayment(array $input): ?Payment
     {
+
         $mode = $this->toPaymentMode($input['mode'] * 1);
 
         $account = null;
@@ -125,6 +127,7 @@ trait StudentMaker
             'mode' => $mode,
             'account' => $account
         ]);
+
 
         if ($this->watchForWarnings($violations, $input)) {
             return Payment::make(PaymentMode::CASH(), null);
@@ -153,6 +156,7 @@ trait StudentMaker
             'iban' => $this->toIban($input['iban']),
             'number' => $input['number'] * 1,
         ];
+
 
         $violations = BankAccount::validate($data);
 
@@ -194,7 +198,7 @@ trait StudentMaker
         return Iban::make($iban);
     }
 
-    public function toDate(string $date): ?\DateTime
+    public function toDate(string $date): ?CarbonImmutable
     {
 
         if (empty($date)) {
@@ -213,7 +217,7 @@ trait StudentMaker
             return null;
         }
 
-        return new \DateTime($date);
+        return CarbonImmutable::make($date);
     }
 
     public function toEmail(string $email): ?Email

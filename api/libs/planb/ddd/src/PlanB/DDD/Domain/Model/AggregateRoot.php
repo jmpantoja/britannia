@@ -15,22 +15,14 @@ namespace PlanB\DDD\Domain\Model;
 
 
 use PlanB\DDD\Domain\Event\DomainEvent;
+use PlanB\DDD\Domain\Event\EventDispatcher;
 
 abstract class AggregateRoot
 {
-    private $domainEvents = [];
-
-    final public function pullEvents(): array
-    {
-        $domainEvents = $this->domainEvents;
-        $this->domainEvents = [];
-
-        return $domainEvents;
-    }
-
     final protected function notify(DomainEvent $domainEvent): void
     {
-        $this->domainEvents[] = $domainEvent;
+        EventDispatcher::getInstance()
+            ->dispatch($domainEvent);
     }
 
 }

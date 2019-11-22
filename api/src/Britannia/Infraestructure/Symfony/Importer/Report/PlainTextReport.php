@@ -21,12 +21,6 @@ class PlainTextReport extends FileystemReport
     const WIDTH_COLUMN_KEY = 15;
     const WIDTH_COLUMN_MESSAGE = 55;
 
-    public function getName(\DateTime $date): string
-    {
-        // TODO: Implement getName() method.
-    }
-
-
     public function error(Resume $resume): void
     {
         $head = $this->parseHead($resume);

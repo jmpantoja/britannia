@@ -17,11 +17,11 @@ namespace Britannia\Application\UseCase\Course;
 use ApiPlatform\Core\DataPersister\DataPersisterInterface;
 use Britannia\Domain\Repository\CalendarRepositoryInterface;
 use Britannia\Domain\Repository\CourseRepositoryInterface;
-use Britannia\Domain\Service\Course\TimeSheetUpdater;
+use Britannia\Domain\Service\Course\TimeTableUpdater;
 use Britannia\Infraestructure\Doctrine\Repository\CourseRepository;
 use PlanB\DDD\Application\UseCase\UseCaseInterface;
 
-class UpdateTimeSheetUseCase implements UseCaseInterface
+class UpdateTimeTableUseCase implements UseCaseInterface
 {
     /**
      * @var CourseRepository
@@ -32,20 +32,21 @@ class UpdateTimeSheetUseCase implements UseCaseInterface
      */
     private $calendar;
     /**
-     * @var TimeSheetUpdater
+     * @var TimeTableUpdater
      */
     private $updater;
 
-    public function __construct(TimeSheetUpdater $updater, CourseRepositoryInterface $repository)
+    public function __construct(TimeTableUpdater $updater)
     {
         $this->updater = $updater;
-        $this->repository = $repository;
     }
 
-    public function handle(UpdateTimeSheet $updateTimeSheet)
+    public function handle(UpdateTimeTable $updateTimeSheet)
     {
         $course = $updateTimeSheet->getCourse();
-        $this->updater->updateCourseLessons($course);
+        $timeTable = $updateTimeSheet->getTimeTable();
+
+        $this->updater->updateCourseLessons($course, $timeTable);
 
     }
 

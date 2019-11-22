@@ -30,11 +30,8 @@ abstract class FileystemReport extends ReportAbstract
 
     protected function __construct(string $pathToReportDir)
     {
-        $date = new \DateTime('now', new \DateTimeZone('Europe/Madrid'));
         $this->pathToReportDir = $pathToReportDir;
     }
-
-    abstract public function getName(\DateTime $date): string;
 
     public function success(Resume $resume): void
     {

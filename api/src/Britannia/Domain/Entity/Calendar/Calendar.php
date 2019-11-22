@@ -15,6 +15,7 @@ namespace Britannia\Domain\Entity\Calendar;
 
 
 use Britannia\Domain\VO\DayOfWeek;
+use Carbon\CarbonImmutable;
 
 class Calendar
 {
@@ -25,7 +26,7 @@ class Calendar
     private $id;
 
     /**
-     * @var \DateTime
+     * @var CarbonImmutable
      */
     private $date;
 
@@ -55,12 +56,12 @@ class Calendar
     private $day;
 
 
-    public static function fromDate(\DateTimeImmutable $date)
+    public static function fromDate(CarbonImmutable $date)
     {
         return new self($date);
     }
 
-    private function __construct(\DateTimeImmutable $dateTime)
+    private function __construct(CarbonImmutable $dateTime)
     {
         $dateTime = $dateTime->setTime(0, 0, 0);
 
@@ -75,7 +76,7 @@ class Calendar
     }
 
     /**
-     * @return \DateTime
+     * @return string
      */
     public function getId(): string
     {
@@ -84,9 +85,9 @@ class Calendar
 
 
     /**
-     * @return \DateTime
+     * @return CarbonImmutable
      */
-    public function getDate(): \DateTimeImmutable
+    public function getDate(): CarbonImmutable
     {
         return $this->date;
     }

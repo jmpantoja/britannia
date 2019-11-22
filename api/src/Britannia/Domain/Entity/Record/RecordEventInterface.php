@@ -17,6 +17,7 @@ namespace Britannia\Domain\Entity\Record;
 use Britannia\Domain\Entity\Course\Course;
 
 use Britannia\Domain\Entity\Student\Student;
+use Carbon\CarbonImmutable;
 
 interface RecordEventInterface
 {
@@ -28,5 +29,5 @@ interface RecordEventInterface
 
     public function getDescription(): string;
 
-    public function getDate(): \DateTimeImmutable;
+    public function getDate(): CarbonImmutable;
 }

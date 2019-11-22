@@ -16,6 +16,7 @@ namespace Britannia\Infraestructure\Symfony\Importer\Builder;
 
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Student\Student;
+use Britannia\Domain\Entity\Student\StudentCourse;
 use Britannia\Infraestructure\Symfony\Importer\Resume;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\ConstraintViolationList;
@@ -59,6 +60,7 @@ class StudentCoursesBuilder extends BuilderAbstract
     {
         $courses = explode(',', $courses);
         $courses = array_filter($courses);
+        $courses = array_unique($courses);
 
         $this->courses = array_map(function ($course) {
             return $this->findOneOrNull(Course::class, [
@@ -78,8 +80,13 @@ class StudentCoursesBuilder extends BuilderAbstract
             return $this->student;
         }
 
-        $collection = new ArrayCollection($this->courses);
-        $this->student->setCourses($collection);
+        $collection = new ArrayCollection();
+
+        foreach ($this->courses as $course){
+            $collection->add(StudentCourse::make($this->student, $course));
+        }
+
+        $this->student->setStudentHasCourses($collection);
         return $this->student;
     }
 }

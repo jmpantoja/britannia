@@ -20,8 +20,8 @@
 
         <field name="type" type="TypeOfRecord"/>
 
-        <field name="date" type="date_immutable"/>
-        <field name="time" type="time_immutable"/>
+        <field name="day" type="date_immutable"/>
+        <field name="date" type="datetime_immutable"/>
 
         <field name="description"/>
 

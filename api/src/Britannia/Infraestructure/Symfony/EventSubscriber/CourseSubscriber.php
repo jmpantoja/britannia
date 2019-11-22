@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\EventSubscriber;
 
 
-use Britannia\Application\UseCase\Course\UpdateTimeSheet;
+use Britannia\Application\UseCase\Course\UpdateTimeTable;
 use Britannia\Application\UseCase\StaffMember\UpdatePassword;
-use Britannia\Domain\Entity\Course\TimeSheetHasChanged;
+use Britannia\Domain\Entity\Course\TimeTabletHasChanged;
 use Britannia\Domain\Entity\Staff\PasswordHasChanged;
 
 class CourseSubscriber extends DomainEventSubscriber
@@ -29,17 +29,15 @@ class CourseSubscriber extends DomainEventSubscriber
     public static function getSubscribedEvents()
     {
         return [
-            TimeSheetHasChanged::class => 'onTimeSheetChanged'
+            TimeTabletHasChanged::class => 'onTimeSheetChanged'
         ];
     }
 
-    public function onTimeSheetChanged(TimeSheetHasChanged $event)
+    public function onTimeSheetChanged(TimeTabletHasChanged $event)
     {
-
-        $command = UpdateTimeSheet::fromEvent($event);
+        $command = UpdateTimeTable::fromEvent($event);
 
         $this->handle($command);
-
     }
 
 }

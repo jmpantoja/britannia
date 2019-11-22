@@ -34,14 +34,13 @@ class StudentFixtures extends BaseFixture
     public function getBackupFiles(): array
     {
         return [
-            sprintf('%s/dumps/britannia_other_academies.sql', __DIR__),
-            sprintf('%s/dumps/britannia_schools.sql', __DIR__),
             sprintf('%s/dumps/britannia_student_student.sql', __DIR__),
             sprintf('%s/dumps/britannia_students.sql', __DIR__),
             sprintf('%s/dumps/britannia_students_adult.sql', __DIR__),
             sprintf('%s/dumps/britannia_students_child.sql', __DIR__),
             sprintf('%s/dumps/britannia_tutors.sql', __DIR__),
-            sprintf('%s/dumps/britannia_courses_students.sql', __DIR__),
+            sprintf('%s/dumps/britannia_students_courses.sql', __DIR__),
+            sprintf('%s/dumps/britannia_attendance_control.sql', __DIR__),
             sprintf('%s/dumps/britannia_student_records.sql', __DIR__),
         ];
     }

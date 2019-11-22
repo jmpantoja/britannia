@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace PlanB\DDDBundle\Symfony\Form\Type;
 
+use Britannia\Domain\VO\TimeSheet;
+use Britannia\Infraestructure\Symfony\Form\TimeSheetListType;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\DataTransformerInterface;
@@ -30,12 +32,16 @@ abstract class AbstractSingleType extends AbstractType implements DataTransforme
     /**
      * @var FormBuilderInterface
      */
-    private $builder;
+    protected $builder;
+
+    private $options;
 
     final public function buildForm(FormBuilderInterface $builder, array $options)
     {
 
         $this->builder = $builder;
+        $this->options = $this->builder->getOptions();
+
         $builder->addModelTransformer($this);
         $this->customForm($builder, $options);
 
@@ -66,6 +72,20 @@ abstract class AbstractSingleType extends AbstractType implements DataTransforme
     {
         return parent::getBlockPrefix();
     }
+
+    /**
+     * @return mixed
+     */
+    public function getOptions(): array
+    {
+        return $this->options;
+    }
+
+    public function getOption(string $key, $default = null)
+    {
+        return $this->options[$key] ?? $default;
+    }
+
 
     /**
      * {@inheritdoc}
@@ -103,12 +123,12 @@ abstract class AbstractSingleType extends AbstractType implements DataTransforme
      */
     public function transform($value)
     {
-
         if (is_null($value)) {
             return $value;
         }
 
-        $options = $this->builder->getOptions();
+        $options = $this->getOptions();
+
 
         if (!class_exists((string)$options['data_class'])) {
             return (string)$value;
@@ -133,10 +153,9 @@ abstract class AbstractSingleType extends AbstractType implements DataTransforme
      */
     final public function reverseTransform($value)
     {
-        $options = $this->builder->getOptions();
+        $this->options = $this->builder->getOptions();
 
-        $constraint = $this->buildConstraint($options);
-
+        $constraint = $this->buildConstraint($this->options);
 
         if (!($constraint instanceof Constraint)) {
             return $this->customMapping($value);

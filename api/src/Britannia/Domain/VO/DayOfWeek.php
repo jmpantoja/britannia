@@ -26,7 +26,7 @@ class DayOfWeek extends Enum
     public const SATURDAY = 'Sábado';
     public const SUNDAY = 'Domingo';
 
-    public static function fromDate(\DateTimeImmutable $dateTime): self
+    public static function fromDate(\DateTimeInterface $dateTime): self
     {
 
         $day = $dateTime->format('l');

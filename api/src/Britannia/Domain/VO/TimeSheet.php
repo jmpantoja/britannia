@@ -15,11 +15,12 @@ namespace Britannia\Domain\VO;
 
 
 use Britannia\Domain\Entity\ClassRoom\ClassRoomId;
+use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\VO\PositiveInteger;
 use PlanB\DDD\Domain\VO\Traits\Validable;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 
-class TimeSheet
+class TimeSheet implements \Serializable
 {
     use Validable;
 
@@ -27,18 +28,26 @@ class TimeSheet
      * @var DayOfWeek
      */
     private $dayOfWeek;
+
     /**
-     * @var \DateTime
+     * @var CarbonImmutable
      */
-    private $startTime;
+    private $start;
+
     /**
-     * @var \Date
+     * @var CarbonImmutable
+     */
+    private $end;
+
+    /**
+     * @var PositiveInteger
      */
     private $length;
     /**
      * @var ClassRoomId
      */
     private $classRoomId;
+
 
     public static function buildConstraint(array $options = []): Constraint
     {
@@ -47,17 +56,32 @@ class TimeSheet
         ]);
     }
 
-    public static function make(DayOfWeek $dayOfWeek, \DateTime $hour, PositiveInteger $length, ClassRoomId $classRoomId): self
+    public static function make(DayOfWeek $dayOfWeek, CarbonImmutable $start, CarbonImmutable $end, ClassRoomId $classRoomId): self
     {
-        return new self($dayOfWeek, $hour, $length, $classRoomId);
+
+        $values = self::assert([
+            'dayOfWeek' => $dayOfWeek,
+            'start' => $start,
+            'end' => $end,
+            'classroomId' => $classRoomId
+
+        ]);
+
+        return new self(...[
+            $values['dayOfWeek'],
+            $values['start'],
+            $values['end'],
+            $values['classroomId'],
+        ]);
     }
 
-    private function __construct(DayOfWeek $dayOfWeek, \DateTime $hour, PositiveInteger $length, ClassRoomId $classRoomId)
+    private function __construct(DayOfWeek $dayOfWeek, CarbonImmutable $start, CarbonImmutable $end, ClassRoomId $classRoomId)
     {
-        $this->setDayOfWeek($dayOfWeek);
-        $this->setStartTime($hour);
-        $this->setLength($length);
-        $this->setClassRoom($classRoomId);
+        $this->dayOfWeek = $dayOfWeek;
+        $this->start = $start;
+        $this->end = $end;
+        $this->length = $end->diffInMinutes($start);
+        $this->classRoomId = $classRoomId;
     }
 
     /**
@@ -69,57 +93,36 @@ class TimeSheet
     }
 
     /**
-     * @param DayOfWeek $dayOfWeek
-     * @return TimeSheet
+     * @return CarbonImmutable
      */
-    private function setDayOfWeek(DayOfWeek $dayOfWeek): TimeSheet
+    public function getStart(): CarbonImmutable
     {
-        $this->dayOfWeek = $dayOfWeek;
-        return $this;
+        return $this->start;
     }
 
     /**
-     * @return \DateTime
+     * @return CarbonImmutable
      */
-    public function getStartTime(): \DateTime
+    public function getEnd(): CarbonImmutable
     {
-        return $this->startTime;
+        return $this->end;
     }
 
     /**
-     * @param \DateTime $startTime
-     * @return TimeSheet
+     * @return int
      */
-    private function setStartTime(\DateTime $startTime): TimeSheet
-    {
-        $this->startTime = $startTime;
-        return $this;
-    }
-
-    /**
-     * @return LessonLength
-     */
-    public function getLength(): PositiveInteger
+    public function getLength(): int
     {
         return $this->length;
     }
 
-    public function getLengthInterval(): \DateInterval
+    public function getLenghtAsInterval()
     {
-        $spec = sprintf('PT%sM', $this->length);
-
-        return new \DateInterval($spec);
+        $inteval = sprintf('PT%sM', $this->getLength());
+        $dateInterval = new \DateInterval($inteval);
+        return $dateInterval;
     }
 
-    /**
-     * @param LessonLength $length
-     * @return TimeSheet
-     */
-    private function setLength(PositiveInteger $length): TimeSheet
-    {
-        $this->length = $length;
-        return $this;
-    }
 
     /**
      * @return ClassRoomId
@@ -130,13 +133,45 @@ class TimeSheet
     }
 
     /**
-     * @param ClassRoomId $classRoom
-     * @return TimeSheet
+     * String representation of object
+     * @link http://php.net/manual/en/serializable.serialize.php
+     * @return string the string representation of the object or null
+     * @since 5.1.0
      */
-    private function setClassRoom(ClassRoomId $classRoom): TimeSheet
+    public function serialize()
     {
-        $this->classRoomId = $classRoom;
-        return $this;
+        return serialize(array(
+            $this->dayOfWeek->getName(),
+            $this->start,
+            $this->end,
+            $this->classRoomId
+        ));
     }
 
+    /**
+     * Constructs the object
+     * @link http://php.net/manual/en/serializable.unserialize.php
+     * @param string $serialized <p>
+     * The string representation of the object.
+     * </p>
+     * @return void
+     * @since 5.1.0
+     */
+    public function unserialize($serialized)
+    {
+        $options = [
+            'allowed_classes' => [
+                ClassRoomId::class,
+                CarbonImmutable::class]
+        ];
+
+        list (
+            $dayOfWeek,
+            $this->start,
+            $this->end,
+            $this->classRoomId
+            ) = unserialize($serialized, $options);
+
+        $this->dayOfWeek = DayOfWeek::byName($dayOfWeek);
+    }
 }

@@ -16,6 +16,7 @@ namespace Britannia\Infraestructure\Symfony\Form;
 
 use Britannia\Domain\Entity\Course\Lesson;
 use Britannia\Domain\Repository\LessonRepositoryInterface;
+use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\FormDataMapper;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractCompoundType;
@@ -39,7 +40,7 @@ class LessonFilterType extends AbstractCompoundType
 
     public function customForm(FormBuilderInterface $builder, array $options)
     {
-        $today = new \DateTimeImmutable();
+        $today = CarbonImmutable::now();
         $lesson = $this->repository->findOneBy([
             'day' => $today
         ]);
@@ -88,7 +89,7 @@ class LessonFilterType extends AbstractCompoundType
         }
 
         return $this->repository->findOneBy([
-            'day' => \DateTimeImmutable::createFromMutable($data['day']),
+            'day' => $data['day'],
             'course' => $data['course']
         ]);
 

@@ -16,7 +16,6 @@ use PlanB\DDD\Domain\VO\Price;
 class DataExtraFixtures extends BaseFixture
 {
 
-
     public function loadData(DataPersisterInterface $dataPersister): void
     {
 

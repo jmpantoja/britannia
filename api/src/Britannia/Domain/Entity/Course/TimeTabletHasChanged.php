@@ -14,24 +14,30 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Course;
 
 
+use Britannia\Domain\VO\TimeTable;
 use PlanB\DDD\Domain\Event\DomainEvent;
 
-class TimeSheetHasChanged extends DomainEvent
+class TimeTabletHasChanged extends DomainEvent
 {
 
     /**
      * @var Course
      */
     private $course;
+    /**
+     * @var TimeTable
+     */
+    private $timeTable;
 
-    public static function make(Course $course): self
+    public static function make(Course $course, TimeTable $timeTable): self
     {
-        return new self($course);
+        return new self($course, $timeTable);
     }
 
-    private function __construct(Course $course)
+    private function __construct(Course $course, TimeTable $timeTable)
     {
         $this->course = $course;
+        $this->timeTable = $timeTable;
     }
 
     /**
@@ -40,6 +46,14 @@ class TimeSheetHasChanged extends DomainEvent
     public function getCourse(): Course
     {
         return $this->course;
+    }
+
+    /**
+     * @return TimeTable
+     */
+    public function getTimeTable(): TimeTable
+    {
+        return $this->timeTable;
     }
 
 

@@ -20,9 +20,11 @@ use Britannia\Domain\VO\Age;
 use Britannia\Domain\VO\HoursPerWeek;
 use Britannia\Domain\VO\Intensive;
 use Britannia\Domain\VO\Periodicity;
+use Britannia\Domain\VO\TimeTable;
 use Britannia\Infraestructure\Symfony\Importer\Builder\Traits\CourseMaker;
 use Britannia\Infraestructure\Symfony\Importer\Maker\FullNameMaker;
 use Britannia\Infraestructure\Symfony\Importer\Resume;
+use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\VO\PositiveInteger;
 use PlanB\DDD\Domain\VO\Price;
 
@@ -52,12 +54,7 @@ class CourseBuilder extends BuilderAbstract
 
     private $numOfPlaces;
 
-    private $lessons;
-
-    private $startDate;
-
-    private $endDate;
-
+    private $timeTable;
 
     public function initResume(array $input): Resume
     {
@@ -73,14 +70,6 @@ class CourseBuilder extends BuilderAbstract
     public function withName(string $name): self
     {
         $this->name = $name;
-        return $this;
-    }
-
-    public function withInterval(string $start, string $end): self
-    {
-        $this->startDate = \DateTime::createFromFormat('Y-m-d H:i:s', $start);
-        $this->endDate = \DateTime::createFromFormat('Y-m-d H:i:s', $end);
-
         return $this;
     }
 
@@ -145,16 +134,32 @@ class CourseBuilder extends BuilderAbstract
         return $this;
     }
 
-    public function withLessons(string $field1, string $field2, string $classRoomNumber): self
+    public function withTimeTable(string $startDate, string $endDate, string $field1, string $field2, string $classRoomNumber): self
     {
         $classRoomId = $this->getClassRoomId($classRoomNumber);
 
-        $lessons = $this->toLessons($field1, $classRoomId);
-        if (empty($lessons)) {
-            $lessons = $this->toLessons($field2, $classRoomId);
+        $start = CarbonImmutable::make($startDate);
+        $end = CarbonImmutable::make($endDate);
+
+
+        $schedule = $this->toLessons($field1, $classRoomId);
+        if (empty($schedule)) {
+            $schedule = $this->toLessons($field2, $classRoomId);
         }
 
-        $this->lessons = $lessons;
+//        $ignored = [46, 61, 62, 63, 112, 117, 118, 119, 120, 121, 127, 128, 129, 143, 144, 170, 172, 174, 202,
+//            203, 204, 205, 210, 211, 212, 213, 215, 216, 217, 218, 219, 220, 221, 222, 227, 228, 229, 230, 231,
+//            232, 233, 234, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 259, 263, 309, 310, 311,
+//            312, 313, 316, 323, 324, 326, 343];
+//
+//        if (empty($schedule) and !in_array($this->id, $ignored)) {
+//            dump($this->id);
+//            //die("-----------");
+//        }
+
+
+        $this->timeTable = TimeTable::make($start, $end, $schedule);
+
         return $this;
     }
 
@@ -170,11 +175,10 @@ class CourseBuilder extends BuilderAbstract
         $course->setNumOfPlaces($this->numOfPlaces);
         $course->setAge($this->age);
         $course->setPeriodicity($this->periodicity);
-
-        $course->setStartDate($this->startDate);
-        $course->setEndDate($this->endDate);
         $course->setIntensive($this->intensive);
-        $course->setTimeSheet($this->lessons);
+
+        $course->setTimeTable($this->timeTable);
+
 
         return $course;
     }

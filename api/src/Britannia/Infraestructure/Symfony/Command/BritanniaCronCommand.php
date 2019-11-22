@@ -36,9 +36,6 @@ class BritanniaCronCommand extends Command
         $io = new SymfonyStyle($input, $output);
 
 
-        $_SERVER['REQUEST_TIME'] = \DateTime::createFromFormat('Y-m-d', '2019-11-16')
-            ->getTimestamp();
-
         $this->commandBus->handle(UpdateCourseStatus::make());
         $this->commandBus->handle(UpdateCalendar::make());
     }

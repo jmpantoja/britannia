@@ -11,11 +11,18 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\Form\Type\DateRangePickerType;
 use Sonata\Form\Type\DateTimePickerType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 final class RecordAdmin extends AbstractAdmin
 {
+
+    protected $datagridValues = [
+
+        '_sort_by' => 'date',
+        '_sort_order' => 'DESC',
+    ];
 
     public function getExportFields()
     {
@@ -46,14 +53,6 @@ final class RecordAdmin extends AbstractAdmin
                     ]
                 ]
             )
-            ->add('date', 'doctrine_orm_datetime', [
-                'field_type' => DateTimePickerType::class,
-                'advanced_filter' => false,
-                'show_filter' => true,
-                'field_options' => [
-                    'dp_pick_time' => false
-                ]
-            ])
             ->add('type', 'doctrine_orm_choice', [
                     'show_filter' => true,
                     'advanced_filter' => false,
@@ -63,16 +62,23 @@ final class RecordAdmin extends AbstractAdmin
                         'placeholder' => 'Ver todos'
                     ]
                 ]
-            );
+            )
+            ->add('date', 'doctrine_orm_date_range', [
+                'field_type' => DateRangePickerType::class,
+                'advanced_filter' => false,
+                'show_filter' => true
+            ])
+
+        ;
     }
 
     protected function configureListFields(ListMapper $listMapper): void
     {
 
         $listMapper
-            ->add('date', null, [
+            ->add('date', 'date', [
                 'header_style' => 'width:120px',
-                'row_align' => 'center'
+                'row_align' => 'left'
             ])
             ->add('student', 'string', [
                 'template' => 'admin/record/record_resume_column.html.twig',

@@ -5,16 +5,54 @@ sonata_admin:
     show_mosaic_button: false
 
     dashboard:
-        #        groups:
-        #            admin.group.content:
-        #                label: app.admin.group.content
-        #                label_catalogue: App
-        #                items:
-        #                - admin.student
-        #                - admin.tutor
+        groups:
+            admin.group.staff:
+                label: Usuarios
+                label_catalogue: App
+                items:
+                - admin.staff_member
+
+            admin.group.students:
+                label: Alumnos
+                label_catalogue: App
+                items:                
+                - admin.student                
+                - admin.tutor                
+
+            admin.group.courses:
+                label: Cursos
+                label_catalogue: App
+                items:
+                - admin.course
+                - admin.book
+                - admin.level                
+                
+            admin.group.attendance:
+                label: Control de Asistencia
+                label_catalogue: App
+                items:
+                - admin.lesson
+
+            admin.group.tools:
+                label: Herramientas
+                label_catalogue: App
+                items:    
+                - route:        planning
+                  label:        Planning
+                  roles: ['ROLE_MANAGER']
+                  
+                - admin.record 
+                
+            admin.group.extra:
+                label: Configuración
+                label_catalogue: App
+                items:
+                - admin.academy
+                - admin.school
+                - admin.classroom
+                - admin.calendar                
 
         blocks:
-        #        - { type: sonata.admin.block.admin_list, position: left }
         - class:    col-lg-3 col-xs-6
           position: top
           type:     sonata.admin.block.stats
@@ -65,18 +103,36 @@ sonata_admin:
 
     assets:
         extra_stylesheets:
+        - css/admin/multi.css
         - css/admin/core.css
         - css/admin/forms.css
         - css/admin/datagrid.css
-        - css/toggle/bootstrap-toggle.min.css        
+        - css/toggle/bootstrap-toggle.min.css
+        
+        - css/fullcalendar/core.min.css
+        - css/fullcalendar/daygrid.min.css
+        - css/fullcalendar/timegrid.min.css
+        
+        - css/admin/fullcalendar.css
+
         - bundles/sonataformatter/markitup/skins/sonata/style.css
         - bundles/sonataformatter/markitup/sets/markdown/style.css
         - bundles/sonataformatter/markitup/sets/html/style.css
         - bundles/sonataformatter/markitup/sets/textile/style.css
 
         extra_javascripts:
+        - js/admin/multi.js
         - js/admin/forms.js
         - js/toggle/bootstrap-toggle.min.js
+        
+        - js/fullcalendar/core.min.js
+        - js/fullcalendar/daygrid.min.js        
+        - js/fullcalendar/timegrid.min.js
+
+        - js/fullcalendar/resource-common.min.js        
+        - js/fullcalendar/resource-daygrid.min.js        
+        - js/fullcalendar/resource-timegrid.min.js           
+
         - bundles/fosckeditor/ckeditor.js
         - bundles/sonataformatter/vendor/markitup-markitup/markitup/jquery.markitup.js
         - bundles/sonataformatter/markitup/sets/markdown/set.js

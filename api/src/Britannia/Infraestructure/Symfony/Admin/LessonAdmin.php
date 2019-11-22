@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Admin;
 
 use Britannia\Infraestructure\Symfony\Form\AttendanceListType;
+use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -13,7 +15,6 @@ use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter;
 use Sonata\Form\Type\DatePickerType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Security\Core\Security;
 
 final class LessonAdmin extends AbstractAdmin
@@ -28,10 +29,9 @@ final class LessonAdmin extends AbstractAdmin
         parent::__construct($code, $class, $baseControllerName);
 
         $this->security = $security;
-
-        $today = new \DateTime();
+        $today = Carbon::now();
         $this->datagridValues = [
-            'day' => ['value' => $today->format('d M, Y')]
+            'day' => ['value' => $today->format('d M. Y')]
         ];
     }
 
@@ -53,33 +53,28 @@ final class LessonAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
-            ->add('day',
-                CallbackFilter::class,
+            ->add('day', CallbackFilter::class,
                 [
+                    'label' => 'Fecha',
                     'callback' => function (ProxyQuery $query, $alias, $field, $value) {
+                        $date = CarbonImmutable::make($value['value']);
 
-                        if (!$value['value']) {
-                            $value['value'] = null;
-                        }
-                        $this->configureQuery($query, $value['value']);
-
+                        $this->configureQuery($query, $date);
                         return true;
                     },
                     'show_filter' => true,
-                    'label' => 'Fecha'
-                ],
-                DatePickerType::class
+                    'field_type' => DatePickerType::class
+                ]
             );
     }
 
     /**
      * @param ProxyQuery $query
-     * @param $value
-     * @param $user
+     * @param CarbonImmutable|null $day
      */
-    private function configureQuery(ProxyQuery $query, \DateTime $day = null): void
+    private function configureQuery(ProxyQuery $query, ?CarbonImmutable $day = null): void
     {
-        $day = $day ?? new \DateTime();
+        $day = $day ?? Carbon::now();
         $day->setTime(0, 0);
 
         $user = $this->security->getUser();
@@ -93,7 +88,6 @@ final class LessonAdmin extends AbstractAdmin
             ->setParameter('courses', $courses);
     }
 
-
     protected function configureListFields(ListMapper $listMapper): void
     {
         $this->setListMode('mosaic');
@@ -102,11 +96,13 @@ final class LessonAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $lesson = $this->getSubject();
+
+
         $formMapper
             ->add('attendances', AttendanceListType::class, [
-
                 'lesson' => $lesson,
-                'label' => false
+                'required' => false,
+                'label' => $this->toString($lesson)
             ]);
     }
 
@@ -128,7 +124,7 @@ final class LessonAdmin extends AbstractAdmin
     public function toString($object)
     {
         $date = $object->getDay()->format('d/m/Y');
-        $course = (string)$object->getCourse();
+        $course = $object->getCourse()->getName();
 
         return sprintf('%s - %s', $date, $course);
     }

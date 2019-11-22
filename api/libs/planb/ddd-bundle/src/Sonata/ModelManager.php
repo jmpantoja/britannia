@@ -15,9 +15,9 @@ namespace PlanB\DDDBundle\Sonata;
 
 
 use ApiPlatform\Core\DataPersister\DataPersisterInterface;
+use Doctrine\Common\Persistence\ManagerRegistry;
 use League\Tactician\CommandBus;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager as ORMModelManager;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class ModelManager extends ORMModelManager
 {
@@ -34,7 +34,7 @@ class ModelManager extends ORMModelManager
      */
     private $dataPersister;
 
-    public function __construct(RegistryInterface $registry, DataPersisterInterface $dataPersister)
+    public function __construct(ManagerRegistry $registry, DataPersisterInterface $dataPersister)
     {
         $this->dataPersister = $dataPersister;
         parent::__construct($registry);

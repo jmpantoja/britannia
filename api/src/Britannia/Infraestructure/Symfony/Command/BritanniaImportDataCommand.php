@@ -74,8 +74,12 @@ class BritanniaImportDataCommand extends Command implements ContainerAwareInterf
     protected function login()
     {
         $user = $this->userRepository->findOneBy([
-            'userName' => 'cron'
+            'userName' => 'administrador'
         ]);
+
+        if (empty($user)) {
+            return;
+        }
 
         $token = new UsernamePasswordToken(
             $user,

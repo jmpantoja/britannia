@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Britannia\Infraestructure\Symfony\Admin;
 
-use Britannia\Domain\Entity\Course\Attendance;
 use Britannia\Domain\Entity\Student\Adult;
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Repository\AttendanceRepositoryInterface;
@@ -18,8 +17,9 @@ use Britannia\Infraestructure\Symfony\Form\PaymentType;
 use Britannia\Infraestructure\Symfony\Form\RelativesType;
 use Britannia\Infraestructure\Symfony\Form\SchoolCourseType;
 use Britannia\Infraestructure\Symfony\Form\SchoolCourseTypeextends;
+use Britannia\Infraestructure\Symfony\Form\StudentCourseType;
+use Britannia\Infraestructure\Symfony\Form\StudentHasCoursesType;
 use Britannia\Infraestructure\Symfony\Form\TutorType;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use PlanB\DDDBundle\Symfony\Form\Type\DateType;
 use PlanB\DDDBundle\Symfony\Form\Type\DNIType;
@@ -37,9 +37,9 @@ use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\Form\Type\DatePickerType;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Validator\Constraints\Date;
 
 final class StudentAdmin extends AbstractAdmin
 {
@@ -51,11 +51,19 @@ final class StudentAdmin extends AbstractAdmin
     public function __construct(string $code,
                                 string $class,
                                 string $baseControllerName,
-                                AttendanceRepositoryInterface $attendanceRepository)
+                                AttendanceRepositoryInterface $attendanceRepository,
+                                EventDispatcherInterface $eventDispatcher
+
+    )
     {
         parent::__construct($code, $class, $baseControllerName);
 
         $this->attendanceRepository = $attendanceRepository;
+
+        $this->datagridValues = [
+            'active' => array('value' => true),
+        ];
+
     }
 
     public function createQuery($context = 'list')
@@ -99,7 +107,9 @@ final class StudentAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
-            ->add('active')
+            ->add('active', null, [
+                'show_filter' => true
+            ])
             ->add('fullName', 'doctrine_orm_callback', [
                 'callback' => function (ProxyQuery $queryBuilder, $alias, $field, $value) {
                     if (!$value['value']) {
@@ -154,6 +164,7 @@ final class StudentAdmin extends AbstractAdmin
                 'template' => 'admin/student/student_resume_column.html.twig',
                 'label' => 'Alumnos'
             ])
+            ->add('birthdate', 'date')
             ->add('type', null, [
                 'header_style' => 'width:65px',
                 'template' => 'admin/student/type_resume_column.html.twig',
@@ -173,19 +184,6 @@ final class StudentAdmin extends AbstractAdmin
 
         $formMapper
             ->with('Personal', ['tab' => true]);
-
-        $formMapper
-            ->with('Cursos en Activo ', ['class' => 'col-md-12'])
-            ->add('courses', null, [
-                'label' => false,
-                'by_reference' => false,
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('m')
-                        ->where('m.active = :param')
-                        ->setParameter('param', true);
-                }
-            ])
-            ->end();
 
         $formMapper
             ->with('Datos personales', ['class' => 'col-md-4'])
@@ -247,20 +245,31 @@ final class StudentAdmin extends AbstractAdmin
             ->end()
             ->end();
 
+
         $formMapper
-            ->with('Pago', ['tab' => true])
-            ->with('Forma de pago', ['class' => 'col-md-6'])
-            ->add('payment', PaymentType::class, [
-                'label' => false,
-                'required' => true
+            ->with('Cursos', ['tab' => true])
+            ->with('Cursos en Activo ', ['class' => 'col-md-12'])
+            ->add('studentHasCourses', StudentHasCoursesType::class, [
+                'student' => $subject,
             ])
             ->end()
+            ->end();
+
+
+        $formMapper
+            ->with('Pago', ['tab' => true])
             ->with('Descuento', ['class' => 'col-md-6'])
             ->add('relatives', RelativesType::class, [
                 'btn_add' => false,
                 'label' => 'Familiares',
                 'studentId' => $subject->getId(),
                 'required' => false
+            ])
+            ->end()
+            ->with('Forma de pago', ['class' => 'col-md-6'])
+            ->add('payment', PaymentType::class, [
+                'label' => false,
+                'required' => true
             ])
             ->end()
             ->end();
@@ -351,6 +360,8 @@ final class StudentAdmin extends AbstractAdmin
             ->end();
 
         $formMapper->end();
+
+//        $formMapper->get('courses')->addModelTransformer(new CourseDataTransformer($subject, $this->modelManager));
     }
 
     protected function configureShowFields(ShowMapper $showMapper): void

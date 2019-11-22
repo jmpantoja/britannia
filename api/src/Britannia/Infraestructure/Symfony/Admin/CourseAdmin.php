@@ -5,13 +5,17 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Admin;
 
 use Britannia\Domain\Entity\Course\Course;
+use Britannia\Domain\VO\CourseStatus;
 use Britannia\Infraestructure\Symfony\Form\AgeType;
+use Britannia\Infraestructure\Symfony\Form\CourseHasStudentsType;
 use Britannia\Infraestructure\Symfony\Form\ExaminerType;
 use Britannia\Infraestructure\Symfony\Form\HoursPerWeekType;
 use Britannia\Infraestructure\Symfony\Form\IntensiveType;
 use Britannia\Infraestructure\Symfony\Form\LevelType;
-use Britannia\Infraestructure\Symfony\Form\TimeSheetListType;
 use Britannia\Infraestructure\Symfony\Form\PeriodicityType;
+use Britannia\Infraestructure\Symfony\Form\TeachersType;
+use Britannia\Infraestructure\Symfony\Form\TimeSheetListType;
+use Britannia\Infraestructure\Symfony\Form\TimeTableType;
 use Doctrine\ORM\EntityRepository;
 use PlanB\DDDBundle\Symfony\Form\Type\PositiveIntegerType;
 use PlanB\DDDBundle\Symfony\Form\Type\PriceType;
@@ -23,12 +27,25 @@ use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
-use Sonata\Form\Type\DatePickerType;
-use Sonata\Form\Type\DateRangePickerType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\ColorType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 final class CourseAdmin extends AbstractAdmin
 {
+    public function __construct(string $code, string $class, string $baseControllerName)
+    {
+        parent::__construct($code, $class, $baseControllerName);
+
+        $status = CourseStatus::ACTIVE();
+
+        $this->datagridValues = [
+            'status' => ['value' => $status->getName()]
+        ];
+
+    }
+
 
     public function createQuery($context = 'list')
     {
@@ -38,8 +55,7 @@ final class CourseAdmin extends AbstractAdmin
 
         $queryBuilder->select('p')
             ->from($this->getClass(), 'p')
-            ->orderBy('p.endDate', 'DESC')
-        ;
+            ->orderBy('p.timeTable.end', 'DESC');
 
         return new ProxyQuery($queryBuilder);
     }
@@ -60,9 +76,21 @@ final class CourseAdmin extends AbstractAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
+
         $datagridMapper
-            ->add('active')
-            ->add('name');
+            ->add('status', 'doctrine_orm_string', [
+                'show_filter' => true,
+                'advanced_filter' => false,
+                'field_type' => ChoiceType::class,
+                'field_options' => [
+                    'label' => 'Estado',
+                    'choices' => array_flip(CourseStatus::getConstants()),
+                    'placeholder' => 'Todos'
+                ],
+            ])
+            ->add('name', null, [
+                'advanced_filter' => false
+            ]);
     }
 
     protected function configureListFields(ListMapper $listMapper): void
@@ -72,8 +100,9 @@ final class CourseAdmin extends AbstractAdmin
                 'template' => 'admin/course/course_list_field.html.twig',
                 'label' => 'Cursos'
             ])
-            ->add('active', null, [
+            ->add('status', null, [
                 'header_style' => 'width:30px',
+                'template' => 'admin/course/status_list_field.html.twig',
                 'row_align' => 'center'
             ]);
     }
@@ -83,93 +112,64 @@ final class CourseAdmin extends AbstractAdmin
         /** @var Course $course */
         $course = $this->getSubject();
 
-        $isFinished = !$course->isActive();
-        $isStarted = $course->isStarted();
-
-
         $formMapper
-            ->with('Ficha del curso', ['tab'=>true])
-                ->with('Nombre', ['class' => 'col-md-3'])
-                    ->add('name', null, [
-                        'attr'=>[
-                            'style' => 'width:300px'
-                        ]
-                    ])
-                ->end()
-
-                ->with('Curso', ['class' => 'col-md-3' ])
-                    ->add('schoolCourse', null, [
-                        'attr'=>[
-                            'style' => 'width:250px'
-                        ]
-                    ])
-                ->end()
-
-                ->with('Examinador', ['class' => 'col-md-3' ])
-                    ->add('examiner', ExaminerType::class)
-                ->end()
-
-                ->with('Nivel', ['class' => 'col-md-3' ])
-                    ->add('level', LevelType::class, [
-                        'required' => false,
-                    ])
-                ->end()
-
-                ->with('Descripción', ['class' => 'col-md-3'])
-                    ->add('numOfPlaces', PositiveIntegerType::class, [
-                        'label' => 'Plazas',
-                        'attr'=>[
-                            'style' => 'width:100px'
-                        ]
-                    ])
-                    ->add('periodicity', PeriodicityType::class)
-                    ->add('intensive', IntensiveType::class)
-                    ->add('age', AgeType::class)
-                ->end()
-
-                ->with('Coste', ['class' => 'col-md-3'])
-                    ->add('monthlyPayment', PriceType::class)
-                    ->add('enrolmentPayment', PriceType::class)
-                    ->add('books')
-                ->end()
-
-                ->with('Horario', ['class' => 'col-md-6'])
-                    ->add('interval', DateRangePickerType::class, [
-                        'field_options'=>[
-                            'dp_language'=>'es_ES'
-                        ],
-                        'field_options_start'=>[
-                            'disabled'=> $isStarted
-                        ],
-                        'field_type' => DatePickerType::class,
-                        'block_prefix' => 'course_interval',
-                        'disabled' => $isFinished
-
-                    ])
-                    ->add('timeSheet', TimeSheetListType::class, [
-                        'locked' => $isFinished,
-                    ])
-                ->end()
+            ->with('Ficha del curso', ['tab' => true])
+            ->with('Nombre', ['class' => 'col-md-4'])
+            ->add('name', TextType::class, [
+                'required' => true,
+                'constraints' => [
+                    new NotBlank()
+                ]
+            ])
+            ->add('schoolCourse')
+            ->add('examiner', ExaminerType::class)
+            ->add('level', LevelType::class, [
+                'required' => false,
+            ])
             ->end()
-
+            ->with('Descripción', ['class' => 'col-md-4'])
+            ->add('numOfPlaces', PositiveIntegerType::class, [
+                'label' => 'Plazas',
+                'attr' => [
+                    'style' => 'width:100px'
+                ]
+            ])
+            ->add('periodicity', PeriodicityType::class, [
+                'attr' => [
+                    'style' => 'width:200px'
+                ]
+            ])
+            ->add('intensive', IntensiveType::class, [
+                'attr' => [
+                    'style' => 'width:200px'
+                ]
+            ])
+            ->add('age', AgeType::class, [
+                'attr' => [
+                    'style' => 'width:200px'
+                ]
+            ])
+            ->end()
+            ->with('Coste', ['class' => 'col-md-4'])
+            ->add('monthlyPayment', PriceType::class)
+            ->add('books')
+            ->end()
+            ->end()
+            ->with('Horario', ['tab' => true])
+            ->with('Horario', ['class' => 'col-md-6'])
+            ->add('timeTable', TimeTableType::class)
+            ->end()
+            ->end()
             ->with('Alumnos y profesores', ['tab' => true])
-                ->with('Profesores', ['class' => 'col-md-5'])
-                    ->add('teachers', null, [
-                        'by_reference' => false,
-                        'query_builder' => function (EntityRepository $er) {
-                            return $er->createQueryBuilder('m')
-                                ->where('m.teacher = :param')
-                                ->setParameter('param', true);
-                        },
-                    ])
-                ->end()
-                ->with('Alumnos', ['class' => 'col-md-7'])
-                    ->add('students', null, [
-                        'by_reference' => false,
-                    ])
-                ->end()
+            ->with('Profesores', ['class' => 'col-md-5'])
+            ->add('teachers', TeachersType::class)
             ->end()
-        ;
+            ->with('Alumnos', ['class' => 'col-md-7'])
+            ->add('courseHasStudents', CourseHasStudentsType::class, [
+                'course' => $this->subject
+            ])
+            ->end()
+            ->end();
     }
 
     protected function configureShowFields(ShowMapper $showMapper): void
@@ -186,14 +186,7 @@ final class CourseAdmin extends AbstractAdmin
      */
     public function toString($object)
     {
-
-        return sprintf('%s / semana: %sh / total: %sh / plazas disponibles: %s ', ...[
-            $object->getName(),
-            $object->getHoursPerWeek(),
-            $object->getHoursTotal(),
-            $object->getAvailablePlaces()
-        ]);
-
+        return $object->getName();
     }
 
 

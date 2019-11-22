@@ -125,11 +125,11 @@
         </div>
 
         <div class="col-md-3">
-            {{ form_row(form.startTime) }}
+            {{ form_row(form.start) }}
         </div>
 
         <div class="col-md-3">
-            {{ form_row(form.length) }}
+            {{ form_row(form.end) }}
         </div>
 
         <div class="col-md-3">
@@ -152,22 +152,22 @@
         </div>
 
         <script>
-            $(function() {
+            $(function () {
                 var reason = $('#{{ form.reason.vars.id }}').parents('.form-group:first');
 
-                $('#{{ form.missed.vars.id }}').change(function() {
-                    if($(this).prop('checked')){
+                $('#{{ form.missed.vars.id }}').change(function () {
+                    if ($(this).prop('checked')) {
                         reason.show()
                     }
-                    else{
+                    else {
                         reason.hide()
                     }
                 })
 
-                if($('#{{ form.missed.vars.id }}').prop('checked')){
+                if ($('#{{ form.missed.vars.id }}').prop('checked')) {
                     reason.show()
                 }
-                else{
+                else {
                     reason.hide()
                 }
             })
@@ -184,10 +184,41 @@
         {% set checked = 'checked' %}
     {% endif %}
 
-    <input id="{{ id }}" name="{{ full_name }}"  {{ checked }} type="checkbox" data-toggle="toggle" data-on="Falta" data-off="Asiste"
+    <input id="{{ id }}" name="{{ full_name }}" {{ checked }} type="checkbox" data-toggle="toggle" data-on="Falta"
+           data-off="Asiste"
            data-onstyle="danger" data-offstyle="success">
 
-
-
-
 {% endblock %}
+
+
+{% block student_has_courses_widget %}
+    {{ block('multiselect') }}
+{% endblock %}
+
+{% block course_has_students_widget %}
+    {{ block('multiselect') }}
+{% endblock %}
+
+{% block relatives_widget %}
+    {{ block('multiselect') }}
+{% endblock %}
+
+{% block teachers_widget %}
+    {{ block('multiselect') }}
+{% endblock %}
+
+
+
+{% block multiselect %}
+    {{ form_widget(form) }}
+    <script type="text/javascript">
+
+        var select = document.getElementById("{{ id }}");
+
+        multi(select, {
+            non_selected_header: "Todos",
+            selected_header: "Seleccionados"
+        });
+    </script>
+{% endblock %}
+

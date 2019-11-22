@@ -16,6 +16,7 @@ namespace Britannia\Domain\VO\Validator;
 
 use Britannia\Domain\Entity\ClassRoom\ClassRoom;
 use Britannia\Domain\Entity\ClassRoom\ClassRoomId;
+use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\VO\PositiveInteger;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDD\Domain\VO\Validator\ConstraintValidator;
@@ -40,7 +41,6 @@ class TimeSheetValidator extends ConstraintValidator
             return;
         }
 
-
         $this->validateField('dayOfWeek', $value['dayOfWeek'], [
             new NotBlank(),
             new Type([
@@ -48,21 +48,19 @@ class TimeSheetValidator extends ConstraintValidator
             ])
         ]);
 
-        $this->validateField('startTime', $value['startTime'], [
+        $this->validateField('start', $value['start'], [
             new NotBlank(),
             new Type([
-                'type' => \DateTime::class
+                'type' => CarbonImmutable::class
             ])
         ]);
 
-        $this->validateField('length', $value['length'], [
+        $this->validateField('end', $value['end'], [
             new NotBlank(),
             new Type([
-                'type' => PositiveInteger::class
+                'type' => CarbonImmutable::class
             ])
         ]);
-
-
 
         $this->validateField('classroomId', $value['classroomId'], [
             new NotBlank(),
@@ -71,7 +69,25 @@ class TimeSheetValidator extends ConstraintValidator
             ])
         ]);
 
+        $this->validateTimes($value);
+    }
 
+    protected function validateTimes($value)
+    {
+        $start = $value['start'];
+        $end = $value['end'];
+
+        if (!($start instanceof CarbonImmutable)) {
+            return;
+        }
+
+        if (!($end instanceof CarbonImmutable)) {
+            return;
+        }
+
+        if ($end->lessThanOrEqualTo($start)) {
+            $this->addViolation('La hora final ha de ser mayor que la inicial');
+        }
     }
 
 }

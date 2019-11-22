@@ -22,7 +22,7 @@ file that was distributed with this source code.
             {% if _user_image %}
                 <img src="{{ _user_image }}" class="img-circle" alt="Avatar" />
             {% endif %}
-            <p>{{ app.user }}</p>
+            <p>{{ app.user.fullName }}</p>
         </li>
         <li class="user-footer">
             <div class="pull-left">

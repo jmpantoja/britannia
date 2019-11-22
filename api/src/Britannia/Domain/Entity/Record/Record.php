@@ -17,6 +17,7 @@ namespace Britannia\Domain\Entity\Record;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Staff\StaffMember;
 use Britannia\Domain\Entity\Student\Student;
+use Carbon\CarbonImmutable;
 
 class Record
 {
@@ -46,14 +47,14 @@ class Record
     private $type;
 
     /**
-     * @var  \DateTimeImmutable
+     * @var  CarbonImmutable
      */
     private $date;
 
     /**
-     * @var  \DateTimeImmutable
+     * @var  CarbonImmutable
      */
-    private $time;
+    private $day;
 
     /**
      * @var string
@@ -63,7 +64,7 @@ class Record
 
     public static function make(Student $student,
                                 ?Course $course,
-                                \DateTimeImmutable $date,
+                                CarbonImmutable $date,
                                 TypeOfRecord $typeOfRecord,
                                 StaffMember $createdBy,
                                 string $description): self
@@ -73,7 +74,7 @@ class Record
 
     private function __construct(Student $student,
                                  ?Course $course,
-                                 \DateTimeImmutable $date,
+                                 CarbonImmutable $date,
                                  TypeOfRecord $typeOfRecord,
                                  StaffMember $createdBy,
                                  string $description)
@@ -87,7 +88,7 @@ class Record
         $this->description = $description;
 
         $this->date = $date;
-        $this->time = $date;
+        $this->day = $date->setTime(0, 0);
     }
 
     /**
@@ -131,19 +132,19 @@ class Record
     }
 
     /**
-     * @return \DateTimeImmutable
+     * @return CarbonImmutable
      */
-    public function getDate(): \DateTimeImmutable
+    public function getDate(): CarbonImmutable
     {
         return $this->date;
     }
 
     /**
-     * @return \DateTimeImmutable
+     * @return CarbonImmutable
      */
-    public function getTime(): \DateTimeImmutable
+    public function getDay(): CarbonImmutable
     {
-        return $this->time;
+        return $this->day;
     }
 
     /**

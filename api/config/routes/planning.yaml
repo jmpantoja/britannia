@@ -1,0 +1,8 @@
+planning:
+    path:     /admin/britannia/planning
+    controller: Britannia\Infraestructure\Symfony\Controller\Admin\PlanningController::index
+
+
+planning_events:
+    path:     /admin/britannia/planning/events
+    controller: Britannia\Infraestructure\Symfony\Controller\Admin\PlanningController::events

@@ -40,12 +40,18 @@ services:
 
     Britannia\Infraestructure\Symfony\Importer\ImporterManager:
         calls:
-        - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\StaffEtl']]
-        - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\StudentEtl']]
-        - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\RelativesEtl']]
-        - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\CourseEtl']]
-        - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\StudentCoursesEtl']]
+#        - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\StaffEtl']]
+#        - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\StudentEtl']]
+#        - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\RelativesEtl']]
+#        - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\CourseEtl']]
+#        - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\StudentCoursesEtl']]
+        - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\AttendanceControlEtl']]
 
+
+    event_dispatcher:
+        class: PlanB\DDD\Domain\Event\EventDispatcher
+        factory: ['PlanB\DDD\Domain\Event\EventDispatcher', 'getInstance']
+        public: true
 
     admin.staff_member:
         class: Britannia\Infraestructure\Symfony\Admin\StaffMemberAdmin
@@ -137,4 +143,11 @@ services:
         arguments: [~, Britannia\Domain\Entity\Calendar\Calendar, Britannia\Infraestructure\Symfony\Controller\Admin\CalendarController]
         tags:
         - { name: sonata.admin, manager_type: orm, group: Datos Extra, label: Calendario }
+        public: true
+
+    admin.student_course:
+        class: Britannia\Infraestructure\Symfony\Admin\StudentCourseAdmin
+        arguments: [~, Britannia\Domain\Entity\Student\StudentCourse, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: StudentCourse }
         public: true

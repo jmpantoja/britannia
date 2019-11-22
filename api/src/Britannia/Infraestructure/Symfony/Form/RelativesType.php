@@ -16,29 +16,35 @@ namespace Britannia\Infraestructure\Symfony\Form;
 
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Entity\Student\StudentId;
+use phpDocumentor\Reflection\Types\Nullable;
+use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Sonata\ModelManager;
+use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
-class RelativesType extends ModelType
+class RelativesType extends AbstractSingleType
 {
+
     /**
      * @var ModelManager
      */
     private $modelManager;
 
-    public function __construct(PropertyAccessorInterface $propertyAccessor, ModelManager $modelManager)
+    public function __construct(ModelManager $modelManager)
     {
         $this->modelManager = $modelManager;
-        parent::__construct($propertyAccessor);
-
     }
 
-    public function configureOptions(OptionsResolver $resolver)
-    {
 
-        parent::configureOptions($resolver);
+    public function getParent()
+    {
+        return ModelType::class;
+    }
+
+    public function customOptions(OptionsResolver $resolver)
+    {
 
         $resolver->setRequired(['studentId']);
         $resolver->setAllowedTypes('studentId', [StudentId::class]);
@@ -47,26 +53,44 @@ class RelativesType extends ModelType
             'by_reference' => false,
             'multiple' => true,
             'expanded' => false,
+            'model_manager' => $this->modelManager,
+            'class'=>Student::class,
             'property' => 'fullName.reversedMode',
-            'sonata_help'=> 'Seleccione otros alumnos de la misma familia',
+            'sonata_help' => 'Seleccione otros alumnos de la misma familia',
+            'attr' => [
+                'data-sonata-select2' => 'false'
+            ]
         ]);
 
-        $resolver->setNormalizer('query', function (OptionsResolver $resolver) {
-            return $this->getRelativeQuery($resolver['studentId']);
+
+        $resolver->setRequired(['studentId']);
+        $resolver->setAllowedTypes('studentId', [StudentId::class]);
+
+        $resolver->setNormalizer('query', function (OptionsResolver $resolver, $value) {
+            $builder = $this->modelManager->createQuery(Student::class, 'A');
+            return $builder
+                ->where('A.id != :id')
+                ->setParameter('id', $resolver['studentId']);
         });
+
+    }
+
+    public function transform($value)
+    {
+        return $value;
     }
 
 
     /**
-     * @return mixed
+     * @return \Britannia\Infraestructure\Symfony\Validator\FullName
      */
-    private function getRelativeQuery(StudentId $studentId)
+    public function buildConstraint(array $options): ?Constraint
     {
-        $query = $this->modelManager->createQuery(Student::class)
-            ->where('o.id != :id')
-            ->setParameter('id', $studentId)
-            ->getQuery();
-        return $query;
+        return null;
     }
 
+    public function customMapping($data)
+    {
+        return $data;
+    }
 }

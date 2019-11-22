@@ -116,7 +116,6 @@ class StudentEtl extends AbstractEtl
             ->withCreateAt($input['createdAt'])
         ;
 
-
         return $builder;
     }
 

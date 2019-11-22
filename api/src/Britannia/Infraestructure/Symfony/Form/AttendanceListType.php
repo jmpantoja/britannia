@@ -52,6 +52,7 @@ class AttendanceListType extends AbstractCompoundType
         $course = $lesson->getCourse();
 
         foreach ($course->getStudents() as $student) {
+
             $key = (string)$student->getId();
             $builder->add($key, AttendanceType::class, [
                 'label' => false,

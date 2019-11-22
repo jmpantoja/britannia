@@ -15,9 +15,10 @@
 
         <field name="oldId" column="old_id" type="integer" nullable="true"></field>
 
-        <field name="active" type="boolean" column="active"/>
-
         <field name="name"/>
+        <field name="color" type="rgba" nullable="true"/>
+
+        <field name="status" type="CourseStatus"/>
         <field name="schoolCourse" nullable="true"/>
 
         <field name="examiner" type="Examiner" nullable="true"/>
@@ -29,22 +30,30 @@
         <field name="intensive" type="Intensive"/>
         <field name="age" type="Age"/>
 
-
-        <field name="enrolmentPayment" type="price"></field>
-        <field name="monthlyPayment" type="price"></field>
+        <field name="monthlyPayment" type="price"/>
+        <field name="enrolmentPayment" type="price" nullable="true"/>
 
         <many-to-many field="books" target-entity="Britannia\Domain\Entity\Book\Book" inversed-by="courses">
             <join-table name="courses_books">
                 <join-columns>
-                    <join-column name="course_id" referenced-column-name="id"/>
+                    <join-column name="course_id"/>
                 </join-columns>
                 <inverse-join-columns>
-                    <join-column name="book_id" referenced-column-name="id"/>
+                    <join-column name="book_id"/>
                 </inverse-join-columns>
             </join-table>
         </many-to-many>
 
-        <many-to-many field="students" target-entity="Britannia\Domain\Entity\Student\Student" mapped-by="courses"/>
+        <!--<many-to-many field="students" target-entity="Britannia\Domain\Entity\Student\Student" mapped-by="courses"/>-->
+
+        <one-to-many field="courseHasStudents"
+                     target-entity="Britannia\Domain\Entity\Student\StudentCourse"
+                     mapped-by="course"
+                     fetch="EXTRA_LAZY">
+            <cascade>
+                <cascade-persist />
+            </cascade>
+        </one-to-many>
 
         <many-to-many field="teachers" target-entity="Britannia\Domain\Entity\Staff\StaffMember" mapped-by="courses">
             <cascade>
@@ -52,27 +61,19 @@
             </cascade>
         </many-to-many>
 
+        <embedded name="timeTable" class="Britannia\Domain\VO\TimeTable" use-column-prefix="false"/>
 
-        <field name="startDate" type="date" nullable="true"/>
-        <field name="endDate" type="date" nullable="true"/>
-
-        <field name="timeSheet" type="TimeSheetList" nullable="true"/>
-
-        <one-to-many field="lessons" target-entity="Britannia\Domain\Entity\Course\Lesson" mapped-by="course">
+        <one-to-many field="lessons" target-entity="Britannia\Domain\Entity\Course\Lesson" mapped-by="course"
+                     orphan-removal="true">
             <cascade>
-                <cascade-persist/>
-                <cascade-remove/>
+                <cascade-all/>
             </cascade>
         </one-to-many>
 
-        <field name="hoursPerWeek" type="float"/>
-        <field name="hoursTotal" type="float"/>
-
-
-        <lifecycle-callbacks>
-            <lifecycle-callback type="prePersist" method="toSave"/>
-            <lifecycle-callback type="preUpdate" method="toSave"/>
-        </lifecycle-callbacks>
+        <!--<lifecycle-callbacks>-->
+        <!--<lifecycle-callback type="prePersist" method="toSave"/>-->
+        <!--<lifecycle-callback type="preUpdate" method="toSave"/>-->
+        <!--</lifecycle-callbacks>-->
     </entity>
 
 </doctrine-mapping>

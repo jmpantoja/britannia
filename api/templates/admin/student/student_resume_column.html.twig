@@ -85,7 +85,8 @@
 
 {% block courses %}
     <div class="col-md-3">
-        {% for course in object.activeCourses %}
+        {% for course in object.courses %}
+
             {{ block('course') }}
         {% endfor %}
     </div>

@@ -16,6 +16,7 @@ namespace PlanB\DDD\Domain\VO\Validator;
 
 use Symfony\Component\Validator\Constraint as BaseConstraint;
 use Symfony\Component\Validator\ConstraintValidator as Base;
+use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 abstract class ConstraintValidator extends Base
@@ -30,6 +31,7 @@ abstract class ConstraintValidator extends Base
         $this->assertConstraintType($constraint);
         $this->assertValueType($value, $constraint);
         $value = $constraint->sanitize($value);
+
 
         if ($constraint->isEmptyAndRequired($value)) {
             $this->addViolation($constraint->requiredMessage);
@@ -107,6 +109,15 @@ abstract class ConstraintValidator extends Base
     protected function addViolation($message): void
     {
         $this->context->addViolation($message);
+    }
+
+    protected function addViolationToField(string $name, string $message, $value = null)
+    {
+        $this->context->getValidator()
+            ->inContext($this->context)
+            ->getViolations()
+            ->add(new ConstraintViolation($message, null, [], null, $name, $value));
+
     }
 
 

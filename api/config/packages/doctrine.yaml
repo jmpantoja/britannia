@@ -43,6 +43,7 @@ doctrine:
                     BookId: BookId
 
                     JobStatus: JobStatus
+                    CourseStatus: CourseStatus
                     PartOfDay: PartOfDay
                     DayOfWeek: DayOfWeek
                     NumOfYears: NumOfYears
@@ -52,7 +53,6 @@ doctrine:
                     BookCategory: BookCategory
                     Examiner: Examiner
                     Age: Age
-                    TimeSheetList: TimeSheetList
                     Periodicity: Periodicity
                     Intensive: Intensive
                     TypeOfRecord: TypeOfRecord
@@ -73,6 +73,7 @@ doctrine:
 
 
             JobStatus: Britannia\Infraestructure\Doctrine\DBAL\Type\JobStatusType
+            CourseStatus: Britannia\Infraestructure\Doctrine\DBAL\Type\CourseStatusType
             PartOfDay: Britannia\Infraestructure\Doctrine\DBAL\Type\PartOfDayType
             DayOfWeek: Britannia\Infraestructure\Doctrine\DBAL\Type\DayOfWeekType
             NumOfYears: Britannia\Infraestructure\Doctrine\DBAL\Type\NumOfYearsType
@@ -83,7 +84,6 @@ doctrine:
 
             Examiner: Britannia\Infraestructure\Doctrine\DBAL\Type\ExaminerType
             Age: Britannia\Infraestructure\Doctrine\DBAL\Type\AgeType
-            TimeSheetList: Britannia\Infraestructure\Doctrine\DBAL\Type\TimeSheetListType
             Periodicity: Britannia\Infraestructure\Doctrine\DBAL\Type\PeriodicityType
             Intensive: Britannia\Infraestructure\Doctrine\DBAL\Type\IntensiveType
 

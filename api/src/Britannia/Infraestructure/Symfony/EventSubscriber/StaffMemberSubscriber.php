@@ -15,7 +15,7 @@ namespace Britannia\Infraestructure\Symfony\EventSubscriber;
 
 
 use Britannia\Application\UseCase\StaffMember\UpdatePassword;
-use Britannia\Domain\Entity\Course\TimeSheetHasChanged;
+use Britannia\Domain\Entity\Course\TimeTabletHasChanged;
 use Britannia\Domain\Entity\Staff\PasswordHasChanged;
 
 class StaffMemberSubscriber extends DomainEventSubscriber

@@ -12,6 +12,7 @@ use Britannia\Domain\VO\NumOfYears;
 use Britannia\Domain\VO\OtherAcademy;
 use Britannia\Domain\VO\PartOfDay;
 use Britannia\Domain\VO\Payment;
+use Carbon\CarbonImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use PlanB\DDD\Domain\Model\AggregateRoot;
@@ -28,24 +29,29 @@ abstract class Student extends AggregateRoot
      */
     private $oldId;
 
+    /**
+     * @var StudentId
+     */
     private $id;
 
 
     /**
      * @var ArrayCollection
      */
-    private $courses;
+    private $studentHasCourses;
 
     /**
      * @var bool
      */
     private $active = false;
 
-    /** @var FullName */
+    /**
+     * @var FullName
+     */
     private $fullName;
 
     /**
-     * @var \DateTime
+     * @var CarbonImmutable
      */
     private $birthDate;
 
@@ -129,12 +135,12 @@ abstract class Student extends AggregateRoot
 
 
     /**
-     * @var \DateTime
+     * @var CarbonImmutable
      */
     private $createdAt;
 
     /**
-     * @var \DateTime
+     * @var CarbonImmutable
      */
     private $updatedAt;
 
@@ -153,7 +159,7 @@ abstract class Student extends AggregateRoot
     {
         $this->id = new StudentId();
         $this->relatives = new ArrayCollection();
-        $this->courses = new ArrayCollection();
+        $this->studentHasCourses = new ArrayCollection();
         $this->records = new ArrayCollection();
     }
 
@@ -195,63 +201,40 @@ abstract class Student extends AggregateRoot
         }
     }
 
-    /**
-     * @return ArrayCollection
-     */
+    public function getAllCourses()
+    {
+        return $this->studentHasCourses->map(function (StudentCourse $studentCourse) {
+            return $studentCourse->getCourse();
+        });
+    }
+
     public function getCourses(): Collection
     {
-        return $this->courses;
+        $allCourses = $this->getAllCourses();
+
+        return $allCourses->filter(function (Course $course) {
+            return !$course->isFinalized();
+        });
     }
 
     /**
      * @return ArrayCollection
      */
-    public function getActiveCourses(): array
+    public function getStudentHasCourses(): Collection
     {
-        return $this->courses->filter(function (Course $course) {
-            return $course->isActive();
-        })->toArray();
+        return $this->studentHasCourses;
     }
+
 
     /**
-     * @param ArrayCollection $courses
+     * @param ArrayCollection $studentHasCourses
      * @return Student
      */
-    public function setCourses(Collection $courses): Student
+    public function setStudentHasCourses(Collection $studentHasCourses): Student
     {
-        foreach ($courses as $course) {
-            $this->addCourse($course);
-        }
+        $this->studentHasCourses = $studentHasCourses;
         return $this;
     }
-
-    public function addCourse(Course $course): Student
-    {
-
-        if ($this->courses->contains($course)) {
-            return $this;
-        }
-
-        $this->courses->add($course);
-        $course->addStudent($this);
-        $this->notify(StudentHasJoinedToCourse::make($this, $course));
-
-        return $this;
-    }
-
-
-    public function removeCourse(Course $course): Student
-    {
-        if (!$course->isActive() || !$this->courses->contains($course)) {
-            return $this;
-        }
-
-        $this->courses->removeElement($course);
-        $course->removeStudent($this);
-
-        return $this;
-    }
-
 
     /**
      * @return bool
@@ -280,25 +263,29 @@ abstract class Student extends AggregateRoot
     }
 
     /**
-     * @return \DateTime
+     * @return CarbonImmutable
      */
-    public function getBirthDate(): ?\DateTime
+    public function getBirthDate(): ?CarbonImmutable
     {
-        return $this->birthDate;
+
+        if (is_null($this->birthDate)) {
+            return null;
+        }
+
+        return CarbonImmutable::instance($this->birthDate);
     }
 
     /**
-     * @param \DateTime $birthDate
+     * @param CarbonImmutable $birthDate
      * @return Student
      */
-    public function setBirthDate(?\DateTime $birthDate): Student
+    public function setBirthDate(?\DateTimeInterface $birthDate): Student
     {
-        $this->birthDate = $birthDate;
-
         if (is_null($birthDate)) {
             return $this;
         }
 
+        $this->birthDate = CarbonImmutable::instance($birthDate);
         $this->birthMonth = (int)$birthDate->format('m');
         return $this;
     }
@@ -636,59 +623,44 @@ abstract class Student extends AggregateRoot
     }
 
     /**
-     * @return \DateTime
+     * @return CarbonImmutable
      */
-    public function getCreatedAt(): \DateTime
+    public function getCreatedAt(): CarbonImmutable
     {
         return $this->createdAt;
     }
 
     /**
-     * @param \DateTime $createdAt
-     * @return Student
+     * @return CarbonImmutable
      */
-    public function setCreatedAt(\DateTime $createdAt): Student
-    {
-
-        if (is_null($this->createdAt)) {
-            $this->createdAt = $createdAt;
-            $this->notify(StudentHasBeenCreated::make($this));
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getUpdatedAt(): \DateTime
+    public function getUpdatedAt(): CarbonImmutable
     {
         return $this->updatedAt;
     }
 
     /**
-     * @param \DateTime $updatedAt
+     * @param CarbonImmutable $date
      * @return Student
      */
-    private function setUpdatedAt(\DateTime $updatedAt): Student
+    public function setUpdatedAt(CarbonImmutable $date): Student
     {
-        $this->updatedAt = $updatedAt;
+        $this->updatedAt = $date;
 
-        $this->setCreatedAt($updatedAt);
-
+        if (is_null($this->createdAt)) {
+            $this->createdAt = $date;
+            $this->notify(StudentHasBeenCreated::make($this));
+        }
         return $this;
     }
 
-    public function toUpdate(): Student
+    public function onSave(): Student
     {
 
-        $this->setUpdatedAt(new \DateTime());
+        $this->setUpdatedAt(CarbonImmutable::now());
 
-        $courses = $this->courses->filter(function (Course $course) {
-            return $course->isActive();
-        });
+        $courses = $this->getCourses();
+        $this->active = !$courses->isEmpty();
 
-        $this->active = $courses->count() > 0;
         return $this;
     }
 

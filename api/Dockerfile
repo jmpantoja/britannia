@@ -15,6 +15,22 @@ RUN apk add --no-cache \
 		git \
 	;
 
+#paquetes para generear pdfs
+RUN apk add --update --no-cache \
+		libgcc \
+		libstdc++ \
+		libx11 \
+		glib \
+		libxrender \
+		libxext \
+		libintl \
+		ttf-dejavu \
+		ttf-droid \
+		ttf-freefont \
+		ttf-liberation \
+		ttf-ubuntu-font-family \
+		wkhtmltopdf;
+
 ARG APCU_VERSION=5.1.16
 RUN set -eux; \
 	apk add --no-cache --virtual .build-deps \

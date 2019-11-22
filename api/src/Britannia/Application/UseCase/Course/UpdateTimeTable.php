@@ -16,23 +16,29 @@ namespace Britannia\Application\UseCase\Course;
 
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Course\CourseId;
-use Britannia\Domain\Entity\Course\TimeSheetHasChanged;
+use Britannia\Domain\Entity\Course\TimeTabletHasChanged;
+use Britannia\Domain\VO\TimeTable;
 
-class UpdateTimeSheet
+class UpdateTimeTable
 {
     /**
      * @var Course
      */
     private $course;
+    /**
+     * @var TimeTable
+     */
+    private $timeTable;
 
-    public static function fromEvent(TimeSheetHasChanged $event): self
+    public static function fromEvent(TimeTabletHasChanged $event): self
     {
-        return new self($event->getCourse());
+        return new self($event->getCourse(), $event->getTimeTable());
     }
 
-    private function __construct(Course $course)
+    private function __construct(Course $courseId, TimeTable $timeTable)
     {
-        $this->course = $course;
+        $this->course = $courseId;
+        $this->timeTable = $timeTable;
     }
 
     /**
@@ -42,5 +48,14 @@ class UpdateTimeSheet
     {
         return $this->course;
     }
+
+    /**
+     * @return TimeTable
+     */
+    public function getTimeTable(): TimeTable
+    {
+        return $this->timeTable;
+    }
+
 
 }

@@ -15,7 +15,7 @@ namespace Britannia\Infraestructure\Symfony\Importer\Etl;
 
 
 use ApiPlatform\Core\DataPersister\DataPersisterInterface;
-use Britannia\Domain\Service\Course\TimeSheetUpdater;
+use Britannia\Domain\Service\Course\TimeTableUpdater;
 use Britannia\Infraestructure\Symfony\Importer\Builder\BuilderInterface;
 use Britannia\Infraestructure\Symfony\Importer\Builder\CourseBuilder;
 use Britannia\Infraestructure\Symfony\Importer\Builder\StudentBuilder;
@@ -32,7 +32,7 @@ use Doctrine\ORM\EntityManagerInterface;
 class CourseEtl extends AbstractEtl
 {
     /**
-     * @var TimeSheetUpdater
+     * @var TimeTableUpdater
      */
     private $timeSheetUpdater;
 
@@ -40,7 +40,7 @@ class CourseEtl extends AbstractEtl
         Connection $original,
         EntityManagerInterface $entityManager,
         DataPersisterInterface $dataPersister,
-        TimeSheetUpdater $timeSheetUpdater
+        TimeTableUpdater $timeSheetUpdater
     )
     {
         parent::__construct($original, $entityManager, $dataPersister);
@@ -94,20 +94,25 @@ class CourseEtl extends AbstractEtl
             ->withId($input['id'])
             ->withName((string)$input['nombre'])
             ->withSchoolCourse((string)$input['curso'])
-            ->withInterval((string)$input['fecha_inicio'], (string)$input['fecha_final'])
             ->withEnrolmentPayment((float)$input['matricula'])
             ->withMonthlyPayment((float)$input['precio'])
             ->withPeriodicity((int)$input['periocidad'])
             ->withNumOfPlaces((int)$input['plazas'])
-            ->withLessons((string)$input['horario'], (string)$input['materiales'], (string)$input['numeroAula'])
+            ->withTimeTable(...[
+                (string)$input['fecha_inicio'],
+                (string)$input['fecha_final'],
+                (string)$input['horario'],
+                (string)$input['materiales'],
+                (string)$input['numeroAula']
+            ])
             ->withCategories($categories);
 
         return $builder;
     }
-
-    public function postPersist($entity)
-    {
-        $this->timeSheetUpdater->updateCourseLessons($entity);
-    }
+//
+//    public function postPersist($entity)
+//    {
+//        $this->timeSheetUpdater->updateCourseLessons($entity);
+//    }
 
 }

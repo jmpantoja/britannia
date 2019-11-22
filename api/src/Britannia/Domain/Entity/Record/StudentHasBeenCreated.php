@@ -22,7 +22,7 @@ class StudentHasBeenCreated extends AbstractRecordEvent
     public static function make(Student $student): self
     {
         $description = sprintf('Nuevo alumno %s', $student->getFullName());
-        $date = \DateTimeImmutable::createFromMutable($student->getCreatedAt());
+        $date = $student->getCreatedAt();
 
 
         return new self($student, null, $description, $date);

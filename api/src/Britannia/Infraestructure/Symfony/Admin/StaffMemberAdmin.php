@@ -207,5 +207,4 @@ final class StaffMemberAdmin extends AbstractAdmin
 
         parent::checkAccess($action, $object);
     }
-
 }

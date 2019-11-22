@@ -6,6 +6,7 @@ namespace Britannia\Infraestructure\Symfony\Admin;
 
 use Britannia\Domain\Entity\Calendar\Calendar;
 use Britannia\Domain\Repository\CalendarRepositoryInterface;
+use Carbon\CarbonImmutable;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -29,7 +30,7 @@ final class CalendarAdmin extends AbstractAdmin
 
         $this->repository = $repository;
 
-        $today = new \DateTime();
+        $today = CarbonImmutable::now();
 
         $this->datagridValues = [
             'month' => array('value' => $today->format('m')),
@@ -120,8 +121,8 @@ final class CalendarAdmin extends AbstractAdmin
                 'label' => 'Laborable',
                 'row_align' => 'center'
             ])
-            ->add('date', null, [
-                'template' => 'admin/calendar/calendar_resume_column.html.twig'
+            ->add('date', 'date', [
+//                'template' => 'admin/calendar/calendar_resume_column.html.twig'
             ]);
     }
 

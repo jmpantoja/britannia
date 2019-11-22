@@ -17,6 +17,7 @@ namespace Britannia\Domain\Entity\Course;
 use Britannia\Domain\Entity\Record\StudentHasMissedLesson;
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\VO\StatusOfAttendance;
+use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\Model\AggregateRoot;
 
 class Attendance
@@ -48,7 +49,7 @@ class Attendance
     private $student;
 
     /**
-     * @var \DateTimeImmutable
+     * @var CarbonImmutable
      */
     private $day;
 
@@ -71,7 +72,8 @@ class Attendance
         $this->day = $lesson->getDay();
         $this->number = $lesson->getNumber();
         $this->student = $student;
-        $this->reason = $reason;
+
+        $this->reason = empty($reason) ? null : $reason;
     }
 
     /**
@@ -99,24 +101,6 @@ class Attendance
     }
 
     /**
-     * @return StatusOfAttendance
-     */
-    public function getStatus(): StatusOfAttendance
-    {
-        return $this->status;
-    }
-
-    /**
-     * @param StatusOfAttendance $status
-     * @return Attendance
-     */
-    public function setStatus(StatusOfAttendance $status): Attendance
-    {
-        $this->status = $status;
-        return $this;
-    }
-
-    /**
      * @return Course
      */
     public function getCourse(): Course
@@ -125,9 +109,9 @@ class Attendance
     }
 
     /**
-     * @return \DateTimeImmutable
+     * @return CarbonImmutable
      */
-    public function getDay(): \DateTimeImmutable
+    public function getDay(): CarbonImmutable
     {
         return $this->day;
     }
@@ -147,31 +131,5 @@ class Attendance
     {
         return $this->reason;
     }
-
-    /**
-     * @return string
-     */
-    public function getValue(): string
-    {
-        return $this->status->getValue();
-    }
-
-    /**
-     * @param string $value
-     * @return Attendance
-     */
-    public function setValue(string $value): Attendance
-    {
-
-        if (!StatusOfAttendance::hasName($value)) {
-            return $this;
-        }
-
-        $status = StatusOfAttendance::byName($value);
-        $this->setStatus($status);
-
-        return $this;
-    }
-
 
 }

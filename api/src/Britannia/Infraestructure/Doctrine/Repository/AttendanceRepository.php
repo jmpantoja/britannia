@@ -23,6 +23,7 @@ use Britannia\Domain\Repository\AttendanceRepositoryInterface;
 use Britannia\Domain\Repository\CalendarRepositoryInterface;
 use Britannia\Domain\Repository\ClassRoomRepositoryInterface;
 use Britannia\Domain\VO\DayOfWeek;
+use Carbon\CarbonImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -43,11 +44,12 @@ class AttendanceRepository extends ServiceEntityRepository implements Attendance
 
     /**
      * @param Student $student
-     * @param \DateTime $date
+     * @param Course $course
+     * @param CarbonImmutable $date
      * @param int|null $limit
      * @return Attendance[]
      */
-    public function findByStudent(Student $student, Course $course, \DateTime $date, int $limit = null): array
+    public function findByStudent(Student $student, Course $course, CarbonImmutable $date, int $limit = null): array
     {
 
         $query = $this->createQueryBuilder('A')

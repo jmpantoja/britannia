@@ -16,6 +16,7 @@ namespace Britannia\Domain\Entity\Record;
 
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Student\Student;
+use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\Event\DomainEvent;
 
 abstract class AbstractRecordEvent extends DomainEvent implements RecordEventInterface
@@ -36,17 +37,17 @@ abstract class AbstractRecordEvent extends DomainEvent implements RecordEventInt
      */
     private $description;
     /**
-     * @var \DateTimeImmutable
+     * @var CarbonImmutable
      */
     private $date;
 
 
-    protected function __construct(Student $student, ?Course $course, string $description, \DateTimeImmutable $date = null)
+    protected function __construct(Student $student, ?Course $course, string $description, ?CarbonImmutable $date = null)
     {
         $this->student = $student;
         $this->course = $course;
         $this->description = $description;
-        $this->date = $date ?? new \DateTimeImmutable();
+        $this->date = $date ?? CarbonImmutable::now();
     }
 
     /**
@@ -72,7 +73,7 @@ abstract class AbstractRecordEvent extends DomainEvent implements RecordEventInt
     }
 
 
-    public function getDate(): \DateTimeImmutable
+    public function getDate(): CarbonImmutable
     {
         return $this->date;
     }

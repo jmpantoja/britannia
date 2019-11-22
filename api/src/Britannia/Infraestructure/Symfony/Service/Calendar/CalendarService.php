@@ -17,6 +17,8 @@ namespace Britannia\Infraestructure\Symfony\Service\Calendar;
 use ApiPlatform\Core\DataPersister\DataPersisterInterface;
 use Britannia\Domain\Entity\Calendar\Calendar;
 use Britannia\Domain\Repository\CalendarRepositoryInterface;
+use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 
 class CalendarService
 {
@@ -49,16 +51,15 @@ class CalendarService
 
     private function createYear(int $year)
     {
-        $date = (new \DateTimeImmutable())
-            ->setDate($year, 1, 1);
+        $date = CarbonImmutable::create($year);
 
         while ((int)$date->format('Y') === $year) {
             $this->createDay($date);
-            $date = $date->add(new \DateInterval('P1D'));
+            $date = $date->add('P1D');
         }
     }
 
-    private function createDay(\DateTimeImmutable $dateTime)
+    private function createDay(CarbonImmutable $dateTime)
     {
         if ($this->repository->hasDay($dateTime)) {
             return;

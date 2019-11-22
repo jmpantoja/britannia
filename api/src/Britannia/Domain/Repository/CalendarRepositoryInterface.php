@@ -16,6 +16,7 @@ namespace Britannia\Domain\Repository;
 
 use Britannia\Domain\Entity\Calendar\Calendar;
 use Britannia\Domain\Entity\Course\Course;
+use Britannia\Domain\VO\TimeTable;
 
 interface CalendarRepositoryInterface
 {
@@ -25,15 +26,15 @@ interface CalendarRepositoryInterface
     public function getAvailableYears(): array;
 
     /**
-     * @param \DateTime $dateTime
+     * @param \DateTimeInterface $dateTime
      * @return bool
      */
-    public function hasDay(\DateTimeImmutable $dateTime): bool;
+    public function hasDay(\DateTimeInterface $dateTime): bool;
 
     /**
      * @param Course $course
      * @return Calendar[]
      */
-    public function getLessonDaysFromCourse(Course $course, ?\DateTime $from): array;
+    public function getWorkingDays(TimeTable $timeTable): array;
 }
 

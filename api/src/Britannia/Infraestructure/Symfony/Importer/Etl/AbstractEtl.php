@@ -109,7 +109,6 @@ abstract class AbstractEtl implements EtlInterface
         if ($builder->isValid()) {
             $entity = $builder->build();
             $this->dataPersister->persist($entity);
-
             $this->postPersist($entity);
 
             $this->entityManager->flush();

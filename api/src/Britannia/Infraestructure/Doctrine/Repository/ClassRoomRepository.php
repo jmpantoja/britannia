@@ -28,7 +28,6 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 /**
  *
  * @method ClassRoom|null findOneBy(array $criteria, array $orderBy = null)
- * @method ClassRoom[]    findAll()
  * @method ClassRoom[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class ClassRoomRepository extends ServiceEntityRepository implements ClassRoomRepositoryInterface
@@ -38,6 +37,9 @@ class ClassRoomRepository extends ServiceEntityRepository implements ClassRoomRe
         parent::__construct($registry, ClassRoom::class);
     }
 
-
+    public function findAll()
+    {
+        return $this->findBy(array(), array('name'=>'asc'));
+    }
 
 }

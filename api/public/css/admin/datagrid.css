@@ -47,13 +47,13 @@
 .attendance_sumary span {
     background-color: gainsboro;
     display: inline-block;
-    margin: 0;
+    margin: 0.1em 0.2em;
     width: 1.5em;
     height: 1.5em;
 }
 
 .attendance_sumary span.missed {
-    background-color: red;
+    background-color: #bf2405;
 }
 
 

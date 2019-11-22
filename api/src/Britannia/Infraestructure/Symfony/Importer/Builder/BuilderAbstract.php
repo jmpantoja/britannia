@@ -61,6 +61,7 @@ abstract class BuilderAbstract implements BuilderInterface
 
     protected function findOneOrNull(string $className, array $criteria): ?object
     {
+
         $founded = null;
         if (!empty($criteria)) {
             $founded = $this->entityManager->getRepository($className)

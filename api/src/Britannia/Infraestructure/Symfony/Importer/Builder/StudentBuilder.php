@@ -24,6 +24,7 @@ use Britannia\Domain\VO\PartOfDay;
 use Britannia\Infraestructure\Symfony\Importer\Builder\Traits\StudentMaker;
 use Britannia\Infraestructure\Symfony\Importer\Maker\FullNameMaker;
 use Britannia\Infraestructure\Symfony\Importer\Resume;
+use Carbon\CarbonImmutable;
 
 class StudentBuilder extends BuilderAbstract
 {
@@ -273,7 +274,7 @@ class StudentBuilder extends BuilderAbstract
 
     public function withCreateAt($date): self{
 
-        $dateTime = \DateTime::createFromFormat('Y-m-d H:i:s', $date);
+        $dateTime = CarbonImmutable::make($date);
         $this->createdAt = $dateTime;
 
         return $this;
@@ -308,7 +309,7 @@ class StudentBuilder extends BuilderAbstract
         $child->setTermsOfUseImageRigths($this->termsOfUseImage);
 
         $child->setPayment($this->payment);
-        $child->setCreatedAt($this->createdAt);
+        $child->setUpdatedAt($this->createdAt);
 
         if ($child instanceof Adult) {
 

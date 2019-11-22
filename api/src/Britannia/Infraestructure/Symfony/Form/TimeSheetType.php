@@ -15,6 +15,7 @@ namespace Britannia\Infraestructure\Symfony\Form;
 
 
 use Britannia\Domain\VO\TimeSheet;
+use Carbon\CarbonImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use PlanB\DDD\Domain\VO\PositiveInteger;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
@@ -24,6 +25,7 @@ use PlanB\DDDBundle\Symfony\Form\Type\PositiveIntegerType;
 use Sonata\Form\Type\DatePickerType;
 use Sonata\Form\Type\DateRangePickerType;
 use Sonata\Form\Type\DateTimePickerType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -46,30 +48,28 @@ class TimeSheetType extends AbstractCompoundType
     {
 
         $builder
-            ->add('dayOfWeek', DayOfWeekType::class, [
-                'disabled' => $options['locked']
-            ])
-            ->add('startTime', DateTimePickerType::class, [
-                'label' => 'Hora',
+            ->add('dayOfWeek', DayOfWeekType::class)
+            ->add('start', DateTimePickerType::class, [
+                'label' => 'Inicio',
                 'dp_pick_date' => false,
-                'format' => 'h:mm a', //YYYY-MM-D h:mm:ss a
-                'dp_minute_stepping' => 5,
-                'required' => false,
-                'disabled' => $options['locked']
+                'dp_pick_time' => true,
+                'format' => 'H:mm',
+                'dp_minute_stepping' => 5
             ])
-            ->add('length', PositiveIntegerType::class, [
-                'disabled' => $options['locked']
+            ->add('end', DateTimePickerType::class, [
+                'label' => 'Fin',
+                'dp_pick_date' => false,
+                'dp_pick_time' => true,
+                'format' => 'H:mm',
+                'dp_minute_stepping' => 5
             ])
-            ->add('classroomId', ClassRoomType::class, [
-                'disabled' => $options['locked']
-            ]);
+            ->add('classroomId', ClassRoomType::class);
     }
 
     public function customOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => TimeSheet::class,
-            'locked' => false
+            'data_class' => TimeSheet::class
         ]);
     }
 
@@ -83,12 +83,14 @@ class TimeSheetType extends AbstractCompoundType
 
     public function customMapping(array $data)
     {
-        return TimeSheet::make(...[
+        $timeSheet = TimeSheet::make(...[
             $data['dayOfWeek'],
-            $data['startTime'],
-            $data['length'],
+            CarbonImmutable::instance($data['start']),
+            CarbonImmutable::instance($data['end']),
             $data['classroomId'],
         ]);
+
+        return $timeSheet;
 
     }
 }

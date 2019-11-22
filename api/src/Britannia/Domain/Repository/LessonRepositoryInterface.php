@@ -15,6 +15,8 @@ namespace Britannia\Domain\Repository;
 
 
 use Britannia\Domain\Entity\Course\Course;
+use Britannia\Domain\Entity\Course\Lesson;
+use Carbon\CarbonImmutable;
 
 /**
  * @method Lesson|null find($id, $lockMode = null, $lockVersion = null)
@@ -25,6 +27,18 @@ use Britannia\Domain\Entity\Course\Course;
 interface LessonRepositoryInterface
 {
 
-    public function getLastByCourse(Course $course, \DateTime $day, int $limit = 5): array;
+    /**
+     * @param Course $course
+     * @param CarbonImmutable $day
+     * @param int $limit
+     * @return Lesson[]
+     */
+    public function getLastByCourse(Course $course, CarbonImmutable $day, int $limit = 5): array;
+
+    /**
+     * @param CarbonImmutable $day
+     * @return Lesson[]
+     */
+    public function findByDay(CarbonImmutable $day): array;
 
 }

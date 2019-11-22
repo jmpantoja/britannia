@@ -14,32 +14,31 @@ declare(strict_types=1);
 namespace Britannia\Application\UseCase\Calendar;
 
 
+use Carbon\CarbonImmutable;
+
 class UpdateCalendar
 {
     /**
-     * @var \DateTime
+     * @var CarbonImmutable
      */
     private $date;
 
     public static function make(): self
     {
-        $today = \DateTime::createFromFormat('U', (string)$_SERVER['REQUEST_TIME']);
-        $today->setTime(0, 0, 0);
-
-        return new self($today);
+        return new self(CarbonImmutable::now());
     }
 
-    private function __construct(\DateTime $date)
+    private function __construct(CarbonImmutable $date)
     {
-        $this->date = $date;
+        $this->date = $date->setTime(0, 0);
     }
 
     /**
-     * @return \DateTime
+     * @return int
      */
     public function getYear(): int
     {
-        return $this->date->format('Y') * 1 ;
+        return $this->date->format('Y') * 1;
     }
 
 

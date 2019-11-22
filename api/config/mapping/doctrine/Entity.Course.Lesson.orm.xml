@@ -32,8 +32,9 @@
         <field name="number" type="integer"/>
 
         <field name="day" type="date_immutable"/>
-        <field name="start" type="datetime_immutable"/>
-        <field name="end" type="datetime_immutable"/>
+
+        <field name="startTime" type="time_immutable"/>
+        <field name="endTime" type="time_immutable"/>
 
     </entity>
 

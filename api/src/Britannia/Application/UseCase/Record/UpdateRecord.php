@@ -18,6 +18,7 @@ use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Record\RecordEventInterface;
 use Britannia\Domain\Entity\Record\TypeOfRecord;
 use Britannia\Domain\Entity\Student\Student;
+use Carbon\CarbonImmutable;
 
 class UpdateRecord
 {
@@ -42,7 +43,7 @@ class UpdateRecord
      */
     private $description;
     /**
-     * @var \DateTimeImmutable
+     * @var CarbonImmutable
      */
     private $date;
 
@@ -52,7 +53,7 @@ class UpdateRecord
         return new self($event->getStudent(), $event->getType(), $event->getCourse(), $event->getDate(), $event->getDescription());
     }
 
-    private function __construct(Student $student, TypeOfRecord $type, ?Course $course, \DateTimeImmutable $date, string $description)
+    private function __construct(Student $student, TypeOfRecord $type, ?Course $course, CarbonImmutable $date, string $description)
     {
         $this->student = $student;
         $this->type = $type;
@@ -87,9 +88,9 @@ class UpdateRecord
 
 
     /**
-     * @return \DateTimeImmutable
+     * @return CarbonImmutable
      */
-    public function getDate(): \DateTimeImmutable
+    public function getDate(): CarbonImmutable
     {
         return $this->date;
     }

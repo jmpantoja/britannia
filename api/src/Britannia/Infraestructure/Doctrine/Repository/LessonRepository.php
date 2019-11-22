@@ -6,6 +6,7 @@ use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Course\Lesson;
 use Britannia\Domain\Repository\CourseRepositoryInterface;
 use Britannia\Domain\Repository\LessonRepositoryInterface;
+use Carbon\CarbonImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -23,7 +24,7 @@ class LessonRepository extends ServiceEntityRepository implements LessonReposito
         parent::__construct($registry, Lesson::class);
     }
 
-    public function getLastByCourse(Course $course, \DateTime $day, int $limit = 5): array
+    public function getLastByCourse(Course $course, CarbonImmutable $day, int $limit = 5): array
     {
         $day->setTime(0, 0);
 
@@ -43,11 +44,11 @@ class LessonRepository extends ServiceEntityRepository implements LessonReposito
 
     /**
      * @param Course $course
-     * @param \DateTime $day
+     * @param CarbonImmutable $day
      * @param int $limit
      * @return array
      */
-    protected function getInPastLessons(Course $course, \DateTime $day, int $limit): array
+    protected function getInPastLessons(Course $course, CarbonImmutable $day, int $limit): array
     {
         $query = $this->createQueryBuilder('A')
             ->where('A.course = :course')
@@ -64,11 +65,11 @@ class LessonRepository extends ServiceEntityRepository implements LessonReposito
 
     /**
      * @param Course $course
-     * @param \DateTime $day
+     * @param CarbonImmutable $day
      * @param int $limit
      * @return array
      */
-    protected function getInFutureLessons(Course $course, \DateTime $day, int $limit): array
+    protected function getInFutureLessons(Course $course, CarbonImmutable $day, int $limit): array
     {
         $query = $this->createQueryBuilder('A')
             ->where('A.course = :course')
@@ -79,6 +80,17 @@ class LessonRepository extends ServiceEntityRepository implements LessonReposito
 
         return $query->execute([
             'course' => $course,
+            'day' => $day
+        ]);
+    }
+
+    /**
+     * @param CarbonImmutable $day
+     * @return Lesson[]
+     */
+    public function findByDay(CarbonImmutable $day): array
+    {
+        return $this->findBy([
             'day' => $day
         ]);
     }

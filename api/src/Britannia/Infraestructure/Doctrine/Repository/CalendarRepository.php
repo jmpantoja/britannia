@@ -18,6 +18,7 @@ use Britannia\Domain\Entity\Calendar\Calendar;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Repository\CalendarRepositoryInterface;
 use Britannia\Domain\VO\DayOfWeek;
+use Britannia\Domain\VO\TimeTable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -56,7 +57,7 @@ class CalendarRepository extends ServiceEntityRepository implements CalendarRepo
         }, $result);
     }
 
-    public function hasDay(\DateTimeImmutable $dateTime): bool
+    public function hasDay(\DateTimeInterface $dateTime): bool
     {
         $dateTime = $dateTime->setTime(0, 0);
         $days = $this->getYear($dateTime);
@@ -65,7 +66,7 @@ class CalendarRepository extends ServiceEntityRepository implements CalendarRepo
         return isset($days[$key]);
     }
 
-    private function getYear(\DateTimeImmutable $dateTime): array
+    private function getYear(\DateTimeInterface $dateTime): array
     {
         $year = (int)$dateTime->format('Y');
 
@@ -91,27 +92,28 @@ class CalendarRepository extends ServiceEntityRepository implements CalendarRepo
     }
 
     /**
-     * @param Course $course
-     * @param \DateTime|null $from
+     * @param TimeTable $timeTable
      * @return Calendar[]
      */
-    public function getLessonDaysFromCourse(Course $course, ?\DateTime $from): array
+    public function getWorkingDays(TimeTable $timeTable): array
     {
 
-        $daysOfWeek = $course->getDaysOfWeek();
-        $daysOfWeek = array_values($daysOfWeek);
+        $daysOfWeek = $timeTable->getDaysOfWeek();
+        $start = $timeTable->getStart();
+        $end = $timeTable->getEnd();
+
 
         $query = $this->createQueryBuilder('A')
             ->where('A.weekday IN (:days)')
-            ->andWhere('A.workDay = true')
             ->andWhere('A.date >= :start AND A.date <= :end')
             ->orderBy('A.id', 'ASC')
             ->getQuery();
 
+
         return $query->execute([
-            'days' => $daysOfWeek,
-            'start' => $from,
-            'end' => $course->getEndDate(),
+            'days' => array_values($daysOfWeek) ,
+            'start' => $start,
+            'end' => $end
         ]);
     }
 }

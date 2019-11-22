@@ -14,32 +14,12 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Importer\Builder\Traits;
 
 
-use Britannia\Domain\Entity\Academy\Academy;
-use Britannia\Domain\Entity\ClassRoom\ClassRoom;
 use Britannia\Domain\Entity\ClassRoom\ClassRoomId;
-use Britannia\Domain\Entity\School\School;
-use Britannia\Domain\Entity\Student\Tutor;
-use Britannia\Domain\VO\BankAccount;
 use Britannia\Domain\VO\DayOfWeek;
-use Britannia\Domain\VO\Job;
-use Britannia\Domain\VO\JobStatus;
-use Britannia\Domain\VO\TimeSheet;
 use Britannia\Domain\VO\LessonLength;
-use Britannia\Domain\VO\NumOfYears;
-use Britannia\Domain\VO\Payment;
-use Britannia\Domain\VO\PaymentMode;
-use PlanB\DDD\Domain\VO\CityAddress;
-use PlanB\DDD\Domain\VO\DNI;
-use PlanB\DDD\Domain\VO\Email;
-use PlanB\DDD\Domain\VO\FullName;
-use PlanB\DDD\Domain\VO\Iban;
-use PlanB\DDD\Domain\VO\PhoneNumber;
-use PlanB\DDD\Domain\VO\PositiveInteger;
-use PlanB\DDD\Domain\VO\PostalAddress;
-use PlanB\DDD\Domain\VO\PostalCode;
-use Symfony\Component\Validator\Constraints\DateTime;
+use Britannia\Domain\VO\TimeSheet;
+use Carbon\CarbonImmutable;
 use Symfony\Component\Validator\ConstraintViolationList;
-use Symfony\Component\Validator\Validation;
 
 trait CourseMaker
 {
@@ -81,7 +61,6 @@ trait CourseMaker
             return !empty(trim($value));
         });
 
-
         $total = count($pieces);
 
         $temp = [];
@@ -99,14 +78,14 @@ trait CourseMaker
     {
 
         $interval = $this->toInterval($hours);
-        list($start, $length) = $interval;
+        list($start, $end) = $interval;
 
         $days = $this->toDays($days);
 
 
         $temp = [];
         foreach ($days as $day) {
-            $temp[] = TimeSheet::make($day, $start, $length, $classRoomId);
+            $temp[] = TimeSheet::make($day, $start, $end, $classRoomId);
         }
 
         return $temp;
@@ -122,15 +101,12 @@ trait CourseMaker
             return null;
         }
 
-        $start = \DateTime::createFromFormat('H:i', $matches[1]);
-        $end = \DateTime::createFromFormat('H:i', $matches[2]);
-
-        $length = $start->diff($end);
-        $totalMinutes = $length->h * 60 + $length->i;
+        $start = CarbonImmutable::make($matches[1]);
+        $end = CarbonImmutable::make($matches[2]);
 
         return [
             $start,
-            PositiveInteger::make($totalMinutes)
+            $end
         ];
     }
 

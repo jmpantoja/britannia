@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Staff;
 
 
+use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\Event\DomainEvent;
 
 
@@ -31,15 +32,15 @@ class PasswordHasChanged extends DomainEvent
 
     public function __construct(StaffMember $staffMember, string $newPassword)
     {
-        $this->occurredOn = new \DateTimeImmutable();
+        $this->occurredOn = CarbonImmutable::now();
         $this->staffMember = $staffMember;
         $this->newPassword = $newPassword;
     }
 
     /**
-     * @return \DateTime
+     * @return CarbonImmutable
      */
-    public function occurredOn(): \DateTime
+    public function occurredOn(): CarbonImmutable
     {
         return $this->occurredOn;
     }

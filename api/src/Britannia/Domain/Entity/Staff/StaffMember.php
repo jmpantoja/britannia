@@ -4,6 +4,7 @@ namespace Britannia\Domain\Entity\Staff;
 
 
 use Britannia\Domain\Entity\Course\Course;
+use Carbon\CarbonImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
@@ -82,8 +83,14 @@ class StaffMember extends AggregateRoot implements UserInterface, \Serializable
 
     private $roles;
 
+    /**
+     * @var CarbonImmutable
+     */
     private $createdAt;
 
+    /**
+     * @var CarbonImmutable
+     */
     private $updatedAt;
 
 
@@ -94,8 +101,8 @@ class StaffMember extends AggregateRoot implements UserInterface, \Serializable
     public function __construct()
     {
         $this->id = new StaffMemberId();
-        $this->createdAt = new \DateTime();
-        $this->updatedAt = new \DateTime();
+        $this->createdAt = CarbonImmutable::now();
+        $this->updatedAt = CarbonImmutable::now();
         $this->roles = [self::DEFAULT_ROLE];
         $this->courses = new ArrayCollection();
 
@@ -253,24 +260,24 @@ class StaffMember extends AggregateRoot implements UserInterface, \Serializable
     }
 
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): ?CarbonImmutable
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    public function setCreatedAt(CarbonImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeInterface
+    public function getUpdatedAt(): ?CarbonImmutable
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    public function setUpdatedAt(CarbonImmutable $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 
@@ -404,7 +411,7 @@ class StaffMember extends AggregateRoot implements UserInterface, \Serializable
         return $this;
     }
 
-    public function onUpdate(): self
+    public function onSave(): self
     {
         $this->teacher = in_array('ROLE_TEACHER', $this->getRoles(), true);
         $this->active = 0 !== count($this->getActiveCourses());
@@ -419,11 +426,6 @@ class StaffMember extends AggregateRoot implements UserInterface, \Serializable
         }
 
         return $this->getId()->equals($object->getId());
-    }
-
-    public function __toString()
-    {
-        return (string)$this->userName;
     }
 
     public function serialize()

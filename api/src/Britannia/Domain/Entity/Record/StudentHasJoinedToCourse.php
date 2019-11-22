@@ -27,8 +27,8 @@ class StudentHasJoinedToCourse extends AbstractRecordEvent
         $description = sprintf('Se une al curso %s', $course->getName());
 
         $date = null;
-        if (!$course->isActive()) {
-            $date = \DateTimeImmutable::createFromMutable($course->getEndDate());
+        if ($course->isFinalized()) {
+            $date = $course->getStartDate();
         }
 
         return new self($student, $course, $description, $date);

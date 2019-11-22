@@ -34,11 +34,9 @@ class CourseFixtures extends BaseFixture
     public function getBackupFiles(): array
     {
         return [
-            sprintf('%s/dumps/britannia_calendar.sql', __DIR__),
-            sprintf('%s/dumps/britannia_classrooms.sql', __DIR__),
             sprintf('%s/dumps/britannia_courses.sql', __DIR__),
             sprintf('%s/dumps/britannia_course_lessons.sql', __DIR__),
-//            sprintf('%s/dumps/britannia_attendance_control.sql', __DIR__),
+            sprintf('%s/dumps/britannia_attendance_control.sql', __DIR__),
         ];
     }
 

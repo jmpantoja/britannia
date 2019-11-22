@@ -6,3 +6,7 @@ _sonata_admin:
     resource: .
     type: sonata_admin
     prefix: /admin
+
+occupation:
+    path:     /admin/britannia/occupation
+    controller: Britannia\Infraestructure\Symfony\Controller\Admin\OccupationController::index

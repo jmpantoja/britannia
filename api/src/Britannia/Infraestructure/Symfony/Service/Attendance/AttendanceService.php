@@ -19,6 +19,7 @@ use Britannia\Domain\Entity\Course\Lesson;
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Repository\AttendanceRepositoryInterface;
 use Britannia\Domain\Repository\LessonRepositoryInterface;
+use Carbon\CarbonImmutable;
 use phpDocumentor\Reflection\Types\Nullable;
 
 class AttendanceService
@@ -33,16 +34,18 @@ class AttendanceService
         $this->lessons = $lessons;
     }
 
-    public function getSummary(Student $student, Course $course, int $limit = 5, \DateTime $day = null): array
+    public function getSummary(Student $student, Course $course, int $limit = 5): array
     {
         $values = [];
-        $today = $day ?? new \DateTime();
+        $today = CarbonImmutable::now();
+
         $lessons = $this->lessons->getLastByCourse($course, $today, $limit);
+
 
         foreach ($lessons as $lesson) {
             $value = [
                 'title' => $this->getTitle($lesson, $student),
-                'status' => $this->getStatus($lesson, $student)
+                'status' =>  $lesson->getStatusByStudent($student)
             ];
 
             $values[] = $value;
@@ -52,15 +55,6 @@ class AttendanceService
             'percent' => 'x',
             'items' => $values
         ];
-    }
-
-    private function getStatus(Lesson $lesson, Student $student): ?string
-    {
-        if ($lesson->isFuture()) {
-            return null;
-        }
-
-        return $lesson->hasStudentMissed($student) ? 'missed' : 'attended';
     }
 
     private function getTitle(Lesson $lesson, Student $student)

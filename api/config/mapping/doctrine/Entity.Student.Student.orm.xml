@@ -18,18 +18,15 @@
             <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
         </id>
 
+        <one-to-many field="studentHasCourses"
+                     target-entity="Britannia\Domain\Entity\Student\StudentCourse"
+                     mapped-by="student"
+                     fetch="EXTRA_LAZY">
 
-        <many-to-many field="courses" target-entity="Britannia\Domain\Entity\Course\Course" inversed-by="students">
-            <join-table name="courses_students">
-                <join-columns>
-                    <join-column name="student_id" referenced-column-name="id"/>
-                </join-columns>
-                <inverse-join-columns>
-                    <join-column name="course_id" referenced-column-name="id"/>
-                </inverse-join-columns>
-            </join-table>
-        </many-to-many>
-
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </one-to-many>
 
         <field name="oldId" column="old_id" type="integer" nullable="true"></field>
 
@@ -37,7 +34,7 @@
 
         <embedded name="fullName" class="PlanB\DDD\Domain\VO\FullName" use-column-prefix="false"/>
 
-        <field name="birthDate" column="birth_date" type="date" nullable="true"/>
+        <field name="birthDate" type="date_immutable" nullable="true"/>
 
         <field name="birthMonth" column="birth_month" type="integer" nullable="true"/>
 
@@ -61,11 +58,12 @@
         <field name="preferredContactMode" column="preferredContactMode" type="ContactMode"/>
 
         <many-to-one field="academy" target-entity="Britannia\Domain\Entity\Academy\Academy">
-            <join-column name="other_academy_id" nullable="true"></join-column>
+            <join-column name="other_academy_id"></join-column>
         </many-to-one>
 
 
-        <one-to-many field="records" target-entity="Britannia\Domain\Entity\Record\Record" mapped-by="student" orphan-removal="true"/>
+        <one-to-many field="records" target-entity="Britannia\Domain\Entity\Record\Record" mapped-by="student"
+                     orphan-removal="true"/>
 
         <field name="academyNumOfYears" column="other_academy_time" type="NumOfYears"/>
         <field name="firstContact" nullable="true"/>
@@ -82,12 +80,12 @@
 
 
         <lifecycle-callbacks>
-            <lifecycle-callback type="prePersist" method="toUpdate"/>
-            <lifecycle-callback type="preUpdate" method="toUpdate"/>
+            <lifecycle-callback type="prePersist" method="onSave"/>
+            <lifecycle-callback type="preUpdate" method="onSave"/>
         </lifecycle-callbacks>
 
-        <field name="createdAt" type="datetime"/>
-        <field name="updatedAt" type="datetime"/>
+        <field name="createdAt" type="datetime_immutable"/>
+        <field name="updatedAt" type="datetime_immutable"/>
 
     </entity>
 
