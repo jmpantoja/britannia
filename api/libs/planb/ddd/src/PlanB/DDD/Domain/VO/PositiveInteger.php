@@ -37,7 +37,7 @@ class PositiveInteger
     /**
      * @return int
      */
-    public function getNumber(): int
+    public function toInt(): int
     {
         return $this->number;
     }
@@ -55,7 +55,7 @@ class PositiveInteger
 
     public function __toString()
     {
-        return (string)$this->getNumber();
+        return (string)$this->toInt();
     }
 
 

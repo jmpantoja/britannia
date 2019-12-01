@@ -37,4 +37,9 @@ class CourseStatus extends Enum
         return $this->is(CourseStatus::FINALIZED());
     }
 
+    public function isOneOf(CourseStatus ...$allowedStatus)
+    {
+        return in_array($this, $allowedStatus);
+    }
+
 }

@@ -59,6 +59,15 @@ class Payment
 
 
     /**
+     * @return mixed
+     */
+    public function getMode(): PaymentMode
+    {
+        return $this->mode;
+    }
+
+
+    /**
      * @param mixed $account
      * @return Payment
      */
@@ -67,15 +76,6 @@ class Payment
         $this->account = $account;
         return $this;
     }
-
-    /**
-     * @return mixed
-     */
-    public function getMode(): PaymentMode
-    {
-        return $this->mode;
-    }
-
 
     /**
      * @return mixed

@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block body %}
-    {% if object.type == 'Adulto' %}
+    {% if object.adult %}
         {{ block('adult') }}
     {% else %}
         {{ block('child') }}

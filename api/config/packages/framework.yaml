@@ -19,3 +19,9 @@ framework:
     #fragments: true
     php_errors:
         log: true
+
+    assets:
+        version: 'v1'
+        version_format: '%%s?version=%%s'
+        base_path: ~
+        base_urls: ['%env(SITE_BASE_URL)%']

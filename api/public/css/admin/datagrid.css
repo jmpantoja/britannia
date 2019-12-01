@@ -36,6 +36,14 @@
     margin-top: 1em;
 }
 
+.table-responsive {
+    min-height: 20em;
+}
+
+.btn-disable {
+    cursor: default;
+}
+
 .course a, .course .attendance_sumary {
     float: left;
 }

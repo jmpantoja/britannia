@@ -8,18 +8,14 @@ use Britannia\Domain\Entity\Student\Adult;
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Repository\AttendanceRepositoryInterface;
 use Britannia\Domain\VO\SchoolCourse;
-use Britannia\Infraestructure\Symfony\Form\ContactModeType;
-use Britannia\Infraestructure\Symfony\Form\CourseType;
-use Britannia\Infraestructure\Symfony\Form\JobType;
-use Britannia\Infraestructure\Symfony\Form\OtherAcademyType;
-use Britannia\Infraestructure\Symfony\Form\PartOfDayType;
-use Britannia\Infraestructure\Symfony\Form\PaymentType;
-use Britannia\Infraestructure\Symfony\Form\RelativesType;
-use Britannia\Infraestructure\Symfony\Form\SchoolCourseType;
-use Britannia\Infraestructure\Symfony\Form\SchoolCourseTypeextends;
-use Britannia\Infraestructure\Symfony\Form\StudentCourseType;
-use Britannia\Infraestructure\Symfony\Form\StudentHasCoursesType;
-use Britannia\Infraestructure\Symfony\Form\TutorType;
+use Britannia\Infraestructure\Symfony\Form\Type\Student\ContactModeType;
+use Britannia\Infraestructure\Symfony\Form\Type\Student\JobType;
+use Britannia\Infraestructure\Symfony\Form\Type\Student\OtherAcademyType;
+use Britannia\Infraestructure\Symfony\Form\Type\Student\PartOfDayType;
+use Britannia\Infraestructure\Symfony\Form\Type\Student\PaymentType;
+use Britannia\Infraestructure\Symfony\Form\Type\Student\RelativesType;
+use Britannia\Infraestructure\Symfony\Form\Type\Student\StudentHasCoursesType;
+use Britannia\Infraestructure\Symfony\Form\Type\Student\TutorType;
 use Doctrine\ORM\QueryBuilder;
 use PlanB\DDDBundle\Symfony\Form\Type\DateType;
 use PlanB\DDDBundle\Symfony\Form\Type\DNIType;
@@ -36,6 +32,7 @@ use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
+use Sonata\Form\Type\BooleanType;
 use Sonata\Form\Type\DatePickerType;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -259,6 +256,12 @@ final class StudentAdmin extends AbstractAdmin
         $formMapper
             ->with('Pago', ['tab' => true])
             ->with('Descuento', ['class' => 'col-md-6'])
+            ->add('free_enrollment', BooleanType::class, [
+                'transform' => true,
+                'attr' => [
+                    'style' => 'width:100px'
+                ]
+            ])
             ->add('relatives', RelativesType::class, [
                 'btn_add' => false,
                 'label' => 'Familiares',

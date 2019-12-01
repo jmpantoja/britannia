@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Course;
 
 
+use Britannia\Domain\Entity\Book\Book;
 use Britannia\Domain\Entity\Staff\StaffMember;
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Entity\Student\StudentCourse;
@@ -135,6 +136,8 @@ class Course extends AggregateRoot
     private $lessons;
 
 
+    private $records;
+
     public function __construct()
     {
         $this->id = new CourseId();
@@ -142,6 +145,8 @@ class Course extends AggregateRoot
         $this->teachers = new ArrayCollection();
         $this->books = new ArrayCollection();
         $this->lessons = new ArrayCollection();
+
+        $this->status = CourseStatus::PENDING();
 
         $this->initColor();
     }
@@ -188,6 +193,7 @@ class Course extends AggregateRoot
      */
     public function isActive(): ?bool
     {
+
         return $this->status->isActive();
     }
 
@@ -197,6 +203,20 @@ class Course extends AggregateRoot
     public function isFinalized(): ?bool
     {
         return $this->status->isFinalized();
+    }
+
+
+    /**
+     * @return bool|null
+     */
+    public function isPending(): ?bool
+    {
+        return $this->status->isPending();
+    }
+
+    public function hasStatus(CourseStatus ...$allowedStatus): bool
+    {
+        return $this->status->isOneOf(...$allowedStatus);
     }
 
 
@@ -496,7 +516,7 @@ class Course extends AggregateRoot
     }
 
     /**
-     * @return Collection
+     * @return Book[]
      */
     public function getBooks(): Collection
     {
@@ -524,6 +544,12 @@ class Course extends AggregateRoot
     public function getStartDate(): CarbonImmutable
     {
         return $this->timeTable->getStart();
+    }
+
+
+    public function getEndDate(): CarbonImmutable
+    {
+        return $this->timeTable->getEnd();
     }
 
     /**
@@ -556,19 +582,42 @@ class Course extends AggregateRoot
         $this->lessons = $lessons;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getRecords()
+    {
+        return $this->records;
+    }
+
+    /**
+     * @param mixed $records
+     * @return Course
+     */
+    public function setRecords($records)
+    {
+        $this->records = $records;
+        return $this;
+    }
 
     public function getAvailablePlaces(): int
     {
-        return $this->numOfPlaces->getNumber() - $this->courseHasStudents->count();
+        return $this->numOfPlaces->toInt() - $this->courseHasStudents->count();
     }
 
     /**
      * @param TimeTable $timeTable
      * @return Course
      */
-    protected function update(): self
+    public function update(): self
     {
+        $students = $this->getStudents();
         $this->status = $this->timeTable->getStatus();
+
+        foreach ($students as $student) {
+            $student->onSave();
+        }
+
         return $this;
     }
 

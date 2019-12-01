@@ -6,29 +6,26 @@ namespace Britannia\Infraestructure\Symfony\Admin;
 
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\VO\CourseStatus;
-use Britannia\Infraestructure\Symfony\Form\AgeType;
-use Britannia\Infraestructure\Symfony\Form\CourseHasStudentsType;
-use Britannia\Infraestructure\Symfony\Form\ExaminerType;
-use Britannia\Infraestructure\Symfony\Form\HoursPerWeekType;
-use Britannia\Infraestructure\Symfony\Form\IntensiveType;
-use Britannia\Infraestructure\Symfony\Form\LevelType;
-use Britannia\Infraestructure\Symfony\Form\PeriodicityType;
-use Britannia\Infraestructure\Symfony\Form\TeachersType;
-use Britannia\Infraestructure\Symfony\Form\TimeSheetListType;
-use Britannia\Infraestructure\Symfony\Form\TimeTableType;
-use Doctrine\ORM\EntityRepository;
+use Britannia\Infraestructure\Symfony\Form\Type\Course\AgeType;
+use Britannia\Infraestructure\Symfony\Form\Type\Course\CourseHasStudentsType;
+use Britannia\Infraestructure\Symfony\Form\Type\Course\ExaminerType;
+use Britannia\Infraestructure\Symfony\Form\Type\Course\IntensiveType;
+use Britannia\Infraestructure\Symfony\Form\Type\Course\LevelType;
+use Britannia\Infraestructure\Symfony\Form\Type\Course\PeriodicityType;
+use Britannia\Infraestructure\Symfony\Form\Type\Course\TeachersType;
+use Britannia\Infraestructure\Symfony\Form\Type\Course\TimeSheetListType;
+use Britannia\Infraestructure\Symfony\Form\Type\Course\TimeTableType;
 use PlanB\DDDBundle\Symfony\Form\Type\PositiveIntegerType;
+
 use PlanB\DDDBundle\Symfony\Form\Type\PriceType;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\ColorType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -43,9 +40,7 @@ final class CourseAdmin extends AbstractAdmin
         $this->datagridValues = [
             'status' => ['value' => $status->getName()]
         ];
-
     }
-
 
     public function createQuery($context = 'list')
     {
@@ -63,6 +58,10 @@ final class CourseAdmin extends AbstractAdmin
     protected function configureRoutes(RouteCollection $collection)
     {
         $collection->clearExcept(['list', 'edit', 'create', 'delete', 'export']);
+
+        $collection->add('report-info', $this->getRouterIdParameter() . '/reports/info');
+        $collection->add('report-certificate', $this->getRouterIdParameter() . '/reports/certificate');
+        $collection->add('report-mark', $this->getRouterIdParameter() . '/reports/mark');
         return $collection;
     }
 
@@ -101,9 +100,19 @@ final class CourseAdmin extends AbstractAdmin
                 'label' => 'Cursos'
             ])
             ->add('status', null, [
-                'header_style' => 'width:30px',
+                'header_style' => 'width:30px;',
                 'template' => 'admin/course/status_list_field.html.twig',
                 'row_align' => 'center'
+            ])
+            ->add('_action', null, [
+                'label' => 'Informes',
+                'header_style' => 'width:210px; text-align: center',
+                'row_align' => 'center',
+                'actions' => [
+                    'report-info' => [
+                        'template' => 'admin/course/course_info_report_action.html.twig'
+                    ]
+                ]
             ]);
     }
 
@@ -151,8 +160,11 @@ final class CourseAdmin extends AbstractAdmin
             ])
             ->end()
             ->with('Coste', ['class' => 'col-md-4'])
-            ->add('monthlyPayment', PriceType::class)
             ->add('books')
+            ->add('monthlyPayment', PriceType::class)
+            ->add('discount', PriceType::class, [
+                'mapped' => false
+            ])
             ->end()
             ->end()
             ->with('Horario', ['tab' => true])

@@ -52,7 +52,7 @@ class PriceType extends Type
             return $value;
         }
 
-        return $value->getPrice();
+        return $value->toFloat();
     }
 
 

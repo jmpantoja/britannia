@@ -53,7 +53,7 @@ class PositiveIntegerType extends Type
             return $value;
         }
 
-        return $value->getNumber();
+        return $value->toInt();
     }
 
 

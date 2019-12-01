@@ -12,6 +12,19 @@ services:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
+    Sonata\AdminBundle\Command\GenerateObjectAclCommand:
+        class: Sonata\AdminBundle\Command\GenerateObjectAclCommand
+        public: true
+        arguments:
+            - '@sonata.admin.pool'
+            - []
+            - ~                    
+        tags: ['console.command']
+
+
+    Sonata\Form\Date\MomentFormatConverter:
+        alias: sonata.core.date.moment_format_converter
+
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     Britannia\:
@@ -36,7 +49,6 @@ services:
         arguments:
         - '@doctrine.dbal.original_connection'
     #            - '@doctrine.dbal.default_connection'
-
 
     Britannia\Infraestructure\Symfony\Importer\ImporterManager:
         calls:
@@ -88,7 +100,7 @@ services:
 
     admin.course:
         class: Britannia\Infraestructure\Symfony\Admin\CourseAdmin
-        arguments: [~, Britannia\Domain\Entity\Course\Course, ~]
+        arguments: [~, Britannia\Domain\Entity\Course\Course, Britannia\Infraestructure\Symfony\Controller\Admin\CourseController]
         tags:
         - { name: sonata.admin, manager_type: orm, group: Cursos, label: Cursos, pager_type: 'simple' }
         public: true

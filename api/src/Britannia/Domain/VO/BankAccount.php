@@ -135,9 +135,15 @@ class BankAccount
         return $this;
     }
 
+    public function getLastDigits(){
+        $complete = $this->getIban()->getElectronicFormat();
+        return substr($complete, -4);
+    }
+
     public function __toString()
     {
         return $this->getIban()->getElectronicFormat();
     }
+
 
 }

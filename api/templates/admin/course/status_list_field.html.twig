@@ -13,13 +13,13 @@
 
 
 {% block pending %}
-    <span class="label label-warning">{{ object.status.value }}</span>
+    <span class="btn btn-warning btn-disable">{{ object.status.value }}</span>
 {% endblock %}
 
 {% block active %}
-    <span class="label label-success">{{ object.status.value }}</span>
+    <span class="btn btn-success btn-disable">{{ object.status.value }}</span>
 {% endblock %}
 
 {% block finalized %}
-    <span class="label label-danger">{{ object.status.value }}</span>
+    <span class="btn btn-danger btn-disable">{{ object.status.value }}</span>
 {% endblock %}

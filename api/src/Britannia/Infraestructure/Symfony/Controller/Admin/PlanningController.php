@@ -27,38 +27,20 @@ class PlanningController extends AbstractController
      * @var PlanningService
      */
     private $service;
-    /**
-     * @var Pdf
-     */
-    private $pdf;
 
-    public function __construct(PlanningService $service, Pdf $pdf)
+    public function __construct(PlanningService $service)
     {
         $this->service = $service;
-        $this->pdf = $pdf;
     }
 
     public function index()
     {
         $classRooms = $this->service->getClassRooms();
 
-        return  $this->render('admin/occupation/index.html.twig', [
+        return $this->render('admin/occupation/index.html.twig', [
             'classRooms' => json_encode($classRooms),
             'events_route' => 'planning_events'
         ]);
-
-//        $html = $this->renderView('admin/occupation/borrame.html.twig', [
-//        ]);
-//
-//        $filename = sprintf('specifications-%s.pdf', date('Y-m-d-hh-ss'));
-//        return new Response(
-//            $this->pdf->getOutputFromHtml($html),
-//            200,
-//            [
-//                'Content-Type' => 'application/pdf',
-//                'Content-Disposition' => sprintf('attachment; filename="%s"', $filename),
-//            ]
-//        );
     }
 
     public function events(Request $request)

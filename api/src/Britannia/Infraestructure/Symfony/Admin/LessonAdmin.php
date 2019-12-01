@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Britannia\Infraestructure\Symfony\Admin;
 
-use Britannia\Infraestructure\Symfony\Form\AttendanceListType;
+use Britannia\Infraestructure\Symfony\Form\Type\Lesson\AttendanceListType;
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
@@ -58,7 +58,6 @@ final class LessonAdmin extends AbstractAdmin
                     'label' => 'Fecha',
                     'callback' => function (ProxyQuery $query, $alias, $field, $value) {
                         $date = CarbonImmutable::make($value['value']);
-
                         $this->configureQuery($query, $date);
                         return true;
                     },

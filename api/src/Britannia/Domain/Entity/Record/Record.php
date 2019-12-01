@@ -25,11 +25,11 @@ class Record
      * @var RecordId
      */
     private $id;
+
     /**
      * @var Student
      */
     private $student;
-
 
     /**
      * @var Course
@@ -104,6 +104,11 @@ class Record
      */
     public function getStudent(): Student
     {
+
+        if($this->student === null){
+            dump($this->id, $this->type, $this->description, $this->student);
+            die('x');
+        }
         return $this->student;
     }
 
@@ -154,6 +159,5 @@ class Record
     {
         return $this->description;
     }
-
 
 }

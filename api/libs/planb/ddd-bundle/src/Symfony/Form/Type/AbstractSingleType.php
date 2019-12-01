@@ -123,12 +123,13 @@ abstract class AbstractSingleType extends AbstractType implements DataTransforme
      */
     public function transform($value)
     {
+        $options = $this->getOptions();
+
+        $value = $value ?? $options['empty_data'] ?? null;
+
         if (is_null($value)) {
             return $value;
         }
-
-        $options = $this->getOptions();
-
 
         if (!class_exists((string)$options['data_class'])) {
             return (string)$value;

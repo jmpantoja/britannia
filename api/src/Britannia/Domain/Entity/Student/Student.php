@@ -8,6 +8,8 @@ use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Record\StudentHasBeenCreated;
 use Britannia\Domain\Entity\Record\StudentHasJoinedToCourse;
 use Britannia\Domain\VO\ContactMode;
+use Britannia\Domain\VO\CourseStatus;
+use Britannia\Domain\VO\Discount;
 use Britannia\Domain\VO\NumOfYears;
 use Britannia\Domain\VO\OtherAcademy;
 use Britannia\Domain\VO\PartOfDay;
@@ -20,6 +22,7 @@ use PlanB\DDD\Domain\VO\Email;
 use PlanB\DDD\Domain\VO\FullName;
 use PlanB\DDD\Domain\VO\PhoneNumber;
 use PlanB\DDD\Domain\VO\PostalAddress;
+use PlanB\DDD\Domain\VO\Price;
 
 
 abstract class Student extends AggregateRoot
@@ -74,6 +77,11 @@ abstract class Student extends AggregateRoot
      * @var Student[]
      */
     private $relatives;
+
+    /**
+     * @var bool
+     */
+    private $freeEnrollment = false;
 
     /**
      * @var Payment
@@ -149,7 +157,6 @@ abstract class Student extends AggregateRoot
      */
     private $birthMonth;
 
-
     /**
      * @var Collection
      */
@@ -191,29 +198,24 @@ abstract class Student extends AggregateRoot
     }
 
 
-    public function getType(): string
+    public function isAdult(): bool
     {
-        switch (static::class) {
-            case Adult::class;
-                return 'Adulto';
-            case Child::class;
-                return 'Niño';
-        }
+        return static::class === Adult::class;
     }
 
-    public function getAllCourses()
+    public function isChild(): bool
     {
-        return $this->studentHasCourses->map(function (StudentCourse $studentCourse) {
+        return static::class === Adult::class;
+    }
+
+    public function findCoursesByStatus(CourseStatus ...$allowedStatus): Collection
+    {
+        $courses = $this->studentHasCourses->map(function (StudentCourse $studentCourse) {
             return $studentCourse->getCourse();
         });
-    }
 
-    public function getCourses(): Collection
-    {
-        $allCourses = $this->getAllCourses();
-
-        return $allCourses->filter(function (Course $course) {
-            return !$course->isFinalized();
+        return $courses->filter(function (Course $course) use ($allowedStatus) {
+            return $course->hasStatus(...$allowedStatus);
         });
     }
 
@@ -366,6 +368,26 @@ abstract class Student extends AggregateRoot
 
         return $this;
     }
+
+    /**
+     * @return bool
+     */
+    public function isFreeEnrollment(): bool
+    {
+        return $this->freeEnrollment;
+    }
+
+    /**
+     * @param bool $freeEnrollment
+     * @return Student
+     */
+    public function setFreeEnrollment(bool $freeEnrollment): Student
+    {
+
+        $this->freeEnrollment = $freeEnrollment;
+        return $this;
+    }
+
 
     /**
      * @return Student[]
@@ -623,6 +645,14 @@ abstract class Student extends AggregateRoot
     }
 
     /**
+     * @return Discount
+     */
+    public function getDiscount(): Discount
+    {
+        return Discount::fromStudent($this);
+    }
+
+    /**
      * @return CarbonImmutable
      */
     public function getCreatedAt(): CarbonImmutable
@@ -658,9 +688,10 @@ abstract class Student extends AggregateRoot
 
         $this->setUpdatedAt(CarbonImmutable::now());
 
-        $courses = $this->getCourses();
-        $this->active = !$courses->isEmpty();
+        $allowedStatus = [CourseStatus::ACTIVE, CourseStatus::PENDING];
+        $courses = $this->findCoursesByStatus(...$allowedStatus);
 
+        $this->active = !$courses->isEmpty();
         return $this;
     }
 

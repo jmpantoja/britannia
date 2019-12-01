@@ -29,65 +29,92 @@ doctrine:
                 url: '%env(resolve:DATABASE_URL)%'
 
                 mapping_types:
-                    StaffMemberId: StaffMemberId
+                    #Academy
                     AcademyId: AcademyId
-                    SchoolId: SchoolId
-                    StudentId: StudentId
-                    TutorId: TutorId
+                    
+                    #Book
+                    BookId: BookId
+                    BookCategory: BookCategory
+                    
+                    #ClassRoom
                     ClassRoomId: ClassRoomId
-                    LessonId: LessonId
+                    
+                    #Course
                     AttendanceId: AttendanceId
                     LevelId: LevelId
                     CourseId: CourseId
-                    RecordId: RecordId
-                    BookId: BookId
-
-                    JobStatus: JobStatus
                     CourseStatus: CourseStatus
-                    PartOfDay: PartOfDay
                     DayOfWeek: DayOfWeek
+                    Examiner: Examiner
+                    Age: Age
+                    Periodicity: Periodicity
+                    Intensive: Intensive                    
+                    
+                    #Staff
+                    StaffMemberId: StaffMemberId
+                    
+                    #Student
+                    SchoolId: SchoolId
+                    StudentId: StudentId
+                    TutorId: TutorId
+                    JobStatus: JobStatus
+                    PartOfDay: PartOfDay
                     NumOfYears: NumOfYears
                     ContactMode: ContactMode
                     PaymentMode: PaymentMode
                     BankAccount: BankAccount
-                    BookCategory: BookCategory
-                    Examiner: Examiner
-                    Age: Age
-                    Periodicity: Periodicity
-                    Intensive: Intensive
+                                        
+                    #Lesson
+                    LessonId: LessonId
+                    
+                    #Record
+                    RecordId: RecordId                                            
                     TypeOfRecord: TypeOfRecord
 
         types:
-            StaffMemberId:  Britannia\Infraestructure\Doctrine\DBAL\Type\StaffMemberIdType
-            AcademyId:  Britannia\Infraestructure\Doctrine\DBAL\Type\AcademyIdType
-            SchoolId:  Britannia\Infraestructure\Doctrine\DBAL\Type\SchoolIdType
-            StudentId: Britannia\Infraestructure\Doctrine\DBAL\Type\StudentIdType
-            TutorId: Britannia\Infraestructure\Doctrine\DBAL\Type\TutorIdType
-            ClassRoomId: Britannia\Infraestructure\Doctrine\DBAL\Type\ClassRoomIdType
-            LessonId: Britannia\Infraestructure\Doctrine\DBAL\Type\LessonIdType
-            LevelId: Britannia\Infraestructure\Doctrine\DBAL\Type\LevelId
-            CourseId: Britannia\Infraestructure\Doctrine\DBAL\Type\CourseId
-            RecordId: Britannia\Infraestructure\Doctrine\DBAL\Type\RecordId
-            AttendanceId: Britannia\Infraestructure\Doctrine\DBAL\Type\AttendanceId
-            BookId: Britannia\Infraestructure\Doctrine\DBAL\Type\BookIdType
+            #Academy
+            AcademyId:  Britannia\Infraestructure\Doctrine\DBAL\Type\Academy\AcademyIdType
+            
+            #Book
+            BookId: Britannia\Infraestructure\Doctrine\DBAL\Type\Book\BookIdType
+            BookCategory: Britannia\Infraestructure\Doctrine\DBAL\Type\Book\BookCategoryType
 
+            #Classroom
+            ClassRoomId: Britannia\Infraestructure\Doctrine\DBAL\Type\ClassRoom\ClassRoomIdType
 
-            JobStatus: Britannia\Infraestructure\Doctrine\DBAL\Type\JobStatusType
-            CourseStatus: Britannia\Infraestructure\Doctrine\DBAL\Type\CourseStatusType
-            PartOfDay: Britannia\Infraestructure\Doctrine\DBAL\Type\PartOfDayType
-            DayOfWeek: Britannia\Infraestructure\Doctrine\DBAL\Type\DayOfWeekType
-            NumOfYears: Britannia\Infraestructure\Doctrine\DBAL\Type\NumOfYearsType
-            ContactMode: Britannia\Infraestructure\Doctrine\DBAL\Type\ContactModeType
-            PaymentMode: Britannia\Infraestructure\Doctrine\DBAL\Type\PaymentModeType
-            BankAccount: Britannia\Infraestructure\Doctrine\DBAL\Type\BankAccountType
-            BookCategory: Britannia\Infraestructure\Doctrine\DBAL\Type\BookCategoryType
+            #Courses
+            Age: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\AgeType
+            AttendanceId: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\AttendanceId
+            DayOfWeek: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\DayOfWeekType
+            Examiner: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\ExaminerType
+            Intensive: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\IntensiveType
+            Periodicity: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\PeriodicityType
+            CourseStatus: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\CourseStatusType            
+            CourseId: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\CourseId
+            LevelId: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\LevelId
+            
+            #Lesson
+            LessonId: Britannia\Infraestructure\Doctrine\DBAL\Type\Lesson\LessonIdType
 
-            Examiner: Britannia\Infraestructure\Doctrine\DBAL\Type\ExaminerType
-            Age: Britannia\Infraestructure\Doctrine\DBAL\Type\AgeType
-            Periodicity: Britannia\Infraestructure\Doctrine\DBAL\Type\PeriodicityType
-            Intensive: Britannia\Infraestructure\Doctrine\DBAL\Type\IntensiveType
+            #Record
+            RecordId: Britannia\Infraestructure\Doctrine\DBAL\Type\Record\RecordId
+            TypeOfRecord: Britannia\Infraestructure\Doctrine\DBAL\Type\Record\TypeOfRecordType
 
-            TypeOfRecord: Britannia\Infraestructure\Doctrine\DBAL\Type\TypeOfRecordType
+            #School
+            SchoolId:  Britannia\Infraestructure\Doctrine\DBAL\Type\School\SchoolIdType            
+            
+            #Staff
+            StaffMemberId:  Britannia\Infraestructure\Doctrine\DBAL\Type\Staff\StaffMemberIdType
+                            
+            #Student
+            StudentId: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\StudentIdType            
+            TutorId: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\TutorIdType
+            JobStatus: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\JobStatusType            
+            PartOfDay: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\PartOfDayType            
+            NumOfYears: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\NumOfYearsType
+            ContactMode: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\ContactModeType
+            PaymentMode: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\PaymentModeType
+            BankAccount: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\BankAccountType
 
     orm:
         auto_generate_proxy_classes: true

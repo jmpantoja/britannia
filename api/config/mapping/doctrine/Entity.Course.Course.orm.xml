@@ -55,6 +55,9 @@
             </cascade>
         </one-to-many>
 
+        <one-to-many field="records" target-entity="Britannia\Domain\Entity\Record\Record" mapped-by="course"
+                     orphan-removal="true"/>
+
         <many-to-many field="teachers" target-entity="Britannia\Domain\Entity\Staff\StaffMember" mapped-by="courses">
             <cascade>
                 <cascade-persist/>

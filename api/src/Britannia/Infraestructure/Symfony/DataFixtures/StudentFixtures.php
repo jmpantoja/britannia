@@ -41,7 +41,7 @@ class StudentFixtures extends BaseFixture
             sprintf('%s/dumps/britannia_tutors.sql', __DIR__),
             sprintf('%s/dumps/britannia_students_courses.sql', __DIR__),
             sprintf('%s/dumps/britannia_attendance_control.sql', __DIR__),
-            sprintf('%s/dumps/britannia_student_records.sql', __DIR__),
+//            sprintf('%s/dumps/britannia_student_records.sql', __DIR__),
         ];
     }
 

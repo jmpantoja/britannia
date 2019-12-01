@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Admin;
 
 use Britannia\Domain\Entity\Staff\StaffMember;
-use Britannia\Infraestructure\Symfony\Form\RoleType;
+use Britannia\Domain\VO\CourseStatus;
+use Britannia\Infraestructure\Symfony\Form\Type\Staff\RoleType;
 use Doctrine\ORM\EntityRepository;
 use PlanB\DDDBundle\Symfony\Form\Type\DNIType;
 use PlanB\DDDBundle\Symfony\Form\Type\EmailListType;
@@ -125,10 +126,11 @@ final class StaffMemberAdmin extends AbstractAdmin
                 ->add('courses', null, [
                     'label' => false,
                     'by_reference' => false,
+                    'choice_label' => 'name',
                     'query_builder' => function (EntityRepository $er) {
                         return $er->createQueryBuilder('m')
-                            ->where('m.active = :param')
-                            ->setParameter('param', true);
+                            ->where('m.status= :param')
+                            ->setParameter('param', CourseStatus::ACTIVE());
                     }
                 ])
                 ->end();

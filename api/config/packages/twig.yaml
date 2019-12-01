@@ -5,6 +5,8 @@ twig:
 
     globals:
         attendances: '@Britannia\Infraestructure\Symfony\Service\Attendance\AttendanceService'
+        schedules: '@Britannia\Infraestructure\Symfony\Service\Course\ScheduleService'
+        paymentInfo: '@Britannia\Domain\Service\Payment\PaymentInfoService'
 
     form_themes:    
     - '@SonataFormatter/Form/formatter.html.twig'

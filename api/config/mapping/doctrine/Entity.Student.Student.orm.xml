@@ -44,6 +44,8 @@
 
         <field name="phoneNumbers" column="phone_numbers" type="phone_number_list"/>
 
+        <field name="freeEnrollment" type="boolean" />
+
         <many-to-many field="relatives" target-entity="Student">
             <cascade>
                 <cascade-all/>

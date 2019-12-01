@@ -1,0 +1,303 @@
+{% extends 'base_pdf.html.twig' %}
+
+{% block stylesheets %}
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css">
+
+{% endblock %}
+
+{% block style %}
+    <style>
+        body {
+            padding: 50mm 15mm 0 15mm;
+            font-family: 'Open Sans';
+            font-size: 150%;
+        }
+
+        section {
+            margin-top: 2em;
+            overflow: auto;
+        }
+
+        h2.title {
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .calendar {
+            margin-top: 1em;
+        }
+
+        .calendar .date, .schedule .date {
+            text-transform: uppercase;
+            font-size: 1.1em;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        table thead tr {
+            text-align: right;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        table, th, td {
+            table-layout: auto;
+        }
+
+        tbody td {
+            padding: 8px 0;
+            border-bottom: solid 1px #BBB;
+        }
+
+        tr.separator {
+            height: 5em;
+        }
+
+        tr.separator td {
+            padding-top: 8px;
+            vertical-align: top;
+            margin-top: 5px;
+            border-bottom: none;
+        }
+
+        td.title {
+            font-weight: bold;
+        }
+
+        td.subtitle {
+            text-align: right;
+            font-style: italic;
+        }
+
+        td.reason {
+            text-align: left;
+            text-transform: lowercase;
+            width: 60%;
+        }
+
+        td.reason::first-letter {
+            text-transform: uppercase;
+        }
+
+        td.number {
+            text-align: right;
+        }
+
+
+        .week {
+            margin-top: 2em;
+        }
+
+        .week p.day span.day-name {
+            display: inline-block;
+            /*min-width: 20%;*!*/
+            font-weight: bold;
+        }
+
+        div.notes {
+            margin-top: 3px;
+        }
+
+        div.notes p {
+            font-size: 0.85em;
+            margin-bottom: 0;
+            font-style: italic;
+        }
+
+        div.notes p::before {
+            content: '-';
+        }
+
+    </style>
+
+{% endblock %}
+
+
+{% block body %}
+
+    <h2 class="title">{{ course.name }}</h2>
+
+    <section class="schedule">
+        <h3><span class="fa fa-calendar" aria-hidden="true"></span> Horario:</h3>
+
+        <p class="calendar">
+            Desde el <span class="date">{{ course.startDate | localizeddate('long', 'none') }}</span>
+            hasta el <span class="date">{{ course.endDate | localizeddate('long', 'none') }}</span>
+        </p>
+
+        <div class="week">
+            {% set schedule = course.timeTable.schedule %}
+
+            {% for lesson in  schedule %}
+                <p class="day">
+                    <span class="day-name">{{ lesson.dayOfWeek.value }}</span>
+                    de <span class="date">{{ lesson.start | date('H:i') }}</span>
+                    a {{ lesson.end | date('H:i') }}
+                </p>
+            {% endfor %}
+
+        </div>
+    </section>
+
+    <section class="payment">
+        <h3><span class="fa fa-credit-card" aria-hidden="true"></span> Abonos:</h3>
+
+        <table>
+            <thead>
+            <tr>
+                {% with {reason: '', price: 'precio', discount: 'descuento', total: 'total' } %}
+                    {{ block('row') }}
+                {% endwith %}
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr>
+                <td class="title" colspan="4">Reserva del curso</td>
+            </tr>
+            <tr>
+                {% with {reason: 'Matrícula', concept: paymentInfo.enrollment(course, discount) } %}
+                    {{ block('concept') }}
+                {% endwith %}
+            </tr>
+            <tr>
+                {% with {reason: 'Material', concept: paymentInfo.material(course) } %}
+                    {{ block('concept') }}
+                {% endwith %}
+            </tr>
+
+            <tr>
+                {% with {reason: 'Primera y última mensualidad', concept: paymentInfo.reserveMonthly(course, discount) } %}
+                    {{ block('concept') }}
+                {% endwith %}
+            </tr>
+            <tr class="separator">
+                <td class="subtitle" colspan="3">Total reserva:</td>
+                <td class="number">
+                    {{ _self.format_money(paymentInfo.reserveTotal(course, discount)) }}
+                </td>
+            </tr>
+
+            <tr>
+                <td class="title" colspan="4">Mensualidades</td>
+            </tr>
+
+            <tr>
+
+                {% set start = _self.short_date(course.startDate | date_modify('first day of next month')) %}
+                {% set end = _self.short_date(course.endDate | date_modify('first day of previous month')) %}
+
+                {% set reason = 'cada mes entre <b>%s</b> y <b>%s</b>' | format(start, end) %}
+
+                {% with {reason: reason, concept: paymentInfo.monthly(course, discount) } %}
+                    {{ block('concept') }}
+                {% endwith %}
+            </tr>
+
+            </tbody>
+        </table>
+        {% if student %}
+            {{ block('notes') }}
+        {% endif %}
+
+
+    </section>
+{% endblock %}
+
+{% block schedule_day %}
+    <div class="day">
+        {% if day.times is null %}
+            {{ block('schedule_day_disposable') }}
+        {% else %}
+            {{ block('schedule_day_available') }}
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block schedule_day_disposable %}
+    <div class="box disposable">
+        <span class="head">{{ day.name }}</span>
+        <span class="body">
+            &nbsp; <br/> &nbsp;
+        </span>
+    </div>
+{% endblock %}
+
+{% block schedule_day_available %}
+    <div class="box ">
+        <span class="head">{{ day.name }}</span>
+        <span class="body">
+            {{ day.times.start }} <br/> {{ day.times.end }}
+        </span>
+    </div>
+{% endblock %}
+
+{% block row %}
+    <td>{{ reason }}</td>
+    <td>{{ price }}</td>
+    <td>{{ discount }}</td>
+    <td>{{ total }}</td>
+{% endblock %}
+
+{% block concept %}
+    <td class="reason">{{ reason | raw }}</td>
+    <td class="number">{{ _self.format_money(concept.price) }}</td>
+
+    <td class="number">{{ _self.format_percent(concept.discount.toInt) }}</td>
+    <td class="number">{{ _self.format_money(concept.total) }}</td>
+{% endblock %}
+
+{% block notes %}
+    <div class="notes">
+        <p>Estos precios sólo son válidos {{ student.fullName.regular }}</p>
+        {% set mode = student.payment.mode %}
+        {% if mode.cash == false %}
+            {% set account = student.payment.account %}
+            <p>Los cobros se realizarán el dia {{ mode.dayNumber }} de cada mes en la cuenta terminada
+                en {{ account.lastDigits }}</p>
+        {% endif %}
+    </div>
+{% endblock %}
+
+
+{% macro format_money(price) %}
+    {% if price == 0 %}
+        -
+    {% else %}
+        {{ price | number_format(2) }} €
+    {% endif %}
+{% endmacro %}
+
+{% macro format_percent(price) %}
+    {% if price == 0 %}
+        -
+    {% else %}
+        {{ price }}%
+    {% endif %}
+{% endmacro %}
+
+{% macro short_date(date) %}
+
+    {% set month = date | date('m') %}
+    {% set year = date | date('Y') %}
+
+    {% if month == 1 %}{% set month_name = 'ene' %}{% endif %}
+    {% if month == 2 %}{% set month_name = 'feb' %}{% endif %}
+    {% if month == 3 %}{% set month_name = 'mar' %}{% endif %}
+    {% if month == 4 %}{% set month_name = 'abr' %}{% endif %}
+    {% if month == 5 %}{% set month_name = 'mayo' %}{% endif %}
+    {% if month == 6 %}{% set month_name = 'jun' %}{% endif %}
+    {% if month == 7 %}{% set month_name = 'jul' %}{% endif %}
+    {% if month == 8 %}{% set month_name = 'ago' %}{% endif %}
+    {% if month == 9 %}{% set month_name = 'sept' %}{% endif %}
+    {% if month == 10 %}{% set month_name = 'oct' %}{% endif %}
+    {% if month == 11 %}{% set month_name = 'nov' %}{% endif %}
+    {% if month == 12 %}{% set month_name = 'dic' %}{% endif %}
+
+    {{ '%s/%s' | format(month_name, year) | raw }}
+
+{% endmacro %}

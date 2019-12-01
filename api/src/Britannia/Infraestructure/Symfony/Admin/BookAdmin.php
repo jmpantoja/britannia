@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Britannia\Infraestructure\Symfony\Admin;
 
-use Britannia\Infraestructure\Symfony\Form\BookCategoryType;
+use Britannia\Infraestructure\Symfony\Form\Type\Book\BookCategoryType;
 use PlanB\DDDBundle\Symfony\Form\Type\PriceType;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;

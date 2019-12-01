@@ -1,0 +1,7 @@
+parameters:
+    family_discount:
+        order:
+        - 0
+        - 5
+        - 15
+        increase: 5

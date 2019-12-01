@@ -34,10 +34,38 @@ class Price
         $this->setPrice($price);
     }
 
+    public function add(Price $otherPrice): Price
+    {
+        $total = $this->toFloat() + $otherPrice->toFloat();
+        return Price::make($total);
+    }
+
+    /**
+     * Si el objeto actual es:
+     * mayor que el argumento: devuelve 1
+     * igual que el argumento: devuelve 0
+     * menor que el argumento: devuelve -1
+     *
+     * @param Price $price
+     * @return int
+     */
+    public function compare(Price $price): int
+    {
+        if ($this->toFloat() > $price->toFloat()) {
+            return 1;
+        }
+
+        if ($this->toFloat() === $price->toFloat()) {
+            return 0;
+        }
+
+        return -1;
+    }
+
     /**
      * @return int
      */
-    public function getPrice(): float
+    public function toFloat(): float
     {
         return $this->price;
     }
@@ -55,7 +83,7 @@ class Price
 
     public function __toString()
     {
-        return number_format($this->getPrice(), 2);
+        return number_format($this->toFloat(), 2);
     }
 
 

@@ -27,4 +27,17 @@ class PaymentMode extends Enum
     {
         return $this->is(PaymentMode::CASH());
     }
+
+    public function getDayNumber(): ?int
+    {
+        if ($this->is(PaymentMode::DAY_1())) {
+            return 1;
+        }
+
+        if ($this->is(PaymentMode::DAY_10())) {
+            return 10;
+        }
+
+        return null;
+    }
 }
