@@ -62,6 +62,9 @@
             "ref": "44d3aa7752dd46f77ba11af2297a25e1dedfb4d0"
         }
     },
+    "doctrine/doctrine-cache-bundle": {
+        "version": "1.4.0"
+    },
     "doctrine/doctrine-fixtures-bundle": {
         "version": "3.0",
         "recipe": {
@@ -199,6 +202,9 @@
     },
     "nikic/php-parser": {
         "version": "v4.2.4"
+    },
+    "php": {
+        "version": "7.3"
     },
     "php-cs-fixer/diff": {
         "version": "v1.2.0"

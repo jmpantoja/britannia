@@ -13,7 +13,7 @@
         }
     ],
     "require": {
-        "php": "^7.2",
+        "php": "^7.3",
         "beberlei/assert": "^3.2",
         "ramsey/uuid-doctrine": "^1.5"
     },
@@ -28,6 +28,12 @@
     "autoload-dev": {
         "psr-4": {
             "PlanB\\DDD\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "symfony": {
+            "allow-contrib": false,
+            "require": "4.4.*"
         }
     }
 }

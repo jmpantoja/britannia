@@ -16,7 +16,7 @@
         }
     ],
     "require": {
-        "php": "^7.2",
+        "php": "^7.3",
         "api-platform/core": "^2.4",
         "doctrine/event-manager": "^1.0",
         "symfony/http-kernel": "^4.2",
@@ -33,6 +33,12 @@
     "autoload-dev": {
         "psr-4": {
             "PlanB\\DDDBundle\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "symfony": {
+            "allow-contrib": false,
+            "require": "4.4.*"
         }
     }
 }

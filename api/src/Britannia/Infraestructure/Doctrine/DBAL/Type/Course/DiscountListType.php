@@ -42,6 +42,10 @@ class DiscountListType extends Type
             'allowed_classes' => [Discount::class]
         ]);
 
+        if(!is_array($data)){
+            return null;
+        }
+
         return new ArrayCollection($data);
     }
 
