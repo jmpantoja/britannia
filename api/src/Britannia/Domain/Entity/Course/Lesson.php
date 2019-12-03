@@ -18,7 +18,7 @@ use Britannia\Domain\Entity\ClassRoom\ClassRoom;
 use Britannia\Domain\Entity\ClassRoom\ClassRoomId;
 use Britannia\Domain\Entity\Record\StudentHasMissedLesson;
 use Britannia\Domain\Entity\Student\Student;
-use Britannia\Domain\VO\TimeSheet;
+use Britannia\Domain\VO\Course\TimeTable\TimeSheet;
 use Carbon\CarbonImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;

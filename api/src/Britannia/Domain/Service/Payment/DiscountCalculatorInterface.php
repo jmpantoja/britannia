@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Domain\Service\Payment;
 
 
-use Britannia\Domain\VO\Discount;
+use Britannia\Domain\VO\Discount\Discount;
 use PlanB\DDD\Domain\VO\Percent;
 
 interface DiscountCalculatorInterface

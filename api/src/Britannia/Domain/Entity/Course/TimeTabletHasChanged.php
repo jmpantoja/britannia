@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Course;
 
 
-use Britannia\Domain\VO\TimeTable;
+use Britannia\Domain\VO\Course\TimeTable\TimeTable;
 use PlanB\DDD\Domain\Event\DomainEvent;
 
 class TimeTabletHasChanged extends DomainEvent

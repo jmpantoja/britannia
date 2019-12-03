@@ -15,9 +15,9 @@ namespace Britannia\Infraestructure\Symfony\Importer\Builder\Traits;
 
 
 use Britannia\Domain\Entity\ClassRoom\ClassRoomId;
-use Britannia\Domain\VO\DayOfWeek;
+use Britannia\Domain\VO\Course\TimeTable\DayOfWeek;
 use Britannia\Domain\VO\LessonLength;
-use Britannia\Domain\VO\TimeSheet;
+use Britannia\Domain\VO\Course\TimeTable\TimeSheet;
 use Carbon\CarbonImmutable;
 use Symfony\Component\Validator\ConstraintViolationList;
 

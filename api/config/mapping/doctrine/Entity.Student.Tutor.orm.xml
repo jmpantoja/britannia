@@ -20,7 +20,7 @@
 
         <field name="phoneNumbers" column="phone_numbers" type="phone_number_list"/>
 
-        <embedded name="job" class="Britannia\Domain\VO\Job" />
+        <embedded name="job" class="Britannia\Domain\VO\Student\Job\Job" />
 
     </entity>
 

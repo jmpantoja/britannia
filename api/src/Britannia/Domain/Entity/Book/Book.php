@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Book;
 
 
-use Britannia\Domain\VO\BookCategory;
+use Britannia\Domain\VO\Course\Book\BookCategory;
 use PlanB\DDD\Domain\VO\Price;
 
 class Book

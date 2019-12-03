@@ -22,7 +22,7 @@ use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Repository\AttendanceRepositoryInterface;
 use Britannia\Domain\Repository\CalendarRepositoryInterface;
 use Britannia\Domain\Repository\ClassRoomRepositoryInterface;
-use Britannia\Domain\VO\DayOfWeek;
+use Britannia\Domain\VO\Course\TimeTable\DayOfWeek;
 use Carbon\CarbonImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;

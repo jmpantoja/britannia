@@ -5,18 +5,17 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Admin;
 
 use Britannia\Domain\Entity\Course\Course;
-use Britannia\Domain\VO\CourseStatus;
+use Britannia\Domain\VO\Course\CourseStatus;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\AgeType;
+use Britannia\Infraestructure\Symfony\Form\Type\Course\Discount\DiscountListTye;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\CourseHasStudentsType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\ExaminerType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\IntensiveType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\LevelType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\PeriodicityType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\TeachersType;
-use Britannia\Infraestructure\Symfony\Form\Type\Course\TimeSheetListType;
-use Britannia\Infraestructure\Symfony\Form\Type\Course\TimeTableType;
+use Britannia\Infraestructure\Symfony\Form\Type\Course\TimeTable\TimeTableType;
 use PlanB\DDDBundle\Symfony\Form\Type\PositiveIntegerType;
-
 use PlanB\DDDBundle\Symfony\Form\Type\PriceType;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -123,7 +122,7 @@ final class CourseAdmin extends AbstractAdmin
 
         $formMapper
             ->with('Ficha del curso', ['tab' => true])
-            ->with('Nombre', ['class' => 'col-md-4'])
+            ->with('Nombre', ['class' => 'col-md-3'])
             ->add('name', TextType::class, [
                 'required' => true,
                 'constraints' => [
@@ -136,7 +135,7 @@ final class CourseAdmin extends AbstractAdmin
                 'required' => false,
             ])
             ->end()
-            ->with('Descripción', ['class' => 'col-md-4'])
+            ->with('Descripción', ['class' => 'col-md-3'])
             ->add('numOfPlaces', PositiveIntegerType::class, [
                 'label' => 'Plazas',
                 'attr' => [
@@ -159,28 +158,45 @@ final class CourseAdmin extends AbstractAdmin
                 ]
             ])
             ->end()
-            ->with('Coste', ['class' => 'col-md-4'])
-            ->add('books')
-            ->add('monthlyPayment', PriceType::class)
-            ->add('discount', PriceType::class, [
-                'mapped' => false
-            ])
             ->end()
+
+            ->with('Coste', ['tab' => true])
+
+            ->with('Coste', ['class' => 'col-md-6'])
+                ->add('enrolmentPayment', PriceType::class, [
+                    'label' => 'Matrícula',
+                ])
+                ->add('monthlyPayment', PriceType::class, [
+                    'label' => 'Mensualidad',
+                ])
+                ->add('books', null, [
+                    'label' => 'Material'
+                ])
+
+            ->end()
+            ->with('Descuentos', ['class' => 'col-md-6'])
+                ->add('discount', DiscountListTye::class, [
+                    'label' => false,
+                ])
+                ->end()
+
             ->end()
             ->with('Horario', ['tab' => true])
-            ->with('Horario', ['class' => 'col-md-6'])
-            ->add('timeTable', TimeTableType::class)
+                ->with('Horario', ['class' => 'col-md-6'])
+                    ->add('timeTable', TimeTableType::class)
+                ->end()
             ->end()
-            ->end()
+
+
             ->with('Alumnos y profesores', ['tab' => true])
-            ->with('Profesores', ['class' => 'col-md-5'])
-            ->add('teachers', TeachersType::class)
-            ->end()
-            ->with('Alumnos', ['class' => 'col-md-7'])
-            ->add('courseHasStudents', CourseHasStudentsType::class, [
-                'course' => $this->subject
-            ])
-            ->end()
+                ->with('Profesores', ['class' => 'col-md-5'])
+                    ->add('teachers', TeachersType::class)
+                ->end()
+                ->with('Alumnos', ['class' => 'col-md-7'])
+                ->add('courseHasStudents', CourseHasStudentsType::class, [
+                    'course' => $this->subject
+                ])
+                ->end()
             ->end();
     }
 

@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Form\Type\Course;
 
 
-use Britannia\Domain\VO\Intensive;
-use Britannia\Domain\VO\Periodicity;
+use Britannia\Domain\VO\Course\Intensive\Intensive;
+use Britannia\Domain\VO\Course\Periodicity\Periodicity;
 use Britannia\Domain\VO\Validator;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
@@ -50,7 +50,7 @@ class IntensiveType extends AbstractSingleType
      */
     public function buildConstraint(array $options): ?Constraint
     {
-        return new Validator\Intensive([
+        return new \Britannia\Domain\VO\Course\Intensive\Validator\Intensive([
             'required' => $options['required']
         ]);
     }

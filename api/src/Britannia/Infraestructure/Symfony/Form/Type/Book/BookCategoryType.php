@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Form\Type\Book;
 
 
-use Britannia\Domain\VO\BookCategory;
+use Britannia\Domain\VO\Course\Book\BookCategory;
 use Britannia\Domain\VO\Validator;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
@@ -51,7 +51,7 @@ class BookCategoryType extends AbstractSingleType
      */
     public function buildConstraint(array $options): ?Constraint
     {
-        return new Validator\BookCategory([
+        return new \Britannia\Domain\VO\Course\Book\Validator\BookCategory([
             'required' => $options['required']
         ]);
     }

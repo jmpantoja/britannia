@@ -15,8 +15,8 @@ namespace Britannia\Domain\Service\Payment;
 
 
 use Britannia\Domain\Repository\FamilyDiscountStorageInterface;
-use Britannia\Domain\VO\Discount;
-use Britannia\Domain\VO\FamilyDiscountList;
+use Britannia\Domain\VO\Discount\Discount;
+use Britannia\Domain\VO\Discount\FamilyDiscountList;
 use PlanB\DDD\Domain\VO\Percent;
 
 class DiscountCalculator implements DiscountCalculatorInterface

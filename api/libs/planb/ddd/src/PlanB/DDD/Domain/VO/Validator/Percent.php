@@ -28,4 +28,14 @@ class Percent extends Constraint
     {
         return is_null($value);
     }
+
+    public function sanitize($value)
+    {
+        if($this->isEmpty($value)){
+            return 0;
+        }
+        return $value;
+    }
+
+
 }

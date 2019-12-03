@@ -16,15 +16,14 @@ namespace Britannia\Domain\Entity\Course;
 
 use Britannia\Domain\Entity\Book\Book;
 use Britannia\Domain\Entity\Staff\StaffMember;
-use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Entity\Student\StudentCourse;
-use Britannia\Domain\VO\Age;
-use Britannia\Domain\VO\CourseStatus;
-use Britannia\Domain\VO\Examiner;
+use Britannia\Domain\VO\Course\Age\Age;
+use Britannia\Domain\VO\Course\CourseStatus;
+use Britannia\Domain\VO\Course\Examiner\Examiner;
+use Britannia\Domain\VO\Course\Intensive\Intensive;
+use Britannia\Domain\VO\Course\Periodicity\Periodicity;
+use Britannia\Domain\VO\Course\TimeTable\TimeTable;
 use Britannia\Domain\VO\HoursPerWeek;
-use Britannia\Domain\VO\Intensive;
-use Britannia\Domain\VO\Periodicity;
-use Britannia\Domain\VO\TimeTable;
 use Carbon\CarbonImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -135,6 +134,11 @@ class Course extends AggregateRoot
      */
     private $lessons;
 
+    /**
+     * @var Collection
+     */
+    private $discount;
+
 
     private $records;
 
@@ -145,6 +149,7 @@ class Course extends AggregateRoot
         $this->teachers = new ArrayCollection();
         $this->books = new ArrayCollection();
         $this->lessons = new ArrayCollection();
+        $this->discount = new ArrayCollection();
 
         $this->status = CourseStatus::PENDING();
 
@@ -581,6 +586,25 @@ class Course extends AggregateRoot
     {
         $this->lessons = $lessons;
     }
+
+    /**
+     * @return Collection
+     */
+    public function getDiscount(): ?Collection
+    {
+        return $this->discount;
+    }
+
+    /**
+     * @param Collection $discount
+     * @return Course
+     */
+    public function setDiscount(Collection $discount): Course
+    {
+        $this->discount = $discount;
+        return $this;
+    }
+
 
     /**
      * @return mixed

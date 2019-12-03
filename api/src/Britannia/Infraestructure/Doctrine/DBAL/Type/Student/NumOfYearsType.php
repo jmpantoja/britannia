@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Doctrine\DBAL\Type\Student;
 
 
-use Britannia\Domain\VO\NumOfYears;
+use Britannia\Domain\VO\Student\OtherAcademy\NumOfYears;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 

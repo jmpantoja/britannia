@@ -15,7 +15,7 @@ namespace Britannia\Infraestructure\Doctrine\DBAL\Type\Student;
 namespace Britannia\Infraestructure\Doctrine\DBAL\Type\Student;
 
 
-use Britannia\Domain\VO\JobStatus;
+use Britannia\Domain\VO\Student\Job\JobStatus;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 

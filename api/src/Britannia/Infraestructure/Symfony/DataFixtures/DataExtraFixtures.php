@@ -7,7 +7,7 @@ use Britannia\Domain\Entity\Book\Book;
 use Britannia\Domain\Entity\ClassRoom\ClassRoom;
 use Britannia\Domain\Entity\ClassRoom\ClassRoomId;
 use Britannia\Domain\Entity\Course\Level;
-use Britannia\Domain\VO\BookCategory;
+use Britannia\Domain\VO\Course\Book\BookCategory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use PlanB\DDD\Domain\VO\PositiveInteger;

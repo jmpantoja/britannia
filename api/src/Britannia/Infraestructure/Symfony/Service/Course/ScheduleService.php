@@ -15,9 +15,9 @@ namespace Britannia\Infraestructure\Symfony\Service\Course;
 
 
 use Britannia\Domain\Entity\Course\Course;
-use Britannia\Domain\VO\DayOfWeek;
-use Britannia\Domain\VO\TimeSheet;
-use Britannia\Domain\VO\TimeTable;
+use Britannia\Domain\VO\Course\TimeTable\DayOfWeek;
+use Britannia\Domain\VO\Course\TimeTable\TimeSheet;
+use Britannia\Domain\VO\Course\TimeTable\TimeTable;
 use Carbon\CarbonImmutable;
 
 class ScheduleService

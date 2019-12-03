@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Form\Type\Course\TimeTable;
 
 
-use Britannia\Domain\VO\TimeSheet;
+use Britannia\Domain\VO\Course\TimeTable\TimeSheet;
 use Carbon\CarbonImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use PlanB\DDD\Domain\VO\Validator\Constraint;

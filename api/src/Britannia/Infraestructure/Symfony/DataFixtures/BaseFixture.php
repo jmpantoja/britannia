@@ -63,8 +63,10 @@ abstract class BaseFixture extends Fixture
         $paths = $this->getBackupFiles();
 
         foreach ($paths as $path) {
+
             $sql = file_get_contents($path);
-            $manager->getConnection()->exec($sql);
+            $response = $manager->getConnection()->exec($sql);
+
         }
         $manager->flush();
     }

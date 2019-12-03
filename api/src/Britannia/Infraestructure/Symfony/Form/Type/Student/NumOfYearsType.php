@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Form\Type\Student;
 
 
-use Britannia\Domain\VO\NumOfYears;
+use Britannia\Domain\VO\Student\OtherAcademy\NumOfYears;
 use Britannia\Domain\VO\Validator;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
@@ -47,7 +47,7 @@ class NumOfYearsType extends AbstractSingleType
      */
     public function buildConstraint(array $options): ?Constraint
     {
-        return new Validator\NumOfYears([
+        return new \Britannia\Domain\VO\Student\OtherAcademy\Validator\NumOfYears([
             'required' => $options['required'],
         ]);
     }

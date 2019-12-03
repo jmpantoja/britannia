@@ -15,7 +15,7 @@ namespace Britannia\Infraestructure\Symfony\Service\Payment;
 
 
 use Britannia\Domain\Repository\FamilyDiscountStorageInterface;
-use Britannia\Domain\VO\FamilyDiscountList;
+use Britannia\Domain\VO\Discount\FamilyDiscountList;
 use PlanB\DDD\Domain\VO\Percent;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 

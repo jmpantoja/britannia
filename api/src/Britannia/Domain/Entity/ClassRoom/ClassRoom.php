@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\ClassRoom;
 
 
-use Britannia\Domain\VO\Age;
-use Britannia\Domain\VO\Examiner;
+use Britannia\Domain\VO\Course\Age\Age;
+use Britannia\Domain\VO\Course\Examiner\Examiner;
 use PlanB\DDD\Domain\VO\PositiveInteger;
 use PlanB\DDD\Domain\VO\Price;
 

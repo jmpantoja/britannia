@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Doctrine\DBAL\Type\Course;
 
 
-use Britannia\Domain\VO\Intensive;
+use Britannia\Domain\VO\Course\Intensive\Intensive;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 

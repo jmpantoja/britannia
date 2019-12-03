@@ -16,7 +16,7 @@ namespace Britannia\Domain\Repository;
 
 use Britannia\Domain\Entity\Calendar\Calendar;
 use Britannia\Domain\Entity\Course\Course;
-use Britannia\Domain\VO\TimeTable;
+use Britannia\Domain\VO\Course\TimeTable\TimeTable;
 
 interface CalendarRepositoryInterface
 {

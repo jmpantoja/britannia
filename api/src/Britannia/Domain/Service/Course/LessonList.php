@@ -19,8 +19,8 @@ use Britannia\Domain\Entity\ClassRoom\ClassRoom;
 use Britannia\Domain\Entity\ClassRoom\ClassRoomId;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Course\Lesson;
-use Britannia\Domain\VO\TimeSheet;
-use Britannia\Domain\VO\TimeTable;
+use Britannia\Domain\VO\Course\TimeTable\TimeSheet;
+use Britannia\Domain\VO\Course\TimeTable\TimeTable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 

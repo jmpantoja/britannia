@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Form\Type\Course;
 
 
-use Britannia\Domain\VO\Periodicity;
+use Britannia\Domain\VO\Course\Periodicity\Periodicity;
 use Britannia\Domain\VO\Validator;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
@@ -52,7 +52,7 @@ class PeriodicityType extends AbstractSingleType
      */
     public function buildConstraint(array $options): ?Constraint
     {
-        return new Validator\Periodicity([
+        return new \Britannia\Domain\VO\Course\Periodicity\Validator\Periodicity([
             'required' => $options['required']
         ]);
     }

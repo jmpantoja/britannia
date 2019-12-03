@@ -7,13 +7,13 @@ use Britannia\Domain\Entity\Academy\Academy;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Record\StudentHasBeenCreated;
 use Britannia\Domain\Entity\Record\StudentHasJoinedToCourse;
-use Britannia\Domain\VO\ContactMode;
-use Britannia\Domain\VO\CourseStatus;
-use Britannia\Domain\VO\Discount;
-use Britannia\Domain\VO\NumOfYears;
-use Britannia\Domain\VO\OtherAcademy;
-use Britannia\Domain\VO\PartOfDay;
-use Britannia\Domain\VO\Payment;
+use Britannia\Domain\VO\Student\ContactMode\ContactMode;
+use Britannia\Domain\VO\Course\CourseStatus;
+use Britannia\Domain\VO\Discount\Discount;
+use Britannia\Domain\VO\Student\OtherAcademy\NumOfYears;
+use Britannia\Domain\VO\Student\OtherAcademy\OtherAcademy;
+use Britannia\Domain\VO\Student\PartOfDay\PartOfDay;
+use Britannia\Domain\VO\Payment\Payment;
 use Carbon\CarbonImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -217,6 +217,10 @@ abstract class Student extends AggregateRoot
         return $courses->filter(function (Course $course) use ($allowedStatus) {
             return $course->hasStatus(...$allowedStatus);
         });
+    }
+
+    public function getActiveCourses(): Collection{
+        return $this->findCoursesByStatus(CourseStatus::ACTIVE());
     }
 
     /**
@@ -688,7 +692,7 @@ abstract class Student extends AggregateRoot
 
         $this->setUpdatedAt(CarbonImmutable::now());
 
-        $allowedStatus = [CourseStatus::ACTIVE, CourseStatus::PENDING];
+        $allowedStatus = [CourseStatus::ACTIVE(), CourseStatus::PENDING()];
         $courses = $this->findCoursesByStatus(...$allowedStatus);
 
         $this->active = !$courses->isEmpty();

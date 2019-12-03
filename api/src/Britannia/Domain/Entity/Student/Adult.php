@@ -4,7 +4,7 @@ namespace Britannia\Domain\Entity\Student;
 
 use Britannia\Domain\Entity\Employment\Situation;
 use Britannia\Domain\VO\Employment;
-use Britannia\Domain\VO\Job;
+use Britannia\Domain\VO\Student\Job\Job;
 use PlanB\DDD\Domain\VO\DNI;
 
 class Adult extends Student

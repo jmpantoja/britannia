@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Calendar;
 
 
-use Britannia\Domain\VO\DayOfWeek;
+use Britannia\Domain\VO\Course\TimeTable\DayOfWeek;
 use Carbon\CarbonImmutable;
 
 class Calendar

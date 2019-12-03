@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace Britannia\Domain\Service\Payment;
 
 use Britannia\Domain\Entity\Course\Course;
-use Britannia\Domain\VO\DayOfWeek;
-use Britannia\Domain\VO\Discount;
-use Britannia\Domain\VO\JobStatus;
-use Britannia\Domain\VO\TimeSheet;
-use Britannia\Domain\VO\TimeTable;
+use Britannia\Domain\VO\Course\TimeTable\DayOfWeek;
+use Britannia\Domain\VO\Discount\Discount;
+use Britannia\Domain\VO\Student\Job\JobStatus;
+use Britannia\Domain\VO\Course\TimeTable\TimeSheet;
+use Britannia\Domain\VO\Course\TimeTable\TimeTable;
 use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\VO\Percent;
 use PlanB\DDD\Domain\VO\Price;

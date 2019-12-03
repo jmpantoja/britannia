@@ -96,7 +96,6 @@ final class LessonAdmin extends AbstractAdmin
     {
         $lesson = $this->getSubject();
 
-
         $formMapper
             ->add('attendances', AttendanceListType::class, [
                 'lesson' => $lesson,

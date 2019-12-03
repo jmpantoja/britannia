@@ -3,7 +3,7 @@
 namespace Britannia\Domain\Entity\Student;
 
 
-use Britannia\Domain\VO\Job;
+use Britannia\Domain\VO\Student\Job\Job;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use PlanB\DDD\Domain\Model\AggregateRoot;

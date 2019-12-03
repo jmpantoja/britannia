@@ -136,7 +136,7 @@ class CourseController extends CRUDController
         $data['title'] = $data['title'] ?? $filename;
         $html = $this->renderView($template, $data);
 
-        //return new Response($html);
+        return new Response($html);
 
         return new Response(
             $this->pdfGenerator->getOutputFromHtml($html, [

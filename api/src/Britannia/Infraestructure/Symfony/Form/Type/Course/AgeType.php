@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Form\Type\Course;
 
 
-use Britannia\Domain\VO\Age;
-use Britannia\Domain\VO\Examiner;
+use Britannia\Domain\VO\Course\Age\Age;
+use Britannia\Domain\VO\Course\Examiner\Examiner;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use Britannia\Domain\VO\Validator;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
@@ -50,7 +50,7 @@ class AgeType  extends AbstractSingleType
      */
     public function buildConstraint(array $options): ?Constraint
     {
-        return new Validator\Age([
+        return new \Britannia\Domain\VO\Course\Age\Validator\Age([
             'required' => $options['required']
         ]);
     }

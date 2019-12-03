@@ -31,17 +31,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class AttendanceListType extends AbstractCompoundType
 {
-    /**
-     * @var StudentRepositoryInterface
-     */
-    private $repository;
-
-    public function __construct(StudentRepositoryInterface $repository)
-    {
-        $this->repository = $repository;
-    }
-
-
     public function customForm(FormBuilderInterface $builder, array $options)
     {
         $lesson = $options['lesson'];
@@ -87,6 +76,8 @@ class AttendanceListType extends AbstractCompoundType
 
     public function customMapping(array $data)
     {
+        return [1, 2, 3];
+
         $attendances = new ArrayCollection();
 
         $data = array_filter($data);

@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Form\Type\Course\TimeTable;
 
 
-use Britannia\Domain\VO\DayOfWeek;
-use Britannia\Domain\VO\PartOfDay;
+use Britannia\Domain\VO\Course\TimeTable\DayOfWeek;
+use Britannia\Domain\VO\Student\PartOfDay\PartOfDay;
 use Britannia\Domain\VO\Validator;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
@@ -52,7 +52,7 @@ class DayOfWeekType extends AbstractSingleType
      */
     public function buildConstraint(array $options): ?Constraint
     {
-        return new Validator\DayOfWeek([
+        return new \Britannia\Domain\VO\Course\TimeTable\Validator\DayOfWeek([
             'required' => $options['required']
         ]);
     }

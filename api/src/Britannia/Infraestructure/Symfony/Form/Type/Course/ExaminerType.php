@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Form\Type\Course;
 
 
-use Britannia\Domain\VO\Examiner;
+use Britannia\Domain\VO\Course\Examiner\Examiner;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use Britannia\Domain\VO\Validator;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
@@ -54,7 +54,7 @@ class ExaminerType  extends AbstractSingleType
      */
     public function buildConstraint(array $options): ?Constraint
     {
-        return new Validator\Examiner([
+        return new \Britannia\Domain\VO\Course\Examiner\Validator\Examiner([
             'required' => $options['required']
         ]);
     }

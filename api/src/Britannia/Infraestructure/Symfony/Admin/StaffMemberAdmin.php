@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Admin;
 
 use Britannia\Domain\Entity\Staff\StaffMember;
-use Britannia\Domain\VO\CourseStatus;
+use Britannia\Domain\VO\Course\CourseStatus;
 use Britannia\Infraestructure\Symfony\Form\Type\Staff\RoleType;
 use Doctrine\ORM\EntityRepository;
 use PlanB\DDDBundle\Symfony\Form\Type\DNIType;

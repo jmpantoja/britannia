@@ -44,6 +44,8 @@
             </join-table>
         </many-to-many>
 
+        <field name="discount" type="DiscountList" nullable="true"></field>
+
         <!--<many-to-many field="students" target-entity="Britannia\Domain\Entity\Student\Student" mapped-by="courses"/>-->
 
         <one-to-many field="courseHasStudents"
@@ -51,7 +53,7 @@
                      mapped-by="course"
                      fetch="EXTRA_LAZY">
             <cascade>
-                <cascade-persist />
+                <cascade-persist/>
             </cascade>
         </one-to-many>
 
@@ -64,7 +66,7 @@
             </cascade>
         </many-to-many>
 
-        <embedded name="timeTable" class="Britannia\Domain\VO\TimeTable" use-column-prefix="false"/>
+        <embedded name="timeTable" class="Britannia\Domain\VO\Course\TimeTable\TimeTable" use-column-prefix="false"/>
 
         <one-to-many field="lessons" target-entity="Britannia\Domain\Entity\Course\Lesson" mapped-by="course"
                      orphan-removal="true">

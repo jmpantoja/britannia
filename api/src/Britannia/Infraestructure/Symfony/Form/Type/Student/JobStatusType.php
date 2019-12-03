@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Form\Type\Student;
 
 
-use Britannia\Domain\VO\JobStatus;
+use Britannia\Domain\VO\Student\Job\JobStatus;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
 use Symfony\Component\Form\ChoiceList\Loader\CallbackChoiceLoader;
@@ -49,7 +49,7 @@ class JobStatusType extends AbstractSingleType
      */
     public function buildConstraint(array $options): ?Constraint
     {
-        return new Validator\JobStatus([
+        return new \Britannia\Domain\VO\Student\Job\Validator\JobStatus([
             'required' => $options['required']
         ]);
     }

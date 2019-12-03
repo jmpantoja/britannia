@@ -17,7 +17,7 @@ namespace Britannia\Domain\Entity\Student;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Record\StudentHasJoinedToCourse;
 use Britannia\Domain\Entity\Record\StudentHasLeavedCourse;
-use Britannia\Domain\VO\CourseStatus;
+use Britannia\Domain\VO\Course\CourseStatus;
 use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\Model\AggregateRoot;
 
@@ -105,7 +105,7 @@ class StudentCourse extends AggregateRoot
     }
 
     /**
-     * @return \Britannia\Domain\VO\CourseStatus
+     * @return \Britannia\Domain\VO\Course\CourseStatus
      */
     protected function getCourseStatus(): CourseStatus
     {

@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Domain\Repository;
 
 
-use Britannia\Domain\VO\FamilyDiscountList;
+use Britannia\Domain\VO\Discount\FamilyDiscountList;
 
 interface FamilyDiscountStorageInterface
 {

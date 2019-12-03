@@ -15,7 +15,7 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Student;
 
 
 use Britannia\Domain\Entity\Academy\Academy;
-use Britannia\Domain\VO\OtherAcademy;
+use Britannia\Domain\VO\Student\OtherAcademy\OtherAcademy;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractCompoundType;

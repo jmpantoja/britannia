@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace PlanB\DDDBundle\Symfony\Form\Type;
 
-use Britannia\Domain\VO\TimeSheet;
+use Britannia\Domain\VO\Course\TimeTable\TimeSheet;
 use Britannia\Infraestructure\Symfony\Form\TimeSheetListType;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use Symfony\Component\Form\AbstractType;
@@ -132,14 +132,14 @@ abstract class AbstractSingleType extends AbstractType implements DataTransforme
         }
 
         if (!class_exists((string)$options['data_class'])) {
-            return (string)$value;
+            return $value;
         }
 
         if (is_a($value, $options['data_class'])) {
             return $value;
         }
 
-        return (string)$value;
+        return $value;
 
     }
 

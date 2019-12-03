@@ -85,3 +85,17 @@ fieldset[id$=attendances] .missed{
     padding-top: 1.7em;
 }
 
+.discount .status {
+    display: inline-block;
+    margin:1em 0 1em 2em;
+    line-height: 2.6em;
+    font-size: 1.3em;
+}
+
+
+/*li:has(> a.active) { !* styles to apply to the li tag *! }*/
+
+.icheckbox_square-blue, .iradio_square-blue{
+    min-height: 34px;
+    margin-top: 5px;
+}

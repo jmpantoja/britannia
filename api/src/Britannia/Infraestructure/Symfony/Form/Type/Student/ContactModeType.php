@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Form\Type\Student;
 
 
-use Britannia\Domain\VO\ContactMode;
+use Britannia\Domain\VO\Student\ContactMode\ContactMode;
 use Britannia\Domain\VO\Validator;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
@@ -48,7 +48,7 @@ class ContactModeType extends AbstractSingleType
      */
     public function buildConstraint(array $options): ?Constraint
     {
-        return new Validator\ContactMode([
+        return new \Britannia\Domain\VO\Student\ContactMode\Validator\ContactMode([
             'required' => $options['required']
         ]);
     }

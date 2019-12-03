@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Doctrine\DBAL\Type\Student;
 
 
-use Britannia\Domain\VO\PaymentMode;
+use Britannia\Domain\VO\Payment\PaymentMode;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 

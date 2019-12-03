@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Doctrine\DBAL\Type\Course;
 
 
-use Britannia\Domain\VO\DayOfWeek;
+use Britannia\Domain\VO\Course\TimeTable\DayOfWeek;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 

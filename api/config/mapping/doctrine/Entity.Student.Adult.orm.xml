@@ -7,7 +7,7 @@
 
     <entity name="Britannia\Domain\Entity\Student\Adult" table="students_adult">
         <field name="dni" column="dni" type="dni" nullable="true"/>
-        <embedded name="job" class="Britannia\Domain\VO\Job" />
+        <embedded name="job" class="Britannia\Domain\VO\Student\Job\Job" />
     </entity>
 
 </doctrine-mapping>

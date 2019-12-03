@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Doctrine\DBAL\Type\Book;
 
 
-use Britannia\Domain\VO\BookCategory;
-use Britannia\Domain\VO\PartOfDay;
+use Britannia\Domain\VO\Course\Book\BookCategory;
+use Britannia\Domain\VO\Student\PartOfDay\PartOfDay;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 

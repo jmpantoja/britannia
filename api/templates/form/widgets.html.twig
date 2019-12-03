@@ -190,6 +190,42 @@
 
 {% endblock %}
 
+{% block toggle_widget %}
+    {% set checked = '' %}
+
+    {% if value == "1" %}
+        {% set checked = 'checked' %}
+    {% endif %}
+
+    <input id="{{ id }}" name="{{ full_name }}" {{ checked }} type="checkbox" data-toggle="toggle"
+           value="yes"
+           data-on="{{ on_text }}"
+           data-off="{{ off_text }}"
+           data-onstyle="{{ on_style }}"
+           data-offstyle="{{ off_style }}"
+    >
+
+{% endblock %}
+
+
+{% block discount_widget %}
+    <div class="row discount">
+        <div class="col-md-3">
+            <span class="status"> {{ status.value }} </span>
+        </div>
+
+        <div class="col-md-2">
+            {{ form_row(form.discount) }}
+        </div>
+
+        <div class="col-md-7">
+            {{ form_row(form.freeEnrollment) }}
+        </div>
+    </div>
+
+
+
+{% endblock %}
 
 {% block student_has_courses_widget %}
     {{ block('multiselect') }}
@@ -212,7 +248,6 @@
 {% block multiselect %}
     {{ form_widget(form) }}
     <script type="text/javascript">
-
         var select = document.getElementById("{{ id }}");
 
         multi(select, {

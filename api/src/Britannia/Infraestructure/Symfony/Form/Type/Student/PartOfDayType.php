@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Form\Type\Student;
 
 
-use Britannia\Domain\VO\PartOfDay;
+use Britannia\Domain\VO\Student\PartOfDay\PartOfDay;
 use Britannia\Domain\VO\Validator;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
@@ -50,7 +50,7 @@ class PartOfDayType extends AbstractSingleType
      */
     public function buildConstraint(array $options): ?Constraint
     {
-        return new Validator\PartOfDay([
+        return new \Britannia\Domain\VO\Student\PartOfDay\Validator\PartOfDay([
             'required' => $options['required']
         ]);
     }

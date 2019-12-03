@@ -13,7 +13,7 @@ class Percent
 
     use Traits\Validable;
 
-    private $price;
+    private $percent;
 
     public static function buildConstraint(array $options = []): Constraint
     {
@@ -50,5 +50,9 @@ class Percent
         return $this->percent / 100;
     }
 
+    public function __toString()
+    {
+        return (string)$this->toInt();
+    }
 
 }

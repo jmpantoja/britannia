@@ -16,11 +16,11 @@ namespace Britannia\Infraestructure\Symfony\Importer\Builder;
 
 use Britannia\Domain\Entity\ClassRoom\ClassRoom;
 use Britannia\Domain\Entity\Course\Course;
-use Britannia\Domain\VO\Age;
+use Britannia\Domain\VO\Course\Age\Age;
 use Britannia\Domain\VO\HoursPerWeek;
-use Britannia\Domain\VO\Intensive;
-use Britannia\Domain\VO\Periodicity;
-use Britannia\Domain\VO\TimeTable;
+use Britannia\Domain\VO\Course\Intensive\Intensive;
+use Britannia\Domain\VO\Course\Periodicity\Periodicity;
+use Britannia\Domain\VO\Course\TimeTable\TimeTable;
 use Britannia\Infraestructure\Symfony\Importer\Builder\Traits\CourseMaker;
 use Britannia\Infraestructure\Symfony\Importer\Maker\FullNameMaker;
 use Britannia\Infraestructure\Symfony\Importer\Resume;

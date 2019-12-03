@@ -17,7 +17,7 @@ namespace Britannia\Application\UseCase\Course;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Course\CourseId;
 use Britannia\Domain\Entity\Course\TimeTabletHasChanged;
-use Britannia\Domain\VO\TimeTable;
+use Britannia\Domain\VO\Course\TimeTable\TimeTable;
 
 class UpdateTimeTable
 {

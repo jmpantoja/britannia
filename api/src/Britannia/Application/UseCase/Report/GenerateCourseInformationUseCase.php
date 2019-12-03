@@ -15,7 +15,7 @@ namespace Britannia\Application\UseCase\Report;
 
 
 use Britannia\Domain\Entity\Student\Student;
-use Britannia\Domain\VO\Discount;
+use Britannia\Domain\VO\Discount\Discount;
 use Carbon\CarbonImmutable;
 use PlanB\DDD\Application\UseCase\UseCaseInterface;
 

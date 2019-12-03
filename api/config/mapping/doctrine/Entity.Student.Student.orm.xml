@@ -53,7 +53,7 @@
         </many-to-many>
 
 
-        <embedded name="payment" class="Britannia\Domain\VO\Payment"/>
+        <embedded name="payment" class="Britannia\Domain\VO\Payment\Payment"/>
 
         <field name="preferredPartOfDay" column="preferredPartOfDay" type="PartOfDay"/>
 
