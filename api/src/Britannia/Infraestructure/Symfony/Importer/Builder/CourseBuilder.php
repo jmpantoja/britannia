@@ -17,6 +17,7 @@ namespace Britannia\Infraestructure\Symfony\Importer\Builder;
 use Britannia\Domain\Entity\ClassRoom\ClassRoom;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\VO\Course\Age\Age;
+use Britannia\Domain\VO\Course\Support\Support;
 use Britannia\Domain\VO\HoursPerWeek;
 use Britannia\Domain\VO\Course\Intensive\Intensive;
 use Britannia\Domain\VO\Course\Periodicity\Periodicity;
@@ -147,17 +148,6 @@ class CourseBuilder extends BuilderAbstract
             $schedule = $this->toLessons($field2, $classRoomId);
         }
 
-//        $ignored = [46, 61, 62, 63, 112, 117, 118, 119, 120, 121, 127, 128, 129, 143, 144, 170, 172, 174, 202,
-//            203, 204, 205, 210, 211, 212, 213, 215, 216, 217, 218, 219, 220, 221, 222, 227, 228, 229, 230, 231,
-//            232, 233, 234, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 259, 263, 309, 310, 311,
-//            312, 313, 316, 323, 324, 326, 343];
-//
-//        if (empty($schedule) and !in_array($this->id, $ignored)) {
-//            dump($this->id);
-//            //die("-----------");
-//        }
-
-
         $this->timeTable = TimeTable::make($start, $end, $schedule);
 
         return $this;
@@ -172,13 +162,14 @@ class CourseBuilder extends BuilderAbstract
         $course->setEnrolmentPayment($this->enrolmentPayment);
         $course->setMonthlyPayment($this->monthlyPayment);
 
+        $course->setSupport(Support::REGULAR());
+
         $course->setNumOfPlaces($this->numOfPlaces);
         $course->setAge($this->age);
         $course->setPeriodicity($this->periodicity);
         $course->setIntensive($this->intensive);
 
         $course->setTimeTable($this->timeTable);
-
 
         return $course;
     }

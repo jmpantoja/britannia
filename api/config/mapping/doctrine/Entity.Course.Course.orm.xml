@@ -25,6 +25,7 @@
         <many-to-one field="level" target-entity="Britannia\Domain\Entity\Course\Level"></many-to-one>
 
         <field name="numOfPlaces" type="positive_integer"/>
+        <field name="support" type="Support"/>
         <field name="periodicity" type="Periodicity"/>
 
         <field name="intensive" type="Intensive"/>

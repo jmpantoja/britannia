@@ -15,12 +15,10 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Course\Discount;
 
 
 use Britannia\Domain\VO\Student\Job\JobStatus;
-
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractCompoundType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -28,16 +26,20 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class DiscountListTye extends AbstractCompoundType
 {
 
+
+
     public function customForm(FormBuilderInterface $builder, array $options)
     {
         $status = JobStatus::getDiscountables();
 
         foreach ($status as $name => $value) {
 
+
+
             $builder->add($name, DiscountType::class, [
                 'required' => false,
                 'label' => false,
-                'status' => JobStatus::byName($name)
+                'status' => JobStatus::byName($name),
             ]);
         }
     }
@@ -84,9 +86,7 @@ class DiscountListTye extends AbstractCompoundType
     {
 
         $data = array_filter($data);
-
         return new ArrayCollection($data);
-        return $data;
     }
 
 

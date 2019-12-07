@@ -65,11 +65,14 @@ final class RecordAdmin extends AbstractAdmin
             )
             ->add('date', 'doctrine_orm_date_range', [
                 'field_type' => DateRangePickerType::class,
+                'field_options' => [
+                    'field_options' => [
+                        'format' => \IntlDateFormatter::LONG
+                    ],
+                ],
                 'advanced_filter' => false,
                 'show_filter' => true
-            ])
-
-        ;
+            ]);
     }
 
     protected function configureListFields(ListMapper $listMapper): void

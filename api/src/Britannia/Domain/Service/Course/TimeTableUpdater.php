@@ -42,7 +42,18 @@ class TimeTableUpdater
 
     public function updateCourseLessons(Course $course, TimeTable $timeTable)
     {
-        $lessonList = LessonList::make($course->getLessons());
+        if ($timeTable->isLocked()) {
+            return;
+        }
+
+        if ($timeTable->shouldBeResetted()) {
+            $lessonList = LessonList::make();
+        }
+
+        if ($timeTable->shouldBeUpdated()) {
+            $lessonList = LessonList::make($course->getLessons());
+        }
+
 
         $days = $this->calendar->getWorkingDays($timeTable);
 

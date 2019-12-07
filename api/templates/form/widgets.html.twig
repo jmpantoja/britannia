@@ -199,6 +199,8 @@
 
     <input id="{{ id }}" name="{{ full_name }}" {{ checked }} type="checkbox" data-toggle="toggle"
            value="yes"
+           data-width="{{ width }}"
+           data-height="{{ height }}"
            data-on="{{ on_text }}"
            data-off="{{ off_text }}"
            data-onstyle="{{ on_style }}"
@@ -223,9 +225,119 @@
         </div>
     </div>
 
+{% endblock %}
 
+
+
+{% block course_information_widget %}
+
+    <h1>Información de Cursos</h1>
+
+    <div class="row course_information course">
+
+        <div class="col-md-4">
+            <h2>Curso</h2>
+            {{ form_row(form.course) }}
+        </div>
+    </div>
+
+    <div class="row course_information student">
+        <div class="col-md-12">
+            <h2>Alumno</h2>
+        </div>
+
+        <div class="col-md-3">
+            {{ form_row(form.familyOrder) }}
+        </div>
+
+        <div class="col-md-3">
+            {{ form_row(form.jobStatus) }}
+        </div>
+
+        <div class="col-md-6">
+            {{ form_row(form.freeEnrollment) }}
+        </div>
+    </div>
+
+    <div class="row course_information start_date">
+        <div class="col-md-12">
+            <h2>Incorporación</h2>
+        </div>
+        <div class="col-md-6">
+            {{ form_row(form.startDate) }}
+        </div>
+    </div>
 
 {% endblock %}
+
+
+{% block time_table_widget %}
+    <div class="row time_table_title">
+        <div class="col-md-2" style="margin-bottom: 4em">
+            <legend class="control-label" style=" ">
+                Calendario
+            </legend>
+
+        </div>
+        {% if form.locked is defined %}
+        <div class="col-md-10">
+            {{ form_row(form.locked) }}
+            <p class="notice">sss</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <div id="{{ id }}-row" class="row time_table">
+        <div class="col-md-4">
+            {{ form_row(form.start) }}
+        </div>
+        <div class="col-md-4">
+            {{ form_row(form.end) }}
+        </div>
+        <div class="col-md-12" style="margin-top: 3em">
+            {{ form_row(form.schedule) }}
+        </div>
+    </div>
+
+    {% if form.locked is defined %}
+        <script>
+            var el = $('#{{ form.locked.vars.id }}');
+
+            $(function () {
+                var notices = {
+                    'LOCKED': '',
+                    'RESET': '!Cuidado!, se destruiran todas las lecciones ya generadas',
+                    'UPDATE': 'Se conservaran las lecciones pasadas',
+                }
+
+                var toggle = function (el, value) {
+                    var notice = $(el).parents('.form-group').find('.notice');
+                    var value = $(el).prop('value')
+
+                    var parent = $('#{{ id }}-row');
+                    var locked = (value === 'LOCKED');
+
+                    var inputs = $(parent).find('input');
+                    var select = $(parent).find('select');
+
+                    $(inputs).prop('readonly', locked)
+                    $(select).select2("readonly", locked);
+
+                    $(notice).text(notices[value])
+
+                    $(el).prop('disabled', false)
+                }
+
+                $(el).on('change', function () {
+                    toggle($(this))
+                });
+                toggle($(el))
+            })
+        </script>
+    {% endif %}
+
+{% endblock %}
+
 
 {% block student_has_courses_widget %}
     {{ block('multiselect') }}
@@ -256,4 +368,3 @@
         });
     </script>
 {% endblock %}
-

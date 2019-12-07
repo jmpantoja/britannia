@@ -6,6 +6,7 @@ namespace Britannia\Infraestructure\Symfony\Admin;
 
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\VO\Course\CourseStatus;
+use Britannia\Domain\VO\Course\Support\Support;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\AgeType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\Discount\DiscountListTye;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\CourseHasStudentsType;
@@ -13,6 +14,7 @@ use Britannia\Infraestructure\Symfony\Form\Type\Course\ExaminerType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\IntensiveType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\LevelType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\PeriodicityType;
+use Britannia\Infraestructure\Symfony\Form\Type\Course\SupportType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\TeachersType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\TimeTable\TimeTableType;
 use PlanB\DDDBundle\Symfony\Form\Type\PositiveIntegerType;
@@ -122,80 +124,74 @@ final class CourseAdmin extends AbstractAdmin
 
         $formMapper
             ->with('Ficha del curso', ['tab' => true])
-            ->with('Nombre', ['class' => 'col-md-3'])
-            ->add('name', TextType::class, [
-                'required' => true,
-                'constraints' => [
-                    new NotBlank()
-                ]
-            ])
-            ->add('schoolCourse')
-            ->add('examiner', ExaminerType::class)
-            ->add('level', LevelType::class, [
-                'required' => false,
-            ])
-            ->end()
-            ->with('Descripción', ['class' => 'col-md-3'])
-            ->add('numOfPlaces', PositiveIntegerType::class, [
-                'label' => 'Plazas',
-                'attr' => [
-                    'style' => 'width:100px'
-                ]
-            ])
-            ->add('periodicity', PeriodicityType::class, [
-                'attr' => [
-                    'style' => 'width:200px'
-                ]
-            ])
-            ->add('intensive', IntensiveType::class, [
-                'attr' => [
-                    'style' => 'width:200px'
-                ]
-            ])
-            ->add('age', AgeType::class, [
-                'attr' => [
-                    'style' => 'width:200px'
-                ]
-            ])
-            ->end()
+                ->with('Nombre', ['class' => 'col-md-12 horizontal'])
+                    ->add('name', TextType::class, [
+                        'required' => true
+                    ])
+                    ->add('schoolCourse')
+                    ->add('numOfPlaces', PositiveIntegerType::class, [
+                        'label' => 'Plazas',
+                    ])
+                ->end()
+                ->with('Descripción', ['class' => 'col-md-12 horizontal'])
+                    ->add('support', SupportType::class, [
+                        'label' => '¿Es de apoyo?'
+                    ])
+                    ->add('periodicity', PeriodicityType::class, [
+                        'label' => 'Periocidad'
+                    ])
+                    ->add('intensive', IntensiveType::class, [
+                        'label' => '¿Es intensivo?'
+                    ])
+                    ->add('age', AgeType::class, [
+                        'label' => 'Grupo de Edad'
+                    ])
+                ->end()
+                ->with('Certificado', ['class' => 'col-md-12 horizontal'])
+                    ->add('examiner', ExaminerType::class, [
+                        'label' => 'Examinador'
+                    ])
+                    ->add('level', LevelType::class, [
+                        'required' => false,
+                        'label' => 'Nivel'
+                    ])
+                ->end()
             ->end()
 
             ->with('Coste', ['tab' => true])
-
-            ->with('Coste', ['class' => 'col-md-6'])
-                ->add('enrolmentPayment', PriceType::class, [
-                    'label' => 'Matrícula',
-                ])
-                ->add('monthlyPayment', PriceType::class, [
-                    'label' => 'Mensualidad',
-                ])
-                ->add('books', null, [
-                    'label' => 'Material'
-                ])
-
-            ->end()
-            ->with('Descuentos', ['class' => 'col-md-6'])
-                ->add('discount', DiscountListTye::class, [
-                    'label' => false,
-                ])
+                ->with('Coste', ['class' => 'col-md-6'])
+                    ->add('enrolmentPayment', PriceType::class, [
+                        'label' => 'Matrícula',
+                    ])
+                    ->add('monthlyPayment', PriceType::class, [
+                        'label' => 'Mensualidad',
+                    ])
+                    ->add('books', null, [
+                        'label' => 'Material'
+                    ])
                 ->end()
-
-            ->end()
-            ->with('Horario', ['tab' => true])
-                ->with('Horario', ['class' => 'col-md-6'])
-                    ->add('timeTable', TimeTableType::class)
+                ->with('Descuentos', ['class' => 'col-md-6'])
+                    ->add('discount', DiscountListTye::class, [
+                        'label' => false,
+                    ])
                 ->end()
             ->end()
-
-
+            ->with('Fechas', ['tab' => true])
+                ->with('Fechas', ['class' => 'col-md-6'])
+                    ->add('timeTable', TimeTableType::class, [
+                        'label' => false,
+                        'course' => $course
+                    ])
+                ->end()
+            ->end()
             ->with('Alumnos y profesores', ['tab' => true])
                 ->with('Profesores', ['class' => 'col-md-5'])
                     ->add('teachers', TeachersType::class)
                 ->end()
                 ->with('Alumnos', ['class' => 'col-md-7'])
-                ->add('courseHasStudents', CourseHasStudentsType::class, [
-                    'course' => $this->subject
-                ])
+                    ->add('courseHasStudents', CourseHasStudentsType::class, [
+                        'course' => $this->subject
+                    ])
                 ->end()
             ->end();
     }

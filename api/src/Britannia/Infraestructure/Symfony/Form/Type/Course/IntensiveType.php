@@ -41,7 +41,10 @@ class IntensiveType extends AbstractSingleType
             'choice_loader' => new CallbackChoiceLoader(function () {
                 $values = array_flip(Intensive::getConstants());
                 return array_merge(['' => ''], $values);
-            })
+            }),
+            'attr' => [
+                'style' => 'width:200px'
+            ]
         ]);
     }
 

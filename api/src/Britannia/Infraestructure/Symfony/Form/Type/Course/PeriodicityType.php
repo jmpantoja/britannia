@@ -42,7 +42,7 @@ class PeriodicityType extends AbstractSingleType
                 return array_merge(['' => ''], $values);
             }),
             'attr' => [
-                'style' => 'width: 190px'
+                'style' => 'width:200px'
             ]
         ]);
     }

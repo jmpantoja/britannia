@@ -23,7 +23,7 @@ use Symfony\Component\Form\ChoiceList\Loader\CallbackChoiceLoader;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class AgeType  extends AbstractSingleType
+class AgeType extends AbstractSingleType
 {
     /**
      * {@inheritdoc}
@@ -41,7 +41,10 @@ class AgeType  extends AbstractSingleType
             'choice_loader' => new CallbackChoiceLoader(function () {
                 $values = array_flip(Age::getConstants());
                 return array_merge(['' => ''], $values);
-            })
+            }),
+            'attr' => [
+                'style' => 'width:200px'
+            ]
         ]);
     }
 

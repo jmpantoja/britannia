@@ -43,7 +43,9 @@ class TimeSheetType extends AbstractCompoundType
     {
 
         $builder
-            ->add('dayOfWeek', DayOfWeekType::class)
+            ->add('dayOfWeek', DayOfWeekType::class, [
+                'required' => true
+            ])
             ->add('start', DateTimePickerType::class, [
                 'label' => 'Inicio',
                 'dp_pick_date' => false,
@@ -58,13 +60,16 @@ class TimeSheetType extends AbstractCompoundType
                 'format' => 'H:mm',
                 'dp_minute_stepping' => 5
             ])
-            ->add('classroomId', ClassRoomType::class);
+            ->add('classroomId', ClassRoomType::class, [
+                'required' => true
+            ]);
     }
 
     public function customOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => TimeSheet::class
+            'data_class' => TimeSheet::class,
+            'required' => true
         ]);
     }
 
@@ -78,6 +83,7 @@ class TimeSheetType extends AbstractCompoundType
 
     public function customMapping(array $data)
     {
+
         $timeSheet = TimeSheet::make(...[
             $data['dayOfWeek'],
             CarbonImmutable::instance($data['start']),

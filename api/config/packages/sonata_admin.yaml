@@ -1,6 +1,6 @@
 sonata_admin:
     title: 'Britannia'
-    title_logo: '/images/admin/logo.png'
+    title_logo: '/images/admin/logo_50.png'
 
     show_mosaic_button: false
 
@@ -75,7 +75,7 @@ sonata_admin:
               text:  Cursos
               color: bg-blue
               filters:
-                  active: { value: 1 }
+                  status: { value: ACTIVE }
 
         - class:    col-lg-3 col-xs-6
           position: top
@@ -107,6 +107,7 @@ sonata_admin:
         - css/admin/core.css
         - css/admin/forms.css
         - css/admin/datagrid.css
+        - css/admin/widgets.css
         - css/toggle/bootstrap-toggle.min.css
         
         - css/fullcalendar/core.min.css

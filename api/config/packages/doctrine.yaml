@@ -48,6 +48,7 @@ doctrine:
                     Examiner: Examiner
                     Age: Age
                     Periodicity: Periodicity
+                    Support: Support
                     Intensive: Intensive
                     DiscountList: DiscountList
                     
@@ -90,6 +91,7 @@ doctrine:
             Examiner: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\ExaminerType
             Intensive: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\IntensiveType
             Periodicity: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\PeriodicityType
+            Support: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\SupportType
             CourseStatus: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\CourseStatusType            
             CourseId: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\CourseId
             LevelId: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\LevelId

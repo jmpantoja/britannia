@@ -50,6 +50,16 @@ class Percent
         return $this->percent / 100;
     }
 
+    public function hasValue(int $value): bool
+    {
+        return $this->percent === $value;
+    }
+
+    public function isZero(): bool
+    {
+        return $this->hasValue(0);
+    }
+
     public function __toString()
     {
         return (string)$this->toInt();

@@ -25,7 +25,7 @@
 
         <one-to-many field="attendances" target-entity="Britannia\Domain\Entity\Course\Attendance" mapped-by="lesson" orphan-removal="true">
             <cascade>
-                <cascade-persist/>
+                <cascade-all />
             </cascade>
         </one-to-many>
 

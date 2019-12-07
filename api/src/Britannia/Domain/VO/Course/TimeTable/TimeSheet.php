@@ -115,7 +115,7 @@ class TimeSheet implements \Serializable
      */
     public function getLength(): int
     {
-        return $this->length;
+        return $this->end->diffInMinutes($this->start);
     }
 
     public function getLenghtAsInterval()

@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Form\Type\Course\TimeTable;
 
 
+use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\VO\Course\TimeTable\TimeTable;
-use Britannia\Infraestructure\Symfony\Form\Type\Course\TimeTable\TimeSheetType;
 use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\FormDataMapper;
@@ -30,15 +30,26 @@ class TimeTableType extends AbstractCompoundType
 {
     public function customForm(FormBuilderInterface $builder, array $options)
     {
-
         $builder
             ->add('start', DatePickerType::class, [
-                'format' => \IntlDateFormatter::LONG
+                'format' => \IntlDateFormatter::LONG,
+                'label' => 'Inicio'
             ])
             ->add('end', DatePickerType::class, [
-                'format' => \IntlDateFormatter::LONG
-            ])
+                'format' => \IntlDateFormatter::LONG,
+                'label' => 'Fin'
+            ]);
+
+        if (!$options['course']->isPending()) {
+            $builder
+                ->add('locked', LockedType::class, [
+                    'label' => false,
+                ]);
+        }
+
+        $builder
             ->add('schedule', CollectionType::class, [
+                'label' => 'Horario',
                 'entry_type' => TimeSheetType::class,
                 'prototype' => true,
                 'allow_add' => true,
@@ -49,8 +60,17 @@ class TimeTableType extends AbstractCompoundType
     public function customOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => TimeTable::class
+            'data_class' => TimeTable::class,
+            'label' => 'Calendario',
+            'required' => true,
+            'course' => null,
+            'locked' => false
         ]);
+
+        $resolver->addAllowedTypes('course', [Course::class]);
+        $resolver->setRequired('locked', function () {
+            return false;
+        });
     }
 
     /**
@@ -65,10 +85,12 @@ class TimeTableType extends AbstractCompoundType
     {
         $schedule = array_filter($data['schedule']);
 
+
         return TimeTable::make(...[
             CarbonImmutable::make($data['start']),
             CarbonImmutable::make($data['end']),
-            $schedule
+            $schedule,
+            $data['locked']
         ]);
 
     }

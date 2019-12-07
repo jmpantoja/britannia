@@ -9,7 +9,7 @@ use Britannia\Domain\Entity\Record\StudentHasBeenCreated;
 use Britannia\Domain\Entity\Record\StudentHasJoinedToCourse;
 use Britannia\Domain\VO\Student\ContactMode\ContactMode;
 use Britannia\Domain\VO\Course\CourseStatus;
-use Britannia\Domain\VO\Discount\Discount;
+use Britannia\Domain\VO\Discount\StudentDiscount;
 use Britannia\Domain\VO\Student\OtherAcademy\NumOfYears;
 use Britannia\Domain\VO\Student\OtherAcademy\OtherAcademy;
 use Britannia\Domain\VO\Student\PartOfDay\PartOfDay;
@@ -649,11 +649,11 @@ abstract class Student extends AggregateRoot
     }
 
     /**
-     * @return Discount
+     * @return StudentDiscount
      */
-    public function getDiscount(): Discount
+    public function getDiscount(): StudentDiscount
     {
-        return Discount::fromStudent($this);
+        return StudentDiscount::fromStudent($this);
     }
 
     /**

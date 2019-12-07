@@ -16,12 +16,14 @@ namespace Britannia\Infraestructure\Symfony\Form\Report\CourseInfo;
 
 use Britannia\Application\UseCase\Report\GenerateCourseInformation;
 use Britannia\Domain\Entity\Course\Course;
-use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\VO\CourseInfoData;
+use Britannia\Domain\VO\Discount\StudentDiscount;
+use Britannia\Infraestructure\Symfony\Form\Type\Course\Discount\FamilyOrderType;
+use Britannia\Infraestructure\Symfony\Form\Type\Course\Discount\FreeEnrollmentType;
+use Britannia\Infraestructure\Symfony\Form\Type\Student\JobStatusType;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
-use PlanB\DDDBundle\Sonata\ModelManager;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractCompoundType;
-use Sonata\AdminBundle\Model\ModelManagerInterface;
+use Sonata\Form\Type\DatePickerType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -29,16 +31,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CourseInformationType extends AbstractCompoundType
 {
-
-    /**
-     * @var ModelManagerInterface
-     */
-    private $modelManager;
-
-    public function __construct(ModelManager $modelManager)
-    {
-        $this->modelManager = $modelManager;
-    }
 
     public function customForm(FormBuilderInterface $builder, array $options)
     {
@@ -48,15 +40,18 @@ class CourseInformationType extends AbstractCompoundType
                 'class' => Course::class,
                 'choice_label' => 'name',
                 'data' => $options['course'],
-                'required' => true
+                'required' => true,
+                'label' => 'Elige un curso'
             ])
-            ->add('student', EntityType::class, [
-                'class' => Student::class,
-                'choice_label' => 'fullName',
-                'placeholder' => 'Alumno genérico',
-                'required' => false
+            ->add('freeEnrollment', FreeEnrollmentType::class)
+            ->add('familyOrder', FamilyOrderType::class)
+            ->add('jobStatus', JobStatusType::class)
+            ->add('startDate', DatePickerType::class, [
+                'format' => \IntlDateFormatter::LONG,
+                'label' => false,
+                'sonata_help' => 'Si el alumno se incorpora despues de empezado el curso'
             ])
-            ->add('generar', SubmitType::class, [
+            ->add('aceptar', SubmitType::class, [
                 'attr' => [
                     'class' => 'btn btn-success'
                 ]
@@ -88,10 +83,17 @@ class CourseInformationType extends AbstractCompoundType
 
     public function customMapping(array $data)
     {
+
         $course = $data['course'];
-        $student = $data['student'] ?? null;
+        $startDate = $data['startDate'];
 
+        $discount = StudentDiscount::make(...[
+            $data['familyOrder'],
+            $data['jobStatus'],
+            $startDate,
+            $data['freeEnrollment']
+        ]);
 
-        return GenerateCourseInformation::make($course, $student);
+        return GenerateCourseInformation::make($course, $discount);
     }
 }

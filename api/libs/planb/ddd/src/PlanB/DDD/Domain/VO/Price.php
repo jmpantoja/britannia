@@ -40,6 +40,14 @@ class Price
         return Price::make($total);
     }
 
+    public function discount(Percent $percent): Price
+    {
+        $price = $this->toFloat();
+        $newPrice = $price - ($price * $percent->toFloat());
+
+        return new static($newPrice);
+    }
+
     /**
      * Si el objeto actual es:
      * mayor que el argumento: devuelve 1

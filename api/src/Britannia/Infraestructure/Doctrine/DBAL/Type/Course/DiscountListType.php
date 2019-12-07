@@ -15,7 +15,7 @@ namespace Britannia\Infraestructure\Doctrine\DBAL\Type\Course;
 
 
 use Britannia\Domain\VO\Course\CourseStatus;
-use Britannia\Domain\VO\Course\Discount\Discount;
+use Britannia\Domain\VO\Course\Discount\CourseDiscount;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
@@ -39,7 +39,7 @@ class DiscountListType extends Type
         }
 
         $data = unserialize($value, [
-            'allowed_classes' => [Discount::class]
+            'allowed_classes' => [CourseDiscount::class]
         ]);
 
         if(!is_array($data)){

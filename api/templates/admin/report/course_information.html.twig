@@ -10,7 +10,7 @@
 {% block style %}
     <style>
         body {
-            padding: 50mm 15mm 0 15mm;
+            padding: 10mm 15mm 0 15mm;
             font-family: 'Open Sans';
             font-size: 150%;
         }
@@ -21,6 +21,7 @@
         }
 
         h2.title {
+            margin-top: 2em;
             text-align: center;
             text-transform: uppercase;
         }
@@ -87,7 +88,6 @@
             text-align: right;
         }
 
-
         .week {
             margin-top: 2em;
         }
@@ -98,18 +98,15 @@
             font-weight: bold;
         }
 
-        div.notes {
-            margin-top: 3px;
-        }
-
-        div.notes p {
-            font-size: 0.85em;
+        p.notes {
             margin-bottom: 0;
+            font-size: 0.8em;
             font-style: italic;
         }
 
-        div.notes p::before {
-            content: '-';
+        p.notes::before {
+            content: '*';
+            padding-right: 0.5em;
         }
 
     </style>
@@ -118,6 +115,8 @@
 
 
 {% block body %}
+
+    <img src="{{ asset_base }}/images/admin/logo_h_300.jpg"/>
 
     <h2 class="title">{{ course.name }}</h2>
 
@@ -136,7 +135,7 @@
                 <p class="day">
                     <span class="day-name">{{ lesson.dayOfWeek.value }}</span>
                     de <span class="date">{{ lesson.start | date('H:i') }}</span>
-                    a {{ lesson.end | date('H:i') }}
+                    a <span class="date">{{ lesson.end | date('H:i') }}</span>
                 </p>
             {% endfor %}
 
@@ -144,7 +143,9 @@
     </section>
 
     <section class="payment">
+
         <h3><span class="fa fa-credit-card" aria-hidden="true"></span> Abonos:</h3>
+        {{ block('notes') }}
 
         <table>
             <thead>
@@ -160,25 +161,37 @@
                 <td class="title" colspan="4">Reserva del curso</td>
             </tr>
             <tr>
-                {% with {reason: 'Matrícula', concept: paymentInfo.enrollment(course, discount) } %}
+                {% with {reason: 'Matrícula', concept: reserve.enrollment } %}
                     {{ block('concept') }}
                 {% endwith %}
             </tr>
             <tr>
-                {% with {reason: 'Material', concept: paymentInfo.material(course) } %}
+                {% with {reason: 'Material', concept: reserve.material } %}
                     {{ block('concept') }}
                 {% endwith %}
             </tr>
 
             <tr>
-                {% with {reason: 'Primera y última mensualidad', concept: paymentInfo.reserveMonthly(course, discount) } %}
+                {% set reason = 'Primera mensualidad (%s)' | format(_self.short_date(limits.start)) %}
+
+                {% with {reason: reason, concept: reserve.first_month } %}
                     {{ block('concept') }}
                 {% endwith %}
             </tr>
+
+            <tr>
+                {% set reason = 'Última mensualidad (%s)' | format(_self.short_date(limits.end)) %}
+
+                {% with {reason: reason, concept: reserve.last_month } %}
+                    {{ block('concept') }}
+                {% endwith %}
+            </tr>
+
             <tr class="separator">
                 <td class="subtitle" colspan="3">Total reserva:</td>
                 <td class="number">
-                    {{ _self.format_money(paymentInfo.reserveTotal(course, discount)) }}
+
+                    {{ _self.format_money(reserve.total) }}
                 </td>
             </tr>
 
@@ -191,49 +204,18 @@
                 {% set start = _self.short_date(course.startDate | date_modify('first day of next month')) %}
                 {% set end = _self.short_date(course.endDate | date_modify('first day of previous month')) %}
 
-                {% set reason = 'cada mes entre <b>%s</b> y <b>%s</b>' | format(start, end) %}
+                {% set reason = 'cada mes entre %s y %s' | format(start, end) %}
 
-                {% with {reason: reason, concept: paymentInfo.monthly(course, discount) } %}
+                {% with {reason: reason, concept: monthly } %}
                     {{ block('concept') }}
                 {% endwith %}
+
             </tr>
 
             </tbody>
         </table>
-        {% if student %}
-            {{ block('notes') }}
-        {% endif %}
-
 
     </section>
-{% endblock %}
-
-{% block schedule_day %}
-    <div class="day">
-        {% if day.times is null %}
-            {{ block('schedule_day_disposable') }}
-        {% else %}
-            {{ block('schedule_day_available') }}
-        {% endif %}
-    </div>
-{% endblock %}
-
-{% block schedule_day_disposable %}
-    <div class="box disposable">
-        <span class="head">{{ day.name }}</span>
-        <span class="body">
-            &nbsp; <br/> &nbsp;
-        </span>
-    </div>
-{% endblock %}
-
-{% block schedule_day_available %}
-    <div class="box ">
-        <span class="head">{{ day.name }}</span>
-        <span class="body">
-            {{ day.times.start }} <br/> {{ day.times.end }}
-        </span>
-    </div>
 {% endblock %}
 
 {% block row %}
@@ -252,30 +234,26 @@
 {% endblock %}
 
 {% block notes %}
-    <div class="notes">
-        <p>Estos precios sólo son válidos {{ student.fullName.regular }}</p>
-        {% set mode = student.payment.mode %}
-        {% if mode.cash == false %}
-            {% set account = student.payment.account %}
-            <p>Los cobros se realizarán el dia {{ mode.dayNumber }} de cada mes en la cuenta terminada
-                en {{ account.lastDigits }}</p>
-        {% endif %}
-    </div>
+    {% if reserve.enrollment.ofJobStatusType %}
+        <p class="notes">Matrícula gratis por situación laboral</p>
+    {% endif %}
+
+    {% if monthly.ofJobStatusType %}
+        <p class="notes">Descuento en mensualidades por situación laboral</p>
+    {% endif %}
+
+    {% if monthly.ofFamilyType %}
+        <p class="notes">Descuento familiar en mensualidades</p>
+    {% endif %}
+
 {% endblock %}
 
-
 {% macro format_money(price) %}
-    {% if price == 0 %}
-        -
-    {% else %}
-        {{ price | number_format(2) }} €
-    {% endif %}
+    {{ price.toFloat | number_format(2) }} €
 {% endmacro %}
 
 {% macro format_percent(price) %}
-    {% if price == 0 %}
-        -
-    {% else %}
+    {% if price != 0 %}
         {{ price }}%
     {% endif %}
 {% endmacro %}
@@ -298,6 +276,6 @@
     {% if month == 11 %}{% set month_name = 'nov' %}{% endif %}
     {% if month == 12 %}{% set month_name = 'dic' %}{% endif %}
 
-    {{ '%s/%s' | format(month_name, year) | raw }}
+    {{ '%s-%s' | format(month_name, year) | raw }}
 
 {% endmacro %}

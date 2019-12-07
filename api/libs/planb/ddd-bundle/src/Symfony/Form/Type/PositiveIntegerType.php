@@ -25,6 +25,11 @@ class PositiveIntegerType extends AbstractSingleType
 
     public function customOptions(OptionsResolver $resolver)
     {
+        $resolver->setDefaults([
+            'attr' => [
+                'style' => 'width:100px'
+            ]
+        ]);
     }
 
     public function buildConstraint(array $options): ?Constraint

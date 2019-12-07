@@ -56,6 +56,26 @@ class TimeTableValidator extends ConstraintValidator
                 'type' => CarbonImmutable::class
             ])
         ]);
+
+        $this->validateDates($value);
+    }
+
+    protected function validateDates($value)
+    {
+        $start = $value['start'];
+        $end = $value['end'];
+
+        if (!($start instanceof CarbonImmutable)) {
+            return;
+        }
+
+        if (!($end instanceof CarbonImmutable)) {
+            return;
+        }
+
+        if ($end->lessThanOrEqualTo($start)) {
+            $this->addViolation('La fecha inicial no puede ser mayor que la final');
+        }
     }
 
 }

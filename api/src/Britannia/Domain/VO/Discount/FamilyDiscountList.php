@@ -19,40 +19,68 @@ use PlanB\DDD\Domain\VO\PositiveInteger;
 
 class FamilyDiscountList
 {
-
-    /**
-     * @var Percent[]
-     */
-    private $percents = [];
-
     /**
      * @var Percent
      */
-    private $increase;
+    private $upper;
+    /**
+     * @var Percent
+     */
+    private $lower;
+    /**
+     * @var Percent
+     */
+    private $default;
 
-    public static function make(Percent ...$percents): self
+    public static function make(Percent $upper, Percent $lower, Percent $default): self
     {
-        return new self(...$percents);
+        return new self($upper, $lower, $default);
     }
 
-    private function __construct(Percent ...$percents)
+    private function __construct(Percent $upper, Percent $lower, Percent $default)
     {
-        foreach ($percents as $index => $percent) {
-            $this->percents[$index + 1] = $percent;
+
+        $this->upper = $upper;
+        $this->lower = $lower;
+        $this->default = $default;
+    }
+
+    /**
+     * @return Percent
+     */
+    public function getUpper(): Percent
+    {
+        return $this->upper;
+    }
+
+    /**
+     * @return Percent
+     */
+    public function getLower(): Percent
+    {
+        return $this->lower;
+    }
+
+    /**
+     * @return Percent
+     */
+    public function getDefault(): Percent
+    {
+        return $this->default;
+    }
+
+
+    public function getByFamilyOrder(FamilyOrder $order): Percent
+    {
+        if ($order->isUpper()) {
+            return $this->getUpper();
         }
-    }
 
-    public function withIncrease(Percent $increase): self
-    {
-        $this->increase = $increase;
-        return $this;
-    }
+        if ($order->isLower()) {
+            return $this->getLower();
+        }
 
-    public function get(PositiveInteger $order): Percent
-    {
-        $index = $order->toInt();
-
-        return $this->percents[$index] ?? Percent::zero();
+        return $this->getDefault();
     }
 
 }

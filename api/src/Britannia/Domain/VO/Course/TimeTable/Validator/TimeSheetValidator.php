@@ -38,6 +38,7 @@ class TimeSheetValidator extends ConstraintValidator
 
     public function handle($value, Constraint $constraint)
     {
+
         if ($value instanceof VO\Course\TimeTable\TimeSheet) {
             return;
         }
@@ -87,7 +88,7 @@ class TimeSheetValidator extends ConstraintValidator
         }
 
         if ($end->lessThanOrEqualTo($start)) {
-            $this->addViolation('La hora final ha de ser mayor que la inicial');
+            $this->addViolation('La hora inicial no puede ser mayor que la final');
         }
     }
 

@@ -40,7 +40,8 @@ class JobStatusType extends AbstractSingleType
             'choice_loader' => new CallbackChoiceLoader(function () {
                 $values = array_flip(JobStatus::getConstants());
                 return array_merge(['' => ''], $values);
-            })
+            }),
+            'label'=>'Situación Laboral'
         ]);
     }
 

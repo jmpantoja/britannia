@@ -18,9 +18,10 @@ use Britannia\Domain\Entity\Student\Adult;
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\VO\Discount\DiscountBuilder;
 use Britannia\Domain\VO\Student\Job\JobStatus;
+use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\VO\PositiveInteger;
 
-class Discount
+class StudentDiscount
 {
 
     /**
@@ -36,38 +37,34 @@ class Discount
      * @var bool
      */
     private $hasFreeEnrollment;
+    /**
+     * @var CarbonImmutable|null
+     */
+    private $startDate;
 
     public static function byDefault(): self
     {
-        $familyOrder = PositiveInteger::make(1);
+        $familyOrder = FamilyOrder::UPPER();
 
         return static::make($familyOrder);
     }
 
-    public static function fromStudent(Student $student): self
+    public static function make(?FamilyOrder $familyOrder, ?JobStatus $jobStatus = null, ?\DateTimeInterface $startDate = null, bool $hasFreeEnrollment = false): self
     {
-        $builder = DiscountBuilder::make()
-            ->withRelatives($student, $student->getRelatives())
-            ->withEnrollement($student->findCoursesByStatus(), $student->isFreeEnrollment());
-
-        if ($student instanceof Adult) {
-            $builder->withJob($student->getJob());
+        $date = null;
+        if ($startDate instanceof \DateTimeInterface) {
+            $date = CarbonImmutable::instance($startDate);
         }
 
-        return $builder->build();
-    }
-
-    public static function make(PositiveInteger $familyOrder, ?JobStatus $jobStatus = null, bool $hasFreeEnrollment = false): self
-    {
-
-        return new self($familyOrder, $jobStatus, $hasFreeEnrollment);
+        return new self($familyOrder, $jobStatus, $date, $hasFreeEnrollment);
     }
 
 
-    private function __construct(PositiveInteger $familyOrder, ?JobStatus $jobStatus, bool $hasFreeEnrollment)
+    private function __construct(?FamilyOrder $familyOrder, ?JobStatus $jobStatus, ?CarbonImmutable $startDate, bool $hasFreeEnrollment)
     {
-        $this->familyOrder = $familyOrder;
+        $this->familyOrder = $familyOrder ?? FamilyOrder::UPPER();
         $this->jobStatus = $jobStatus;
+        $this->startDate = $startDate;
         $this->hasFreeEnrollment = $hasFreeEnrollment;
     }
 
@@ -82,10 +79,29 @@ class Discount
     /**
      * @return int
      */
-    public function getFamilyOrder(): PositiveInteger
+    public function getFamilyOrder(): FamilyOrder
     {
         return $this->familyOrder;
     }
+
+    public function applyFamilyDiscount(): bool
+    {
+        return !$this->applyJobStatusDiscount();
+    }
+
+    public function applyJobStatusDiscount(): bool
+    {
+        return $this->familyOrder->isUpper();
+    }
+
+    /**
+     * @return CarbonImmutable|null
+     */
+    public function getStartDate(): ?CarbonImmutable
+    {
+        return $this->startDate;
+    }
+
 
     public function hasFreeEnrollment(): bool
     {

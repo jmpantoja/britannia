@@ -30,6 +30,7 @@
         "symfony/maker-bundle": "^1.13",
         "symfony/monolog-bundle": "^3.4",
         "symfony/yaml": "4.3.*",
+        "tightenco/collect": "^6.5",
         "zendframework/zend-filter": "^2.9"
     },
     "require-dev": {

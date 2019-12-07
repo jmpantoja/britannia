@@ -16,6 +16,7 @@ namespace Britannia\Application\UseCase\Report;
 
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Student\Student;
+use Britannia\Domain\VO\Discount\StudentDiscount;
 
 class GenerateCourseInformation
 {
@@ -24,20 +25,19 @@ class GenerateCourseInformation
      */
     private $course;
     /**
-     * @var Student
+     * @var StudentDiscount
      */
-    private $student;
+    private $discount;
 
-    public static function make(Course $course, ?Student $student): self
+    public static function make(Course $course, StudentDiscount $discount): self
     {
-        return new self($course, $student);
+        return new self($course, $discount);
     }
 
-    protected function __construct(Course $course, ?Student $student)
+    protected function __construct(Course $course, ?StudentDiscount $discount)
     {
-
         $this->course = $course;
-        $this->student = $student;
+        $this->discount = $discount;
     }
 
     /**
@@ -49,11 +49,11 @@ class GenerateCourseInformation
     }
 
     /**
-     * @return Student
+     * @return StudentDiscount
      */
-    public function getStudent(): ?Student
+    public function getDiscount(): ?StudentDiscount
     {
-        return $this->student;
+        return $this->discount;
     }
 
 

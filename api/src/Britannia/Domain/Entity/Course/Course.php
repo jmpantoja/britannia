@@ -22,6 +22,7 @@ use Britannia\Domain\VO\Course\CourseStatus;
 use Britannia\Domain\VO\Course\Examiner\Examiner;
 use Britannia\Domain\VO\Course\Intensive\Intensive;
 use Britannia\Domain\VO\Course\Periodicity\Periodicity;
+use Britannia\Domain\VO\Course\Support\Support;
 use Britannia\Domain\VO\Course\TimeTable\TimeTable;
 use Britannia\Domain\VO\HoursPerWeek;
 use Carbon\CarbonImmutable;
@@ -87,6 +88,11 @@ class Course extends AggregateRoot
      * @var null|Periodicity
      */
     private $periodicity;
+
+    /**
+     * @var null|Support
+     */
+    private $support;
 
     /**
      * @var null|Age
@@ -388,6 +394,24 @@ class Course extends AggregateRoot
     public function setPeriodicity(?Periodicity $periodicity): Course
     {
         $this->periodicity = $periodicity;
+        return $this;
+    }
+
+    /**
+     * @return Support|null
+     */
+    public function getSupport(): ?Support
+    {
+        return $this->support;
+    }
+
+    /**
+     * @param Support|null $support
+     * @return Course
+     */
+    public function setSupport(?Support $support): Course
+    {
+        $this->support = $support;
         return $this;
     }
 

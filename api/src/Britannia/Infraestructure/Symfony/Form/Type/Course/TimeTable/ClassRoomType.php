@@ -41,6 +41,8 @@ class ClassRoomType extends AbstractSingleType
 
             $this->classRoomList[$name] = $id;
         }
+
+        ksort($this->classRoomList);
     }
 
     /**

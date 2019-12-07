@@ -16,14 +16,10 @@ namespace Britannia\Domain\VO\Course\Discount;
 
 use Britannia\Domain\VO\Student\Job\JobStatus;
 use PlanB\DDD\Domain\VO\Percent;
+use PlanB\DDD\Domain\VO\Price;
 
-class Discount implements \Serializable
+class CourseDiscount implements \Serializable
 {
-
-    /**
-     * @var JobStatus
-     */
-    private $status;
     /**
      * @var Percent
      */
@@ -33,31 +29,27 @@ class Discount implements \Serializable
      */
     private $freeEnrollment;
 
-    public static function withEnrollment(JobStatus $status, ?Percent $discount): self
+    public static  function byDefault(): self
     {
-        $discount = $discount ?? Percent::zero();
-        return new self($status, $discount, false);
+        return new self(Percent::zero(), false);
     }
 
-    public static function withoutEnrollment(JobStatus $status, ?Percent $discount): self
+    public static function withEnrollment(?Percent $discount): self
     {
         $discount = $discount ?? Percent::zero();
-        return new self($status, $discount, true);
+        return new self($discount, false);
     }
 
-    private function __construct(JobStatus $status, Percent $discount, bool $freeEnrollment)
+    public static function withoutEnrollment(?Percent $discount): self
     {
-        $this->status = $status;
+        $discount = $discount ?? Percent::zero();
+        return new self($discount, true);
+    }
+
+    private function __construct(Percent $discount, bool $freeEnrollment)
+    {
         $this->discount = $discount;
         $this->freeEnrollment = $freeEnrollment;
-    }
-
-    /**
-     * @return JobStatus
-     */
-    public function getStatus(): JobStatus
-    {
-        return $this->status;
     }
 
     /**
@@ -77,11 +69,9 @@ class Discount implements \Serializable
     }
 
 
-
     public function serialize()
     {
         $data = [
-            'status' => $this->status->getName(),
             'discount' => $this->discount->toInt(),
             'freeEnrollment' => $this->freeEnrollment
         ];
@@ -95,7 +85,6 @@ class Discount implements \Serializable
             'allowed_classes' => []
         ]);
 
-        $this->status = JobStatus::byName($data['status']);
         $this->discount = Percent::make($data['discount']);
         $this->freeEnrollment = $data['freeEnrollment'];
     }

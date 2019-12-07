@@ -30,8 +30,10 @@ class LessonList
     private $data = [];
 
 
-    public static function make(Collection $collection): self
+    public static function make(?Collection $collection = null): self
     {
+        $collection = $collection ?? new ArrayCollection();
+
         return new self($collection);
     }
 

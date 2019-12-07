@@ -36,6 +36,8 @@ abstract class AbstractSingleType extends AbstractType implements DataTransforme
 
     private $options;
 
+    private $empty_data;
+
     final public function buildForm(FormBuilderInterface $builder, array $options)
     {
 
@@ -84,6 +86,25 @@ abstract class AbstractSingleType extends AbstractType implements DataTransforme
     public function getOption(string $key, $default = null)
     {
         return $this->options[$key] ?? $default;
+    }
+
+
+    public function finishView(FormView $view, FormInterface $form, array $options)
+    {
+        if ($form->isSubmitted()) {
+            parent::finishView($view, $form, $options);
+            return;
+        }
+
+        $data = $form->getData();
+        if (is_null($data)) {
+
+            $default = $options['empty_data'];
+            $form->setData($default);
+            $view->vars['data'] = $default;
+            $view->vars['value'] = $default;
+        }
+        parent::finishView($view, $form, $options);
     }
 
 

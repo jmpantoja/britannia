@@ -133,23 +133,25 @@ class CourseController extends CRUDController
      */
     private function generatePdf(array $data, string $template, string $filename): Response
     {
+        $isPdf = true;
+
         $data['title'] = $data['title'] ?? $filename;
+        $data['asset_base'] = $isPdf ? 'http://api' : '';
         $html = $this->renderView($template, $data);
 
-        return new Response($html);
-
-        return new Response(
-            $this->pdfGenerator->getOutputFromHtml($html, [
-                'page-size' => 'A5'
-            ]),
-            200,
-            [
-                'Content-Type' => 'application/pdf',
-                'Content-Disposition' => sprintf('attachment; filename="%s"', $filename),
-            ]
-        );
+        return !$isPdf ?
+            new Response($html) :
+            new Response(
+                $this->pdfGenerator->getOutputFromHtml($html, [
+                    'page-size' => 'A5'
+                ]),
+                200,
+                [
+                    'Content-Type' => 'application/pdf',
+                    'Content-Disposition' => sprintf('attachment; filename="%s"', $filename),
+                ]
+            );
     }
-
 
 }
 

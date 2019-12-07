@@ -92,10 +92,15 @@ fieldset[id$=attendances] .missed{
     font-size: 1.3em;
 }
 
-
-/*li:has(> a.active) { !* styles to apply to the li tag *! }*/
-
 .icheckbox_square-blue, .iradio_square-blue{
     min-height: 34px;
     margin-top: 5px;
 }
+
+
+div.horizontal .box .box-body fieldset{
+    display: inline-block;
+    margin-right: 1em;
+}
+
+

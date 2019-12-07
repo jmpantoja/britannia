@@ -40,6 +40,11 @@ class TimeTable
      */
     private $schedule = [];
 
+    /**
+     * @var Locked
+     */
+    private $locked;
+
 
     public static function buildConstraint(array $options = []): Constraint
     {
@@ -48,9 +53,9 @@ class TimeTable
         ]);
     }
 
-    public static function make(CarbonImmutable $start, CarbonImmutable $end, array $schedule): self
+    public static function make(CarbonImmutable $start, CarbonImmutable $end, array $schedule, Locked $locked): self
     {
-        return new self($start, $end, $schedule);
+        return new self($start, $end, $schedule, $locked);
     }
 
     /**
@@ -59,11 +64,13 @@ class TimeTable
      * @param CarbonImmutable $end
      * @param TimeSheet[] $schedule
      */
-    private function __construct(CarbonImmutable $start, CarbonImmutable $end, array $schedule)
+    private function __construct(CarbonImmutable $start, CarbonImmutable $end, array $schedule, Locked $locked)
     {
 
         $this->start = $start;
         $this->end = $end;
+
+        $this->setLocked($locked);
 
         foreach ($schedule as $timeSheet) {
             $key = $this->getShortDayName($timeSheet->getDayOfWeek());
@@ -109,6 +116,44 @@ class TimeTable
             return $timeSheet->getDayOfWeek();
         }, $this->schedule);
 
+    }
+
+
+    public function setLocked(Locked $locked): self
+    {
+
+        $this->locked = $locked;
+        return $this;
+    }
+
+    public function getLocked(): Locked
+    {
+
+        if (!is_null($this->locked)) {
+            return $this->locked;
+        }
+
+        if ($this->start->isPast()) {
+            return Locked::LOCKED();
+        }
+        return Locked::RESET();
+    }
+
+
+    public function isLocked(): bool
+    {
+        return $this->locked->isLocked();
+    }
+
+    public function shouldBeUpdated()
+    {
+        return $this->locked->isUpdate();
+    }
+
+
+    public function shouldBeResetted()
+    {
+        return $this->locked->isReset();
     }
 
     public function getDailySchedule(Calendar $day): ?TimeSheet

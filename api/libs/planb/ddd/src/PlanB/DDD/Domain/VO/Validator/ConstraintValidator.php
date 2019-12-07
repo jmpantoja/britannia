@@ -28,10 +28,10 @@ abstract class ConstraintValidator extends Base
      */
     public function validate($value, BaseConstraint $constraint)
     {
+
         $this->assertConstraintType($constraint);
         $this->assertValueType($value, $constraint);
         $value = $constraint->sanitize($value);
-
 
         if ($constraint->isEmptyAndRequired($value)) {
             $this->addViolation($constraint->requiredMessage);
