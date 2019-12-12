@@ -27,12 +27,11 @@ class ContactModeType extends Type
 
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
-        if(empty($value)){
+        if (empty($value)) {
             return null;
         }
         return ContactMode::byName($value);
     }
-
 
 
     /**

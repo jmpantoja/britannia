@@ -4,7 +4,6 @@ namespace Britannia\Infraestructure\Symfony\Command;
 
 use Britannia\Domain\Repository\CourseRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
-use phpDocumentor\Reflection\Types\Self_;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -49,7 +48,7 @@ class BorrameCommand extends Command
         $total = count($allCourses);
 
 
-        foreach ($allCourses as $course){
+        foreach ($allCourses as $course) {
             $course->initColor();
 
             $this->entityManager->persist($course);

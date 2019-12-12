@@ -52,9 +52,9 @@ final class LevelAdmin extends AbstractAdmin
     {
         $formMapper
             ->with('Nivel', ['tab' => true])
-                ->with('', ['class' => 'col-md-4'])
-                    ->add('name')
-                ->end()
+            ->with('', ['class' => 'col-md-4'])
+            ->add('name')
+            ->end()
             ->end();
     }
 

@@ -15,9 +15,8 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Course;
 
 
 use Britannia\Domain\VO\Course\Age\Age;
-use Britannia\Domain\VO\Course\Examiner\Examiner;
-use PlanB\DDD\Domain\VO\Validator\Constraint;
 use Britannia\Domain\VO\Validator;
+use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
 use Symfony\Component\Form\ChoiceList\Loader\CallbackChoiceLoader;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;

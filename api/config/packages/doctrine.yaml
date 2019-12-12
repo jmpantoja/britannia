@@ -31,14 +31,14 @@ doctrine:
                 mapping_types:
                     #Academy
                     AcademyId: AcademyId
-                    
+
                     #Book
                     BookId: BookId
                     BookCategory: BookCategory
-                    
+
                     #ClassRoom
                     ClassRoomId: ClassRoomId
-                    
+
                     #Course
                     AttendanceId: AttendanceId
                     LevelId: LevelId
@@ -51,10 +51,19 @@ doctrine:
                     Support: Support
                     Intensive: Intensive
                     DiscountList: DiscountList
-                    
+
+                    #Mark
+                    UnitId: UnitId
+                    UnitMarkId: UnitMarkId
+                    TermId: TermId
+                    TermName: TermName
+                    SetOfSkills: SetOfSkills
+                    UnitsDefinition: UnitsDefinition
+                    Mark: Mark
+
                     #Staff
                     StaffMemberId: StaffMemberId
-                    
+
                     #Student
                     SchoolId: SchoolId
                     StudentId: StudentId
@@ -65,18 +74,18 @@ doctrine:
                     ContactMode: ContactMode
                     PaymentMode: PaymentMode
                     BankAccount: BankAccount
-                                        
+
                     #Lesson
                     LessonId: LessonId
-                    
+
                     #Record
-                    RecordId: RecordId                                            
+                    RecordId: RecordId
                     TypeOfRecord: TypeOfRecord
 
         types:
             #Academy
             AcademyId:  Britannia\Infraestructure\Doctrine\DBAL\Type\Academy\AcademyIdType
-            
+
             #Book
             BookId: Britannia\Infraestructure\Doctrine\DBAL\Type\Book\BookIdType
             BookCategory: Britannia\Infraestructure\Doctrine\DBAL\Type\Book\BookCategoryType
@@ -92,11 +101,21 @@ doctrine:
             Intensive: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\IntensiveType
             Periodicity: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\PeriodicityType
             Support: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\SupportType
-            CourseStatus: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\CourseStatusType            
+            CourseStatus: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\CourseStatusType
             CourseId: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\CourseId
             LevelId: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\LevelId
             DiscountList: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\DiscountListType
-            
+
+
+            #Mark
+            UnitId: Britannia\Infraestructure\Doctrine\DBAL\Type\Mark\UnitId
+            UnitMarkId: Britannia\Infraestructure\Doctrine\DBAL\Type\Mark\UnitMarkId
+            TermId: Britannia\Infraestructure\Doctrine\DBAL\Type\Mark\TermId
+            TermName: Britannia\Infraestructure\Doctrine\DBAL\Type\Mark\TermNameType
+            SetOfSkills: Britannia\Infraestructure\Doctrine\DBAL\Type\Mark\SetOfSkillsType
+            UnitsDefinition: Britannia\Infraestructure\Doctrine\DBAL\Type\Mark\UnitsDefinitionType
+            Mark: Britannia\Infraestructure\Doctrine\DBAL\Type\Mark\MarkType
+
             #Lesson
             LessonId: Britannia\Infraestructure\Doctrine\DBAL\Type\Lesson\LessonIdType
 
@@ -105,16 +124,16 @@ doctrine:
             TypeOfRecord: Britannia\Infraestructure\Doctrine\DBAL\Type\Record\TypeOfRecordType
 
             #School
-            SchoolId:  Britannia\Infraestructure\Doctrine\DBAL\Type\School\SchoolIdType            
-            
+            SchoolId:  Britannia\Infraestructure\Doctrine\DBAL\Type\School\SchoolIdType
+
             #Staff
             StaffMemberId:  Britannia\Infraestructure\Doctrine\DBAL\Type\Staff\StaffMemberIdType
-                            
+
             #Student
-            StudentId: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\StudentIdType            
+            StudentId: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\StudentIdType
             TutorId: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\TutorIdType
-            JobStatus: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\JobStatusType            
-            PartOfDay: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\PartOfDayType            
+            JobStatus: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\JobStatusType
+            PartOfDay: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\PartOfDayType
             NumOfYears: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\NumOfYearsType
             ContactMode: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\ContactModeType
             PaymentMode: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\PaymentModeType

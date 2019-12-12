@@ -14,11 +14,9 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Course;
 
 
-use Britannia\Domain\Entity\Record\StudentHasMissedLesson;
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\VO\StatusOfAttendance;
 use Carbon\CarbonImmutable;
-use PlanB\DDD\Domain\Model\AggregateRoot;
 
 class Attendance
 {
@@ -58,11 +56,6 @@ class Attendance
      */
     private $reason;
 
-    public static function make(Lesson $lesson, Student $student, ?string $reason): self
-    {
-        return new self($lesson, $student, $reason);
-    }
-
     private function __construct(Lesson $lesson, Student $student, ?string $reason)
     {
         $this->id = new AttendanceId();
@@ -74,6 +67,11 @@ class Attendance
         $this->student = $student;
 
         $this->reason = empty($reason) ? null : $reason;
+    }
+
+    public static function make(Lesson $lesson, Student $student, ?string $reason): self
+    {
+        return new self($lesson, $student, $reason);
     }
 
     /**

@@ -38,6 +38,12 @@ class StudentCourse extends AggregateRoot
      */
     private $joinedAt;
 
+    private function __construct(Student $student, Course $course, CarbonImmutable $date)
+    {
+        $this->student = $student;
+        $this->course = $course;
+        $this->joinedAt = $date;
+    }
 
     public static function make(Student $student, Course $course): self
     {
@@ -46,29 +52,6 @@ class StudentCourse extends AggregateRoot
             $date = $course->getStartDate();
         }
         return new self($student, $course, $date);
-    }
-
-    private function __construct(Student $student, Course $course, CarbonImmutable $date)
-    {
-        $this->student = $student;
-        $this->course = $course;
-        $this->joinedAt = $date;
-    }
-
-    /**
-     * @return Student
-     */
-    public function getStudent(): Student
-    {
-        return $this->student;
-    }
-
-    /**
-     * @return Course
-     */
-    public function getCourse(): Course
-    {
-        return $this->course;
     }
 
     /**
@@ -85,6 +68,22 @@ class StudentCourse extends AggregateRoot
         $course = $studentCourse->getCourse();
 
         return $this->hasStudent($student) AND $this->hasCourse($course);
+    }
+
+    /**
+     * @return Student
+     */
+    public function getStudent(): Student
+    {
+        return $this->student;
+    }
+
+    /**
+     * @return Course
+     */
+    public function getCourse(): Course
+    {
+        return $this->course;
     }
 
     public function hasStudent(Student $student): bool

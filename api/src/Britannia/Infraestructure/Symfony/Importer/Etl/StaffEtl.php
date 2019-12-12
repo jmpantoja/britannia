@@ -16,7 +16,6 @@ namespace Britannia\Infraestructure\Symfony\Importer\Etl;
 
 use Britannia\Infraestructure\Symfony\Importer\Builder\BuilderInterface;
 use Britannia\Infraestructure\Symfony\Importer\Builder\StaffBuilder;
-use Britannia\Infraestructure\Symfony\Importer\Builder\StudentBuilder;
 use Britannia\Infraestructure\Symfony\Importer\Console;
 use Britannia\Infraestructure\Symfony\Importer\Converter\FullNameConverter;
 use Britannia\Infraestructure\Symfony\Importer\DataCollector;
@@ -25,7 +24,6 @@ use Britannia\Infraestructure\Symfony\Importer\Normalizer\NormalizerInterface;
 use Britannia\Infraestructure\Symfony\Importer\Normalizer\StudentNormalizer;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Query\Expr\Join;
 
 class StaffEtl extends AbstractEtl
 {
@@ -33,19 +31,6 @@ class StaffEtl extends AbstractEtl
     public function clean(): void
     {
         $this->truncate('staff_members');
-    }
-
-    protected function extract(QueryBuilder $builder): array
-    {
-        $sql = <<<eof
-SELECT id, user, nombre, password, null as email, dni, telefono, cursos, null as teacherId, true as is_teacher, false as is_admin  FROM academia_mysql.profesores 
-UNION
-SELECT id, user, name as nombre, password, email, null as dni, null as telefono, null as cursos, idProfesorVinculado as teacherId, false as is_teacher, true as is_admin   FROM academia_mysql.user 
-eof;
-
-        $query = $builder->getConnection()->executeQuery($sql);
-
-        return $query->fetchAll();
     }
 
     public function createBuilder(array $input, EntityManagerInterface $entityManager): BuilderInterface
@@ -80,5 +65,18 @@ eof;
     public function configureDataLoader(QueryBuilder $builder): void
     {
         // TODO: Implement configureDataLoader() method.
+    }
+
+    protected function extract(QueryBuilder $builder): array
+    {
+        $sql = <<<eof
+SELECT id, user, nombre, password, null as email, dni, telefono, cursos, null as teacherId, true as is_teacher, false as is_admin  FROM academia_mysql.profesores 
+UNION
+SELECT id, user, name as nombre, password, email, null as dni, null as telefono, null as cursos, idProfesorVinculado as teacherId, false as is_teacher, true as is_admin   FROM academia_mysql.user 
+eof;
+
+        $query = $builder->getConnection()->executeQuery($sql);
+
+        return $query->fetchAll();
     }
 }

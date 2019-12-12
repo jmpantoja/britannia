@@ -16,9 +16,9 @@ services:
         class: Sonata\AdminBundle\Command\GenerateObjectAclCommand
         public: true
         arguments:
-            - '@sonata.admin.pool'
-            - []
-            - ~                    
+        - '@sonata.admin.pool'
+        - []
+        - ~
         tags: ['console.command']
 
 
@@ -52,11 +52,11 @@ services:
 
     Britannia\Infraestructure\Symfony\Importer\ImporterManager:
         calls:
-#        - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\StaffEtl']]
-#        - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\StudentEtl']]
-#        - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\RelativesEtl']]
-#        - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\CourseEtl']]
-#        - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\StudentCoursesEtl']]
+        #        - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\StaffEtl']]
+        #        - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\StudentEtl']]
+        #        - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\RelativesEtl']]
+        #        - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\CourseEtl']]
+        #        - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\StudentCoursesEtl']]
         - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\AttendanceControlEtl']]
 
 
@@ -104,6 +104,14 @@ services:
         tags:
         - { name: sonata.admin, manager_type: orm, group: Cursos, label: Cursos, pager_type: 'simple' }
         public: true
+
+    admin.mark:
+        class: Britannia\Infraestructure\Symfony\Admin\MarkAdmin
+        arguments: [~, Britannia\Domain\Entity\Course\Course, ~]
+        tags:
+        - { name: sonata.admin, manager_type: orm, group: Cursos, label: Calificaciones, , pager_type: 'simple' }
+        public: true
+
 
     admin.lesson:
         class: Britannia\Infraestructure\Symfony\Admin\LessonAdmin
@@ -161,5 +169,5 @@ services:
         class: Britannia\Infraestructure\Symfony\Admin\StudentCourseAdmin
         arguments: [~, Britannia\Domain\Entity\Student\StudentCourse, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: StudentCourse }
+        - { name: sonata.admin, manager_type: orm, group: admin, label: StudentCourse }
         public: true

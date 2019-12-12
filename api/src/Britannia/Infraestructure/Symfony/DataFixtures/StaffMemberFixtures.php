@@ -6,14 +6,17 @@ use ApiPlatform\Core\DataPersister\DataPersisterInterface;
 use Britannia\Domain\Entity\Staff\StaffMember;
 use Britannia\Domain\Entity\Staff\User;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
-use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\DBAL\Query\QueryBuilder;
 use PlanB\DDD\Domain\VO\Email;
 use PlanB\DDD\Domain\VO\FullName;
 use PlanB\OrigamiBundle\Api\DataPersister;
 
 class StaffMemberFixtures extends BaseFixture implements FixtureGroupInterface
 {
+
+    public static function getGroups(): array
+    {
+        return ['staff'];
+    }
 
     public function getBackupFiles(): array
     {
@@ -24,11 +27,6 @@ class StaffMemberFixtures extends BaseFixture implements FixtureGroupInterface
             sprintf('%s/dumps/britannia_classrooms.sql', __DIR__),
             sprintf('%s/dumps/britannia_staff_members.sql', __DIR__)
         ];
-    }
-
-    public static function getGroups(): array
-    {
-        return ['staff'];
     }
 
     public function loadData(DataPersisterInterface $dataPersister): void

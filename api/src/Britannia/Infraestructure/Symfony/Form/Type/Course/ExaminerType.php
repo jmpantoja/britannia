@@ -15,14 +15,14 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Course;
 
 
 use Britannia\Domain\VO\Course\Examiner\Examiner;
-use PlanB\DDD\Domain\VO\Validator\Constraint;
 use Britannia\Domain\VO\Validator;
+use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
 use Symfony\Component\Form\ChoiceList\Loader\CallbackChoiceLoader;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ExaminerType  extends AbstractSingleType
+class ExaminerType extends AbstractSingleType
 {
     /**
      * {@inheritdoc}
@@ -42,7 +42,7 @@ class ExaminerType  extends AbstractSingleType
                 asort($values);
                 return array_merge(['' => ''], $values);
             }),
-            'attr'=>[
+            'attr' => [
                 'style' => 'width:170px'
             ]
 

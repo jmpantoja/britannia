@@ -5,7 +5,6 @@ namespace Britannia\Domain\Entity\Student;
 
 use Britannia\Domain\VO\Student\Job\Job;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use PlanB\DDD\Domain\Model\AggregateRoot;
 use PlanB\DDD\Domain\VO\DNI;
 use PlanB\DDD\Domain\VO\Email;
@@ -59,7 +58,7 @@ class Tutor extends AggregateRoot
     {
         $this->id = new TutorId();
         $this->phoneNumbers = [];
-        $this->emails= [];
+        $this->emails = [];
         $this->children = new ArrayCollection();
     }
 
@@ -69,25 +68,6 @@ class Tutor extends AggregateRoot
     public function getId(): TutorId
     {
         return $this->id;
-    }
-
-
-    /**
-     * @return null|FullName
-     */
-    public function getFullName(): ?FullName
-    {
-        return $this->fullName;
-    }
-
-    /**
-     * @param null|FullName $fullName
-     * @return Tutor
-     */
-    public function setFullName(?FullName $fullName): self
-    {
-        $this->fullName = $fullName;
-        return $this;
     }
 
     /**
@@ -178,7 +158,6 @@ class Tutor extends AggregateRoot
         return $this;
     }
 
-
     public function addPhoneNumber(PhoneNumber $phoneNumber): self
     {
         $number = $phoneNumber->getPhoneNumber();
@@ -223,10 +202,27 @@ class Tutor extends AggregateRoot
         return $this;
     }
 
-
     public function __toString()
     {
         return $this->getFullName()->getReversedMode();
+    }
+
+    /**
+     * @return null|FullName
+     */
+    public function getFullName(): ?FullName
+    {
+        return $this->fullName;
+    }
+
+    /**
+     * @param null|FullName $fullName
+     * @return Tutor
+     */
+    public function setFullName(?FullName $fullName): self
+    {
+        $this->fullName = $fullName;
+        return $this;
     }
 
 }

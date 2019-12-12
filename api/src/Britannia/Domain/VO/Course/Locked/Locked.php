@@ -11,17 +11,16 @@
 
 declare(strict_types=1);
 
-namespace Britannia\Domain\VO\Course\TimeTable;
+namespace Britannia\Domain\VO\Course\Locked;
 
 
 use MabeEnum\Enum;
 
 class Locked extends Enum
 {
-    //public const LOCKED = 'Bloqueado';
     public const LOCKED = 'Bloqueado';
-    public const RESET = 'Borrar lecciones antiguas';
-    public const UPDATE = 'Mantener lecciones antiguas';
+    public const UPDATE = 'Mantener info. del pasado';
+    public const RESET = 'Borrar todo';
 
     public function isLocked(): bool
     {

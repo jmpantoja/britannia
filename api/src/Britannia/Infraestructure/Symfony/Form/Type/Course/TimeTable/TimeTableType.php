@@ -16,6 +16,7 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Course\TimeTable;
 
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\VO\Course\TimeTable\TimeTable;
+use Britannia\Infraestructure\Symfony\Form\Type\Course\LockedType;
 use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\FormDataMapper;
@@ -38,6 +39,13 @@ class TimeTableType extends AbstractCompoundType
             ->add('end', DatePickerType::class, [
                 'format' => \IntlDateFormatter::LONG,
                 'label' => 'Fin'
+            ])
+            ->add('schedule', CollectionType::class, [
+                'label' => 'Horario',
+                'entry_type' => TimeSheetType::class,
+                'prototype' => true,
+                'allow_add' => true,
+                'allow_delete' => true
             ]);
 
         if (!$options['course']->isPending()) {
@@ -47,14 +55,6 @@ class TimeTableType extends AbstractCompoundType
                 ]);
         }
 
-        $builder
-            ->add('schedule', CollectionType::class, [
-                'label' => 'Horario',
-                'entry_type' => TimeSheetType::class,
-                'prototype' => true,
-                'allow_add' => true,
-                'allow_delete' => true
-            ]);
     }
 
     public function customOptions(OptionsResolver $resolver)
@@ -63,14 +63,10 @@ class TimeTableType extends AbstractCompoundType
             'data_class' => TimeTable::class,
             'label' => 'Calendario',
             'required' => true,
-            'course' => null,
-            'locked' => false
+            'course' => null
         ]);
 
         $resolver->addAllowedTypes('course', [Course::class]);
-        $resolver->setRequired('locked', function () {
-            return false;
-        });
     }
 
     /**
@@ -90,7 +86,7 @@ class TimeTableType extends AbstractCompoundType
             CarbonImmutable::make($data['start']),
             CarbonImmutable::make($data['end']),
             $schedule,
-            $data['locked']
+            $data['locked'] ?? null
         ]);
 
     }

@@ -18,18 +18,18 @@ final class AcademyAdmin extends AbstractAdmin
         '_sort_by' => 'fullName.lastName',
     ];
 
-    protected function configureRoutes(RouteCollection $collection)
-    {
-        $collection->clearExcept(['list', 'edit', 'create', 'delete', 'export']);
-        return $collection;
-    }
-
     public function getBatchActions()
     {
         $actions = parent::getBatchActions();
         unset($actions['delete']);
 
         return $actions;
+    }
+
+    protected function configureRoutes(RouteCollection $collection)
+    {
+        $collection->clearExcept(['list', 'edit', 'create', 'delete', 'export']);
+        return $collection;
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
@@ -50,9 +50,9 @@ final class AcademyAdmin extends AbstractAdmin
     {
         $formMapper
             ->with('Academia', ['tab' => true])
-                ->with('', ['class' => 'col-md-4'])
-                    ->add('name')
-                ->end()
+            ->with('', ['class' => 'col-md-4'])
+            ->add('name')
+            ->end()
             ->end();
     }
 

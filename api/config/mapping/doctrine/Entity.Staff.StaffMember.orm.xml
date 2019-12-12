@@ -47,6 +47,9 @@
                     <join-column name="course_id"/>
                 </inverse-join-columns>
             </join-table>
+            <cascade>
+                <cascade-persist/>
+            </cascade>
         </many-to-many>
 
 

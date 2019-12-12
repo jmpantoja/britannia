@@ -14,8 +14,6 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Course;
 
 
-use Britannia\Domain\VO\Course\Age\Age;
-use Britannia\Domain\VO\Course\Examiner\Examiner;
 use PlanB\DDD\Domain\Model\EntityId;
 
 class CourseId extends EntityId

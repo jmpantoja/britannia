@@ -14,12 +14,11 @@ declare(strict_types=1);
 namespace Britannia\Domain\VO\BankAccount;
 
 
+use Britannia\Domain\VO\Validator;
 use PlanB\DDD\Domain\VO\CityAddress;
-use PlanB\DDD\Domain\VO\FullName;
 use PlanB\DDD\Domain\VO\Iban;
 use PlanB\DDD\Domain\VO\Traits\Validable;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
-use Britannia\Domain\VO\Validator;
 
 class BankAccount
 {
@@ -42,6 +41,35 @@ class BankAccount
      */
     private $number = 0;
 
+    private function __construct(string $titular, CityAddress $cityAddress, Iban $iban, int $number)
+    {
+        $this->setTitular($titular);
+        $this->setIban($iban);
+        $this->setCityAddress($cityAddress);
+        $this->setNumber($number);
+
+    }
+
+    /**
+     * @param string $cityAddress
+     * @return BankAccount
+     */
+    private function setCityAddress(CityAddress $cityAddress): BankAccount
+    {
+        $this->cityAddress = $cityAddress;
+        return $this;
+    }
+
+    /**
+     * @param int $number
+     * @return BankAccount
+     */
+    private function setNumber(int $number): BankAccount
+    {
+        $this->number = $number;
+        return $this;
+    }
+
     public static function buildConstraint(array $options = []): Constraint
     {
         return new \Britannia\Domain\VO\BankAccount\Validator\BankAccount([
@@ -52,15 +80,6 @@ class BankAccount
     public static function make(string $titular, CityAddress $cityAddress, Iban $iban, int $number): self
     {
         return new self($titular, $cityAddress, $iban, $number);
-    }
-
-    private function __construct(string $titular, CityAddress $cityAddress, Iban $iban, int $number)
-    {
-        $this->setTitular($titular);
-        $this->setIban($iban);
-        $this->setCityAddress($cityAddress);
-        $this->setNumber($number);
-
     }
 
     /**
@@ -82,6 +101,28 @@ class BankAccount
     }
 
     /**
+     * @return string
+     */
+    public function getCityAddress(): CityAddress
+    {
+        return $this->cityAddress;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNumber(): int
+    {
+        return $this->number;
+    }
+
+    public function getLastDigits()
+    {
+        $complete = $this->getIban()->getElectronicFormat();
+        return substr($complete, -4);
+    }
+
+    /**
      * @return Iban
      */
     public function getIban(): Iban
@@ -97,47 +138,6 @@ class BankAccount
     {
         $this->iban = $iban;
         return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCityAddress(): CityAddress
-    {
-        return $this->cityAddress;
-    }
-
-    /**
-     * @param string $cityAddress
-     * @return BankAccount
-     */
-    private function setCityAddress(CityAddress $cityAddress): BankAccount
-    {
-        $this->cityAddress = $cityAddress;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getNumber(): int
-    {
-        return $this->number;
-    }
-
-    /**
-     * @param int $number
-     * @return BankAccount
-     */
-    private function setNumber(int $number): BankAccount
-    {
-        $this->number = $number;
-        return $this;
-    }
-
-    public function getLastDigits(){
-        $complete = $this->getIban()->getElectronicFormat();
-        return substr($complete, -4);
     }
 
     public function __toString()

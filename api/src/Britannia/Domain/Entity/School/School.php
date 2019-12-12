@@ -38,6 +38,11 @@ class School
         return $this->id;
     }
 
+    public function __toString()
+    {
+        return (string)$this->getName();
+    }
+
     /**
      * @return string
      */
@@ -56,11 +61,6 @@ class School
 
         $this->name = $filter->filter($name);
         return $this;
-    }
-
-    public function __toString()
-    {
-        return (string)$this->getName();
     }
 
 }

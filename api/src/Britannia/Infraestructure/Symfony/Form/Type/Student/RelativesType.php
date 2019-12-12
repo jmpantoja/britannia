@@ -16,13 +16,11 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Student;
 
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Entity\Student\StudentId;
-use phpDocumentor\Reflection\Types\Nullable;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Sonata\ModelManager;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 class RelativesType extends AbstractSingleType
 {
@@ -54,7 +52,7 @@ class RelativesType extends AbstractSingleType
             'multiple' => true,
             'expanded' => false,
             'model_manager' => $this->modelManager,
-            'class'=>Student::class,
+            'class' => Student::class,
             'property' => 'fullName.reversedMode',
             'sonata_help' => 'Seleccione otros alumnos de la misma familia',
             'attr' => [

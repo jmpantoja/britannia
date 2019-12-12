@@ -14,10 +14,9 @@ declare(strict_types=1);
 namespace Britannia\Domain\VO\Student\OtherAcademy\Validator;
 
 
-use Britannia\Domain\VO\Student\OtherAcademy\Validator\NumOfYears;
+use Britannia\Domain\VO;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDD\Domain\VO\Validator\ConstraintValidator;
-use Britannia\Domain\VO;
 
 class NumOfYearsValidator extends ConstraintValidator
 {

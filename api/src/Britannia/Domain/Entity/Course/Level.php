@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Course;
 
 
-
 class Level
 {
     /**
@@ -41,6 +40,11 @@ class Level
         return $this->id;
     }
 
+    public function __toString()
+    {
+        return (string)$this->getName();
+    }
+
     /**
      * @return string
      */
@@ -57,11 +61,6 @@ class Level
     {
         $this->name = $name;
         return $this;
-    }
-
-    public function __toString()
-    {
-        return (string)$this->getName();
     }
 
 

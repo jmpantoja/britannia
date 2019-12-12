@@ -7,7 +7,6 @@ use Britannia\Domain\Entity\Course\Course;
 use Carbon\CarbonImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\Criteria;
 use PlanB\DDD\Domain\Model\AggregateRoot;
 use PlanB\DDD\Domain\VO\DNI;
 use PlanB\DDD\Domain\VO\Email;
@@ -20,83 +19,65 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class StaffMember extends AggregateRoot implements UserInterface, \Serializable
 {
 
+    const DEFAULT_ROLE = 'ROLE_SONATA_ADMIN';
     /**
      * @var int
      */
     private $oldId;
-
     /**
      * @var bool
      */
     private $active = true;
-
     /**
      * @var bool
      */
     private $teacher = false;
-
     /**
      * @var string
      */
     private $userName;
-
     /**
      * @var  DNI
      */
     private $dni;
-
     /**
      * @var string
      */
     private $password;
-
     /**
      * @var string
      */
     private $plainPassword;
-
     /**
      * @var null|FullName
      */
     private $fullName;
-
     /**
      * @var null|PostalAddress
      */
     private $address;
-
-
     /**
      * @var null|Email[]
      */
     private $emails;
-
     /**
      * @var null|PhoneNumber[]
      */
     private $phoneNumbers;
-
     /**
      * @var Collection
      */
     private $courses;
-
     private $roles;
-
     /**
      * @var CarbonImmutable
      */
     private $createdAt;
-
     /**
      * @var CarbonImmutable
      */
     private $updatedAt;
-
-
     private $id;
-
-    const DEFAULT_ROLE = 'ROLE_SONATA_ADMIN';
 
     public function __construct()
     {
@@ -106,11 +87,6 @@ class StaffMember extends AggregateRoot implements UserInterface, \Serializable
         $this->roles = [self::DEFAULT_ROLE];
         $this->courses = new ArrayCollection();
 
-    }
-
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**
@@ -130,7 +106,6 @@ class StaffMember extends AggregateRoot implements UserInterface, \Serializable
         $this->oldId = $oldId;
         return $this;
     }
-
 
     public function isTeacher(): ?bool
     {
@@ -222,7 +197,6 @@ class StaffMember extends AggregateRoot implements UserInterface, \Serializable
         return $this;
     }
 
-
     /**
      * @return null|Email[]
      */
@@ -259,7 +233,6 @@ class StaffMember extends AggregateRoot implements UserInterface, \Serializable
         return $this;
     }
 
-
     public function getCreatedAt(): ?CarbonImmutable
     {
         return $this->createdAt;
@@ -284,35 +257,12 @@ class StaffMember extends AggregateRoot implements UserInterface, \Serializable
         return $this;
     }
 
-
-    public function getRoles(): ?array
-    {
-        return $this->roles;
-
-    }
-
-    public function setRoles(array $roles): self
-    {
-        $roles[] = self::DEFAULT_ROLE;
-        $this->roles = $roles;
-
-        return $this;
-    }
-
     /**
      * @return Collection
      */
     public function getCourses(): Collection
     {
         return $this->courses;
-    }
-
-    public function getActiveCourses(): array
-    {
-        return $this->courses->filter(function (Course $course) {
-            return $course->isActive();
-        })->toArray();
-
     }
 
     /**
@@ -356,7 +306,6 @@ class StaffMember extends AggregateRoot implements UserInterface, \Serializable
         });
     }
 
-
     /**
      * Returns the salt that was originally used to encode the password.
      *
@@ -385,14 +334,6 @@ class StaffMember extends AggregateRoot implements UserInterface, \Serializable
         return $this->active;
     }
 
-    private function setActive(bool $active): self
-    {
-
-        $this->active = $active;
-
-        return $this;
-    }
-
     /**
      * @return mixed
      */
@@ -419,6 +360,28 @@ class StaffMember extends AggregateRoot implements UserInterface, \Serializable
         return $this;
     }
 
+    public function getRoles(): ?array
+    {
+        return $this->roles;
+
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $roles[] = self::DEFAULT_ROLE;
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    public function getActiveCourses(): array
+    {
+        return $this->courses->filter(function (Course $course) {
+            return $course->isActive();
+        })->toArray();
+
+    }
+
     public function isEqual($object): bool
     {
         if (!($object instanceof StaffMember)) {
@@ -426,6 +389,11 @@ class StaffMember extends AggregateRoot implements UserInterface, \Serializable
         }
 
         return $this->getId()->equals($object->getId());
+    }
+
+    public function getId()
+    {
+        return $this->id;
     }
 
     public function serialize()
@@ -454,5 +422,13 @@ class StaffMember extends AggregateRoot implements UserInterface, \Serializable
             $this->password,
             ) = unserialize($serialized, array('allowed_classes' => [StaffMemberId::class]));
 
+    }
+
+    private function setActive(bool $active): self
+    {
+
+        $this->active = $active;
+
+        return $this;
     }
 }

@@ -18,11 +18,11 @@ use Britannia\Domain\Entity\Academy\Academy;
 use Britannia\Domain\Entity\School\School;
 use Britannia\Domain\Entity\Student\Tutor;
 use Britannia\Domain\VO\BankAccount\BankAccount;
+use Britannia\Domain\VO\Payment\Payment;
+use Britannia\Domain\VO\Payment\PaymentMode;
 use Britannia\Domain\VO\Student\Job\Job;
 use Britannia\Domain\VO\Student\Job\JobStatus;
 use Britannia\Domain\VO\Student\OtherAcademy\NumOfYears;
-use Britannia\Domain\VO\Payment\Payment;
-use Britannia\Domain\VO\Payment\PaymentMode;
 use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\VO\CityAddress;
 use PlanB\DDD\Domain\VO\DNI;
@@ -38,80 +38,6 @@ use Symfony\Component\Validator\Validation;
 
 trait StudentMaker
 {
-
-    abstract protected function watchForErrors(ConstraintViolationList $violationList, array $input = null): bool;
-
-    abstract protected function watchForWarnings(ConstraintViolationList $violationList, array $input = null): bool;
-
-    abstract protected function hasViolations(ConstraintViolationList $violationList): bool;
-
-    abstract protected function findOneOrCreate(object $entity, array $criteria): ?object;
-
-    abstract protected function findOneOrNull(string $className, array $criteria): ?object;
-
-    public function toFullName(array $input): ?FullName
-    {
-        $input = $this->cleanFullName((string)$input['firstName'], (string)$input['lastName']);
-
-        if (empty($input['firstName']) || empty($input['lastName'])) {
-            return null;
-        }
-
-        $violations = FullName::validate($input);
-
-        if ($this->watchForErrors($violations)) {
-            return null;
-        }
-
-        return FullName::make(...[
-            $input['firstName'],
-            $input['lastName'],
-        ]);
-    }
-
-    public function cleanFullName(string $firstName, string $lastName): array
-    {
-
-        $firstName = trim($firstName);
-        $lastName = trim($lastName);
-
-        if (empty($firstName)) {
-            $firstName = $lastName;
-            $lastName = '';
-        }
-
-        if (empty($lastName)) {
-
-            $pieces = preg_split('/( |,)/', $firstName);
-            $pieces = array_filter($pieces);
-
-            $lastName = array_pop($pieces);
-            $firstName = implode(' ', $pieces);
-        }
-
-        $firstName = str_replace([','], '', $firstName);
-        $lastName = str_replace([','], '', $lastName);
-
-        return [
-            'firstName' => $firstName,
-            'lastName' => $lastName
-        ];
-    }
-
-    public function toDni(string $dni): ?DNI
-    {
-        if (empty($dni)) {
-            return null;
-        }
-
-        $violations = DNI::validate($dni);
-
-        if ($this->watchForWarnings($violations)) {
-            return null;
-        }
-
-        return DNI::make($dni);
-    }
 
     public function toPayment(array $input): ?Payment
     {
@@ -187,6 +113,8 @@ trait StudentMaker
 
     }
 
+    abstract protected function hasViolations(ConstraintViolationList $violationList): bool;
+
     private function toIban(string $iban): ?Iban
     {
         $violations = Iban::validate($iban);
@@ -197,6 +125,8 @@ trait StudentMaker
 
         return Iban::make($iban);
     }
+
+    abstract protected function watchForWarnings(ConstraintViolationList $violationList, array $input = null): bool;
 
     public function toDate(string $date): ?CarbonImmutable
     {
@@ -220,60 +150,7 @@ trait StudentMaker
         return CarbonImmutable::make($date);
     }
 
-    public function toEmail(string $email): ?Email
-    {
-
-        if (strpos($email, 'NO TIENE') !== false) {
-            $email = '';
-        }
-
-        if (strpos($email, 'NO USA') !== false) {
-            $email = '';
-        }
-
-        if (empty($email)) {
-            return null;
-        }
-
-        $violations = Email::validate($email);
-
-        if ($this->watchForWarnings($violations)) {
-            return null;
-        }
-
-        return Email::make($email);
-    }
-
-    public function toPostalAddress(string $address, string $postalCode): ?PostalAddress
-    {
-
-        $data = [
-            'address' => $address,
-            'postalCode' => $this->toPostalCode($postalCode)
-        ];
-
-        $violations = PostalAddress::validate($data);
-
-        if ($this->watchForWarnings($violations)) {
-            return null;
-        }
-
-        return PostalAddress::make(...[
-            $data['address'],
-            $data['postalCode'],
-        ]);
-    }
-
-    private function toPostalCode(string $postalCode): ?PostalCode
-    {
-        $violations = PostalCode::validate($postalCode);
-
-        if ($this->hasViolations($violations)) {
-            return null;
-        }
-        return PostalCode::make($postalCode);
-    }
-
+    abstract protected function findOneOrNull(string $className, array $criteria): ?object;
 
     /**
      * @param string $time
@@ -328,37 +205,7 @@ trait StudentMaker
         return $academy;
     }
 
-    /**
-     * @param string $situacion
-     * @return null
-     */
-    protected function toJobStatus(string $situacion): ?JobStatus
-    {
-        $situacion = strtoupper($situacion);
-
-        $status = null;
-        switch ($situacion) {
-            case 'ESTUDIANTE':
-                $status = JobStatus::STUDENT();
-                break;
-            case 'EMPLEADO':
-            case 'E':
-            case 'EMPLEADA':
-                $status = JobStatus::EMPLOYED();
-                break;
-            case 'DESEMPLEADO':
-            case 'DESEMPLEADA':
-                $status = JobStatus::UNEMPLOYED();
-                break;
-            case 'JUBILADO':
-                $status = JobStatus::RETIRED();
-                break;
-            case 'NADA':
-                $status = JobStatus::NOTHING();
-                break;
-        }
-        return $status;
-    }
+    abstract protected function findOneOrCreate(object $entity, array $criteria): ?object;
 
     /**
      * @param string $name
@@ -373,46 +220,6 @@ trait StudentMaker
             'name' => $name
         ]);
     }
-
-
-    /**
-     * @param string $phones
-     * @return array
-     */
-    protected function toPhoneNumbers(string ...$phones): array
-    {
-        $phoneNumbers = [];
-
-        $allTheNumbers = implode("/", $phones);
-        $items = preg_split('/[\/|\-]/', $allTheNumbers);
-
-        foreach ($items as $item) {
-            $matches = [];
-
-            if (empty($item)) {
-                continue;
-            }
-
-            if (false !== strpos('@', $item)) {
-                continue;
-            }
-
-            if (preg_match('/([ \p{L}]+)(\d{9})/u', $item, $matches)) {
-                $item = sprintf('%s %s', $matches[2], $matches[1]);
-            }
-
-            $matches = [];
-            if (preg_match_all('/(\d{9})([ \p{L}]*)/u', $item, $matches)) {
-
-                $total = count($matches[0]);
-                for ($i = 0; $i < $total; $i++) {
-                    $phoneNumbers[] = PhoneNumber::make($matches[1][$i], $matches[2][$i]);
-                }
-            }
-        }
-        return $phoneNumbers;
-    }
-
 
     protected function toTutor(array $data): ?Tutor
     {
@@ -472,5 +279,195 @@ trait StudentMaker
     {
         $name = preg_replace("/[[:punct:]]|\d/u", '', $name);
         return trim($name);
+    }
+
+    public function toFullName(array $input): ?FullName
+    {
+        $input = $this->cleanFullName((string)$input['firstName'], (string)$input['lastName']);
+
+        if (empty($input['firstName']) || empty($input['lastName'])) {
+            return null;
+        }
+
+        $violations = FullName::validate($input);
+
+        if ($this->watchForErrors($violations)) {
+            return null;
+        }
+
+        return FullName::make(...[
+            $input['firstName'],
+            $input['lastName'],
+        ]);
+    }
+
+    public function cleanFullName(string $firstName, string $lastName): array
+    {
+
+        $firstName = trim($firstName);
+        $lastName = trim($lastName);
+
+        if (empty($firstName)) {
+            $firstName = $lastName;
+            $lastName = '';
+        }
+
+        if (empty($lastName)) {
+
+            $pieces = preg_split('/( |,)/', $firstName);
+            $pieces = array_filter($pieces);
+
+            $lastName = array_pop($pieces);
+            $firstName = implode(' ', $pieces);
+        }
+
+        $firstName = str_replace([','], '', $firstName);
+        $lastName = str_replace([','], '', $lastName);
+
+        return [
+            'firstName' => $firstName,
+            'lastName' => $lastName
+        ];
+    }
+
+    abstract protected function watchForErrors(ConstraintViolationList $violationList, array $input = null): bool;
+
+    public function toDni(string $dni): ?DNI
+    {
+        if (empty($dni)) {
+            return null;
+        }
+
+        $violations = DNI::validate($dni);
+
+        if ($this->watchForWarnings($violations)) {
+            return null;
+        }
+
+        return DNI::make($dni);
+    }
+
+    public function toPostalAddress(string $address, string $postalCode): ?PostalAddress
+    {
+
+        $data = [
+            'address' => $address,
+            'postalCode' => $this->toPostalCode($postalCode)
+        ];
+
+        $violations = PostalAddress::validate($data);
+
+        if ($this->watchForWarnings($violations)) {
+            return null;
+        }
+
+        return PostalAddress::make(...[
+            $data['address'],
+            $data['postalCode'],
+        ]);
+    }
+
+    private function toPostalCode(string $postalCode): ?PostalCode
+    {
+        $violations = PostalCode::validate($postalCode);
+
+        if ($this->hasViolations($violations)) {
+            return null;
+        }
+        return PostalCode::make($postalCode);
+    }
+
+    /**
+     * @param string $situacion
+     * @return null
+     */
+    protected function toJobStatus(string $situacion): ?JobStatus
+    {
+        $situacion = strtoupper($situacion);
+
+        $status = null;
+        switch ($situacion) {
+            case 'ESTUDIANTE':
+                $status = JobStatus::STUDENT();
+                break;
+            case 'EMPLEADO':
+            case 'E':
+            case 'EMPLEADA':
+                $status = JobStatus::EMPLOYED();
+                break;
+            case 'DESEMPLEADO':
+            case 'DESEMPLEADA':
+                $status = JobStatus::UNEMPLOYED();
+                break;
+            case 'JUBILADO':
+                $status = JobStatus::RETIRED();
+                break;
+            case 'NADA':
+                $status = JobStatus::NOTHING();
+                break;
+        }
+        return $status;
+    }
+
+    /**
+     * @param string $phones
+     * @return array
+     */
+    protected function toPhoneNumbers(string ...$phones): array
+    {
+        $phoneNumbers = [];
+
+        $allTheNumbers = implode("/", $phones);
+        $items = preg_split('/[\/|\-]/', $allTheNumbers);
+
+        foreach ($items as $item) {
+            $matches = [];
+
+            if (empty($item)) {
+                continue;
+            }
+
+            if (false !== strpos('@', $item)) {
+                continue;
+            }
+
+            if (preg_match('/([ \p{L}]+)(\d{9})/u', $item, $matches)) {
+                $item = sprintf('%s %s', $matches[2], $matches[1]);
+            }
+
+            $matches = [];
+            if (preg_match_all('/(\d{9})([ \p{L}]*)/u', $item, $matches)) {
+
+                $total = count($matches[0]);
+                for ($i = 0; $i < $total; $i++) {
+                    $phoneNumbers[] = PhoneNumber::make($matches[1][$i], $matches[2][$i]);
+                }
+            }
+        }
+        return $phoneNumbers;
+    }
+
+    public function toEmail(string $email): ?Email
+    {
+
+        if (strpos($email, 'NO TIENE') !== false) {
+            $email = '';
+        }
+
+        if (strpos($email, 'NO USA') !== false) {
+            $email = '';
+        }
+
+        if (empty($email)) {
+            return null;
+        }
+
+        $violations = Email::validate($email);
+
+        if ($this->watchForWarnings($violations)) {
+            return null;
+        }
+
+        return Email::make($email);
     }
 }

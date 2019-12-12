@@ -15,7 +15,6 @@ namespace Britannia\Domain\VO\Discount;
 
 
 use PlanB\DDD\Domain\VO\Percent;
-use PlanB\DDD\Domain\VO\PositiveInteger;
 
 class FamilyDiscountList
 {
@@ -32,17 +31,30 @@ class FamilyDiscountList
      */
     private $default;
 
-    public static function make(Percent $upper, Percent $lower, Percent $default): self
-    {
-        return new self($upper, $lower, $default);
-    }
-
     private function __construct(Percent $upper, Percent $lower, Percent $default)
     {
 
         $this->upper = $upper;
         $this->lower = $lower;
         $this->default = $default;
+    }
+
+    public static function make(Percent $upper, Percent $lower, Percent $default): self
+    {
+        return new self($upper, $lower, $default);
+    }
+
+    public function getByFamilyOrder(FamilyOrder $order): Percent
+    {
+        if ($order->isUpper()) {
+            return $this->getUpper();
+        }
+
+        if ($order->isLower()) {
+            return $this->getLower();
+        }
+
+        return $this->getDefault();
     }
 
     /**
@@ -67,20 +79,6 @@ class FamilyDiscountList
     public function getDefault(): Percent
     {
         return $this->default;
-    }
-
-
-    public function getByFamilyOrder(FamilyOrder $order): Percent
-    {
-        if ($order->isUpper()) {
-            return $this->getUpper();
-        }
-
-        if ($order->isLower()) {
-            return $this->getLower();
-        }
-
-        return $this->getDefault();
     }
 
 }

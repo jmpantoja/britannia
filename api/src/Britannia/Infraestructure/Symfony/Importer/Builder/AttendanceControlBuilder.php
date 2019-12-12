@@ -16,15 +16,11 @@ namespace Britannia\Infraestructure\Symfony\Importer\Builder;
 
 use Britannia\Domain\Entity\Course\Attendance;
 use Britannia\Domain\Entity\Course\Course;
-use Britannia\Domain\Entity\Course\Lesson;
 use Britannia\Domain\Entity\Record\StudentHasMissedLesson;
 use Britannia\Domain\Entity\Student\Student;
-use Britannia\Domain\Entity\Student\StudentCourse;
 use Britannia\Infraestructure\Symfony\Importer\Resume;
 use Carbon\CarbonImmutable;
-use Doctrine\Common\Collections\ArrayCollection;
 use PlanB\DDD\Domain\Event\EventDispatcher;
-use Symfony\Component\Validator\ConstraintViolationList;
 
 class AttendanceControlBuilder extends BuilderAbstract
 {

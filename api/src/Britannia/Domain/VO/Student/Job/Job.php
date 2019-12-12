@@ -32,6 +32,28 @@ class Job
      */
     private $status;
 
+    private function __construct(string $name, JobStatus $status)
+    {
+        $this->setName($name);
+        $this->setStatus($status);
+    }
+
+    /**
+     * @param string $name
+     * @return Job
+     */
+    private function setName(string $name): self
+    {
+        $this->name = $name;
+        return $this;
+    }
+
+    private function setStatus(JobStatus $status): self
+    {
+        $this->status = $status;
+
+        return $this;
+    }
 
     public static function buildConstraint(array $options = []): Constraint
     {
@@ -54,23 +76,6 @@ class Job
         return new self((string)$name, $status);
     }
 
-    private function __construct(string $name, JobStatus $status)
-    {
-        $this->setName($name);
-        $this->setStatus($status);
-    }
-
-    /**
-     * @param string $name
-     * @return Job
-     */
-    private function setName(string $name): self
-    {
-        $this->name = $name;
-        return $this;
-    }
-
-
     /**
      * @return string
      */
@@ -85,13 +90,6 @@ class Job
     public function getStatus(): ?JobStatus
     {
         return $this->status;
-    }
-
-    private function setStatus(JobStatus $status): self
-    {
-        $this->status = $status;
-
-        return $this;
     }
 
 }

@@ -17,7 +17,6 @@ namespace Britannia\Infraestructure\Symfony\Service\Calendar;
 use ApiPlatform\Core\DataPersister\DataPersisterInterface;
 use Britannia\Domain\Entity\Calendar\Calendar;
 use Britannia\Domain\Repository\CalendarRepositoryInterface;
-use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 
 class CalendarService

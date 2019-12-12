@@ -1,4 +1,7 @@
 parameters:
+    marks:
+        unit_percent_weight: 30
+    
     discount:
         family:
             upper: 0

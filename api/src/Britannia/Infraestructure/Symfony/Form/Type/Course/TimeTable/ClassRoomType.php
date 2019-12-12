@@ -19,7 +19,6 @@ use Britannia\Domain\Entity\ClassRoom\ClassRoomId;
 use Doctrine\ORM\EntityManagerInterface;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
-
 use Symfony\Component\Form\ChoiceList\Loader\CallbackChoiceLoader;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;

@@ -19,9 +19,7 @@ use Britannia\Domain\Service\Payment\Discount\EnrollmentDiscount;
 use Britannia\Domain\Service\Payment\Discount\MaterialDiscount;
 use Britannia\Domain\Service\Payment\Discount\MonthlyDiscount;
 use Britannia\Domain\VO\Discount\StudentDiscount;
-use PlanB\DDD\Domain\VO\Price;
 use Tightenco\Collect\Support\Collection;
-use Zend\Stdlib\ArrayObject;
 
 class PaymentBreakdownService
 {

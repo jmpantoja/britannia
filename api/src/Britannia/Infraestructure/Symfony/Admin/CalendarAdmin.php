@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 namespace Britannia\Infraestructure\Symfony\Admin;
 
-use Britannia\Domain\Entity\Calendar\Calendar;
 use Britannia\Domain\Repository\CalendarRepositoryInterface;
 use Carbon\CarbonImmutable;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
-use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
-
 use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -38,6 +35,15 @@ final class CalendarAdmin extends AbstractAdmin
         ];
     }
 
+    public function configureActionButtons($action, $object = null)
+    {
+        $actionButtons = parent::configureActionButtons($action, $object);
+
+        unset($actionButtons['create']);
+
+        return $actionButtons;
+    }
+
     protected function configureBatchActions($actions)
     {
         if ($this->hasAccess('edit')) {
@@ -59,15 +65,6 @@ final class CalendarAdmin extends AbstractAdmin
     {
         $collection->clearExcept(['list', 'batch']);
         return $collection;
-    }
-
-    public function configureActionButtons($action, $object = null)
-    {
-        $actionButtons = parent::configureActionButtons($action, $object);
-
-        unset($actionButtons['create']);
-
-        return $actionButtons;
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void

@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Importer;
 
 
-use MongoDB\BSON\Regex;
 use Respect\Validation\Rules\NotBlank;
 use Symfony\Component\Validator\ConstraintViolation;
 
@@ -56,17 +55,17 @@ class Resume
      */
     private $warnings = [];
 
-    public static function make(int $id, string $type, string $title): self
-    {
-        return new self($id, $type, $title);
-    }
-
     private function __construct(int $id, string $type, string $title)
     {
 
         $this->id = $id;
         $this->type = trim($type);
         $this->title = trim($title);
+    }
+
+    public static function make(int $id, string $type, string $title): self
+    {
+        return new self($id, $type, $title);
     }
 
     /**
@@ -170,6 +169,11 @@ class Resume
         return $this->addViolationToList($this->warnings, $violation, $input);
     }
 
+    public function isSuccessful(): bool
+    {
+        return !$this->hasErrors() && !$this->hasWarnings();
+    }
+
     public function hasErrors(): bool
     {
         return 0 !== count($this->errors);
@@ -178,12 +182,6 @@ class Resume
     public function hasWarnings(): bool
     {
         return 0 !== count($this->warnings);
-    }
-
-
-    public function isSuccessful(): bool
-    {
-        return !$this->hasErrors() && !$this->hasWarnings();
     }
 
 }

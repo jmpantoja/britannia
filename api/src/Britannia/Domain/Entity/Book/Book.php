@@ -56,25 +56,6 @@ class Book
         return $this->id;
     }
 
-
-    /**
-     * @return null|string
-     */
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param null|string $name
-     * @return Book
-     */
-    public function setName(?string $name): Book
-    {
-        $this->name = $name;
-        return $this;
-    }
-
     /**
      * @return BookCategory|null
      */
@@ -90,24 +71,6 @@ class Book
     public function setCategory(?BookCategory $category): Book
     {
         $this->category = $category;
-        return $this;
-    }
-
-    /**
-     * @return null|Price
-     */
-    public function getPrice(): ?Price
-    {
-        return $this->price;
-    }
-
-    /**
-     * @param null|Price $price
-     * @return Book
-     */
-    public function setPrice(?Price $price): Book
-    {
-        $this->price = $price;
         return $this;
     }
 
@@ -129,7 +92,6 @@ class Book
         return $this;
     }
 
-
     public function __toString()
     {
 
@@ -143,6 +105,42 @@ class Book
             $name,
             (string)$this->getPrice()
         ]);
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param null|string $name
+     * @return Book
+     */
+    public function setName(?string $name): Book
+    {
+        $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * @return null|Price
+     */
+    public function getPrice(): ?Price
+    {
+        return $this->price;
+    }
+
+    /**
+     * @param null|Price $price
+     * @return Book
+     */
+    public function setPrice(?Price $price): Book
+    {
+        $this->price = $price;
+        return $this;
     }
 
 }

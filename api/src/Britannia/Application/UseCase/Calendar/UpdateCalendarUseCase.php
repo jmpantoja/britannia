@@ -14,21 +14,17 @@ declare(strict_types=1);
 namespace Britannia\Application\UseCase\Calendar;
 
 
-use ApiPlatform\Core\DataPersister\DataPersisterInterface;
-use Britannia\Domain\Entity\Calendar\Calendar;
-use Britannia\Domain\Repository\CalendarRepositoryInterface;
 use Britannia\Infraestructure\Symfony\Service\Calendar\CalendarService;
 use PlanB\DDD\Application\UseCase\UseCaseInterface;
 use PlanB\DDDBundle\ApiPlattform\DataPersister;
 
 class UpdateCalendarUseCase implements UseCaseInterface
 {
+    const NUM_OF_FUTURE_YEARS = 3;
     /**
      * @var CalendarService
      */
     private $calendar;
-
-    const NUM_OF_FUTURE_YEARS = 3;
 
     public function __construct(CalendarService $calendar)
     {

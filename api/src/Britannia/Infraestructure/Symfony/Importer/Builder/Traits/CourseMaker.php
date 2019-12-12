@@ -16,8 +16,8 @@ namespace Britannia\Infraestructure\Symfony\Importer\Builder\Traits;
 
 use Britannia\Domain\Entity\ClassRoom\ClassRoomId;
 use Britannia\Domain\VO\Course\TimeTable\DayOfWeek;
-use Britannia\Domain\VO\LessonLength;
 use Britannia\Domain\VO\Course\TimeTable\TimeSheet;
+use Britannia\Domain\VO\LessonLength;
 use Carbon\CarbonImmutable;
 use Symfony\Component\Validator\ConstraintViolationList;
 
@@ -25,16 +25,6 @@ trait CourseMaker
 {
 
     private $patternA = '/((LUNES|MARTES|MIERCOLES|JUEVES|VIERNES)(.*)(LUNES|MARTES|MIERCOLES|JUEVES|VIERNES)  (.*))/U';
-
-    abstract protected function watchForErrors(ConstraintViolationList $violationList, array $input = null): bool;
-
-    abstract protected function watchForWarnings(ConstraintViolationList $violationList, array $input = null): bool;
-
-    abstract protected function hasViolations(ConstraintViolationList $violationList): bool;
-
-    abstract protected function findOneOrCreate(object $entity, array $criteria): ?object;
-
-    abstract protected function findOneOrNull(string $className, array $criteria): ?object;
 
     /**
      * @param string $value
@@ -110,7 +100,6 @@ trait CourseMaker
         ];
     }
 
-
     /**
      * @param string $days
      * @return DayOfWeek[]
@@ -153,7 +142,6 @@ trait CourseMaker
         return $temp;
     }
 
-
     private function fixDaysInterval(string $days): string
     {
 
@@ -183,4 +171,14 @@ trait CourseMaker
 
         return $temp;
     }
+
+    abstract protected function watchForErrors(ConstraintViolationList $violationList, array $input = null): bool;
+
+    abstract protected function watchForWarnings(ConstraintViolationList $violationList, array $input = null): bool;
+
+    abstract protected function hasViolations(ConstraintViolationList $violationList): bool;
+
+    abstract protected function findOneOrCreate(object $entity, array $criteria): ?object;
+
+    abstract protected function findOneOrNull(string $className, array $criteria): ?object;
 }

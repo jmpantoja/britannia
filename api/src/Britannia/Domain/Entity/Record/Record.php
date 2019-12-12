@@ -61,17 +61,6 @@ class Record
      */
     private $description;
 
-
-    public static function make(Student $student,
-                                ?Course $course,
-                                CarbonImmutable $date,
-                                TypeOfRecord $typeOfRecord,
-                                StaffMember $createdBy,
-                                string $description): self
-    {
-        return new self($student, $course, $date, $typeOfRecord, $createdBy, $description);
-    }
-
     private function __construct(Student $student,
                                  ?Course $course,
                                  CarbonImmutable $date,
@@ -91,6 +80,16 @@ class Record
         $this->day = $date->setTime(0, 0);
     }
 
+    public static function make(Student $student,
+                                ?Course $course,
+                                CarbonImmutable $date,
+                                TypeOfRecord $typeOfRecord,
+                                StaffMember $createdBy,
+                                string $description): self
+    {
+        return new self($student, $course, $date, $typeOfRecord, $createdBy, $description);
+    }
+
     /**
      * @return RecordId
      */
@@ -105,7 +104,7 @@ class Record
     public function getStudent(): Student
     {
 
-        if($this->student === null){
+        if ($this->student === null) {
             dump($this->id, $this->type, $this->description, $this->student);
             die('x');
         }

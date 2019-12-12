@@ -64,7 +64,7 @@ class RelativesBuilder extends BuilderAbstract
 
     public function build(): ?object
     {
-        if(is_null($this->student)){
+        if (is_null($this->student)) {
             return null;
         }
 

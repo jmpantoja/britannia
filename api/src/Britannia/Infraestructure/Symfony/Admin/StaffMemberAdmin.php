@@ -59,6 +59,27 @@ final class StaffMemberAdmin extends AbstractAdmin
         return $actions;
     }
 
+    public function checkAccess($action, $object = null)
+    {
+        if ($this->hasAccess($action, $object)) {
+            return;
+        }
+
+        parent::checkAccess($action, $object);
+    }
+
+    public function hasAccess($action, $object = null)
+    {
+        $currentUser = $this->security->getUser();
+
+        if ($action === 'edit' && $currentUser instanceof StaffMember && $currentUser->isEqual($object)) {
+            return true;
+        }
+
+
+        return parent::hasAccess($action, $object);
+    }
+
     protected function configureRoutes(RouteCollection $collection)
     {
 
@@ -186,27 +207,5 @@ final class StaffMemberAdmin extends AbstractAdmin
             ->add('createdAt')
             ->add('updatedAt')
             ->add('id');
-    }
-
-    public function hasAccess($action, $object = null)
-    {
-        $currentUser = $this->security->getUser();
-
-        if ($action === 'edit' && $currentUser instanceof StaffMember && $currentUser->isEqual($object)) {
-            return true;
-        }
-
-
-        return parent::hasAccess($action, $object);
-    }
-
-
-    public function checkAccess($action, $object = null)
-    {
-        if ($this->hasAccess($action, $object)) {
-            return;
-        }
-
-        parent::checkAccess($action, $object);
     }
 }

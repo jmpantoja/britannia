@@ -14,12 +14,9 @@ declare(strict_types=1);
 namespace Britannia\Domain\VO\Discount;
 
 
-use Britannia\Domain\Entity\Student\Adult;
-use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\VO\Discount\DiscountBuilder;
 use Britannia\Domain\VO\Student\Job\JobStatus;
 use Carbon\CarbonImmutable;
-use PlanB\DDD\Domain\VO\PositiveInteger;
 
 class StudentDiscount
 {
@@ -42,6 +39,14 @@ class StudentDiscount
      */
     private $startDate;
 
+    private function __construct(?FamilyOrder $familyOrder, ?JobStatus $jobStatus, ?CarbonImmutable $startDate, bool $hasFreeEnrollment)
+    {
+        $this->familyOrder = $familyOrder ?? FamilyOrder::UPPER();
+        $this->jobStatus = $jobStatus;
+        $this->startDate = $startDate;
+        $this->hasFreeEnrollment = $hasFreeEnrollment;
+    }
+
     public static function byDefault(): self
     {
         $familyOrder = FamilyOrder::UPPER();
@@ -57,15 +62,6 @@ class StudentDiscount
         }
 
         return new self($familyOrder, $jobStatus, $date, $hasFreeEnrollment);
-    }
-
-
-    private function __construct(?FamilyOrder $familyOrder, ?JobStatus $jobStatus, ?CarbonImmutable $startDate, bool $hasFreeEnrollment)
-    {
-        $this->familyOrder = $familyOrder ?? FamilyOrder::UPPER();
-        $this->jobStatus = $jobStatus;
-        $this->startDate = $startDate;
-        $this->hasFreeEnrollment = $hasFreeEnrollment;
     }
 
     /**

@@ -16,7 +16,6 @@ namespace Britannia\Infraestructure\Symfony\Importer\Etl;
 
 use Britannia\Infraestructure\Symfony\Importer\Builder\BuilderInterface;
 use Britannia\Infraestructure\Symfony\Importer\Builder\RelativesBuilder;
-use Britannia\Infraestructure\Symfony\Importer\Builder\StudentBuilder;
 use Britannia\Infraestructure\Symfony\Importer\Console;
 use Britannia\Infraestructure\Symfony\Importer\Converter\FullNameConverter;
 use Britannia\Infraestructure\Symfony\Importer\DataCollector;

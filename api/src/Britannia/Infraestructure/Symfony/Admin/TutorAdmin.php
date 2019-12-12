@@ -7,7 +7,6 @@ namespace Britannia\Infraestructure\Symfony\Admin;
 use Britannia\Infraestructure\Symfony\Form\JobType;
 use PlanB\DDDBundle\Symfony\Form\Type\DNIType;
 use PlanB\DDDBundle\Symfony\Form\Type\EmailListType;
-use PlanB\DDDBundle\Symfony\Form\Type\EmailType;
 use PlanB\DDDBundle\Symfony\Form\Type\FullNameType;
 use PlanB\DDDBundle\Symfony\Form\Type\PhoneNumberListType;
 use PlanB\DDDBundle\Symfony\Form\Type\PostalAddressType;
@@ -15,11 +14,9 @@ use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 final class TutorAdmin extends AbstractAdmin
 {

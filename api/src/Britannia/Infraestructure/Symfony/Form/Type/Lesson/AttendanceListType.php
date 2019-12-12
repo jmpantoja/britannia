@@ -14,18 +14,11 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Form\Type\Lesson;
 
 
-use Britannia\Domain\Entity\Course\Attendance;
 use Britannia\Domain\Entity\Course\Lesson;
-use Britannia\Domain\Entity\Student\Student;
-use Britannia\Domain\Repository\StudentRepositoryInterface;
-use Britannia\Infraestructure\Doctrine\Repository\StudentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\Criteria;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractCompoundType;
-use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 

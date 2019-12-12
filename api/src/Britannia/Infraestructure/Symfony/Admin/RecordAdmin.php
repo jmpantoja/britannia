@@ -9,10 +9,8 @@ use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
-
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Type\DateRangePickerType;
-use Sonata\Form\Type\DateTimePickerType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 final class RecordAdmin extends AbstractAdmin
@@ -68,7 +66,7 @@ final class RecordAdmin extends AbstractAdmin
                 'field_options' => [
                     'field_options' => [
                         'format' => \IntlDateFormatter::LONG
-                    ],
+                    ]
                 ],
                 'advanced_filter' => false,
                 'show_filter' => true

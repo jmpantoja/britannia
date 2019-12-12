@@ -15,6 +15,8 @@ namespace Britannia\Domain\Entity\Course;
 
 
 use Britannia\Domain\Entity\Book\Book;
+use Britannia\Domain\Entity\Mark\Term;
+use Britannia\Domain\Entity\Mark\Unit;
 use Britannia\Domain\Entity\Staff\StaffMember;
 use Britannia\Domain\Entity\Student\StudentCourse;
 use Britannia\Domain\VO\Course\Age\Age;
@@ -25,6 +27,7 @@ use Britannia\Domain\VO\Course\Periodicity\Periodicity;
 use Britannia\Domain\VO\Course\Support\Support;
 use Britannia\Domain\VO\Course\TimeTable\TimeTable;
 use Britannia\Domain\VO\HoursPerWeek;
+use Britannia\Domain\VO\Mark\UnitsDefinition;
 use Carbon\CarbonImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -145,7 +148,25 @@ class Course extends AggregateRoot
      */
     private $discount;
 
+    /**
+     * @var UnitsDefinition
+     */
+    private $unitsDefinition;
 
+    /**
+     * @var Collection
+     */
+    private $terms;
+
+    /**
+     * @var int
+     */
+    private $numOfUnits = 0;
+
+
+    /**
+     * @var Collection
+     */
     private $records;
 
     public function __construct()
@@ -155,11 +176,33 @@ class Course extends AggregateRoot
         $this->teachers = new ArrayCollection();
         $this->books = new ArrayCollection();
         $this->lessons = new ArrayCollection();
+        $this->terms = new ArrayCollection();
         $this->discount = new ArrayCollection();
 
         $this->status = CourseStatus::PENDING();
 
         $this->initColor();
+    }
+
+    private function initColor(): Course
+    {
+        $colors = [
+            RGBA::make(28, 58, 19),
+            RGBA::make(111, 94, 92),
+            RGBA::make(103, 42, 78),
+            RGBA::make(206, 114, 28),
+            RGBA::make(57, 91, 80),
+            RGBA::make(176, 113, 86),
+            RGBA::make(60, 137, 198),
+            RGBA::make(35, 91, 132),
+            RGBA::make(44, 42, 41)
+        ];
+
+
+        $key = array_rand($colors);
+        $this->color = $colors[$key];
+
+        return $this;
     }
 
     /**
@@ -180,25 +223,6 @@ class Course extends AggregateRoot
         return $this;
     }
 
-
-    /**
-     * @return CourseId
-     */
-    public function getId(): CourseId
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param CourseId $id
-     * @return Course
-     */
-    public function setId(CourseId $id): Course
-    {
-        $this->id = $id;
-        return $this;
-    }
-
     /**
      * @return bool|null
      */
@@ -216,7 +240,6 @@ class Course extends AggregateRoot
         return $this->status->isFinalized();
     }
 
-
     /**
      * @return bool|null
      */
@@ -229,7 +252,6 @@ class Course extends AggregateRoot
     {
         return $this->status->isOneOf(...$allowedStatus);
     }
-
 
     /**
      * @return null|string
@@ -257,27 +279,6 @@ class Course extends AggregateRoot
         return $this->color;
     }
 
-    private function initColor(): Course
-    {
-        $colors = [
-            RGBA::make(28, 58, 19),
-            RGBA::make(111, 94, 92),
-            RGBA::make(103, 42, 78),
-            RGBA::make(206, 114, 28),
-            RGBA::make(57, 91, 80),
-            RGBA::make(176, 113, 86),
-            RGBA::make(60, 137, 198),
-            RGBA::make(35, 91, 132),
-            RGBA::make(44, 42, 41)
-        ];
-
-
-        $key = array_rand($colors);
-        $this->color = $colors[$key];
-
-        return $this;
-    }
-
     /**
      * @return CourseStatus
      */
@@ -285,7 +286,6 @@ class Course extends AggregateRoot
     {
         return $this->status;
     }
-
 
     /**
      * @return null|string
@@ -304,7 +304,6 @@ class Course extends AggregateRoot
         $this->schoolCourse = $schoolCourse;
         return $this;
     }
-
 
     /**
      * @return Examiner|null
@@ -378,7 +377,6 @@ class Course extends AggregateRoot
         return $this;
     }
 
-
     /**
      * @return Periodicity|null
      */
@@ -415,7 +413,6 @@ class Course extends AggregateRoot
         return $this;
     }
 
-
     /**
      * @return Intensive|null
      */
@@ -430,10 +427,10 @@ class Course extends AggregateRoot
      */
     public function setIntensive(?Intensive $intensive): Course
     {
+
         $this->intensive = $intensive;
         return $this;
     }
-
 
     /**
      * @return Price
@@ -471,7 +468,6 @@ class Course extends AggregateRoot
         return $this;
     }
 
-
     /**
      * @return Collection
      */
@@ -493,16 +489,6 @@ class Course extends AggregateRoot
     /**
      * @return Collection
      */
-    public function getStudents(): Collection
-    {
-        return $this->courseHasStudents->map(function (StudentCourse $studentCourse) {
-            return $studentCourse->getStudent();
-        });
-    }
-
-    /**
-     * @return Collection
-     */
     public function getTeachers(): Collection
     {
         return $this->teachers;
@@ -519,7 +505,6 @@ class Course extends AggregateRoot
         }
         return $this;
     }
-
 
     public function addTeacher(StaffMember $teacher): Course
     {
@@ -570,6 +555,47 @@ class Course extends AggregateRoot
         return $this->timeTable;
     }
 
+    /**
+     * @param TimeTable $timeTable
+     * @return Course
+     */
+    public function setTimeTable(TimeTable $timeTable): Course
+    {
+        if (!is_null($this->timeTable)) {
+            $this->notify(TimeTabletHasChanged::make($this, $timeTable));
+        }
+
+        $this->timeTable = $timeTable;
+        $this->update();
+        return $this;
+    }
+
+    /**
+     * @param TimeTable $timeTable
+     * @return Course
+     */
+    public function update(): self
+    {
+        $students = $this->getStudents();
+        $this->status = $this->timeTable->getStatus();
+
+        foreach ($students as $student) {
+            $student->onSave();
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getStudents(): Collection
+    {
+        return $this->courseHasStudents->map(function (StudentCourse $studentCourse) {
+            return $studentCourse->getStudent();
+        });
+    }
+
     public function getStartDate(): CarbonImmutable
     {
         return $this->timeTable->getStart();
@@ -582,20 +608,6 @@ class Course extends AggregateRoot
     }
 
     /**
-     * @param TimeTable $timeTable
-     * @return Course
-     */
-    public function setTimeTable(TimeTable $timeTable): Course
-    {
-        $this->timeTable = $timeTable;
-        $this->notify(TimeTabletHasChanged::make($this, $timeTable));
-
-        $this->update();
-        return $this;
-    }
-
-
-    /**
      * @return Lesson[]
      */
     public function getLessons(): Collection
@@ -605,10 +617,12 @@ class Course extends AggregateRoot
 
     /**
      * @param Collection $lessons
+     * @return Course
      */
-    public function setLessons(Collection $lessons): void
+    public function setLessons(Collection $lessons): self
     {
         $this->lessons = $lessons;
+        return $this;
     }
 
     /**
@@ -629,6 +643,77 @@ class Course extends AggregateRoot
         return $this;
     }
 
+    /**
+     * @return UnitsDefinition
+     */
+    public function getUnitsDefinition(): ?UnitsDefinition
+    {
+        return $this->unitsDefinition;
+    }
+
+    /**
+     * @param UnitsDefinition $unitsDefinition
+     * @return Course
+     */
+    public function setUnitsDefinition(UnitsDefinition $unitsDefinition): Course
+    {
+        if (!is_null($this->unitsDefinition)) {
+            $this->notify(UnitDefinitionHasChanged::make($this, $unitsDefinition));
+        }
+
+        $this->unitsDefinition = $unitsDefinition;
+        return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getTerms(): Collection
+    {
+        return $this->terms;
+    }
+
+    /**
+     * @param Term[] $terms
+     * @return Course
+     */
+    public function setTerms(Collection $terms): Course
+    {
+        $this->terms = $terms;
+
+        $totalOfUnits = 0;
+        foreach ($terms as $term) {
+            $totalOfUnits += $term->totalOfUnits();
+        }
+
+        $this->numOfUnits = $totalOfUnits;
+
+        return $this;
+    }
+
+    public function hasUnits(): bool
+    {
+
+        return $this->numOfUnits > 0;
+    }
+
+    /**
+     * @return Unit[]
+     */
+    public function getUnits(): array
+    {
+        $carry = [];
+
+        foreach ($this->terms as $term) {
+            $carry[] = $term->getUnits()->toArray();
+        }
+
+        $units = collect(array_merge(...$carry));
+
+        return $units->sort(function (Unit $first, Unit $second) {
+            return $first->compare($second);
+        })->values()->toArray();
+    }
 
     /**
      * @return mixed
@@ -653,25 +738,27 @@ class Course extends AggregateRoot
         return $this->numOfPlaces->toInt() - $this->courseHasStudents->count();
     }
 
-    /**
-     * @param TimeTable $timeTable
-     * @return Course
-     */
-    public function update(): self
-    {
-        $students = $this->getStudents();
-        $this->status = $this->timeTable->getStatus();
-
-        foreach ($students as $student) {
-            $student->onSave();
-        }
-
-        return $this;
-    }
-
     public function isEqual(Course $course): bool
     {
         return $this->getId()->equals($course->getId());
+    }
+
+    /**
+     * @return CourseId
+     */
+    public function getId(): CourseId
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param CourseId $id
+     * @return Course
+     */
+    public function setId(CourseId $id): Course
+    {
+        $this->id = $id;
+        return $this;
     }
 
 }

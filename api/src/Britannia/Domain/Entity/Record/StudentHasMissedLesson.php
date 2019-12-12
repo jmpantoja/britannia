@@ -15,15 +15,13 @@ namespace Britannia\Domain\Entity\Record;
 
 
 use Britannia\Domain\Entity\Course\Attendance;
-use Britannia\Domain\Entity\Course\Lesson;
-use Britannia\Domain\Entity\Student\Student;
 
 class StudentHasMissedLesson extends AbstractRecordEvent
 {
 
     public static function make(Attendance $attendance): self
     {
-        $student  = $attendance->getStudent();
+        $student = $attendance->getStudent();
         $lesson = $attendance->getLesson();
         $reason = $attendance->getReason();
 

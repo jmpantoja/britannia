@@ -19,7 +19,6 @@ use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Entity\Student\StudentCourse;
 use Britannia\Infraestructure\Symfony\Importer\Resume;
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Validator\ConstraintViolationList;
 
 class StudentCoursesBuilder extends BuilderAbstract
 {
@@ -82,7 +81,7 @@ class StudentCoursesBuilder extends BuilderAbstract
 
         $collection = new ArrayCollection();
 
-        foreach ($this->courses as $course){
+        foreach ($this->courses as $course) {
             $collection->add(StudentCourse::make($this->student, $course));
         }
 

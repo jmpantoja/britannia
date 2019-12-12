@@ -16,9 +16,6 @@ namespace Britannia\Infraestructure\Symfony\Importer\Etl;
 
 use Britannia\Infraestructure\Symfony\Importer\Builder\AttendanceControlBuilder;
 use Britannia\Infraestructure\Symfony\Importer\Builder\BuilderInterface;
-use Britannia\Infraestructure\Symfony\Importer\Builder\CourseBuilder;
-use Britannia\Infraestructure\Symfony\Importer\Builder\StudentCoursesBuilder;
-use Britannia\Infraestructure\Symfony\Importer\Builder\StudentBuilder;
 use Britannia\Infraestructure\Symfony\Importer\Console;
 use Britannia\Infraestructure\Symfony\Importer\Converter\FullNameConverter;
 use Britannia\Infraestructure\Symfony\Importer\DataCollector;
@@ -62,7 +59,7 @@ class AttendanceControlEtl extends AbstractEtl
 
         $builder->withLesson((int)$input['curso'], (string)$input['fecha']);
         $builder->withStudent((int)$input['alumno']);
-        $builder->withReason ((string)$input['motivo']);
+        $builder->withReason((string)$input['motivo']);
 
         return $builder;
     }

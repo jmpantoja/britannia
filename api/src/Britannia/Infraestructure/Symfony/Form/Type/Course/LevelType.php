@@ -42,7 +42,7 @@ class LevelType extends ModelType
             'multiple' => false,
             'expanded' => false,
             'btn_add' => false,
-            'attr'=>[
+            'attr' => [
                 'style' => 'width:200px'
             ]
         ]);

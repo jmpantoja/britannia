@@ -14,15 +14,9 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Doctrine\Repository;
 
 
-use Britannia\Domain\Entity\Calendar\Calendar;
 use Britannia\Domain\Entity\ClassRoom\ClassRoom;
-use Britannia\Domain\Entity\Course\Course;
-use Britannia\Domain\Repository\CalendarRepositoryInterface;
 use Britannia\Domain\Repository\ClassRoomRepositoryInterface;
-use Britannia\Domain\VO\Course\TimeTable\DayOfWeek;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -39,7 +33,7 @@ class ClassRoomRepository extends ServiceEntityRepository implements ClassRoomRe
 
     public function findAll()
     {
-        return $this->findBy(array(), array('name'=>'asc'));
+        return $this->findBy(array(), array('name' => 'asc'));
     }
 
 }

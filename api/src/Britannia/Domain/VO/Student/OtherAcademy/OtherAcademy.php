@@ -15,7 +15,6 @@ namespace Britannia\Domain\VO\Student\OtherAcademy;
 
 
 use Britannia\Domain\Entity\Academy\Academy;
-use Britannia\Domain\VO\Student\OtherAcademy\NumOfYears;
 
 class OtherAcademy
 {
@@ -30,25 +29,11 @@ class OtherAcademy
      */
     private $numOfYears;
 
-    public static function make(Academy $academy, ?NumOfYears $numOfYears): self
-    {
-        return new self($academy, $numOfYears);
-    }
-
     private function __construct(Academy $academy, ?NumOfYears $numOfYears)
     {
 
         $this->setAcademy($academy);
         $this->setNumOfYears($numOfYears);
-    }
-
-
-    /**
-     * @return Academy
-     */
-    public function getAcademy(): Academy
-    {
-        return $this->academy;
     }
 
     /**
@@ -62,14 +47,6 @@ class OtherAcademy
     }
 
     /**
-     * @return NumOfYears
-     */
-    public function getNumOfYears(): ?NumOfYears
-    {
-        return $this->numOfYears;
-    }
-
-    /**
      * @param NumOfYears $numOfYears
      * @return OtherAcademy
      */
@@ -77,6 +54,27 @@ class OtherAcademy
     {
         $this->numOfYears = $numOfYears;
         return $this;
+    }
+
+    public static function make(Academy $academy, ?NumOfYears $numOfYears): self
+    {
+        return new self($academy, $numOfYears);
+    }
+
+    /**
+     * @return Academy
+     */
+    public function getAcademy(): Academy
+    {
+        return $this->academy;
+    }
+
+    /**
+     * @return NumOfYears
+     */
+    public function getNumOfYears(): ?NumOfYears
+    {
+        return $this->numOfYears;
     }
 
 

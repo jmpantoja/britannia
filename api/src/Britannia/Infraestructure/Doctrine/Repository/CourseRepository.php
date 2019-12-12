@@ -6,7 +6,6 @@ use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Repository\CourseRepositoryInterface;
 use Britannia\Domain\VO\Course\CourseStatus;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**

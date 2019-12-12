@@ -16,13 +16,9 @@ namespace Britannia\Application\UseCase\Report;
 
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Service\Payment\Concept;
-use Britannia\Domain\Service\Payment\Discount\EnrollmentDiscount;
-use Britannia\Domain\Service\Payment\Discount\MaterialDiscount;
 use Britannia\Domain\Service\Payment\PaymentBreakdownService;
-use Britannia\Domain\Service\Payment\Discount\MonthlyDiscount;
 use Britannia\Domain\VO\Discount\StudentDiscount;
 use PlanB\DDD\Application\UseCase\UseCaseInterface;
-use PlanB\DDD\Domain\VO\Percent;
 use PlanB\DDD\Domain\VO\Price;
 use Tightenco\Collect\Support\Collection;
 
@@ -60,24 +56,6 @@ class GenerateCourseInformationUseCase implements UseCaseInterface
     }
 
     /**
-     * @param $discount
-     * @param $course
-     * @return array
-     */
-    protected function getLimits($discount, $course): array
-    {
-        $startDate = $discount->getStartDate() ?? $course->getStartDate();
-        $endDate = $course->getEndDate();
-
-        $limits = [
-            'start' => $startDate,
-            'end' => $endDate,
-        ];
-        return $limits;
-    }
-
-
-    /**
      * @param $course
      * @param $discount
      * @return array
@@ -101,7 +79,6 @@ class GenerateCourseInformationUseCase implements UseCaseInterface
         ];
     }
 
-
     private function getTotal(Concept ...$concepts)
     {
         $conceptList = collect($concepts);
@@ -111,6 +88,23 @@ class GenerateCourseInformationUseCase implements UseCaseInterface
             $price = $concept->getTotal();
             return $total->add($price);
         }, $total);
+    }
+
+    /**
+     * @param $discount
+     * @param $course
+     * @return array
+     */
+    protected function getLimits($discount, $course): array
+    {
+        $startDate = $discount->getStartDate() ?? $course->getStartDate();
+        $endDate = $course->getEndDate();
+
+        $limits = [
+            'start' => $startDate,
+            'end' => $endDate,
+        ];
+        return $limits;
     }
 
     private function getMonthly(Collection $monthlyPayments): ?Concept

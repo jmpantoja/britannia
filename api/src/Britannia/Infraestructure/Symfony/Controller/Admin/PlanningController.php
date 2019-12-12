@@ -16,7 +16,6 @@ namespace Britannia\Infraestructure\Symfony\Controller\Admin;
 
 use Britannia\Infraestructure\Symfony\Service\Planning\PlanningService;
 use Carbon\CarbonImmutable;
-use Knp\Snappy\Pdf;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 

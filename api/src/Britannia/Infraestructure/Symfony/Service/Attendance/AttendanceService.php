@@ -17,10 +17,8 @@ namespace Britannia\Infraestructure\Symfony\Service\Attendance;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Course\Lesson;
 use Britannia\Domain\Entity\Student\Student;
-use Britannia\Domain\Repository\AttendanceRepositoryInterface;
 use Britannia\Domain\Repository\LessonRepositoryInterface;
 use Carbon\CarbonImmutable;
-use phpDocumentor\Reflection\Types\Nullable;
 
 class AttendanceService
 {
@@ -45,7 +43,7 @@ class AttendanceService
         foreach ($lessons as $lesson) {
             $value = [
                 'title' => $this->getTitle($lesson, $student),
-                'status' =>  $lesson->getStatusByStudent($student)
+                'status' => $lesson->getStatusByStudent($student)
             ];
 
             $values[] = $value;

@@ -17,11 +17,11 @@ namespace Britannia\Infraestructure\Symfony\Importer\Builder;
 use Britannia\Domain\Entity\ClassRoom\ClassRoom;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\VO\Course\Age\Age;
-use Britannia\Domain\VO\Course\Support\Support;
-use Britannia\Domain\VO\HoursPerWeek;
 use Britannia\Domain\VO\Course\Intensive\Intensive;
 use Britannia\Domain\VO\Course\Periodicity\Periodicity;
+use Britannia\Domain\VO\Course\Support\Support;
 use Britannia\Domain\VO\Course\TimeTable\TimeTable;
+use Britannia\Domain\VO\HoursPerWeek;
 use Britannia\Infraestructure\Symfony\Importer\Builder\Traits\CourseMaker;
 use Britannia\Infraestructure\Symfony\Importer\Maker\FullNameMaker;
 use Britannia\Infraestructure\Symfony\Importer\Resume;
@@ -153,27 +153,6 @@ class CourseBuilder extends BuilderAbstract
         return $this;
     }
 
-    public function build(): object
-    {
-        $course = new Course();
-        $course->setOldId($this->id);
-        $course->setName($this->name);
-        $course->setSchoolCourse($this->schoolCourse);
-        $course->setEnrolmentPayment($this->enrolmentPayment);
-        $course->setMonthlyPayment($this->monthlyPayment);
-
-        $course->setSupport(Support::REGULAR());
-
-        $course->setNumOfPlaces($this->numOfPlaces);
-        $course->setAge($this->age);
-        $course->setPeriodicity($this->periodicity);
-        $course->setIntensive($this->intensive);
-
-        $course->setTimeTable($this->timeTable);
-
-        return $course;
-    }
-
     /**
      * @param string $classRoomNumber
      * @return mixed
@@ -194,6 +173,27 @@ class CourseBuilder extends BuilderAbstract
 
         $classRoomId = $classRoom->getId();
         return $classRoomId;
+    }
+
+    public function build(): object
+    {
+        $course = new Course();
+        $course->setOldId($this->id);
+        $course->setName($this->name);
+        $course->setSchoolCourse($this->schoolCourse);
+        $course->setEnrolmentPayment($this->enrolmentPayment);
+        $course->setMonthlyPayment($this->monthlyPayment);
+
+        $course->setSupport(Support::REGULAR());
+
+        $course->setNumOfPlaces($this->numOfPlaces);
+        $course->setAge($this->age);
+        $course->setPeriodicity($this->periodicity);
+        $course->setIntensive($this->intensive);
+
+        $course->setTimeTable($this->timeTable);
+
+        return $course;
     }
 }
 

@@ -47,6 +47,9 @@
 
         <field name="discount" type="DiscountList" nullable="true"></field>
 
+        <field name="unitsDefinition" type="UnitsDefinition" nullable="true"></field>
+
+
         <!--<many-to-many field="students" target-entity="Britannia\Domain\Entity\Student\Student" mapped-by="courses"/>-->
 
         <one-to-many field="courseHasStudents"
@@ -76,10 +79,15 @@
             </cascade>
         </one-to-many>
 
-        <!--<lifecycle-callbacks>-->
-        <!--<lifecycle-callback type="prePersist" method="toSave"/>-->
-        <!--<lifecycle-callback type="preUpdate" method="toSave"/>-->
-        <!--</lifecycle-callbacks>-->
+        <one-to-many field="terms" target-entity="Britannia\Domain\Entity\Mark\Term" mapped-by="course"
+                     orphan-removal="true">
+            <cascade>
+                <cascade-all/>
+            </cascade>
+        </one-to-many>
+
+        <field name="numOfUnits" type="integer"/>
+
     </entity>
 
 </doctrine-mapping>

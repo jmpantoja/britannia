@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Form\Type\Course;
 
 
-use Britannia\Domain\VO\Course\Periodicity\Periodicity;
 use Britannia\Domain\VO\Course\Support\Support;
 use Britannia\Domain\VO\Validator;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
@@ -42,7 +41,7 @@ class SupportType extends AbstractSingleType
                 $values = array_flip(Support::getConstants());
                 return $values;
             }),
-            'empty_data'=>Support::REGULAR(),
+            'empty_data' => Support::REGULAR(),
             'attr' => [
                 'style' => 'width:200px'
             ]

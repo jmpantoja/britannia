@@ -17,7 +17,6 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Course;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Entity\Student\StudentCourse;
-use Britannia\Domain\VO\Course\CourseStatus;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\QueryBuilder;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
@@ -125,7 +124,7 @@ class CourseHasStudentsType extends AbstractSingleType
 
         $toRemove = $builder->getQuery()->execute();
 
-        foreach ($toRemove as $item){
+        foreach ($toRemove as $item) {
             $this->modelManager->delete($item);
         }
 

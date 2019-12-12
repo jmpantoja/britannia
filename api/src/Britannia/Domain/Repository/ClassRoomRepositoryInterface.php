@@ -14,9 +14,6 @@ declare(strict_types=1);
 namespace Britannia\Domain\Repository;
 
 
-use Britannia\Domain\Entity\Calendar\Calendar;
-use Britannia\Domain\Entity\Course\Course;
-
 /**
  *
  * @method ClassRoom|null findOneBy(array $criteria, array $orderBy = null)

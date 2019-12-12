@@ -15,12 +15,12 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Student;
 
 
 use Britannia\Domain\VO\Student\Job\JobStatus;
+use Britannia\Domain\VO\Validator;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
 use Symfony\Component\Form\ChoiceList\Loader\CallbackChoiceLoader;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Britannia\Domain\VO\Validator;
 
 class JobStatusType extends AbstractSingleType
 {
@@ -41,7 +41,7 @@ class JobStatusType extends AbstractSingleType
                 $values = array_flip(JobStatus::getConstants());
                 return array_merge(['' => ''], $values);
             }),
-            'label'=>'Situación Laboral'
+            'label' => 'Situación Laboral'
         ]);
     }
 

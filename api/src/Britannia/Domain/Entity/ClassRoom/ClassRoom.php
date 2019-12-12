@@ -14,8 +14,6 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\ClassRoom;
 
 
-use Britannia\Domain\VO\Course\Age\Age;
-use Britannia\Domain\VO\Course\Examiner\Examiner;
 use PlanB\DDD\Domain\VO\PositiveInteger;
 use PlanB\DDD\Domain\VO\Price;
 
@@ -50,25 +48,6 @@ class ClassRoom
         return $this->id;
     }
 
-
-    /**
-     * @return null|string
-     */
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param null|string $name
-     * @return ClassRoom
-     */
-    public function setName(?string $name): ClassRoom
-    {
-        $this->name = $name;
-        return $this;
-    }
-
     /**
      * @return null|Price
      */
@@ -89,7 +68,25 @@ class ClassRoom
 
     public function __toString()
     {
-        return (string) $this->getName();
+        return (string)$this->getName();
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param null|string $name
+     * @return ClassRoom
+     */
+    public function setName(?string $name): ClassRoom
+    {
+        $this->name = $name;
+        return $this;
     }
 
 

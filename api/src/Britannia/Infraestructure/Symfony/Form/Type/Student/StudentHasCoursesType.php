@@ -127,7 +127,7 @@ class StudentHasCoursesType extends AbstractSingleType
 
         $toRemove = $builder->getQuery()->execute();
 
-        foreach ($toRemove as $item){
+        foreach ($toRemove as $item) {
             $this->modelManager->delete($item);
         }
 

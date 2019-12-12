@@ -29,16 +29,16 @@ class UpdatePassword
      */
     private $newPassword;
 
-    public static function fromEvent(PasswordHasChanged $event)
-    {
-        return new self($event->getStaffMember(), $event->getNewPassword());
-    }
-
     private function __construct(StaffMember $staffMember, string $newPassword)
     {
 
         $this->staffMember = $staffMember;
         $this->newPassword = $newPassword;
+    }
+
+    public static function fromEvent(PasswordHasChanged $event)
+    {
+        return new self($event->getStaffMember(), $event->getNewPassword());
     }
 
     /**
@@ -57,5 +57,5 @@ class UpdatePassword
         return $this->newPassword;
     }
 
-    
+
 }

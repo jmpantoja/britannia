@@ -16,8 +16,7 @@ final class StudentCourseAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
-            ->add('joinedAt')
-            ;
+            ->add('joinedAt');
     }
 
     protected function configureListFields(ListMapper $listMapper): void
@@ -36,14 +35,12 @@ final class StudentCourseAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $formMapper
-            ->add('joinedAt')
-            ;
+            ->add('joinedAt');
     }
 
     protected function configureShowFields(ShowMapper $showMapper): void
     {
         $showMapper
-            ->add('joinedAt')
-            ;
+            ->add('joinedAt');
     }
 }

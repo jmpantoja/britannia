@@ -86,12 +86,6 @@ final class StudentAdmin extends AbstractAdmin
         return $actions;
     }
 
-    protected function configureRoutes(RouteCollection $collection)
-    {
-        $collection->clearExcept(['list', 'edit', 'create', 'delete', 'export']);
-        return $collection;
-    }
-
     public function getExportFields()
     {
         $fields = parent::getExportFields();
@@ -100,6 +94,11 @@ final class StudentAdmin extends AbstractAdmin
         return $fields;
     }
 
+    protected function configureRoutes(RouteCollection $collection)
+    {
+        $collection->clearExcept(['list', 'edit', 'create', 'delete', 'export']);
+        return $collection;
+    }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {

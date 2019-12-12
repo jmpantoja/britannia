@@ -22,15 +22,15 @@ abstract class FileystemReport extends ReportAbstract
 
     private $pathToReportDir;
 
+    protected function __construct(string $pathToReportDir)
+    {
+        $this->pathToReportDir = $pathToReportDir;
+    }
+
     public static function make(string $pathToReportDir): self
     {
 
         return new static($pathToReportDir);
-    }
-
-    protected function __construct(string $pathToReportDir)
-    {
-        $this->pathToReportDir = $pathToReportDir;
     }
 
     public function success(Resume $resume): void

@@ -14,10 +14,9 @@ declare(strict_types=1);
 namespace Britannia\Domain\VO\Course\Periodicity\Validator;
 
 
-use Britannia\Domain\VO\Course\Periodicity\Validator\Periodicity;
+use Britannia\Domain\VO;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDD\Domain\VO\Validator\ConstraintValidator;
-use Britannia\Domain\VO;
 
 class PeriodicityValidator extends ConstraintValidator
 {

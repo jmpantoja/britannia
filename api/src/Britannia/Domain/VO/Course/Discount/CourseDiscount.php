@@ -14,9 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Domain\VO\Course\Discount;
 
 
-use Britannia\Domain\VO\Student\Job\JobStatus;
 use PlanB\DDD\Domain\VO\Percent;
-use PlanB\DDD\Domain\VO\Price;
 
 class CourseDiscount implements \Serializable
 {
@@ -29,7 +27,13 @@ class CourseDiscount implements \Serializable
      */
     private $freeEnrollment;
 
-    public static  function byDefault(): self
+    private function __construct(Percent $discount, bool $freeEnrollment)
+    {
+        $this->discount = $discount;
+        $this->freeEnrollment = $freeEnrollment;
+    }
+
+    public static function byDefault(): self
     {
         return new self(Percent::zero(), false);
     }
@@ -44,12 +48,6 @@ class CourseDiscount implements \Serializable
     {
         $discount = $discount ?? Percent::zero();
         return new self($discount, true);
-    }
-
-    private function __construct(Percent $discount, bool $freeEnrollment)
-    {
-        $this->discount = $discount;
-        $this->freeEnrollment = $freeEnrollment;
     }
 
     /**

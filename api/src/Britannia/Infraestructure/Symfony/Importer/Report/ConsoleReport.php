@@ -28,17 +28,16 @@ class ConsoleReport extends ReportAbstract
      */
     private $style;
 
+    private function __construct(OutputStyle $style)
+    {
+        $this->style = $style;
+    }
+
     public static function make(InputInterface $input, OutputInterface $output): self
     {
 
         $style = new SymfonyStyle($input, $output);
         return new self($style);
-    }
-
-
-    private function __construct(OutputStyle $style)
-    {
-        $this->style = $style;
     }
 
     public function success(Resume $resume): void

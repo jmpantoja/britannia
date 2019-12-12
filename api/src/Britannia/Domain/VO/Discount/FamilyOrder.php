@@ -15,7 +15,6 @@ namespace Britannia\Domain\VO\Discount;
 
 
 use MabeEnum\Enum;
-use PlanB\DDD\Domain\VO\Percent;
 
 class FamilyOrder extends Enum
 {

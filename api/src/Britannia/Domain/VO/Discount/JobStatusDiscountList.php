@@ -16,7 +16,6 @@ namespace Britannia\Domain\VO\Discount;
 
 use Britannia\Domain\VO\Student\Job\JobStatus;
 use PlanB\DDD\Domain\VO\Percent;
-use PlanB\DDD\Domain\VO\PositiveInteger;
 use Tightenco\Collect\Support\Collection;
 
 class JobStatusDiscountList
@@ -26,15 +25,15 @@ class JobStatusDiscountList
      */
     private $data;
 
-    public static function make(Collection $data): self
-    {
-        return new self($data);
-    }
-
     private function __construct(Collection $data)
     {
 
         $this->data = $data;
+    }
+
+    public static function make(Collection $data): self
+    {
+        return new self($data);
     }
 
     public function getByJobStatus(JobStatus $jobStatus): ?Percent

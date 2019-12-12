@@ -113,8 +113,7 @@ class StudentEtl extends AbstractEtl
                 'iban' => $input['numeroCuenta'],
                 'number' => $input['numeroDomiciliado'],
             ])
-            ->withCreateAt($input['createdAt'])
-        ;
+            ->withCreateAt($input['createdAt']);
 
         return $builder;
     }

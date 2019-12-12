@@ -12,6 +12,7 @@
 declare(strict_types=1);
 
 namespace Britannia\Infraestructure\Doctrine\DBAL\Type\Student;
+
 namespace Britannia\Infraestructure\Doctrine\DBAL\Type\Student;
 
 
@@ -28,7 +29,7 @@ class JobStatusType extends Type
 
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
-        if(empty($value)){
+        if (empty($value)) {
             return null;
         }
         return JobStatus::byName($value);

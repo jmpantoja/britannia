@@ -37,11 +37,6 @@ class FullCalendarEvent
 
     private $attendances = [];
 
-    public static function fromLesson(Lesson $lesson): self
-    {
-        return new self($lesson);
-    }
-
     private function __construct(Lesson $lesson)
     {
         $classRoom = $lesson->getClassRoom();
@@ -66,41 +61,6 @@ class FullCalendarEvent
     private function getColorByCourse(Course $course): RGBA
     {
         return $course->getColor();
-    }
-
-    private function withResource(ClassRoom $classRoom): self
-    {
-        $this->resourceId = (string)$classRoom->getId();
-        return $this;
-    }
-
-    private function withTitle(Course $course): self
-    {
-        $this->title = (string)$course->getName();
-        return $this;
-    }
-
-    private function withLimits(CarbonImmutable $start, CarbonImmutable $end): self
-    {
-        $this->start = $start->toAtomString();
-        $this->end = $end->toAtomString();
-
-        return $this;
-    }
-
-    private function withColor(RGBA $color): self
-    {
-        $this->color = $color->toHtml();
-        return $this;
-    }
-
-    private function withSchedule(CarbonImmutable $startTime, CarbonImmutable $endTime): self
-    {
-        $this->schedule = sprintf('de %s a %s', ...[
-            $startTime->toTimeString('minute'),
-            $endTime->toTimeString('minute')
-        ]);
-        return $this;
     }
 
     private function withAttendances(Course $course, Lesson $lesson): self
@@ -146,6 +106,45 @@ class FullCalendarEvent
         return $reason;
     }
 
+    private function withSchedule(CarbonImmutable $startTime, CarbonImmutable $endTime): self
+    {
+        $this->schedule = sprintf('de %s a %s', ...[
+            $startTime->toTimeString('minute'),
+            $endTime->toTimeString('minute')
+        ]);
+        return $this;
+    }
+
+    private function withColor(RGBA $color): self
+    {
+        $this->color = $color->toHtml();
+        return $this;
+    }
+
+    private function withLimits(CarbonImmutable $start, CarbonImmutable $end): self
+    {
+        $this->start = $start->toAtomString();
+        $this->end = $end->toAtomString();
+
+        return $this;
+    }
+
+    private function withTitle(Course $course): self
+    {
+        $this->title = (string)$course->getName();
+        return $this;
+    }
+
+    private function withResource(ClassRoom $classRoom): self
+    {
+        $this->resourceId = (string)$classRoom->getId();
+        return $this;
+    }
+
+    public static function fromLesson(Lesson $lesson): self
+    {
+        return new self($lesson);
+    }
 
     public function toArray(): array
     {

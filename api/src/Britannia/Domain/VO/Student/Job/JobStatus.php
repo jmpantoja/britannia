@@ -27,7 +27,8 @@ class JobStatus extends Enum
     public const DISABLED = 'Minusvalía';
 
 
-    public static function getDiscountables(){
+    public static function getDiscountables()
+    {
         $values = self::getConstants();
 
         unset($values['NOTHING']);

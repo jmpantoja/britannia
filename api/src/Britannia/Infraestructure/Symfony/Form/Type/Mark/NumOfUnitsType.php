@@ -11,37 +11,35 @@
 
 declare(strict_types=1);
 
-namespace Britannia\Infraestructure\Symfony\Form\Type\Course\TimeTable;
+namespace Britannia\Infraestructure\Symfony\Form\Type\Mark;
 
 
-use Britannia\Domain\VO\Course\TimeTable\Locked;
+use Britannia\Domain\VO\Mark\NumOfUnits;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
 use Symfony\Component\Form\ChoiceList\Loader\CallbackChoiceLoader;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class LockedType extends AbstractSingleType
+class NumOfUnitsType extends AbstractSingleType
 {
-
-    /**
-     * {@inheritdoc}
-     */
     public function getParent()
     {
         return ChoiceType::class;
     }
 
+
     public function customOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'label' => 'Bloqueo',
-            'required' => true,
+//            'data_class' => NumOfUnits::class,
+            'expanded' => false,
             'choice_loader' => new CallbackChoiceLoader(function () {
-                $values = array_flip(Locked::getConstants());
-                return $values;
+                return array_flip(NumOfUnits::getConstants());
             }),
-           'attr' => array('style' => 'max-width: 200px;')
+            'empty_data' => (string)NumOfUnits::THREE(),
+            'required' => false,
+            'label' => 'nº de unidades',
         ]);
     }
 
@@ -50,13 +48,14 @@ class LockedType extends AbstractSingleType
      */
     public function buildConstraint(array $options): ?Constraint
     {
-        return new \Britannia\Domain\VO\Course\TimeTable\Validator\Locked([
+        return new \Britannia\Domain\VO\Mark\Validator\NumOfUnits([
             'required' => $options['required']
         ]);
     }
 
     public function customMapping($data)
     {
-        return Locked::byName($data);
+
+        return NumOfUnits::byName($data);
     }
 }

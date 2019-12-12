@@ -17,14 +17,10 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Course\Discount;
 use Britannia\Domain\Repository\JobStatusDiscountStorageInterface;
 use Britannia\Domain\VO\Course\Discount\CourseDiscount;
 use Britannia\Domain\VO\Student\Job\JobStatus;
-use Doctrine\Common\Collections\Collection;
 use PlanB\DDD\Domain\VO\Percent;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractCompoundType;
 use PlanB\DDDBundle\Symfony\Form\Type\PercentageType;
-use PlanB\DDDBundle\Symfony\Form\Type\ToggleType;
-use Sonata\Form\Type\BooleanType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -82,13 +78,6 @@ class DiscountType extends AbstractCompoundType
         parent::buildView($view, $form, $options);
     }
 
-    protected function dataToForms($data, array $forms): void
-    {
-        parent::dataToForms($data, $forms);
-        $forms['freeEnrollment']->setData($data->isFreeEnrollment());
-    }
-
-
     /**
      * @return \Britannia\Infraestructure\Symfony\Validator\FullName
      */
@@ -107,5 +96,11 @@ class DiscountType extends AbstractCompoundType
 
         return CourseDiscount::withEnrollment($data['discount']);
 
+    }
+
+    protected function dataToForms($data, array $forms): void
+    {
+        parent::dataToForms($data, $forms);
+        $forms['freeEnrollment']->setData($data->isFreeEnrollment());
     }
 }

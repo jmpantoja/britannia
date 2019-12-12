@@ -14,11 +14,8 @@ declare(strict_types=1);
 namespace Britannia\Domain\VO\Discount\Validator;
 
 
-use Britannia\Domain\VO\Payment\PaymentMode;
-use Britannia\Domain\VO\Payment\Validator\Payment;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDD\Domain\VO\Validator\ConstraintValidator;
-use Symfony\Component\Validator\Constraints\NotBlank;
 
 class FamilyOrderValidator extends ConstraintValidator
 {

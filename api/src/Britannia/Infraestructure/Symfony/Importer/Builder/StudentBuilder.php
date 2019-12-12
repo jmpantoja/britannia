@@ -99,11 +99,6 @@ class StudentBuilder extends BuilderAbstract
         return $this;
     }
 
-    public function isAdult(): bool
-    {
-        return $this->className === Adult::class;
-    }
-
     public function withDNI(string $dni): self
     {
         if (!$this->isAdult()) {
@@ -114,6 +109,10 @@ class StudentBuilder extends BuilderAbstract
         return $this;
     }
 
+    public function isAdult(): bool
+    {
+        return $this->className === Adult::class;
+    }
 
     public function withFullName(array $input): self
     {
@@ -272,7 +271,8 @@ class StudentBuilder extends BuilderAbstract
     }
 
 
-    public function withCreateAt($date): self{
+    public function withCreateAt($date): self
+    {
 
         $dateTime = CarbonImmutable::make($date);
         $this->createdAt = $dateTime;

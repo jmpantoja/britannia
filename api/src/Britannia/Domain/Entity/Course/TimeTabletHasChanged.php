@@ -29,15 +29,15 @@ class TimeTabletHasChanged extends DomainEvent
      */
     private $timeTable;
 
-    public static function make(Course $course, TimeTable $timeTable): self
-    {
-        return new self($course, $timeTable);
-    }
-
     private function __construct(Course $course, TimeTable $timeTable)
     {
         $this->course = $course;
         $this->timeTable = $timeTable;
+    }
+
+    public static function make(Course $course, TimeTable $timeTable): self
+    {
+        return new self($course, $timeTable);
     }
 
     /**

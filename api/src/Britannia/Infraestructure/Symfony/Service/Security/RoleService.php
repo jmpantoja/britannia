@@ -38,13 +38,6 @@ class RoleService
         $this->roles = $list;
     }
 
-    public function getList(): array
-    {
-
-
-        return $this->roles;
-    }
-
     /**
      * @param $hierarchy
      * @return array
@@ -70,6 +63,13 @@ class RoleService
         $role = preg_replace(['/^role_(.*)$/', '/_+/'], ['$1', ' '], $role);
 
         return ucwords($role);
+    }
+
+    public function getList(): array
+    {
+
+
+        return $this->roles;
     }
 
 }

@@ -16,10 +16,8 @@ namespace Britannia\Domain\Service\Payment\Discount;
 
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Repository\FamilyDiscountStorageInterface;
-use Britannia\Domain\Repository\JobStatusDiscountStorageInterface;
 use Britannia\Domain\Service\Payment\Concept;
 use Britannia\Domain\Service\Payment\FamilyDiscountList;
-use Britannia\Domain\VO\Course\Discount\CourseDiscount;
 use Britannia\Domain\VO\Discount\StudentDiscount;
 use Britannia\Domain\VO\Student\Job\JobStatus;
 use Carbon\CarbonImmutable;

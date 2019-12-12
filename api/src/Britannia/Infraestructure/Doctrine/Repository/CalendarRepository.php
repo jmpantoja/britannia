@@ -15,13 +15,9 @@ namespace Britannia\Infraestructure\Doctrine\Repository;
 
 
 use Britannia\Domain\Entity\Calendar\Calendar;
-use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Repository\CalendarRepositoryInterface;
-use Britannia\Domain\VO\Course\TimeTable\DayOfWeek;
 use Britannia\Domain\VO\Course\TimeTable\TimeTable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -111,7 +107,7 @@ class CalendarRepository extends ServiceEntityRepository implements CalendarRepo
 
 
         return $query->execute([
-            'days' => array_values($daysOfWeek) ,
+            'days' => array_values($daysOfWeek),
             'start' => $start,
             'end' => $end
         ]);

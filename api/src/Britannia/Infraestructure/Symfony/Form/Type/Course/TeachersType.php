@@ -14,18 +14,12 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Form\Type\Course;
 
 
-use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Staff\StaffMember;
 use Britannia\Domain\Entity\Student\Student;
-use Britannia\Domain\Entity\Student\StudentCourse;
-use Britannia\Domain\VO\Course\CourseStatus;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\QueryBuilder;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Sonata\ModelManager;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
 use Sonata\AdminBundle\Form\Type\ModelType;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TeachersType extends AbstractSingleType

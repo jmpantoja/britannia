@@ -17,7 +17,7 @@ final class SchoolAdmin extends AbstractAdmin
     protected $datagridValues = [
         '_sort_by' => 'fullName.lastName',
     ];
-    
+
     public function getBatchActions()
     {
         $actions = parent::getBatchActions();

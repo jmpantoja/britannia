@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xmlns:gedmo="http://gediminasm.org/schemas/orm/doctrine-extensions-mapping"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+
+    <entity name="Britannia\Domain\Entity\Mark\UnitMark"
+            table="unit_mark">
+
+        <id name="id" type="UnitMarkId" column="id">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
+        </id>
+
+        <many-to-one field="unit" target-entity="Britannia\Domain\Entity\Mark\Unit" inversed-by="marks"
+                     fetch="EAGER">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </many-to-one>
+
+        <many-to-one field="student" target-entity="Britannia\Domain\Entity\Student\Student" inversed-by="marks"
+                     fetch="EAGER">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </many-to-one>
+
+        <field name="mark" type="Mark"></field>
+        <field name="completedAt" type="datetime_immutable" nullable="true"></field>
+
+    </entity>
+</doctrine-mapping>
+
+

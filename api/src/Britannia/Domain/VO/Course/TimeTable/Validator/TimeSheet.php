@@ -15,7 +15,6 @@ namespace Britannia\Domain\VO\Course\TimeTable\Validator;
 
 
 use Carbon\CarbonImmutable;
-use PlanB\DDD\Domain\VO\PositiveInteger;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 
 class TimeSheet extends Constraint

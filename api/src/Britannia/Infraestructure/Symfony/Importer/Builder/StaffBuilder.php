@@ -60,14 +60,14 @@ class StaffBuilder extends BuilderAbstract
     }
 
 
-    public function withRoles(bool  $teacher, bool $admin): self
+    public function withRoles(bool $teacher, bool $admin): self
     {
         $this->roles = [];
-        if($teacher){
+        if ($teacher) {
             $this->roles[] = 'ROLE_TEACHER';
         }
 
-        if($admin){
+        if ($admin) {
             $this->roles[] = 'ROLE_MANAGER';
         }
 

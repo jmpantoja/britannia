@@ -19,7 +19,6 @@ use Cocur\Slugify\Slugify;
 use Knp\Snappy\Pdf;
 use League\Tactician\CommandBus;
 use Sonata\AdminBundle\Controller\CRUDController;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormRenderer;
 use Symfony\Component\HttpFoundation\Response;
@@ -56,26 +55,6 @@ class CourseController extends CRUDController
 
         $filename = sprintf('info-%s-%s.pdf', $name, date('U'));
         return $this->handleForm($form, $template, $filename);
-    }
-
-    public function reportMarkAction($id)
-    {
-        $course = $this->getCourse($id);
-
-        dump(__METHOD__);
-        dump('estamos trabajando en ello');
-        dump($course);
-        die();
-    }
-
-    public function reportCertificateAction($id)
-    {
-        $course = $this->getCourse($id);
-
-        dump(__METHOD__);
-        dump('estamos trabajando en ello');
-        dump($course);
-        die();
     }
 
     /**
@@ -151,6 +130,26 @@ class CourseController extends CRUDController
                     'Content-Disposition' => sprintf('attachment; filename="%s"', $filename),
                 ]
             );
+    }
+
+    public function reportMarkAction($id)
+    {
+        $course = $this->getCourse($id);
+
+        dump(__METHOD__);
+        dump('estamos trabajando en ello');
+        dump($course);
+        die();
+    }
+
+    public function reportCertificateAction($id)
+    {
+        $course = $this->getCourse($id);
+
+        dump(__METHOD__);
+        dump('estamos trabajando en ello');
+        dump($course);
+        die();
     }
 
 }

@@ -5,7 +5,6 @@ namespace Britannia\Infraestructure\Doctrine\Repository;
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Repository\StudentRepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**

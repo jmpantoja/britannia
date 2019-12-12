@@ -18,7 +18,6 @@ use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Service\Payment\Concept;
 use Britannia\Domain\VO\Course\Discount\CourseDiscount;
 use Britannia\Domain\VO\Discount\StudentDiscount;
-use Britannia\Domain\VO\Student\Job\JobStatus;
 use PlanB\DDD\Domain\VO\Percent;
 
 class EnrollmentDiscount extends DiscountCalculator

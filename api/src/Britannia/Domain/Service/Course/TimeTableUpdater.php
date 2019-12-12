@@ -16,7 +16,7 @@ namespace Britannia\Domain\Service\Course;
 
 use Britannia\Domain\Entity\ClassRoom\ClassRoom;
 use Britannia\Domain\Entity\Course\Course;
-use Britannia\Domain\Entity\Course\Lesson;
+use Britannia\Domain\Entity\Course\LessonList;
 use Britannia\Domain\Repository\CalendarRepositoryInterface;
 use Britannia\Domain\Repository\ClassRoomRepositoryInterface;
 use Britannia\Domain\VO\Course\TimeTable\TimeSheet;
@@ -53,7 +53,6 @@ class TimeTableUpdater
         if ($timeTable->shouldBeUpdated()) {
             $lessonList = LessonList::make($course->getLessons());
         }
-
 
         $days = $this->calendar->getWorkingDays($timeTable);
 

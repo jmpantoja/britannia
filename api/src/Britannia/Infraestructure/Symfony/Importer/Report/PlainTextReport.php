@@ -30,24 +30,6 @@ class PlainTextReport extends FileystemReport
         $this->appendToFile($row, 'error.txt');
     }
 
-    public function warning(Resume $resume): void
-    {
-        $head = $this->parseHead($resume);
-        $body = $this->parseBody($resume->getWarnings());
-
-        $row = $this->parseRow($head, $body);
-        $this->appendToFile($row, 'warning.txt');
-    }
-
-    protected function parseRow(string $head, string $body): string
-    {
-        return <<<eof
-$head
-$body
-
-eof;
-    }
-
     protected function parseBody(array $items): string
     {
         $lines = [];
@@ -79,6 +61,24 @@ eof;
         }, $keys, $errors);
 
         return implode("\n", $lines);
+    }
+
+    protected function parseRow(string $head, string $body): string
+    {
+        return <<<eof
+$head
+$body
+
+eof;
+    }
+
+    public function warning(Resume $resume): void
+    {
+        $head = $this->parseHead($resume);
+        $body = $this->parseBody($resume->getWarnings());
+
+        $row = $this->parseRow($head, $body);
+        $this->appendToFile($row, 'warning.txt');
     }
 
 

@@ -24,15 +24,14 @@ class Reporter
      */
     private $reports = [];
 
-    public static function make(): self
-    {
-        return new self();
-    }
-
     private function __construct()
     {
     }
 
+    public static function make(): self
+    {
+        return new self();
+    }
 
     public function add(ReportInterface $report): self
     {

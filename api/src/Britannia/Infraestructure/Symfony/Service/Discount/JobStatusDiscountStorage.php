@@ -14,10 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Service\Discount;
 
 
-use Britannia\Domain\Repository\FamilyDiscountStorageInterface;
 use Britannia\Domain\Repository\JobStatusDiscountStorageInterface;
-use Britannia\Domain\VO\Discount\FamilyDiscountList;
-use Britannia\Domain\VO\Discount\FamilyOrder;
 use Britannia\Domain\VO\Discount\JobStatusDiscountList;
 use Britannia\Domain\VO\Student\Job\JobStatus;
 use PlanB\DDD\Domain\VO\Percent;

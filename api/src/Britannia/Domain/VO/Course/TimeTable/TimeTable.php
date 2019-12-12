@@ -16,10 +16,8 @@ namespace Britannia\Domain\VO\Course\TimeTable;
 
 use Britannia\Domain\Entity\Calendar\Calendar;
 use Britannia\Domain\VO\Course\CourseStatus;
-use Britannia\Domain\VO\Course\TimeTable\DayOfWeek;
-use Britannia\Domain\VO\Course\TimeTable\TimeSheet;
+use Britannia\Domain\VO\Course\Locked\Locked;
 use Britannia\Domain\VO\Validator;
-use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\VO\Traits\Validable;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
@@ -45,19 +43,6 @@ class TimeTable
      */
     private $locked;
 
-
-    public static function buildConstraint(array $options = []): Constraint
-    {
-        return new \Britannia\Domain\VO\Course\TimeTable\Validator\TimeTable([
-            'required' => $options['required'] ?? true
-        ]);
-    }
-
-    public static function make(CarbonImmutable $start, CarbonImmutable $end, array $schedule, Locked $locked): self
-    {
-        return new self($start, $end, $schedule, $locked);
-    }
-
     /**
      * TimeTable constructor.
      * @param CarbonImmutable $start
@@ -70,7 +55,7 @@ class TimeTable
         $this->start = $start;
         $this->end = $end;
 
-        $this->setLocked($locked);
+        $this->locked = $locked;
 
         foreach ($schedule as $timeSheet) {
             $key = $this->getShortDayName($timeSheet->getDayOfWeek());
@@ -81,6 +66,20 @@ class TimeTable
     private function getShortDayName(DayOfWeek $dayOfWeek): string
     {
         return $dayOfWeek->getShortName();
+    }
+
+    public static function buildConstraint(array $options = []): Constraint
+    {
+        return new \Britannia\Domain\VO\Course\TimeTable\Validator\TimeTable([
+            'required' => $options['required'] ?? true
+        ]);
+    }
+
+    public static function make(CarbonImmutable $start, CarbonImmutable $end, array $schedule, ?Locked $locked = null): self
+    {
+        $locked = $locked ?? Locked::RESET();
+
+        return new self($start, $end, $schedule, $locked);
     }
 
     /**
@@ -118,24 +117,19 @@ class TimeTable
 
     }
 
-
-    public function setLocked(Locked $locked): self
-    {
-
-        $this->locked = $locked;
-        return $this;
-    }
-
     public function getLocked(): Locked
     {
+        return $this->locked ?? Locked::LOCKED();
 
         if (!is_null($this->locked)) {
             return $this->locked;
         }
 
+
         if ($this->start->isPast()) {
             return Locked::LOCKED();
         }
+
         return Locked::RESET();
     }
 

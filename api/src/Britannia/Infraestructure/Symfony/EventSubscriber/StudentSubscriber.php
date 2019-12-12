@@ -15,7 +15,6 @@ namespace Britannia\Infraestructure\Symfony\EventSubscriber;
 
 
 use ApiPlatform\Core\DataPersister\DataPersisterInterface;
-use Britannia\Domain\Entity\Record\Record;
 use Britannia\Domain\Entity\Record\RecordEventInterface;
 use Britannia\Domain\Entity\Record\StudentHasJoinedToCourse;
 use Britannia\Domain\Entity\Record\StudentHasLeavedCourse;

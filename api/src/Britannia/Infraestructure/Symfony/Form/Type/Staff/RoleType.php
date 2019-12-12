@@ -16,7 +16,6 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Staff;
 
 use Britannia\Infraestructure\Symfony\Service\Security\RoleService;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\ChoiceList\Loader\ChoiceLoaderInterface;
 use Symfony\Component\Form\ChoiceList\Loader\IntlCallbackChoiceLoader;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\Options;

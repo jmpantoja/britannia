@@ -4,13 +4,8 @@ namespace Britannia\Infraestructure\Symfony\DataFixtures;
 
 use ApiPlatform\Core\DataPersister\DataPersisterInterface;
 use Britannia\Domain\Entity\Book\Book;
-use Britannia\Domain\Entity\ClassRoom\ClassRoom;
-use Britannia\Domain\Entity\ClassRoom\ClassRoomId;
 use Britannia\Domain\Entity\Course\Level;
 use Britannia\Domain\VO\Course\Book\BookCategory;
-use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Common\Persistence\ObjectManager;
-use PlanB\DDD\Domain\VO\PositiveInteger;
 use PlanB\DDD\Domain\VO\Price;
 
 class DataExtraFixtures extends BaseFixture
@@ -37,7 +32,7 @@ class DataExtraFixtures extends BaseFixture
         $this->createMany(Book::class, 8, function (Book $book, int $count) {
 
             $rand = rand(1, 10);
-            $name = sprintf('Libro #%s', $count+1);
+            $name = sprintf('Libro #%s', $count + 1);
 
             $category = $rand % 2 === 0 ? BookCategory::STUDENT_BOOK() : BookCategory::WORK_BOOK();
 

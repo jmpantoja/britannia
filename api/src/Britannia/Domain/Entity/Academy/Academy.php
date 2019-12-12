@@ -39,6 +39,10 @@ class Academy
         return $this->id;
     }
 
+    public function __toString()
+    {
+        return (string)$this->getName();
+    }
 
     /**
      * @return string
@@ -56,10 +60,5 @@ class Academy
     {
         $this->name = $name;
         return $this;
-    }
-
-    public function __toString()
-    {
-        return (string)$this->getName();
     }
 }

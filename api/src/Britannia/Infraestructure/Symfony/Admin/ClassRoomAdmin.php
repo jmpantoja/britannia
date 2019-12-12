@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Britannia\Infraestructure\Symfony\Admin;
 
-use PlanB\DDD\Domain\VO\Price;
 use PlanB\DDDBundle\Symfony\Form\Type\PositiveIntegerType;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -12,12 +11,6 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\Positive;
-use Symfony\Component\Validator\Constraints\Type;
 
 final class ClassRoomAdmin extends AbstractAdmin
 {
@@ -60,10 +53,10 @@ final class ClassRoomAdmin extends AbstractAdmin
     {
         $formMapper
             ->with('Nivel', ['tab' => true])
-                ->with('', ['class' => 'col-md-4'])
-                    ->add('name')
-                    ->add('capacity', PositiveIntegerType::class)
-                ->end()
+            ->with('', ['class' => 'col-md-4'])
+            ->add('name')
+            ->add('capacity', PositiveIntegerType::class)
+            ->end()
             ->end();
     }
 

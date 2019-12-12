@@ -15,7 +15,6 @@ namespace Britannia\Infraestructure\Doctrine\DBAL\Type\Book;
 
 
 use Britannia\Domain\VO\Course\Book\BookCategory;
-use Britannia\Domain\VO\Student\PartOfDay\PartOfDay;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 
@@ -28,12 +27,11 @@ class BookCategoryType extends Type
 
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
-        if(empty($value)){
+        if (empty($value)) {
             return null;
         }
         return BookCategory::byName($value);
     }
-
 
 
     /**

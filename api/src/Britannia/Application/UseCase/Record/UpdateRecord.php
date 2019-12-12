@@ -47,12 +47,6 @@ class UpdateRecord
      */
     private $date;
 
-
-    public static function fromEvent(RecordEventInterface $event): self
-    {
-        return new self($event->getStudent(), $event->getType(), $event->getCourse(), $event->getDate(), $event->getDescription());
-    }
-
     private function __construct(Student $student, TypeOfRecord $type, ?Course $course, CarbonImmutable $date, string $description)
     {
         $this->student = $student;
@@ -60,6 +54,11 @@ class UpdateRecord
         $this->course = $course;
         $this->date = $date;
         $this->description = $description;
+    }
+
+    public static function fromEvent(RecordEventInterface $event): self
+    {
+        return new self($event->getStudent(), $event->getType(), $event->getCourse(), $event->getDate(), $event->getDescription());
     }
 
     /**

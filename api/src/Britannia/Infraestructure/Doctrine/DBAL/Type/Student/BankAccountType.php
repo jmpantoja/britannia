@@ -18,7 +18,6 @@ use Britannia\Domain\VO\BankAccount\BankAccount;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 use PlanB\DDD\Domain\VO\CityAddress;
-use PlanB\DDD\Domain\VO\FullName;
 use PlanB\DDD\Domain\VO\Iban;
 
 class BankAccountType extends Type

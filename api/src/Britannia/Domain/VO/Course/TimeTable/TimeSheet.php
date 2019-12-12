@@ -15,7 +15,6 @@ namespace Britannia\Domain\VO\Course\TimeTable;
 
 
 use Britannia\Domain\Entity\ClassRoom\ClassRoomId;
-use Britannia\Domain\VO\Course\TimeTable\DayOfWeek;
 use Britannia\Domain\VO\Validator;
 use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\VO\PositiveInteger;
@@ -50,6 +49,14 @@ class TimeSheet implements \Serializable
      */
     private $classRoomId;
 
+    private function __construct(DayOfWeek $dayOfWeek, CarbonImmutable $start, CarbonImmutable $end, ClassRoomId $classRoomId)
+    {
+        $this->dayOfWeek = $dayOfWeek;
+        $this->start = $start;
+        $this->end = $end;
+        $this->length = $end->diffInMinutes($start);
+        $this->classRoomId = $classRoomId;
+    }
 
     public static function buildConstraint(array $options = []): Constraint
     {
@@ -77,15 +84,6 @@ class TimeSheet implements \Serializable
         ]);
     }
 
-    private function __construct(DayOfWeek $dayOfWeek, CarbonImmutable $start, CarbonImmutable $end, ClassRoomId $classRoomId)
-    {
-        $this->dayOfWeek = $dayOfWeek;
-        $this->start = $start;
-        $this->end = $end;
-        $this->length = $end->diffInMinutes($start);
-        $this->classRoomId = $classRoomId;
-    }
-
     /**
      * @return DayOfWeek
      */
@@ -110,14 +108,6 @@ class TimeSheet implements \Serializable
         return $this->end;
     }
 
-    /**
-     * @return int
-     */
-    public function getLength(): int
-    {
-        return $this->end->diffInMinutes($this->start);
-    }
-
     public function getLenghtAsInterval()
     {
         $inteval = sprintf('PT%sM', $this->getLength());
@@ -125,6 +115,13 @@ class TimeSheet implements \Serializable
         return $dateInterval;
     }
 
+    /**
+     * @return int
+     */
+    public function getLength(): int
+    {
+        return $this->end->diffInMinutes($this->start);
+    }
 
     /**
      * @return ClassRoomId

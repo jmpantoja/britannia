@@ -18,7 +18,6 @@ use Britannia\Domain\Entity\Student\Tutor;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Sonata\ModelManager;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
-
 use Sonata\AdminBundle\Form\Type\ModelListType;
 use Sonata\AdminBundle\Model\ModelManagerInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;

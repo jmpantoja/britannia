@@ -53,25 +53,6 @@ abstract class AbstractEtl implements EtlInterface
         $this->dataPersister = $dataPersister;
     }
 
-    protected function truncate(string ...$tables): self
-    {
-        foreach ($tables as $table) {
-            $this->default->query('SET FOREIGN_KEY_CHECKS=0');
-            $this->default->query('DELETE FROM ' . $table);
-            $this->default->query('SET FOREIGN_KEY_CHECKS=1');
-        }
-
-        return $this;
-    }
-
-    protected function loadSql(string ...$paths)
-    {
-        foreach ($paths as $path) {
-            $sql = file_get_contents($path);
-            $this->default->exec($sql);
-        }
-    }
-
     public function run(Reporter $reporter): void
     {
         $data = $this->extract($this->builder);
@@ -121,6 +102,25 @@ abstract class AbstractEtl implements EtlInterface
     public function postPersist($entity)
     {
 
+    }
+
+    protected function truncate(string ...$tables): self
+    {
+        foreach ($tables as $table) {
+            $this->default->query('SET FOREIGN_KEY_CHECKS=0');
+            $this->default->query('DELETE FROM ' . $table);
+            $this->default->query('SET FOREIGN_KEY_CHECKS=1');
+        }
+
+        return $this;
+    }
+
+    protected function loadSql(string ...$paths)
+    {
+        foreach ($paths as $path) {
+            $sql = file_get_contents($path);
+            $this->default->exec($sql);
+        }
     }
 
 }

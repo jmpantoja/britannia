@@ -56,18 +56,17 @@ final class BookAdmin extends AbstractAdmin
     {
         $formMapper
             ->tab('Curso')
-                ->with('Nombre', ['class' => 'col-md-4'])
-                    ->add('name', TextType::class, [
-                        'attr' => [
-                            'style' => 'width: 300px'
-                        ]
-                    ])
-                    ->add('category', BookCategoryType::class)
-                ->end()
-                ->with('Precio', ['class' => 'col-md-4'])
-                    ->add('price', PriceType::class)
-                ->end()
-
+            ->with('Nombre', ['class' => 'col-md-4'])
+            ->add('name', TextType::class, [
+                'attr' => [
+                    'style' => 'width: 300px'
+                ]
+            ])
+            ->add('category', BookCategoryType::class)
+            ->end()
+            ->with('Precio', ['class' => 'col-md-4'])
+            ->add('price', PriceType::class)
+            ->end()
             ->end();
     }
 

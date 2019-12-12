@@ -15,7 +15,6 @@ namespace Britannia\Domain\VO\Student\ContactMode\Validator;
 
 
 use Britannia\Domain\VO;
-use Britannia\Domain\VO\Student\ContactMode\Validator\ContactMode;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDD\Domain\VO\Validator\ConstraintValidator;
 

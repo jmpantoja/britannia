@@ -42,6 +42,11 @@ class PositiveInteger
         return $this->number;
     }
 
+    public function compare(PositiveInteger $other): int
+    {
+        return $this->toInt() <=> $other->toInt();
+    }
+
     /**
      * @param int $number
      * @return PositiveInteger

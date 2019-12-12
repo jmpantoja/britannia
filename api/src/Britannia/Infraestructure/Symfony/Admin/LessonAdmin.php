@@ -35,36 +35,12 @@ final class LessonAdmin extends AbstractAdmin
         ];
     }
 
-    protected function configureRoutes(RouteCollection $collection)
-    {
-        $collection->clearExcept(['list', 'edit']);
-        return $collection;
-    }
-
     public function createQuery($context = 'list')
     {
         $query = parent::createQuery($context);
         $this->configureQuery($query);
 
         return $query;
-    }
-
-
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
-    {
-        $datagridMapper
-            ->add('day', CallbackFilter::class,
-                [
-                    'label' => 'Fecha',
-                    'callback' => function (ProxyQuery $query, $alias, $field, $value) {
-                        $date = CarbonImmutable::make($value['value']);
-                        $this->configureQuery($query, $date);
-                        return true;
-                    },
-                    'show_filter' => true,
-                    'field_type' => DatePickerType::class
-                ]
-            );
     }
 
     /**
@@ -87,6 +63,44 @@ final class LessonAdmin extends AbstractAdmin
             ->setParameter('courses', $courses);
     }
 
+    public function isGranted($name, $object = null)
+    {
+        $isGranted = parent::isGranted($name, $object);
+        if ($name !== 'EDIT') {
+            return $isGranted;
+        }
+
+        if ($isGranted) {
+            $user = $this->security->getUser();
+            $isGranted = $user->hasCourse($object->getCourse());
+        }
+
+        return $isGranted;
+    }
+
+    protected function configureRoutes(RouteCollection $collection)
+    {
+        $collection->clearExcept(['list', 'edit']);
+        return $collection;
+    }
+
+    protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
+    {
+        $datagridMapper
+            ->add('day', CallbackFilter::class,
+                [
+                    'label' => 'Fecha',
+                    'callback' => function (ProxyQuery $query, $alias, $field, $value) {
+                        $date = CarbonImmutable::make($value['value']);
+                        $this->configureQuery($query, $date);
+                        return true;
+                    },
+                    'show_filter' => true,
+                    'field_type' => DatePickerType::class
+                ]
+            );
+    }
+
     protected function configureListFields(ListMapper $listMapper): void
     {
         $this->setListMode('mosaic');
@@ -102,21 +116,6 @@ final class LessonAdmin extends AbstractAdmin
                 'required' => false,
                 'label' => $this->toString($lesson)
             ]);
-    }
-
-    public function isGranted($name, $object = null)
-    {
-        $isGranted = parent::isGranted($name, $object);
-        if ($name !== 'EDIT') {
-            return $isGranted;
-        }
-
-        if ($isGranted) {
-            $user = $this->security->getUser();
-            $isGranted = $user->hasCourse($object->getCourse());
-        }
-
-        return $isGranted;
     }
 
     public function toString($object)

@@ -16,7 +16,6 @@ namespace Britannia\Infraestructure\Symfony\Service\Discount;
 
 use Britannia\Domain\Repository\FamilyDiscountStorageInterface;
 use Britannia\Domain\VO\Discount\FamilyDiscountList;
-use Britannia\Domain\VO\Discount\FamilyOrder;
 use PlanB\DDD\Domain\VO\Percent;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Tightenco\Collect\Support\Collection;

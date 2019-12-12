@@ -26,11 +26,6 @@ abstract class BuilderAbstract implements BuilderInterface
      */
     private $entityManager;
 
-    public static function make(array $input, EntityManagerInterface $entityManager): self
-    {
-        return new static($input, $entityManager);
-    }
-
     private function __construct(array $input, EntityManagerInterface $entityManager)
     {
         $this->resume = $this->initResume($input);
@@ -38,8 +33,22 @@ abstract class BuilderAbstract implements BuilderInterface
         $this->entityManager = $entityManager;
     }
 
-
     abstract public function initResume(array $input): Resume;
+
+    public static function make(array $input, EntityManagerInterface $entityManager): self
+    {
+        return new static($input, $entityManager);
+    }
+
+    public function resume(): Resume
+    {
+        return $this->resume;
+    }
+
+    public function isValid(): bool
+    {
+        return !$this->resume->hasErrors();
+    }
 
     protected function findOneOrCreate(object $entity, array $criteria): ?object
     {
@@ -72,7 +81,6 @@ abstract class BuilderAbstract implements BuilderInterface
 
     }
 
-
     protected function watchForErrors(ConstraintViolationList $violationList, array $input = null): bool
     {
         if (count($violationList) === 0) {
@@ -101,18 +109,6 @@ abstract class BuilderAbstract implements BuilderInterface
     protected function hasViolations(ConstraintViolationList $violationList): bool
     {
         return count($violationList) !== 0;
-    }
-
-
-    public function resume(): Resume
-    {
-        return $this->resume;
-    }
-
-
-    public function isValid(): bool
-    {
-        return !$this->resume->hasErrors();
     }
 
 

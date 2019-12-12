@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Britannia\Domain\VO\BankAccount\Validator;
 
 
-use Britannia\Domain\VO\BankAccount\Validator\BankAccount;
 use PlanB\DDD\Domain\VO\Validator\CityAddress;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDD\Domain\VO\Validator\ConstraintValidator;

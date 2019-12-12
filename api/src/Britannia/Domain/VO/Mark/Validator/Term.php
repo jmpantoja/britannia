@@ -11,18 +11,18 @@
 
 declare(strict_types=1);
 
-namespace Britannia\Domain\VO\Course\TimeTable\Validator;
+namespace Britannia\Domain\VO\Mark\Validator;
 
 
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 
-class Locked extends Constraint
+class Term extends Constraint
 {
 
-    public $requiredMessage = 'Se necesita un tipo de bloqueo';
+    public $requiredMessage = 'Se necesita un trimestre';
 
     public function isValidType($value): bool
     {
-        return is_scalar($value) || $value instanceof \Britannia\Domain\VO\Course\TimeTable\Locked;
+        return is_array($value) || $value instanceof \Britannia\Domain\VO\Mark\TermDefinition;
     }
 }

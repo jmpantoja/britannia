@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Doctrine\DBAL\Type\Course;
 
 
-use Britannia\Domain\VO\Course\CourseStatus;
 use Britannia\Domain\VO\Course\Discount\CourseDiscount;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
@@ -42,7 +41,7 @@ class DiscountListType extends Type
             'allowed_classes' => [CourseDiscount::class]
         ]);
 
-        if(!is_array($data)){
+        if (!is_array($data)) {
             return null;
         }
 

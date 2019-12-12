@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Britannia\Application\UseCase\Calendar;
 
 
-use ApiPlatform\Core\DataPersister\DataPersisterInterface;
 use PlanB\DDD\Application\UseCase\UseCaseInterface;
 
 class ChangeWorkDayStatusUseCase implements UseCaseInterface

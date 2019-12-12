@@ -6,14 +6,13 @@ namespace Britannia\Domain\Entity\Student;
 use Britannia\Domain\Entity\Academy\Academy;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Record\StudentHasBeenCreated;
-use Britannia\Domain\Entity\Record\StudentHasJoinedToCourse;
-use Britannia\Domain\VO\Student\ContactMode\ContactMode;
 use Britannia\Domain\VO\Course\CourseStatus;
 use Britannia\Domain\VO\Discount\StudentDiscount;
+use Britannia\Domain\VO\Payment\Payment;
+use Britannia\Domain\VO\Student\ContactMode\ContactMode;
 use Britannia\Domain\VO\Student\OtherAcademy\NumOfYears;
 use Britannia\Domain\VO\Student\OtherAcademy\OtherAcademy;
 use Britannia\Domain\VO\Student\PartOfDay\PartOfDay;
-use Britannia\Domain\VO\Payment\Payment;
 use Carbon\CarbonImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -22,7 +21,6 @@ use PlanB\DDD\Domain\VO\Email;
 use PlanB\DDD\Domain\VO\FullName;
 use PlanB\DDD\Domain\VO\PhoneNumber;
 use PlanB\DDD\Domain\VO\PostalAddress;
-use PlanB\DDD\Domain\VO\Price;
 
 
 abstract class Student extends AggregateRoot
@@ -170,15 +168,6 @@ abstract class Student extends AggregateRoot
         $this->records = new ArrayCollection();
     }
 
-
-    /**
-     * @return StudentId
-     */
-    public function getId(): ?StudentId
-    {
-        return $this->id;
-    }
-
     /**
      * @return int
      */
@@ -197,7 +186,6 @@ abstract class Student extends AggregateRoot
         return $this;
     }
 
-
     public function isAdult(): bool
     {
         return static::class === Adult::class;
@@ -206,6 +194,11 @@ abstract class Student extends AggregateRoot
     public function isChild(): bool
     {
         return static::class === Adult::class;
+    }
+
+    public function getActiveCourses(): Collection
+    {
+        return $this->findCoursesByStatus(CourseStatus::ACTIVE());
     }
 
     public function findCoursesByStatus(CourseStatus ...$allowedStatus): Collection
@@ -219,10 +212,6 @@ abstract class Student extends AggregateRoot
         });
     }
 
-    public function getActiveCourses(): Collection{
-        return $this->findCoursesByStatus(CourseStatus::ACTIVE());
-    }
-
     /**
      * @return ArrayCollection
      */
@@ -230,7 +219,6 @@ abstract class Student extends AggregateRoot
     {
         return $this->studentHasCourses;
     }
-
 
     /**
      * @param ArrayCollection $studentHasCourses
@@ -248,24 +236,6 @@ abstract class Student extends AggregateRoot
     public function isActive(): bool
     {
         return $this->active;
-    }
-
-    /**
-     * @return FullName
-     */
-    public function getFullName(): ?FullName
-    {
-        return $this->fullName;
-    }
-
-    /**
-     * @param FullName $fullName
-     * @return Student
-     */
-    public function setFullName(?FullName $fullName): Student
-    {
-        $this->fullName = $fullName;
-        return $this;
     }
 
     /**
@@ -392,7 +362,6 @@ abstract class Student extends AggregateRoot
         return $this;
     }
 
-
     /**
      * @return Student[]
      */
@@ -503,7 +472,6 @@ abstract class Student extends AggregateRoot
         return $this->academyNumOfYears;
     }
 
-
     /**
      * @return OtherAcademy
      */
@@ -587,7 +555,6 @@ abstract class Student extends AggregateRoot
         $this->secondComment = $secondComment;
         return $this;
     }
-
 
     /**
      * @return bool
@@ -704,10 +671,35 @@ abstract class Student extends AggregateRoot
         return $student->getId()->equals($this->getId());
     }
 
+    /**
+     * @return StudentId
+     */
+    public function getId(): ?StudentId
+    {
+        return $this->id;
+    }
 
     public function __toString()
     {
         return (string)$this->getFullName();
+    }
+
+    /**
+     * @return FullName
+     */
+    public function getFullName(): ?FullName
+    {
+        return $this->fullName;
+    }
+
+    /**
+     * @param FullName $fullName
+     * @return Student
+     */
+    public function setFullName(?FullName $fullName): Student
+    {
+        $this->fullName = $fullName;
+        return $this;
     }
 
 }

@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Doctrine\DBAL\Type\Course;
 
 
-use Britannia\Domain\VO\Student\PartOfDay\PartOfDay;
 use Britannia\Domain\VO\Course\Periodicity\Periodicity;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
@@ -28,12 +27,11 @@ class PeriodicityType extends Type
 
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
-        if(empty($value)){
+        if (empty($value)) {
             return null;
         }
         return Periodicity::byName($value);
     }
-
 
 
     /**

@@ -9,7 +9,6 @@ use Britannia\Infraestructure\Symfony\Importer\Report\ConsoleReport;
 use Britannia\Infraestructure\Symfony\Importer\Report\PlainTextErrorReport;
 use Britannia\Infraestructure\Symfony\Importer\Report\PlainTextReport;
 use Britannia\Infraestructure\Symfony\Importer\Report\PlainTextWarningsReport;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -47,6 +46,19 @@ class BritanniaImportDataCommand extends Command implements ContainerAwareInterf
 
         $this->importer = $import;
         $this->userRepository = $userRepository;
+    }
+
+    /**
+     * Sets the container.
+     */
+    public function setContainer(ContainerInterface $container = null)
+    {
+        $pathToLogsDir = $container->getParameter('kernel.logs_dir');
+        $this->pathToReportDir = sprintf('%s/reports', dirname($pathToLogsDir));
+
+        @chmod($this->pathToReportDir, 0777);
+
+        $this->container = $container;
     }
 
     protected function configure()
@@ -89,18 +101,5 @@ class BritanniaImportDataCommand extends Command implements ContainerAwareInterf
 
         $this->container->get('security.token_storage')->setToken($token);
 
-    }
-
-    /**
-     * Sets the container.
-     */
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $pathToLogsDir = $container->getParameter('kernel.logs_dir');
-        $this->pathToReportDir = sprintf('%s/reports', dirname($pathToLogsDir));
-
-        @chmod($this->pathToReportDir, 0777);
-
-        $this->container = $container;
     }
 }

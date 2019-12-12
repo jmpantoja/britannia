@@ -14,8 +14,6 @@ declare(strict_types=1);
 namespace Britannia\Domain\Repository;
 
 
-use Doctrine\Common\Collections\Collection;
-
 /**
  * @method Student|null find($id, $lockMode = null, $lockVersion = null)
  * @method Student|null findOneBy(array $criteria, array $orderBy = null)

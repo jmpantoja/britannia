@@ -16,7 +16,6 @@ namespace Britannia\Domain\Entity\Record;
 
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Student\Student;
-use PlanB\DDD\Domain\Event\DomainEvent;
 
 class StudentHasJoinedToCourse extends AbstractRecordEvent
 {

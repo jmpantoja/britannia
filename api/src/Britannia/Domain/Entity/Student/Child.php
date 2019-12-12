@@ -5,8 +5,6 @@ namespace Britannia\Domain\Entity\Student;
 use Britannia\Domain\Entity\School\School;
 use Britannia\Domain\VO\SchoolCourse;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use phpDocumentor\Reflection\Types\Parent_;
 
 class Child extends Student
 {
@@ -39,7 +37,6 @@ class Child extends Student
      * @var Tutor
      */
     private $secondTutor;
-
 
 
     public function __construct()

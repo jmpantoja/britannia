@@ -14,9 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Application\UseCase\Course;
 
 
-use ApiPlatform\Core\DataPersister\DataPersisterInterface;
 use Britannia\Domain\Repository\CalendarRepositoryInterface;
-use Britannia\Domain\Repository\CourseRepositoryInterface;
 use Britannia\Domain\Service\Course\TimeTableUpdater;
 use Britannia\Infraestructure\Doctrine\Repository\CourseRepository;
 use PlanB\DDD\Application\UseCase\UseCaseInterface;

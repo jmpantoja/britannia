@@ -23,14 +23,14 @@ class UpdateCalendar
      */
     private $date;
 
-    public static function make(): self
-    {
-        return new self(CarbonImmutable::now());
-    }
-
     private function __construct(CarbonImmutable $date)
     {
         $this->date = $date->setTime(0, 0);
+    }
+
+    public static function make(): self
+    {
+        return new self(CarbonImmutable::now());
     }
 
     /**

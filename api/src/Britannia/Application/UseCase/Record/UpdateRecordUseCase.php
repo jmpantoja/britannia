@@ -16,12 +16,8 @@ namespace Britannia\Application\UseCase\Record;
 
 use ApiPlatform\Core\DataPersister\DataPersisterInterface;
 use Britannia\Domain\Entity\Record\Record;
-use Britannia\Domain\Entity\Student\Student;
-use Britannia\Domain\Repository\StaffMemberRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use PlanB\DDD\Application\UseCase\UseCaseInterface;
-use PlanB\DDDBundle\Sonata\ModelManager;
-use Sonata\AdminBundle\Model\ModelManagerInterface;
 use Symfony\Component\Security\Core\Security;
 
 class UpdateRecordUseCase implements UseCaseInterface

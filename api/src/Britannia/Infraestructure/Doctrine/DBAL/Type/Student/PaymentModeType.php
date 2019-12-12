@@ -27,7 +27,7 @@ class PaymentModeType extends Type
 
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
-        if(empty($value)){
+        if (empty($value)) {
             return null;
         }
         return PaymentMode::byName($value);

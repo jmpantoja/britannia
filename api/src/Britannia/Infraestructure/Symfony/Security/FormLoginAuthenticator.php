@@ -4,12 +4,10 @@ namespace Britannia\Infraestructure\Symfony\Security;
 
 use Britannia\Domain\Entity\Staff\StaffMember;
 use Doctrine\ORM\EntityManagerInterface;
-use phpDocumentor\Reflection\Types\Nullable;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Encoder\EncoderFactory;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;

@@ -27,16 +27,6 @@ class ChangeWorkDayStatus
      */
     private $workDay;
 
-    public static function toHoliday(array $list): self
-    {
-        return new self($list, false);
-    }
-
-    public static function toWorkday(array $list): self
-    {
-        return new self($list, true);
-    }
-    
     private function __construct(array $list, bool $value)
     {
         $this->workDay = $value;
@@ -51,6 +41,16 @@ class ChangeWorkDayStatus
     {
         $this->days[] = $day;
         return $this;
+    }
+
+    public static function toHoliday(array $list): self
+    {
+        return new self($list, false);
+    }
+
+    public static function toWorkday(array $list): self
+    {
+        return new self($list, true);
     }
 
     /**

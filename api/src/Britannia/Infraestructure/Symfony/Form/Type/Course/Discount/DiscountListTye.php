@@ -27,13 +27,11 @@ class DiscountListTye extends AbstractCompoundType
 {
 
 
-
     public function customForm(FormBuilderInterface $builder, array $options)
     {
         $status = JobStatus::getDiscountables();
 
         foreach ($status as $name => $value) {
-
 
 
             $builder->add($name, DiscountType::class, [
@@ -59,6 +57,13 @@ class DiscountListTye extends AbstractCompoundType
         return null;
     }
 
+    public function customMapping(array $data)
+    {
+
+        $data = array_filter($data);
+        return new ArrayCollection($data);
+    }
+
     protected function dataToForms($data, array $forms): void
     {
         foreach ($data as $name => $discount) {
@@ -79,14 +84,6 @@ class DiscountListTye extends AbstractCompoundType
         }
 
         $form->setData($discount);
-    }
-
-
-    public function customMapping(array $data)
-    {
-
-        $data = array_filter($data);
-        return new ArrayCollection($data);
     }
 
 

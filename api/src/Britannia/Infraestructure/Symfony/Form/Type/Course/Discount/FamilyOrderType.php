@@ -15,7 +15,6 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Course\Discount;
 
 
 use Britannia\Domain\VO\Discount\FamilyOrder;
-use PlanB\DDD\Domain\VO\PositiveInteger;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
 use Symfony\Component\Form\ChoiceList\Loader\CallbackChoiceLoader;

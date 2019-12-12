@@ -17,14 +17,14 @@ namespace Britannia\Application\UseCase\Course;
 class UpdateCourseStatus
 {
 
-    public static function make(): self
-    {
-        return new self();
-    }
-
     private function __construct()
     {
 
+    }
+
+    public static function make(): self
+    {
+        return new self();
     }
 
 }

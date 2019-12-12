@@ -15,7 +15,6 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Course\TimeTable;
 
 
 use Britannia\Domain\VO\Course\TimeTable\DayOfWeek;
-use Britannia\Domain\VO\Student\PartOfDay\PartOfDay;
 use Britannia\Domain\VO\Validator;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;

@@ -4,11 +4,9 @@ namespace Britannia\Infraestructure\Doctrine\Repository;
 
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Course\Lesson;
-use Britannia\Domain\Repository\CourseRepositoryInterface;
 use Britannia\Domain\Repository\LessonRepositoryInterface;
 use Carbon\CarbonImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**

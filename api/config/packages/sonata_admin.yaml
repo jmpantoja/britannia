@@ -41,7 +41,8 @@ sonata_admin:
                   label:        Planning
                   roles: ['ROLE_MANAGER']
                   
-                - admin.record 
+                - admin.record
+                - admin.mark
                 
             admin.group.extra:
                 label: Configuración

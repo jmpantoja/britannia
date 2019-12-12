@@ -15,10 +15,9 @@ namespace Britannia\Domain\VO\Payment;
 
 
 use Britannia\Domain\VO\BankAccount\BankAccount;
-use Britannia\Domain\VO\Payment\PaymentMode;
+use Britannia\Domain\VO\Validator;
 use PlanB\DDD\Domain\VO\Traits\Validable;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
-use Britannia\Domain\VO\Validator;
 
 class Payment
 {
@@ -29,25 +28,11 @@ class Payment
 
     private $account;
 
-    public static function buildConstraint(array $options = []): Constraint
-    {
-        return new \Britannia\Domain\VO\Payment\Validator\Payment([
-            'required' => $options['required'] ?? true
-        ]);
-    }
-
-
-    public static function make(PaymentMode $mode, ?BankAccount $account)
-    {
-        return new self($mode, $account);
-    }
-
     private function __construct($mode, $account)
     {
         $this->setMode($mode);
         $this->setAccount($account);
     }
-
 
     /**
      * @param mixed $mode
@@ -59,16 +44,6 @@ class Payment
         return $this;
     }
 
-
-    /**
-     * @return mixed
-     */
-    public function getMode(): PaymentMode
-    {
-        return $this->mode;
-    }
-
-
     /**
      * @param mixed $account
      * @return Payment
@@ -77,6 +52,26 @@ class Payment
     {
         $this->account = $account;
         return $this;
+    }
+
+    public static function buildConstraint(array $options = []): Constraint
+    {
+        return new \Britannia\Domain\VO\Payment\Validator\Payment([
+            'required' => $options['required'] ?? true
+        ]);
+    }
+
+    public static function make(PaymentMode $mode, ?BankAccount $account)
+    {
+        return new self($mode, $account);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMode(): PaymentMode
+    {
+        return $this->mode;
     }
 
     /**

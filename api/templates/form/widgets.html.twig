@@ -270,74 +270,169 @@
 
 {% endblock %}
 
+{% block locked_widget %}
 
-{% block time_table_widget %}
-    <div class="row time_table_title">
-        <div class="col-md-2" style="margin-bottom: 4em">
-            <legend class="control-label" style=" ">
-                Calendario
-            </legend>
-
+    <div class="row">
+        <div class="col-md-8 col-md-offset-4" id="{{ id }}-wrapper">
+            <div class="pull-right">
+                {{ form_widget(form) }}
+            </div>
         </div>
-        {% if form.locked is defined %}
-        <div class="col-md-10">
-            {{ form_row(form.locked) }}
-            <p class="notice">sss</p>
-        </div>
-        {% endif %}
     </div>
 
-    <div id="{{ id }}-row" class="row time_table">
-        <div class="col-md-4">
+    <script>
+        $(function () {
+
+            var toggle = function (el) {
+                var value = $(el).prop('value')
+
+                var parent = $('#{{ widget }}');
+
+                var locked = (value === 'LOCKED');
+
+                var inputs = $(parent).find('input');
+                var select = $(parent).find('select');
+
+                $(inputs).prop('readonly', locked)
+                $(select).select2("readonly", locked);
+
+                $(el).prop('disabled', false)
+            }
+
+
+            var contents = {
+                LOCKED: 'Bloqueado',
+                UPDATE: 'Se mantendrá la información de <b>eventos ya pasados</b> <br />pero <b>se borrará el resto</b>',
+                RESET: 'Se <b>borrará toda la información</b>, <br />incluidos los eventos ya pasados',
+            }
+
+            var backgrounds = {
+                LOCKED: 'gray',
+                UPDATE: '#008d4c',
+                RESET: 'red',
+            }
+
+            var wrapper = $("#{{ id }}-wrapper");
+            var el = $('#{{ id }}')
+
+            var popover = $(wrapper).popover({
+                'title': 'Cuidado!',
+                'html': true,
+                'content': function () {
+                    var key = $(el).val();
+                    return contents[key];
+                }
+            });
+
+            $(el).on('change', function () {
+                toggle($(this))
+
+                if ($(this).val() == 'LOCKED') {
+                    $(popover).popover('hide')
+                }
+                else {
+                    var key = $(el).val();
+                    var background = backgrounds[key];
+
+                    $(popover).popover('show')
+                    var title = $(popover).siblings('.popover').find('h3.popover-title')
+                    $(title).css({'background-color': background, 'color': 'white', 'font-size': '1.4em'})
+                }
+            })
+
+            $(el).trigger('change')
+        })
+    </script>
+{% endblock %}
+
+
+{% block time_table_widget %}
+    {% if form.locked is defined %}
+        {{ form_row(form.locked, {widget: id ~ '-wrapper'}) }}
+    {% endif %}
+
+    <div id="{{ id }}-wrapper">
+        <div class="col-md-12" style="margin-top: 5em">
+            <legend class="control-label required">
+                Calendario
+            </legend>
+        </div>
+        <div class="col-md-4 col-md-offset-1">
             {{ form_row(form.start) }}
         </div>
         <div class="col-md-4">
             {{ form_row(form.end) }}
         </div>
-        <div class="col-md-12" style="margin-top: 3em">
+        <div class="col-md-12">
             {{ form_row(form.schedule) }}
         </div>
     </div>
 
-    {% if form.locked is defined %}
-        <script>
-            var el = $('#{{ form.locked.vars.id }}');
-
-            $(function () {
-                var notices = {
-                    'LOCKED': '',
-                    'RESET': '!Cuidado!, se destruiran todas las lecciones ya generadas',
-                    'UPDATE': 'Se conservaran las lecciones pasadas',
-                }
-
-                var toggle = function (el, value) {
-                    var notice = $(el).parents('.form-group').find('.notice');
-                    var value = $(el).prop('value')
-
-                    var parent = $('#{{ id }}-row');
-                    var locked = (value === 'LOCKED');
-
-                    var inputs = $(parent).find('input');
-                    var select = $(parent).find('select');
-
-                    $(inputs).prop('readonly', locked)
-                    $(select).select2("readonly", locked);
-
-                    $(notice).text(notices[value])
-
-                    $(el).prop('disabled', false)
-                }
-
-                $(el).on('change', function () {
-                    toggle($(this))
-                });
-                toggle($(el))
-            })
-        </script>
-    {% endif %}
-
 {% endblock %}
 
+
+{% block units_definition_widget %}
+    {% if form.locked is defined %}
+        {{ form_row(form.locked, {widget: id ~ '-wrapper'}) }}
+    {% endif %}
+
+    <div id="{{ id }}-wrapper" class="row unit_definition">
+        <div class="col-md-12 col-md-offset-1" style="margin-top: 3em">
+            <legend class="control-label required">
+                Habilidades
+            </legend>
+            {{ form_row(form.skills) }}
+        </div>
+
+        <div class="col-md-12">
+            {{ form_row(form.terms) }}
+        </div>
+
+    </div>
+{% endblock %}
+
+
+{% block term_widget %}
+    <div class="row" style="margin-top: 3em">
+        {{ form_row(form.term) }}
+        <div class="col-md-3">
+            <legend class="control-label" style="margin: 1.2em 0 0 3.8em; font-size: 1.4em">
+                {{ term.value }}:
+            </legend>
+        </div>
+        <div class="col-md-3">
+            {{ form_row(form.numOfUnits) }}
+        </div>
+        <div class="col-md-2">
+            {{ form_row(form.weighOfUnits) }}
+        </div>
+        <div class="col-md-2">
+            {{ form_row(form.weighOfExam) }}
+        </div>
+    </div>
+
+    <script>
+        $(function () {
+            var units = $('#{{ form.weighOfUnits.vars.id }}');
+            var exam = $('#{{ form.weighOfExam.vars.id }}');
+
+            $(units).on('keyup', function () {
+                var value = $(this).val();
+
+                if ($.isNumeric(value) && value >= 0 && value <= 100) {
+                    $(exam).val(100 - value);
+                    return;
+                }
+
+                $(exam).val('-');
+            })
+
+            $(units).trigger('keyup');
+        })
+
+    </script>
+
+{% endblock %}
 
 {% block student_has_courses_widget %}
     {{ block('multiselect') }}

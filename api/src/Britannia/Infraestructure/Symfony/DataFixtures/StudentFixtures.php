@@ -5,18 +5,12 @@ namespace Britannia\Infraestructure\Symfony\DataFixtures;
 use ApiPlatform\Core\DataPersister\DataPersisterInterface;
 use Britannia\Domain\Entity\Employment\Situation;
 use Britannia\Domain\Entity\Staff\User;
-use Britannia\Domain\Entity\Student\Adult;
-use Britannia\Domain\Entity\Student\Child;
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\VO\BankAccount\BankAccount;
 use Britannia\Domain\VO\Employment;
-use Britannia\Domain\VO\Student\Job\Job;
-use Britannia\Domain\VO\Student\Job\JobStatus;
 use Britannia\Domain\VO\Payment\Payment;
 use Britannia\Domain\VO\Payment\PaymentMode;
-use Doctrine\Common\Persistence\ObjectManager;
 use PlanB\DDD\Domain\VO\CityAddress;
-use PlanB\DDD\Domain\VO\DNI;
 use PlanB\DDD\Domain\VO\Email;
 use PlanB\DDD\Domain\VO\FullName;
 use PlanB\DDD\Domain\VO\Iban;
@@ -77,8 +71,6 @@ class StudentFixtures extends BaseFixture
 //            $child->setActive(true);
 //        });
     }
-
-
 
 
     private function create(Student $student)

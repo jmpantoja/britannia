@@ -15,7 +15,6 @@ namespace Britannia\Application\UseCase\StaffMember;
 
 
 use Britannia\Domain\Entity\Staff\StaffMember;
-use Britannia\Domain\Repository\StaffMemberRepositoryInterface;
 use PlanB\DDD\Application\UseCase\UseCaseInterface;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 

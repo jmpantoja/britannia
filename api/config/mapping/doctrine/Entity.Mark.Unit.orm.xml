@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+
+    <entity name="Britannia\Domain\Entity\Mark\Unit"
+            table="term_units">
+
+        <id name="id" type="UnitId" column="id">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
+        </id>
+
+        <many-to-one field="term" target-entity="Britannia\Domain\Entity\Mark\Term" inversed-by="units"
+                     fetch="EAGER">
+            <join-column on-delete="CASCADE" />
+        </many-to-one>
+
+        <field name="termName" type="TermName"></field>
+
+        <field name="number" type="positive_integer"></field>
+        <field name="completedAt" type="datetime_immutable" nullable="true"></field>
+
+    </entity>
+</doctrine-mapping>
+
+

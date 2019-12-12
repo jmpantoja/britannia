@@ -55,12 +55,6 @@ class Calendar
      */
     private $day;
 
-
-    public static function fromDate(CarbonImmutable $date)
-    {
-        return new self($date);
-    }
-
     private function __construct(CarbonImmutable $dateTime)
     {
         $dateTime = $dateTime->setTime(0, 0, 0);
@@ -73,6 +67,11 @@ class Calendar
 
         $this->weekday = DayOfWeek::fromDate($dateTime);
         $this->workDay = !$this->weekday->isWeekEnd();
+    }
+
+    public static function fromDate(CarbonImmutable $date)
+    {
+        return new self($date);
     }
 
     /**

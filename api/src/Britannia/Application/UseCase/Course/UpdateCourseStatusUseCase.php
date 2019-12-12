@@ -35,7 +35,7 @@ class UpdateCourseStatusUseCase implements UseCaseInterface
     {
         $courses = $this->repository->findUpdateStatusPending();
 
-        foreach ($courses as $course){
+        foreach ($courses as $course) {
             $course->update();
         }
     }

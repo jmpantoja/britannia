@@ -15,7 +15,6 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Course;
 
 
 use Britannia\Domain\VO\Course\Intensive\Intensive;
-use Britannia\Domain\VO\Course\Periodicity\Periodicity;
 use Britannia\Domain\VO\Validator;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;

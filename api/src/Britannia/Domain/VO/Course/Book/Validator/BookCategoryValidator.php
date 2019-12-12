@@ -15,7 +15,6 @@ namespace Britannia\Domain\VO\Course\Book\Validator;
 
 
 use Britannia\Domain\VO;
-use Britannia\Domain\VO\Course\Book\Validator\BookCategory;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDD\Domain\VO\Validator\ConstraintValidator;
 

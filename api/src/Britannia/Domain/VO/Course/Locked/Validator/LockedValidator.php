@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Britannia\Domain\VO\Course\TimeTable\Validator;
+namespace Britannia\Domain\VO\Course\Locked\Validator;
 
 
 use Britannia\Domain\VO;
@@ -31,11 +31,11 @@ class LockedValidator extends ConstraintValidator
 
     public function handle($value, Constraint $constraint)
     {
-        if ($value instanceof VO\Course\TimeTable\Locked) {
+        if ($value instanceof VO\Course\Locked\Locked) {
             return;
         }
 
-        if (VO\Course\TimeTable\Locked::hasName($value)) {
+        if (VO\Course\Locked\Locked::hasName($value)) {
             return;
         }
 

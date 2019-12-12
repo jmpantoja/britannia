@@ -14,7 +14,6 @@
             <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
         </id>
 
-
         <many-to-one field="course" target-entity="Britannia\Domain\Entity\Course\Course" inversed-by="lessons" fetch="EAGER">
             <cascade>
                 <cascade-persist/>

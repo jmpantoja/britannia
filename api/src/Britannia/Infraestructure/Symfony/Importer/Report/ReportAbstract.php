@@ -19,15 +19,6 @@ use Britannia\Infraestructure\Symfony\Importer\Resume;
 abstract class ReportAbstract implements ReportInterface
 {
 
-    protected function parseHead(Resume $resume): string
-    {
-        return sprintf('%s[%s] ** %s', ...[
-            $resume->getType(),
-            $resume->getId(),
-            $resume->getTitle()
-        ]);
-    }
-
     public function dump(Resume $resume)
     {
         if ($resume->isSuccessful()) {
@@ -48,5 +39,14 @@ abstract class ReportAbstract implements ReportInterface
     abstract public function error(Resume $resume): void;
 
     abstract public function warning(Resume $resume): void;
+
+    protected function parseHead(Resume $resume): string
+    {
+        return sprintf('%s[%s] ** %s', ...[
+            $resume->getType(),
+            $resume->getId(),
+            $resume->getTitle()
+        ]);
+    }
 
 }
