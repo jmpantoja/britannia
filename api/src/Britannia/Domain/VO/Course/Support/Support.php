@@ -18,7 +18,6 @@ use MabeEnum\Enum;
 
 class Support extends Enum
 {
-    public const SUPPORTED = 'Curso de apoyo';
     public const REGULAR = 'Curso Regular';
-
+    public const SUPPORTED = 'Curso de apoyo';
 }

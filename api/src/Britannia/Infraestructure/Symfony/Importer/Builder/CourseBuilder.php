@@ -28,6 +28,7 @@ use Britannia\Infraestructure\Symfony\Importer\Resume;
 use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\VO\PositiveInteger;
 use PlanB\DDD\Domain\VO\Price;
+use stdClass;
 
 class CourseBuilder extends BuilderAbstract
 {
@@ -127,6 +128,8 @@ class CourseBuilder extends BuilderAbstract
             return $this;
         }
 
+        return $this;
+
     }
 
     public function withNumOfPlaces(int $places): self
@@ -177,23 +180,25 @@ class CourseBuilder extends BuilderAbstract
 
     public function build(): object
     {
-        $course = new Course();
-        $course->setOldId($this->id);
-        $course->setName($this->name);
-        $course->setSchoolCourse($this->schoolCourse);
-        $course->setEnrolmentPayment($this->enrolmentPayment);
-        $course->setMonthlyPayment($this->monthlyPayment);
+        return new stdClass();
 
-        $course->setSupport(Support::REGULAR());
+//        $course = new Course();
+//        $course->setOldId($this->id);
+//        $course->setName($this->name);
+//        $course->setSchoolCourse($this->schoolCourse);
+//        $course->setEnrolmentPayment($this->enrolmentPayment);
+//        $course->setMonthlyPayment($this->monthlyPayment);
+//
+//        $course->setSupport(Support::REGULAR());
+//
+//        $course->setNumOfPlaces($this->numOfPlaces);
+//        $course->setAge($this->age);
+//        $course->setPeriodicity($this->periodicity);
+//        $course->setIntensive($this->intensive);
+//
+//        $course->setTimeTable($this->timeTable);
 
-        $course->setNumOfPlaces($this->numOfPlaces);
-        $course->setAge($this->age);
-        $course->setPeriodicity($this->periodicity);
-        $course->setIntensive($this->intensive);
-
-        $course->setTimeTable($this->timeTable);
-
-        return $course;
+//        return $course;
     }
 }
 

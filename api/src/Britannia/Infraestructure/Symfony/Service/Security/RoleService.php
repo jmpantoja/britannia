@@ -17,7 +17,8 @@ namespace Britannia\Infraestructure\Symfony\Service\Security;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 /**
- * @property mixed roles
+ * Class RoleService
+ * @package Britannia\Infraestructure\Symfony\Service\Security
  */
 class RoleService
 {
@@ -39,10 +40,10 @@ class RoleService
     }
 
     /**
-     * @param $hierarchy
-     * @return array
+     * @param array $hierarchy
+     * @return string[]
      */
-    private function buildList($hierarchy): array
+    private function buildList(array $hierarchy): array
     {
 
         $list = [];

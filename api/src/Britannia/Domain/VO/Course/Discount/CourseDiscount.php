@@ -15,8 +15,9 @@ namespace Britannia\Domain\VO\Course\Discount;
 
 
 use PlanB\DDD\Domain\VO\Percent;
+use Serializable;
 
-class CourseDiscount implements \Serializable
+class CourseDiscount implements Serializable
 {
     /**
      * @var Percent

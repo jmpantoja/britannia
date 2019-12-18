@@ -70,9 +70,13 @@ final class StaffMemberAdmin extends AbstractAdmin
 
     public function hasAccess($action, $object = null)
     {
+        if(is_null($object)){
+            return true;
+        }
+
         $currentUser = $this->security->getUser();
 
-        if ($action === 'edit' && $currentUser instanceof StaffMember && $currentUser->isEqual($object)) {
+        if ($action === 'edit' && $currentUser instanceof StaffMember && $currentUser->equals($object)) {
             return true;
         }
 
@@ -153,8 +157,11 @@ final class StaffMemberAdmin extends AbstractAdmin
                             ->where('m.status= :param')
                             ->setParameter('param', CourseStatus::ACTIVE());
                     }
+                ], [
+                    'admin_code' => 'admin.course'
                 ])
-                ->end();
+                ->end()
+            ;
         }
 
         $formMapper->with('Acceso', ['class' => 'col-md-3'])

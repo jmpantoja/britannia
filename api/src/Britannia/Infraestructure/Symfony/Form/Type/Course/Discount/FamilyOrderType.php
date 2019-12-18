@@ -15,6 +15,7 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Course\Discount;
 
 
 use Britannia\Domain\VO\Discount\FamilyOrder;
+use Britannia\Infraestructure\Symfony\Validator\FullName;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
 use Symfony\Component\Form\ChoiceList\Loader\CallbackChoiceLoader;
@@ -42,7 +43,7 @@ class FamilyOrderType extends AbstractSingleType
     }
 
     /**
-     * @return \Britannia\Infraestructure\Symfony\Validator\FullName
+     * @return FullName
      */
     public function buildConstraint(array $options): ?Constraint
     {

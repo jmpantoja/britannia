@@ -102,7 +102,7 @@ class FormLoginAuthenticator extends AbstractFormLoginAuthenticator
     private function getRedirectPath(TokenInterface $token): string
     {
         if ($token->getUser()->isTeacher()) {
-            return $this->urlGenerator->generate('admin_britannia_domain_course_lesson_list');
+            return $this->urlGenerator->generate('admin_britannia_domain_lesson_lesson_list');
 
         }
 

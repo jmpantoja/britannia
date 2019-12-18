@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Britannia\Domain\VO\BankAccount;
 
 
-use Britannia\Domain\VO\Validator;
 use PlanB\DDD\Domain\VO\CityAddress;
 use PlanB\DDD\Domain\VO\Iban;
 use PlanB\DDD\Domain\VO\Traits\Validable;
@@ -72,7 +71,7 @@ class BankAccount
 
     public static function buildConstraint(array $options = []): Constraint
     {
-        return new \Britannia\Domain\VO\BankAccount\Validator\BankAccount([
+        return new Validator\BankAccount([
             'required' => $options['required'] ?? true
         ]);
     }

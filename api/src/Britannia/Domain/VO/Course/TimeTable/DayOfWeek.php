@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Domain\VO\Course\TimeTable;
 
 
+use DateTimeInterface;
 use MabeEnum\Enum;
 
 class DayOfWeek extends Enum
@@ -26,7 +27,7 @@ class DayOfWeek extends Enum
     public const SATURDAY = 'Sábado';
     public const SUNDAY = 'Domingo';
 
-    public static function fromDate(\DateTimeInterface $dateTime): self
+    public static function fromDate(DateTimeInterface $dateTime): self
     {
 
         $day = $dateTime->format('l');

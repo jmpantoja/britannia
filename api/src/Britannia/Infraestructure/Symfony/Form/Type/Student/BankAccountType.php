@@ -15,6 +15,7 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Student;
 
 
 use Britannia\Domain\VO\BankAccount\BankAccount;
+use Britannia\Infraestructure\Symfony\Validator\FullName;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\FormDataMapper;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractCompoundType;
@@ -60,7 +61,7 @@ class BankAccountType extends AbstractCompoundType
     }
 
     /**
-     * @return \Britannia\Infraestructure\Symfony\Validator\FullName
+     * @return FullName
      */
     public function buildConstraint(array $options): ?Constraint
     {

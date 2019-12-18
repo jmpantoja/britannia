@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+
+    <entity name="Britannia\Domain\Entity\Lesson\Lesson"
+            table="course_lessons"
+            repository-class="Britannia\Infraestructure\Doctrine\Repository\LessonRepository">
+
+        <id name="id" type="LessonId" column="id">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
+        </id>
+
+        <many-to-one field="course" target-entity="Britannia\Domain\Entity\Course\Course" inversed-by="lessons"
+                     fetch="EAGER">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </many-to-one>
+
+        <many-to-one field="classRoom" target-entity="Britannia\Domain\Entity\ClassRoom\ClassRoom"/>
+
+        <one-to-many field="attendances" target-entity="Britannia\Domain\Entity\Course\Attendance" mapped-by="lesson"
+                     orphan-removal="true">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </one-to-many>
+
+        <field name="number" type="positive_integer"/>
+
+        <field name="day" type="date_immutable"/>
+
+        <field name="startTime" type="time_immutable"/>
+        <field name="endTime" type="time_immutable"/>
+
+    </entity>
+
+</doctrine-mapping>

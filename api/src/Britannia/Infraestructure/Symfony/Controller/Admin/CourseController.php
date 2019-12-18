@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Controller\Admin;
 
 
+use Britannia\Domain\Entity\Course\Borrame\Borrame;
 use Britannia\Infraestructure\Symfony\Form\Report\CourseInfo\CourseInformationType;
 use Cocur\Slugify\Slugify;
 use Knp\Snappy\Pdf;
@@ -22,6 +23,7 @@ use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormRenderer;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CourseController extends CRUDController
 {
@@ -74,9 +76,9 @@ class CourseController extends CRUDController
      * @param Form $form
      * @param string $template
      * @param string $filename
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
-    private function handleForm(Form $form, string $template, string $filename): \Symfony\Component\HttpFoundation\Response
+    private function handleForm(Form $form, string $template, string $filename): Response
     {
         $request = $this->getRequest();
         $form->handleRequest($request);

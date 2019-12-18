@@ -14,16 +14,26 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Mark;
 
 
-use Britannia\Domain\VO\Mark\TermName;
+use Britannia\Domain\Entity\Course\Course;
+use Britannia\Domain\VO\Mark\Term;
 use Carbon\CarbonImmutable;
+use PlanB\DDD\Domain\Behaviour\Comparable;
+use PlanB\DDD\Domain\Behaviour\Traits\ComparableTrait;
 use PlanB\DDD\Domain\VO\PositiveInteger;
 
-class Unit
+class Unit implements Comparable
 {
+    use ComparableTrait;
+
     /**
      * @var UnitId
      */
     private $id;
+
+    /**
+     * @var Course
+     */
+    private $course;
 
     /**
      * @var Term
@@ -31,100 +41,88 @@ class Unit
     private $term;
 
     /**
-     * @var TermName
+     * @var PositiveInteger
      */
-    private $termName;
+    private $number;
 
     /**
      * @var PositiveInteger
      */
-    private $number;
+    private $position;
+
 
     /**
      * @var CarbonImmutable
      */
     private $completedAt;
 
-    private function __construct(Term $term, PositiveInteger $number)
+    private function __construct(Course $course, Term $term, PositiveInteger $number)
     {
         $this->id = new UnitId();
 
+        $this->course = $course;
         $this->term = $term;
-        $this->termName = $term->getName();
         $this->number = $number;
     }
 
-    public static function make(Term $term, PositiveInteger $number)
+    public static function make(Course $course, Term $term, PositiveInteger $number)
     {
-        return new self($term, $number);
+        return new self($course, $term, $number);
+    }
+
+    private function setPosition(Term $term, PositiveInteger $number): self
+    {
+        $this->number = $number;
+        $this->position = $number->addInteger($term->toInt());
+        return $this;
     }
 
     /**
      * @return UnitId
      */
-    public function getId(): UnitId
+    public function id(): UnitId
     {
         return $this->id;
     }
 
-    public function getLabel(): string
-    {
-
-        return sprintf('Unidad #%s', ...[
-            $this->getPosition()
-        ]);
-    }
-
     /**
-     * @return int
+     * @return Course
      */
-    private function getPosition(): int
+    public function course(): Course
     {
-        $termOrder = $this->getTermName()->getOrder();
-        $totalOfUnits = $this->getTerm()->totalOfUnits();
-
-        $number = $this->getNumber()->toInt();
-
-        return ($termOrder - 1) * $totalOfUnits + $number;
-    }
-
-    /**
-     * @return TermName
-     */
-    public function getTermName(): TermName
-    {
-        return $this->termName;
+        return $this->course;
     }
 
     /**
      * @return Term
      */
-    public function getTerm(): Term
+    public function term(): Term
     {
         return $this->term;
+    }
+
+
+    /**
+     * @return PositiveInteger
+     */
+    public function number(): PositiveInteger
+    {
+        return $this->number;
     }
 
     /**
      * @return PositiveInteger
      */
-    public function getNumber(): PositiveInteger
+    public function position(): PositiveInteger
     {
-        return $this->number;
+        return $this->position;
     }
 
-    public function getName(): string
-    {
-
-        return sprintf('%s. Unidad %s', ...[
-            $this->getTermName()->getValue(),
-            $this->getNumber()->toInt()
-        ]);
-    }
 
     /**
      * @return CarbonImmutable
      */
-    public function getCompletedAt(): ?CarbonImmutable
+    public function completedAt(): ?CarbonImmutable
     {
         return $this->completedAt;
     }
@@ -134,8 +132,4 @@ class Unit
         return $this->completedAt instanceof CarbonImmutable;
     }
 
-    public function compare(Unit $other): int
-    {
-        return $this->getPosition() <=> $other->getPosition();
-    }
 }

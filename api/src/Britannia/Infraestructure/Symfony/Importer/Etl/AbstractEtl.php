@@ -23,6 +23,7 @@ use Britannia\Infraestructure\Symfony\Importer\Traits\Loggable;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\ORM\EntityManagerInterface;
+use Throwable;
 
 abstract class AbstractEtl implements EtlInterface
 {
@@ -78,7 +79,7 @@ abstract class AbstractEtl implements EtlInterface
         try {
             $builder = $this->createBuilder($input, $this->entityManager);
 
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
 
             $id = sprintf('ID: %s', $input['id']);
             dump($exception->getMessage(), $id);

@@ -14,11 +14,19 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Course;
 
 
-use Britannia\Domain\Entity\Book\Book;
-use Britannia\Domain\Entity\Mark\Term;
-use Britannia\Domain\Entity\Mark\Unit;
+use Britannia\Domain\Entity\Lesson\Lesson;
+use Britannia\Domain\Entity\Lesson\LessonList;
+use Britannia\Domain\Entity\Mark\UnitList;
+use Britannia\Domain\Entity\Record\StudentHasJoinedToCourse;
+use Britannia\Domain\Entity\Record\StudentHasLeavedCourse;
+use Britannia\Domain\Entity\Staff\StaffList;
 use Britannia\Domain\Entity\Staff\StaffMember;
+use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Entity\Student\StudentCourse;
+use Britannia\Domain\Entity\Student\StudentCourseList;
+use Britannia\Domain\Entity\Student\StudentList;
+use Britannia\Domain\Service\Course\LessonGenerator;
+use Britannia\Domain\Service\Course\UnitGenerator;
 use Britannia\Domain\VO\Course\Age\Age;
 use Britannia\Domain\VO\Course\CourseStatus;
 use Britannia\Domain\VO\Course\Examiner\Examiner;
@@ -31,13 +39,19 @@ use Britannia\Domain\VO\Mark\UnitsDefinition;
 use Carbon\CarbonImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use PlanB\DDD\Domain\Behaviour\Comparable;
+use PlanB\DDD\Domain\Behaviour\Traits\ComparableTrait;
 use PlanB\DDD\Domain\Model\AggregateRoot;
+use PlanB\DDD\Domain\Model\Traits\AggregateRootTrait;
 use PlanB\DDD\Domain\VO\PositiveInteger;
 use PlanB\DDD\Domain\VO\Price;
 use PlanB\DDD\Domain\VO\RGBA;
 
-class Course extends AggregateRoot
+class Course implements Comparable
 {
+
+    use AggregateRootTrait;
+    use ComparableTrait;
 
     /**
      * @var int
@@ -51,12 +65,12 @@ class Course extends AggregateRoot
 
 
     /**
-     * @var null|string
+     * @var string
      */
     private $name;
 
     /**
-     * @var RGBA
+     * @var null|RGBA
      */
     private $color;
 
@@ -83,9 +97,10 @@ class Course extends AggregateRoot
 
 
     /**
-     * @var null|PositiveInteger
+     * @var PositiveInteger
      */
     private $numOfPlaces;
+
 
     /**
      * @var null|Periodicity
@@ -107,20 +122,20 @@ class Course extends AggregateRoot
      */
     private $intensive;
 
-
-    /** @var Price */
+    /**
+     * @var null|Price
+     */
     private $monthlyPayment;
 
     /**
-     * @var Price
+     * @var null|Price
      */
-    private $enrolmentPayment;
+    private $enrollmentPayment;
 
     /**
-     * @var Collection
+     * @var StaffList
      */
     private $teachers;
-
 
     /**
      * @var Collection
@@ -128,16 +143,14 @@ class Course extends AggregateRoot
     private $courseHasStudents;
 
     /**
-     * @var ArrayCollection
+     * @var Collection
      */
     private $books;
-
 
     /**
      * @var TimeTable
      */
     private $timeTable;
-
     /**
      * @var Collection
      */
@@ -156,125 +169,220 @@ class Course extends AggregateRoot
     /**
      * @var Collection
      */
-    private $terms;
-
-    /**
-     * @var int
-     */
-    private $numOfUnits = 0;
-
+    private $units;
 
     /**
      * @var Collection
      */
     private $records;
 
-    public function __construct()
+    /**
+     * @var CarbonImmutable
+     */
+    private $createdAt;
+
+    /**
+     * @var CarbonImmutable
+     */
+    private $updatedAt;
+
+
+    public static function make(CourseDto $dto): self
+    {
+        return new self($dto);
+    }
+
+    private function __construct(CourseDto $dto)
     {
         $this->id = new CourseId();
         $this->courseHasStudents = new ArrayCollection();
         $this->teachers = new ArrayCollection();
         $this->books = new ArrayCollection();
         $this->lessons = new ArrayCollection();
-        $this->terms = new ArrayCollection();
+        $this->units = new ArrayCollection();
         $this->discount = new ArrayCollection();
-
+        $this->records = new ArrayCollection();
         $this->status = CourseStatus::PENDING();
 
-        $this->initColor();
+        $this->createdAt = new CarbonImmutable();
+
+
+        $this->update($dto);
     }
 
-    private function initColor(): Course
+    public function update(CourseDto $dto): self
     {
-        $colors = [
-            RGBA::make(28, 58, 19),
-            RGBA::make(111, 94, 92),
-            RGBA::make(103, 42, 78),
-            RGBA::make(206, 114, 28),
-            RGBA::make(57, 91, 80),
-            RGBA::make(176, 113, 86),
-            RGBA::make(60, 137, 198),
-            RGBA::make(35, 91, 132),
-            RGBA::make(44, 42, 41)
-        ];
 
+        $this->name = $dto->name;
+        $this->schoolCourse = $dto->schoolCourse;
+        $this->numOfPlaces = $dto->numOfPlaces;
+        $this->support = $dto->support;
+        $this->periodicity = $dto->periodicity;
+        $this->intensive = $dto->intensive;
+        $this->age = $dto->age;
+        $this->examiner = $dto->examiner;
+        $this->level = $dto->level;
+        $this->monthlyPayment = $dto->monthlyPayment;
+        $this->enrollmentPayment = $dto->enrollmentPayment;
+        // $this->discount = $dto->discount;
+        // $this->unitsDefinition = $dto->unitsDefinition;
 
-        $key = array_rand($colors);
-        $this->color = $colors[$key];
+        $this->setTeachers($dto->teachers);
+        $this->setStudents($dto->courseHasStudents);
+
+        $this->updatedAt = new CarbonImmutable();
 
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getOldId(): int
+    public function changeCalendar(TimeTable $timeTable, LessonGenerator $generator): self
     {
-        return $this->oldId;
-    }
+        if ($timeTable->isLocked()) {
+            return $this;
+        }
 
-    /**
-     * @param int $oldId
-     * @return Course
-     */
-    public function setOldId(int $oldId): Course
-    {
-        $this->oldId = $oldId;
+        $this->setStatus($timeTable->status());
+        $this->setTimeTable($timeTable, $generator);
+
         return $this;
     }
 
-    /**
-     * @return bool|null
-     */
-    public function isActive(): ?bool
+    private function setStatus(CourseStatus $status): self
     {
+        if ($this->status->is($status)) {
+            return $this;
+        }
 
-        return $this->status->isActive();
+        $this->status = $status;
+        //Lanzar un evento, para actualizar el estado de los alumnos
+
+        return $this;
+    }
+
+    private function setTimeTable(TimeTable $timeTable, LessonGenerator $generator): self
+    {
+        $this->timeTable = $timeTable;
+        $locked = $this->timeTable->locked();
+
+        $lessons = $generator->generateList($timeTable);
+
+        $this->lessonList()
+            ->update($lessons, $locked, $this);
+
+        return $this;
+    }
+
+
+    public function changeUnits(UnitsDefinition $definition, UnitGenerator $generator): self
+    {
+        if ($definition->isLocked()) {
+            return $this;
+        }
+
+        $this->unitsDefinition = $definition;
+        $units = $generator->generateList($this, $definition);
+        $locked = $definition->locked();
+
+        $this->unitList()
+            ->update($units, $locked);
+
+        return $this;
+    }
+
+    public function setTeachers(StaffList $teachers)
+    {
+        $this->teachersList()
+            ->forRemovedItems($teachers, [$this, 'removeTeacher'])
+            ->forAddedItems($teachers, [$this, 'addTeacher']);
+    }
+
+    public function removeTeacher(StaffMember $member): self
+    {
+        $this->teachersList()
+            ->remove($member, fn(StaffMember $member) => $member->removeCourse($this));
+
+        return $this;
+    }
+
+    public function addTeacher(StaffMember $member)
+    {
+        $this->teachersList()
+            ->add($member, fn(StaffMember $member) => $member->addCourse($this));
+
+        return $this;
+    }
+
+    public function setStudents(StudentList $students): self
+    {
+        $this->courseHasStudentList()
+            ->toStudentList()
+            ->forRemovedItems($students, [$this, 'removeStudent'])
+            ->forAddedItems($students, [$this, 'addStudent']);
+
+        return $this;
+    }
+
+    public function removeStudent(Student $student): self
+    {
+        $joined = StudentCourse::make($student, $this);
+
+        $this->courseHasStudentList()
+            ->remove($joined, function (StudentCourse $studentCourse) {
+                $event = StudentHasLeavedCourse::make($studentCourse);
+                $this->notify($event);
+            });
+
+        return $this;
+    }
+
+    public function addStudent(Student $student): self
+    {
+        $joined = StudentCourse::make($student, $this);
+        $this->courseHasStudentList()
+            ->add($joined, function (StudentCourse $student) {
+                $event = StudentHasJoinedToCourse::make($student, $this);
+                $this->notify($event);
+            });
+
+        return $this;
+    }
+
+
+    public function isPending(): bool
+    {
+        return $this->status()->isPending();
+    }
+
+    public function isActive(): bool
+    {
+        return $this->status()->isActive();
+    }
+
+    public function isFinalized(): bool
+    {
+        return $this->status()->isFinalized();
     }
 
     /**
-     * @return bool|null
+     * @return CourseId
      */
-    public function isFinalized(): ?bool
+    public function id(): ?CourseId
     {
-        return $this->status->isFinalized();
+        return $this->id;
     }
 
     /**
-     * @return bool|null
+     * @return string
      */
-    public function isPending(): ?bool
-    {
-        return $this->status->isPending();
-    }
-
-    public function hasStatus(CourseStatus ...$allowedStatus): bool
-    {
-        return $this->status->isOneOf(...$allowedStatus);
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getName(): ?string
+    public function name(): string
     {
         return $this->name;
     }
 
     /**
-     * @param null|string $name
-     * @return Course
+     * @return RGBA|null
      */
-    public function setName(?string $name): Course
-    {
-        $this->name = $name;
-        return $this;
-    }
-
-    /**
-     * @return RGBA
-     */
-    public function getColor(): RGBA
+    public function color(): ?RGBA
     {
         return $this->color;
     }
@@ -282,483 +390,188 @@ class Course extends AggregateRoot
     /**
      * @return CourseStatus
      */
-    public function getStatus(): CourseStatus
+    public function status(): CourseStatus
     {
-        return $this->status;
+        return $this->status ?? CourseStatus::PENDING();
     }
 
+    public function start(): CarbonImmutable
+    {
+        return $this->timeTable->start();
+    }
+
+
     /**
-     * @return null|string
+     * @return string|null
      */
-    public function getSchoolCourse(): ?string
+    public function schoolCourse(): ?string
     {
         return $this->schoolCourse;
     }
 
     /**
-     * @param null|string $schoolCourse
-     * @return Course
-     */
-    public function setSchoolCourse(?string $schoolCourse): Course
-    {
-        $this->schoolCourse = $schoolCourse;
-        return $this;
-    }
-
-    /**
      * @return Examiner|null
      */
-    public function getExaminer(): ?Examiner
+    public function examiner(): ?Examiner
     {
         return $this->examiner;
     }
 
     /**
-     * @param Examiner|null $examiner
-     * @return Course
-     */
-    public function setExaminer(?Examiner $examiner): Course
-    {
-        $this->examiner = $examiner;
-        return $this;
-    }
-
-    /**
      * @return Level|null
      */
-    public function getLevel(): ?Level
+    public function level(): ?Level
     {
         return $this->level;
     }
 
     /**
-     * @param Level|null $level
-     * @return Course
+     * @return PositiveInteger
      */
-    public function setLevel(?Level $level): Course
-    {
-        $this->level = $level;
-        return $this;
-    }
-
-    /**
-     * @return Age|null
-     */
-    public function getAge(): ?Age
-    {
-        return $this->age;
-    }
-
-    /**
-     * @param Age|null $age
-     * @return Course
-     */
-    public function setAge(?Age $age): Course
-    {
-        $this->age = $age;
-        return $this;
-    }
-
-    /**
-     * @return PositiveInteger|null
-     */
-    public function getNumOfPlaces(): ?PositiveInteger
+    public function numOfPlaces(): PositiveInteger
     {
         return $this->numOfPlaces;
     }
 
     /**
-     * @param PositiveInteger|null $numOfPlaces
-     * @return Course
+     * @return int
      */
-    public function setNumOfPlaces(?PositiveInteger $numOfPlaces): Course
+    public function numOfStudents(): int
     {
-        $this->numOfPlaces = $numOfPlaces;
-        return $this;
+        return $this->courseHasStudents->count();
     }
 
     /**
      * @return Periodicity|null
      */
-    public function getPeriodicity(): ?Periodicity
+    public function periodicity(): ?Periodicity
     {
         return $this->periodicity;
     }
 
     /**
-     * @param Periodicity|null $periodicity
-     * @return Course
-     */
-    public function setPeriodicity(?Periodicity $periodicity): Course
-    {
-        $this->periodicity = $periodicity;
-        return $this;
-    }
-
-    /**
      * @return Support|null
      */
-    public function getSupport(): ?Support
+    public function support(): ?Support
     {
         return $this->support;
     }
 
     /**
-     * @param Support|null $support
-     * @return Course
+     * @return Age|null
      */
-    public function setSupport(?Support $support): Course
+    public function age(): ?Age
     {
-        $this->support = $support;
-        return $this;
+        return $this->age;
     }
 
     /**
      * @return Intensive|null
      */
-    public function getIntensive(): ?Intensive
+    public function intensive(): ?Intensive
     {
         return $this->intensive;
     }
 
     /**
-     * @param Intensive|null $intensive
-     * @return Course
+     * @return Price|null
      */
-    public function setIntensive(?Intensive $intensive): Course
-    {
-
-        $this->intensive = $intensive;
-        return $this;
-    }
-
-    /**
-     * @return Price
-     */
-    public function getMonthlyPayment(): ?Price
+    public function monthlyPayment(): ?Price
     {
         return $this->monthlyPayment;
     }
 
     /**
-     * @param Price $monthlyPayment
-     * @return Course
+     * @return Price|null
      */
-    public function setMonthlyPayment(Price $monthlyPayment): Course
+    public function enrollmentPayment(): ?Price
     {
-        $this->monthlyPayment = $monthlyPayment;
-        return $this;
+        return $this->enrollmentPayment;
     }
 
     /**
-     * @return Price
+     * @return StaffMember[]
      */
-    public function getEnrolmentPayment(): ?Price
+    public function teachers(): array
     {
-        return $this->enrolmentPayment;
+        return $this->teachersList()->toArray();
     }
 
     /**
-     * @param Price $enrolmentPayment
-     * @return Course
+     * @return StaffList
      */
-    public function setEnrolmentPayment(Price $enrolmentPayment): Course
+    public function teachersList(): StaffList
     {
-        $this->enrolmentPayment = $enrolmentPayment;
-        return $this;
+        return StaffList::collect($this->teachers);
+    }
+
+    /**
+     * @return StudentCourse[]
+     */
+    public function courseHasStudents(): array
+    {
+        return $this->courseHasStudentList()->toArray();
+    }
+
+    /**
+     * @return StudentCourseList
+     */
+    private function courseHasStudentList(): StudentCourseList
+    {
+        return StudentCourseList::collect($this->courseHasStudents);
+    }
+
+    public function students(): array
+    {
+        return $this->courseHasStudentList()
+            ->toStudentList()
+            ->toArray();
     }
 
     /**
      * @return Collection
      */
-    public function getCourseHasStudents(): Collection
-    {
-        return $this->courseHasStudents;
-    }
-
-    /**
-     * @param Collection $courseHasStudents
-     * @return Course
-     */
-    public function setCourseHasStudents(Collection $courseHasStudents): Course
-    {
-        $this->courseHasStudents = $courseHasStudents;
-        return $this;
-    }
-
-    /**
-     * @return Collection
-     */
-    public function getTeachers(): Collection
-    {
-        return $this->teachers;
-    }
-
-    /**
-     * @param Collection $teachers
-     * @return Course
-     */
-    public function setTeachers(Collection $teachers): Course
-    {
-        foreach ($teachers as $teacher) {
-            $this->addTeacher($teacher);
-        }
-        return $this;
-    }
-
-    public function addTeacher(StaffMember $teacher): Course
-    {
-        if ($this->teachers->contains($teacher)) {
-            return $this;
-        }
-
-        $this->teachers->add($teacher);
-        $teacher->addCourse($this);
-
-        return $this;
-    }
-
-    public function removeTeacher(StaffMember $teacher): Course
-    {
-        if (!$this->teachers->contains($teacher)) {
-            return $this;
-        }
-
-        $this->teachers->removeElement($teacher);
-        $teacher->removeCourse($this);
-        return $this;
-    }
-
-    /**
-     * @return Book[]
-     */
-    public function getBooks(): Collection
+    public function books(): Collection
     {
         return $this->books;
     }
 
     /**
-     * @param Collection $books
-     * @return Course
-     */
-    public function setBooks(Collection $books): Course
-    {
-        $this->books = $books;
-        return $this;
-    }
-
-    /**
-     * @return TimeTable
-     */
-    public function getTimeTable(): ?TimeTable
-    {
-        return $this->timeTable;
-    }
-
-    /**
-     * @param TimeTable $timeTable
-     * @return Course
-     */
-    public function setTimeTable(TimeTable $timeTable): Course
-    {
-        if (!is_null($this->timeTable)) {
-            $this->notify(TimeTabletHasChanged::make($this, $timeTable));
-        }
-
-        $this->timeTable = $timeTable;
-        $this->update();
-        return $this;
-    }
-
-    /**
-     * @param TimeTable $timeTable
-     * @return Course
-     */
-    public function update(): self
-    {
-        $students = $this->getStudents();
-        $this->status = $this->timeTable->getStatus();
-
-        foreach ($students as $student) {
-            $student->onSave();
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection
-     */
-    public function getStudents(): Collection
-    {
-        return $this->courseHasStudents->map(function (StudentCourse $studentCourse) {
-            return $studentCourse->getStudent();
-        });
-    }
-
-    public function getStartDate(): CarbonImmutable
-    {
-        return $this->timeTable->getStart();
-    }
-
-
-    public function getEndDate(): CarbonImmutable
-    {
-        return $this->timeTable->getEnd();
-    }
-
-    /**
      * @return Lesson[]
      */
-    public function getLessons(): Collection
+    public function lessons(): array
     {
-        return $this->lessons;
+        return $this->lessonList()->toArray();
     }
 
     /**
-     * @param Collection $lessons
-     * @return Course
+     * @return LessonList
      */
-    public function setLessons(Collection $lessons): self
+    private function lessonList(): LessonList
     {
-        $this->lessons = $lessons;
-        return $this;
+        return LessonList::collect($this->lessons);
     }
 
     /**
      * @return Collection
      */
-    public function getDiscount(): ?Collection
+    public function units(): array
     {
-        return $this->discount;
+        return $this->unitList()->toArray();
     }
 
-    /**
-     * @param Collection $discount
-     * @return Course
-     */
-    public function setDiscount(Collection $discount): Course
+    private function unitList(): UnitList
     {
-        $this->discount = $discount;
-        return $this;
-    }
-
-    /**
-     * @return UnitsDefinition
-     */
-    public function getUnitsDefinition(): ?UnitsDefinition
-    {
-        return $this->unitsDefinition;
-    }
-
-    /**
-     * @param UnitsDefinition $unitsDefinition
-     * @return Course
-     */
-    public function setUnitsDefinition(UnitsDefinition $unitsDefinition): Course
-    {
-        if (!is_null($this->unitsDefinition)) {
-            $this->notify(UnitDefinitionHasChanged::make($this, $unitsDefinition));
-        }
-
-        $this->unitsDefinition = $unitsDefinition;
-        return $this;
+        return UnitList::collect($this->units);
     }
 
     /**
      * @return Collection
      */
-    public function getTerms(): Collection
-    {
-        return $this->terms;
-    }
-
-    /**
-     * @param Term[] $terms
-     * @return Course
-     */
-    public function setTerms(Collection $terms): Course
-    {
-        $this->terms = $terms;
-
-        $totalOfUnits = 0;
-        foreach ($terms as $term) {
-            $totalOfUnits += $term->totalOfUnits();
-        }
-
-        $this->numOfUnits = $totalOfUnits;
-
-        return $this;
-    }
-
-    public function hasUnits(): bool
-    {
-
-        return $this->numOfUnits > 0;
-    }
-
-    /**
-     * @return Unit[]
-     */
-    public function getUnits(): array
-    {
-        $carry = [];
-
-        foreach ($this->terms as $term) {
-            $carry[] = $term->getUnits()->toArray();
-        }
-
-        $units = collect(array_merge(...$carry));
-
-        return $units->sort(function (Unit $first, Unit $second) {
-            return $first->compare($second);
-        })->values()->toArray();
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getRecords()
+    public function records(): Collection
     {
         return $this->records;
     }
 
-    /**
-     * @param mixed $records
-     * @return Course
-     */
-    public function setRecords($records)
-    {
-        $this->records = $records;
-        return $this;
-    }
-
-    public function getAvailablePlaces(): int
-    {
-        return $this->numOfPlaces->toInt() - $this->courseHasStudents->count();
-    }
-
-    public function isEqual(Course $course): bool
-    {
-        return $this->getId()->equals($course->getId());
-    }
-
-    /**
-     * @return CourseId
-     */
-    public function getId(): CourseId
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param CourseId $id
-     * @return Course
-     */
-    public function setId(CourseId $id): Course
-    {
-        $this->id = $id;
-        return $this;
-    }
 
 }

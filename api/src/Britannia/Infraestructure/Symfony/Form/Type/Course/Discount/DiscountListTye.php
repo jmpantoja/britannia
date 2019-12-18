@@ -15,6 +15,7 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Course\Discount;
 
 
 use Britannia\Domain\VO\Student\Job\JobStatus;
+use Britannia\Infraestructure\Symfony\Validator\FullName;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
@@ -32,8 +33,6 @@ class DiscountListTye extends AbstractCompoundType
         $status = JobStatus::getDiscountables();
 
         foreach ($status as $name => $value) {
-
-
             $builder->add($name, DiscountType::class, [
                 'required' => false,
                 'label' => false,
@@ -50,7 +49,7 @@ class DiscountListTye extends AbstractCompoundType
     }
 
     /**
-     * @return \Britannia\Infraestructure\Symfony\Validator\FullName
+     * @return FullName
      */
     public function buildConstraint(array $options): ?Constraint
     {

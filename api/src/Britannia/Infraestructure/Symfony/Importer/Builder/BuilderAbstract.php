@@ -25,8 +25,12 @@ abstract class BuilderAbstract implements BuilderInterface
      * @var EntityManagerInterface
      */
     private $entityManager;
+    /**
+     * @var Resume
+     */
+    private Resume $resume;
 
-    private function __construct(array $input, EntityManagerInterface $entityManager)
+    final private function __construct(array $input, EntityManagerInterface $entityManager)
     {
         $this->resume = $this->initResume($input);
 

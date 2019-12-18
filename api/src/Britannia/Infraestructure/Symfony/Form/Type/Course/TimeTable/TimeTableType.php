@@ -13,11 +13,13 @@ declare(strict_types=1);
 
 namespace Britannia\Infraestructure\Symfony\Form\Type\Course\TimeTable;
 
-
 use Britannia\Domain\Entity\Course\Course;
+use Britannia\Domain\VO\Course\TimeTable\Schedule;
 use Britannia\Domain\VO\Course\TimeTable\TimeTable;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\LockedType;
+use Britannia\Infraestructure\Symfony\Validator\FullName;
 use Carbon\CarbonImmutable;
+use IntlDateFormatter;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\FormDataMapper;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractCompoundType;
@@ -26,18 +28,17 @@ use Sonata\Form\Type\DatePickerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-
 class TimeTableType extends AbstractCompoundType
 {
     public function customForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('start', DatePickerType::class, [
-                'format' => \IntlDateFormatter::LONG,
+                'format' => IntlDateFormatter::LONG,
                 'label' => 'Inicio'
             ])
             ->add('end', DatePickerType::class, [
-                'format' => \IntlDateFormatter::LONG,
+                'format' => IntlDateFormatter::LONG,
                 'label' => 'Fin'
             ])
             ->add('schedule', CollectionType::class, [
@@ -54,7 +55,6 @@ class TimeTableType extends AbstractCompoundType
                     'label' => false,
                 ]);
         }
-
     }
 
     public function customOptions(OptionsResolver $resolver)
@@ -70,17 +70,27 @@ class TimeTableType extends AbstractCompoundType
     }
 
     /**
-     * @return \Britannia\Infraestructure\Symfony\Validator\FullName
+     * @return FullName
      */
     public function buildConstraint(array $options): ?Constraint
     {
         return TimeTable::buildConstraint($options);
     }
 
+    protected function getValueFromData($data, $name)
+    {
+        $value = parent::getValueFromData($data, $name);
+
+        if ($value instanceof Schedule) {
+            $value = $value->toArray();
+        }
+        return $value;
+    }
+
+
     public function customMapping(array $data)
     {
-        $schedule = array_filter($data['schedule']);
-
+        $schedule = Schedule::fromArray($data['schedule']);
 
         return TimeTable::make(...[
             CarbonImmutable::make($data['start']),
@@ -90,6 +100,7 @@ class TimeTableType extends AbstractCompoundType
         ]);
 
     }
+
 }
 
 

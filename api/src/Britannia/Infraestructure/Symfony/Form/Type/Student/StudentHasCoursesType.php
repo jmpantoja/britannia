@@ -18,6 +18,7 @@ use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Entity\Student\StudentCourse;
 use Britannia\Domain\VO\Course\CourseStatus;
+use Britannia\Infraestructure\Symfony\Validator\FullName;
 use Doctrine\Common\Collections\ArrayCollection;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Sonata\ModelManager;
@@ -97,7 +98,7 @@ class StudentHasCoursesType extends AbstractSingleType
 
 
     /**
-     * @return \Britannia\Infraestructure\Symfony\Validator\FullName
+     * @return FullName
      */
     public function buildConstraint(array $options): ?Constraint
     {

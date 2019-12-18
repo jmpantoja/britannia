@@ -1,7 +1,7 @@
 # the different stages of this Dockerfile are meant to be built into separate images
 # https://docs.docker.com/compose/compose-file/#target
 
-ARG PHP_VERSION=7.3
+ARG PHP_VERSION=7.4
 ARG NGINX_VERSION=1.15
 ARG VARNISH_VERSION=6.0
 
@@ -29,6 +29,7 @@ RUN apk add --update --no-cache \
 		ttf-freefont \
 		ttf-liberation \
 		ttf-ubuntu-font-family \
+		libzip-dev \
 		wkhtmltopdf;
 
 ARG APCU_VERSION=5.1.16
@@ -36,26 +37,27 @@ RUN set -eux; \
 	apk add --no-cache --virtual .build-deps \
 		$PHPIZE_DEPS \
 		icu-dev \
-		libzip-dev \
+#		libzip-dev \
 #		postgresql-dev \
 		zlib-dev \
-	; \
-	\
-	docker-php-ext-configure zip --with-libzip; \
-	docker-php-ext-install -j$(nproc) \
+	;
+
+#	docker-php-ext-configure zip --with-libzip; \
+#	docker-php-ext-configure zip; \
+RUN	docker-php-ext-install -j$(nproc) \
 		intl \
 #		pdo_pgsql \
 		mysqli \
 		pdo \
 		pdo_mysql \
-		zip \
+#		zip \
 		bcmath \
 	; \
 	pecl install \
 		apcu-${APCU_VERSION} \
 	; \
-	pecl clear-cache; \
-	docker-php-ext-enable \
+	pecl clear-cache;
+RUN	docker-php-ext-enable \
 		apcu \
 		opcache \
 		mysqli \

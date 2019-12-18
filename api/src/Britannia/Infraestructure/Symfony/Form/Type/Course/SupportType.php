@@ -16,6 +16,7 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Course;
 
 use Britannia\Domain\VO\Course\Support\Support;
 use Britannia\Domain\VO\Validator;
+use Britannia\Infraestructure\Symfony\Validator\FullName;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
 use Symfony\Component\Form\ChoiceList\Loader\CallbackChoiceLoader;
@@ -49,7 +50,7 @@ class SupportType extends AbstractSingleType
     }
 
     /**
-     * @return \Britannia\Infraestructure\Symfony\Validator\FullName
+     * @return FullName
      */
     public function buildConstraint(array $options): ?Constraint
     {

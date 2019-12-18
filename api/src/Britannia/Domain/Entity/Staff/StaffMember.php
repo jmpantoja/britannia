@@ -4,20 +4,27 @@ namespace Britannia\Domain\Entity\Staff;
 
 
 use Britannia\Domain\Entity\Course\Course;
+use Britannia\Domain\VO\Course\CourseStatus;
 use Carbon\CarbonImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use PlanB\DDD\Domain\Behaviour\Comparable;
+use PlanB\DDD\Domain\Behaviour\Traits\ComparableTrait;
 use PlanB\DDD\Domain\Model\AggregateRoot;
+use PlanB\DDD\Domain\Model\Traits\AggregateRootTrait;
 use PlanB\DDD\Domain\VO\DNI;
 use PlanB\DDD\Domain\VO\Email;
 use PlanB\DDD\Domain\VO\FullName;
 use PlanB\DDD\Domain\VO\PhoneNumber;
 use PlanB\DDD\Domain\VO\PostalAddress;
+use Serializable;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 
-class StaffMember extends AggregateRoot implements UserInterface, \Serializable
+class StaffMember implements UserInterface, Serializable, Comparable
 {
+    use AggregateRootTrait;
+    use ComparableTrait;
 
     const DEFAULT_ROLE = 'ROLE_SONATA_ADMIN';
     /**
@@ -299,10 +306,10 @@ class StaffMember extends AggregateRoot implements UserInterface, \Serializable
         return $this;
     }
 
-    public function hasCourse(Course $course): bool
+    public function isTeacherOfCourse(Course $course): bool
     {
         return $this->courses->exists(function (int $index, Course $current) use ($course) {
-            return $current->isEqual($course);
+            return $current->equals($course);
         });
     }
 
@@ -382,16 +389,8 @@ class StaffMember extends AggregateRoot implements UserInterface, \Serializable
 
     }
 
-    public function isEqual($object): bool
-    {
-        if (!($object instanceof StaffMember)) {
-            return false;
-        }
 
-        return $this->getId()->equals($object->getId());
-    }
-
-    public function getId()
+    public function id(): StaffMemberId
     {
         return $this->id;
     }

@@ -14,18 +14,18 @@
             <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
         </id>
 
-
-        <field name="number" type="integer"/>
-        <many-to-one field="lesson" target-entity="Britannia\Domain\Entity\Course\Lesson" inversed-by="attendances">
-            <join-column on-delete="CASCADE"></join-column>
-        </many-to-one>
-        <many-to-one field="student" target-entity="Britannia\Domain\Entity\Student\Student"/>
-
-        <many-to-one field="course" target-entity="Britannia\Domain\Entity\Course\Course"/>
+        <field name="number" type="positive_integer"/>
 
         <field name="day" type="date_immutable"/>
+
         <field name="reason" nullable="true"/>
 
+        <many-to-one field="lesson" target-entity="Britannia\Domain\Entity\Lesson\Lesson" inversed-by="attendances">
+            <join-column on-delete="CASCADE"></join-column>
+        </many-to-one>
+
+        <many-to-one field="student" target-entity="Britannia\Domain\Entity\Student\Student"/>
+        <many-to-one field="course" target-entity="Britannia\Domain\Entity\Course\Course"/>
     </entity>
 
 </doctrine-mapping>

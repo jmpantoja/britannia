@@ -15,6 +15,7 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Student;
 
 
 use Britannia\Domain\VO\Payment\PaymentMode;
+use Britannia\Infraestructure\Symfony\Validator\FullName;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
 use Symfony\Component\Form\ChoiceList\Loader\CallbackChoiceLoader;
@@ -51,7 +52,7 @@ class PaymentModeType extends AbstractSingleType
 //    }
 
     /**
-     * @return \Britannia\Infraestructure\Symfony\Validator\FullName
+     * @return FullName
      */
     public function buildConstraint(array $options): ?Constraint
     {

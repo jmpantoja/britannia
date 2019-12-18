@@ -16,6 +16,7 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Student;
 
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Entity\Student\StudentId;
+use Britannia\Infraestructure\Symfony\Validator\FullName;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Sonata\ModelManager;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
@@ -80,7 +81,7 @@ class RelativesType extends AbstractSingleType
 
 
     /**
-     * @return \Britannia\Infraestructure\Symfony\Validator\FullName
+     * @return FullName
      */
     public function buildConstraint(array $options): ?Constraint
     {

@@ -70,9 +70,9 @@ final class LessonAdmin extends AbstractAdmin
             return $isGranted;
         }
 
-        if ($isGranted) {
+        if (true === $isGranted) {
             $user = $this->security->getUser();
-            $isGranted = $user->hasCourse($object->getCourse());
+            $isGranted = $user->isTeacherOfCourse($object->course());
         }
 
         return $isGranted;
@@ -120,11 +120,12 @@ final class LessonAdmin extends AbstractAdmin
 
     public function toString($object)
     {
-        $date = $object->getDay()->format('d/m/Y');
-        $course = $object->getCourse()->getName();
+        $date = $object->day()->format('d/m/Y');
+        $course = $object->course()->name();
 
         return sprintf('%s - %s', $date, $course);
     }
+
 
 
 }

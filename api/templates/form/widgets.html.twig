@@ -158,16 +158,14 @@
                 $('#{{ form.missed.vars.id }}').change(function () {
                     if ($(this).prop('checked')) {
                         reason.show()
-                    }
-                    else {
+                    } else {
                         reason.hide()
                     }
                 })
 
                 if ($('#{{ form.missed.vars.id }}').prop('checked')) {
                     reason.show()
-                }
-                else {
+                } else {
                     reason.hide()
                 }
             })
@@ -329,8 +327,7 @@
 
                 if ($(this).val() == 'LOCKED') {
                     $(popover).popover('hide')
-                }
-                else {
+                } else {
                     var key = $(el).val();
                     var background = backgrounds[key];
 
@@ -409,6 +406,18 @@
         <div class="col-md-2">
             {{ form_row(form.weighOfExam) }}
         </div>
+        {% if completedUnits is defined %}
+            <div class="col-md-7 col-md-push-3">
+                <p class="note">
+                    {% if completedUnits == 1 %}
+                        Este trimestre ya tiene <strong>una unidad evaluadas</strong>, que se conservaran
+                    {% else %}
+                        Este trimestre ya tiene <strong>{{ completedUnits }} unidades
+                        evaluadas</strong>, que se conservaran
+                    {% endif %}
+                </p>
+            </div>
+        {% endif %}
     </div>
 
     <script>

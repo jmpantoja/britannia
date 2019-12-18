@@ -17,6 +17,7 @@ use Britannia\Infraestructure\Symfony\Form\Type\Student\RelativesType;
 use Britannia\Infraestructure\Symfony\Form\Type\Student\StudentHasCoursesType;
 use Britannia\Infraestructure\Symfony\Form\Type\Student\TutorType;
 use Doctrine\ORM\QueryBuilder;
+use IntlDateFormatter;
 use PlanB\DDDBundle\Symfony\Form\Type\DateType;
 use PlanB\DDDBundle\Symfony\Form\Type\DNIType;
 use PlanB\DDDBundle\Symfony\Form\Type\EmailListType;
@@ -190,7 +191,7 @@ final class StudentAdmin extends AbstractAdmin
             ])
             ->add('birthDate', DatePickerType::class, [
                 'label' => 'Fecha de nacimiento',
-                'format' => \IntlDateFormatter::LONG,
+                'format' => IntlDateFormatter::LONG,
                 'required' => false
             ])
             ->ifTrue($isAdult)
@@ -264,7 +265,7 @@ final class StudentAdmin extends AbstractAdmin
             ->add('relatives', RelativesType::class, [
                 'btn_add' => false,
                 'label' => 'Familiares',
-                'studentId' => $subject->getId(),
+                'studentId' => $subject->id(),
                 'required' => false
             ])
             ->end()

@@ -20,6 +20,7 @@ doctrine:
                 charset: 'UTF8'
 
             default:
+                logging: true
                 # configure these for your database server
                 driver: 'mysql'
                 server_version: '5.7'
@@ -52,14 +53,11 @@ doctrine:
                     Intensive: Intensive
                     DiscountList: DiscountList
 
-                    #Mark
+                    #Unit
                     UnitId: UnitId
-                    UnitMarkId: UnitMarkId
-                    TermId: TermId
-                    TermName: TermName
+                    Term: Term
                     SetOfSkills: SetOfSkills
                     UnitsDefinition: UnitsDefinition
-                    Mark: Mark
 
                     #Staff
                     StaffMemberId: StaffMemberId
@@ -107,14 +105,12 @@ doctrine:
             DiscountList: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\DiscountListType
 
 
-            #Mark
+            #Unit
             UnitId: Britannia\Infraestructure\Doctrine\DBAL\Type\Mark\UnitId
-            UnitMarkId: Britannia\Infraestructure\Doctrine\DBAL\Type\Mark\UnitMarkId
-            TermId: Britannia\Infraestructure\Doctrine\DBAL\Type\Mark\TermId
-            TermName: Britannia\Infraestructure\Doctrine\DBAL\Type\Mark\TermNameType
+            Term: Britannia\Infraestructure\Doctrine\DBAL\Type\Mark\TermType
             SetOfSkills: Britannia\Infraestructure\Doctrine\DBAL\Type\Mark\SetOfSkillsType
             UnitsDefinition: Britannia\Infraestructure\Doctrine\DBAL\Type\Mark\UnitsDefinitionType
-            Mark: Britannia\Infraestructure\Doctrine\DBAL\Type\Mark\MarkType
+            
 
             #Lesson
             LessonId: Britannia\Infraestructure\Doctrine\DBAL\Type\Lesson\LessonIdType

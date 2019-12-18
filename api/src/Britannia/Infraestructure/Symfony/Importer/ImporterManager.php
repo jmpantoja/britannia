@@ -26,6 +26,10 @@ class ImporterManager
      * @var EtlInterface[]
      */
     protected $etls = [];
+    /**
+     * @var Reporter
+     */
+    private Reporter $reporter;
 
     public function __construct()
     {

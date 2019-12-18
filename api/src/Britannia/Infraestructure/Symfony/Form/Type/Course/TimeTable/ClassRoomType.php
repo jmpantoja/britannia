@@ -16,6 +16,7 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Course\TimeTable;
 
 use Britannia\Domain\Entity\ClassRoom\ClassRoom;
 use Britannia\Domain\Entity\ClassRoom\ClassRoomId;
+use Britannia\Infraestructure\Symfony\Validator\FullName;
 use Doctrine\ORM\EntityManagerInterface;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
@@ -66,7 +67,7 @@ class ClassRoomType extends AbstractSingleType
     }
 
     /**
-     * @return \Britannia\Infraestructure\Symfony\Validator\FullName
+     * @return FullName
      */
     public function buildConstraint(array $options): ?Constraint
     {

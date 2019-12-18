@@ -26,6 +26,11 @@ class Mark
      */
     private $mark;
 
+    private function __construct(float $mark)
+    {
+        $this->mark = $mark;
+    }
+
     public static function buildConstraint(array $options = []): Constraint
     {
         return new Validator\Mark([
@@ -37,10 +42,5 @@ class Mark
     {
         $mark = self::assert($mark);
         return new self($mark);
-    }
-
-    private function __construct(float $mark)
-    {
-        $this->mark = $mark;
     }
 }

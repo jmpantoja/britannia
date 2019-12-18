@@ -19,11 +19,11 @@
 
         <field name="joinedAt" type="date_immutable"/>
 
-        <lifecycle-callbacks>
-            <lifecycle-callback type="postPersist" method="onSave"/>
-            <lifecycle-callback type="postRemove" method="onRemove"/>
-        </lifecycle-callbacks>
-        
+<!--        <lifecycle-callbacks>-->
+<!--            <lifecycle-callback type="postPersist" method="onSave"/>-->
+<!--            <lifecycle-callback type="postRemove" method="onRemove"/>-->
+<!--        </lifecycle-callbacks>-->
+<!--        -->
     </entity>
 
 </doctrine-mapping>

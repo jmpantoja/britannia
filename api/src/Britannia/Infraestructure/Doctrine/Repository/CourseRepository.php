@@ -21,17 +21,4 @@ class CourseRepository extends ServiceEntityRepository implements CourseReposito
         parent::__construct($registry, Course::class);
     }
 
-    /**
-     * @return Course[]
-     */
-    public function findUpdateStatusPending(): array
-    {
-        $query = $this->createQueryBuilder('A')
-            ->where('A.status != :status')
-            ->setParameters(['status' => CourseStatus::FINALIZED()])
-            ->getQuery();
-
-        return $query->getResult();
-
-    }
 }

@@ -14,99 +14,92 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Mark;
 
 
-use Britannia\Domain\VO\Mark\NumOfUnits;
-use Doctrine\Common\Collections\Collection;
-use PlanB\DDD\Domain\VO\PositiveInteger;
+use Britannia\Domain\VO\Course\Locked\Locked;
+use Britannia\Domain\VO\Mark\Term;
+use PlanB\DDD\Domain\Model\EntityList;
+use Tightenco\Collect\Support\Collection;
 
-class UnitList
+final class UnitList extends EntityList
 {
-    /**
-     * @var Unit[]
-     */
-    private $data;
 
-    private $term;
-
-    private function __construct(Term $term)
+    protected function __construct(Unit ...$units)
     {
-        $this->term = $term;
-        $this->data = $term->getUnits();
+        parent::__construct($units);
     }
 
-    public static function make(Term $term)
+    public function update(UnitList $units, Locked $locked)
     {
-
-        return new self($term);
-    }
-
-    public function updateAmount(NumOfUnits $numOfUnits): self
-    {
-        $total = $this->data->count();
-
-        $max = $numOfUnits->toInt();
-
-        if ($total === $max) {
+        if ($locked->isLocked()) {
             return $this;
         }
 
-        if ($total > $max) {
-            $this->purge($max);
-            return $this;
+        $this->clear($locked)
+            ->forAddedItems($units);
+    }
+
+    private function clear(Locked $locked): self
+    {
+        if ($locked->isReset()) {
+            $this->clearAll();
         }
 
-        $this->populate($max);
+        if ($locked->isUpdate()) {
+            $this->clearOnlyNotCompleted();
+        }
 
         return $this;
     }
 
-
-    private function purge(int $max)
+    /**
+     * @return $this
+     */
+    private function clearAll(): self
     {
-        $overflowedUnits = $this->getOverflowUnits($max);
-
-        foreach ($overflowedUnits as $unit) {
-            $this->remove($unit);
+        foreach ($this as $item) {
+            $this->remove($item);
         }
+        return $this;
     }
 
-    private function getOverflowUnits(int $max): Collection
+    private function clearOnlyNotCompleted(): self
     {
-        return $this->data->filter(function (Unit $unit) use ($max) {
-            $position = $unit->getNumber()->toInt();
-            return $position > $max;
+        foreach ($this->notCompletedUnits() as $item) {
+            $this->remove($item);
+        }
+        return $this;
+    }
+
+    private function notCompletedUnits(): Collection
+    {
+        return $this->data()->filter(function (Unit $unit) {
+            return !$unit->isCompleted();
         });
+
     }
 
-
-    private function remove(Unit $unit): self
+    public function filterByTerm(Term $term): self
     {
-        if ($unit->isCompleted()) {
-            return $this;
-        }
+        $data = $this->data()->filter(function (Unit $unit) use ($term) {
+            return $unit->term()->is($term);
+        });
 
-        $this->data->removeElement($unit);
-        return $this;
+        return static::collect($data);
     }
 
-    /**
-     * @param $max
-     */
-    private function populate(int $max): void
+    public function onlyCompleted(): self
     {
-        $total = $this->data->count();
-        $total++;
-        while ($total <= $max) {
-            $unit = Unit::make($this->term, PositiveInteger::make($total));
+        $data = $this->data()->filter(function (Unit $unit) {
+            return $unit->isCompleted();
+        });
 
-            $this->data->add($unit);
-            $total++;
-        }
+        return static::collect($data);
     }
 
-    public function toCollection(): Collection
+    public function numOfCompletdUnits(Term $term): int
     {
-        return $this->data;
+        return $this
+            ->filterByTerm($term)
+            ->onlyCompleted()
+            ->count();
     }
-
-
 }

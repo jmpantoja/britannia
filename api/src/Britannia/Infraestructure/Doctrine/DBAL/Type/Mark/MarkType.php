@@ -15,7 +15,6 @@ namespace Britannia\Infraestructure\Doctrine\DBAL\Type\Mark;
 
 
 use Britannia\Domain\VO\Mark\Mark;
-use Britannia\Domain\VO\Mark\SetOfSkills;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 
@@ -23,7 +22,6 @@ class MarkType extends Type
 {
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
-        die(__METHOD__);
         return (string)$value;
     }
 

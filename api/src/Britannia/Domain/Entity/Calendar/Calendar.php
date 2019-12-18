@@ -19,7 +19,6 @@ use Carbon\CarbonImmutable;
 
 class Calendar
 {
-
     /**
      * @var string
      */

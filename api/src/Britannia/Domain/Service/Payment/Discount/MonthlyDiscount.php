@@ -21,8 +21,10 @@ use Britannia\Domain\Service\Payment\FamilyDiscountList;
 use Britannia\Domain\VO\Discount\StudentDiscount;
 use Britannia\Domain\VO\Student\Job\JobStatus;
 use Carbon\CarbonImmutable;
+use DateTimeZone;
 use PlanB\DDD\Domain\VO\Percent;
 use PlanB\DDD\Domain\VO\Price;
+use ReflectionException;
 
 class MonthlyDiscount extends DiscountCalculator
 {
@@ -57,8 +59,8 @@ class MonthlyDiscount extends DiscountCalculator
     /**
      * @param Course $course
      * @param CarbonImmutable $date
-     * @return null|\PlanB\DDD\Domain\VO\Price
-     * @throws \ReflectionException
+     * @return null|Price
+     * @throws ReflectionException
      */
     private function getPrice(Course $course, CarbonImmutable $date): Price
     {
@@ -71,7 +73,7 @@ class MonthlyDiscount extends DiscountCalculator
     /**
      * @param CarbonImmutable $date
      * @return Percent
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     private function getMonthlyPercent(CarbonImmutable $date, CarbonImmutable $endDate): Percent
     {
@@ -106,8 +108,8 @@ class MonthlyDiscount extends DiscountCalculator
     /**
      * @param CarbonImmutable $date
      * @param CarbonImmutable $endDate
-     * @return bool|\DateTimeZone|int|null|string
-     * @throws \ReflectionException
+     * @return bool|DateTimeZone|int|null|string
+     * @throws ReflectionException
      */
     private function getLastDayOfMonth(CarbonImmutable $date, CarbonImmutable $endDate): int
     {

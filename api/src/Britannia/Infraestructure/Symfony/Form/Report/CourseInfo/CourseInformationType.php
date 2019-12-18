@@ -21,6 +21,8 @@ use Britannia\Domain\VO\Discount\StudentDiscount;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\Discount\FamilyOrderType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\Discount\FreeEnrollmentType;
 use Britannia\Infraestructure\Symfony\Form\Type\Student\JobStatusType;
+use Britannia\Infraestructure\Symfony\Validator\FullName;
+use IntlDateFormatter;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractCompoundType;
 use Sonata\Form\Type\DatePickerType;
@@ -47,7 +49,7 @@ class CourseInformationType extends AbstractCompoundType
             ->add('familyOrder', FamilyOrderType::class)
             ->add('jobStatus', JobStatusType::class)
             ->add('startDate', DatePickerType::class, [
-                'format' => \IntlDateFormatter::LONG,
+                'format' => IntlDateFormatter::LONG,
                 'label' => false,
                 'sonata_help' => 'Si el alumno se incorpora despues de empezado el curso'
             ])
@@ -73,7 +75,7 @@ class CourseInformationType extends AbstractCompoundType
     }
 
     /**
-     * @return \Britannia\Infraestructure\Symfony\Validator\FullName
+     * @return FullName
      */
     public function buildConstraint(array $options): ?Constraint
     {

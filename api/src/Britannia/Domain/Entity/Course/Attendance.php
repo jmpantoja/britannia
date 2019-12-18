@@ -14,12 +14,17 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Course;
 
 
+use Britannia\Domain\Entity\Lesson\Lesson;
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\VO\StatusOfAttendance;
 use Carbon\CarbonImmutable;
+use PlanB\DDD\Domain\Behaviour\Comparable;
+use PlanB\DDD\Domain\Behaviour\Traits\ComparableTrait;
 
-class Attendance
+class Attendance implements Comparable
 {
+
+    use ComparableTrait;
 
     /**
      * @var AttendanceId
@@ -59,11 +64,11 @@ class Attendance
     private function __construct(Lesson $lesson, Student $student, ?string $reason)
     {
         $this->id = new AttendanceId();
-        $this->course = $lesson->getCourse();
+        $this->course = $lesson->course();
 
         $this->lesson = $lesson;
-        $this->day = $lesson->getDay();
-        $this->number = $lesson->getNumber();
+        $this->day = $lesson->day();
+        $this->number = $lesson->number();
         $this->student = $student;
 
         $this->reason = empty($reason) ? null : $reason;
@@ -129,5 +134,11 @@ class Attendance
     {
         return $this->reason;
     }
+
+    public function isOfStudent(Student $student)
+    {
+        return $this->getStudent()->equals($student);
+    }
+
 
 }

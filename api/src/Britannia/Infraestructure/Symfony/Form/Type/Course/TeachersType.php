@@ -14,8 +14,10 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Form\Type\Course;
 
 
+use Britannia\Domain\Entity\Staff\StaffList;
 use Britannia\Domain\Entity\Staff\StaffMember;
 use Britannia\Domain\Entity\Student\Student;
+use Britannia\Infraestructure\Symfony\Validator\FullName;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Sonata\ModelManager;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
@@ -74,7 +76,7 @@ class TeachersType extends AbstractSingleType
 
 
     /**
-     * @return \Britannia\Infraestructure\Symfony\Validator\FullName
+     * @return FullName
      */
     public function buildConstraint(array $options): ?Constraint
     {
@@ -83,7 +85,7 @@ class TeachersType extends AbstractSingleType
 
     public function customMapping($students)
     {
-        return $students;
+        return StaffList::collect($students);
     }
 
 }

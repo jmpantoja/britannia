@@ -14,10 +14,12 @@ declare(strict_types=1);
 namespace Britannia\Domain\VO\Course\TimeTable\Validator;
 
 
-use Britannia\Domain\VO;
+use Britannia\Domain\VO\Course\TimeTable\TimeSheet;
+use Britannia\Domain\VO\Course\TimeTable\TimeTable as VOTimeTable;
 use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDD\Domain\VO\Validator\ConstraintValidator;
+use Symfony\Component\Validator\Constraints\All;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Type;
 
@@ -34,7 +36,7 @@ class TimeTableValidator extends ConstraintValidator
 
     public function handle($value, Constraint $constraint)
     {
-        if ($value instanceof VO\Course\TimeTable\TimeTable) {
+        if ($value instanceof VOTimeTable) {
             return;
         }
 
@@ -49,6 +51,17 @@ class TimeTableValidator extends ConstraintValidator
             new NotBlank(),
             new Type([
                 'type' => CarbonImmutable::class
+            ])
+        ]);
+
+        $this->validateField('schedule', $value['schedule'], [
+            new NotBlank([
+                'message' => 'Se necesita al menos el horario de una clase'
+            ]),
+            new All([
+                new Type([
+                    'type' => TimeSheet::class
+                ])
             ])
         ]);
 

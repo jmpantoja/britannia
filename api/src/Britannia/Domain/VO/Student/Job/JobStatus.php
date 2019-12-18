@@ -16,7 +16,14 @@ namespace Britannia\Domain\VO\Student\Job;
 
 use MabeEnum\Enum;
 
-
+/***
+ * @method  static self NOTHING()
+ * @method  static self STUDENT()
+ * @method  static self EMPLOYED()
+ * @method  static self UNEMPLOYED()
+ * @method  static self RETIRED()
+ * @method  static self DISABLED()
+ */
 class JobStatus extends Enum
 {
     public const NOTHING = 'No hace nada';

@@ -17,6 +17,8 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Course;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Entity\Student\StudentCourse;
+use Britannia\Domain\Entity\Student\StudentList;
+use Britannia\Infraestructure\Symfony\Validator\FullName;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\QueryBuilder;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
@@ -92,9 +94,8 @@ class CourseHasStudentsType extends AbstractSingleType
         return $results;
     }
 
-
     /**
-     * @return \Britannia\Infraestructure\Symfony\Validator\FullName
+     * @return FullName
      */
     public function buildConstraint(array $options): ?Constraint
     {
@@ -103,6 +104,10 @@ class CourseHasStudentsType extends AbstractSingleType
 
     public function customMapping($students)
     {
+        return StudentList::collect($students);
+        dump();
+        die();
+
         $results = new ArrayCollection();
 
         foreach ($students as $student) {

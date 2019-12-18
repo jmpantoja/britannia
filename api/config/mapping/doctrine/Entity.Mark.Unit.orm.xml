@@ -5,22 +5,24 @@
 
 
     <entity name="Britannia\Domain\Entity\Mark\Unit"
-            table="term_units">
+            table="course_units">
 
         <id name="id" type="UnitId" column="id">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
         </id>
 
-        <many-to-one field="term" target-entity="Britannia\Domain\Entity\Mark\Term" inversed-by="units"
-                     fetch="EAGER">
-            <join-column on-delete="CASCADE" />
-        </many-to-one>
-
-        <field name="termName" type="TermName"></field>
+        <field name="term" type="Term"></field>
 
         <field name="number" type="positive_integer"></field>
+
+        <field name="position" type="positive_integer" nullable="true"></field>
+
         <field name="completedAt" type="datetime_immutable" nullable="true"></field>
+
+        <many-to-one field="course" target-entity="Britannia\Domain\Entity\Course\Course" inversed-by="units"
+                     fetch="EAGER">
+        </many-to-one>
 
     </entity>
 </doctrine-mapping>

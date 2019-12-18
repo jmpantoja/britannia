@@ -38,12 +38,10 @@ class CourseEtl extends AbstractEtl
     public function __construct(
         Connection $original,
         EntityManagerInterface $entityManager,
-        DataPersisterInterface $dataPersister,
-        TimeTableUpdater $timeSheetUpdater
+        DataPersisterInterface $dataPersister
     )
     {
         parent::__construct($original, $entityManager, $dataPersister);
-        $this->timeSheetUpdater = $timeSheetUpdater;
     }
 
 

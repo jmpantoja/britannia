@@ -16,6 +16,7 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Student;
 
 use Britannia\Domain\Entity\Academy\Academy;
 use Britannia\Domain\VO\Student\OtherAcademy\OtherAcademy;
+use Britannia\Infraestructure\Symfony\Validator\FullName;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractCompoundType;
@@ -87,7 +88,7 @@ class OtherAcademyType extends AbstractCompoundType
     }
 
     /**
-     * @return \Britannia\Infraestructure\Symfony\Validator\FullName
+     * @return FullName
      */
     public function buildConstraint(array $options): ?Constraint
     {

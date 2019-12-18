@@ -22,12 +22,29 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Component\Validator\Validation;
 
 abstract class AbstractCompoundType extends AbstractType implements DataMapperInterface
 {
     private $options;
+
+    /**
+     * @var PropertyAccessor
+     */
+    private ?PropertyAccessor $propertyAccessor = null;
+
+    protected function getPropertyAccessor()
+    {
+        if (is_null($this->propertyAccessor)) {
+            $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
+        }
+
+        return $this->propertyAccessor;
+    }
+
 
     /**
      * {@inheritdoc}
@@ -136,12 +153,17 @@ abstract class AbstractCompoundType extends AbstractType implements DataMapperIn
 
         $className = $options['data_class'];
 
+        if (is_null($className)) {
+
+            $this->dataToForms($data, $forms);
+            return;
+        }
+
         if (!($data instanceof $className)) {
             return;
         }
 
         $this->dataToForms($data, $forms);
-
     }
 
     /**
@@ -152,15 +174,26 @@ abstract class AbstractCompoundType extends AbstractType implements DataMapperIn
     protected function dataToForms($data, array $forms): void
     {
         foreach ($forms as $name => $form) {
-            $method = sprintf('get%s', ucfirst($name));
-
-            $value = null;
-            if (is_callable([$data, $method])) {
-                $value = $data->{$method}();
-            }
-
+            $value = $this->getValueFromData($data, $name);
             $form->setData($value);
         }
+    }
+
+    /**
+     * @param $data
+     * @param $name
+     * @return mixed
+     */
+    protected function getValueFromData($data, $name)
+    {
+        if (is_null($data)) {
+            return null;
+        }
+        if (is_array($data)) {
+            return $data[$name] ?? null;
+        }
+
+        return $this->getPropertyAccessor()->getValue($data, $name);
     }
 
 

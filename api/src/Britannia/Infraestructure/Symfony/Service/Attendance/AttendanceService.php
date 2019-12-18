@@ -15,7 +15,7 @@ namespace Britannia\Infraestructure\Symfony\Service\Attendance;
 
 
 use Britannia\Domain\Entity\Course\Course;
-use Britannia\Domain\Entity\Course\Lesson;
+use Britannia\Domain\Entity\Lesson\Lesson;
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Repository\LessonRepositoryInterface;
 use Carbon\CarbonImmutable;
@@ -59,7 +59,7 @@ class AttendanceService
     {
         $date = $lesson->getDay()->format('d/m/Y');
 
-        $reason = $lesson->getMissedReasonByStudent($student);
+        $reason = $lesson->missedReasonByStudent($student);
 
         if (is_null($reason)) {
             return $date;

@@ -15,7 +15,7 @@ namespace Britannia\Domain\Repository;
 
 
 use Britannia\Domain\Entity\Course\Course;
-use Britannia\Domain\Entity\Course\Lesson;
+use Britannia\Domain\Entity\Lesson\Lesson;
 use Carbon\CarbonImmutable;
 
 /**

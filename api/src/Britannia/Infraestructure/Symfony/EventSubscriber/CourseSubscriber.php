@@ -29,22 +29,8 @@ class CourseSubscriber extends DomainEventSubscriber
     public static function getSubscribedEvents()
     {
         return [
-            TimeTabletHasChanged::class => 'onTimeSheetChanged',
-            UnitDefinitionHasChanged::class => 'onUnitDefinitionChanged'
         ];
     }
 
-    public function onTimeSheetChanged(TimeTabletHasChanged $event)
-    {
-        $command = UpdateTimeTable::fromEvent($event);
 
-        $this->handle($command);
-    }
-
-    public function onUnitDefinitionChanged(UnitDefinitionHasChanged $event)
-    {
-        $command = UpdateUnitDefinition::fromEvent($event);
-
-        $this->handle($command);
-    }
 }

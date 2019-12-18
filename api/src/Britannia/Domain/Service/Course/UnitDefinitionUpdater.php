@@ -20,29 +20,29 @@ use Britannia\Domain\VO\Mark\UnitsDefinition;
 
 class UnitDefinitionUpdater
 {
-    public function updateUnits(Course $course, UnitsDefinition $unitsDefinition)
-    {
-        if ($unitsDefinition->isLocked()) {
-            return;
-        }
-
-        if ($unitsDefinition->shouldBeResetted()) {
-            $course->getTerms()->clear();
-            $termList = TermList::make($course->getTerms());
-        }
-
-        if ($unitsDefinition->shouldBeUpdated()) {
-            $termList = TermList::make($course->getTerms());
-        }
-
-        $terms = $unitsDefinition->getTerms();
-        $skills = $unitsDefinition->getSkills();
-
-        foreach ($terms as $definition) {
-            $termList->add($course, $skills, $definition);
-        }
-
-        $course->setTerms($termList->toCollection());
-    }
+//    public function updateUnits(Course $course, UnitsDefinition $unitsDefinition)
+//    {
+//        if ($unitsDefinition->isLocked()) {
+//            return;
+//        }
+//
+//        if ($unitsDefinition->shouldBeResetted()) {
+//            $course->getTerms()->clear();
+//            $termList = TermList::make($course->getTerms());
+//        }
+//
+//        if ($unitsDefinition->shouldBeUpdated()) {
+//            $termList = TermList::make($course->getTerms());
+//        }
+//
+//        $terms = $unitsDefinition->getTerms();
+//        $skills = $unitsDefinition->getSkills();
+//
+//        foreach ($terms as $definition) {
+//            $termList->add($course, $skills, $definition);
+//        }
+//
+//        $course->setTerms($termList->toCollection());
+//    }
 
 }

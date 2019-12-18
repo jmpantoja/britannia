@@ -15,14 +15,17 @@ namespace Britannia\Domain\Entity\Student;
 
 
 use Britannia\Domain\Entity\Course\Course;
-use Britannia\Domain\Entity\Record\StudentHasJoinedToCourse;
-use Britannia\Domain\Entity\Record\StudentHasLeavedCourse;
-use Britannia\Domain\VO\Course\CourseStatus;
 use Carbon\CarbonImmutable;
+use PlanB\DDD\Domain\Behaviour\Comparable;
+use PlanB\DDD\Domain\Behaviour\Traits\ComparableTrait;
 use PlanB\DDD\Domain\Model\AggregateRoot;
+use PlanB\DDD\Domain\Model\EntityId;
+use PlanB\DDD\Domain\Model\Traits\AggregateRootTrait;
 
-class StudentCourse extends AggregateRoot
+class StudentCourse implements Comparable
 {
+    use ComparableTrait;
+
     /**
      * @var Student
      */
@@ -38,36 +41,21 @@ class StudentCourse extends AggregateRoot
      */
     private $joinedAt;
 
-    private function __construct(Student $student, Course $course, CarbonImmutable $date)
-    {
-        $this->student = $student;
-        $this->course = $course;
-        $this->joinedAt = $date;
-    }
 
     public static function make(Student $student, Course $course): self
     {
         $date = CarbonImmutable::now();
         if ($course->isFinalized()) {
-            $date = $course->getStartDate();
+            $date = $course->start();
         }
         return new self($student, $course, $date);
     }
 
-    /**
-     * @return CarbonImmutable
-     */
-    public function getJoinedAt(): CarbonImmutable
+    private function __construct(Student $student, Course $course, CarbonImmutable $date)
     {
-        return $this->joinedAt;
-    }
-
-    public function isEqual(StudentCourse $studentCourse): bool
-    {
-        $student = $studentCourse->getStudent();
-        $course = $studentCourse->getCourse();
-
-        return $this->hasStudent($student) AND $this->hasCourse($course);
+        $this->student = $student;
+        $this->course = $course;
+        $this->joinedAt = $date;
     }
 
     /**
@@ -86,53 +74,16 @@ class StudentCourse extends AggregateRoot
         return $this->course;
     }
 
-    public function hasStudent(Student $student): bool
+    public function compareTo(object $other): int
     {
-        return $this->getStudent()->isEqual($student);
+        $this->assertThatCanBeCompared($other);
+        return $this->student->compareTo($other->student) * $this->course->compareTo($other->course);
     }
 
-    public function hasCourse(Course $course): bool
+    public function equals(object $other): bool
     {
-        return $this->getCourse()->isEqual($course);
+        $this->assertThatCanBeCompared($other);
+        return $this->student->equals($other->student) && $this->course->equals($other->course);
     }
-
-    public function isFinalized(): bool
-    {
-        $status = $this->getCourseStatus();
-
-        return $status->isFinalized();
-    }
-
-    /**
-     * @return \Britannia\Domain\VO\Course\CourseStatus
-     */
-    protected function getCourseStatus(): CourseStatus
-    {
-        return $this->getCourse()->getStatus();
-    }
-
-    public function onSave(): self
-    {
-        $this->notify(StudentHasJoinedToCourse::make($this->student, $this->course));
-        return $this;
-    }
-
-    public function onRemove(): self
-    {
-        $this->notify(StudentHasLeavedCourse::make($this->student, $this->course));
-        return $this;
-    }
-
-    public function repare()
-    {
-
-        $date = CarbonImmutable::now();
-        if ($this->course->isFinalized()) {
-            $date = $this->course->getStartDate();
-        }
-
-        $this->joinedAt = $date;
-    }
-
 
 }

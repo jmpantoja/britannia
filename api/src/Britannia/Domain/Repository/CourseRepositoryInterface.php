@@ -17,8 +17,4 @@ namespace Britannia\Domain\Repository;
 interface CourseRepositoryInterface
 {
 
-    /**
-     * @return Course[]
-     */
-    public function findUpdateStatusPending(): array;
 }

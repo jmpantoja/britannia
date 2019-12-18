@@ -15,13 +15,17 @@ namespace Britannia\Domain\VO\Course\TimeTable;
 
 
 use Britannia\Domain\Entity\ClassRoom\ClassRoomId;
-use Britannia\Domain\VO\Validator;
+use Britannia\Domain\VO\Course\TimeTable\Validator;
+
 use Carbon\CarbonImmutable;
+use DateInterval;
 use PlanB\DDD\Domain\VO\PositiveInteger;
 use PlanB\DDD\Domain\VO\Traits\Validable;
-use PlanB\DDD\Domain\VO\Validator\Constraint;
 
-class TimeSheet implements \Serializable
+use PlanB\DDD\Domain\VO\Validator\Constraint;
+use Serializable;
+
+class TimeSheet implements Serializable
 {
     use Validable;
 
@@ -60,14 +64,13 @@ class TimeSheet implements \Serializable
 
     public static function buildConstraint(array $options = []): Constraint
     {
-        return new \Britannia\Domain\VO\Course\TimeTable\Validator\TimeSheet([
+        return new Validator\TimeSheet([
             'required' => $options['required'] ?? true
         ]);
     }
 
     public static function make(DayOfWeek $dayOfWeek, CarbonImmutable $start, CarbonImmutable $end, ClassRoomId $classRoomId): self
     {
-
         $values = self::assert([
             'dayOfWeek' => $dayOfWeek,
             'start' => $start,
@@ -87,7 +90,7 @@ class TimeSheet implements \Serializable
     /**
      * @return DayOfWeek
      */
-    public function getDayOfWeek(): DayOfWeek
+    public function dayOfWeek(): DayOfWeek
     {
         return $this->dayOfWeek;
     }
@@ -95,7 +98,7 @@ class TimeSheet implements \Serializable
     /**
      * @return CarbonImmutable
      */
-    public function getStart(): CarbonImmutable
+    public function start(): CarbonImmutable
     {
         return $this->start;
     }
@@ -103,22 +106,16 @@ class TimeSheet implements \Serializable
     /**
      * @return CarbonImmutable
      */
-    public function getEnd(): CarbonImmutable
+    public function end(): CarbonImmutable
     {
         return $this->end;
     }
 
-    public function getLenghtAsInterval()
-    {
-        $inteval = sprintf('PT%sM', $this->getLength());
-        $dateInterval = new \DateInterval($inteval);
-        return $dateInterval;
-    }
 
     /**
      * @return int
      */
-    public function getLength(): int
+    public function length(): int
     {
         return $this->end->diffInMinutes($this->start);
     }
@@ -126,7 +123,7 @@ class TimeSheet implements \Serializable
     /**
      * @return ClassRoomId
      */
-    public function getClassRoomId(): ClassRoomId
+    public function classRoomId(): ClassRoomId
     {
         return $this->classRoomId;
     }

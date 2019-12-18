@@ -13,46 +13,37 @@ declare(strict_types=1);
 
 namespace Britannia\Domain\VO\Mark;
 
-
-use Britannia\Domain\VO\Course\Term\Validator;
+use Britannia\Domain\VO\Mark\Validator;
 use PlanB\DDD\Domain\VO\Percent;
 use PlanB\DDD\Domain\VO\Traits\Validable;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
+use Serializable;
 
-class TermDefinition implements \Serializable
+class TermDefinition implements Serializable
 {
     use Validable;
 
-    /**
-     * @var NumOfUnits
-     */
-    private $numOfUnits;
-    /**
-     * @var TermName
-     */
-    private $termName;
-    /**
-     * @var Percent
-     */
+    private NumOfUnits $numOfUnits;
 
-    private $weighOfUnits;
+    private Term $term;
 
-    private function __construct(TermName $termName, NumOfUnits $numOfUnits, Percent $unitsWeight)
+    private Percent $weighOfUnits;
+
+    private function __construct(Term $termName, NumOfUnits $numOfUnits, Percent $unitsWeight)
     {
-
-        $this->termName = $termName;
+        $this->term = $termName;
         $this->numOfUnits = $numOfUnits;
         $this->weighOfUnits = $unitsWeight;
     }
 
     public static function buildConstraint(array $options = []): Constraint
     {
-        return new \Britannia\Domain\VO\Mark\Validator\Term([
+        return new Validator\Term([
             'required' => $options['required'] ?? true
         ]);
     }
 
-    public static function make(TermName $termName, NumOfUnits $numOfUnits, Percent $unitsWeight): self
+    public static function make(Term $termName, NumOfUnits $numOfUnits, Percent $unitsWeight): self
     {
         return new self($termName, $numOfUnits, $unitsWeight);
     }
@@ -60,36 +51,40 @@ class TermDefinition implements \Serializable
     /**
      * @return NumOfUnits
      */
-    public function getNumOfUnits(): NumOfUnits
+    public function numOfUnits(): NumOfUnits
     {
         return $this->numOfUnits;
     }
 
     /**
-     * @return TermName
+     * @return Term
      */
-    public function getTermName(): TermName
+    public function term(): Term
     {
-        return $this->termName;
-    }
-
-    public function getName(): string
-    {
-        return $this->termName->getName();
+        return $this->term;
     }
 
     /**
      * @return Percent
      */
-    public function getWeighOfUnits(): Percent
+    public function weighOfUnits(): Percent
     {
         return $this->weighOfUnits;
     }
 
+    /**
+     * @return Percent
+     */
+    public function weighOfExam(): Percent
+    {
+        return $this->weighOfUnits->complementary();
+    }
+
+
     public function serialize()
     {
         return serialize([
-            'termName' => $this->termName->getName(),
+            'termName' => $this->term->getName(),
             'numOfUnits' => $this->numOfUnits->getName(),
             'weighOfUnits' => $this->weighOfUnits->toInt()
         ]);
@@ -101,7 +96,7 @@ class TermDefinition implements \Serializable
             'allowed_classes' => false
         ]);
 
-        $this->termName = TermName::byName($data['termName']);
+        $this->term = Term::byName($data['termName']);
         $this->numOfUnits = NumOfUnits::byName($data['numOfUnits']);
         $this->weighOfUnits = Percent::make($data['weighOfUnits']);
 

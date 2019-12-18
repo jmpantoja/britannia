@@ -16,7 +16,7 @@ namespace Britannia\Infraestructure\Symfony\Service\Planning;
 
 use Britannia\Domain\Entity\ClassRoom\ClassRoom;
 use Britannia\Domain\Entity\Course\Course;
-use Britannia\Domain\Entity\Course\Lesson;
+use Britannia\Domain\Entity\Lesson\Lesson;
 use Britannia\Domain\Entity\Student\Student;
 use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\VO\RGBA;
@@ -39,99 +39,70 @@ class FullCalendarEvent
 
     private function __construct(Lesson $lesson)
     {
-        $classRoom = $lesson->getClassRoom();
-        $course = $lesson->getCourse();
+        $classRoom = $lesson->classRoom();
+        $course = $lesson->course();
         $color = $this->getColorByCourse($course);
 
-        $start = $lesson->getStart();
-        $end = $lesson->getEnd();
-
-        $startTime = $lesson->getStartTime();
-        $endTime = $lesson->getEndTime();
+        $day = $lesson->day();
+        $start = $lesson->startTime();
+        $end = $lesson->endTime();
 
         $this->withResource($classRoom)
             ->withTitle($course)
-            ->withLimits($start, $end)
+            ->withLimits($day, $start, $end)
             ->withColor($color)
-            ->withSchedule($startTime, $endTime)
             ->withAttendances($course, $lesson);
 
     }
 
     private function getColorByCourse(Course $course): RGBA
     {
+        return RGBA::make(100, 0, 100);
         return $course->getColor();
     }
 
     private function withAttendances(Course $course, Lesson $lesson): self
     {
-        $students = iterator_to_array($course->getStudents());
+        $students = $course->students();
 
         $this->attendances = array_map(function (Student $student) use ($lesson) {
-            return $this->createAttendance($student, $lesson);
+            return FullCalendarAttendance::make($student, $lesson)
+                ->toArray();
         }, $students);
 
         return $this;
     }
-
-    private function createAttendance(Student $student, Lesson $lesson): array
-    {
-        $status = $lesson->getStatusByStudent($student);
-        $student = $this->formatStudentNameWithReason($student, $lesson);
-
-        return [
-            'status' => $status,
-            'student' => $student,
-        ];
-    }
-
-    private function formatStudentNameWithReason(Student $student, Lesson $lesson)
-    {
-        $name = $student->getFullName();
-        $reason = $this->getFormattedReason($student, $lesson);
-
-        $student = sprintf('%s %s', $name, $reason);
-        return trim($student);
-    }
-
-    /**
-     * @param Student $student
-     * @param Lesson $lesson
-     * @return null|string
-     */
-    private function getFormattedReason(Student $student, Lesson $lesson)
-    {
-        $reason = $lesson->getMissedReasonByStudent($student);
-        $reason = empty($reason) ? '' : sprintf('(%s)', $reason);
-        return $reason;
-    }
-
-    private function withSchedule(CarbonImmutable $startTime, CarbonImmutable $endTime): self
-    {
-        $this->schedule = sprintf('de %s a %s', ...[
-            $startTime->toTimeString('minute'),
-            $endTime->toTimeString('minute')
-        ]);
-        return $this;
-    }
-
+    
     private function withColor(RGBA $color): self
     {
         $this->color = $color->toHtml();
         return $this;
     }
 
-    private function withLimits(CarbonImmutable $start, CarbonImmutable $end): self
+    private function withLimits(CarbonImmutable $day, CarbonImmutable $start, CarbonImmutable $end): self
     {
-        $this->start = $start->toAtomString();
-        $this->end = $end->toAtomString();
+        $this->start = $this->applyTimeToDay($day, $start);
+        $this->end = $this->applyTimeToDay($day, $end);
+
+        $this->schedule = sprintf('de %s a %s', ...[
+            $start->toTimeString('minute'),
+            $end->toTimeString('minute')
+        ]);
 
         return $this;
     }
 
+    private function applyTimeToDay(CarbonImmutable $day, CarbonImmutable $time): CarbonImmutable
+    {
+        $hour = $time->get('hour');
+        $minute = $time->get('minute');
+
+        return $day->setTime($hour, $minute);
+    }
+
     private function withTitle(Course $course): self
     {
-        $this->title = (string)$course->getName();
+        $this->title = (string)$course->name();
         return $this;
     }
 

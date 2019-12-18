@@ -6,6 +6,7 @@ namespace Britannia\Domain\Entity\Student;
 use Britannia\Domain\VO\Student\Job\Job;
 use Doctrine\Common\Collections\ArrayCollection;
 use PlanB\DDD\Domain\Model\AggregateRoot;
+use PlanB\DDD\Domain\Model\Traits\AggregateRootTrait;
 use PlanB\DDD\Domain\VO\DNI;
 use PlanB\DDD\Domain\VO\Email;
 use PlanB\DDD\Domain\VO\FullName;
@@ -13,8 +14,10 @@ use PlanB\DDD\Domain\VO\PhoneNumber;
 use PlanB\DDD\Domain\VO\PostalAddress;
 
 
-class Tutor extends AggregateRoot
+class Tutor
 {
+    use AggregateRootTrait;
+
     /**
      * @var TutorId
      */
@@ -65,7 +68,7 @@ class Tutor extends AggregateRoot
     /**
      * @return TutortId
      */
-    public function getId(): TutorId
+    public function id(): TutorId
     {
         return $this->id;
     }

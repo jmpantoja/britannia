@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace PlanB\DDD\Domain\Model;
 
 
-use Britannia\Domain\Entity\Academy\AcademyId;
+use PlanB\DDD\Domain\Behaviour\Comparable;
 use Ramsey\Uuid\Uuid;
 
-class EntityId
+abstract class EntityId implements Comparable
 {
     /**
      * @var string
@@ -51,9 +51,14 @@ class EntityId
      * @param EntityId $entityId
      * @return bool
      */
-    public function equals(EntityId $entityId)
+    public function equals(object $other): bool
     {
-        return $this->id() === $entityId->id();
+        return $this->id() === $other->id();
+    }
+
+    public function compareTo(object $other): int
+    {
+        return strcmp($this->id, $other->id);
     }
 
     /**

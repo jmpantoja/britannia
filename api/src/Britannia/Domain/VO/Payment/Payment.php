@@ -15,7 +15,7 @@ namespace Britannia\Domain\VO\Payment;
 
 
 use Britannia\Domain\VO\BankAccount\BankAccount;
-use Britannia\Domain\VO\Validator;
+
 use PlanB\DDD\Domain\VO\Traits\Validable;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 
@@ -56,7 +56,7 @@ class Payment
 
     public static function buildConstraint(array $options = []): Constraint
     {
-        return new \Britannia\Domain\VO\Payment\Validator\Payment([
+        return new Validator\Payment ([
             'required' => $options['required'] ?? true
         ]);
     }

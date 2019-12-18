@@ -15,8 +15,9 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Lesson;
 
 
 use Britannia\Domain\Entity\Course\Attendance;
-use Britannia\Domain\Entity\Course\Lesson;
+use Britannia\Domain\Entity\Lesson\Lesson;
 use Britannia\Domain\Entity\Student\Student;
+use Britannia\Infraestructure\Symfony\Validator\FullName;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractCompoundType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -40,7 +41,7 @@ class AttendanceType extends AbstractCompoundType
             ])
             ->add('reason', null, [
                 'label' => 'Motivo',
-                'data' => $lesson->getMissedReasonByStudent($student)
+                'data' => $lesson->whyHasItBeenMissing($student)
             ]);
     }
 
@@ -66,7 +67,7 @@ class AttendanceType extends AbstractCompoundType
     }
 
     /**
-     * @return \Britannia\Infraestructure\Symfony\Validator\FullName
+     * @return FullName
      */
     public function buildConstraint(array $options): ?Constraint
     {

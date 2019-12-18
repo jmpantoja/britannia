@@ -14,17 +14,24 @@ use Britannia\Domain\VO\Student\OtherAcademy\NumOfYears;
 use Britannia\Domain\VO\Student\OtherAcademy\OtherAcademy;
 use Britannia\Domain\VO\Student\PartOfDay\PartOfDay;
 use Carbon\CarbonImmutable;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use PlanB\DDD\Domain\Behaviour\Comparable;
+use PlanB\DDD\Domain\Behaviour\Traits\ComparableTrait;
 use PlanB\DDD\Domain\Model\AggregateRoot;
+use PlanB\DDD\Domain\Model\Traits\AggregateRootTrait;
 use PlanB\DDD\Domain\VO\Email;
 use PlanB\DDD\Domain\VO\FullName;
 use PlanB\DDD\Domain\VO\PhoneNumber;
 use PlanB\DDD\Domain\VO\PostalAddress;
 
 
-abstract class Student extends AggregateRoot
+abstract class Student implements Comparable
 {
+    use AggregateRootTrait;
+    use ComparableTrait;
+
     /**
      * @var int
      */
@@ -201,14 +208,14 @@ abstract class Student extends AggregateRoot
         return $this->findCoursesByStatus(CourseStatus::ACTIVE());
     }
 
-    public function findCoursesByStatus(CourseStatus ...$allowedStatus): Collection
+    public function findCoursesByStatus(CourseStatus $status): Collection
     {
         $courses = $this->studentHasCourses->map(function (StudentCourse $studentCourse) {
             return $studentCourse->getCourse();
         });
 
-        return $courses->filter(function (Course $course) use ($allowedStatus) {
-            return $course->hasStatus(...$allowedStatus);
+        return $courses->filter(function (Course $course) use ($status) {
+            return $course->status()->is($status);
         });
     }
 
@@ -228,6 +235,19 @@ abstract class Student extends AggregateRoot
     {
         $this->studentHasCourses = $studentHasCourses;
         return $this;
+    }
+
+    public function removeCourse(Course $course)
+    {
+
+        $studentCourse = StudentCourse::make($this, $course);
+
+        $key = collect($this->studentHasCourses)
+            ->search(fn(StudentCourse $item) => $item->equals($studentCourse));
+
+        $aaa = $this->studentHasCourses->get($key);
+        $this->studentHasCourses->removeElement($aaa);
+
     }
 
     /**
@@ -255,7 +275,7 @@ abstract class Student extends AggregateRoot
      * @param CarbonImmutable $birthDate
      * @return Student
      */
-    public function setBirthDate(?\DateTimeInterface $birthDate): Student
+    public function setBirthDate(?DateTimeInterface $birthDate): Student
     {
         if (is_null($birthDate)) {
             return $this;
@@ -615,13 +635,6 @@ abstract class Student extends AggregateRoot
         return $this->records;
     }
 
-    /**
-     * @return StudentDiscount
-     */
-    public function getDiscount(): StudentDiscount
-    {
-        return StudentDiscount::fromStudent($this);
-    }
 
     /**
      * @return CarbonImmutable
@@ -668,13 +681,13 @@ abstract class Student extends AggregateRoot
 
     public function isEqual(Student $student): bool
     {
-        return $student->getId()->equals($this->getId());
+        return $student->id()->equals($this->id());
     }
 
     /**
      * @return StudentId
      */
-    public function getId(): ?StudentId
+    public function id(): ?StudentId
     {
         return $this->id;
     }

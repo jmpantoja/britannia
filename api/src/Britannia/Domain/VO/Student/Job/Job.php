@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Britannia\Domain\VO\Student\Job;
 
 
-use Britannia\Domain\VO\Validator;
 use PlanB\DDD\Domain\VO\Traits\Validable;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 
@@ -57,7 +56,7 @@ class Job
 
     public static function buildConstraint(array $options = []): Constraint
     {
-        return new \Britannia\Domain\VO\Student\Job\Validator\Job([
+        return new Validator\Job([
             'required' => $options['required'] ?? true
         ]);
     }

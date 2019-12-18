@@ -20,15 +20,31 @@ use Doctrine\DBAL\Types\DateType;
 use Doctrine\DBAL\Types\TimeImmutableType;
 use Doctrine\DBAL\Types\TimeType;
 
+/**
+ * Class CarbonTimeImmutableType
+ * @package PlanB\DDDBundle\Doctrine\DBAL\Type
+ */
 class CarbonTimeImmutableType extends TimeImmutableType
 {
+    /**
+     *
+     */
     private const NAME = 'carbon_time_immutable';
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return static::NAME;
     }
 
+    /**
+     * @param mixed $value
+     * @param AbstractPlatform $platform
+     * @return CarbonImmutable|\DateTime|\DateTimeImmutable|false|mixed
+     * @throws \Doctrine\DBAL\Types\ConversionException
+     */
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
         $result = parent::convertToPHPValue($value, $platform);
@@ -39,6 +55,10 @@ class CarbonTimeImmutableType extends TimeImmutableType
         return $result;
     }
 
+    /**
+     * @param AbstractPlatform $platform
+     * @return bool
+     */
     public function requiresSQLCommentHint(AbstractPlatform $platform)
     {
         return true;

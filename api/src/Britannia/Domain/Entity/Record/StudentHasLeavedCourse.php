@@ -15,15 +15,32 @@ namespace Britannia\Domain\Entity\Record;
 
 
 use Britannia\Domain\Entity\Course\Course;
-use Britannia\Domain\Entity\Student\Student;
+use Britannia\Domain\Entity\Student\StudentCourse;
 
 class StudentHasLeavedCourse extends AbstractRecordEvent
 {
 
-    public static function make(Student $student, Course $course): self
+    public static function make(StudentCourse $studentCourse): self
     {
-        $description = sprintf('Abandona el  curso %s', $course->getName());
+        $student = $studentCourse->getStudent();
+        $course = $studentCourse->getCourse();
+
+        $description = self::parseDescription($course);
+
         return new self($student, $course, $description);
+    }
+
+    /**
+     * @param Course $course
+     * @return string
+     */
+    private static function parseDescription(Course $course): string
+    {
+        $description = sprintf('Abandona el  curso %s', $course->name());
+        if ($course->isFinalized()) {
+            $description = sprintf('Finaliza el  curso %s', $course->name());
+        }
+        return $description;
     }
 
     public function getType(): TypeOfRecord

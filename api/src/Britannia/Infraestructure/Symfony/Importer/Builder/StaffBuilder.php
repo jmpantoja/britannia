@@ -36,6 +36,10 @@ class StaffBuilder extends BuilderAbstract
     private $teacherId;
     private $roles;
     private $courses;
+    /**
+     * @var int
+     */
+    private int $id;
 
 
     public function initResume(array $input): Resume

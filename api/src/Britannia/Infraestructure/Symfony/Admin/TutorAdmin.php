@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Britannia\Infraestructure\Symfony\Admin;
 
-use Britannia\Infraestructure\Symfony\Form\JobType;
+use Britannia\Infraestructure\Symfony\Form\Type\Student\JobType;
 use PlanB\DDDBundle\Symfony\Form\Type\DNIType;
 use PlanB\DDDBundle\Symfony\Form\Type\EmailListType;
 use PlanB\DDDBundle\Symfony\Form\Type\FullNameType;

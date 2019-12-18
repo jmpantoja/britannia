@@ -3,7 +3,7 @@
 namespace Britannia\Infraestructure\Doctrine\Repository;
 
 use Britannia\Domain\Entity\Course\Course;
-use Britannia\Domain\Entity\Course\Lesson;
+use Britannia\Domain\Entity\Lesson\Lesson;
 use Britannia\Domain\Repository\LessonRepositoryInterface;
 use Carbon\CarbonImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;

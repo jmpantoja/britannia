@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Domain\VO\Mark\Validator;
 
 
+use Britannia\Domain\VO\Mark\TermDefinition;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 
 class Term extends Constraint
@@ -23,6 +24,6 @@ class Term extends Constraint
 
     public function isValidType($value): bool
     {
-        return is_array($value) || $value instanceof \Britannia\Domain\VO\Mark\TermDefinition;
+        return is_array($value) || $value instanceof TermDefinition;
     }
 }

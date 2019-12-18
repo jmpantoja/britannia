@@ -16,9 +16,9 @@ namespace Britannia\Domain\VO\Mark;
 
 use Britannia\Domain\VO\Course\Locked\Locked;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Serializable;
 
-class UnitsDefinition implements \Serializable
+class UnitsDefinition implements Serializable
 {
     /**
      * @var SetOfSkills
@@ -27,48 +27,51 @@ class UnitsDefinition implements \Serializable
     /**
      * @var TermDefinition[]
      */
-    private $terms;
+    private $termList;
     /**
      * @var Locked
      */
     private $locked;
 
-    private function __construct(SetOfSkills $skills, iterable $terms, Locked $locked)
+    private function __construct(SetOfSkills $skills, TermDefinitionList $termList, Locked $locked)
     {
         $this->skills = $skills;
-        $this->terms = $terms;
+        $this->termList = $termList;
         $this->locked = $locked;
     }
 
     public static function make(SetOfSkills $skills, iterable $terms, ?Locked $locked): self
     {
         $locked = $locked ?? Locked::RESET();
-        return new self($skills, $terms, $locked);
+        $termList = TermDefinitionList::collect($terms);
+
+        return new self($skills, $termList, $locked);
 
     }
 
     /**
      * @return SetOfSkills
      */
-    public function getSkills(): SetOfSkills
+    public function skills(): SetOfSkills
     {
         return $this->skills;
     }
 
     /**
-     * @return TermDefinition[]
+     * @return TermDefinitionList
      */
-    public function getTerms(): Collection
+    public function terms(): TermDefinitionList
     {
-        return $this->terms;
+        return $this->termList;
     }
 
-
-    public function getLocked(): Locked
+    /**
+     * @return Locked
+     */
+    public function locked(): Locked
     {
-        return $this->locked ?? Locked::LOCKED();
+        return  $this->locked ?? Locked::LOCKED();
     }
-
 
     public function isLocked(): bool
     {
@@ -80,7 +83,6 @@ class UnitsDefinition implements \Serializable
         return $this->locked->isUpdate();
     }
 
-
     public function shouldBeResetted()
     {
         return $this->locked->isReset();
@@ -90,7 +92,7 @@ class UnitsDefinition implements \Serializable
     {
         return serialize([
             'skills' => $this->skills->getName(),
-            'terms' => $this->terms
+            'terms' => $this->termList
         ]);
     }
 
@@ -99,11 +101,12 @@ class UnitsDefinition implements \Serializable
     {
 
         $data = unserialize($serialized, [
-            'allowed_classes' => [TermDefinition::class, ArrayCollection::class]
+            'allowed_classes' => [TermDefinition::class, TermDefinitionList::class]
         ]);
 
+
         $this->skills = SetOfSkills::byName($data['skills']);
-        $this->terms = $data['terms'];
+        $this->termList = $data['terms'];
 
     }
 

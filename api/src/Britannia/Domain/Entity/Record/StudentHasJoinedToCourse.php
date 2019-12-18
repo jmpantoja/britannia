@@ -14,20 +14,20 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Record;
 
 
-use Britannia\Domain\Entity\Course\Course;
-use Britannia\Domain\Entity\Student\Student;
+use Britannia\Domain\Entity\Student\StudentCourse;
 
 class StudentHasJoinedToCourse extends AbstractRecordEvent
 {
 
-    public static function make(Student $student, Course $course): self
+    public static function make(StudentCourse $studentCourse): self
     {
-
-        $description = sprintf('Se une al curso %s', $course->getName());
+        $student = $studentCourse->getStudent();
+        $course = $studentCourse->getCourse();
+        $description = sprintf('Se une al curso %s', $course->name());
 
         $date = null;
         if ($course->isFinalized()) {
-            $date = $course->getStartDate();
+            $date = $course->startDate();
         }
 
         return new self($student, $course, $description, $date);

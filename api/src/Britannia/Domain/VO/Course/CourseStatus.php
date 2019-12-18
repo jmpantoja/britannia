@@ -18,6 +18,7 @@ use MabeEnum\Enum;
 
 class CourseStatus extends Enum
 {
+
     public const PENDING = 'Pendiente';
     public const ACTIVE = 'En Curso';
     public const FINALIZED = 'Finalizado';

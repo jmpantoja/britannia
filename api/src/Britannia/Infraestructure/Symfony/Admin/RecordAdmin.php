@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Admin;
 
 use Britannia\Domain\Entity\Record\TypeOfRecord;
+use IntlDateFormatter;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -65,7 +66,7 @@ final class RecordAdmin extends AbstractAdmin
                 'field_type' => DateRangePickerType::class,
                 'field_options' => [
                     'field_options' => [
-                        'format' => \IntlDateFormatter::LONG
+                        'format' => IntlDateFormatter::LONG
                     ]
                 ],
                 'advanced_filter' => false,

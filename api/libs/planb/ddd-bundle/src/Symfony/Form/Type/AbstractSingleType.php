@@ -190,6 +190,8 @@ abstract class AbstractSingleType extends AbstractType implements DataTransforme
         if ($this->validate($value, $constraint)) {
             return $this->customMapping($value);
         }
+
+        return null;
     }
 
 

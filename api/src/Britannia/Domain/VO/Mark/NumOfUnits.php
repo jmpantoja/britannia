@@ -37,9 +37,7 @@ class NumOfUnits extends Enum
             return 2;
         }
 
-        if ($this->isThree()) {
-            return 3;
-        }
+        return 3;
     }
 
     public function isZero(): bool

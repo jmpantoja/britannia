@@ -72,6 +72,8 @@ trait StudentMaker
             case 2:
                 return PaymentMode::DAY_10();
         }
+
+        return PaymentMode::CASH();
     }
 
     private function toBankAccount(array $input): ?BankAccount

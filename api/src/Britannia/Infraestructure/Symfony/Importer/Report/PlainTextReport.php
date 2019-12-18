@@ -16,7 +16,7 @@ namespace Britannia\Infraestructure\Symfony\Importer\Report;
 
 use Britannia\Infraestructure\Symfony\Importer\Resume;
 
-class PlainTextReport extends FileystemReport
+class PlainTextReport extends FilesystemReport
 {
     const WIDTH_COLUMN_KEY = 15;
     const WIDTH_COLUMN_MESSAGE = 55;

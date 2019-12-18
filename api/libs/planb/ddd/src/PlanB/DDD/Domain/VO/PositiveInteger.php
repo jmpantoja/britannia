@@ -35,19 +35,6 @@ class PositiveInteger
     }
 
     /**
-     * @return int
-     */
-    public function toInt(): int
-    {
-        return $this->number;
-    }
-
-    public function compare(PositiveInteger $other): int
-    {
-        return $this->toInt() <=> $other->toInt();
-    }
-
-    /**
      * @param int $number
      * @return PositiveInteger
      */
@@ -55,6 +42,31 @@ class PositiveInteger
     {
         $this->number = $number;
         return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function toInt(): int
+    {
+        return $this->number;
+    }
+
+    public function addInteger(int $value): PositiveInteger
+    {
+        $number = $this->toInt() + $value;
+        return PositiveInteger::make($number);
+    }
+
+    public function substractInteger(int $value): PositiveInteger
+    {
+        $number = $this->toInt() - $value;
+        return PositiveInteger::make($number);
+    }
+
+    public function compare(PositiveInteger $other): int
+    {
+        return $this->toInt() <=> $other->toInt();
     }
 
 

@@ -15,8 +15,12 @@ namespace Britannia\Infraestructure\Doctrine\Repository;
 
 
 use Britannia\Domain\Entity\Calendar\Calendar;
+use Britannia\Domain\Entity\Calendar\DaysList;
+use Britannia\Domain\Entity\Lesson\LessonList;
 use Britannia\Domain\Repository\CalendarRepositoryInterface;
-use Britannia\Domain\VO\Course\TimeTable\TimeTable;
+use Britannia\Domain\VO\Course\TimeTable\Schedule;
+use Carbon\CarbonImmutable;
+use DateTimeInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -53,7 +57,7 @@ class CalendarRepository extends ServiceEntityRepository implements CalendarRepo
         }, $result);
     }
 
-    public function hasDay(\DateTimeInterface $dateTime): bool
+    public function hasDay(DateTimeInterface $dateTime): bool
     {
         $dateTime = $dateTime->setTime(0, 0);
         $days = $this->getYear($dateTime);
@@ -62,7 +66,7 @@ class CalendarRepository extends ServiceEntityRepository implements CalendarRepo
         return isset($days[$key]);
     }
 
-    private function getYear(\DateTimeInterface $dateTime): array
+    private function getYear(DateTimeInterface $dateTime): array
     {
         $year = (int)$dateTime->format('Y');
 
@@ -80,7 +84,7 @@ class CalendarRepository extends ServiceEntityRepository implements CalendarRepo
 
         foreach ($result as $day) {
             $values[$day->getId()] = $day;
-        };
+        }
 
         $this->cache[$year] = $values;
 
@@ -88,28 +92,28 @@ class CalendarRepository extends ServiceEntityRepository implements CalendarRepo
     }
 
     /**
-     * @param TimeTable $timeTable
-     * @return Calendar[]
+     * @param CarbonImmutable $start
+     * @param CarbonImmutable $end
+     * @param Schedule $schedule
+     * @return LessonList
      */
-    public function getWorkingDays(TimeTable $timeTable): array
+    public function getWorkingDays(CarbonImmutable $start, CarbonImmutable $end, Schedule $schedule): DaysList
     {
-
-        $daysOfWeek = $timeTable->getDaysOfWeek();
-        $start = $timeTable->getStart();
-        $end = $timeTable->getEnd();
-
-
+        $daysOfWeek = $schedule->workDays();
         $query = $this->createQueryBuilder('A')
             ->where('A.weekday IN (:days)')
             ->andWhere('A.date >= :start AND A.date <= :end')
             ->orderBy('A.id', 'ASC')
             ->getQuery();
 
-
-        return $query->execute([
+        $data = $query->execute([
             'days' => array_values($daysOfWeek),
             'start' => $start,
             'end' => $end
         ]);
+
+        return DaysList::collect(...$data);
+
     }
+
 }

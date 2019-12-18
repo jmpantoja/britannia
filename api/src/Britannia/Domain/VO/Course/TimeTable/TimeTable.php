@@ -14,10 +14,9 @@ declare(strict_types=1);
 namespace Britannia\Domain\VO\Course\TimeTable;
 
 
-use Britannia\Domain\Entity\Calendar\Calendar;
 use Britannia\Domain\VO\Course\CourseStatus;
 use Britannia\Domain\VO\Course\Locked\Locked;
-use Britannia\Domain\VO\Validator;
+use Britannia\Domain\VO\Course\TimeTable\Validator;
 use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\VO\Traits\Validable;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
@@ -43,39 +42,22 @@ class TimeTable
      */
     private $locked;
 
-    /**
-     * TimeTable constructor.
-     * @param CarbonImmutable $start
-     * @param CarbonImmutable $end
-     * @param TimeSheet[] $schedule
-     */
-    private function __construct(CarbonImmutable $start, CarbonImmutable $end, array $schedule, Locked $locked)
-    {
-
-        $this->start = $start;
-        $this->end = $end;
-
-        $this->locked = $locked;
-
-        foreach ($schedule as $timeSheet) {
-            $key = $this->getShortDayName($timeSheet->getDayOfWeek());
-            $this->schedule[$key] = $timeSheet;
-        }
-    }
-
-    private function getShortDayName(DayOfWeek $dayOfWeek): string
-    {
-        return $dayOfWeek->getShortName();
-    }
 
     public static function buildConstraint(array $options = []): Constraint
     {
-        return new \Britannia\Domain\VO\Course\TimeTable\Validator\TimeTable([
+        return new Validator\TimeTable([
             'required' => $options['required'] ?? true
         ]);
     }
 
-    public static function make(CarbonImmutable $start, CarbonImmutable $end, array $schedule, ?Locked $locked = null): self
+    /**
+     * @param CarbonImmutable $start
+     * @param CarbonImmutable $end
+     * @param Schedule $schedule
+     * @param Locked|null $locked
+     * @return static
+     */
+    public static function make(CarbonImmutable $start, CarbonImmutable $end, Schedule $schedule, ?Locked $locked = null): self
     {
         $locked = $locked ?? Locked::RESET();
 
@@ -83,9 +65,27 @@ class TimeTable
     }
 
     /**
+     * TimeTable constructor.
+     * @param CarbonImmutable $start
+     * @param CarbonImmutable $end
+     * @param Schedule $schedule
+     * @param Locked $locked
+     */
+    private function __construct(CarbonImmutable $start, CarbonImmutable $end, Schedule $schedule, Locked $locked)
+    {
+
+        $this->start = $start;
+        $this->end = $end;
+        $this->schedule = $schedule;
+
+        $this->locked = $locked;
+    }
+
+
+    /**
      * @return CarbonImmutable
      */
-    public function getStart(): CarbonImmutable
+    public function start(): CarbonImmutable
     {
         return CarbonImmutable::instance($this->start);
     }
@@ -93,70 +93,52 @@ class TimeTable
     /**
      * @return CarbonImmutable
      */
-    public function getEnd(): CarbonImmutable
+    public function end(): CarbonImmutable
     {
         return CarbonImmutable::instance($this->end);
     }
 
+
     /**
      * @return array
      */
-    public function getSchedule(): array
+    public function schedule(): Schedule
     {
+        if (is_array($this->schedule)) {
+
+            $schedule = array_values($this->schedule);
+            $this->schedule = Schedule::make(...$schedule);
+        }
+
         return $this->schedule;
     }
 
-    /**
-     * @return DayOfWeek[]
-     */
-    public function getDaysOfWeek(): array
-    {
-        return array_map(function (TimeSheet $timeSheet) {
-            return $timeSheet->getDayOfWeek();
-        }, $this->schedule);
-
-    }
-
-    public function getLocked(): Locked
-    {
-        return $this->locked ?? Locked::LOCKED();
-
-        if (!is_null($this->locked)) {
-            return $this->locked;
-        }
-
-
-        if ($this->start->isPast()) {
-            return Locked::LOCKED();
-        }
-
-        return Locked::RESET();
-    }
-
-
     public function isLocked(): bool
     {
-        return $this->locked->isLocked();
+        return $this->locked()->isLocked();
     }
 
     public function shouldBeUpdated()
     {
-        return $this->locked->isUpdate();
+        return $this->locked()->isUpdate();
     }
 
 
     public function shouldBeResetted()
     {
-        return $this->locked->isReset();
+        return $this->locked()->isReset();
     }
 
-    public function getDailySchedule(Calendar $day): ?TimeSheet
+    /**
+     * @return Locked
+     */
+    public function locked(): Locked
     {
-        $key = $day->getShortDayName();
-        return $this->schedule[$key] ?? null;
+        return  $this->locked ?? Locked::LOCKED();
     }
 
-    public function getStatus(): CourseStatus
+
+    public function status(): CourseStatus
     {
         if ($this->start->isFuture()) {
             return CourseStatus::PENDING();

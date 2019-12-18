@@ -17,6 +17,7 @@ namespace Britannia\Domain\VO\Discount;
 use Britannia\Domain\VO\Discount\DiscountBuilder;
 use Britannia\Domain\VO\Student\Job\JobStatus;
 use Carbon\CarbonImmutable;
+use DateTimeInterface;
 
 class StudentDiscount
 {
@@ -54,10 +55,10 @@ class StudentDiscount
         return static::make($familyOrder);
     }
 
-    public static function make(?FamilyOrder $familyOrder, ?JobStatus $jobStatus = null, ?\DateTimeInterface $startDate = null, bool $hasFreeEnrollment = false): self
+    public static function make(?FamilyOrder $familyOrder, ?JobStatus $jobStatus = null, ?DateTimeInterface $startDate = null, bool $hasFreeEnrollment = false): self
     {
         $date = null;
-        if ($startDate instanceof \DateTimeInterface) {
+        if ($startDate instanceof DateTimeInterface) {
             $date = CarbonImmutable::instance($startDate);
         }
 

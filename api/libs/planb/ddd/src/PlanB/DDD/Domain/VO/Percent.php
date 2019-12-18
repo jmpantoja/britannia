@@ -60,7 +60,7 @@ class Percent
         return $this->hasValue(0);
     }
 
-    public function getComplementary(): Percent
+    public function complementary(): Percent
     {
         return Percent::make(100 - $this->toInt());
     }

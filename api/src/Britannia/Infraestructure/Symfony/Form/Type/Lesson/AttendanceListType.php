@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Form\Type\Lesson;
 
 
-use Britannia\Domain\Entity\Course\Lesson;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Britannia\Domain\Entity\Course\AttendanceList;
+use Britannia\Domain\Entity\Lesson\Lesson;
+use Britannia\Infraestructure\Symfony\Validator\FullName;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractCompoundType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -31,11 +31,11 @@ class AttendanceListType extends AbstractCompoundType
             return;
         }
 
-        $course = $lesson->getCourse();
+        $course = $lesson->course();
 
-        foreach ($course->getStudents() as $student) {
+        foreach ($course->students() as $student) {
 
-            $key = (string)$student->getId();
+            $key = (string)$student->id();
             $builder->add($key, AttendanceType::class, [
                 'label' => false,
                 'required' => false,
@@ -50,17 +50,15 @@ class AttendanceListType extends AbstractCompoundType
         $resolver->setRequired([
             'lesson'
         ]);
-
-        $resolver->setDefaults([
-            'data_class' => Collection::class
-        ]);
+//        $resolver->setDefaults([
+//            'data_class' => Collection::class
+//        ]);
 
         $resolver->setAllowedTypes('lesson', Lesson::class);
-
     }
 
     /**
-     * @return \Britannia\Infraestructure\Symfony\Validator\FullName
+     * @return FullName
      */
     public function buildConstraint(array $options): ?Constraint
     {
@@ -69,16 +67,20 @@ class AttendanceListType extends AbstractCompoundType
 
     public function customMapping(array $data)
     {
-        return [1, 2, 3];
-
-        $attendances = new ArrayCollection();
-
-        $data = array_filter($data);
-
-        foreach ($data as $attendance) {
-            $attendances->add($attendance);
-        }
-
-        return $attendances;
+        return AttendanceList::collect($data);
+//
+//        dump($data);
+//        die();
+//        return [1, 2, 3];
+//
+//        $attendances = new ArrayCollection();
+//
+//        $data = array_filter($data);
+//
+//        foreach ($data as $attendance) {
+//            $attendances->add($attendance);
+//        }
+//
+//        return $attendances;
     }
 }

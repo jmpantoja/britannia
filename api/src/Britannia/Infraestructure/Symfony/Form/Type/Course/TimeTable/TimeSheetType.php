@@ -15,6 +15,7 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Course\TimeTable;
 
 
 use Britannia\Domain\VO\Course\TimeTable\TimeSheet;
+use Britannia\Infraestructure\Symfony\Validator\FullName;
 use Carbon\CarbonImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
@@ -74,7 +75,7 @@ class TimeSheetType extends AbstractCompoundType
     }
 
     /**
-     * @return \Britannia\Infraestructure\Symfony\Validator\FullName
+     * @return FullName
      */
     public function buildConstraint(array $options): ?Constraint
     {
@@ -83,16 +84,12 @@ class TimeSheetType extends AbstractCompoundType
 
     public function customMapping(array $data)
     {
-
-        $timeSheet = TimeSheet::make(...[
+        return TimeSheet::make(...[
             $data['dayOfWeek'],
             CarbonImmutable::instance($data['start']),
             CarbonImmutable::instance($data['end']),
             $data['classroomId'],
         ]);
-
-        return $timeSheet;
-
     }
 }
 

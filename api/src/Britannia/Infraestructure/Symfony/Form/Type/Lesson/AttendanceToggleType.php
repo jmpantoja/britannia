@@ -14,8 +14,9 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Form\Type\Lesson;
 
 
-use Britannia\Domain\Entity\Course\Lesson;
+use Britannia\Domain\Entity\Lesson\Lesson;
 use Britannia\Domain\Entity\Student\Student;
+use Britannia\Infraestructure\Symfony\Validator\FullName;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -28,7 +29,7 @@ class AttendanceToggleType extends AbstractSingleType
         $student = $options['student'];
         $lesson = $options['lesson'];
 
-        $data = $lesson->hasStudentMissed($student);
+        $data = $lesson->hasBeenMissing($student);
         $builder->setData($data);
     }
 
@@ -45,7 +46,7 @@ class AttendanceToggleType extends AbstractSingleType
     }
 
     /**
-     * @return \Britannia\Infraestructure\Symfony\Validator\FullName
+     * @return FullName
      */
     public function buildConstraint(array $options): ?Constraint
     {

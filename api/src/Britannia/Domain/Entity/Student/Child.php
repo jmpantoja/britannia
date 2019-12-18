@@ -38,6 +38,11 @@ class Child extends Student
      */
     private $secondTutor;
 
+    /**
+     * @var ArrayCollection
+     */
+    private ArrayCollection $tutors;
+
 
     public function __construct()
     {

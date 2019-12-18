@@ -16,7 +16,9 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Course\Discount;
 
 use Britannia\Domain\Repository\JobStatusDiscountStorageInterface;
 use Britannia\Domain\VO\Course\Discount\CourseDiscount;
+use Britannia\Domain\VO\Discount\JobStatusDiscountList;
 use Britannia\Domain\VO\Student\Job\JobStatus;
+use Britannia\Infraestructure\Symfony\Validator\FullName;
 use PlanB\DDD\Domain\VO\Percent;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractCompoundType;
@@ -30,7 +32,7 @@ class DiscountType extends AbstractCompoundType
 {
 
     /**
-     * @var \Britannia\Domain\VO\Discount\JobStatusDiscountList
+     * @var JobStatusDiscountList
      */
     private $jobStatusDiscountList;
 
@@ -79,7 +81,7 @@ class DiscountType extends AbstractCompoundType
     }
 
     /**
-     * @return \Britannia\Infraestructure\Symfony\Validator\FullName
+     * @return FullName
      */
     public function buildConstraint(array $options): ?Constraint
     {
