@@ -24,9 +24,9 @@ class EnrollmentDiscount extends DiscountCalculator
 {
     public function calcule(Course $course, StudentDiscount $studentDiscount): Concept
     {
-        $courseDiscount = $this->getCourseDiscount($course, $studentDiscount->getJobStatus());
+        $courseDiscount = $this->getCourseDiscount($course, $studentDiscount->jobStatus());
 
-        $price = $course->getEnrolmentPayment();
+        $price = $course->enrollmentPayment();
         $percent = $this->calculePercent($courseDiscount, $studentDiscount);
 
         return Concept::jobStatus($price, $percent);

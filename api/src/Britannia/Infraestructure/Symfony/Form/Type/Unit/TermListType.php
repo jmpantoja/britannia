@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Form\Type\Unit;
 
 
-use Britannia\Domain\Entity\Mark\UnitList;
-use Britannia\Domain\VO\Mark\Term;
+use Britannia\Domain\Entity\Unit\UnitList;
+use Britannia\Domain\VO\Mark\TypeOfTerm;
 use Britannia\Domain\VO\Mark\TermDefinition;
 use Britannia\Domain\VO\Mark\TermDefinitionList;
 use Britannia\Infraestructure\Symfony\Validator\FullName;
@@ -30,18 +30,18 @@ class TermListType extends AbstractCompoundType
 
     public function customForm(FormBuilderInterface $builder, array $options)
     {
-        $terms = Term::getConstants();
+        $terms = TypeOfTerm::getConstants();
 
         foreach ($terms as $key => $value) {
 
-            $term = Term::byName($key);
-            $numOfCompletdUnits = $options['unitList']->numOfCompletdUnits($term);
+            $term = TypeOfTerm::byName($key);
+            $numOfCompletedUnits = $options['unitList']->numOfCompletdUnits($term);
 
             $builder
                 ->add($key, TermType::class, [
                     'label' => false,
                     'term' => $term,
-                    'completedUnits' => $numOfCompletdUnits
+                    'completedUnits' => $numOfCompletedUnits
                 ]);
         }
     }

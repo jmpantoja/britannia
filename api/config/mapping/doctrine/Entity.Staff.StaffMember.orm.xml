@@ -15,8 +15,6 @@
 
         <field name="oldId" type="integer" nullable="true"/>
 
-        <field name="active" type="boolean" column="active"/>
-
         <field name="teacher" type="boolean" column="teacher"/>
 
         <field name="userName" column="username" length="256" unique="true"/>
@@ -25,8 +23,8 @@
 
         <field name="plainPassword" column="plain_password" length="256" nullable="true"/>
 
-
         <embedded name="fullName" class="PlanB\DDD\Domain\VO\FullName" use-column-prefix="false"/>
+
         <embedded name="address" class="PlanB\DDD\Domain\VO\PostalAddress" use-column-prefix="false"/>
 
 
@@ -36,6 +34,10 @@
         <field name="phoneNumbers" column="phone_numbers" type="phone_number_list"/>
 
         <field name="roles" column="roles" type="json"/>
+
+
+        <field name="createdAt" type="datetime_immutable" nullable="true"/>
+        <field name="updatedAt" type="datetime_immutable" nullable="true"/>
 
 
         <many-to-many field="courses" target-entity="Britannia\Domain\Entity\Course\Course" inversed-by="teachers">
@@ -51,19 +53,6 @@
                 <cascade-persist/>
             </cascade>
         </many-to-many>
-
-
-        <lifecycle-callbacks>
-            <lifecycle-callback type="prePersist" method="onSave"/>
-            <lifecycle-callback type="preUpdate" method="onSave"/>
-        </lifecycle-callbacks>
-
-        <field name="createdAt" type="datetime_immutable">
-            <gedmo:timestampable on="create"/>
-        </field>
-        <field name="updatedAt" type="datetime_immutable">
-            <gedmo:timestampable on="update"/>
-        </field>
 
     </entity>
 

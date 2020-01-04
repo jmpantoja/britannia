@@ -17,6 +17,7 @@ namespace Britannia\Application\UseCase\Report;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Service\Payment\Concept;
 use Britannia\Domain\Service\Payment\PaymentBreakdownService;
+use Britannia\Domain\VO\Course\Discount\CourseDiscount;
 use Britannia\Domain\VO\Discount\StudentDiscount;
 use PlanB\DDD\Application\UseCase\UseCaseInterface;
 use PlanB\DDD\Domain\VO\Price;
@@ -37,8 +38,8 @@ class GenerateCourseInformationUseCase implements UseCaseInterface
 
     public function handle(GenerateCourseInformation $command)
     {
-        $course = $command->getCourse();
-        $discount = $command->getDiscount();
+        $course = $command->course();
+        $discount = $command->discount();
 
         $monthlyPayments = $this->breakdown->calculeMonthlyPayments($course, $discount);
         $reserve = $this->getReserve($course, $discount, $monthlyPayments);
@@ -95,10 +96,10 @@ class GenerateCourseInformationUseCase implements UseCaseInterface
      * @param $course
      * @return array
      */
-    protected function getLimits($discount, $course): array
+    protected function getLimits(StudentDiscount $discount, Course $course): array
     {
-        $startDate = $discount->getStartDate() ?? $course->getStartDate();
-        $endDate = $course->getEndDate();
+        $startDate = $discount->startDate() ?? $course->start();
+        $endDate = $course->end();
 
         $limits = [
             'start' => $startDate,
@@ -112,7 +113,6 @@ class GenerateCourseInformationUseCase implements UseCaseInterface
         if ($monthlyPayments->count() < 3) {
             return null;
         }
-
         return $monthlyPayments->slice(1, 1)->pop();
     }
 

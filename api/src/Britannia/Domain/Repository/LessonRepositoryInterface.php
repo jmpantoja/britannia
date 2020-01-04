@@ -33,7 +33,7 @@ interface LessonRepositoryInterface
      * @param int $limit
      * @return Lesson[]
      */
-    public function getLastByCourse(Course $course, CarbonImmutable $day, int $limit = 5): array;
+    public function getLastLessonsByCourse(Course $course, CarbonImmutable $day, int $limit = 5): array;
 
     /**
      * @param CarbonImmutable $day

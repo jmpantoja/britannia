@@ -64,7 +64,6 @@ class AttendanceControlBuilder extends BuilderAbstract
 
     public function withLesson(int $courseId, string $fecha): self
     {
-
         /** @var Course $course */
         $course = $this->findOneOrNull(Course::class, [
             'oldId' => $courseId
@@ -73,13 +72,11 @@ class AttendanceControlBuilder extends BuilderAbstract
         $date = CarbonImmutable::createFromFormat('Y-m-d', $fecha)
             ->setTime(0, 0);
 
-
-        $lessons = $course->getLessons()->toArray();
-
+        $lessons = $course->lessons();
         $this->lesson = null;
-        foreach ($lessons as $lesson) {
-            $day = $lesson->getDay();
 
+        foreach ($lessons as $lesson) {
+            $day = $lesson->day();
             if ($date->equalTo($day)) {
                 $this->lesson = $lesson;
                 break;

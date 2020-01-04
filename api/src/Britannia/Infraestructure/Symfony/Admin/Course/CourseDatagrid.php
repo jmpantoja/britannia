@@ -21,9 +21,10 @@ final class CourseDatagrid extends AdminDataGrid
 
     public function configure(): self
     {
-        $this->addId();
-//            ->addStatus()
-//            ->addActions();
+        $this->addId()
+//            ->addDates()
+            ->addStatus()
+            ->addActions();
 
         return $this;
     }
@@ -36,6 +37,17 @@ final class CourseDatagrid extends AdminDataGrid
         ]);
         return $this;
     }
+
+
+//    private function addDates(): self
+//    {
+//        $this->add('start', 'string', [
+////            'template' => 'admin/course/course_list_field.html.twig',
+////            'label' => 'Cursos'
+//        ]);
+//        return $this;
+//    }
+
 
     private function addStatus(): self
     {

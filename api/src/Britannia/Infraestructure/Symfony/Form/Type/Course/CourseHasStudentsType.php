@@ -19,8 +19,6 @@ use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Entity\Student\StudentCourse;
 use Britannia\Domain\Entity\Student\StudentList;
 use Britannia\Infraestructure\Symfony\Validator\FullName;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\QueryBuilder;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Sonata\ModelManager;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
@@ -70,14 +68,12 @@ class CourseHasStudentsType extends AbstractSingleType
         $resolver->setNormalizer('course', function (OptionsResolver $resolver, $value) {
             return $this->course = $value;
         });
-
-        $resolver->setNormalizer('query', function (OptionsResolver $resolver, $value) {
-            $builder = $this->modelManager->createQuery(Student::class, 'A');
-
-            return $builder;
-        });
     }
 
+    /**
+     * @param StudentCourse[] $value
+     * @return Student[]
+     */
     public function transform($value)
     {
         if (empty($value)) {
@@ -85,10 +81,8 @@ class CourseHasStudentsType extends AbstractSingleType
         }
 
         $results = [];
-
-        /** @var StudentCourse $studentCourse */
         foreach ($value as $studentCourse) {
-            $results[] = $studentCourse->getStudent();
+            $results[] = $studentCourse->student();
         }
 
         return $results;
@@ -105,54 +99,6 @@ class CourseHasStudentsType extends AbstractSingleType
     public function customMapping($students)
     {
         return StudentList::collect($students);
-        dump();
-        die();
-
-        $results = new ArrayCollection();
-
-        foreach ($students as $student) {
-            $studentCourse = $this->create($student);
-            $results->add($studentCourse);
-        }
-
-        /** @var QueryBuilder $builder */
-        $builder = $this->modelManager->createQuery(StudentCourse::class, 'A');
-
-        $builder
-            ->where('A.course = :course')
-            ->setParameter('course', $this->course);
-
-        if (!$results->isEmpty()) {
-            $builder->andWhere('A.student not IN (:students)')
-                ->setParameter('students', $students);
-        }
-
-        $toRemove = $builder->getQuery()->execute();
-
-        foreach ($toRemove as $item) {
-            $this->modelManager->delete($item);
-        }
-
-
-        return $results;
-    }
-
-    /**
-     * @param $student
-     * @return StudentCourse
-     */
-    protected function create(Student $student): StudentCourse
-    {
-        $repository = $this->modelManager->getEntityManager(StudentCourse::class)
-            ->getRepository(StudentCourse::class);
-
-        $studentCourse = $repository->findOneBy([
-            'course' => $this->course,
-            'student' => $student
-        ]);
-
-        return $studentCourse ?? StudentCourse::make($student, $this->course);
-
     }
 
 }

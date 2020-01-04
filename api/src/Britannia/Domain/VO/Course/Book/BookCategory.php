@@ -19,7 +19,7 @@ use MabeEnum\Enum;
 
 class BookCategory extends Enum
 {
-    public const WORK_BOOK = 'Ejercicios';
     public const STUDENT_BOOK = 'Estudiante';
+    public const WORK_BOOK = 'Ejercicios';
     public const TEACHER_BOOK = 'Profesor';
 }

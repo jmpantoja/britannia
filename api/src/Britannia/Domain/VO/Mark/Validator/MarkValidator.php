@@ -35,7 +35,11 @@ class MarkValidator extends ConstraintValidator
             return;
         }
 
-        if (!is_numeric($value) || !is_float($value * 1)) {
+        if (is_null($value)) {
+            return;
+        }
+
+        if (!is_numeric($value)) {
             $this->context->buildViolation($constraint->message)
                 ->addViolation();
             return;

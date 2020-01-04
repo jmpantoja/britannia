@@ -35,7 +35,10 @@ class TimeTableType extends AbstractCompoundType
         $builder
             ->add('start', DatePickerType::class, [
                 'format' => IntlDateFormatter::LONG,
-                'label' => 'Inicio'
+                'label' => 'Inicio',
+                'attr' => [
+                    'data-disabled' => $options['course']->isActive()
+                ]
             ])
             ->add('end', DatePickerType::class, [
                 'format' => IntlDateFormatter::LONG,
@@ -53,6 +56,8 @@ class TimeTableType extends AbstractCompoundType
             $builder
                 ->add('locked', LockedType::class, [
                     'label' => false,
+                    'msg_update' => 'Se <b>descartará</b> la información de las <b>lecciones que aún no se han producido</b><br/>pero se <b>conservará la de las lecciones ya pasadas</b><br/><br/>Elija esta opción si no quiere perder el control de asistencia.',
+                    'msg_reset' => 'Se <b>borrará la información de todas las lecciones</b>, incluidas las ya pasadas<br/><br/>Esto implica que <b>se perderá el control de asistencia</b>'
                 ]);
         }
     }

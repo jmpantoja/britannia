@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Domain\VO\Course\TimeTable;
 
 
+use Britannia\Domain\Entity\Lesson\LessonList;
 use Britannia\Domain\VO\Course\CourseStatus;
 use Britannia\Domain\VO\Course\Locked\Locked;
 use Britannia\Domain\VO\Course\TimeTable\Validator;
@@ -134,7 +135,7 @@ class TimeTable
      */
     public function locked(): Locked
     {
-        return  $this->locked ?? Locked::LOCKED();
+        return $this->locked ?? Locked::LOCKED();
     }
 
 
@@ -149,5 +150,16 @@ class TimeTable
         }
 
         return CourseStatus::ACTIVE();
+    }
+
+    public function update(LessonList $lessonList): self
+    {
+        if ($lessonList->count() === 0) {
+            return $this;
+        }
+
+        $this->start = $lessonList->firstDay();
+        $this->end = $lessonList->lastDay();
+        return $this;
     }
 }

@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Form\Type\Unit;
 
 
-use Britannia\Domain\VO\Mark\Term;
+use Britannia\Domain\VO\Mark\TypeOfTerm;
 use Britannia\Domain\VO\Mark\TermDefinition;
 use Britannia\Infraestructure\Symfony\Validator\FullName;
 use PlanB\DDD\Domain\VO\Percent;
@@ -60,7 +60,8 @@ class TermType extends AbstractCompoundType
                 'data' => $options['term']
             ])
             ->add('numOfUnits', NumOfUnitsType::class, [
-                'required' => true
+                'required' => true,
+                'completed' => $options['completedUnits']
             ])
             ->add('weighOfUnits', PercentageType::class, [
                 'label' => '% unidades',
@@ -77,7 +78,7 @@ class TermType extends AbstractCompoundType
     {
         $view->vars['term'] = $options['term'];
 
-        if($options['completedUnits'] > 0){
+        if ($options['completedUnits'] > 0) {
             $view->vars['completedUnits'] = $options['completedUnits'];
         }
 
@@ -93,7 +94,7 @@ class TermType extends AbstractCompoundType
         ]);
 
         $resolver->setRequired(['term']);
-        $resolver->setAllowedTypes('term', [Term::class]);
+        $resolver->setAllowedTypes('term', [TypeOfTerm::class]);
 
         $resolver->setRequired(['completedUnits']);
         $resolver->setAllowedTypes('completedUnits', ['int']);
@@ -110,7 +111,7 @@ class TermType extends AbstractCompoundType
     public function customMapping(array $data)
     {
         return TermDefinition::make(...[
-            Term::byName($data['term']),
+            TypeOfTerm::byName($data['term']),
             $data['numOfUnits'],
             $data['weighOfUnits']
         ]);

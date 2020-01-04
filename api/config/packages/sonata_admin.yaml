@@ -24,15 +24,10 @@ sonata_admin:
                 label_catalogue: App
                 items:
                 - admin.course
+                - admin.mark 
                 - admin.book
-                - admin.level                
+                - admin.level
                 
-            admin.group.attendance:
-                label: Control de Asistencia
-                label_catalogue: App
-                items:
-                - admin.lesson
-
             admin.group.tools:
                 label: Herramientas
                 label_catalogue: App
@@ -42,7 +37,7 @@ sonata_admin:
                   roles: ['ROLE_MANAGER']
                   
                 - admin.record
-                - admin.mark
+                - admin.attendance 
                 
             admin.group.extra:
                 label: Configuración

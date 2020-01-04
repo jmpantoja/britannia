@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\ClassRoom;
 
 
+use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\VO\PositiveInteger;
 use PlanB\DDD\Domain\VO\Price;
 
@@ -34,60 +35,66 @@ class ClassRoom
      */
     private $capacity;
 
+    /**
+     * @var CarbonImmutable
+     */
+    private $createdAt;
 
-    public function __construct()
+    /**
+     * @var CarbonImmutable
+     */
+    private $updatedAt;
+
+    public static function make(ClassRoomDto $dto): self
+    {
+        return new self($dto);
+    }
+
+    private function __construct(ClassRoomDto $dto)
     {
         $this->id = new ClassRoomId();
+        $this->createdAt = CarbonImmutable::now();
+
+        $this->update($dto);
+    }
+
+
+    public function update(ClassRoomDto $dto): self
+    {
+        $this->name = $dto->name;
+        $this->capacity = $dto->capacity;
+        $this->updatedAt = CarbonImmutable::now();
+
+        return $this;
     }
 
     /**
      * @return ClassRoomId
      */
-    public function getId(): ClassRoomId
+    public function id(): ?ClassRoomId
     {
         return $this->id;
     }
 
     /**
-     * @return null|Price
+     * @return Price
      */
-    public function getCapacity(): ?PositiveInteger
+    public function capacity(): PositiveInteger
     {
         return $this->capacity;
     }
 
     /**
-     * @param null|PositiveInteger $capacity
-     * @return ClassRoom
+     * @return string
      */
-    public function setCapacity(?PositiveInteger $capacity): ClassRoom
+    public function name(): string
     {
-        $this->capacity = $capacity;
-        return $this;
+        return $this->name ?? (string) $this->id();
     }
+
 
     public function __toString()
     {
-        return (string)$this->getName();
+        return $this->name();
     }
-
-    /**
-     * @return null|string
-     */
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param null|string $name
-     * @return ClassRoom
-     */
-    public function setName(?string $name): ClassRoom
-    {
-        $this->name = $name;
-        return $this;
-    }
-
-
 }

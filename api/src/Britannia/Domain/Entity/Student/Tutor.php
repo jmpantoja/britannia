@@ -4,7 +4,9 @@ namespace Britannia\Domain\Entity\Student;
 
 
 use Britannia\Domain\VO\Student\Job\Job;
+use Carbon\CarbonImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use PlanB\DDD\Domain\Model\AggregateRoot;
 use PlanB\DDD\Domain\Model\Traits\AggregateRootTrait;
 use PlanB\DDD\Domain\VO\DNI;
@@ -27,12 +29,6 @@ class Tutor
     /** @var null|FullName */
     private $fullName;
 
-    /**
-     * @var Email[]
-     */
-    private $emails;
-
-
     /** @var null|DNI */
     private $dni;
 
@@ -42,9 +38,14 @@ class Tutor
     private $address;
 
     /**
+     * @var Email[]
+     */
+    private $emails = [];
+
+    /**
      * @var PhoneNumber[]
      */
-    private $phoneNumbers;
+    private $phoneNumbers = [];
 
     /**
      * @var null|Job
@@ -52,180 +53,113 @@ class Tutor
     private $job;
 
     /**
-     * @var null|Child[]
+     * @var Collection
      */
     private $children;
 
+    /**
+     * @var CarbonImmutable
+     */
+    private $createdAt;
 
-    public function __construct()
+    /**
+     * @var CarbonImmutable
+     */
+    private $updatedAt;
+
+    public static function make(TutorDto $dto): self
+    {
+        return new self($dto);
+    }
+
+    private function __construct(TutorDto $dto)
     {
         $this->id = new TutorId();
-        $this->phoneNumbers = [];
-        $this->emails = [];
         $this->children = new ArrayCollection();
+        $this->createdAt = CarbonImmutable::now();
+
+        $this->update($dto);
+    }
+
+    public function update(TutorDto $dto)
+    {
+        $this->fullName = $dto->fullName;
+        $this->dni = $dto->dni;
+        $this->emails = $dto->emails;
+        $this->phoneNumbers = $dto->phoneNumbers;
+        $this->job = $dto->job;
+
+        $this->updatedAt = CarbonImmutable::now();
     }
 
     /**
      * @return TutortId
      */
-    public function id(): TutorId
+    public function id(): ?TutorId
     {
         return $this->id;
     }
 
     /**
-     * @return null|Email
-     */
-    public function getEmails(): array
-    {
-        return $this->emails;
-    }
-
-    /**
-     * @param null|Email $emails
-     * @return Tutor
-     */
-    public function setEmails(array $emails): self
-    {
-        $this->emails = [];
-        foreach ($emails as $email) {
-            $this->addEmail($email);
-        }
-        return $this;
-    }
-
-    public function addEmail(Email $email): self
-    {
-        $address = (string)$email;
-        $this->emails[$address] = $email;
-
-        return $this;
-    }
-
-    /**
-     * @return DNI|null
-     */
-    public function getDni(): ?DNI
-    {
-        return $this->dni;
-    }
-
-    /**
-     * @param DNI|null $dni
-     * @return Tutor
-     */
-    public function setDni(?DNI $dni): self
-    {
-        $this->dni = $dni;
-        return $this;
-    }
-
-    /**
-     * @return PostalAddress
-     */
-    public function getAddress(): ?PostalAddress
-    {
-        return $this->address;
-    }
-
-    /**
-     * @param PostalAddress $address
-     * @return Tutor
-     */
-    public function setAddress(?PostalAddress $address): self
-    {
-        $this->address = $address;
-        return $this;
-    }
-
-    /**
-     * @return PhoneNumber[]
-     */
-    public function getPhoneNumbers(): array
-    {
-        return $this->phoneNumbers;
-    }
-
-    /**
-     * @param PhoneNumber[] $phoneNumbers
-     * @return Tutor
-     */
-    public function setPhoneNumbers(array $phoneNumbers): self
-    {
-
-        $this->phoneNumbers = [];
-        foreach ($phoneNumbers as $phoneNumber) {
-            $this->addPhoneNumber($phoneNumber);
-        }
-
-        return $this;
-    }
-
-    public function addPhoneNumber(PhoneNumber $phoneNumber): self
-    {
-        $number = $phoneNumber->getPhoneNumber();
-        $this->phoneNumbers[$number] = $phoneNumber;
-
-        return $this;
-    }
-
-    /**
-     * @return Job|null
-     */
-    public function getJob(): ?Job
-    {
-        return $this->job;
-    }
-
-    /**
-     * @param Job|null $job
-     * @return Tutor
-     */
-    public function setJob(?Job $job): self
-    {
-        $this->job = $job;
-        return $this;
-    }
-
-    /**
-     * @return Child[]|null
-     */
-    public function getChildren(): ?array
-    {
-        return $this->children;
-    }
-
-    /**
-     * @param Child[]|null $children
-     * @return Tutor
-     */
-    public function setChildren(?array $children): self
-    {
-        $this->children = $children;
-        return $this;
-    }
-
-    public function __toString()
-    {
-        return $this->getFullName()->getReversedMode();
-    }
-
-    /**
      * @return null|FullName
      */
-    public function getFullName(): ?FullName
+    public function fullName(): FullName
     {
         return $this->fullName;
     }
 
     /**
-     * @param null|FullName $fullName
-     * @return Tutor
+     * @return null|Email
      */
-    public function setFullName(?FullName $fullName): self
+    public function emails(): array
     {
-        $this->fullName = $fullName;
-        return $this;
+        return $this->emails;
+    }
+
+    /**
+     * @return DNI
+     */
+    public function dni(): ?DNI
+    {
+        return $this->dni;
+    }
+
+    /**
+     * @return PostalAddress
+     */
+    public function address(): ?PostalAddress
+    {
+        return $this->address;
+    }
+
+    /**
+     * @return PhoneNumber[]
+     */
+    public function phoneNumbers(): array
+    {
+        return $this->phoneNumbers;
+    }
+
+    /**
+     * @return Job
+     */
+    public function job(): ?Job
+    {
+        return $this->job;
+    }
+
+    /**
+     * @return Child[]
+     */
+    public function children(): array
+    {
+        return $this->children;
+    }
+
+
+    public function __toString()
+    {
+        return $this->fullName()->getReversedMode();
     }
 
 }

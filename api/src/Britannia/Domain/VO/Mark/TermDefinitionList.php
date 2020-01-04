@@ -16,6 +16,7 @@ namespace Britannia\Domain\VO\Mark;
 
 use ArrayIterator;
 use IteratorAggregate;
+use PlanB\DDD\Domain\VO\Percent;
 
 final class TermDefinitionList implements IteratorAggregate
 {
@@ -23,6 +24,8 @@ final class TermDefinitionList implements IteratorAggregate
      * @var array|TermDefinition[]
      */
     private array $definitions;
+
+    private $numOfUnits;
 
     public static function collect(iterable $definitions): self
     {
@@ -32,21 +35,32 @@ final class TermDefinitionList implements IteratorAggregate
 
     protected function __construct(TermDefinition ...$definitions)
     {
-        $this->definitions = $definitions;
+        $this->numOfUnits = 0;
+        foreach ($definitions as $definition) {
+            $key = (string)$definition->term();
+            $this->definitions[$key] = $definition;
+
+            $this->numOfUnits += $definition->numOfUnits()->toInt();
+        }
     }
 
+    public function numOfUnits(): int
+    {
+        return $this->numOfUnits;
+    }
 
     /**
      * @inheritDoc
      */
     public function getIterator()
     {
-        $data = [];
-        foreach ($this->definitions as $definition) {
-            $key = (string)$definition->term();
-            $data[$key] = $definition;
-        }
-
-        return new ArrayIterator($data);
+        return new ArrayIterator($this->definitions);
     }
+
+    public function percentByTerm(TypeOfTerm $term): Percent
+    {
+        $key = (string)$term;
+        return $this->definitions[$key]->weighOfUnits();
+    }
+
 }

@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace PlanB\DDD\Domain\Event;
 
 
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class DomainEvent extends Event
 {

@@ -37,7 +37,7 @@ class StudentCoursesEtl extends AbstractEtl
     {
         $offset = 0;
         $limit = null;
-        $id = null;
+        $id = 1688;
 
         $builder->select('*')
             ->from('alumnos')
@@ -49,6 +49,7 @@ class StudentCoursesEtl extends AbstractEtl
                 ->andWhere('id > ?')
                 ->setParameter(0, $id);
         }
+
     }
 
 

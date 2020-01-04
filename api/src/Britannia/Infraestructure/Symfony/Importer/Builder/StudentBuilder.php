@@ -16,7 +16,7 @@ namespace Britannia\Infraestructure\Symfony\Importer\Builder;
 
 use Britannia\Domain\Entity\Student\Adult;
 use Britannia\Domain\Entity\Student\Child;
-use Britannia\Domain\Entity\Student\Student;
+use Britannia\Domain\Entity\Student\StudentDto;
 use Britannia\Domain\VO\Student\ContactMode\ContactMode;
 use Britannia\Domain\VO\Student\Job\Job;
 use Britannia\Domain\VO\Student\OtherAcademy\OtherAcademy;
@@ -31,44 +31,33 @@ class StudentBuilder extends BuilderAbstract
     use StudentMaker;
 
     private const TYPE = 'Alumno';
-
-    private $id;
-
     private $className;
 
+    private $id;
     private $fullName;
-
     private $dni;
     private $payment;
     private $birthDate;
     private $emails = [];
     private $address;
-
     private $phoneNumbers = [];
     private $preferredPartOfDay;
-
     private $preferredContactMode;
-
     private $otherAcademy;
-
     private $firstContact;
     private $termsOfUseStudent;
     private $termsOfUseAcademy;
     private $termsOfUseImage;
-
     private $job;
-
     private $school;
-
     private $schoolCourse;
     private $firstTutor;
     private $secondTutor;
-
     private $firstComment;
     private $secondComment;
-
     private $firstTutorDescription;
     private $secondTutorDescription;
+
     private $createdAt;
 
 
@@ -84,7 +73,7 @@ class StudentBuilder extends BuilderAbstract
 
     public function withId($id): self
     {
-        $this->id = $id;
+        $this->id = $id * 1;
         return $this;
     }
 
@@ -282,53 +271,46 @@ class StudentBuilder extends BuilderAbstract
 
     public function build(): ?object
     {
+        $dto = $this->makeDto();
 
-        /** @var Student $child */
-        $child = new $this->className();
-
-        $child->setOldId(1 * $this->id);
-
-        $child->setFullName($this->fullName);
-
-        $child->setBirthDate($this->birthDate);
-        $child->setEmails($this->emails);
-        $child->setAddress($this->address);
-
-        $child->setPhoneNumbers($this->phoneNumbers);
-        $child->setPreferredPartOfDay($this->preferredPartOfDay);
-        $child->setPreferredContactMode($this->preferredContactMode);
-
-        $child->setOtherAcademy($this->otherAcademy);
-        $child->setFirstContact($this->firstContact);
-
-        $child->setFirstComment($this->firstComment);
-        $child->setSecondComment($this->secondComment);
-
-        $child->setTermsOfUseStudent($this->termsOfUseStudent);
-        $child->setTermsOfUseAcademy($this->termsOfUseAcademy);
-        $child->setTermsOfUseImageRigths($this->termsOfUseImage);
-
-        $child->setPayment($this->payment);
-        $child->setUpdatedAt($this->createdAt);
-
-        if ($child instanceof Adult) {
-
-            $child->setDni($this->dni);
-            $child->setJob($this->job);
+        if (Child::class === $this->className) {
+            return Child::make($dto);
         }
+        return Adult::make($dto);
+    }
 
-        if ($child instanceof Child) {
-            $child->setSchool($this->school);
-            $child->setSchoolCourse($this->schoolCourse);
+    /**
+     * @return StudentDto
+     */
+    private function makeDto(): StudentDto
+    {
+        $dto = StudentDto::fromArray([
+            'oldId' => $this->id,
+            'fullName' => $this->fullName,
+            'dni' => $this->dni,
+            'payment' => $this->payment,
+            'birthDate' => $this->birthDate,
+            'emails' => $this->emails,
+            'address' => $this->address,
+            'phoneNumbers' => $this->phoneNumbers,
+            'preferredPartOfDay' => $this->preferredPartOfDay,
+            'preferredContactMode' => $this->preferredContactMode,
+            'otherAcademy' => $this->otherAcademy,
+            'firstContact' => $this->firstContact,
+            'termsOfUseStudent' => $this->termsOfUseStudent,
+            'termsOfUseAcademy' => $this->termsOfUseAcademy,
+            'termsOfUseImage' => $this->termsOfUseImage,
+            'job' => $this->job,
+            'school' => $this->school,
+            'schoolCourse' => $this->schoolCourse,
+            'firstTutor' => $this->firstTutor,
+            'secondTutor' => $this->secondTutor,
+            'firstComment' => $this->firstComment,
+            'secondComment' => $this->secondComment,
+            'firstTutorDescription' => $this->firstTutorDescription,
+            'secondTutorDescription' => $this->secondTutorDescription,
+        ]);
 
-            $child->setFirstTutorDescription($this->firstTutorDescription);
-            $child->setFirstTutor($this->firstTutor);
-
-            $child->setSecondTutorDescription($this->secondTutorDescription);
-            $child->setSecondTutor($this->secondTutor);
-
-        }
-
-        return $child;
+        return $dto;
     }
 }

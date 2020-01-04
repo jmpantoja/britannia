@@ -17,12 +17,15 @@ namespace PlanB\DDD\Domain\Model;
 use Countable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use IteratorAggregate;
 use PlanB\DDD\Domain\Behaviour\Comparable;
+use PlanB\DDD\Domain\Model\Exception\InvalidTypeException;
+use PlanB\DDD\Domain\Model\Exception\ValidationException;
 
-abstract class EntityList implements \IteratorAggregate, Countable
+abstract class EntityList implements Countable, IteratorAggregate
 {
     /**
-     * @var \Tightenco\Collect\Support\Collection
+     * @var Collection
      */
     private $data;
 
@@ -31,63 +34,49 @@ abstract class EntityList implements \IteratorAggregate, Countable
      */
     public Collection $collection;
 
-    public static function collect(iterable $items, ?EntityList $parent = null): self
+    public static function collect(?iterable $input = []): self
     {
+        $input ??= [];
+        return new static($input);
+    }
 
-        $collection = self::getCollection($items, $parent);
+    final  private function __construct(iterable $input)
+    {
+        $this->assertType($input);
 
-        $data = collect($items)
-            ->filter()
-            ->values();
-
-
-        return (new static(...$data))->setCollection($collection);
+        if ($input instanceof Collection) {
+            $this->data = $input;
+            return;
+        }
+        if (is_object($input)) {
+            $input = iterator_to_array($input);
+        }
+        $this->data = new ArrayCollection($input);
     }
 
     /**
-     * @param iterable $items
-     * @param EntityList|null $parent
-     * @return Collection
+     * @param iterable $input
      */
-    private static function getCollection(iterable $items, ?EntityList $parent): Collection
+    protected function assertType(iterable $input): void
     {
-        if (!is_null($parent)) {
-            return $parent->collection;
+        $typeName = $this->typeName();
+        foreach ($input as $item) {
+            if (!is_a($item, $typeName)) {
+                throw InvalidTypeException::make($item, $typeName);
+            }
         }
-
-        if ($items instanceof Collection) {
-            return $items;
-        }
-
-        $data = collect($items)
-            ->filter()
-            ->values();
-
-        return new ArrayCollection([...$data]);
     }
 
-
-    private function setCollection(Collection $items): self
-    {
-        $this->collection = $items;
-        return $this;
-    }
-
-    protected function __construct(iterable $items)
-    {
-        $this->data = collect($items);
-    }
-
+    abstract protected function typeName(): string;
 
     public function forRemovedItems(EntityList $list, callable $callback = null): self
     {
         $callback ??= [$this, 'remove'];
-        $this->data->diffUsing($list->data, function (Comparable $left, Comparable $right) {
+        $this->values()->diffUsing($list->values(), function (Comparable $left, Comparable $right) {
             return $left->compareTo($right);
 
         })->each(function (Comparable $element) use ($callback) {
             $callback($element);
-
         });
 
         return $this;
@@ -96,7 +85,7 @@ abstract class EntityList implements \IteratorAggregate, Countable
     public function forAddedItems(EntityList $list, callable $callback = null): self
     {
         $callback ??= [$this, 'add'];
-        $list->data->diffUsing($this->data, function (Comparable $left, Comparable $right) {
+        $list->values()->diffUsing($this->values(), function (Comparable $left, Comparable $right) {
             return $left->compareTo($right);
 
         })->each(function (Comparable $element) use ($callback) {
@@ -109,16 +98,19 @@ abstract class EntityList implements \IteratorAggregate, Countable
     public function remove(Comparable $entity, ?callable $callback = null): self
     {
         $key = $this->indexOf($entity);
+
         if (false === $key) {
             return $this;
         }
+        $element = $this->data->get($key);
 
-        $element = $this->collection->get($key);
         if (is_null($element)) {
             return $this;
         }
 
-        $this->collection->removeElement($element);
+        $this->data->removeElement($element);
+        $this->values()->forget($key);
+
         if (is_callable($callback)) {
             $callback($element);
         }
@@ -134,28 +126,38 @@ abstract class EntityList implements \IteratorAggregate, Countable
             return $this;
         }
 
-        $this->collection->add($entity);
+        $this->data->add($entity);
+        $this->values()->add($entity);
+
         if (is_callable($callback)) {
             $callback($entity);
         }
         return $this;
     }
 
-
     /**
      * {@inheritDoc}
      */
     protected function indexOf(Comparable $element)
     {
-        return $this->data->search(fn(Comparable $item) => $item->equals($element));
+        return $this->values()->search(fn(Comparable $item) => $item->equals($element));
     }
+
 
     /**
      * @return \Tightenco\Collect\Support\Collection
      */
-    public function data(): \Tightenco\Collect\Support\Collection
+    public function values(): \Tightenco\Collect\Support\Collection
     {
-        return $this->data;
+        return collect($this->data);
+    }
+
+    /**
+     * @return int
+     */
+    public function count()
+    {
+        return $this->data->count();
     }
 
     /**
@@ -166,17 +168,18 @@ abstract class EntityList implements \IteratorAggregate, Countable
         return $this->data->toArray();
     }
 
+    public function toCollection(): Collection
+    {
+        return $this->data;
+    }
+
     /**
      * @inheritDoc
      */
     public function getIterator()
     {
-        return $this->data;
+        return $this->values();
     }
 
-    public function count()
-    {
-        return $this->collection->count();
-    }
 
 }

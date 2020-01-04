@@ -15,7 +15,6 @@ namespace Britannia\Domain\VO\Mark;
 
 
 use Britannia\Domain\VO\Course\Locked\Locked;
-use Doctrine\Common\Collections\ArrayCollection;
 use Serializable;
 
 class UnitsDefinition implements Serializable
@@ -65,12 +64,17 @@ class UnitsDefinition implements Serializable
         return $this->termList;
     }
 
+    public function numOfUnits(): int
+    {
+        return  $this->terms()->numOfUnits();
+    }
+
     /**
      * @return Locked
      */
     public function locked(): Locked
     {
-        return  $this->locked ?? Locked::LOCKED();
+        return $this->locked ?? Locked::LOCKED();
     }
 
     public function isLocked(): bool
@@ -109,5 +113,4 @@ class UnitsDefinition implements Serializable
         $this->termList = $data['terms'];
 
     }
-
 }

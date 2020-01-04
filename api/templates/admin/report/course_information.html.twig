@@ -124,12 +124,12 @@
         <h3><span class="fa fa-calendar" aria-hidden="true"></span> Horario:</h3>
 
         <p class="calendar">
-            Desde el <span class="date">{{ course.startDate | localizeddate('long', 'none') }}</span>
-            hasta el <span class="date">{{ course.endDate | localizeddate('long', 'none') }}</span>
+            Desde el <span class="date">{{ course.start | localizeddate('long', 'none') }}</span>
+            hasta el <span class="date">{{ course.end | localizeddate('long', 'none') }}</span>
         </p>
 
         <div class="week">
-            {% set schedule = course.timeTable.schedule %}
+            {% set schedule = course.schedule %}
 
             {% for lesson in  schedule %}
                 <p class="day">
@@ -170,15 +170,12 @@
                     {{ block('concept') }}
                 {% endwith %}
             </tr>
-
             <tr>
                 {% set reason = 'Primera mensualidad (%s)' | format(_self.short_date(limits.start)) %}
-
                 {% with {reason: reason, concept: reserve.first_month } %}
                     {{ block('concept') }}
                 {% endwith %}
             </tr>
-
             <tr>
                 {% set reason = 'Última mensualidad (%s)' | format(_self.short_date(limits.end)) %}
 
@@ -186,31 +183,27 @@
                     {{ block('concept') }}
                 {% endwith %}
             </tr>
-
             <tr class="separator">
                 <td class="subtitle" colspan="3">Total reserva:</td>
                 <td class="number">
-
                     {{ _self.format_money(reserve.total) }}
                 </td>
             </tr>
 
-            <tr>
-                <td class="title" colspan="4">Mensualidades</td>
-            </tr>
+            {% if monthly != null %}
+                <tr>
+                    <td class="title" colspan="4">Mensualidades</td>
+                </tr>
+                <tr>
+                    {% set start = _self.short_date(limits.start | date_modify('first day of next month')) %}
+                    {% set end = _self.short_date(course.end | date_modify('first day of previous month')) %}
+                    {% set reason = 'cada mes entre %s y %s' | format(start, end) %}
 
-            <tr>
-
-                {% set start = _self.short_date(course.startDate | date_modify('first day of next month')) %}
-                {% set end = _self.short_date(course.endDate | date_modify('first day of previous month')) %}
-
-                {% set reason = 'cada mes entre %s y %s' | format(start, end) %}
-
-                {% with {reason: reason, concept: monthly } %}
-                    {{ block('concept') }}
-                {% endwith %}
-
-            </tr>
+                    {% with {reason: reason, concept: monthly } %}
+                        {{ block('concept') }}
+                    {% endwith %}
+                </tr>
+            {% endif %}
 
             </tbody>
         </table>
@@ -238,12 +231,14 @@
         <p class="notes">Matrícula gratis por situación laboral</p>
     {% endif %}
 
-    {% if monthly.ofJobStatusType %}
-        <p class="notes">Descuento en mensualidades por situación laboral</p>
-    {% endif %}
+    {% if monthly != null %}
+        {% if monthly.ofJobStatusType %}
+            <p class="notes">Descuento en mensualidades por situación laboral</p>
+        {% endif %}
 
-    {% if monthly.ofFamilyType %}
-        <p class="notes">Descuento familiar en mensualidades</p>
+        {% if monthly.ofFamilyType %}
+            <p class="notes">Descuento familiar en mensualidades</p>
+        {% endif %}
     {% endif %}
 
 {% endblock %}

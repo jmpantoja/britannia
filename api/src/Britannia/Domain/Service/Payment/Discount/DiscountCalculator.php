@@ -31,7 +31,7 @@ abstract class DiscountCalculator
             return CourseDiscount::byDefault();
         }
 
-        $discount = $course->getDiscount();
+        $discount = $course->discount();
         return $discount->get($jobStatus->getName()) ?? CourseDiscount::byDefault();
     }
 }

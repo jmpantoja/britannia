@@ -14,7 +14,9 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Course;
 
 
-class Level
+use Carbon\CarbonImmutable;
+
+final class Level
 {
     /**
      * @var LevelId
@@ -26,42 +28,55 @@ class Level
      */
     private $name;
 
+    /**
+     * @var CarbonImmutable
+     */
+    private $createdAt;
 
-    public function __construct()
+    /**
+     * @var CarbonImmutable
+     */
+    private $updatedAt;
+
+    public static function make(LevelDto $dto): self
+    {
+        return new self($dto);
+    }
+
+    private function __construct(LevelDto $dto)
     {
         $this->id = new LevelId();
+        $this->createdAt = CarbonImmutable::now();
+
+        $this->update($dto);
+    }
+
+    public function update(LevelDto $dto): self
+    {
+        $this->name = $dto->name;
+        $this->updatedAt = CarbonImmutable::now();
+        return $this;
     }
 
     /**
      * @return LevelId
      */
-    public function getId()
+    public function id(): ?LevelId
     {
         return $this->id;
-    }
-
-    public function __toString()
-    {
-        return (string)$this->getName();
     }
 
     /**
      * @return string
      */
-    public function getName(): ?string
+    public function name(): string
     {
-        return $this->name;
+        return $this->name ?? (string)$this->id();
     }
 
-    /**
-     * @param string $name
-     * @return Level
-     */
-    public function setName(string $name): Level
+    public function __toString()
     {
-        $this->name = $name;
-        return $this;
+        return $this->name();
     }
-
 
 }

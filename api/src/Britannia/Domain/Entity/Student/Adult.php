@@ -7,7 +7,7 @@ use Britannia\Domain\VO\Employment;
 use Britannia\Domain\VO\Student\Job\Job;
 use PlanB\DDD\Domain\VO\DNI;
 
-class Adult extends Student
+final class Adult extends Student
 {
     /** @var DNI */
     private $dni;
@@ -17,40 +17,28 @@ class Adult extends Student
      */
     private $job;
 
+    public function update(StudentDto $dto): Adult
+    {
+        $this->dni = $dto->dni;
+        $this->job = $dto->job;
+
+        return parent::update($dto);
+    }
+
     /**
      * @return DNI
      */
-    public function getDni(): ?DNI
+    public function dni(): ?DNI
     {
         return $this->dni;
     }
 
     /**
-     * @param DNI $dni
-     * @return Adult
-     */
-    public function setDni(?DNI $dni): Adult
-    {
-        $this->dni = $dni;
-        return $this;
-    }
-
-    /**
      * @return Job
      */
-    public function getJob(): ?Job
+    public function job(): ?Job
     {
         return $this->job;
-    }
-
-    /**
-     * @param Job $job
-     * @return Adult
-     */
-    public function setJob(?Job $job): Adult
-    {
-        $this->job = $job;
-        return $this;
     }
 
 }

@@ -15,11 +15,15 @@ namespace Britannia\Infraestructure\Symfony\Importer\Builder;
 
 
 use Britannia\Domain\Entity\ClassRoom\ClassRoom;
+use Britannia\Domain\Entity\ClassRoom\ClassRoomDto;
 use Britannia\Domain\Entity\Course\Course;
+use Britannia\Domain\Entity\Course\CourseDto;
+use Britannia\Domain\Service\Course\LessonGenerator;
+use Britannia\Domain\Service\Course\UnitGenerator;
 use Britannia\Domain\VO\Course\Age\Age;
 use Britannia\Domain\VO\Course\Intensive\Intensive;
 use Britannia\Domain\VO\Course\Periodicity\Periodicity;
-use Britannia\Domain\VO\Course\Support\Support;
+use Britannia\Domain\VO\Course\TimeTable\Schedule;
 use Britannia\Domain\VO\Course\TimeTable\TimeTable;
 use Britannia\Domain\VO\HoursPerWeek;
 use Britannia\Infraestructure\Symfony\Importer\Builder\Traits\CourseMaker;
@@ -57,6 +61,15 @@ class CourseBuilder extends BuilderAbstract
     private $numOfPlaces;
 
     private $timeTable;
+
+    /**
+     * @var LessonGenerator
+     */
+    private LessonGenerator $lessonGenerator;
+    /**
+     * @var UnitGenerator
+     */
+    private UnitGenerator $unitGenerator;
 
     public function initResume(array $input): Resume
     {
@@ -151,6 +164,8 @@ class CourseBuilder extends BuilderAbstract
             $schedule = $this->toLessons($field2, $classRoomId);
         }
 
+        $schedule = Schedule::fromArray($schedule);
+
         $this->timeTable = TimeTable::make($start, $end, $schedule);
 
         return $this;
@@ -162,24 +177,52 @@ class CourseBuilder extends BuilderAbstract
      */
     protected function getClassRoomId(string $classRoomNumber)
     {
-
         $classRoomNumber = (int)$classRoomNumber;
         $name = sprintf('Aula #%s', $classRoomNumber);
 
-        $classRoom = new ClassRoom();
-        $classRoom->setName($name);
-        $classRoom->setCapacity(PositiveInteger::make(10));
+        $dto = ClassRoomDto::fromArray([
+            'name' => $name,
+            'capacity' => PositiveInteger::make(10)
+        ]);
 
+        $classRoom = ClassRoom::make($dto);
         $classRoom = $this->findOneOrCreate($classRoom, [
             'name' => $name
         ]);
 
-        $classRoomId = $classRoom->getId();
-        return $classRoomId;
+        return $classRoom->id();
+    }
+
+
+    public function withGenerator(LessonGenerator $lessonGenerator, UnitGenerator $unitGenerator): self
+    {
+        $this->lessonGenerator = $lessonGenerator;
+        $this->unitGenerator = $unitGenerator;
+
+        return $this;
     }
 
     public function build(): object
     {
+        $dto = CourseDto::fromArray([
+            'oldId' => $this->id,
+            'name' => $this->name,
+            'schoolCourse' => $this->schoolCourse,
+            'enrollmentPayment' => $this->enrolmentPayment,
+            'monthlyPayment' => $this->monthlyPayment,
+            'numOfPlaces' => $this->numOfPlaces,
+            'age' => $this->age,
+            'periodicity' => $this->periodicity,
+            'intensive' => $this->intensive,
+            'timeTable' => $this->timeTable,
+            'lessonCreator' => $this->lessonGenerator,
+            'unitGenerator' => $this->unitGenerator
+        ]);
+
+
+        return Course::make($dto);
+
+        die("----");
         return new stdClass();
 
 //        $course = new Course();
@@ -203,6 +246,3 @@ class CourseBuilder extends BuilderAbstract
 }
 
 
-/**
- *  Observaciones
- */

@@ -51,7 +51,6 @@ class AttendanceControlEtl extends AbstractEtl
         }
     }
 
-
     public function createBuilder(array $input, EntityManagerInterface $entityManager): BuilderInterface
     {
 

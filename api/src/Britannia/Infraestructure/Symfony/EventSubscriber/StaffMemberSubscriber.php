@@ -19,7 +19,6 @@ use Britannia\Domain\Entity\Staff\PasswordHasChanged;
 
 class StaffMemberSubscriber extends DomainEventSubscriber
 {
-
     /**
      *
      * @return array The event names to listen to
@@ -27,13 +26,7 @@ class StaffMemberSubscriber extends DomainEventSubscriber
     public static function getSubscribedEvents()
     {
         return [
-            PasswordHasChanged::class => 'onPasswordChanged'
-        ];
-    }
 
-    public function onPasswordChanged(PasswordHasChanged $event)
-    {
-        $command = UpdatePassword::fromEvent($event);
-        $this->handle($command);
+        ];
     }
 }

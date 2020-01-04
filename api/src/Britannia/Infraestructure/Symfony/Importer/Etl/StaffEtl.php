@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Importer\Etl;
 
 
+use ApiPlatform\Core\DataPersister\DataPersisterInterface;
 use Britannia\Infraestructure\Symfony\Importer\Builder\BuilderInterface;
 use Britannia\Infraestructure\Symfony\Importer\Builder\StaffBuilder;
 use Britannia\Infraestructure\Symfony\Importer\Console;
@@ -22,11 +23,28 @@ use Britannia\Infraestructure\Symfony\Importer\DataCollector;
 use Britannia\Infraestructure\Symfony\Importer\Normalizer\ChildNormalizer;
 use Britannia\Infraestructure\Symfony\Importer\Normalizer\NormalizerInterface;
 use Britannia\Infraestructure\Symfony\Importer\Normalizer\StudentNormalizer;
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 
 class StaffEtl extends AbstractEtl
 {
+    /**
+     * @var EncoderFactoryInterface
+     */
+    private EncoderFactoryInterface $encoderFactory;
+
+    public function __construct(Connection $original,
+                                EntityManagerInterface $entityManager,
+                                DataPersisterInterface $dataPersister,
+                                EncoderFactoryInterface $encoderFactory
+    )
+    {
+        parent::__construct($original, $entityManager, $dataPersister);
+        $this->encoderFactory = $encoderFactory;
+    }
+
 
     public function clean(): void
     {
@@ -56,7 +74,8 @@ class StaffEtl extends AbstractEtl
             ->withEmail((string)$input['email'], (string)$input['telefono'], (string)$input['dni'])
             ->withDni((string)$input['dni'])
             ->withCourses((string)$input['cursos'])
-            ->withPhone((string)$input['telefono']);
+            ->withPhone((string)$input['telefono'])
+            ->withEncoder($this->encoderFactory);
 
 
         return $builder;
@@ -70,9 +89,9 @@ class StaffEtl extends AbstractEtl
     protected function extract(QueryBuilder $builder): array
     {
         $sql = <<<eof
-SELECT id, user, nombre, password, null as email, dni, telefono, cursos, null as teacherId, true as is_teacher, false as is_admin  FROM academia_mysql.profesores 
+SELECT id, user, nombre, password, null as email, dni, telefono, cursos, null as teacherId, true as is_teacher, false as is_admin  FROM academia_mysql.profesores
 UNION
-SELECT id, user, name as nombre, password, email, null as dni, null as telefono, null as cursos, idProfesorVinculado as teacherId, false as is_teacher, true as is_admin   FROM academia_mysql.user 
+SELECT id, user, name as nombre, password, email, null as dni, null as telefono, null as cursos, idProfesorVinculado as teacherId, false as is_teacher, true as is_admin   FROM academia_mysql.user
 eof;
 
         $query = $builder->getConnection()->executeQuery($sql);

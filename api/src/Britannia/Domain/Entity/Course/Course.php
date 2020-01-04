@@ -16,7 +16,6 @@ namespace Britannia\Domain\Entity\Course;
 
 use Britannia\Domain\Entity\Lesson\Lesson;
 use Britannia\Domain\Entity\Lesson\LessonList;
-use Britannia\Domain\Entity\Mark\UnitList;
 use Britannia\Domain\Entity\Record\StudentHasJoinedToCourse;
 use Britannia\Domain\Entity\Record\StudentHasLeavedCourse;
 use Britannia\Domain\Entity\Staff\StaffList;
@@ -25,14 +24,19 @@ use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Entity\Student\StudentCourse;
 use Britannia\Domain\Entity\Student\StudentCourseList;
 use Britannia\Domain\Entity\Student\StudentList;
+use Britannia\Domain\Entity\Unit\Unit;
+use Britannia\Domain\Entity\Unit\UnitList;
+use Britannia\Domain\Entity\Unit\UnitStudentList;
 use Britannia\Domain\Service\Course\LessonGenerator;
 use Britannia\Domain\Service\Course\UnitGenerator;
+use Britannia\Domain\Service\Mark\MarkCalculator;
 use Britannia\Domain\VO\Course\Age\Age;
 use Britannia\Domain\VO\Course\CourseStatus;
 use Britannia\Domain\VO\Course\Examiner\Examiner;
 use Britannia\Domain\VO\Course\Intensive\Intensive;
 use Britannia\Domain\VO\Course\Periodicity\Periodicity;
 use Britannia\Domain\VO\Course\Support\Support;
+use Britannia\Domain\VO\Course\TimeTable\Schedule;
 use Britannia\Domain\VO\Course\TimeTable\TimeTable;
 use Britannia\Domain\VO\HoursPerWeek;
 use Britannia\Domain\VO\Mark\UnitsDefinition;
@@ -84,7 +88,6 @@ class Course implements Comparable
      */
     private $schoolCourse;
 
-
     /**
      * @var null|Examiner
      */
@@ -94,7 +97,6 @@ class Course implements Comparable
      * @var null|Level
      */
     private $level;
-
 
     /**
      * @var PositiveInteger
@@ -167,6 +169,11 @@ class Course implements Comparable
     private $unitsDefinition;
 
     /**
+     * @var int
+     */
+    private $numOfUnits;
+
+    /**
      * @var Collection
      */
     private $units;
@@ -200,19 +207,16 @@ class Course implements Comparable
         $this->books = new ArrayCollection();
         $this->lessons = new ArrayCollection();
         $this->units = new ArrayCollection();
+        $this->numOfUnits = 0;
         $this->discount = new ArrayCollection();
         $this->records = new ArrayCollection();
         $this->status = CourseStatus::PENDING();
-
-        $this->createdAt = new CarbonImmutable();
-
-
+        $this->createdAt = CarbonImmutable::now();
         $this->update($dto);
     }
 
     public function update(CourseDto $dto): self
     {
-
         $this->name = $dto->name;
         $this->schoolCourse = $dto->schoolCourse;
         $this->numOfPlaces = $dto->numOfPlaces;
@@ -224,20 +228,24 @@ class Course implements Comparable
         $this->level = $dto->level;
         $this->monthlyPayment = $dto->monthlyPayment;
         $this->enrollmentPayment = $dto->enrollmentPayment;
-        // $this->discount = $dto->discount;
-        // $this->unitsDefinition = $dto->unitsDefinition;
+        $this->discount = $dto->discount;
+        $this->updatedAt = CarbonImmutable::now();
 
+        if (isset($dto->oldId)) {
+            $this->oldId = $dto->oldId;
+            return $this;
+        }
+
+        $this->changeCalendar($dto->timeTable, $dto->lessonCreator);
+        $this->changeUnits($dto->unitsDefinition, $dto->unitGenerator);
         $this->setTeachers($dto->teachers);
         $this->setStudents($dto->courseHasStudents);
-
-        $this->updatedAt = new CarbonImmutable();
-
         return $this;
     }
 
-    public function changeCalendar(TimeTable $timeTable, LessonGenerator $generator): self
+    public function changeCalendar(?TimeTable $timeTable, LessonGenerator $generator): self
     {
-        if ($timeTable->isLocked()) {
+        if (is_null($timeTable) || $timeTable->isLocked()) {
             return $this;
         }
 
@@ -254,7 +262,7 @@ class Course implements Comparable
         }
 
         $this->status = $status;
-        //Lanzar un evento, para actualizar el estado de los alumnos
+        $this->notify(CourseHasChangedStatus::make($this, $status));
 
         return $this;
     }
@@ -269,9 +277,10 @@ class Course implements Comparable
         $this->lessonList()
             ->update($lessons, $locked, $this);
 
+        $this->timeTable->update($this->lessonList());
+
         return $this;
     }
-
 
     public function changeUnits(UnitsDefinition $definition, UnitGenerator $generator): self
     {
@@ -280,11 +289,17 @@ class Course implements Comparable
         }
 
         $this->unitsDefinition = $definition;
-        $units = $generator->generateList($this, $definition);
-        $locked = $definition->locked();
+        $this->numOfUnits = $definition->numOfUnits();
 
-        $this->unitList()
-            ->update($units, $locked);
+//        dump($definition->terms());
+//        die();
+//
+//
+//
+//        $unitList = $this->unitList()
+//            ->update($this, $definition, $generator);
+//
+//        $this->numOfUnits = $unitList->count();
 
         return $this;
     }
@@ -347,6 +362,23 @@ class Course implements Comparable
         return $this;
     }
 
+    public function updateStatus(): self
+    {
+        $this->setStatus($this->timeTable->status());
+        return $this;
+    }
+
+    public function updateMarks(UnitStudentList $unitStudentList): self
+    {
+        MarkCalculator::make()
+            ->updateTotal($unitStudentList, $this->unitsDefinition);
+
+        $this->unitList()
+            ->updateMarks($unitStudentList);
+
+        return $this;
+
+    }
 
     public function isPending(): bool
     {
@@ -376,7 +408,7 @@ class Course implements Comparable
      */
     public function name(): string
     {
-        return $this->name;
+        return $this->name ?? (string)$this->id();
     }
 
     /**
@@ -400,6 +432,18 @@ class Course implements Comparable
         return $this->timeTable->start();
     }
 
+    public function end(): CarbonImmutable
+    {
+        return $this->timeTable->end();
+    }
+
+    /**
+     * @return Schedule
+     */
+    public function schedule(): Schedule
+    {
+        return $this->timeTable->schedule();
+    }
 
     /**
      * @return string|null
@@ -490,6 +534,14 @@ class Course implements Comparable
     }
 
     /**
+     * @return Collection
+     */
+    public function discount(): Collection
+    {
+        return $this->discount ?? new ArrayCollection();
+    }
+
+    /**
      * @return StaffMember[]
      */
     public function teachers(): array
@@ -500,7 +552,7 @@ class Course implements Comparable
     /**
      * @return StaffList
      */
-    public function teachersList(): StaffList
+    private function teachersList(): StaffList
     {
         return StaffList::collect($this->teachers);
     }
@@ -553,16 +605,36 @@ class Course implements Comparable
     }
 
     /**
-     * @return Collection
+     * @return Unit[]
      */
     public function units(): array
     {
-        return $this->unitList()->toArray();
+        return $this->unitList()
+            ->values()
+            ->sortBy(fn(Unit $unit) => $unit->position()->toInt())
+            ->values()
+            ->toArray();
     }
 
     private function unitList(): UnitList
     {
         return UnitList::collect($this->units);
+    }
+
+    /**
+     * @return \Britannia\Domain\VO\Mark\SetOfSkills
+     */
+    public function evaluableSkills()
+    {
+        return $this->unitsDefinition->skills();
+    }
+
+    /**
+     * @return int
+     */
+    public function numOfUnits(): int
+    {
+        return $this->numOfUnits;
     }
 
     /**
@@ -573,5 +645,9 @@ class Course implements Comparable
         return $this->records;
     }
 
+    public function __toString()
+    {
+        return $this->name();
+    }
 
 }

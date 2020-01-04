@@ -64,7 +64,7 @@ class ChangeWorkDayStatus
     /**
      * @return bool
      */
-    public function shouldBeWorkDay(): bool
+    public function isWorkingDay(): bool
     {
         return $this->workDay;
     }

@@ -15,7 +15,9 @@ namespace Britannia\Infraestructure\Symfony\Importer\Etl;
 
 
 use ApiPlatform\Core\DataPersister\DataPersisterInterface;
+use Britannia\Domain\Service\Course\LessonGenerator;
 use Britannia\Domain\Service\Course\TimeTableUpdater;
+use Britannia\Domain\Service\Course\UnitGenerator;
 use Britannia\Infraestructure\Symfony\Importer\Builder\BuilderInterface;
 use Britannia\Infraestructure\Symfony\Importer\Builder\CourseBuilder;
 use Britannia\Infraestructure\Symfony\Importer\Console;
@@ -30,17 +32,27 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class CourseEtl extends AbstractEtl
 {
+
     /**
-     * @var TimeTableUpdater
+     * @var LessonGenerator
      */
-    private $timeSheetUpdater;
+    private LessonGenerator $lessonGenerator;
+    /**
+     * @var UnitGenerator
+     */
+    private UnitGenerator $unitGenerator;
 
     public function __construct(
         Connection $original,
         EntityManagerInterface $entityManager,
-        DataPersisterInterface $dataPersister
+        DataPersisterInterface $dataPersister,
+        LessonGenerator $lessonGenerator,
+        UnitGenerator $unitGenerator
     )
     {
+        $this->lessonGenerator = $lessonGenerator;
+        $this->unitGenerator = $unitGenerator;
+
         parent::__construct($original, $entityManager, $dataPersister);
     }
 
@@ -68,7 +80,7 @@ class CourseEtl extends AbstractEtl
 
         if (is_int($id)) {
             $builder
-                ->andWhere('id = ?')
+                ->andWhere('id > ?')
                 ->setParameter(0, $id);
         }
     }
@@ -95,6 +107,7 @@ class CourseEtl extends AbstractEtl
             ->withMonthlyPayment((float)$input['precio'])
             ->withPeriodicity((int)$input['periocidad'])
             ->withNumOfPlaces((int)$input['plazas'])
+            ->withGenerator($this->lessonGenerator, $this->unitGenerator)
             ->withTimeTable(...[
                 (string)$input['fecha_inicio'],
                 (string)$input['fecha_final'],
@@ -106,10 +119,5 @@ class CourseEtl extends AbstractEtl
 
         return $builder;
     }
-//
-//    public function postPersist($entity)
-//    {
-//        $this->timeSheetUpdater->updateCourseLessons($entity);
-//    }
 
 }

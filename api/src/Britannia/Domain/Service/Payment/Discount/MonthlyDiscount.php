@@ -46,11 +46,11 @@ class MonthlyDiscount extends DiscountCalculator
         $price = $this->getPrice($course, $date);
 
         if ($discount->applyJobStatusDiscount()) {
-            $percent = $this->getJobStausPercent($course, $discount->getJobStatus());
+            $percent = $this->getJobStausPercent($course, $discount->jobStatus());
             return Concept::jobStatus($price, $percent);
         }
 
-        $order = $discount->getFamilyOrder();
+        $order = $discount->familyOrder();
         $percent = $this->getFamlilyPercent($order);
 
         return Concept::family($price, $percent);
@@ -64,8 +64,8 @@ class MonthlyDiscount extends DiscountCalculator
      */
     private function getPrice(Course $course, CarbonImmutable $date): Price
     {
-        $percent = $this->getMonthlyPercent($date, $course->getEndDate());
-        $price = $course->getMonthlyPayment();
+        $percent = $this->getMonthlyPercent($date, $course->end());
+        $price = $course->monthlyPayment();
 
         return $price->discount($percent);
     }

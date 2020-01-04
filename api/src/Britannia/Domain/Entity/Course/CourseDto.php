@@ -17,11 +17,14 @@ namespace Britannia\Domain\Entity\Course;
 use Britannia\Domain\Entity\Lesson\UpdateCalendarOrder;
 use Britannia\Domain\Entity\Staff\StaffList;
 use Britannia\Domain\Entity\Student\StudentList;
+use Britannia\Domain\Service\Course\LessonGenerator;
+use Britannia\Domain\Service\Course\UnitGenerator;
 use Britannia\Domain\VO\Course\Age\Age;
 use Britannia\Domain\VO\Course\Examiner\Examiner;
 use Britannia\Domain\VO\Course\Intensive\Intensive;
 use Britannia\Domain\VO\Course\Periodicity\Periodicity;
 use Britannia\Domain\VO\Course\Support\Support;
+use Britannia\Domain\VO\Course\TimeTable\TimeTable;
 use Britannia\Domain\VO\Mark\UnitsDefinition;
 use Doctrine\Common\Collections\Collection;
 use PlanB\DDD\Domain\Model\Dto;
@@ -31,23 +34,24 @@ use PlanB\DDD\Domain\VO\RGBA;
 
 class CourseDto extends Dto
 {
-    public ?int $oldId;
+
+    public int $oldId;
 
     public ?string $name;
 
     public ?string  $schoolCourse;
 
-    public ?RGBA $color;
+    public RGBA $color;
 
-    public ?Examiner $examiner;
+    public ?Examiner $examiner = null;
 
-    public ?Level $level;
+    public ?Level $level = null;
 
     public ?PositiveInteger $numOfPlaces;
 
     public ?Periodicity $periodicity;
 
-    public ?Support $support;
+    public Support $support;
 
     public ?Age $age;
 
@@ -63,9 +67,22 @@ class CourseDto extends Dto
 
     public ?Collection $books;
 
-//    public TimeTable $timeTable;
+    public ?TimeTable $timeTable;
 
-//    public Collection $discount;
+    public LessonGenerator $lessonCreator;
 
-//    public UnitsDefinition $unitsDefinition;
+    public ?Collection $discount = null;
+
+    public UnitsDefinition $unitsDefinition;
+
+    public UnitGenerator $unitGenerator;
+
+    protected function defaults(): array
+    {
+        return [
+            'support' => Support::REGULAR()
+        ];
+    }
+
+
 }

@@ -22,8 +22,8 @@ class StudentHasLeavedCourse extends AbstractRecordEvent
 
     public static function make(StudentCourse $studentCourse): self
     {
-        $student = $studentCourse->getStudent();
-        $course = $studentCourse->getCourse();
+        $student = $studentCourse->student();
+        $course = $studentCourse->course();
 
         $description = self::parseDescription($course);
 

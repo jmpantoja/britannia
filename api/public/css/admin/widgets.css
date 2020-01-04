@@ -1,6 +1,129 @@
-.time_table_title .notice{
+.time_table_title .notice {
     color: red;
     margin-top: -15px;
     font-style: italic;
     font-size: 1.5em;
 }
+
+table.term_marks {
+    table-layout: fixed;
+    width: 100%;
+    border: solid 1px;
+}
+
+table.term_marks thead td {
+    border: solid 1px;
+    text-align: center;
+}
+
+table.term_marks tbody td {
+    border: solid 1px;
+    text-align: left;
+}
+
+table.term_marks td.student {
+    font-size: 1.3em;
+    padding: 3px 15px;
+}
+
+table.unit_header {
+    table-layout: fixed;
+    width: 100%;
+    border: none;
+    border-right: solid 1px;
+    border-left: solid 1px;
+}
+
+table.unit_header thead {
+    border-bottom: solid 1px;
+}
+
+table.unit_header thead td {
+    border: none;
+    text-align: center;
+    font-size: 1.3em;
+    padding: 5px;
+}
+
+table.unit_header tbody td {
+    border: none;
+    border-right: solid 1px black;
+
+    color: white;
+    font-weight: bold;
+    text-align: center;
+}
+
+table.unit_header tbody td:last-child {
+    border-right: none;
+}
+
+table.unit_header tbody td.reading {
+    background-color: black;
+}
+
+table.unit_header tbody td.writing {
+    background-color: green;
+}
+
+table.unit_header tbody td.listening {
+    background-color: dodgerblue;
+}
+
+table.unit_header tbody td.speaking {
+    background-color: red;
+}
+
+table.unit_header tbody td.grammar {
+    background-color: rebeccapurple;
+}
+
+table.unit_header tbody td.vocabulary {
+    background-color: #e58f00;
+}
+
+table.unit_header tbody td.average {
+    background-color: yellow;
+    color: black;
+
+}
+
+table.unit_body {
+    table-layout: fixed;
+    width: 100%;
+    border: none;
+    border-right: solid 1px;
+    border-left: solid 1px;
+}
+
+table.unit_body tr {
+    border: none;
+}
+
+table.unit_body tbody td {
+    border: none;
+    border-right: solid 1px;
+}
+
+table.unit_body tbody td.average {
+    font-weight: bold;
+}
+
+table.unit_body tbody td.average input {
+    padding: 3px;
+}
+
+table.unit_body tbody td:last-child {
+    border: none;
+}
+
+table.unit_body tbody td input {
+    border: none;
+    text-align: center;
+    padding: 6px;
+}
+
+table.unit_body td.error {
+    border: solid 3px red;
+}
+

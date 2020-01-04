@@ -16,5 +16,5 @@ namespace Britannia\Domain\Repository;
 
 interface CourseRepositoryInterface
 {
-
+    public function findCoursesForUpdateStatus(): array;
 }

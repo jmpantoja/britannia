@@ -48,8 +48,8 @@ class PlanningService
 
         $data = array_map(function (ClassRoom $classRoom) {
             return [
-                'id' => (string)$classRoom->getId(),
-                'title' => (string)$classRoom->getName()
+                'id' => (string)$classRoom->id(),
+                'title' => (string)$classRoom->name()
             ];
         }, $classRooms);
 

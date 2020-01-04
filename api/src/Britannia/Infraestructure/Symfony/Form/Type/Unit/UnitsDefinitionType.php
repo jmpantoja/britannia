@@ -15,7 +15,7 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Unit;
 
 
 use Britannia\Domain\Entity\Course\Course;
-use Britannia\Domain\Entity\Mark\UnitList;
+use Britannia\Domain\Entity\Unit\UnitList;
 use Britannia\Domain\VO\Mark\UnitsDefinition;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\LockedType;
 use Britannia\Infraestructure\Symfony\Validator\FullName;
@@ -33,7 +33,10 @@ class UnitsDefinitionType extends AbstractCompoundType
 
         $builder
             ->add('skills', SetOfSkillsType::class, [
-                'label' => false
+                'label' => false,
+                'attr' => [
+                    'data-disabled' => true
+                ]
             ])
             ->add('terms', TermListType::class, [
                 'mapped' => false,
@@ -45,6 +48,8 @@ class UnitsDefinitionType extends AbstractCompoundType
             $builder
                 ->add('locked', LockedType::class, [
                     'label' => false,
+                    'msg_update' => 'Se <b>conservarán</b> las calificaciones de las unidades ya completadas, <br />pero se pueden eliminar unidades aún sin calificar',
+                    'msg_reset' => 'Se <b>borrarán</b> las calificaciones de todas las unidades, <br/>incluidas las que ya han sido completadas'
                 ]);
         }
 

@@ -9,9 +9,8 @@ use PlanB\DDD\Domain\Model\EntityListInterface;
 
 final class StaffList extends EntityList
 {
-    protected function __construct(StaffMember ...$items)
+    protected function typeName(): string
     {
-        parent::__construct($items);
+        return StaffMember::class;
     }
-
 }

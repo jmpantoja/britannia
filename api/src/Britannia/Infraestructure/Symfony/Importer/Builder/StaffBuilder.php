@@ -16,13 +16,14 @@ namespace Britannia\Infraestructure\Symfony\Importer\Builder;
 
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Staff\StaffMember;
+use Britannia\Domain\Entity\Staff\StaffMemberDto;
 use Britannia\Infraestructure\Symfony\Importer\Maker\FullNameMaker;
 use Britannia\Infraestructure\Symfony\Importer\Resume;
-use Doctrine\Common\Collections\ArrayCollection;
 use PlanB\DDD\Domain\VO\DNI;
 use PlanB\DDD\Domain\VO\Email;
 use PlanB\DDD\Domain\VO\FullName;
 use PlanB\DDD\Domain\VO\PhoneNumber;
+use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 
 class StaffBuilder extends BuilderAbstract
 {
@@ -40,6 +41,10 @@ class StaffBuilder extends BuilderAbstract
      * @var int
      */
     private int $id;
+    /**
+     * @var EncoderFactoryInterface
+     */
+    private EncoderFactoryInterface $encoder;
 
 
     public function initResume(array $input): Resume
@@ -112,7 +117,7 @@ class StaffBuilder extends BuilderAbstract
 
         $name = preg_replace('/[[:punct:]]|\d/', '', $name);
 
-        $this->fullName = FullName::make($name, 'brittania');
+        $this->fullName = FullName::make($name, 'britannia');
         return $this;
     }
 
@@ -176,26 +181,27 @@ class StaffBuilder extends BuilderAbstract
     }
 
 
+    public function withEncoder(EncoderFactoryInterface $encoderFactory): self
+    {
+        $this->encoder = $encoderFactory;
+        return $this;
+    }
+
     public function build(): ?object
     {
+        $dto = StaffMemberDto::fromArray([
+            'oldId' => $this->id,
+            'userName' => $this->userName,
+            'password' => 1234,
+            'encoder' => $this->encoder,
+            'fullName' => $this->fullName,
+            'emails' => $this->emails,
+            'phoneNumbers' => (array)$this->phoneNumbers,
+            'dni' => $this->dni,
+            'roles' => $this->roles,
+        ]);
 
-        //$staff = $this->createStaff();
-        $staff = new StaffMember();
-
-        $staff->setOldId($this->id);
-        $staff->setUserName($this->userName);
-        $staff->setPassword($this->password);
-        $staff->setPlainPassword('1234');
-
-        $staff->setFullName($this->fullName);
-        $staff->setEmails($this->emails);
-        $staff->setPhoneNumbers($this->phoneNumbers);
-        $staff->setRoles($this->roles);
-
-        $staff->setDni($this->dni);
-        $staff->setCourses(new ArrayCollection($this->courses));
-
-        return $staff;
+        return StaffMember::make($dto);
     }
 
 

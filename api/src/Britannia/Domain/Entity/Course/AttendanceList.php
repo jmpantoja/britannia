@@ -19,17 +19,19 @@ use PlanB\DDD\Domain\Model\EntityList;
 
 final class AttendanceList extends EntityList
 {
-    protected function __construct(Attendance ...$items)
+
+    protected function typeName(): string
     {
-        parent::__construct($items);
+        return Attendance::class;
     }
 
     public function findByStudent(Student $student)
     {
-        return $this->data()->
+        return $this->values()->
         filter(function (Attendance $attendance) use ($student) {
             return $attendance->isOfStudent($student);
 
         })->first();
     }
+
 }

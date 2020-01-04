@@ -22,7 +22,7 @@ class LessonRepository extends ServiceEntityRepository implements LessonReposito
         parent::__construct($registry, Lesson::class);
     }
 
-    public function getLastByCourse(Course $course, CarbonImmutable $day, int $limit = 5): array
+    public function getLastLessonsByCourse(Course $course, CarbonImmutable $day, int $limit = 5): array
     {
         $day->setTime(0, 0);
 
@@ -33,7 +33,7 @@ class LessonRepository extends ServiceEntityRepository implements LessonReposito
         $lessons = array_merge($inFutureLessons, $inPastLessons);
 
         usort($lessons, function (Lesson $lessonA, Lesson $lessonB) {
-            return $lessonA->getDay()->getTimestamp() < $lessonB->getDay()->getTimestamp();
+            return $lessonA->day()->getTimestamp() < $lessonB->day()->getTimestamp();
         });
 
         return $lessons;

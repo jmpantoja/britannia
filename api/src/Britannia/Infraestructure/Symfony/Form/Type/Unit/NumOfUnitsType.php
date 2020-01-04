@@ -33,15 +33,22 @@ class NumOfUnitsType extends AbstractSingleType
     public function customOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-//            'data_class' => NumOfUnits::class,
             'expanded' => false,
             'choice_loader' => new CallbackChoiceLoader(function () {
                 return array_flip(NumOfUnits::getConstants());
             }),
-            'empty_data' => (string)NumOfUnits::THREE(),
+          //  'data' => null,
             'required' => false,
             'label' => 'nº de unidades',
         ]);
+
+        $resolver->setRequired('completed');
+        $resolver->setAllowedTypes('completed', ['int']);
+
+        $resolver->setNormalizer('data', function (OptionsResolver $resolver) {
+            dump($resolver['completed']);
+            return NumOfUnits::TWO();
+        });
     }
 
     /**
@@ -56,7 +63,6 @@ class NumOfUnitsType extends AbstractSingleType
 
     public function customMapping($data)
     {
-
         return NumOfUnits::byName($data);
     }
 }

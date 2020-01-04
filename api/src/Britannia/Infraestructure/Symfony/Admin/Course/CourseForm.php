@@ -30,39 +30,30 @@ use PlanB\DDD\Domain\VO\Price;
 use PlanB\DDDBundle\Sonata\Admin\AdminForm;
 use PlanB\DDDBundle\Symfony\Form\Type\PositiveIntegerType;
 use PlanB\DDDBundle\Symfony\Form\Type\PriceType;
-use Sonata\AdminBundle\Form\FormMapper;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class CourseForm extends AdminForm
+final class CourseForm extends AdminForm
 {
 
     /**
      * @var Course
      */
     private $course;
-
-    public static function make(FormMapper $mapper): self
-    {
-        return new self($mapper);
-    }
-
-    private function __construct(FormMapper $mapper)
-    {
-        parent::__construct($mapper);
-    }
+    /**
+     * @var Price
+     */
+    private Price $enrollmentPrice;
 
     public function configure(Course $course): self
     {
         $this->course = $course;
 
-        $this->firstTab('Ficha del curso');
-        $this->secondTab('Alumnos y profesores');
-        $this->thirdTab('Calendario');
-        $this->fourthTab('Unidades');
-//        $this->fifthTab('Precio')
-        ;
-
+        $this->cardTab('Ficha del curso');
+        $this->calendarTab('Calendario');
+        $this->priceTab('Precio');
+        $this->studentsTab('Alumnos y profesores');
+        $this->unitsTab('Unidades');
         return $this;
     }
 
@@ -70,7 +61,7 @@ class CourseForm extends AdminForm
      * @param $name
      * @return CourseForm
      */
-    private function firstTab($name): self
+    private function cardTab($name): self
     {
         $this->tab($name);
 
@@ -114,7 +105,7 @@ class CourseForm extends AdminForm
         return $this;
     }
 
-    private function secondTab(string $name): self
+    private function studentsTab(string $name): self
     {
         $this->tab($name);
 
@@ -129,7 +120,7 @@ class CourseForm extends AdminForm
         return $this;
     }
 
-    private function thirdTab(string $name): self
+    private function calendarTab(string $name): self
     {
         $this->tab($name);
 
@@ -142,7 +133,7 @@ class CourseForm extends AdminForm
         return $this;
     }
 
-    private function fourthTab(string $name): self
+    private function unitsTab(string $name): self
     {
         $this->tab($name);
 
@@ -155,7 +146,7 @@ class CourseForm extends AdminForm
         return $this;
     }
 
-    private function fifthTab(string $name): self
+    private function priceTab(string $name): self
     {
         $this->tab($name);
 
@@ -163,7 +154,11 @@ class CourseForm extends AdminForm
         $this->group('Coste', ['class' => 'col-md-6'])
             ->add('enrollmentPayment', PriceType::class, [
                 'label' => 'Matrícula',
-                'empty_data' => Price::make(50)
+                'empty_data' => $this->enrollmentPrice,
+                'attr' => [
+                    'readonly' => true
+                ]
+                // 'disabled' => true
             ])
             ->add('monthlyPayment', PriceType::class, [
                 'label' => 'Mensualidad',
@@ -177,6 +172,12 @@ class CourseForm extends AdminForm
                 'label' => false,
             ]);
 
+        return $this;
+    }
+
+    public function setEnrollmentPrice(Price $enrollmentPrice): self
+    {
+        $this->enrollmentPrice = $enrollmentPrice;
         return $this;
     }
 

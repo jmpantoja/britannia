@@ -83,7 +83,7 @@ class CalendarRepository extends ServiceEntityRepository implements CalendarRepo
         $values = [];
 
         foreach ($result as $day) {
-            $values[$day->getId()] = $day;
+            $values[$day->id()] = $day;
         }
 
         $this->cache[$year] = $values;

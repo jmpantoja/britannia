@@ -69,7 +69,7 @@ class UpdateRecordUseCase implements UseCaseInterface
             return $entity;
         }
 
-        $managed = $this->entityManager->find(get_class($entity), $entity->getId());
+        $managed = $this->entityManager->find(get_class($entity), $entity->id());
 
         if (!is_null($managed)) {
             return $managed;

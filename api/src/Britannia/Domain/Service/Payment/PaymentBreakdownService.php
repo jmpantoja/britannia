@@ -80,8 +80,8 @@ class PaymentBreakdownService
     {
         $monthlyPayments = [];
 
-        $date = $discount->getStartDate() ?? $course->getStartDate();
-        $endDate = $course->getEndDate();
+        $date = $this->calculeStartDate($course, $discount);
+        $endDate = $course->end();
 
         while ($date->lessThan($endDate)) {
             $key = $date->format('M-Y');
@@ -91,6 +91,27 @@ class PaymentBreakdownService
         }
 
         return collect($monthlyPayments);
+    }
+
+    /**
+     * @param Course $course
+     * @param StudentDiscount $discount
+     * @return \Carbon\CarbonImmutable|null
+     */
+    public function calculeStartDate(Course $course, StudentDiscount $discount)
+    {
+        $discountDate = $discount->startDate();
+        $courseDate = $course->start();
+
+        if (is_null($discountDate)) {
+            return $courseDate;
+        }
+
+        if ($courseDate->greaterThan($discountDate)) {
+            return $courseDate;
+        }
+
+        return $discountDate;
     }
 
 }

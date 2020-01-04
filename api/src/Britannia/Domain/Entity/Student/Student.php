@@ -5,9 +5,9 @@ namespace Britannia\Domain\Entity\Student;
 
 use Britannia\Domain\Entity\Academy\Academy;
 use Britannia\Domain\Entity\Course\Course;
-use Britannia\Domain\Entity\Record\StudentHasBeenCreated;
-use Britannia\Domain\VO\Course\CourseStatus;
-use Britannia\Domain\VO\Discount\StudentDiscount;
+use Britannia\Domain\Entity\Course\CourseList;
+use Britannia\Domain\Entity\Record\StudentHasJoinedToCourse;
+use Britannia\Domain\Entity\Record\StudentHasLeavedCourse;
 use Britannia\Domain\VO\Payment\Payment;
 use Britannia\Domain\VO\Student\ContactMode\ContactMode;
 use Britannia\Domain\VO\Student\OtherAcademy\NumOfYears;
@@ -146,6 +146,15 @@ abstract class Student implements Comparable
      */
     private $termsOfUseImageRigths = false;
 
+    /**
+     * @var int
+     */
+    private $birthMonth;
+
+    /**
+     * @var Collection
+     */
+    private $records;
 
     /**
      * @var CarbonImmutable
@@ -157,97 +166,167 @@ abstract class Student implements Comparable
      */
     private $updatedAt;
 
-    /**
-     * @var int
-     */
-    private $birthMonth;
+    public static function make(StudentDto $dto): self
+    {
+        return new static($dto);
+    }
 
-    /**
-     * @var Collection
-     */
-    private $records;
-
-    public function __construct()
+    protected function __construct(StudentDto $dto)
     {
         $this->id = new StudentId();
         $this->relatives = new ArrayCollection();
         $this->studentHasCourses = new ArrayCollection();
         $this->records = new ArrayCollection();
+        $this->createdAt = CarbonImmutable::now();
+
+        static::update($dto);
     }
 
-    /**
-     * @return int
-     */
-    public function getOldId(): int
+    public function update(StudentDto $dto): self
     {
-        return $this->oldId;
-    }
+        $this->fullName = $dto->fullName;
+        $this->address = $dto->address;
+        $this->emails = $dto->emails;
+        $this->phoneNumbers = $dto->phoneNumbers;
 
-    /**
-     * @param int $oldId
-     * @return Student
-     */
-    public function setOldId(int $oldId): Student
-    {
-        $this->oldId = $oldId;
+        $this->freeEnrollment = $dto->freeEnrollment;
+        $this->payment = $dto->payment;
+
+        $this->firstComment = $dto->firstComment;
+        $this->secondComment = $dto->secondComment;
+
+        $this->preferredPartOfDay = $dto->preferredPartOfDay;
+        $this->preferredContactMode = $dto->preferredContactMode;
+        $this->firstContact = $dto->firstContact;
+        $this->termsOfUseAcademy = $dto->termsOfUseAcademy;
+        $this->termsOfUseStudent = $dto->termsOfUseStudent;
+        $this->termsOfUseImageRigths = $dto->termsOfUseImageRigths;
+
+        $this->setOtherAcademy($dto->otherAcademy);
+        $this->setRelatives($dto->relatives);
+        $this->setCourses($dto->studentHasCourses);
+        $this->setBirthDate($dto->birthDate);
+
+        $this->updatedAt = CarbonImmutable::now();
+
+        if (isset($dto->oldId)) {
+            $this->oldId = $dto->oldId;
+        }
+
         return $this;
     }
 
+
+    public function setCourses(CourseList $courses): self
+    {
+        $this->studentHasCoursesList()
+            ->toCourseList()
+            ->forRemovedItems($courses, [$this, 'removeCourse'])
+            ->forAddedItems($courses, [$this, 'addCourse']);
+
+        return $this;
+    }
+
+    public function removeCourse(Course $course): self
+    {
+        $joined = StudentCourse::make($this, $course);
+
+        $this->studentHasCoursesList()
+            ->remove($joined, function (StudentCourse $studentCourse) {
+                $event = StudentHasLeavedCourse::make($studentCourse);
+                $this->notify($event);
+            });
+
+        return $this;
+    }
+
+    public function addCourse(Course $course): self
+    {
+        $joined = StudentCourse::make($this, $course);
+
+        $this->studentHasCoursesList()
+            ->add($joined, function (StudentCourse $student) {
+                $event = StudentHasJoinedToCourse::make($student, $this);
+                $this->notify($event);
+            });
+
+        return $this;
+    }
+
+    public function setRelatives(StudentList $relatives): self
+    {
+        $this->relativesList()
+            ->forRemovedItems($relatives, [$this, 'removeRelative'])
+            ->forAddedItems($relatives, [$this, 'addRelative']);
+
+        return $this;
+    }
+
+
+    public function removeRelative(Student $relative): self
+    {
+        $this->relativesList()
+            ->remove($relative, function (Student $removed) {
+                $removed->removeRelative($this);
+            });
+
+        return $this;
+    }
+
+    public function addRelative(Student $relative): self
+    {
+        $this->relativesList()
+            ->add($relative, function (Student $added) {
+                $added->addRelative($this);
+            });
+
+        return $this;
+    }
+
+    private function setBirthDate(?DateTimeInterface $birthDate): self
+    {
+        if (is_null($birthDate)) {
+            $this->birthDate = null;
+            $this->birthMonth = null;
+
+            return $this;
+        }
+
+        $this->birthDate = CarbonImmutable::make($birthDate);
+        $this->birthMonth = $this->birthDate->get('month');
+
+        return $this;
+    }
+
+    public function updateStatus(): self
+    {
+        $total = $this->activeCourses()->count();
+        $this->active = $total > 0;
+        return $this;
+    }
+
+    /**
+     * @return StudentId
+     */
+    public function id(): ?StudentId
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return bool
+     */
     public function isAdult(): bool
     {
         return static::class === Adult::class;
     }
 
+    /**
+     * @return bool
+     */
     public function isChild(): bool
     {
         return static::class === Adult::class;
-    }
-
-    public function getActiveCourses(): Collection
-    {
-        return $this->findCoursesByStatus(CourseStatus::ACTIVE());
-    }
-
-    public function findCoursesByStatus(CourseStatus $status): Collection
-    {
-        $courses = $this->studentHasCourses->map(function (StudentCourse $studentCourse) {
-            return $studentCourse->getCourse();
-        });
-
-        return $courses->filter(function (Course $course) use ($status) {
-            return $course->status()->is($status);
-        });
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getStudentHasCourses(): Collection
-    {
-        return $this->studentHasCourses;
-    }
-
-    /**
-     * @param ArrayCollection $studentHasCourses
-     * @return Student
-     */
-    public function setStudentHasCourses(Collection $studentHasCourses): Student
-    {
-        $this->studentHasCourses = $studentHasCourses;
-        return $this;
-    }
-
-    public function removeCourse(Course $course)
-    {
-
-        $studentCourse = StudentCourse::make($this, $course);
-
-        $key = collect($this->studentHasCourses)
-            ->search(fn(StudentCourse $item) => $item->equals($studentCourse));
-
-        $aaa = $this->studentHasCourses->get($key);
-        $this->studentHasCourses->removeElement($aaa);
-
     }
 
     /**
@@ -259,108 +338,52 @@ abstract class Student implements Comparable
     }
 
     /**
-     * @return CarbonImmutable
+     * @return FullName
      */
-    public function getBirthDate(): ?CarbonImmutable
+    public function fullName(): FullName
     {
+        return $this->fullName;
+    }
 
-        if (is_null($this->birthDate)) {
-            return null;
+    public function name(): string
+    {
+        if (!is_null($this->fullName)) {
+            return (string)$this->fullName;
         }
 
-        return CarbonImmutable::instance($this->birthDate);
+        return (string)$this->id();
     }
 
     /**
-     * @param CarbonImmutable $birthDate
-     * @return Student
+     * @return CarbonImmutable
      */
-    public function setBirthDate(?DateTimeInterface $birthDate): Student
+    public function birthDate(): ?CarbonImmutable
     {
-        if (is_null($birthDate)) {
-            return $this;
-        }
-
-        $this->birthDate = CarbonImmutable::instance($birthDate);
-        $this->birthMonth = (int)$birthDate->format('m');
-        return $this;
+        return $this->birthDate;
     }
 
     /**
      * @return Email[]
      */
-    public function getEmails(): array
+    public function emails(): array
     {
         return $this->emails;
     }
 
     /**
-     * @param Email[] $emails
-     * @return Student
-     */
-    public function setEmails(array $emails): Student
-    {
-        $this->emails = [];
-        foreach ($emails as $email) {
-            $this->addEmail($email);
-        }
-        return $this;
-    }
-
-    public function addEmail(Email $email): Student
-    {
-        $address = (string)$email;
-        $this->emails[$address] = $email;
-
-        return $this;
-    }
-
-    /**
      * @return PostalAddress
      */
-    public function getAddress(): ?PostalAddress
+    public function address(): ?PostalAddress
     {
         return $this->address;
     }
 
     /**
-     * @param PostalAddress $address
-     * @return Student
-     */
-    public function setAddress(?PostalAddress $address): Student
-    {
-        $this->address = $address;
-        return $this;
-    }
-
-    /**
      * @return PhoneNumber[]
      */
-    public function getPhoneNumbers(): array
+    public function phoneNumbers(): array
     {
         return $this->phoneNumbers;
-    }
-
-    /**
-     * @param PhoneNumber[] $phoneNumbers
-     * @return Student
-     */
-    public function setPhoneNumbers(array $phoneNumbers): Student
-    {
-        $this->phoneNumbers = [];
-        foreach ($phoneNumbers as $phoneNumber) {
-            $this->addPhoneNumber($phoneNumber);
-        }
-
-        return $this;
-    }
-
-    public function addPhoneNumber(PhoneNumber $phoneNumber): Student
-    {
-        $number = $phoneNumber->getPhoneNumber();
-        $this->phoneNumbers[$number] = $phoneNumber;
-
-        return $this;
     }
 
     /**
@@ -372,114 +395,66 @@ abstract class Student implements Comparable
     }
 
     /**
-     * @param bool $freeEnrollment
-     * @return Student
+     * @return CourseList
      */
-    public function setFreeEnrollment(bool $freeEnrollment): Student
+    public function activeCourses(): CourseList
     {
+        return $this->studentHasCoursesList()
+            ->toCourseList()
+            ->onlyActives();
+    }
 
-        $this->freeEnrollment = $freeEnrollment;
-        return $this;
+    public function studentHasCourses(): array
+    {
+        return $this->studentHasCoursesList()->toArray();
+    }
+
+    private function studentHasCoursesList(): StudentCourseList
+    {
+        return StudentCourseList::collect($this->studentHasCourses);
     }
 
     /**
      * @return Student[]
      */
-    public function getRelatives(): Collection
+    public function relatives(): array
     {
-        return $this->relatives;
+        return $this->relativesList()->toArray();
     }
 
-    /**
-     * @param Student[] $relatives
-     * @return Student
-     */
-    public function setRelatives(Collection $relatives): Student
+    private function relativesList(): StudentList
     {
-        $this->relatives = $relatives;
-        return $this;
-    }
-
-    public function addRelative(Student $relative): self
-    {
-        if (!$this->relatives->contains($relative)) {
-            $this->relatives[] = $relative;
-
-            $relative->addRelative($this);
-        }
-
-        return $this;
-    }
-
-    public function removeRelative(Student $relative): self
-    {
-        if ($this->relatives->contains($relative)) {
-            $this->relatives->removeElement($relative);
-
-            $relative->removeRelative($this);
-        }
-
-        return $this;
+        return StudentList::collect($this->relatives);
     }
 
     /**
      * @return Payment
      */
-    public function getPayment(): ?Payment
+    public function payment(): ?Payment
     {
         return $this->payment;
     }
 
     /**
-     * @param Payment $payment
-     * @return Student
-     */
-    public function setPayment(Payment $payment): Student
-    {
-        $this->payment = $payment;
-        return $this;
-    }
-
-    /**
      * @return PartOfDay
      */
-    public function getPreferredPartOfDay(): ?PartOfDay
+    public function preferredPartOfDay(): ?PartOfDay
     {
         return $this->preferredPartOfDay;
     }
 
     /**
-     * @param PartOfDay $preferredPartOfDay
-     * @return Student
-     */
-    public function setPreferredPartOfDay(?PartOfDay $preferredPartOfDay): self
-    {
-        $this->preferredPartOfDay = $preferredPartOfDay;
-        return $this;
-    }
-
-    /**
      * @return ContactMode
      */
-    public function getPreferredContactMode(): ?ContactMode
+    public function preferredContactMode(): ?ContactMode
     {
         return $this->preferredContactMode;
     }
 
     /**
-     * @param ContactMode $preferredContactMode
-     * @return Student
-     */
-    public function setPreferredContactMode(?ContactMode $preferredContactMode): self
-    {
-        $this->preferredContactMode = $preferredContactMode;
-        return $this;
-    }
-
-    /**
      * @return Academy
      */
-    public function getAcademy(): ?Academy
+    public function academy(): ?Academy
     {
         return $this->academy;
     }
@@ -487,7 +462,7 @@ abstract class Student implements Comparable
     /**
      * @return NumOfYears
      */
-    public function getAcademyNumOfYears(): ?NumOfYears
+    public function academyNumOfYears(): ?NumOfYears
     {
         return $this->academyNumOfYears;
     }
@@ -495,7 +470,7 @@ abstract class Student implements Comparable
     /**
      * @return OtherAcademy
      */
-    public function getOtherAcademy(): ?OtherAcademy
+    public function otherAcademy(): ?OtherAcademy
     {
         if (!($this->academy instanceof Academy)) {
             return null;
@@ -508,72 +483,43 @@ abstract class Student implements Comparable
      * @param OtherAcademy $otherAcademy
      * @return Student
      */
-    public function setOtherAcademy(?OtherAcademy $otherAcademy): self
+    private function setOtherAcademy(?OtherAcademy $otherAcademy): self
     {
-        if (!($otherAcademy instanceof OtherAcademy)) {
-            $this->academy = null;
-            $this->academyNumOfYears = null;
+        if ($otherAcademy instanceof OtherAcademy) {
+            $this->academy = $otherAcademy->academy();
+            $this->academyNumOfYears = $otherAcademy->numOfYears();
             return $this;
         }
 
-        $this->academy = $otherAcademy->getAcademy();
-        $this->academyNumOfYears = $otherAcademy->getNumOfYears();
+        $this->academy = null;
+        $this->academyNumOfYears = null;
         return $this;
 
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getFirstContact(): ?string
-    {
-        return $this->firstContact;
-    }
-
-    /**
-     * @param null|string $firstContact
-     * @return Student
-     */
-    public function setFirstContact(?string $firstContact): self
-    {
-        $this->firstContact = $firstContact;
-        return $this;
     }
 
     /**
      * @return string
      */
-    public function getFirstComment(): ?string
+    public function firstContact(): string
+    {
+        return $this->firstContact;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function firstComment(): string
     {
         return $this->firstComment;
     }
 
     /**
-     * @param string $firstComment
-     * @return Student
-     */
-    public function setFirstComment(string $firstComment): Student
-    {
-        $this->firstComment = $firstComment;
-        return $this;
-    }
-
-    /**
      * @return string
      */
-    public function getSecondComment(): ?string
+    public function secondComment(): string
     {
         return $this->secondComment;
-    }
-
-    /**
-     * @param string $secondComment
-     * @return Student
-     */
-    public function setSecondComment(string $secondComment): Student
-    {
-        $this->secondComment = $secondComment;
-        return $this;
     }
 
     /**
@@ -585,31 +531,11 @@ abstract class Student implements Comparable
     }
 
     /**
-     * @param bool $termsOfUseAcademy
-     * @return Student
-     */
-    public function setTermsOfUseAcademy(bool $termsOfUseAcademy): self
-    {
-        $this->termsOfUseAcademy = $termsOfUseAcademy;
-        return $this;
-    }
-
-    /**
      * @return bool
      */
     public function isTermsOfUseStudent(): bool
     {
         return $this->termsOfUseStudent;
-    }
-
-    /**
-     * @param bool $termsOfUseStudent
-     * @return Student
-     */
-    public function setTermsOfUseStudent(bool $termsOfUseStudent): self
-    {
-        $this->termsOfUseStudent = $termsOfUseStudent;
-        return $this;
     }
 
     /**
@@ -620,99 +546,17 @@ abstract class Student implements Comparable
         return $this->termsOfUseImageRigths;
     }
 
-    /**
-     * @param bool $termsOfUseImageRigths
-     * @return Student
-     */
-    public function setTermsOfUseImageRigths(bool $termsOfUseImageRigths): self
-    {
-        $this->termsOfUseImageRigths = $termsOfUseImageRigths;
-        return $this;
-    }
 
-    public function getRecords(): ?Collection
+    /**
+     * @return Collection
+     */
+    public function records(): Collection
     {
         return $this->records;
     }
 
-
-    /**
-     * @return CarbonImmutable
-     */
-    public function getCreatedAt(): CarbonImmutable
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * @return CarbonImmutable
-     */
-    public function getUpdatedAt(): CarbonImmutable
-    {
-        return $this->updatedAt;
-    }
-
-    /**
-     * @param CarbonImmutable $date
-     * @return Student
-     */
-    public function setUpdatedAt(CarbonImmutable $date): Student
-    {
-        $this->updatedAt = $date;
-
-        if (is_null($this->createdAt)) {
-            $this->createdAt = $date;
-            $this->notify(StudentHasBeenCreated::make($this));
-        }
-        return $this;
-    }
-
-    public function onSave(): Student
-    {
-
-        $this->setUpdatedAt(CarbonImmutable::now());
-
-        $allowedStatus = [CourseStatus::ACTIVE(), CourseStatus::PENDING()];
-        $courses = $this->findCoursesByStatus(...$allowedStatus);
-
-        $this->active = !$courses->isEmpty();
-        return $this;
-    }
-
-    public function isEqual(Student $student): bool
-    {
-        return $student->id()->equals($this->id());
-    }
-
-    /**
-     * @return StudentId
-     */
-    public function id(): ?StudentId
-    {
-        return $this->id;
-    }
-
     public function __toString()
     {
-        return (string)$this->getFullName();
+        return $this->name();
     }
-
-    /**
-     * @return FullName
-     */
-    public function getFullName(): ?FullName
-    {
-        return $this->fullName;
-    }
-
-    /**
-     * @param FullName $fullName
-     * @return Student
-     */
-    public function setFullName(?FullName $fullName): Student
-    {
-        $this->fullName = $fullName;
-        return $this;
-    }
-
 }

@@ -58,6 +58,8 @@ doctrine:
                     Term: Term
                     SetOfSkills: SetOfSkills
                     UnitsDefinition: UnitsDefinition
+                    Mark: Mark
+                    TypeOfUnit: TypeOfUnit
 
                     #Staff
                     StaffMemberId: StaffMemberId
@@ -106,11 +108,13 @@ doctrine:
 
 
             #Unit
-            UnitId: Britannia\Infraestructure\Doctrine\DBAL\Type\Mark\UnitId
-            Term: Britannia\Infraestructure\Doctrine\DBAL\Type\Mark\TermType
-            SetOfSkills: Britannia\Infraestructure\Doctrine\DBAL\Type\Mark\SetOfSkillsType
-            UnitsDefinition: Britannia\Infraestructure\Doctrine\DBAL\Type\Mark\UnitsDefinitionType
-            
+            UnitId: Britannia\Infraestructure\Doctrine\DBAL\Type\Unit\UnitId
+            Term: Britannia\Infraestructure\Doctrine\DBAL\Type\Unit\TermType
+            SetOfSkills: Britannia\Infraestructure\Doctrine\DBAL\Type\Unit\SetOfSkillsType
+            UnitsDefinition: Britannia\Infraestructure\Doctrine\DBAL\Type\Unit\UnitsDefinitionType
+            Mark: Britannia\Infraestructure\Doctrine\DBAL\Type\Unit\MarkType
+            TypeOfUnit: Britannia\Infraestructure\Doctrine\DBAL\Type\Unit\TypeOfUnitType
+
 
             #Lesson
             LessonId: Britannia\Infraestructure\Doctrine\DBAL\Type\Lesson\LessonIdType

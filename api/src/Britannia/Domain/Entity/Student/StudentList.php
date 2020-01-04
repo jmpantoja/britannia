@@ -18,9 +18,8 @@ use PlanB\DDD\Domain\Model\EntityList;
 
 final class StudentList extends EntityList
 {
-
-    protected function __construct(Student ...$items)
+    protected function typeName(): string
     {
-        parent::__construct($items);
+        return Student::class;
     }
 }

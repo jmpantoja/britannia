@@ -25,11 +25,11 @@ class TermDefinition implements Serializable
 
     private NumOfUnits $numOfUnits;
 
-    private Term $term;
+    private TypeOfTerm $term;
 
     private Percent $weighOfUnits;
 
-    private function __construct(Term $termName, NumOfUnits $numOfUnits, Percent $unitsWeight)
+    private function __construct(TypeOfTerm $termName, NumOfUnits $numOfUnits, Percent $unitsWeight)
     {
         $this->term = $termName;
         $this->numOfUnits = $numOfUnits;
@@ -43,7 +43,7 @@ class TermDefinition implements Serializable
         ]);
     }
 
-    public static function make(Term $termName, NumOfUnits $numOfUnits, Percent $unitsWeight): self
+    public static function make(TypeOfTerm $termName, NumOfUnits $numOfUnits, Percent $unitsWeight): self
     {
         return new self($termName, $numOfUnits, $unitsWeight);
     }
@@ -57,9 +57,9 @@ class TermDefinition implements Serializable
     }
 
     /**
-     * @return Term
+     * @return TypeOfTerm
      */
-    public function term(): Term
+    public function term(): TypeOfTerm
     {
         return $this->term;
     }
@@ -96,7 +96,7 @@ class TermDefinition implements Serializable
             'allowed_classes' => false
         ]);
 
-        $this->term = Term::byName($data['termName']);
+        $this->term = TypeOfTerm::byName($data['termName']);
         $this->numOfUnits = NumOfUnits::byName($data['numOfUnits']);
         $this->weighOfUnits = Percent::make($data['weighOfUnits']);
 

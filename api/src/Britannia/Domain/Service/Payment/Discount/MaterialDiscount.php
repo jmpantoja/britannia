@@ -35,12 +35,12 @@ class MaterialDiscount
      */
     private function getTotalPrice(Course $course)
     {
-        $books = collect($course->getBooks());
+        $books = collect($course->books());
 
         $price = Price::make(0);
 
         return $books->reduce(function (Price $total, Book $book) {
-            $bookPrice = $book->getPrice();
+            $bookPrice = $book->price();
 
             return $total->add($bookPrice);
         }, $price);

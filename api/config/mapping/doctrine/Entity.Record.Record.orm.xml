@@ -13,9 +13,10 @@
             <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
         </id>
 
-
         <many-to-one field="student" target-entity="Britannia\Domain\Entity\Student\Student" inversed-by="records"/>
+
         <many-to-one field="course" target-entity="Britannia\Domain\Entity\Course\Course" inversed-by="records"/>
+
         <many-to-one field="createdBy" target-entity="Britannia\Domain\Entity\Staff\StaffMember" />
 
         <field name="type" type="TypeOfRecord"/>

@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Academy;
 
 
+use Carbon\CarbonImmutable;
+
 class Academy
 {
     /**
@@ -26,39 +28,53 @@ class Academy
      */
     private $name;
 
-    public function __construct()
+    /**
+     * @var CarbonImmutable
+     */
+    private $createdAt;
+
+    /**
+     * @var CarbonImmutable
+     */
+    private $updatedAt;
+
+    public static function make(AcademyDto $dto): self
+    {
+        return new self($dto);
+    }
+
+    private function __construct(AcademyDto $dto)
     {
         $this->id = new AcademyId();
+        $this->createdAt = CarbonImmutable::now();
+
+        $this->update($dto);
+    }
+
+    public function update(AcademyDto $dto)
+    {
+        $this->name = $dto->name;
+        $this->updatedAt = $this->createdAt = CarbonImmutable::now();
     }
 
     /**
      * @return AcademyId
      */
-    public function getId(): AcademyId
+    public function id(): ?AcademyId
     {
         return $this->id;
-    }
-
-    public function __toString()
-    {
-        return (string)$this->getName();
     }
 
     /**
      * @return string
      */
-    public function getName(): ?string
+    public function name(): string
     {
-        return $this->name;
+        return $this->name ?? (string)$this->id();
     }
 
-    /**
-     * @param string $name
-     * @return Academy
-     */
-    public function setName(string $name): self
+    public function __toString()
     {
-        $this->name = $name;
-        return $this;
+        return $this->name();
     }
 }

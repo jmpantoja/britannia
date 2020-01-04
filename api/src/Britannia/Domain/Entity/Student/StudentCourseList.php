@@ -14,26 +14,35 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Student;
 
 
+use Britannia\Domain\Entity\Course\CourseList;
 use PlanB\DDD\Domain\Model\EntityList;
 
 final class StudentCourseList extends EntityList
 {
-    protected function __construct(StudentCourse ...$studentCourses)
+    protected function typeName(): string
     {
-        parent::__construct($studentCourses);
+        return StudentCourse::class;
     }
 
     public function toStudentList(): StudentList
     {
-        $students = $this->data()
-            ->map(fn(StudentCourse $studentCourse) => $studentCourse->getStudent());
+        $students = $this->values()
+            ->map(fn(StudentCourse $studentCourse) => $studentCourse->student());
 
-        return StudentList::collect($students, $this);
+        return StudentList::collect($students);
+    }
+
+    public function toCourseList(): CourseList
+    {
+        $courses = $this->values()
+            ->map(fn(StudentCourse $studentCourse) => $studentCourse->course());
+
+        return CourseList::collect($courses);
     }
 
     public function has(StudentCourse $studentCourse): bool
     {
-        return $this->data()
+        return $this->values()
             ->filter(fn(StudentCourse $item) => $item->equals($studentCourse))
             ->isNotEmpty();
     }

@@ -1,31 +1,8 @@
 {% extends 'admin/core/resume_column_base.html.twig' %}
 
 {% block header %}
-    {{ object.date.format('l, d  M Y') }}
+
+    {{ object.date | localizeddate('full', 'none') }}
 {% endblock %}
-
-{#{% block body %}#}
-    {#<div class="col-md-3">#}
-        {#{% for phoneNumber in object.phoneNumbers %}#}
-            {#<p class="phone">#}
-                {#<i class="fa fa-phone" aria-hidden="true"></i>#}
-                {#<span> {{ phoneNumber }} </span>#}
-                {#{% if phoneNumber.description %}#}
-                    {#<span> ({{ phoneNumber.description }})</span>#}
-                {#{% endif %}#}
-            {#</p>#}
-        {#{% endfor %}#}
-
-    {#</div>#}
-
-    {#<div class="col-md-3">#}
-        {#{% for email in object.emails %}#}
-            {#<p class="mail">#}
-                {#<i class="fa fa-envelope" aria-hidden="true"></i>#}
-                {#<span> {{ email }} </span>#}
-            {#</p>#}
-        {#{% endfor %}#}
-    {#</div>#}
-{#{% endblock %}#}
 
 

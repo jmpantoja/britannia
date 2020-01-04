@@ -18,9 +18,7 @@ use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Course\CourseDto;
 use Britannia\Domain\Service\Course\LessonGenerator;
 use Britannia\Domain\Service\Course\UnitGenerator;
-use PlanB\DDD\Domain\VO\Price;
 use PlanB\DDDBundle\Sonata\Admin\AdminMapper;
-use Symfony\Component\Form\Exception\UnexpectedTypeException;
 
 final class CourseMapper extends AdminMapper
 {
@@ -28,28 +26,27 @@ final class CourseMapper extends AdminMapper
      * @var LessonGenerator
      */
     private LessonGenerator $lessonCreator;
+    /**
+     * @var UnitGenerator
+     */
+    private UnitGenerator $unitGenerator;
 
     public function __construct(LessonGenerator $lessonCreator, UnitGenerator $unitGenerator)
     {
-        parent::__construct(Course::class);
+        parent::__construct();
         $this->lessonCreator = $lessonCreator;
         $this->unitGenerator = $unitGenerator;
     }
 
-    public function mapDataToForms($data, $forms)
+    public function className(): string
     {
-        parent::mapDataToForms($data, $forms);
+        return Course::class;
     }
 
-
-    protected function create(array $values)
+    protected function create(array $values): Course
     {
-        $timeTable = $values['timeTable'];
-        unset($values['timeTable']);
-
-        $dto = CourseDto::fromArray($values);
-        return Course::make($dto)
-            ->changeCalendar($timeTable, $this->lessonCreator);
+        $dto = $this->makeDto($values);
+        return Course::make($dto);
     }
 
     /**
@@ -58,29 +55,26 @@ final class CourseMapper extends AdminMapper
      */
     protected function update($course, array $values)
     {
-        if (!($course instanceof Course)) {
-            throw new UnexpectedTypeException($course, Course::class);
-        }
+        $dto = $this->makeDto($values);
+        $course
+            ->update($dto);
+    }
 
+    /**
+     * @param array $values
+     * @return CourseDto
+     */
+    protected function makeDto(array $values): CourseDto
+    {
+        $values['lessonCreator'] = $this->lessonCreator;
+        $values['unitGenerator'] = $this->unitGenerator;
 
-
-        $timeTable = $values['timeTable'];
-        unset($values['timeTable']);
-
-        $unitsDefinition = $values['unitsDefinition'];
-        unset($values['unitsDefinition']);
-
-
+        /**
+         * Aqui el precio de la matricula por defecto
+         */
 
         $dto = CourseDto::fromArray($values);
-
-        $dto->enrollmentPayment = Price::make(50);
-        $dto->monthlyPayment = Price::make(50);
-
-        $course
-            ->update($dto)
-            ->changeCalendar($timeTable, $this->lessonCreator)
-            ->changeUnits($unitsDefinition, $this->unitGenerator);
+        return $dto;
     }
 
 }

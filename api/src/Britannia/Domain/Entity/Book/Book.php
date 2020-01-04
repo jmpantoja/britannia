@@ -15,9 +15,10 @@ namespace Britannia\Domain\Entity\Book;
 
 
 use Britannia\Domain\VO\Course\Book\BookCategory;
+use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\VO\Price;
 
-class Book
+final class Book
 {
     /**
      * @var BookId
@@ -30,117 +31,84 @@ class Book
     private $name;
 
     /**
-     * @var null|BookCategory
+     * @var BookCategory
      */
     private $category;
 
     /**
-     * @var null|Price
+     * @var Price
      */
     private $price;
 
+    /**
+     * @var CarbonImmutable
+     */
+    private $createdAt;
 
-    private $courses;
+    /**
+     * @var CarbonImmutable
+     */
+    private $updatedAt;
 
-    public function __construct()
+
+    public static function make(BookDto $dto): self
     {
-        $this->id = new BookId();
+        return new self($dto);
     }
 
+    private function __construct(BookDto $dto)
+    {
+        $this->id = new BookId();
+        $this->update($dto);
+
+        $this->createdAt = CarbonImmutable::now();
+    }
+
+    public function update(BookDto $dto)
+    {
+        $this->name = $dto->name;
+        $this->price = $dto->price;
+        $this->category = $dto->category;
+
+        $this->updatedAt = CarbonImmutable::now();
+    }
 
     /**
      * @return BookId
      */
-    public function getId(): BookId
+    public function id(): ?BookId
     {
         return $this->id;
     }
 
     /**
-     * @return BookCategory|null
+     * @return string
      */
-    public function getCategory(): ?BookCategory
+    public function name(): string
     {
-        return $this->category;
+        return $this->name ?? (string)$this->id();
     }
 
     /**
-     * @param BookCategory|null $category
-     * @return Book
+     * @return Price
      */
-    public function setCategory(?BookCategory $category): Book
-    {
-        $this->category = $category;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getCourses()
-    {
-        return $this->courses;
-    }
-
-    /**
-     * @param mixed $courses
-     * @return Book
-     */
-    public function setCourses($courses)
-    {
-        $this->courses = $courses;
-        return $this;
-    }
-
-    public function __toString()
-    {
-
-        $name = (string)$this->getName();
-
-        if (is_null($this->getPrice())) {
-            return $name;
-        }
-
-        return sprintf('%s (%s €)', ...[
-            $name,
-            (string)$this->getPrice()
-        ]);
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param null|string $name
-     * @return Book
-     */
-    public function setName(?string $name): Book
-    {
-        $this->name = $name;
-        return $this;
-    }
-
-    /**
-     * @return null|Price
-     */
-    public function getPrice(): ?Price
+    public function price(): Price
     {
         return $this->price;
     }
 
     /**
-     * @param null|Price $price
-     * @return Book
+     * @return BookCategory
      */
-    public function setPrice(?Price $price): Book
+    public function category(): BookCategory
     {
-        $this->price = $price;
-        return $this;
+        return $this->category;
     }
+
+    public function __toString()
+    {
+        return $this->name();
+    }
+
 
 }

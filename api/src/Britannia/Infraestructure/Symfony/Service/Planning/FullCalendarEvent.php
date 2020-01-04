@@ -72,7 +72,7 @@ class FullCalendarEvent
 
         return $this;
     }
-    
+
     private function withColor(RGBA $color): self
     {
         $this->color = $color->toHtml();
@@ -108,7 +108,7 @@ class FullCalendarEvent
 
     private function withResource(ClassRoom $classRoom): self
     {
-        $this->resourceId = (string)$classRoom->getId();
+        $this->resourceId = (string)$classRoom->id();
         return $this;
     }
 

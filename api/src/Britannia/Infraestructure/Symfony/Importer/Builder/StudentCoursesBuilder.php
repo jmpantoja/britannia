@@ -15,10 +15,9 @@ namespace Britannia\Infraestructure\Symfony\Importer\Builder;
 
 
 use Britannia\Domain\Entity\Course\Course;
+use Britannia\Domain\Entity\Course\CourseList;
 use Britannia\Domain\Entity\Student\Student;
-use Britannia\Domain\Entity\Student\StudentCourse;
 use Britannia\Infraestructure\Symfony\Importer\Resume;
-use Doctrine\Common\Collections\ArrayCollection;
 
 class StudentCoursesBuilder extends BuilderAbstract
 {
@@ -61,13 +60,14 @@ class StudentCoursesBuilder extends BuilderAbstract
         $courses = array_filter($courses);
         $courses = array_unique($courses);
 
-        $this->courses = array_map(function ($course) {
+        $courses = array_map(function ($course) {
             return $this->findOneOrNull(Course::class, [
                 'oldId' => $course * 1
             ]);
         }, $courses);
 
-        $this->courses = array_filter($this->courses);
+        $courses = array_filter($courses);
+        $this->courses = CourseList::collect($courses);
 
         return $this;
     }
@@ -75,17 +75,11 @@ class StudentCoursesBuilder extends BuilderAbstract
 
     public function build(): ?object
     {
-        if (empty($this->courses)) {
+        if (empty($this->courses) or empty($this->student)) {
             return $this->student;
         }
 
-        $collection = new ArrayCollection();
-
-        foreach ($this->courses as $course) {
-            $collection->add(StudentCourse::make($this->student, $course));
-        }
-
-        $this->student->setStudentHasCourses($collection);
+        $this->student->setCourses($this->courses);
         return $this->student;
     }
 }

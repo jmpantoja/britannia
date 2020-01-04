@@ -13,14 +13,16 @@
 
         <embedded name="fullName" class="PlanB\DDD\Domain\VO\FullName" use-column-prefix="false"/>
 
-        <field name="emails" column="emails"  type="email_list"/>
+        <field name="emails" column="emails" type="email_list"/>
         <field name="dni" column="dni" type="dni" nullable="true"/>
-
-        <embedded name="address" class="PlanB\DDD\Domain\VO\PostalAddress" use-column-prefix="false"/>
 
         <field name="phoneNumbers" column="phone_numbers" type="phone_number_list"/>
 
-        <embedded name="job" class="Britannia\Domain\VO\Student\Job\Job" />
+        <field name="createdAt" type="datetime_immutable" nullable="true"/>
+        <field name="updatedAt" type="datetime_immutable" nullable="true"/>
+
+        <embedded name="address" class="PlanB\DDD\Domain\VO\PostalAddress" use-column-prefix="false"/>
+        <embedded name="job" class="Britannia\Domain\VO\Student\Job\Job"/>
 
     </entity>
 

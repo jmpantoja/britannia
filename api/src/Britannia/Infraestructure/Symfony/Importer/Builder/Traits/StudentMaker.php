@@ -15,8 +15,11 @@ namespace Britannia\Infraestructure\Symfony\Importer\Builder\Traits;
 
 
 use Britannia\Domain\Entity\Academy\Academy;
+use Britannia\Domain\Entity\Academy\AcademyDto;
 use Britannia\Domain\Entity\School\School;
+use Britannia\Domain\Entity\School\SchoolDto;
 use Britannia\Domain\Entity\Student\Tutor;
+use Britannia\Domain\Entity\Student\TutorDto;
 use Britannia\Domain\VO\BankAccount\BankAccount;
 use Britannia\Domain\VO\Payment\Payment;
 use Britannia\Domain\VO\Payment\PaymentMode;
@@ -38,10 +41,8 @@ use Symfony\Component\Validator\Validation;
 
 trait StudentMaker
 {
-
     public function toPayment(array $input): ?Payment
     {
-
         $mode = $this->toPaymentMode($input['mode'] * 1);
 
         $account = null;
@@ -198,9 +199,11 @@ trait StudentMaker
      */
     protected function toAcademy(string $name)
     {
-        $academy = new Academy();
-        $academy->setName($name);
+        $dto = AcademyDto::fromArray([
+            'name'=>$name
+        ]);
 
+        $academy = Academy::make($dto);
         $academy = $this->findOneOrCreate($academy, [
             'name' => $name
         ]);
@@ -215,8 +218,11 @@ trait StudentMaker
      */
     protected function toSchool(string $name): ?School
     {
-        $school = new School();
-        $school->setName($name);
+        $dto = SchoolDto::fromArray([
+            'name' => $name
+        ]);
+
+        $school = School::make($dto);
 
         return $this->findOneOrCreate($school, [
             'name' => $name
@@ -262,14 +268,24 @@ trait StudentMaker
 
         $emails = array_filter($emails);
 
-        $tutor = new Tutor();
-        $tutor->setFullName($fullName);
-        $tutor->setDni($dni);
-        $tutor->setAddress($address);
-        $tutor->setJob($job);
-        $tutor->setPhoneNumbers($phoneNumbers);
-        $tutor->setEmails($emails);
+        $dto = TutorDto::fromArray([
+            'fullName' => $fullName,
+            'dni' => $dni,
+            'address' => $address,
+            'job' => $job,
+            'phoneNumbers' => $phoneNumbers,
+            'emails' => $emails,
+        ]);
 
+        $tutor = Tutor::make($dto);
+
+//        $tutor = new Tutor();
+//        $tutor->setFullName($fullName);
+//        $tutor->setDni($dni);
+//        $tutor->setAddress($address);
+//        $tutor->setJob($job);
+//        $tutor->setPhoneNumbers($phoneNumbers);
+//        $tutor->setEmails($emails);
 
         return $this->findOneOrCreate($tutor, [
 
@@ -325,6 +341,10 @@ trait StudentMaker
 
         $firstName = str_replace([','], '', $firstName);
         $lastName = str_replace([','], '', $lastName);
+
+
+        $firstName = empty($firstName)? 'NOMBRE DESCONOCIDO': $firstName;
+        $lastName = empty($lastName)? 'APELLIDOS DESCONOCIDOS': $lastName;
 
         return [
             'firstName' => $firstName,

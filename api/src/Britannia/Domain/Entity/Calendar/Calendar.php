@@ -37,7 +37,7 @@ class Calendar
     /**
      * @var bool
      */
-    private $workDay = false;
+    private $workingDay = false;
 
     /**
      * @var int
@@ -56,16 +56,16 @@ class Calendar
 
     private function __construct(CarbonImmutable $dateTime)
     {
-        $dateTime = $dateTime->setTime(0, 0, 0);
+        $date = $dateTime->setTime(0, 0, 0);
 
-        $this->id = $dateTime->format('U');
-        $this->date = $dateTime;
-        $this->year = $dateTime->format('Y');
-        $this->month = $dateTime->format('m');
-        $this->day = $dateTime->format('d');
+        $this->id = $date->format('U');
+        $this->date = $date;
+        $this->year = $date->format('Y');
+        $this->month = $date->format('m');
+        $this->day = $date->format('d');
 
-        $this->weekday = DayOfWeek::fromDate($dateTime);
-        $this->workDay = !$this->weekday->isWeekEnd();
+        $this->weekday = DayOfWeek::fromDate($date);
+        $this->workingDay = !$this->weekday->isWeekEnd();
     }
 
     public static function fromDate(CarbonImmutable $date)
@@ -76,16 +76,15 @@ class Calendar
     /**
      * @return string
      */
-    public function getId(): string
+    public function id(): string
     {
         return $this->id;
     }
 
-
     /**
      * @return CarbonImmutable
      */
-    public function getDate(): CarbonImmutable
+    public function date(): CarbonImmutable
     {
         return $this->date;
     }
@@ -93,7 +92,7 @@ class Calendar
     /**
      * @return DayOfWeek
      */
-    public function getWeekday(): DayOfWeek
+    public function weekday(): DayOfWeek
     {
         return $this->weekday;
     }
@@ -101,7 +100,7 @@ class Calendar
     /**
      * @return string
      */
-    public function getShortDayName(): string
+    public function shortDayName(): string
     {
         return $this->weekday->getShortName();
     }
@@ -109,7 +108,7 @@ class Calendar
     /**
      * @return int
      */
-    public function getYear(): int
+    public function year(): int
     {
         return $this->year;
     }
@@ -117,7 +116,7 @@ class Calendar
     /**
      * @return int
      */
-    public function getMonth(): int
+    public function month(): int
     {
         return $this->month;
     }
@@ -125,28 +124,51 @@ class Calendar
     /**
      * @return int
      */
-    public function getDay(): int
+    public function day(): int
     {
         return $this->day;
     }
 
-
     /**
      * @return bool
      */
-    public function isWorkDay(): bool
+    public function isWorkingDay(): bool
     {
-        return $this->workDay;
+        return $this->workingDay;
     }
 
     /**
-     * @param bool $workDay
+     * @param bool $workingDay
      * @return Calendar
      */
-    public function setWorkDay(bool $workDay): Calendar
+    public function setWorkingDay(bool $workingDay): self
     {
-        $this->workDay = $workDay;
+        if ($workingDay) {
+            $this->setAsLaborable();
+            return $this;
+        }
+
+        $this->setAsHoliday();
         return $this;
     }
+
+    public function setAsLaborable(): self
+    {
+        if ($this->isWorkingDay()) {
+            return $this;
+        }
+
+        $this->workingDay = true;
+    }
+
+    public function setAsHoliday()
+    {
+        if (!$this->isWorkingDay()) {
+            return $this;
+        }
+
+        $this->workingDay = false;
+    }
+
 
 }

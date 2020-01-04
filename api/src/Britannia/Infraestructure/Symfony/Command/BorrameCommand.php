@@ -2,7 +2,10 @@
 
 namespace Britannia\Infraestructure\Symfony\Command;
 
+use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Repository\CourseRepositoryInterface;
+use Britannia\Domain\Service\Course\LessonGenerator;
+use Britannia\Domain\VO\Course\TimeTable\TimeTable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -22,13 +25,21 @@ class BorrameCommand extends Command
      * @var EntityManagerInterface
      */
     private $entityManager;
+    /**
+     * @var LessonGenerator
+     */
+    private LessonGenerator $lessonGenerator;
 
-    public function __construct(CourseRepositoryInterface $repository, EntityManagerInterface $entityManager)
+    public function __construct(CourseRepositoryInterface $repository,
+                                EntityManagerInterface $entityManager,
+                                LessonGenerator $lessonGenerator
+    )
     {
         parent::__construct(null);
 
         $this->repository = $repository;
         $this->entityManager = $entityManager;
+        $this->lessonGenerator = $lessonGenerator;
     }
 
     protected function configure()
@@ -43,23 +54,6 @@ class BorrameCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        $allCourses = $this->repository->findAll();
-
-        $total = count($allCourses);
-
-
-        foreach ($allCourses as $course) {
-            $course->initColor();
-
-            $this->entityManager->persist($course);
-
-            $io->text($total--);
-
-        }
-
-        $this->entityManager->flush();
-
-        die();
 
 
         return 0;

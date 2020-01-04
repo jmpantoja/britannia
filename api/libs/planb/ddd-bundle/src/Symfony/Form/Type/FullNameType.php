@@ -42,7 +42,6 @@ class FullNameType extends AbstractCompoundType
     {
         $resolver->setDefaults([
             'data_class' => FullName::class
-
         ]);
     }
 

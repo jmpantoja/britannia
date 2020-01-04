@@ -36,8 +36,8 @@ class ClassRoomType extends AbstractSingleType
 
 
         foreach ($classRoomList as $classRoom) {
-            $id = (string)$classRoom->getId();
-            $name = $classRoom->getName();
+            $id = (string)$classRoom->id();
+            $name = $classRoom->name();
 
             $this->classRoomList[$name] = $id;
         }

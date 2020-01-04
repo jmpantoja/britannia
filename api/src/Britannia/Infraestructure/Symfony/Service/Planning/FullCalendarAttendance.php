@@ -86,7 +86,7 @@ final class FullCalendarAttendance
 
     private function initStudent(Student $student, Lesson $lesson): self
     {
-        $fullName = (string)$student->getFullName();
+        $fullName = (string)$student->fullName();
 
         if (!$this->isMissed()) {
             $this->student = $fullName;

@@ -68,7 +68,7 @@ class StudentDiscount
     /**
      * @return JobStatus
      */
-    public function getJobStatus(): ?JobStatus
+    public function jobStatus(): ?JobStatus
     {
         return $this->jobStatus;
     }
@@ -76,7 +76,7 @@ class StudentDiscount
     /**
      * @return int
      */
-    public function getFamilyOrder(): FamilyOrder
+    public function familyOrder(): FamilyOrder
     {
         return $this->familyOrder;
     }
@@ -94,7 +94,7 @@ class StudentDiscount
     /**
      * @return CarbonImmutable|null
      */
-    public function getStartDate(): ?CarbonImmutable
+    public function startDate(): ?CarbonImmutable
     {
         return $this->startDate;
     }

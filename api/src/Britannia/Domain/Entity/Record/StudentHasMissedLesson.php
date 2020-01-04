@@ -25,14 +25,14 @@ class StudentHasMissedLesson extends AbstractRecordEvent
         $lesson = $attendance->getLesson();
         $reason = $attendance->getReason();
 
-        $description = sprintf('%s falta a clase', $student->getFullName());
+        $description = sprintf('%s falta a clase', $student->fullName());
 
         if (!is_null($reason)) {
-            $description = sprintf('%s falta a clase (%s)', $student->getFullName(), $reason);
+            $description = sprintf('%s falta a clase (%s)', $student->fullName(), $reason);
         }
 
-        $course = $lesson->getCourse();
-        $date = $lesson->getDay();
+        $course = $lesson->course();
+        $date = $lesson->day();
 
         return new self($student, $course, $description, $date);
     }

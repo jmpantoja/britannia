@@ -18,10 +18,8 @@
             <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
         </id>
 
-        <one-to-many field="studentHasCourses"
-                     target-entity="Britannia\Domain\Entity\Student\StudentCourse"
-                     mapped-by="student"
-                     fetch="EXTRA_LAZY">
+        <one-to-many field="studentHasCourses" target-entity="Britannia\Domain\Entity\Student\StudentCourse"
+                     mapped-by="student" orphan-removal="true">
 
             <cascade>
                 <cascade-persist/>
@@ -80,13 +78,8 @@
 
         <field name="termsOfUseImageRigths" type="boolean"/>
 
-
-        <lifecycle-callbacks>
-            <lifecycle-callback type="prePersist" method="onSave"/>
-            <lifecycle-callback type="preUpdate" method="onSave"/>
-        </lifecycle-callbacks>
-
         <field name="createdAt" type="datetime_immutable"/>
+
         <field name="updatedAt" type="datetime_immutable"/>
 
     </entity>

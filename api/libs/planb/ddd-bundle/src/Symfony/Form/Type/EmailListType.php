@@ -79,12 +79,10 @@ class EmailListType extends AbstractSingleType
      * @return Email
      */
     protected function toEmail($email): Email
-
     {
         if ($email instanceof Email) {
             return $email;
         }
-
         return Email::make((string)$email);
     }
 

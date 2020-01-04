@@ -4,8 +4,6 @@
 namespace PlanB\DDD\Domain\Model;
 
 
-use Symfony\Component\Form\Exception\InvalidArgumentException;
-
 abstract class Dto
 {
     public static function fromArray(array $values)
@@ -13,19 +11,30 @@ abstract class Dto
         return new static($values);
     }
 
-    private function __construct(array $values)
+    protected function __construct(array $values)
     {
+
+        $defaults = $this->defaults();
+        $values = array_replace($defaults, $values);
+
         $properties = array_keys(get_class_vars(static::class));
 
         foreach ($properties as $name) {
-            $this->{$name} = $values[$name] ?? null;
-            unset($values[$name]);
+            if (array_key_exists($name, $values)) {
+                $this->{$name} = $values[$name];
+                unset($values[$name]);
+            }
         }
-
-        if (count($values)) {
-            $message = sprintf('Datos extra: [%s]', implode(', ', array_keys($values)));
-            throw new InvalidArgumentException($message);
-        }
+//        if (count($values)) {
+//            $message = sprintf('Datos extra: [%s]', implode(', ', array_keys($values)));
+//            throw new \InvalidArgumentException($message);
+//        }
     }
+
+    protected function defaults(): array
+    {
+        return [];
+    }
+
 
 }

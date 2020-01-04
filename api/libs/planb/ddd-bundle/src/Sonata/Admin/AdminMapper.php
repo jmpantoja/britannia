@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace PlanB\DDDBundle\Sonata\Admin;
 
+use PlanB\DDD\Domain\Model\Exception\InvalidTypeException;
 use Symfony\Component\Form\DataMapperInterface;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\Form\FormInterface;
@@ -25,11 +26,13 @@ abstract class AdminMapper implements DataMapperInterface
 
     protected $propertyAccessor;
 
-    protected function __construct($className)
+    public function __construct()
     {
         $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
-        $this->className = $className;
+        $this->className = $this->className();
     }
+
+    abstract protected function className(): string;
 
     public function mapDataToForms($object, $forms)
     {
@@ -87,13 +90,25 @@ abstract class AdminMapper implements DataMapperInterface
         $id = $this->propertyAccessor->getValue($data, 'id');
         if (null === $id) {
             $data = $this->create($values);
+            $this->assertType($data);
             return;
         }
 
+        $this->assertType($data);
         $this->update($data, $values);
     }
 
-    abstract protected function create(array $values);
+    /**
+     * @param $object
+     */
+    protected function assertType($object): void
+    {
+        if (!is_a($object, $this->className(), true)) {
+            throw InvalidTypeException::make($object, $this->className());
+        }
+    }
+
+    abstract protected function create(array $values): object;
 
     abstract protected function update($object, array $values);
 }

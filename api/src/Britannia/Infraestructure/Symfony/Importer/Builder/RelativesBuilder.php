@@ -15,6 +15,7 @@ namespace Britannia\Infraestructure\Symfony\Importer\Builder;
 
 
 use Britannia\Domain\Entity\Student\Student;
+use Britannia\Domain\Entity\Student\StudentList;
 use Britannia\Infraestructure\Symfony\Importer\Resume;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -58,7 +59,7 @@ class RelativesBuilder extends BuilderAbstract
 
         $relatives = array_filter($relatives);
 
-        $this->relatives = new ArrayCollection($relatives);
+        $this->relatives = StudentList::collect($relatives);
     }
 
 

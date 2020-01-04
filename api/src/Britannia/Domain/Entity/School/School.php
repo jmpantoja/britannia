@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\School;
 
 
+use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\Filter\ProperName;
 
 class School
@@ -25,42 +26,67 @@ class School
      */
     private $name;
 
-    public function __construct()
+    /**
+     * @var CarbonImmutable
+     */
+    private $createdAt;
+
+    /**
+     * @var CarbonImmutable
+     */
+    private $updatedAt;
+
+    public static function make(SchoolDto $dto): self
+    {
+        return new self($dto);
+    }
+
+    private function __construct(SchoolDto $dto)
     {
         $this->id = new SchoolId();
+        $this->createdAt = CarbonImmutable::now();
+
+        $this->update($dto);
+    }
+
+
+    public function update(SchoolDto $dto)
+    {
+        $this->setName($dto->name);
+        $this->updatedAt = CarbonImmutable::now();
     }
 
     /**
      * @return mixed
      */
-    public function getId()
+    public function id(): ?SchoolId
     {
         return $this->id;
-    }
-
-    public function __toString()
-    {
-        return (string)$this->getName();
-    }
-
-    /**
-     * @return string
-     */
-    public function getName(): ?string
-    {
-        return $this->name;
     }
 
     /**
      * @param string $name
      * @return School
      */
-    public function setName(string $name): self
+    private function setName(?string $name): self
     {
         $filter = new ProperName();
-
         $this->name = $filter->filter($name);
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function name(): string
+    {
+        return $this->name ?? (string) $this->id();
+    }
+
+    public function __toString()
+    {
+        return $this->name();
+    }
+
 
 }

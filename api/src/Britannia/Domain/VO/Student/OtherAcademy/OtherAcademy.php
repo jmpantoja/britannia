@@ -64,7 +64,7 @@ class OtherAcademy
     /**
      * @return Academy
      */
-    public function getAcademy(): Academy
+    public function academy(): Academy
     {
         return $this->academy;
     }
@@ -72,7 +72,7 @@ class OtherAcademy
     /**
      * @return NumOfYears
      */
-    public function getNumOfYears(): ?NumOfYears
+    public function numOfYears(): ?NumOfYears
     {
         return $this->numOfYears;
     }

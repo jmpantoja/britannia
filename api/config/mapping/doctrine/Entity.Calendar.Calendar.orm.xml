@@ -16,7 +16,9 @@
         <field name="year" type="integer"/>
         <field name="day" type="integer"/>
 
-        <field name="workDay" type="boolean"/>
+        <field name="workingDay" type="boolean"/>
+
+
     </entity>
 
 </doctrine-mapping>

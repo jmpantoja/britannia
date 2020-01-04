@@ -21,7 +21,6 @@ use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\VO\Course\TimeTable\TimeSheet;
 use Carbon\CarbonImmutable;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use PlanB\DDD\Domain\Behaviour\Comparable;
 use PlanB\DDD\Domain\Behaviour\Traits\ComparableTrait;
@@ -76,21 +75,41 @@ class Lesson implements Comparable
     private $endTime;
 
 
-    public static function make(ClassRoom $classRoom, CarbonImmutable $day, TimeSheet $timeSheet): self
+    public static function fromArray(array $values): self
     {
-        return new self($classRoom, $day, $timeSheet);
+        $dto = LessonDto::fromArray($values);
+        return new self($dto);
     }
 
-    private function __construct(ClassRoom $classRoom, CarbonImmutable $day, TimeSheet $timeSheet)
+    public static function make(LessonDto $dto): self
+    {
+        return new self($dto);
+    }
+
+    private function __construct(LessonDto $dto)
     {
         $this->id = new LessonId();
         $this->number = PositiveInteger::make(1);
-        $this->classRoom = $classRoom;
-        $this->attendances = new ArrayCollection();
 
-        $this->setDay($day);
-        $this->setStartTime($timeSheet);
-        $this->setEndTime($timeSheet);
+        $this->update($dto);
+    }
+
+    public function update(LessonDto $dto)
+    {
+        $this->classRoom = $dto->classRoom ;
+        $this->setDay($dto->date);
+        $this->setStartTime($dto->timeSheet);
+        $this->setEndTime($dto->timeSheet);
+        $this->updateAttendances($dto->attendances);
+    }
+
+    public function updateAttendances(AttendanceList $attendances): self
+    {
+        $this->attendanceList()
+            ->forRemovedItems($attendances)
+            ->forAddedItems($attendances);
+
+        return $this;
     }
 
     private function setDay(CarbonImmutable $day): self
@@ -150,15 +169,6 @@ class Lesson implements Comparable
         return $this->classRoom;
     }
 
-    public function setAttendances(AttendanceList $attendances): self
-    {
-        $this->attendanceList()
-            ->forRemovedItems($attendances)
-            ->forAddedItems($attendances);
-
-        return $this;
-    }
-
     /**
      * @return Collection
      */
@@ -170,6 +180,7 @@ class Lesson implements Comparable
 
     private function attendanceList(): AttendanceList
     {
+
         return AttendanceList::collect($this->attendances);
     }
 

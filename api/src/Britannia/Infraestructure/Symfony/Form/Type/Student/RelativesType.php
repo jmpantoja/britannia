@@ -16,6 +16,7 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Student;
 
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Entity\Student\StudentId;
+use Britannia\Domain\Entity\Student\StudentList;
 use Britannia\Infraestructure\Symfony\Validator\FullName;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Sonata\ModelManager;
@@ -25,7 +26,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class RelativesType extends AbstractSingleType
 {
-
     /**
      * @var ModelManager
      */
@@ -46,7 +46,7 @@ class RelativesType extends AbstractSingleType
     {
 
         $resolver->setRequired(['studentId']);
-        $resolver->setAllowedTypes('studentId', [StudentId::class]);
+        $resolver->setAllowedTypes('studentId', [StudentId::class, 'null']);
 
         $resolver->setDefaults([
             'by_reference' => false,
@@ -61,17 +61,22 @@ class RelativesType extends AbstractSingleType
             ]
         ]);
 
+        $resolver->setNormalizer('query', $this->normalizeQuery());
 
-        $resolver->setRequired(['studentId']);
-        $resolver->setAllowedTypes('studentId', [StudentId::class]);
+    }
 
-        $resolver->setNormalizer('query', function (OptionsResolver $resolver, $value) {
+    /**
+     * @return \Closure
+     */
+    private function normalizeQuery(): \Closure
+    {
+        return function (OptionsResolver $resolver, $value) {
             $builder = $this->modelManager->createQuery(Student::class, 'A');
+            $studentId = $resolver['studentId'];
             return $builder
                 ->where('A.id != :id')
-                ->setParameter('id', $resolver['studentId']);
-        });
-
+                ->setParameter('id', $studentId);
+        };
     }
 
     public function transform($value)
@@ -79,10 +84,6 @@ class RelativesType extends AbstractSingleType
         return $value;
     }
 
-
-    /**
-     * @return FullName
-     */
     public function buildConstraint(array $options): ?Constraint
     {
         return null;
@@ -90,6 +91,8 @@ class RelativesType extends AbstractSingleType
 
     public function customMapping($data)
     {
-        return $data;
+        return StudentList::collect($data);
     }
+
+
 }

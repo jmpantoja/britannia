@@ -28,7 +28,7 @@ class Mark
 
     private function __construct(float $mark)
     {
-        $this->mark = $mark;
+        $this->mark = round($mark, 2);
     }
 
     public static function buildConstraint(array $options = []): Constraint
@@ -43,4 +43,19 @@ class Mark
         $mark = self::assert($mark);
         return new self($mark);
     }
+
+    /**
+     * @return float
+     */
+    public function mark(): float
+    {
+        return $this->mark;
+    }
+
+    public function __toString()
+    {
+        return (string)$this->mark();
+    }
+
+
 }

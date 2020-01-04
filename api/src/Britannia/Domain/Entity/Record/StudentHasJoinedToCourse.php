@@ -21,13 +21,13 @@ class StudentHasJoinedToCourse extends AbstractRecordEvent
 
     public static function make(StudentCourse $studentCourse): self
     {
-        $student = $studentCourse->getStudent();
-        $course = $studentCourse->getCourse();
+        $student = $studentCourse->student();
+        $course = $studentCourse->course();
         $description = sprintf('Se une al curso %s', $course->name());
 
         $date = null;
         if ($course->isFinalized()) {
-            $date = $course->startDate();
+            $date = $course->start();
         }
 
         return new self($student, $course, $description, $date);

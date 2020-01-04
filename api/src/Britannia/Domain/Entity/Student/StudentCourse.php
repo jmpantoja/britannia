@@ -61,7 +61,7 @@ class StudentCourse implements Comparable
     /**
      * @return Student
      */
-    public function getStudent(): Student
+    public function student(): Student
     {
         return $this->student;
     }
@@ -69,7 +69,7 @@ class StudentCourse implements Comparable
     /**
      * @return Course
      */
-    public function getCourse(): Course
+    public function course(): Course
     {
         return $this->course;
     }

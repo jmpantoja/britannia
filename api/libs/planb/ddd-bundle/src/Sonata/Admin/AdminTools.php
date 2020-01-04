@@ -14,12 +14,21 @@ declare(strict_types=1);
 namespace PlanB\DDDBundle\Sonata\Admin;
 
 
-use Britannia\Infraestructure\Symfony\Admin\Course\CourseDatagrid;
+use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Route\RouteCollection;
+use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 
 abstract class AdminTools
 {
-    abstract public function dataGrid(ListMapper $listMapper): CourseDatagrid;
-    abstract public function form(FormMapper $formMapper): AdminForm;
+    abstract public function dataGrid(ListMapper $listMapper): ?AdminDataGrid;
+
+    abstract public function form(FormMapper $formMapper): ?AdminForm;
+
+    abstract public function query(ProxyQuery $query): ?AdminQuery;
+
+    abstract public function filters(DatagridMapper $filterMapper): ?AdminFilter;
+
+    abstract public function routes(RouteCollection $collection, string $idParameter): ?AdminRoutes;
 }

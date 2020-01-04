@@ -13,11 +13,8 @@ declare(strict_types=1);
 
 namespace Britannia\Infraestructure\Symfony\EventSubscriber;
 
-
-use Britannia\Application\UseCase\Course\UpdateTimeTable;
-use Britannia\Application\UseCase\Course\UpdateUnitDefinition;
-use Britannia\Domain\Entity\Course\TimeTabletHasChanged;
-use Britannia\Domain\Entity\Mark\UnitDefinitionHasChanged;
+use Britannia\Application\UseCase\Course\ChangeCourseStatus;
+use Britannia\Domain\Entity\Course\CourseHasChangedStatus;
 
 class CourseSubscriber extends DomainEventSubscriber
 {
@@ -29,7 +26,14 @@ class CourseSubscriber extends DomainEventSubscriber
     public static function getSubscribedEvents()
     {
         return [
+            CourseHasChangedStatus::class => 'onCourseChangeStatus'
         ];
+    }
+
+    public function onCourseChangeStatus(CourseHasChangedStatus $event)
+    {
+        $command = ChangeCourseStatus::fromEvent($event);
+        $this->handle($command);
     }
 
 

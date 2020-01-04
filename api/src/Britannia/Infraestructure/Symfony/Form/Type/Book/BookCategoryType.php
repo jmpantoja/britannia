@@ -36,9 +36,9 @@ class BookCategoryType extends AbstractSingleType
     public function customOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'required' => false,
+            'required' => true,
             'choice_loader' => new CallbackChoiceLoader(function () {
-                $values = array_flip(BookCategory::getConstants());
+                return array_flip(BookCategory::getConstants());
                 return array_merge(['' => ''], $values);
             }),
             'attr' => array('style' => 'max-width: 150px')

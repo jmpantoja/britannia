@@ -4,7 +4,7 @@ namespace Britannia\Domain\Entity\Staff;
 
 
 use Britannia\Domain\Entity\Course\Course;
-use Britannia\Domain\VO\Course\CourseStatus;
+use Britannia\Domain\Entity\Course\CourseList;
 use Carbon\CarbonImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -18,6 +18,7 @@ use PlanB\DDD\Domain\VO\FullName;
 use PlanB\DDD\Domain\VO\PhoneNumber;
 use PlanB\DDD\Domain\VO\PostalAddress;
 use Serializable;
+use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 
@@ -27,14 +28,17 @@ class StaffMember implements UserInterface, Serializable, Comparable
     use ComparableTrait;
 
     const DEFAULT_ROLE = 'ROLE_SONATA_ADMIN';
+
+    /**
+     * @var StaffMemberId
+     */
+    private $id;
+
     /**
      * @var int
      */
     private $oldId;
-    /**
-     * @var bool
-     */
-    private $active = true;
+
     /**
      * @var bool
      */
@@ -75,6 +79,10 @@ class StaffMember implements UserInterface, Serializable, Comparable
      * @var Collection
      */
     private $courses;
+
+    /**
+     * @var array
+     */
     private $roles;
     /**
      * @var CarbonImmutable
@@ -84,225 +92,163 @@ class StaffMember implements UserInterface, Serializable, Comparable
      * @var CarbonImmutable
      */
     private $updatedAt;
-    private $id;
 
-    public function __construct()
+    public static function make(StaffMemberDto $dto): self
+    {
+        return new self($dto);
+    }
+
+    private function __construct(StaffMemberDto $dto)
     {
         $this->id = new StaffMemberId();
-        $this->createdAt = CarbonImmutable::now();
-        $this->updatedAt = CarbonImmutable::now();
+        $this->teacher = true;
         $this->roles = [self::DEFAULT_ROLE];
         $this->courses = new ArrayCollection();
-
+        $this->createdAt = CarbonImmutable::now();
+        $this->update($dto);
     }
 
-    /**
-     * @return int
-     */
-    public function getOldId(): int
+    public function update(StaffMemberDto $dto): self
     {
-        return $this->oldId;
-    }
+        $this->userName = $dto->userName;
+        $this->dni = $dto->dni;
+        $this->fullName = $dto->fullName;
+        $this->address = $dto->address;
+        $this->emails = $dto->emails;
+        $this->phoneNumbers = $dto->phoneNumbers;
 
-    /**
-     * @param int $oldId
-     * @return StaffMember
-     */
-    public function setOldId(int $oldId): StaffMember
-    {
-        $this->oldId = $oldId;
+        $this->setCourses($dto->courses);
+
+        if (isset($dto->roles)) {
+            $this->setRoles($dto->roles);
+        }
+
+        if (isset($dto->password)) {
+            $this->changePassword($dto->password, $dto->encoder);
+        }
+
+        $this->updatedAt = CarbonImmutable::now();
+
+        if (isset($dto->oldId)) {
+            $this->oldId = $dto->oldId;
+        }
+
         return $this;
     }
 
-    public function isTeacher(): ?bool
+
+    public function changePassword(string $password, EncoderFactoryInterface $encoderFactory)
+    {
+        $encoder = $encoderFactory->getEncoder($this);
+        $salt = $this->getSalt();
+
+        $encodedPassword = $encoder->encodePassword($password, $salt);
+
+        $this->password = $encodedPassword;
+    }
+
+
+    public function id(): ?StaffMemberId
+    {
+        return $this->id;
+    }
+
+    public function isTeacher(): bool
     {
         return $this->teacher;
     }
 
-    public function setTeacher(bool $teacher): self
-    {
-        $this->teacher = $teacher;
 
-        return $this;
-    }
-
-    public function getUserName(): ?string
+    public function getUsername(): string
     {
         return $this->userName;
     }
 
-    public function setUserName(string $userName): self
-    {
-        $this->userName = $userName;
-
-        return $this;
-    }
-
-    public function getPassword(): ?string
+    public function getPassword(): string
     {
         return $this->password;
-    }
-
-    public function setPassword(string $password): self
-    {
-        $this->password = $password;
-
-        return $this;
     }
 
     /**
      * @return FullName
      */
-    public function getFullName(): ?FullName
+    public function fullName(): FullName
     {
         return $this->fullName;
     }
 
     /**
-     * @param FullName $fullName
-     * @return StaffMember
+     * @return PostalAddress
      */
-    public function setFullName(FullName $fullName): StaffMember
-    {
-        $this->fullName = $fullName;
-        return $this;
-    }
-
-    /**
-     * @return null|PostalAddress
-     */
-    public function getAddress(): ?PostalAddress
+    public function address(): ?PostalAddress
     {
         return $this->address;
     }
 
     /**
-     * @param null|PostalAddress $address
-     * @return StaffMember
+     * @return DNI
      */
-    public function setAddress(?PostalAddress $address): StaffMember
-    {
-        $this->address = $address;
-        return $this;
-    }
-
-    /**
-     * @return null|DNI
-     */
-    public function getDni(): ?DNI
+    public function dni(): ?DNI
     {
         return $this->dni;
     }
 
-    /**
-     * @param null|DNI $dni
-     * @return StaffMember
-     */
-    public function setDni(?DNI $dni): StaffMember
-    {
-        $this->dni = $dni;
-        return $this;
-    }
 
     /**
      * @return null|Email[]
      */
-    public function getEmails(): ?array
+    public function emails(): array
     {
         return $this->emails;
     }
 
     /**
-     * @param null|Email[] $emails
-     * @return StaffMember
-     */
-    public function setEmails(?array $emails): StaffMember
-    {
-        $this->emails = $emails;
-        return $this;
-    }
-
-    /**
      * @return null|PhoneNumber[]
      */
-    public function getPhoneNumbers(): ?array
+    public function phoneNumbers(): array
     {
         return $this->phoneNumbers;
     }
 
     /**
-     * @param null|PhoneNumber[] $phoneNumbers
-     * @return StaffMember
+     * @return Course[]
      */
-    public function setPhoneNumbers(?array $phoneNumbers): StaffMember
+    public function courses(): array
     {
-        $this->phoneNumbers = $phoneNumbers;
-        return $this;
+        return $this->courseList()->toArray();
     }
 
-    public function getCreatedAt(): ?CarbonImmutable
+    private function courseList(): CourseList
     {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(CarbonImmutable $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?CarbonImmutable
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(CarbonImmutable $updatedAt): self
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection
-     */
-    public function getCourses(): Collection
-    {
-        return $this->courses;
+        return CourseList::collect($this->courses);
     }
 
     /**
      * @param Collection $courses
      * @return StaffMember
      */
-    public function setCourses(Collection $courses): StaffMember
+    public function setCourses(CourseList $courses): self
     {
-        foreach ($courses as $course) {
-            $this->addCourse($course);
-        }
+        $this->courseList()
+            ->forRemovedItems($courses, [$this, 'removeCourse'])
+            ->forAddedItems($courses, [$this, 'addCourse']);
+
         return $this;
     }
 
-    public function addCourse(Course $course): StaffMember
+    public function addCourse(Course $course): self
     {
-        if ($this->courses->contains($course)) {
-            return $this;
-        }
+        $this->courseList()
+            ->add($course, fn(Course $course) => $course->addTeacher($this));
 
-        $this->courses->add($course);
-        $course->addTeacher($this);
         return $this;
     }
 
     public function removeCourse(Course $course): StaffMember
     {
-        if (!$this->courses->contains($course)) {
-            return $this;
-        }
+        $this->courseList()
+            ->remove($course, fn(Course $course) => $course->removeTeacher($this));
 
-        $this->courses->removeElement($course);
-        $course->removeTeacher($this);
         return $this;
     }
 
@@ -336,37 +282,6 @@ class StaffMember implements UserInterface, Serializable, Comparable
 
     }
 
-    public function getActive(): ?bool
-    {
-        return $this->active;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPlainPassword(): ?string
-    {
-        return $this->plainPassword;
-    }
-
-    /**
-     * @param string $plainPassword
-     * @return StaffMember
-     */
-    public function setPlainPassword(?string $plainPassword): self
-    {
-        $this->notify(new PasswordHasChanged($this, $plainPassword));
-        return $this;
-    }
-
-    public function onSave(): self
-    {
-        $this->teacher = in_array('ROLE_TEACHER', $this->getRoles(), true);
-        $this->active = 0 !== count($this->getActiveCourses());
-
-        return $this;
-    }
-
     public function getRoles(): ?array
     {
         return $this->roles;
@@ -377,22 +292,17 @@ class StaffMember implements UserInterface, Serializable, Comparable
     {
         $roles[] = self::DEFAULT_ROLE;
         $this->roles = $roles;
+        $this->teacher = in_array('ROLE_TEACHER', $this->roles, true);
 
         return $this;
     }
 
-    public function getActiveCourses(): array
+    public function activeCourses(): array
     {
         return $this->courses->filter(function (Course $course) {
             return $course->isActive();
         })->toArray();
 
-    }
-
-
-    public function id(): StaffMemberId
-    {
-        return $this->id;
     }
 
     public function serialize()
@@ -423,11 +333,5 @@ class StaffMember implements UserInterface, Serializable, Comparable
 
     }
 
-    private function setActive(bool $active): self
-    {
 
-        $this->active = $active;
-
-        return $this;
-    }
 }

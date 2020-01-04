@@ -23,7 +23,7 @@ use Symfony\Component\Form\ChoiceList\Loader\CallbackChoiceLoader;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class SupportType extends AbstractSingleType
+final class SupportType extends AbstractSingleType
 {
     /**
      * {@inheritdoc}

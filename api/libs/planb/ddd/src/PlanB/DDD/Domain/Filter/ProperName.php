@@ -34,12 +34,16 @@ class ProperName implements FilterInterface
     /**
      * Returns the result of filtering $value
      *
-     * @param  mixed $value
-     * @throws Exception\RuntimeException If filtering $value is impossible
+     * @param mixed $value
      * @return mixed
+     * @throws Exception\RuntimeException If filtering $value is impossible
      */
     public function filter($value)
     {
+        if (is_null($value)) {
+            return null;
+        }
+
         $value = trim($value);
         $pieces = preg_split('/\s+/', $value);
 

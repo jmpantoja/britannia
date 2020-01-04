@@ -47,11 +47,10 @@ class StudentEtl extends AbstractEtl
 
         if (is_int($id)) {
             $builder
-                ->andWhere('id = ?')
+                ->andWhere('id > ?')
                 ->setParameter(0, $id);
         }
     }
-
 
     public function createBuilder(array $input, EntityManagerInterface $entityManager): BuilderInterface
     {
@@ -61,8 +60,8 @@ class StudentEtl extends AbstractEtl
             ->withId($input['id'])
             ->withType($input['tipo'])
             ->withFullName([
-                'firstName' => $input['nombre'],
-                'lastName' => $input['apellidos']
+                'firstName' => $input['nombre'] ?? 'NOMBRE DESCONOCIDO',
+                'lastName' => $input['apellidos'] ?? 'APELLIDOS DESCONOCIDOS'
             ])
             ->withBirthDate((string)$input['fecha'])
             ->withDNI((string)$input['dni'])

@@ -14,13 +14,19 @@ declare(strict_types=1);
 namespace PlanB\DDDBundle\Sonata\Admin;
 
 
+use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Form\FormMapper;
 use Symfony\Component\Form\DataMapperInterface;
 
-class AdminForm
+abstract class AdminForm
 {
     private $mapper;
     private $isOpened;
+
+    public static function make(FormMapper $mapper): self
+    {
+        return new static($mapper);
+    }
 
 
     protected function __construct(FormMapper $mapper)
@@ -28,11 +34,22 @@ class AdminForm
         $this->mapper = $mapper;
     }
 
+    public function admin(): AbstractAdmin
+    {
+        return $this->mapper->getAdmin();
+    }
+
     public function setDataMapper(DataMapperInterface $dataMapper): self
     {
         $this->mapper->getFormBuilder()->setDataMapper($dataMapper);
         return $this;
     }
+
+    public function dataMapper(): ?DataMapperInterface
+    {
+        return $this->mapper->getFormBuilder()->getDataMapper();
+    }
+
 
     protected function tab(string $name): self
     {
@@ -71,5 +88,6 @@ class AdminForm
         }
         $this->isOpened = true;
     }
+
 
 }

@@ -16,7 +16,6 @@ namespace Britannia\Domain\Service\Course;
 
 use Britannia\Domain\Entity\Calendar\Calendar;
 use Britannia\Domain\Entity\ClassRoom\ClassRoom;
-use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Lesson\Lesson;
 use Britannia\Domain\Entity\Lesson\LessonList;
 use Britannia\Domain\Repository\CalendarRepositoryInterface;
@@ -97,14 +96,10 @@ final class LessonGenerator
 
     private function makeLesson(Calendar $day, Schedule $schedule)
     {
-        $classRoom = $this->getClassRoomByShedule($schedule, $day);
-        $timeSheet = $schedule->timeSheetByDay($day->getWeekday());
-        $date = $day->getDate();
-
-        return Lesson::make(...[
-            $classRoom,
-            $date,
-            $timeSheet
+        return Lesson::fromArray([
+            'classRoom' => $this->getClassRoomByShedule($schedule, $day),
+            'timeSheet' => $schedule->timeSheetByDay($day->weekday()),
+            'date' => $day->date()
         ]);
 
     }
@@ -116,7 +111,7 @@ final class LessonGenerator
      */
     private function getClassRoomByShedule(Schedule $schedule, Calendar $day): ClassRoom
     {
-        $dayOfWeek = $day->getWeekday();
+        $dayOfWeek = $day->weekday();
         $classRoomId = $schedule->classRoomIdByDay($dayOfWeek);
         return $this->classRoomRepository->find($classRoomId);
     }

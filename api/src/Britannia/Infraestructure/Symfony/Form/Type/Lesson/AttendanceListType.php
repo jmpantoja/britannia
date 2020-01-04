@@ -68,19 +68,5 @@ class AttendanceListType extends AbstractCompoundType
     public function customMapping(array $data)
     {
         return AttendanceList::collect($data);
-//
-//        dump($data);
-//        die();
-//        return [1, 2, 3];
-//
-//        $attendances = new ArrayCollection();
-//
-//        $data = array_filter($data);
-//
-//        foreach ($data as $attendance) {
-//            $attendances->add($attendance);
-//        }
-//
-//        return $attendances;
     }
 }

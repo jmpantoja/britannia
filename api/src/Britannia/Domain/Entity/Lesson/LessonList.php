@@ -16,19 +16,21 @@ namespace Britannia\Domain\Entity\Lesson;
 
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\VO\Course\Locked\Locked;
+use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\Model\EntityList;
 use PlanB\DDD\Domain\VO\PositiveInteger;
 
 class LessonList extends EntityList
 {
-    protected function __construct(Lesson ...$items)
+
+    protected function typeName(): string
     {
-        parent::__construct($items);
+        return Lesson::class;
     }
 
     private function futureLessons()
     {
-        return $this->data()->filter(function (Lesson $lesson) {
+        return $this->values()->filter(function (Lesson $lesson) {
             return $lesson->isFuture();
         });
     }
@@ -41,7 +43,6 @@ class LessonList extends EntityList
 
         $this->clear($locked);
         $lessons->reindex($course, $this->count());
-
         $this->forAddedItems($lessons);
 
         return $this;
@@ -50,7 +51,7 @@ class LessonList extends EntityList
     private function reindex(Course $course, int $offset)
     {
         $number = PositiveInteger::make($offset + 1);
-        $this->data()->each(function (Lesson $lesson, int $index) use ($course, $number) {
+        $this->values()->each(function (Lesson $lesson, int $index) use ($course, $number) {
             $number = $number->addInteger($index);
             $lesson->attach($course, $number);
         });
@@ -80,7 +81,18 @@ class LessonList extends EntityList
         foreach ($this->futureLessons() as $item) {
             $this->remove($item);
         }
+
         return $this;
+    }
+
+    public function firstDay(): CarbonImmutable
+    {
+        return $this->values()->first()->day();
+    }
+
+    public function lastDay(): CarbonImmutable
+    {
+        return $this->values()->last()->day();
     }
 
 }

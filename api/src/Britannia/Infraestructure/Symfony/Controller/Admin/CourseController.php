@@ -15,6 +15,8 @@ namespace Britannia\Infraestructure\Symfony\Controller\Admin;
 
 
 use Britannia\Domain\Entity\Course\Borrame\Borrame;
+use Britannia\Domain\Entity\Lesson\Lesson;
+use Britannia\Domain\Entity\Lesson\LessonDto;
 use Britannia\Infraestructure\Symfony\Form\Report\CourseInfo\CourseInformationType;
 use Cocur\Slugify\Slugify;
 use Knp\Snappy\Pdf;
@@ -27,7 +29,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CourseController extends CRUDController
 {
-
     /**
      * @var CommandBus
      */
@@ -43,8 +44,10 @@ class CourseController extends CRUDController
         $this->pdfGenerator = $pdfGenerator;
     }
 
-    public function reportInfoAction($id)
+    public function infoAction()
     {
+        $id = $this->getRequest()->get('id');
+
         $course = $this->getCourse($id);
         $form = $this->createForm(CourseInformationType::class, null, [
             'course' => $course,
@@ -53,7 +56,7 @@ class CourseController extends CRUDController
         $template = 'admin/report/course_information.html.twig';
 
         $name = Slugify::create()
-            ->slugify($course->getName());
+            ->slugify($course->name());
 
         $filename = sprintf('info-%s-%s.pdf', $name, date('U'));
         return $this->handleForm($form, $template, $filename);

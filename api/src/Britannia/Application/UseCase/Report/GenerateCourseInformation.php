@@ -28,12 +28,22 @@ class GenerateCourseInformation
      */
     private $discount;
 
+    /**
+     * GenerateCourseInformation constructor.
+     * @param Course $course
+     * @param StudentDiscount|null $discount
+     */
     protected function __construct(Course $course, ?StudentDiscount $discount)
     {
         $this->course = $course;
         $this->discount = $discount;
     }
 
+    /**
+     * @param Course $course
+     * @param StudentDiscount $discount
+     * @return static
+     */
     public static function make(Course $course, StudentDiscount $discount): self
     {
         return new self($course, $discount);
@@ -42,7 +52,7 @@ class GenerateCourseInformation
     /**
      * @return Course
      */
-    public function getCourse(): Course
+    public function course(): Course
     {
         return $this->course;
     }
@@ -50,7 +60,7 @@ class GenerateCourseInformation
     /**
      * @return StudentDiscount
      */
-    public function getDiscount(): ?StudentDiscount
+    public function discount(): ?StudentDiscount
     {
         return $this->discount;
     }

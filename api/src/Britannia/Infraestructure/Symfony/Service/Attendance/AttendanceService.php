@@ -37,13 +37,13 @@ class AttendanceService
         $values = [];
         $today = CarbonImmutable::now();
 
-        $lessons = $this->lessons->getLastByCourse($course, $today, $limit);
+        $lessons = $this->lessons->getLastLessonsByCourse($course, $today, $limit);
 
 
         foreach ($lessons as $lesson) {
             $value = [
-                'title' => $this->getTitle($lesson, $student),
-                'status' => $lesson->getStatusByStudent($student)
+                'title' => $this->title($lesson, $student),
+                'status' => $lesson->hasBeenMissing($student) ? 'missed' : 'attended'
             ];
 
             $values[] = $value;
@@ -55,16 +55,15 @@ class AttendanceService
         ];
     }
 
-    private function getTitle(Lesson $lesson, Student $student)
+    private function title(Lesson $lesson, Student $student)
     {
-        $date = $lesson->getDay()->format('d/m/Y');
+        $date = $lesson->day()->format('d/m/Y');
 
-        $reason = $lesson->missedReasonByStudent($student);
+        $reason = $lesson->whyHasItBeenMissing($student);
 
         if (is_null($reason)) {
             return $date;
         }
-
 
         return sprintf('%s (%s)', $date, $reason);
     }

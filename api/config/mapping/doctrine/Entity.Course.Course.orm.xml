@@ -36,12 +36,13 @@
 
         <field name="unitsDefinition" type="UnitsDefinition" nullable="true"></field>
 
+        <field name="numOfUnits" type="integer" nullable="true"></field>
+
         <field name="createdAt" type="datetime_immutable" nullable="true"></field>
 
         <field name="updatedAt" type="datetime_immutable" nullable="true"></field>
 
         <embedded name="timeTable" class="Britannia\Domain\VO\Course\TimeTable\TimeTable" use-column-prefix="false"/>
-
         <many-to-one field="level" target-entity="Britannia\Domain\Entity\Course\Level"></many-to-one>
 
         <many-to-many field="books" target-entity="Britannia\Domain\Entity\Book\Book" inversed-by="courses">
@@ -79,7 +80,7 @@
             </cascade>
         </one-to-many>
 
-        <one-to-many field="units" target-entity="Britannia\Domain\Entity\Mark\Unit" mapped-by="course"
+        <one-to-many field="units" target-entity="Britannia\Domain\Entity\Unit\Unit" mapped-by="course"
                      orphan-removal="true">
             <cascade>
                 <cascade-persist/>

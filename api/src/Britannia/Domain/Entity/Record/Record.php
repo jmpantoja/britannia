@@ -104,10 +104,6 @@ class Record
     public function getStudent(): Student
     {
 
-        if ($this->student === null) {
-            dump($this->id, $this->type, $this->description, $this->student);
-            die('x');
-        }
         return $this->student;
     }
 

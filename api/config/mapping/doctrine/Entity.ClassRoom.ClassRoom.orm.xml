@@ -15,6 +15,10 @@
         <field name="name"/>
         <field name="capacity" type="positive_integer"/>
 
+
+        <field name="createdAt" type="datetime_immutable" nullable="true"/>
+        <field name="updatedAt" type="datetime_immutable" nullable="true"/>
+
     </entity>
 
 </doctrine-mapping>
