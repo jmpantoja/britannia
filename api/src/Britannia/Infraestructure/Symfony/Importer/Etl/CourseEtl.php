@@ -17,7 +17,7 @@ namespace Britannia\Infraestructure\Symfony\Importer\Etl;
 use ApiPlatform\Core\DataPersister\DataPersisterInterface;
 use Britannia\Domain\Service\Course\LessonGenerator;
 use Britannia\Domain\Service\Course\TimeTableUpdater;
-use Britannia\Domain\Service\Course\UnitGenerator;
+use Britannia\Domain\Service\Course\AssessmentGenerator;
 use Britannia\Infraestructure\Symfony\Importer\Builder\BuilderInterface;
 use Britannia\Infraestructure\Symfony\Importer\Builder\CourseBuilder;
 use Britannia\Infraestructure\Symfony\Importer\Console;
@@ -38,16 +38,16 @@ class CourseEtl extends AbstractEtl
      */
     private LessonGenerator $lessonGenerator;
     /**
-     * @var UnitGenerator
+     * @var AssessmentGenerator
      */
-    private UnitGenerator $unitGenerator;
+    private AssessmentGenerator $unitGenerator;
 
     public function __construct(
         Connection $original,
         EntityManagerInterface $entityManager,
         DataPersisterInterface $dataPersister,
         LessonGenerator $lessonGenerator,
-        UnitGenerator $unitGenerator
+        AssessmentGenerator $unitGenerator
     )
     {
         $this->lessonGenerator = $lessonGenerator;

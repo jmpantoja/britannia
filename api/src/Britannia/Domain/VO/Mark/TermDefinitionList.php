@@ -27,6 +27,18 @@ final class TermDefinitionList implements IteratorAggregate
 
     private $numOfUnits;
 
+    public static function byDefault(): array
+    {
+        $input = [];
+        foreach (TermName::all() as $term) {
+            $key = (string)$term;
+            $input[$key] = TermDefinition::make($term, Percent::make(30), NumOfUnits::ZERO(), NumOfUnits::ZERO());
+        }
+
+        return $input;
+
+    }
+
     public static function collect(iterable $definitions): self
     {
         $values = collect($definitions)->values()->toArray();
@@ -35,12 +47,13 @@ final class TermDefinitionList implements IteratorAggregate
 
     protected function __construct(TermDefinition ...$definitions)
     {
+
         $this->numOfUnits = 0;
         foreach ($definitions as $definition) {
-            $key = (string)$definition->term();
+            $key = (string)$definition->termName();
             $this->definitions[$key] = $definition;
 
-            $this->numOfUnits += $definition->numOfUnits()->toInt();
+            $this->numOfUnits += $definition->numOfUnits()->getValue();
         }
     }
 
@@ -49,18 +62,18 @@ final class TermDefinitionList implements IteratorAggregate
         return $this->numOfUnits;
     }
 
+    public function definitionByTerm(TermName $term): TermDefinition
+    {
+        $key = (string)$term;
+        return $this->definitions[$key];
+    }
+
     /**
      * @inheritDoc
      */
     public function getIterator()
     {
         return new ArrayIterator($this->definitions);
-    }
-
-    public function percentByTerm(TypeOfTerm $term): Percent
-    {
-        $key = (string)$term;
-        return $this->definitions[$key]->weighOfUnits();
     }
 
 }

@@ -58,6 +58,9 @@ abstract class EntityId implements Comparable
 
     public function compareTo(object $other): int
     {
+        if ($this->equals($other)) {
+            return 0;
+        }
         return strcmp($this->id, $other->id);
     }
 

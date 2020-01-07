@@ -160,6 +160,11 @@ abstract class EntityList implements Countable, IteratorAggregate
         return $this->data->count();
     }
 
+    public function isEmpty(): bool
+    {
+        return 0 === $this->count();
+    }
+
     /**
      * @return array
      */

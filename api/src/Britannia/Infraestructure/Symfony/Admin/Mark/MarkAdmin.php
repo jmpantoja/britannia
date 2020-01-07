@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Britannia\Infraestructure\Symfony\Admin\Mark;
 
-use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Unit\Unit;
 use Britannia\Domain\VO\Course\CourseStatus;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
@@ -12,10 +11,7 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
-use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 final class MarkAdmin extends AbstractAdmin
 {
@@ -26,7 +22,12 @@ final class MarkAdmin extends AbstractAdmin
      */
     private MarkTools $adminTools;
 
-    public function __construct(string $code, string $class, string $baseControllerName, MarkTools $adminTools)
+    public function __construct(string $code,
+                                string $class,
+                                string $baseControllerName,
+                                MarkTools $adminTools,
+                                ParameterBagInterface $parameterBag
+    )
     {
         parent::__construct($code, $class, $baseControllerName);
         $this->adminTools = $adminTools;
@@ -80,7 +81,6 @@ final class MarkAdmin extends AbstractAdmin
 
     protected function configureListFields(ListMapper $listMapper): void
     {
-
         $this->adminTools()
             ->dataGrid($listMapper)
             ->configure();

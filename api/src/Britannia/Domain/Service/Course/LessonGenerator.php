@@ -46,7 +46,7 @@ final class LessonGenerator
         $this->classRoomRepository = $classRoomRepository;
     }
 
-    public function generateList(TimeTable $timeTable): LessonList
+    public function generateLessons(TimeTable $timeTable): LessonList
     {
         if ($timeTable->shouldBeResetted()) {
             return $this->generateCompleteList($timeTable);
@@ -101,7 +101,6 @@ final class LessonGenerator
             'timeSheet' => $schedule->timeSheetByDay($day->weekday()),
             'date' => $day->date()
         ]);
-
     }
 
     /**

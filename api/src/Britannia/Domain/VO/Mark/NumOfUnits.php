@@ -16,50 +16,19 @@ namespace Britannia\Domain\VO\Mark;
 
 use MabeEnum\Enum;
 
+
+/**
+ * @method static self ZERO()
+ * @method static self ONE()
+ * @method static self TWO()
+ * @method static self THREE()
+ */
 class NumOfUnits extends Enum
 {
-    public const ZERO = 'Ninguna';
-    public const ONE = 'Una';
-    public const TWO = 'Dos';
-    public const THREE = 'Tres';
-
-    public function toInt(): int
-    {
-        if ($this->isZero()) {
-            return 0;
-        }
-
-        if ($this->isOne()) {
-            return 1;
-        }
-
-        if ($this->isTwo()) {
-            return 2;
-        }
-
-        return 3;
-    }
-
-    public function isZero(): bool
-    {
-        return $this->is(static::ZERO());
-    }
-
-    public function isOne(): bool
-    {
-        return $this->is(static::ONE());
-    }
-
-
-    public function isTwo(): bool
-    {
-        return $this->is(static::TWO());
-    }
-
-    public function isThree(): bool
-    {
-        return $this->is(static::THREE());
-    }
+    public const ZERO = 0;
+    public const ONE = 1;
+    public const TWO = 2;
+    public const THREE = 3;
 
 }
 

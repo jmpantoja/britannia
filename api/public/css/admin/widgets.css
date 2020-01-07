@@ -82,7 +82,7 @@ table.unit_header tbody td.vocabulary {
     background-color: #e58f00;
 }
 
-table.unit_header tbody td.average {
+table.unit_header tbody td.total {
     background-color: yellow;
     color: black;
 
@@ -105,11 +105,11 @@ table.unit_body tbody td {
     border-right: solid 1px;
 }
 
-table.unit_body tbody td.average {
+table.unit_body tbody td.total {
     font-weight: bold;
 }
 
-table.unit_body tbody td.average input {
+table.unit_body tbody td.total input {
     padding: 3px;
 }
 

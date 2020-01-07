@@ -279,6 +279,7 @@
     </div>
 
     <script>
+
         $(function () {
             var toggle = function (el) {
                 var value = $(el).prop('value')
@@ -384,107 +385,147 @@
 {% endblock %}
 
 
-{% block units_definition_widget %}
+{% block assessment_definition_widget %}
     {% if form.locked is defined %}
         {{ form_row(form.locked, {widget: id ~ '-wrapper'}) }}
     {% endif %}
 
     <div id="{{ id }}-wrapper" class="row unit_definition">
-        <div class="col-md-12 col-md-offset-1" style="margin-top: 3em">
+        <div class="col-md-12">
             <legend class="control-label required">
                 Habilidades
             </legend>
             {{ form_row(form.skills) }}
         </div>
 
-        <div class="col-md-12">
-            {{ form_row(form.terms) }}
-        </div>
-
-    </div>
-{% endblock %}
-
-
-{% block term_widget %}
-    <div class="row" style="margin-top: 3em">
-        {{ form_row(form.term) }}
-        <div class="col-md-3">
-            <legend class="control-label" style="margin: 1.2em 0 0 3.8em; font-size: 1.4em">
-                {{ term.value }}:
-            </legend>
-        </div>
-        <div class="col-md-3">
-            {{ form_row(form.numOfUnits) }}
-        </div>
         <div class="col-md-2">
-            {{ form_row(form.weighOfUnits) }}
+            {{ form_row(form.unitsWeight) }}
         </div>
+
         <div class="col-md-2">
-            {{ form_row(form.weighOfExam) }}
+            {{ form_row(form.examWeight) }}
         </div>
-        {% if completedUnits is defined %}
-            <div class="col-md-7 col-md-push-3">
-                <p class="note">
-                    {% if completedUnits == 1 %}
-                        Este trimestre ya tiene <strong>una unidad evaluadas</strong>, que
-                        <strong>NO</strong> se puede eliminar
-                    {% else %}
-                        Este trimestre ya tiene <strong>{{ completedUnits }} unidades
-                        evaluadas</strong>, que <strong>NO</strong> se pueden eliminar
-                    {% endif %}
-                </p>
-            </div>
-        {% endif %}
     </div>
 
-    <script>
-        $(function () {
-            var units = $('#{{ form.weighOfUnits.vars.id }}');
-            var exam = $('#{{ form.weighOfExam.vars.id }}');
+        <script>
+            $(function () {
+                var units = $('#{{ form.unitsWeight.vars.id }}');
+                var exam = $('#{{ form.examWeight.vars.id }}');
 
-            $(units).on('keyup', function () {
-                var value = $(this).val();
+                $(units).on('keyup', function () {
+                    var value = $(this).val();
 
-                if ($.isNumeric(value) && value >= 0 && value <= 100) {
-                    $(exam).val(100 - value);
-                    return;
-                }
+                    if ($.isNumeric(value) && value >= 0 && value <= 100) {
+                        $(exam).val(100 - value);
+                        return;
+                    }
 
-                $(exam).val('-');
+                    $(exam).val('-');
+                })
+
+                $(units).trigger('keyup');
             })
 
-            $(units).trigger('keyup');
-        })
+        </script>
 
-    </script>
 
 {% endblock %}
 
 
-{% block term_has_marks_widget %}
-    <table class="term_marks">
+
+{#{% block term_definition_widget %}#}
+{#    <div class="row" style="margin-top: 3em">#}
+{#        #}{#        {{ form_row(form.termName) }}#}
+{#        <div class="col-md-3">#}
+{#            <legend class="control-label" style="margin: 1.2em 0 0 3.8em; font-size: 1.4em">#}
+{#                {{ term.value }}:#}
+{#            </legend>#}
+{#        </div>#}
+{#        <div class="col-md-3">#}
+{#            {{ form_row(form.numOfUnits) }}#}
+{#            #}{#            {{ form_row(form.completedUnits) }}#}
+{#        </div>#}
+{#        <div class="col-md-2">#}
+{#            {{ form_row(form.unitsWeight) }}#}
+{#        </div>#}
+{#        <div class="col-md-2">#}
+{#            {{ form_row(form.examWeight) }}#}
+{#        </div>#}
+{#        {% if completedUnits is defined %}#}
+{#            <div class="col-md-7 col-md-push-3">#}
+{#                <p class="note">#}
+{#                    {% if completedUnits == 1 %}#}
+{#                        Este trimestre ya tiene <strong>una unidad evaluadas</strong>, que#}
+{#                        <strong>NO</strong> se puede eliminar#}
+{#                    {% else %}#}
+{#                        Este trimestre ya tiene <strong>{{ completedUnits }} unidades#}
+{#                        evaluadas</strong>, que <strong>NO</strong> se pueden eliminar#}
+{#                    {% endif %}#}
+{#                </p>#}
+{#            </div>#}
+{#        {% endif %}#}
+{#    </div>#}
+
+{#    <script>#}
+{#        $(function () {#}
+{#            var units = $('#{{ form.unitsWeight.vars.id }}');#}
+{#            var exam = $('#{{ form.examWeight.vars.id }}');#}
+
+{#            $(units).on('keyup', function () {#}
+{#                var value = $(this).val();#}
+
+{#                if ($.isNumeric(value) && value >= 0 && value <= 100) {#}
+{#                    $(exam).val(100 - value);#}
+{#                    return;#}
+{#                }#}
+
+{#                $(exam).val('-');#}
+{#            })#}
+
+{#            $(units).trigger('keyup');#}
+{#        })#}
+
+{#    </script>#}
+
+{#{% endblock %}#}
+
+
+{% block term_list_widget %}
+    <table class="term_marks" border="1">
         <thead>
         <tr>
             <td class="student">Alumno</td>
             {% for unit in units %}
                 <td>
-                    {% set title = unit.name %}
-                    {% set is_total = unit.isTotal %}
-
-                    {% with {title: title, is_total: is_total } %}
+                    {% set title = 'Unidad %s' | format(unit.number) %}
+                    {% with {title: title } %}
                         {{ block('unit_header') }}
                     {% endwith %}
                 </td>
             {% endfor %}
+            <td>
+                {% set title = 'Examen' %}
+                {% with {title: title } %}
+                    {{ block('unit_header') }}
+                {% endwith %}
+            </td>
+
+            <td>
+                {% set title = 'Total' %}
+                {% with {title: title, total: true } %}
+                    {{ block('unit_header') }}
+                {% endwith %}
+            </td>
+
         </tr>
         </thead>
         <tbody>
-        {% for student in form %}
+        {% for term in form %}
             <tr>
                 <td class="student">
-                    {{ student.vars.student }}
+                    {{ term.vars.label }}
                 </td>
-                {% for unit in student %}
+                {% for unit in term %}
                     <td>
                         {{ form_widget(unit) }}
                     </td>
@@ -508,17 +549,15 @@
             {% for key,skill in skills %}
                 <td class="{{ skill | lower }}">{{ key }}</td>
             {% endfor %}
-
-            {% if is_total %}
-                <td class="average">F</td>
+            {% if total is defined and total %}
+                <td class="total">T</td>
             {% endif %}
-
         </tr>
         </tbody>
     </table>
 {% endblock %}
 
-{% block unit_has_marks_widget %}
+{% block unit_widget %}
     <table class="unit_body">
         <tr>
             {% for name, mark in form %}

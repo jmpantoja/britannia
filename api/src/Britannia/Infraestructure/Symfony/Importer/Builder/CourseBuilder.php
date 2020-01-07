@@ -19,7 +19,7 @@ use Britannia\Domain\Entity\ClassRoom\ClassRoomDto;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Course\CourseDto;
 use Britannia\Domain\Service\Course\LessonGenerator;
-use Britannia\Domain\Service\Course\UnitGenerator;
+use Britannia\Domain\Service\Course\AssessmentGenerator;
 use Britannia\Domain\VO\Course\Age\Age;
 use Britannia\Domain\VO\Course\Intensive\Intensive;
 use Britannia\Domain\VO\Course\Periodicity\Periodicity;
@@ -67,9 +67,9 @@ class CourseBuilder extends BuilderAbstract
      */
     private LessonGenerator $lessonGenerator;
     /**
-     * @var UnitGenerator
+     * @var AssessmentGenerator
      */
-    private UnitGenerator $unitGenerator;
+    private AssessmentGenerator $unitGenerator;
 
     public function initResume(array $input): Resume
     {
@@ -194,7 +194,7 @@ class CourseBuilder extends BuilderAbstract
     }
 
 
-    public function withGenerator(LessonGenerator $lessonGenerator, UnitGenerator $unitGenerator): self
+    public function withGenerator(LessonGenerator $lessonGenerator, AssessmentGenerator $unitGenerator): self
     {
         $this->lessonGenerator = $lessonGenerator;
         $this->unitGenerator = $unitGenerator;

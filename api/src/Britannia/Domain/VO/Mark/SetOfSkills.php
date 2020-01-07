@@ -15,10 +15,11 @@ namespace Britannia\Domain\VO\Mark;
 
 
 use ArrayIterator;
+use Countable;
 use IteratorAggregate;
 use MabeEnum\Enum;
 
-class SetOfSkills extends Enum implements IteratorAggregate
+class SetOfSkills extends Enum implements IteratorAggregate, Countable
 {
 
     public const SET_OF_FOUR = 'Reading, Writing, Listening, Speaking';
@@ -45,13 +46,11 @@ class SetOfSkills extends Enum implements IteratorAggregate
         return new ArrayIterator($skills);
     }
 
-    public function toInt(): int
+    /**
+     * @inheritDoc
+     */
+    public function count()
     {
-        if ($this->is(self::SET_OF_SIX)) {
-            return 6;
-        }
-
-        return 4;
-
+        return $this->getIterator()->count();
     }
 }

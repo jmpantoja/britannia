@@ -13,39 +13,35 @@ declare(strict_types=1);
 
 namespace PlanB\DDD\Domain\Behaviour\Traits;
 
+use PlanB\DDD\Domain\Behaviour\Comparable;
 use PlanB\DDD\Domain\Model\Traits\AggregateRootTrait;
 
 trait ComparableTrait
 {
-    public function hash()
+    public function hash(): string
     {
+        if ($this->isAggreate()) {
+            return (string)$this->id();
+        }
         return spl_object_hash($this);
     }
 
-    public function compareTo(object $other): int
+    public function compareTo(Comparable $other): int
     {
         $this->assertThatCanBeCompared($other);
-        if ($this->isAggreate()) {
-            return $this->id()->compareTo($other->id());
-        }
-
-        return strcmp($this->hash(), spl_object_hash($other));
+        return strcmp($this->hash(), $other->hash());
     }
 
-    public function equals(object $other): bool
+    public function equals(Comparable $other): bool
     {
         $this->assertThatCanBeCompared($other);
-        if ($this->isAggreate()) {
-            return $this->id()->equals($other->id());
-        }
-
-        return $this == $other;
+        return 0 === $this->compareTo($other);
     }
 
     /**
      * @param object $other
      */
-    protected function assertThatCanBeCompared(object $other): void
+    protected function assertThatCanBeCompared(Comparable $other): void
     {
         if (!($other instanceof self)) {
             throw new \InvalidArgumentException('No se pueden comparar objetos de diferentes tipos');

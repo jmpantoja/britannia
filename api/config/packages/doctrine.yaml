@@ -53,13 +53,12 @@ doctrine:
                     Intensive: Intensive
                     DiscountList: DiscountList
 
-                    #Unit
-                    UnitId: UnitId
-                    Term: Term
+                    #Assessment
+                    TermName: TermName
                     SetOfSkills: SetOfSkills
-                    UnitsDefinition: UnitsDefinition
                     Mark: Mark
-                    TypeOfUnit: TypeOfUnit
+                    UnitId: UnitId
+                    TermId: TermId
 
                     #Staff
                     StaffMemberId: StaffMemberId
@@ -106,15 +105,12 @@ doctrine:
             LevelId: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\LevelId
             DiscountList: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\DiscountListType
 
-
-            #Unit
-            UnitId: Britannia\Infraestructure\Doctrine\DBAL\Type\Unit\UnitId
-            Term: Britannia\Infraestructure\Doctrine\DBAL\Type\Unit\TermType
-            SetOfSkills: Britannia\Infraestructure\Doctrine\DBAL\Type\Unit\SetOfSkillsType
-            UnitsDefinition: Britannia\Infraestructure\Doctrine\DBAL\Type\Unit\UnitsDefinitionType
-            Mark: Britannia\Infraestructure\Doctrine\DBAL\Type\Unit\MarkType
-            TypeOfUnit: Britannia\Infraestructure\Doctrine\DBAL\Type\Unit\TypeOfUnitType
-
+            #Assessment
+            TermName: Britannia\Infraestructure\Doctrine\DBAL\Type\Assessment\TermNameType
+            SetOfSkills: Britannia\Infraestructure\Doctrine\DBAL\Type\Assessment\SetOfSkillsType
+            Mark: Britannia\Infraestructure\Doctrine\DBAL\Type\Assessment\MarkType
+            UnitId: Britannia\Infraestructure\Doctrine\DBAL\Type\Assessment\UnitId
+            TermId: Britannia\Infraestructure\Doctrine\DBAL\Type\Assessment\TermId
 
             #Lesson
             LessonId: Britannia\Infraestructure\Doctrine\DBAL\Type\Lesson\LessonIdType

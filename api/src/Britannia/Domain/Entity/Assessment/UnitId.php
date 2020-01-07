@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace PlanB\DDD\Domain\Behaviour;
+namespace Britannia\Domain\Entity\Assessment;
 
 
-interface Comparable
+use PlanB\DDD\Domain\Model\EntityId;
+
+class UnitId extends EntityId
 {
-    public function compareTo(Comparable $other): int;
 
-    public function equals(Comparable $other): bool;
 }

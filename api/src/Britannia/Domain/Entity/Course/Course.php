@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Course;
 
 
+use Britannia\Domain\Entity\Assessment\Term;
+use Britannia\Domain\Entity\Assessment\TermList;
 use Britannia\Domain\Entity\Lesson\Lesson;
 use Britannia\Domain\Entity\Lesson\LessonList;
 use Britannia\Domain\Entity\Record\StudentHasJoinedToCourse;
@@ -24,12 +26,8 @@ use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Entity\Student\StudentCourse;
 use Britannia\Domain\Entity\Student\StudentCourseList;
 use Britannia\Domain\Entity\Student\StudentList;
-use Britannia\Domain\Entity\Unit\Unit;
-use Britannia\Domain\Entity\Unit\UnitList;
-use Britannia\Domain\Entity\Unit\UnitStudentList;
+use Britannia\Domain\Service\Course\AssessmentGenerator;
 use Britannia\Domain\Service\Course\LessonGenerator;
-use Britannia\Domain\Service\Course\UnitGenerator;
-use Britannia\Domain\Service\Mark\MarkCalculator;
 use Britannia\Domain\VO\Course\Age\Age;
 use Britannia\Domain\VO\Course\CourseStatus;
 use Britannia\Domain\VO\Course\Examiner\Examiner;
@@ -38,18 +36,19 @@ use Britannia\Domain\VO\Course\Periodicity\Periodicity;
 use Britannia\Domain\VO\Course\Support\Support;
 use Britannia\Domain\VO\Course\TimeTable\Schedule;
 use Britannia\Domain\VO\Course\TimeTable\TimeTable;
-use Britannia\Domain\VO\HoursPerWeek;
-use Britannia\Domain\VO\Mark\UnitsDefinition;
+use Britannia\Domain\VO\Mark\AssessmentDefinition;
+use Britannia\Domain\VO\Mark\SetOfSkills;
 use Carbon\CarbonImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use PlanB\DDD\Domain\Behaviour\Comparable;
 use PlanB\DDD\Domain\Behaviour\Traits\ComparableTrait;
-use PlanB\DDD\Domain\Model\AggregateRoot;
 use PlanB\DDD\Domain\Model\Traits\AggregateRootTrait;
+use PlanB\DDD\Domain\VO\Percent;
 use PlanB\DDD\Domain\VO\PositiveInteger;
 use PlanB\DDD\Domain\VO\Price;
 use PlanB\DDD\Domain\VO\RGBA;
+
 
 class Course implements Comparable
 {
@@ -153,6 +152,7 @@ class Course implements Comparable
      * @var TimeTable
      */
     private $timeTable;
+
     /**
      * @var Collection
      */
@@ -161,17 +161,28 @@ class Course implements Comparable
     /**
      * @var Collection
      */
-    private $discount;
+    private $terms;
+
 
     /**
-     * @var UnitsDefinition
+     * @var Collection
      */
-    private $unitsDefinition;
+    private $discount;
 
     /**
      * @var int
      */
     private $numOfUnits;
+
+    /**
+     * @var SetOfSkills
+     */
+    private $skills;
+
+    /**
+     * @var Percent
+     */
+    private $unitsWeight;
 
     /**
      * @var Collection
@@ -206,6 +217,7 @@ class Course implements Comparable
         $this->teachers = new ArrayCollection();
         $this->books = new ArrayCollection();
         $this->lessons = new ArrayCollection();
+        $this->terms = new ArrayCollection();
         $this->units = new ArrayCollection();
         $this->numOfUnits = 0;
         $this->discount = new ArrayCollection();
@@ -236,10 +248,11 @@ class Course implements Comparable
             return $this;
         }
 
-        $this->changeCalendar($dto->timeTable, $dto->lessonCreator);
-        $this->changeUnits($dto->unitsDefinition, $dto->unitGenerator);
         $this->setTeachers($dto->teachers);
         $this->setStudents($dto->courseHasStudents);
+        $this->changeCalendar($dto->timeTable, $dto->lessonCreator);
+        $this->changeAssessmentDefinition($dto->assessmentDefinition, $dto->assessmentGenerator);
+
         return $this;
     }
 
@@ -272,8 +285,7 @@ class Course implements Comparable
         $this->timeTable = $timeTable;
         $locked = $this->timeTable->locked();
 
-        $lessons = $generator->generateList($timeTable);
-
+        $lessons = $generator->generateLessons($timeTable);
         $this->lessonList()
             ->update($lessons, $locked, $this);
 
@@ -282,24 +294,24 @@ class Course implements Comparable
         return $this;
     }
 
-    public function changeUnits(UnitsDefinition $definition, UnitGenerator $generator): self
+    public function changeAssessmentDefinition(AssessmentDefinition $definition, AssessmentGenerator $generator): self
     {
-        if ($definition->isLocked()) {
-            return $this;
-        }
+        $this->skills = $definition->skills();
+        $this->unitsWeight = $definition->unitsWeight();
+        $termList = $generator->generateTerms($this->courseHasStudentList(), $definition);
 
-        $this->unitsDefinition = $definition;
-        $this->numOfUnits = $definition->numOfUnits();
+        $this->setTerms($termList);
 
-//        dump($definition->terms());
-//        die();
-//
-//
-//
-//        $unitList = $this->unitList()
-//            ->update($this, $definition, $generator);
-//
-//        $this->numOfUnits = $unitList->count();
+        $this->termList()->changeDefinition($definition);
+
+        return $this;
+    }
+
+    public function setTerms(TermList $termList): self
+    {
+        $this->termList()
+            ->forRemovedItems($termList)
+            ->forAddedItems($termList);
 
         return $this;
     }
@@ -366,18 +378,6 @@ class Course implements Comparable
     {
         $this->setStatus($this->timeTable->status());
         return $this;
-    }
-
-    public function updateMarks(UnitStudentList $unitStudentList): self
-    {
-        MarkCalculator::make()
-            ->updateTotal($unitStudentList, $this->unitsDefinition);
-
-        $this->unitList()
-            ->updateMarks($unitStudentList);
-
-        return $this;
-
     }
 
     public function isPending(): bool
@@ -605,36 +605,55 @@ class Course implements Comparable
     }
 
     /**
-     * @return Unit[]
+     * @return Term[]
      */
-    public function units(): array
+    public function terms(): array
     {
-        return $this->unitList()
-            ->values()
-            ->sortBy(fn(Unit $unit) => $unit->position()->toInt())
-            ->values()
-            ->toArray();
-    }
-
-    private function unitList(): UnitList
-    {
-        return UnitList::collect($this->units);
+        return $this->termList()->toArray();
     }
 
     /**
-     * @return \Britannia\Domain\VO\Mark\SetOfSkills
+     * @return TermList
      */
-    public function evaluableSkills()
+    private function termList(): TermList
     {
-        return $this->unitsDefinition->skills();
+
+        return TermList::collect($this->terms);
+    }
+
+
+    public function assessmentDefinition(): AssessmentDefinition
+    {
+        return AssessmentDefinition::make($this->skills(), $this->unitsWeight());
+    }
+
+//    public function termDefinitionList(): TermDefinitionList
+//    {
+//        return $this->termList()->definition();
+//    }
+
+//    /**
+//     * @return int
+//     */
+//    public function numOfUnits(): int
+//    {
+//        return $this->numOfUnits;
+//    }
+
+    /**
+     * @return SetOfSkills
+     */
+    public function skills(): SetOfSkills
+    {
+        return $this->skills;
     }
 
     /**
-     * @return int
+     * @return Percent
      */
-    public function numOfUnits(): int
+    public function unitsWeight(): Percent
     {
-        return $this->numOfUnits;
+        return $this->unitsWeight ?? Percent::make(30);
     }
 
     /**

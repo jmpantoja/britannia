@@ -14,15 +14,14 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Admin\Mark;
 
 
+use Britannia\Domain\Entity\Assessment\TermList;
 use Britannia\Domain\Entity\Course\Course;
-use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Entity\Unit\Unit;
 use Britannia\Domain\Entity\Unit\UnitStudent;
 use Britannia\Domain\Entity\Unit\UnitStudentList;
 use Britannia\Domain\Repository\StudentRepositoryInterface;
 use Britannia\Domain\Repository\UnitRepositoryInterface;
-use Britannia\Domain\Service\Mark\MarkCalculator;
-use Britannia\Domain\VO\Mark\SetOfSkills;
+use Britannia\Domain\VO\Course\Locked\Locked;
 use DomainException;
 use PlanB\DDDBundle\Sonata\Admin\AdminMapper;
 
@@ -37,19 +36,6 @@ final class MarkMapper extends AdminMapper
      * @var UnitRepositoryInterface
      */
     private UnitRepositoryInterface $unitRepository;
-    /**
-     * @var MarkCalculator
-     */
-    private MarkCalculator $calculator;
-
-    public function __construct(StudentRepositoryInterface $studentRepository,
-                                UnitRepositoryInterface $unitRepository)
-    {
-        $this->studentRepository = $studentRepository;
-        $this->unitRepository = $unitRepository;
-
-        parent::__construct();
-    }
 
     protected function className(): string
     {
@@ -68,43 +54,25 @@ final class MarkMapper extends AdminMapper
      */
     protected function update($course, array $values)
     {
-        $data = [];
-        $skills = $course->evaluableSkills();
-
-        foreach ($values as $term) {
-            $data[] = $this->makeUnitStudentListByTerm($skills, $term);
-        }
-
-        $data = array_merge(...$data);
-        $unitStudentList = UnitStudentList::collect($data);
-
-        $course->updateMarks($unitStudentList);
-
+        $termList = $this->buildTermList($values);
+        $course->setTerms($termList);
     }
 
-    private function makeUnitStudentListByTerm(SetOfSkills $skills, array $term)
+    /**
+     * @param array $values
+     * @return TermList
+     */
+    protected function buildTermList(array $values): TermList
     {
-        $data = [];
-        foreach ($term as $studentId => $units) {
-            $student = $this->studentRepository->find($studentId);
 
-            $data[] = $this->makeUnitStudentListByUnits($student, $skills, $units);
-        }
 
-        return array_merge(...$data);
+        $values = array_values($values);
+        $data = collect($values)
+            ->map(fn(TermList $termList) => $termList->toArray())
+            ->toArray();
+
+        $input = array_merge(...$data);
+        $termList = TermList::collect($input);
+        return $termList;
     }
-
-    private function makeUnitStudentListByUnits(Student $student, SetOfSkills $skills, array $units)
-    {
-        $data = [];
-        foreach ($units as $unitId => $marks) {
-            /** @var Unit $unit */
-            $unit = $this->unitRepository->find($unitId);
-
-            $data[] = UnitStudent::make($student, $unit, $marks);
-        }
-        return $data;
-    }
-
-
 }

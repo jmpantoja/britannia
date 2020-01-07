@@ -14,10 +14,15 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Admin\Mark;
 
 
+use Britannia\Domain\Entity\Assessment\TermList;
 use Britannia\Domain\Entity\Course\Course;
-use Britannia\Domain\VO\Mark\TypeOfTerm;
-use Britannia\Infraestructure\Symfony\Form\Type\Mark\TermHasMarksType;
+use Britannia\Domain\VO\Mark\TermName;
+use Britannia\Infraestructure\Symfony\Form\Type\Assessment\SetOfSkillsType;
+use Britannia\Infraestructure\Symfony\Form\Type\Assessment\TermListType;
+use PlanB\DDD\Domain\VO\Percent;
 use PlanB\DDDBundle\Sonata\Admin\AdminForm;
+use PlanB\DDDBundle\Symfony\Form\Type\PercentageType;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 final class MarkForm extends AdminForm
@@ -25,45 +30,55 @@ final class MarkForm extends AdminForm
 
     public function configure(Course $course)
     {
+      //  $this->assertNumOfUnits($course);
 
-        if (!$course->numOfUnits() === 0) {
-            $message = sprintf('no se puede editar las calificaciones de un curso sin unidades definidas');
-            throw new NotFoundHttpException($message);
-        }
+        $data = $this->organizeByTermName($course);
 
-        $terms = $this->calculeUnitsByTerm($course);
-
-        foreach ($terms as $key => $units) {
+        foreach ($data as $key => $terms) {
             $name = $this->tabName($key);
             $this->tab($name);
             $this->group($name)
-                ->add($key, TermHasMarksType::class, [
-                    'by_reference' => true,
+                ->add($key, TermListType::class, [
                     'mapped' => false,
-                    'label' => $key,
-                    'units' => $units,
-                    'course' => $course,
+                    'data' => TermList::collect($terms)
                 ]);
-
         }
+
     }
 
-    private function calculeUnitsByTerm(Course $course): array
+//    /**
+//     * @param Course $course
+//     */
+//    private function assertNumOfUnits(Course $course): void
+//    {
+//        if ($course->numOfUnits() === 0) {
+//            $message = sprintf('no se puede editar las calificaciones de un curso sin unidades definidas');
+//            throw new NotFoundHttpException($message);
+//        }
+//    }
+
+    /**
+     * @param Course $course
+     * @return array
+     */
+    private function organizeByTermName(Course $course): array
     {
         $data = [];
-        $units = $course->units();
-
-        foreach ($units as $unit) {
-            $term = $unit->term()->getName();
-            $data[$term] ??= [];
-            $data[$term][] = $unit;
+        foreach (TermName::all() as $termName) {
+            $data[$termName->getName()] = [];
         }
 
-        return $data;
+        foreach ($course->terms() as $term) {
+            $key = (string)$term->termName();
+            $data[$key][] = $term;
+        }
+
+        return array_filter($data);
     }
 
-    private function tabName(string $key): string
+    private function tabName(string $term): string
     {
-        return TypeOfTerm::byName($key)->getValue();
+        return TermName::byName($term)->getValue();
     }
+
 }

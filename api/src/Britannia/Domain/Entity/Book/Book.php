@@ -21,7 +21,7 @@ use PlanB\DDD\Domain\VO\Price;
 final class Book
 {
     /**
-     * @var BookId
+     * @var TermId
      */
     private $id;
 
@@ -58,7 +58,7 @@ final class Book
 
     private function __construct(BookDto $dto)
     {
-        $this->id = new BookId();
+        $this->id = new TermId();
         $this->update($dto);
 
         $this->createdAt = CarbonImmutable::now();
@@ -74,9 +74,9 @@ final class Book
     }
 
     /**
-     * @return BookId
+     * @return TermId
      */
-    public function id(): ?BookId
+    public function id(): ?TermId
     {
         return $this->id;
     }

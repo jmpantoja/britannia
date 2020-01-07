@@ -15,6 +15,8 @@ namespace Britannia\Infraestructure\Symfony\Admin\Course;
 
 
 use Britannia\Domain\Entity\Course\Course;
+use Britannia\Infraestructure\Symfony\Form\Type\Assessment\AssessmentDefinitionType;
+use Britannia\Infraestructure\Symfony\Form\Type\Assessment\SetOfSkillsType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\AgeType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\CourseHasStudentsType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\Discount\DiscountListTye;
@@ -25,9 +27,10 @@ use Britannia\Infraestructure\Symfony\Form\Type\Course\PeriodicityType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\SupportType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\TeachersType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\TimeTable\TimeTableType;
-use Britannia\Infraestructure\Symfony\Form\Type\Unit\UnitsDefinitionType;
+use PlanB\DDD\Domain\VO\Percent;
 use PlanB\DDD\Domain\VO\Price;
 use PlanB\DDDBundle\Sonata\Admin\AdminForm;
+use PlanB\DDDBundle\Symfony\Form\Type\PercentageType;
 use PlanB\DDDBundle\Symfony\Form\Type\PositiveIntegerType;
 use PlanB\DDDBundle\Symfony\Form\Type\PriceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -137,8 +140,8 @@ final class CourseForm extends AdminForm
     {
         $this->tab($name);
 
-        $this->group('Unidades', ['class' => 'col-md-7  box-with-locked'])
-            ->add('unitsDefinition', UnitsDefinitionType::class, [
+        $this->group('Unidades', ['class' => 'col-md-7'])
+            ->add('assessmentDefinition', AssessmentDefinitionType::class, [
                 'label' => false,
                 'course' => $this->course
             ]);
@@ -149,8 +152,6 @@ final class CourseForm extends AdminForm
     private function priceTab(string $name): self
     {
         $this->tab($name);
-
-
         $this->group('Coste', ['class' => 'col-md-6'])
             ->add('enrollmentPayment', PriceType::class, [
                 'label' => 'Matrícula',

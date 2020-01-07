@@ -18,14 +18,14 @@ use Britannia\Domain\Entity\Lesson\UpdateCalendarOrder;
 use Britannia\Domain\Entity\Staff\StaffList;
 use Britannia\Domain\Entity\Student\StudentList;
 use Britannia\Domain\Service\Course\LessonGenerator;
-use Britannia\Domain\Service\Course\UnitGenerator;
+use Britannia\Domain\Service\Course\AssessmentGenerator;
 use Britannia\Domain\VO\Course\Age\Age;
 use Britannia\Domain\VO\Course\Examiner\Examiner;
 use Britannia\Domain\VO\Course\Intensive\Intensive;
 use Britannia\Domain\VO\Course\Periodicity\Periodicity;
 use Britannia\Domain\VO\Course\Support\Support;
 use Britannia\Domain\VO\Course\TimeTable\TimeTable;
-use Britannia\Domain\VO\Mark\UnitsDefinition;
+use Britannia\Domain\VO\Mark\AssessmentDefinition;
 use Doctrine\Common\Collections\Collection;
 use PlanB\DDD\Domain\Model\Dto;
 use PlanB\DDD\Domain\VO\PositiveInteger;
@@ -73,9 +73,9 @@ class CourseDto extends Dto
 
     public ?Collection $discount = null;
 
-    public UnitsDefinition $unitsDefinition;
+    public AssessmentDefinition $assessmentDefinition;
 
-    public UnitGenerator $unitGenerator;
+    public AssessmentGenerator $assessmentGenerator;
 
     protected function defaults(): array
     {

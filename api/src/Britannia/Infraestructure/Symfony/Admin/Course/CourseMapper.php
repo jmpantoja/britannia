@@ -16,8 +16,8 @@ namespace Britannia\Infraestructure\Symfony\Admin\Course;
 
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Course\CourseDto;
+use Britannia\Domain\Service\Course\AssessmentGenerator;
 use Britannia\Domain\Service\Course\LessonGenerator;
-use Britannia\Domain\Service\Course\UnitGenerator;
 use PlanB\DDDBundle\Sonata\Admin\AdminMapper;
 
 final class CourseMapper extends AdminMapper
@@ -27,15 +27,15 @@ final class CourseMapper extends AdminMapper
      */
     private LessonGenerator $lessonCreator;
     /**
-     * @var UnitGenerator
+     * @var AssessmentGenerator
      */
-    private UnitGenerator $unitGenerator;
+    private AssessmentGenerator $assessmentGenerator;
 
-    public function __construct(LessonGenerator $lessonCreator, UnitGenerator $unitGenerator)
+    public function __construct(LessonGenerator $lessonCreator, AssessmentGenerator $assessmentGenerator)
     {
         parent::__construct();
         $this->lessonCreator = $lessonCreator;
-        $this->unitGenerator = $unitGenerator;
+        $this->assessmentGenerator = $assessmentGenerator;
     }
 
     public function className(): string
@@ -67,13 +67,9 @@ final class CourseMapper extends AdminMapper
     protected function makeDto(array $values): CourseDto
     {
         $values['lessonCreator'] = $this->lessonCreator;
-        $values['unitGenerator'] = $this->unitGenerator;
-
-        /**
-         * Aqui el precio de la matricula por defecto
-         */
-
+        $values['assessmentGenerator'] = $this->assessmentGenerator;
         $dto = CourseDto::fromArray($values);
+
         return $dto;
     }
 

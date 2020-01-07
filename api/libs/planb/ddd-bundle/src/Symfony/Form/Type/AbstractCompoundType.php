@@ -54,7 +54,7 @@ abstract class AbstractCompoundType extends AbstractType implements DataMapperIn
         return TextType::class;
     }
 
-    final public function getBlockPrefix()
+    public function getBlockPrefix()
     {
         return parent::getBlockPrefix();
     }
@@ -205,7 +205,7 @@ abstract class AbstractCompoundType extends AbstractType implements DataMapperIn
      * @param FormInterface[]|\Traversable $forms
      * @param $data
      */
-    final public function mapFormsToData($forms, &$data): void
+    public function mapFormsToData($forms, &$data): void
     {
 
         $forms = iterator_to_array($forms);
@@ -251,7 +251,6 @@ abstract class AbstractCompoundType extends AbstractType implements DataMapperIn
         }
 
         foreach ($violationList as $name => $violation) {
-
             $form = $this->getFormTarget($forms, $violation);
 
             if ($form instanceof FormInterface) {
