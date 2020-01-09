@@ -14,6 +14,9 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\EventSubscriber;
 
 
+use Britannia\Domain\Entity\Student\StudentHasAttendedLesson;
+use Britannia\Domain\Entity\Student\StudentHasMissedLesson;
+
 class StudentSubscriber extends DomainEventSubscriber
 {
     /**
@@ -23,9 +26,20 @@ class StudentSubscriber extends DomainEventSubscriber
     public static function getSubscribedEvents()
     {
         return [
-
+            StudentHasMissedLesson::class => 'onStudentMissedLesson',
+            StudentHasAttendedLesson::class => 'onStudentAttendedLesson',
         ];
     }
 
+    public function onStudentMissedLesson(StudentHasMissedLesson $event)
+    {
+
+        die(__METHOD__);
+    }
+
+    public function onStudentAttendedLesson(StudentHasMissedLesson $event)
+    {
+        die(__METHOD__);
+    }
 
 }

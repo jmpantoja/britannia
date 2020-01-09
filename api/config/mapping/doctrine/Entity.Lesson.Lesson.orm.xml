@@ -22,7 +22,7 @@
 
         <many-to-one field="classRoom" target-entity="Britannia\Domain\Entity\ClassRoom\ClassRoom"/>
 
-        <one-to-many field="attendances" target-entity="Britannia\Domain\Entity\Course\Attendance" mapped-by="lesson"
+        <one-to-many field="attendances" target-entity="Britannia\Domain\Entity\Attendance\Attendance" mapped-by="lesson"
                      orphan-removal="true">
             <cascade>
                 <cascade-persist/>

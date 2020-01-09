@@ -47,11 +47,13 @@ final class StaffMapper extends AdminMapper
     /**
      * @param StaffMember $staffMember
      * @param array $values
+     * @return StaffMember
      */
-    protected function update($staffMember, array $values)
+    protected function update($staffMember, array $values): StaffMember
     {
         $dto = $this->makeDto($values);
-        $staffMember->update($dto);
+        return $staffMember->update($dto);
+
     }
 
     /**

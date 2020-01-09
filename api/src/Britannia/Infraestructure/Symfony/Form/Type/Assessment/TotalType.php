@@ -15,7 +15,7 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Assessment;
 
 
 use Britannia\Domain\Entity\Assessment\Term;
-use Britannia\Domain\VO\Mark\MarkReport;
+use Britannia\Domain\VO\Assessment\MarkReport;
 use Britannia\Infraestructure\Symfony\Form\Type\Unit\FullName;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractCompoundType;

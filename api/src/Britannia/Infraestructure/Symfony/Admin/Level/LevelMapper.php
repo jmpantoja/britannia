@@ -35,11 +35,12 @@ final class LevelMapper extends AdminMapper
     /**
      * @param Level $level
      * @param array $values
+     * @return Level
      */
-    protected function update($level, array $values)
+    protected function update($level, array $values): Level
     {
         $this->assertType($level);
         $dto = LevelDto::fromArray($values);
-        $level->update($dto);
+        return $level->update($dto);
     }
 }

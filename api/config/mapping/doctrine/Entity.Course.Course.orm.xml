@@ -34,7 +34,7 @@
 
         <field name="discount" type="DiscountList" nullable="true"></field>
 
-        <field name="numOfUnits" type="integer" nullable="true"></field>
+        <field name="numOfStudents" type="integer" nullable="true"></field>
 
         <field name="skills" type="SetOfSkills" nullable="true"></field>
 
@@ -45,6 +45,7 @@
         <field name="updatedAt" type="datetime_immutable" nullable="true"></field>
 
         <embedded name="timeTable" class="Britannia\Domain\VO\Course\TimeTable\TimeTable" use-column-prefix="false"/>
+
         <many-to-one field="level" target-entity="Britannia\Domain\Entity\Course\Level"></many-to-one>
 
         <many-to-many field="books" target-entity="Britannia\Domain\Entity\Book\Book" inversed-by="courses">

@@ -39,11 +39,9 @@ final class UpdateCourseStatusUseCase implements UseCaseInterface
     {
         $courses = $this->repository->findCoursesForUpdateStatus();
 
-        $total = count($courses);
-
         foreach ($courses as $course) {
             $course->updateStatus();
-            dump($total--);
+            echo '.';
         }
     }
 

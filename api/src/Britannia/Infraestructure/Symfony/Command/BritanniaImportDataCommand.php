@@ -54,7 +54,7 @@ class BritanniaImportDataCommand extends Command implements ContainerAwareInterf
     public function setContainer(ContainerInterface $container = null)
     {
         $pathToLogsDir = $container->getParameter('kernel.logs_dir');
-        $this->pathToReportDir = sprintf('%s/reports', dirname($pathToLogsDir));
+        $this->pathToReportDir = sprintf('%s/import', dirname($pathToLogsDir));
 
         @chmod($this->pathToReportDir, 0777);
 

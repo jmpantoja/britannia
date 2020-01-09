@@ -62,7 +62,6 @@ abstract class AdminForm
     protected function group(string $name, array $options = []): self
     {
         $this->endGroups();
-
         $this->mapper->with($name, $options);
         return $this;
     }

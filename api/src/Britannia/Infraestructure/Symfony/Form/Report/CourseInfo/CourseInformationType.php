@@ -36,15 +36,7 @@ class CourseInformationType extends AbstractCompoundType
 
     public function customForm(FormBuilderInterface $builder, array $options)
     {
-
         $builder
-            ->add('course', EntityType::class, [
-                'class' => Course::class,
-                'choice_label' => 'name',
-                'data' => $options['course'],
-                'required' => true,
-                'label' => 'Elige un curso'
-            ])
             ->add('freeEnrollment', FreeEnrollmentType::class)
             ->add('familyOrder', FamilyOrderType::class)
             ->add('jobStatus', JobStatusType::class)
@@ -52,25 +44,18 @@ class CourseInformationType extends AbstractCompoundType
                 'format' => IntlDateFormatter::LONG,
                 'label' => false,
                 'sonata_help' => 'Si el alumno se incorpora despues de empezado el curso'
-            ])
-            ->add('aceptar', SubmitType::class, [
-                'attr' => [
-                    'class' => 'btn btn-success'
-                ]
             ]);
     }
 
     public function customOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => GenerateCourseInformation::class,
-            'course' => null,
+            'data_class' => Course::class,
+            'mapped' => false,
             'attr' => [
                 'novalidate' => 'true'
             ]
         ]);
-
-        $resolver->setAllowedTypes('course', ['null', Course::class]);
 
     }
 
@@ -85,8 +70,7 @@ class CourseInformationType extends AbstractCompoundType
 
     public function customMapping(array $data)
     {
-
-        $course = $data['course'];
+        $course = $this->getOption('data');
         $startDate = $data['startDate'];
 
         $discount = StudentDiscount::make(...[

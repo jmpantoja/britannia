@@ -17,7 +17,7 @@ namespace Britannia\Application\UseCase\Report;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\VO\Discount\StudentDiscount;
 
-class GenerateCourseInformation
+class GenerateCourseInformation implements ReportCommandInterface
 {
     /**
      * @var Course

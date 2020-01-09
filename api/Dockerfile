@@ -50,7 +50,7 @@ RUN	docker-php-ext-install -j$(nproc) \
 		mysqli \
 		pdo \
 		pdo_mysql \
-#		zip \
+		zip \
 		bcmath \
 	; \
 	pecl install \

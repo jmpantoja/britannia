@@ -40,12 +40,13 @@ final class BookMapper extends AdminMapper
     /**
      * @param Book $book
      * @param array $values
+     * @return Book
      */
-    protected function update($book, array $values)
+    protected function update($book, array $values): Book
     {
         $dto = BookDto::fromArray($values);
 
-        $book->update($dto);
+        return $book->update($dto);
     }
 
 

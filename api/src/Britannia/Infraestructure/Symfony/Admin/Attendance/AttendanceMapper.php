@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Admin\Attendance;
 
 
-use Britannia\Domain\Entity\Course\Attendance;
+use Britannia\Domain\Entity\Attendance\Attendance;
 use Britannia\Domain\Entity\Lesson\Lesson;
 use DomainException;
 use PlanB\DDDBundle\Sonata\Admin\AdminMapper;
@@ -35,9 +35,10 @@ final class AttendanceMapper extends AdminMapper
     /**
      * @param Lesson $lesson
      * @param array $values
+     * @return Attendance
      */
-    protected function update($lesson, array $values)
+    protected function update($lesson, array $values): Lesson
     {
-        $lesson->updateAttendances($values['attendances']);
+        return  $lesson->updateAttendances($values['attendances']);
     }
 }

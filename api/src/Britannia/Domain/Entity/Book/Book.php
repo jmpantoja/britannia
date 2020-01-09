@@ -64,19 +64,20 @@ final class Book
         $this->createdAt = CarbonImmutable::now();
     }
 
-    public function update(BookDto $dto)
+    public function update(BookDto $dto): self
     {
         $this->name = $dto->name;
         $this->price = $dto->price;
         $this->category = $dto->category;
 
         $this->updatedAt = CarbonImmutable::now();
+        return $this;
     }
 
     /**
-     * @return TermId
+     * @return BookId
      */
-    public function id(): ?TermId
+    public function id(): ?BookId
     {
         return $this->id;
     }

@@ -14,11 +14,13 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Lesson;
 
 
+use Britannia\Domain\Entity\Attendance\Attendance;
+use Britannia\Domain\Entity\Attendance\AttendanceList;
 use Britannia\Domain\Entity\ClassRoom\ClassRoom;
-use Britannia\Domain\Entity\Course\Attendance;
-use Britannia\Domain\Entity\Course\AttendanceList;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Student\Student;
+use Britannia\Domain\Entity\Student\StudentHasAttendedLesson;
+use Britannia\Domain\Entity\Student\StudentHasMissedLesson;
 use Britannia\Domain\VO\Course\TimeTable\TimeSheet;
 use Carbon\CarbonImmutable;
 use Doctrine\Common\Collections\Collection;
@@ -96,7 +98,7 @@ class Lesson implements Comparable
 
     public function update(LessonDto $dto)
     {
-        $this->classRoom = $dto->classRoom ;
+        $this->classRoom = $dto->classRoom;
         $this->setDay($dto->date);
         $this->setStartTime($dto->timeSheet);
         $this->setEndTime($dto->timeSheet);
@@ -106,9 +108,27 @@ class Lesson implements Comparable
     public function updateAttendances(AttendanceList $attendances): self
     {
         $this->attendanceList()
-            ->forRemovedItems($attendances)
-            ->forAddedItems($attendances);
+            ->forRemovedItems($attendances, [$this, 'removeAttendance'])
+            ->forAddedItems($attendances, [$this, 'addAttendance']);
 
+        return $this;
+    }
+
+    public function removeAttendance(Attendance $attendance): self
+    {
+        $this->attendanceList()
+            ->remove($attendance, function (Attendance $attendance) {
+                $this->notify(StudentHasAttendedLesson::make($attendance));
+            });
+        return $this;
+    }
+
+    public function addAttendance(Attendance $attendance): self
+    {
+        $this->attendanceList()
+            ->add($attendance, function (Attendance $attendance) {
+                $this->notify(StudentHasMissedLesson::make($attendance));
+            });
         return $this;
     }
 
@@ -198,7 +218,7 @@ class Lesson implements Comparable
             ->findByStudent($student);
 
         if ($attendance instanceof Attendance) {
-            return $attendance->getReason();
+            return $attendance->reason();
         }
 
         return null;

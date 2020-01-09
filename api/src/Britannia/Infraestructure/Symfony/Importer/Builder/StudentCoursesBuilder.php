@@ -17,7 +17,11 @@ namespace Britannia\Infraestructure\Symfony\Importer\Builder;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Course\CourseList;
 use Britannia\Domain\Entity\Student\Student;
+use Britannia\Domain\Service\Assessment\AssessmentGenerator;
+use Britannia\Domain\VO\Assessment\AssessmentDefinition;
+use Britannia\Domain\VO\Assessment\SetOfSkills;
 use Britannia\Infraestructure\Symfony\Importer\Resume;
+use PlanB\DDD\Domain\VO\Percent;
 
 class StudentCoursesBuilder extends BuilderAbstract
 {
@@ -33,6 +37,14 @@ class StudentCoursesBuilder extends BuilderAbstract
      * @var Course[]
      */
     private $courses = [];
+    /**
+     * @var AssessmentDefinition
+     */
+    private AssessmentDefinition $definition;
+    /**
+     * @var AssessmentGenerator
+     */
+    private AssessmentGenerator $assessmentGenerator;
 
 
     public function initResume(array $input): Resume
@@ -72,6 +84,13 @@ class StudentCoursesBuilder extends BuilderAbstract
         return $this;
     }
 
+    public function withGenerator(AssessmentGenerator $assessmentGenerator): self
+    {
+        $this->definition = AssessmentDefinition::make(SetOfSkills::SET_OF_SIX(), Percent::make(30));
+        $this->assessmentGenerator = $assessmentGenerator;
+        return $this;
+    }
+
 
     public function build(): ?object
     {
@@ -79,7 +98,13 @@ class StudentCoursesBuilder extends BuilderAbstract
             return $this->student;
         }
 
-        $this->student->setCourses($this->courses);
+        foreach ($this->courses as $course) {
+            $course->addStudent($this->student);
+            $course->changeAssessmentDefinition($this->definition, $this->assessmentGenerator);
+        }
+
         return $this->student;
     }
+
+
 }

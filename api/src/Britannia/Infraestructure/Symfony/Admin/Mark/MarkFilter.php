@@ -35,7 +35,8 @@ final class MarkFilter extends AdminFilter
         ]);
 
         $this->add('name', null, [
-            'advanced_filter' => false
+            'advanced_filter' => false,
+            'show_filter' => true
         ]);
     }
 }

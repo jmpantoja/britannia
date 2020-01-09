@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Importer\Etl;
 
 
+use ApiPlatform\Core\DataPersister\DataPersisterInterface;
+use Britannia\Domain\Service\Assessment\AssessmentGenerator;
 use Britannia\Infraestructure\Symfony\Importer\Builder\BuilderInterface;
 use Britannia\Infraestructure\Symfony\Importer\Builder\StudentCoursesBuilder;
 use Britannia\Infraestructure\Symfony\Importer\Console;
@@ -22,15 +24,32 @@ use Britannia\Infraestructure\Symfony\Importer\DataCollector;
 use Britannia\Infraestructure\Symfony\Importer\Normalizer\ChildNormalizer;
 use Britannia\Infraestructure\Symfony\Importer\Normalizer\NormalizerInterface;
 use Britannia\Infraestructure\Symfony\Importer\Normalizer\StudentNormalizer;
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\ORM\EntityManagerInterface;
 
 class StudentCoursesEtl extends AbstractEtl
 {
+    /**
+     * @var AssessmentGenerator
+     */
+    private AssessmentGenerator $assessmentGenerator;
+
+    public function __construct(Connection $original,
+                                EntityManagerInterface $entityManager,
+                                DataPersisterInterface $dataPersister,
+                                AssessmentGenerator $assessmentGenerator
+
+    )
+    {
+        parent::__construct($original, $entityManager, $dataPersister);
+        $this->assessmentGenerator = $assessmentGenerator;
+    }
+
 
     public function clean(): void
     {
-        $this->truncate('students_courses');
+        $this->truncate('students_courses', 'assessment_term', 'assessment_unit');
     }
 
     public function configureDataLoader(QueryBuilder $builder): void
@@ -60,6 +79,7 @@ class StudentCoursesEtl extends AbstractEtl
 
         $builder->withCourses((string)$input['curso']);
         $builder->withStudent((int)$input['id']);
+        $builder->withGenerator($this->assessmentGenerator);
 
         return $builder;
     }

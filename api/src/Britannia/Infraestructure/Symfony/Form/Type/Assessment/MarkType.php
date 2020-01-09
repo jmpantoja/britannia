@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Form\Type\Assessment;
 
 
-use Britannia\Domain\VO\Mark\Mark;
+use Britannia\Domain\VO\Assessment\Mark;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
 use Symfony\Component\OptionsResolver\OptionsResolver;

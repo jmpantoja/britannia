@@ -15,15 +15,17 @@ namespace Britannia\Domain\Entity\Assessment;
 
 
 use Britannia\Domain\Entity\Course\Course;
+use Britannia\Domain\Entity\Lesson\LessonList;
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Entity\Student\StudentCourse;
-use Britannia\Domain\VO\Mark\AssessmentDefinition;
-use Britannia\Domain\VO\Mark\Mark;
-use Britannia\Domain\VO\Mark\MarkReport;
-use Britannia\Domain\VO\Mark\MarkWeightedAverage;
-use Britannia\Domain\VO\Mark\SetOfSkills;
-use Britannia\Domain\VO\Mark\TermDefinition;
-use Britannia\Domain\VO\Mark\TermName;
+use Britannia\Domain\Repository\TermsParametersInterface;
+use Britannia\Domain\VO\Assessment\AssessmentDefinition;
+use Britannia\Domain\VO\Assessment\Mark;
+use Britannia\Domain\VO\Assessment\MarkReport;
+use Britannia\Domain\VO\Assessment\MarkWeightedAverage;
+use Britannia\Domain\VO\Assessment\SetOfSkills;
+use Britannia\Domain\VO\Assessment\TermName;
+use Carbon\CarbonImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use PlanB\DDD\Domain\Behaviour\Comparable;
 use PlanB\DDD\Domain\Behaviour\Traits\ComparableTrait;
@@ -50,7 +52,7 @@ final class Term implements Comparable
     private $course;
 
     /**
-     * @var TermName
+     * @var Term
      */
     private $termName;
 
@@ -82,12 +84,18 @@ final class Term implements Comparable
      */
     private $units;
 
-    public static function make(StudentCourse $studentCourse, AssessmentDefinition $definition, TermName $termName)
+    public static function make(StudentCourse $studentCourse,
+                                AssessmentDefinition $definition,
+                                TermName $termName
+    )
     {
         return new self($studentCourse, $definition, $termName);
     }
 
-    private function __construct(StudentCourse $studentCourse, AssessmentDefinition $definition, TermName $termName)
+    private function __construct(StudentCourse $studentCourse,
+                                 AssessmentDefinition $definition,
+                                 TermName $termName
+    )
     {
         $this->id = new TermId();
         $this->student = $studentCourse->student();
@@ -95,10 +103,8 @@ final class Term implements Comparable
 
         $this->termName = $termName;
         $this->units = new ArrayCollection();
-        $this->exam = MarkReport::make();
-        $this->final = Mark::make(10);
-        $this->chageDefinition($definition);
 
+        $this->chageDefinition($definition);
 
         $unitList = $this->calculeUnits();
         $this->updateMarks($unitList, MarkReport::make());
@@ -126,7 +132,6 @@ final class Term implements Comparable
         $this->skills = $definition->skills();
 
         $this->updateTotal($this->exam());
-
         return $this;
     }
 
@@ -188,7 +193,7 @@ final class Term implements Comparable
     }
 
     /**
-     * @return TermName
+     * @return Term
      */
     public function termName(): TermName
     {
@@ -208,7 +213,7 @@ final class Term implements Comparable
      */
     public function exam(): MarkReport
     {
-        return $this->exam;
+        return $this->exam ?? MarkReport::make();
     }
 
     /**
@@ -240,13 +245,6 @@ final class Term implements Comparable
         return UnitList::collect($this->units);
     }
 
-    public function definition(): TermDefinition
-    {
-        $numOfUnits = $this->unitList()->numOfUnits();
-        $completedUnits = $this->unitList()->completedUnits();
-        return TermDefinition::make($this->termName, $this->unitsWeight, $numOfUnits, $completedUnits);
-    }
-
     public function hash(): string
     {
         return sprintf('%s-%s-%s', ...[
@@ -255,6 +253,5 @@ final class Term implements Comparable
             $this->termName()
         ]);
     }
-
 
 }

@@ -15,7 +15,8 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Assessment;
 
 
 use Britannia\Domain\Entity\Course\Course;
-use Britannia\Domain\VO\Mark\AssessmentDefinition;
+
+use Britannia\Domain\VO\Assessment\AssessmentDefinition;
 use Britannia\Infraestructure\Symfony\Validator\FullName;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractCompoundType;

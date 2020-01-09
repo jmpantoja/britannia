@@ -15,8 +15,8 @@
         <field name="unitsWeight" type="percent"/>
         <field name="skills" type="SetOfSkills"/>
 
-        <embedded name="exam" class="Britannia\Domain\VO\Mark\MarkReport"/>
-        <embedded name="total" class="Britannia\Domain\VO\Mark\MarkReport"/>
+        <embedded name="exam" class="Britannia\Domain\VO\Assessment\MarkReport"/>
+        <embedded name="total" class="Britannia\Domain\VO\Assessment\MarkReport"/>
         <field name="final" type="Mark"/>
 
         <many-to-one field="student" target-entity="Britannia\Domain\Entity\Student\Student">

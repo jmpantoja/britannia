@@ -22,7 +22,7 @@ final class MarkQuery extends AdminQuery
 
     protected function configure(QueryBuilder $builder, string $alias = 'o'): void
     {
-        $builder->where('o.numOfUnits > 0')
+        $builder->where('o.numOfStudents > 0')
             ->orderBy('o.timeTable.end', 'DESC');
     }
 }

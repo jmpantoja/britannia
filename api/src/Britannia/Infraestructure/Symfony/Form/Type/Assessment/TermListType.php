@@ -43,7 +43,7 @@ class TermListType extends AbstractCompoundType
     public function customOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => TermList::class
+            'data_class' => TermList::class,
         ]);
 
     }

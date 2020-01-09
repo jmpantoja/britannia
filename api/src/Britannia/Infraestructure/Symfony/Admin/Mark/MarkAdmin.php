@@ -25,8 +25,7 @@ final class MarkAdmin extends AbstractAdmin
     public function __construct(string $code,
                                 string $class,
                                 string $baseControllerName,
-                                MarkTools $adminTools,
-                                ParameterBagInterface $parameterBag
+                                MarkTools $adminTools
     )
     {
         parent::__construct($code, $class, $baseControllerName);
@@ -88,6 +87,7 @@ final class MarkAdmin extends AbstractAdmin
 
     protected function configureFormFields(FormMapper $formMapper): void
     {
+
         $course = $this->getSubject();
 
         $this->adminTools()

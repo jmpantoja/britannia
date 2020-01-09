@@ -21,7 +21,6 @@ use Britannia\Domain\Entity\Unit\UnitStudent;
 use Britannia\Domain\Entity\Unit\UnitStudentList;
 use Britannia\Domain\Repository\StudentRepositoryInterface;
 use Britannia\Domain\Repository\UnitRepositoryInterface;
-use Britannia\Domain\VO\Course\Locked\Locked;
 use DomainException;
 use PlanB\DDDBundle\Sonata\Admin\AdminMapper;
 
@@ -51,11 +50,13 @@ final class MarkMapper extends AdminMapper
     /**
      * @param Course $course
      * @param array $values
+     * @return Course
      */
-    protected function update($course, array $values)
+    protected function update($course, array $values): Course
     {
         $termList = $this->buildTermList($values);
-        $course->setTerms($termList);
+        return  $course->setTerms($termList);
+
     }
 
     /**

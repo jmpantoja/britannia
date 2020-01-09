@@ -37,6 +37,7 @@ final class StudentFilter extends AdminFilter
                 $queryBuilder
                     ->andwhere($where)
                     ->setParameter('name', sprintf('%%%s%%', $value['value']));
+
                 return true;
             }
         ]);

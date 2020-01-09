@@ -15,7 +15,7 @@ namespace Britannia\Domain\Service\Payment\Discount;
 
 
 use Britannia\Domain\Entity\Course\Course;
-use Britannia\Domain\Repository\FamilyDiscountStorageInterface;
+use Britannia\Domain\Repository\FamilyDiscountParametersInterface;
 use Britannia\Domain\Service\Payment\Concept;
 use Britannia\Domain\Service\Payment\FamilyDiscountList;
 use Britannia\Domain\VO\Discount\StudentDiscount;
@@ -35,7 +35,7 @@ class MonthlyDiscount extends DiscountCalculator
     private $familyDiscountList;
 
 
-    public function __construct(FamilyDiscountStorageInterface $familyDiscountStorage)
+    public function __construct(FamilyDiscountParametersInterface $familyDiscountStorage)
     {
         $this->familyDiscountList = $familyDiscountStorage->getList();
 

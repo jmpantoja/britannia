@@ -15,7 +15,8 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Assessment;
 
 
 use Britannia\Domain\Entity\Assessment\Unit;
-use Britannia\Domain\VO\Mark\MarkReport;
+use Britannia\Domain\VO\Assessment\Mark;
+use Britannia\Domain\VO\Assessment\MarkReport;
 use Britannia\Infraestructure\Symfony\Form\Type\Unit\FullName;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractCompoundType;
@@ -37,7 +38,8 @@ class UnitType extends AbstractCompoundType
             $builder->add($skill, MarkType::class, [
                 'label' => false,
                 'required' => false,
-                'data' => $markReport->get($skill)
+                'data' => $markReport->get($skill),
+//                'data' => Mark::make(mt_rand(40, 100)/10)
             ]);
         }
     }

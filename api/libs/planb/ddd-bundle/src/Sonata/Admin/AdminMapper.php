@@ -95,7 +95,7 @@ abstract class AdminMapper implements DataMapperInterface
         }
 
         $this->assertType($data);
-        $this->update($data, $values);
+        $data = $this->update($data, $values);
     }
 
     /**
@@ -110,5 +110,5 @@ abstract class AdminMapper implements DataMapperInterface
 
     abstract protected function create(array $values): object;
 
-    abstract protected function update($object, array $values);
+    abstract protected function update($object, array $values): object;
 }

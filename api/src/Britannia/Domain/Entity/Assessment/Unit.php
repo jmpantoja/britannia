@@ -16,8 +16,8 @@ namespace Britannia\Domain\Entity\Assessment;
 
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Student\Student;
-use Britannia\Domain\VO\Mark\MarkReport;
-use Britannia\Domain\VO\Mark\SetOfSkills;
+use Britannia\Domain\VO\Assessment\MarkReport;
+use Britannia\Domain\VO\Assessment\SetOfSkills;
 use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\Behaviour\Comparable;
 use PlanB\DDD\Domain\Behaviour\Traits\ComparableTrait;

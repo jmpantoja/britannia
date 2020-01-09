@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="es" target-language="es" datatype="plaintext" original="file.ext">
+    <header>
+      <tool tool-id="symfony" tool-name="Symfony"/>
+    </header>
+    <body>
+      <trans-unit id="BZLqwiZ" resname="FIRST_TERM">
+        <source>FIRST_TERM</source>
+        <target state="translated">%year% / 1er Trimestre</target>
+      </trans-unit>
+      <trans-unit id="3ks0bJt" resname="SECOND_TERM">
+        <source>SECOND_TERM</source>
+        <target state="translated">%year% / 2do Trimestre</target>
+      </trans-unit>
+      <trans-unit id="zF357LR" resname="THIRD_TERM">
+        <source>THIRD_TERM</source>
+        <target state="translated">%year% / 3er Trimestre</target>
+      </trans-unit>
+      <trans-unit id="UUZh2Tk" resname="student_name">
+        <source>student_name</source>
+        <target state="translated">Nombre del Alumno</target>
+      </trans-unit>
+      <trans-unit id="qQgEPtR" resname="course">
+        <source>course</source>
+        <target state="translated">Curso</target>
+      </trans-unit>
+      <trans-unit id="i0eBOoH" resname="academic_year">
+        <source>academic_year</source>
+        <target state="translated">Año Academico / Trimestre</target>
+      </trans-unit>
+      <trans-unit id="1wr8phU" resname="reading">
+        <source>reading</source>
+        <target state="translated">Compresión escrita</target>
+      </trans-unit>
+      <trans-unit id="7ocRBeh" resname="writing">
+        <source>writing</source>
+        <target state="translated">Compresión escrita</target>
+      </trans-unit>
+      <trans-unit id="hWCHi4e" resname="listening">
+        <source>listening</source>
+        <target state="translated">Compresión escrita</target>
+      </trans-unit>
+      <trans-unit id="h1w05hX" resname="speaking">
+        <source>speaking</source>
+        <target state="translated">Compresión oral</target>
+      </trans-unit>
+      <trans-unit id="4F64pKJ" resname="grammar">
+        <source>grammar</source>
+        <target state="translated">Gramática</target>
+      </trans-unit>
+      <trans-unit id="DH4N4op" resname="vocabulary">
+        <source>vocabulary</source>
+        <target state="translated">Vocabulario</target>
+      </trans-unit>
+      <trans-unit id="wvllyoz" resname="not_assessed">
+        <source>not_assessed</source>
+        <target state="translated">No evaluado</target>
+      </trans-unit>
+      <trans-unit id="QlMF4l3" resname="FAIL">
+        <source>FAIL</source>
+        <target state="translated">Suspenso (%mark%)</target>
+      </trans-unit>
+      <trans-unit id="UZRA24G" resname="BORDERLINE">
+        <source>BORDERLINE</source>
+        <target state="translated">Necesita mejorar (%mark%)</target>
+      </trans-unit>
+      <trans-unit id="L5rLAvq" resname="PASS">
+        <source>PASS</source>
+        <target state="translated">Aprobado (%mark%)</target>
+      </trans-unit>
+      <trans-unit id="PGMBPwE" resname="PASS_WITH_MERIT">
+        <source>PASS_WITH_MERIT</source>
+        <target state="translated">Mención especial (%mark%)</target>
+      </trans-unit>
+      <trans-unit id="ke1bETt" resname="PASS_WITH_DISTINCTION">
+        <source>PASS_WITH_DISTINCTION</source>
+        <target state="translated">Matrícula de honor (%mark%)</target>
+      </trans-unit>
+      <trans-unit id="r10DnU1" resname="final_mark">
+        <source>final_mark</source>
+        <target state="translated">Nota final</target>
+      </trans-unit>
+      <trans-unit id="GIgQHa4" resname="absence">
+        <source>absence</source>
+        <target state="translated">Faltas asistencia</target>
+      </trans-unit>
+      <trans-unit id="WjvLzvW" resname="attendance">
+        <source>attendance</source>
+        <target state="translated">% Asistencia</target>
+      </trans-unit>
+      <trans-unit id="q1qpcHT" resname="notes">
+        <source>notes</source>
+        <target state="translated">Notas</target>
+      </trans-unit>
+      <trans-unit id="BGSiIab" resname="signed_by">
+        <source>signed_by</source>
+        <target state="translated">Firmado por el profesor</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

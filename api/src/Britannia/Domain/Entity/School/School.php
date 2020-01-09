@@ -50,10 +50,11 @@ class School
     }
 
 
-    public function update(SchoolDto $dto)
+    public function update(SchoolDto $dto): self
     {
         $this->setName($dto->name);
         $this->updatedAt = CarbonImmutable::now();
+        return $this;
     }
 
     /**
@@ -80,7 +81,7 @@ class School
      */
     public function name(): string
     {
-        return $this->name ?? (string) $this->id();
+        return $this->name ?? (string)$this->id();
     }
 
     public function __toString()

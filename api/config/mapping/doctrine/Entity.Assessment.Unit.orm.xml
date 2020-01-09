@@ -11,7 +11,7 @@
             <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
         </id>
 
-        <embedded name="marks" class="Britannia\Domain\VO\Mark\MarkReport" use-column-prefix="false"/>
+        <embedded name="marks" class="Britannia\Domain\VO\Assessment\MarkReport" use-column-prefix="false"/>
         <field name="number" type="positive_integer"/>
         <field name="completedAt" type="datetime_immutable" nullable="true"/>
 

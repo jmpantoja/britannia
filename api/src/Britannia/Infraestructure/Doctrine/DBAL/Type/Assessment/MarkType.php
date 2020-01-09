@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Doctrine\DBAL\Type\Assessment;
 
 
-use Britannia\Domain\VO\Mark\Mark;
+use Britannia\Domain\VO\Assessment\Mark;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 
@@ -31,11 +31,11 @@ class MarkType extends Type
 
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
-        if (empty($value)) {
-            return null;
+        if (is_null($value)) {
+            return Mark::notAssessment();
         }
 
-        return Mark::make($value * 1);
+        return Mark::make(1 * $value);
     }
 
 

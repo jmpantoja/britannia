@@ -92,9 +92,11 @@ doctrine:
             #Classroom
             ClassRoomId: Britannia\Infraestructure\Doctrine\DBAL\Type\ClassRoom\ClassRoomIdType
 
+            #Attendance
+            AttendanceId: Britannia\Infraestructure\Doctrine\DBAL\Type\Attendance\AttendanceId
+
             #Courses
             Age: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\AgeType
-            AttendanceId: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\AttendanceId
             DayOfWeek: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\DayOfWeekType
             Examiner: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\ExaminerType
             Intensive: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\IntensiveType

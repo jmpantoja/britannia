@@ -81,7 +81,7 @@ class Tutor
         $this->update($dto);
     }
 
-    public function update(TutorDto $dto)
+    public function update(TutorDto $dto): self
     {
         $this->fullName = $dto->fullName;
         $this->dni = $dto->dni;
@@ -90,6 +90,7 @@ class Tutor
         $this->job = $dto->job;
 
         $this->updatedAt = CarbonImmutable::now();
+        return $this;
     }
 
     /**

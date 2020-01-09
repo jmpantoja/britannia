@@ -15,9 +15,9 @@ namespace Britannia\Infraestructure\Symfony\Importer\Etl;
 
 
 use ApiPlatform\Core\DataPersister\DataPersisterInterface;
+use Britannia\Domain\Service\Assessment\AssessmentGenerator;
 use Britannia\Domain\Service\Course\LessonGenerator;
 use Britannia\Domain\Service\Course\TimeTableUpdater;
-use Britannia\Domain\Service\Course\AssessmentGenerator;
 use Britannia\Infraestructure\Symfony\Importer\Builder\BuilderInterface;
 use Britannia\Infraestructure\Symfony\Importer\Builder\CourseBuilder;
 use Britannia\Infraestructure\Symfony\Importer\Console;

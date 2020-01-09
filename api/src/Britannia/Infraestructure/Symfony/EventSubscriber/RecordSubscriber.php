@@ -18,10 +18,10 @@ use Britannia\Application\UseCase\Record\UpdateRecord;
 use Britannia\Application\UseCase\Student\StudentJoinToCourse;
 use Britannia\Domain\Entity\Record\BorrameEvent;
 use Britannia\Domain\Entity\Record\RecordEventInterface;
-use Britannia\Domain\Entity\Record\StudentHasBeenCreated;
-use Britannia\Domain\Entity\Record\StudentHasJoinedToCourse;
-use Britannia\Domain\Entity\Record\StudentHasLeavedCourse;
-use Britannia\Domain\Entity\Record\StudentHasMissedLesson;
+use Britannia\Domain\Entity\Student\StudentHasBeenCreated;
+use Britannia\Domain\Entity\Student\StudentHasJoinedToCourse;
+use Britannia\Domain\Entity\Student\StudentHasLeavedCourse;
+use Britannia\Domain\Entity\Student\StudentHasMissedLesson;
 
 
 class RecordSubscriber extends DomainEventSubscriber

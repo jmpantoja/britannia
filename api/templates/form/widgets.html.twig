@@ -228,17 +228,6 @@
 
 
 {% block course_information_widget %}
-
-    <h1>Información de Cursos</h1>
-
-    <div class="row course_information course">
-
-        <div class="col-md-4">
-            <h2>Curso</h2>
-            {{ form_row(form.course) }}
-        </div>
-    </div>
-
     <div class="row course_information student">
         <div class="col-md-12">
             <h2>Alumno</h2>
@@ -407,88 +396,29 @@
         </div>
     </div>
 
-        <script>
-            $(function () {
-                var units = $('#{{ form.unitsWeight.vars.id }}');
-                var exam = $('#{{ form.examWeight.vars.id }}');
+    <script>
+        $(function () {
+            var units = $('#{{ form.unitsWeight.vars.id }}');
+            var exam = $('#{{ form.examWeight.vars.id }}');
 
-                $(units).on('keyup', function () {
-                    var value = $(this).val();
+            $(units).on('keyup', function () {
+                var value = $(this).val();
 
-                    if ($.isNumeric(value) && value >= 0 && value <= 100) {
-                        $(exam).val(100 - value);
-                        return;
-                    }
+                if ($.isNumeric(value) && value >= 0 && value <= 100) {
+                    $(exam).val(100 - value);
+                    return;
+                }
 
-                    $(exam).val('-');
-                })
-
-                $(units).trigger('keyup');
+                $(exam).val('-');
             })
 
-        </script>
+            $(units).trigger('keyup');
+        })
+
+    </script>
 
 
 {% endblock %}
-
-
-
-{#{% block term_definition_widget %}#}
-{#    <div class="row" style="margin-top: 3em">#}
-{#        #}{#        {{ form_row(form.termName) }}#}
-{#        <div class="col-md-3">#}
-{#            <legend class="control-label" style="margin: 1.2em 0 0 3.8em; font-size: 1.4em">#}
-{#                {{ term.value }}:#}
-{#            </legend>#}
-{#        </div>#}
-{#        <div class="col-md-3">#}
-{#            {{ form_row(form.numOfUnits) }}#}
-{#            #}{#            {{ form_row(form.completedUnits) }}#}
-{#        </div>#}
-{#        <div class="col-md-2">#}
-{#            {{ form_row(form.unitsWeight) }}#}
-{#        </div>#}
-{#        <div class="col-md-2">#}
-{#            {{ form_row(form.examWeight) }}#}
-{#        </div>#}
-{#        {% if completedUnits is defined %}#}
-{#            <div class="col-md-7 col-md-push-3">#}
-{#                <p class="note">#}
-{#                    {% if completedUnits == 1 %}#}
-{#                        Este trimestre ya tiene <strong>una unidad evaluadas</strong>, que#}
-{#                        <strong>NO</strong> se puede eliminar#}
-{#                    {% else %}#}
-{#                        Este trimestre ya tiene <strong>{{ completedUnits }} unidades#}
-{#                        evaluadas</strong>, que <strong>NO</strong> se pueden eliminar#}
-{#                    {% endif %}#}
-{#                </p>#}
-{#            </div>#}
-{#        {% endif %}#}
-{#    </div>#}
-
-{#    <script>#}
-{#        $(function () {#}
-{#            var units = $('#{{ form.unitsWeight.vars.id }}');#}
-{#            var exam = $('#{{ form.examWeight.vars.id }}');#}
-
-{#            $(units).on('keyup', function () {#}
-{#                var value = $(this).val();#}
-
-{#                if ($.isNumeric(value) && value >= 0 && value <= 100) {#}
-{#                    $(exam).val(100 - value);#}
-{#                    return;#}
-{#                }#}
-
-{#                $(exam).val('-');#}
-{#            })#}
-
-{#            $(units).trigger('keyup');#}
-{#        })#}
-
-{#    </script>#}
-
-{#{% endblock %}#}
-
 
 {% block term_list_widget %}
     <table class="term_marks" border="1">
@@ -534,6 +464,7 @@
         {% endfor %}
         </tbody>
     </table>
+
 {% endblock %}
 
 

@@ -38,9 +38,9 @@ final class SchoolMapper extends AdminMapper
      * @param array $values
      * @return School
      */
-    protected function update($school, array $values)
+    protected function update($school, array $values): School
     {
         $dto = SchoolDto::fromArray($values);
-        $school->update($dto);
+        return $school->update($dto);
     }
 }

@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Doctrine\DBAL\Type\Assessment;
 
 
-use Britannia\Domain\VO\Mark\SetOfSkills;
+use Britannia\Domain\VO\Assessment\SetOfSkills;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 

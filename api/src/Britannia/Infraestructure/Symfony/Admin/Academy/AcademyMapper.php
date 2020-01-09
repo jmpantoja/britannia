@@ -34,11 +34,12 @@ final class AcademyMapper extends AdminMapper
     /**
      * @param Academy $academy
      * @param array $values
+     * @return Academy
      */
-    protected function update($academy, array $values)
+    protected function update($academy, array $values): Academy
     {
         $dto = AcademyDto::fromArray($values);
-        $academy->update($dto);
+        return $academy->update($dto);
     }
 
 }

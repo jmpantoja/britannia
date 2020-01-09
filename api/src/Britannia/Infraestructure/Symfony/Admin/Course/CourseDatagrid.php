@@ -18,13 +18,13 @@ use PlanB\DDDBundle\Sonata\Admin\AdminDataGrid;
 
 final class CourseDatagrid extends AdminDataGrid
 {
-
     public function configure(): self
     {
-        $this->addId()
-//            ->addDates()
+        $this
             ->addStatus()
-            ->addActions();
+            ->addId()
+            ->addActions()
+        ;
 
         return $this;
     }
@@ -38,20 +38,10 @@ final class CourseDatagrid extends AdminDataGrid
         return $this;
     }
 
-
-//    private function addDates(): self
-//    {
-//        $this->add('start', 'string', [
-////            'template' => 'admin/course/course_list_field.html.twig',
-////            'label' => 'Cursos'
-//        ]);
-//        return $this;
-//    }
-
-
     private function addStatus(): self
     {
         $this->add('status', null, [
+            'label' => false,
             'header_style' => 'width:30px;',
             'template' => 'admin/course/status_list_field.html.twig',
             'row_align' => 'center'
@@ -63,9 +53,9 @@ final class CourseDatagrid extends AdminDataGrid
     private function addActions(): self
     {
         $this->add('_action', null, [
-            'label' => 'Informes',
+            'label' => false,
             'header_style' => 'width:210px; text-align: center',
-            'row_align' => 'center',
+            'row_align' => 'right',
             'actions' => [
                 'report-info' => [
                     'template' => 'admin/course/course_info_report_action.html.twig'

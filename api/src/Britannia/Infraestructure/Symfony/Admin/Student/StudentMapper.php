@@ -53,11 +53,12 @@ final class StudentMapper extends AdminMapper
     /**
      * @param Student $student
      * @param array $values
+     * @return Student
      */
-    protected function update($student, array $values)
+    protected function update($student, array $values): Student
     {
         $dto = $this->makeDto($values);
-        $student->update($dto);
+        return $student->update($dto);
     }
 
     /**

@@ -35,10 +35,11 @@ final class TutorMapper extends AdminMapper
     /**
      * @param Tutor $tutor
      * @param array $values
+     * @return Tutor
      */
-    protected function update($tutor, array $values)
+    protected function update($tutor, array $values): Tutor
     {
         $dto = TutorDto::fromArray($values);
-        $tutor->update($dto);
+        return $tutor->update($dto);
     }
 }

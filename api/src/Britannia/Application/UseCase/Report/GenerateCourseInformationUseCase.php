@@ -14,26 +14,21 @@ declare(strict_types=1);
 namespace Britannia\Application\UseCase\Report;
 
 
-use Britannia\Domain\Entity\Course\Course;
-use Britannia\Domain\Service\Payment\Concept;
-use Britannia\Domain\Service\Payment\PaymentBreakdownService;
-use Britannia\Domain\VO\Course\Discount\CourseDiscount;
-use Britannia\Domain\VO\Discount\StudentDiscount;
+use Britannia\Domain\Service\Report\CourseInformation;
+use Britannia\Domain\Service\Report\CourseInformationParamsGenerator;
+use Britannia\Domain\Service\Report\ReportList;
 use PlanB\DDD\Application\UseCase\UseCaseInterface;
-use PlanB\DDD\Domain\VO\Price;
-use Tightenco\Collect\Support\Collection;
 
 class GenerateCourseInformationUseCase implements UseCaseInterface
 {
-
     /**
-     * @var PaymentBreakdownService
+     * @var CourseInformationParamsGenerator
      */
-    private $breakdown;
+    private CourseInformationParamsGenerator $generator;
 
-    public function __construct(PaymentBreakdownService $breakdown)
+    public function __construct(CourseInformationParamsGenerator $paramsGenerator)
     {
-        $this->breakdown = $breakdown;
+        $this->generator = $paramsGenerator;
     }
 
     public function handle(GenerateCourseInformation $command)
@@ -41,80 +36,10 @@ class GenerateCourseInformationUseCase implements UseCaseInterface
         $course = $command->course();
         $discount = $command->discount();
 
-        $monthlyPayments = $this->breakdown->calculeMonthlyPayments($course, $discount);
-        $reserve = $this->getReserve($course, $discount, $monthlyPayments);
+        return ReportList::make($course->name(), [
+            CourseInformation::make($course, $discount, $this->generator)
+        ]);
 
-        $limits = $this->getLimits($discount, $course);
-
-        $monthly = $this->getMonthly($monthlyPayments);
-
-        return [
-            'course' => $course,
-            'reserve' => $reserve,
-            'limits' => $limits,
-            'monthly' => $monthly,
-        ];
     }
-
-    /**
-     * @param $course
-     * @param $discount
-     * @return array
-     */
-    protected function getReserve(Course $course, StudentDiscount $discount, Collection $monthlyPayments): array
-    {
-        $enrollment = $this->breakdown->calculeEnrollment($course, $discount);
-        $material = $this->breakdown->calculeMaterial($course, $discount);
-
-        $firstMonth = $monthlyPayments->first();
-        $lastMonth = $monthlyPayments->last();
-
-        $total = $this->getTotal($enrollment, $material, $firstMonth, $lastMonth);
-
-        return [
-            'enrollment' => $enrollment,
-            'material' => $material,
-            'first_month' => $firstMonth,
-            'last_month' => $lastMonth,
-            'total' => $total,
-        ];
-    }
-
-    private function getTotal(Concept ...$concepts)
-    {
-        $conceptList = collect($concepts);
-        $total = Price::make(0);
-
-        return $conceptList->reduce(function (Price $total, Concept $concept) {
-            $price = $concept->getTotal();
-            return $total->add($price);
-        }, $total);
-    }
-
-    /**
-     * @param $discount
-     * @param $course
-     * @return array
-     */
-    protected function getLimits(StudentDiscount $discount, Course $course): array
-    {
-        $startDate = $discount->startDate() ?? $course->start();
-        $endDate = $course->end();
-
-        $limits = [
-            'start' => $startDate,
-            'end' => $endDate,
-        ];
-        return $limits;
-    }
-
-    private function getMonthly(Collection $monthlyPayments): ?Concept
-    {
-        if ($monthlyPayments->count() < 3) {
-            return null;
-        }
-        return $monthlyPayments->slice(1, 1)->pop();
-    }
-
 
 }

@@ -21,15 +21,16 @@ final class MarkDataGrid extends AdminDataGrid
 
     public function configure()
     {
-        $this->addIdentifier('name', 'string', [
-            'template' => 'admin/course/course_list_field.html.twig',
-            'label' => 'Cursos'
-        ]);
-
         $this->add('status', null, [
+            'label' => false,
             'header_style' => 'width:30px;',
             'template' => 'admin/course/status_list_field.html.twig',
             'row_align' => 'center'
+        ]);
+
+        $this->addIdentifier('name', 'string', [
+            'template' => 'admin/course/course_list_field.html.twig',
+            'label' => 'Cursos'
         ]);
     }
 }

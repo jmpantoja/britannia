@@ -14,8 +14,9 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Assessment;
 
 
-use Britannia\Domain\VO\Mark\AssessmentDefinition;
-use Britannia\Domain\VO\Mark\SetOfSkills;
+use Britannia\Domain\Entity\Lesson\LessonList;
+use Britannia\Domain\VO\Assessment\AssessmentDefinition;
+use Britannia\Domain\VO\Assessment\SetOfSkills;
 use PlanB\DDD\Domain\Model\EntityList;
 
 final class TermList extends EntityList
@@ -25,7 +26,6 @@ final class TermList extends EntityList
     {
         return Term::class;
     }
-
 
     public function changeDefinition(AssessmentDefinition $definition): self
     {

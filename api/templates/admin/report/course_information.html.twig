@@ -3,6 +3,7 @@
 {% block stylesheets %}
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+{#    <link rel="stylesheet" href="{{ assets_base }}/bundles/sonatacore/vendor/bootstrap/dist/css/bootstrap.css">#}
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css">
 
 {% endblock %}
@@ -116,7 +117,7 @@
 
 {% block body %}
 
-    <img src="{{ asset_base }}/images/admin/logo_h_300.jpg"/>
+    <img src="{{ assets_base }}/images/admin/logo_h_300.jpg"/>
 
     <h2 class="title">{{ course.name }}</h2>
 
@@ -228,7 +229,7 @@
 
 {% block notes %}
     {% if reserve.enrollment.ofJobStatusType %}
-        <p class="notes">Matrícula gratis por situación laboral</p>
+        <p class="notes">Matrícula gratis</p>
     {% endif %}
 
     {% if monthly != null %}

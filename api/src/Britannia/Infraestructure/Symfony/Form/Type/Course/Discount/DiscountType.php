@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Form\Type\Course\Discount;
 
 
-use Britannia\Domain\Repository\JobStatusDiscountStorageInterface;
+use Britannia\Domain\Repository\JobStatusDiscountParametersInterface;
 use Britannia\Domain\VO\Course\Discount\CourseDiscount;
 use Britannia\Domain\VO\Discount\JobStatusDiscountList;
 use Britannia\Domain\VO\Student\Job\JobStatus;
@@ -36,7 +36,7 @@ class DiscountType extends AbstractCompoundType
      */
     private $jobStatusDiscountList;
 
-    public function __construct(JobStatusDiscountStorageInterface $jobStatusDiscountStorage)
+    public function __construct(JobStatusDiscountParametersInterface $jobStatusDiscountStorage)
     {
         $this->jobStatusDiscountList = $jobStatusDiscountStorage->getList();
     }

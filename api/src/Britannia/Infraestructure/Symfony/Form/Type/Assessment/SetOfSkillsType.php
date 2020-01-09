@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Form\Type\Assessment;
 
 
-use Britannia\Domain\VO\Mark\SetOfSkills;
+use Britannia\Domain\VO\Assessment\SetOfSkills;
 use Britannia\Infraestructure\Symfony\Validator\FullName;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
@@ -51,7 +51,7 @@ class SetOfSkillsType extends AbstractSingleType
      */
     public function buildConstraint(array $options): ?Constraint
     {
-        return new \Britannia\Domain\VO\Mark\Validator\SetOfSkills([
+        return new \Britannia\Domain\VO\Assessment\Validator\SetOfSkills([
             'required' => $options['required']
         ]);
     }

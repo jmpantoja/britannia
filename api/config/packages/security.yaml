@@ -34,6 +34,7 @@ security:
         - ROLE_ADMIN_ATTENDANCE_ALL
         - ROLE_ADMIN_RECORD_ALL
         - ROLE_ADMIN_MARK_ALL
+        - ROLE_ADMIN_REPORT_ALL
 
         ROLE_RECEPTION:
         - ROLE_SONATA_ADMIN

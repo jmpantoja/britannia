@@ -35,12 +35,13 @@ final class ClassRoomMapper extends AdminMapper
     /**
      * @param ClassRoom $classRoom
      * @param array $values
+     * @return ClassRoom
      */
-    protected function update($classRoom, array $values)
+    protected function update($classRoom, array $values): ClassRoom
     {
         $this->assertType($classRoom);
 
         $dto = ClassRoomDto::fromArray($values);
-        $classRoom->update($dto);
+        return $classRoom->update($dto);
     }
 }

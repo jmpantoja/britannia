@@ -3,6 +3,9 @@
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+imports:
+    - { resource: admins.yaml }
+
 parameters:
     locale: es
 
@@ -51,13 +54,13 @@ services:
 
     Britannia\Infraestructure\Symfony\Importer\ImporterManager:
         calls:
-            #- [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\StaffEtl']]
-#            - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\StudentEtl']]
-#            - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\RelativesEtl']]
-#            - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\CourseEtl']]
-#            - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\TeacherCoursesEtl']]
-            - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\StudentCoursesEtl']]
-#            - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\AttendanceControlEtl']]
+#        - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\StaffEtl']]
+#        - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\StudentEtl']]
+#        - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\RelativesEtl']]
+#        - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\CourseEtl']]
+#        - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\TeacherCoursesEtl']]
+#        - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\StudentCoursesEtl']]
+#        - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\AttendanceControlEtl']]
 
 
     event_dispatcher:
@@ -65,108 +68,3 @@ services:
         factory: ['PlanB\DDD\Domain\Event\EventDispatcher', 'getInstance']
         public: true
 
-    admin.staff_member:
-        class: Britannia\Infraestructure\Symfony\Admin\Staff\StaffAdmin
-        arguments: [~, Britannia\Domain\Entity\Staff\StaffMember, ~]
-        calls:
-            - [setTemplate, ['profile', 'admin/staff/profile.html.twig']]
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: Usuarios, label: Plantilla }
-        public: true
-
-    admin.student:
-        class: Britannia\Infraestructure\Symfony\Admin\Student\StudentAdmin
-        arguments: [~, Britannia\Domain\Entity\Student\Student, ~]
-        public: true
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: Alumnos, label: Alumnos, pager_type: 'simple' }
-        calls:
-            - [setSubClasses, [{child: Britannia\Domain\Entity\Student\Child, adult: Britannia\Domain\Entity\Student\Adult}]]
-
-    admin.record:
-        class: Britannia\Infraestructure\Symfony\Admin\Record\RecordAdmin
-        arguments: [~, Britannia\Domain\Entity\Record\Record, ~]
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: Alumnos, label: Historial, pager_type: 'simple' }
-        public: true
-
-    admin.tutor:
-        class: Britannia\Infraestructure\Symfony\Admin\Tutor\TutorAdmin
-        arguments: [~, Britannia\Domain\Entity\Student\Tutor, ~]
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: Alumnos, label: Tutores, pager_type: 'simple' }
-
-        public: true
-
-    admin.course:
-        class: Britannia\Infraestructure\Symfony\Admin\Course\CourseAdmin
-        arguments: [~, Britannia\Domain\Entity\Course\Course, Britannia\Infraestructure\Symfony\Controller\Admin\CourseController]
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: Cursos, label: Cursos, pager_type: 'simple' }
-        public: true
-
-    admin.mark:
-        class: Britannia\Infraestructure\Symfony\Admin\Mark\MarkAdmin
-        arguments: [~, Britannia\Domain\Entity\Course\Course, ~]
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: Cursos, label: Calificaciones, , pager_type: 'simple' }
-        public: true
-
-    admin.attendance:
-        class: Britannia\Infraestructure\Symfony\Admin\Attendance\AttendanceAdmin
-        arguments: [~, Britannia\Domain\Entity\Lesson\Lesson, ~]
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: Control de Asistencia, label: Asistencia, pager_type: 'simple' }
-        calls:
-            - [setTemplate, ['outer_list_rows_mosaic', 'admin/lesson/list_outer_rows_mosaic.html.twig']]
-        public: true
-
-    admin.book:
-        class: Britannia\Infraestructure\Symfony\Admin\Book\BookAdmin
-        arguments: [~, Britannia\Domain\Entity\Book\Book, ~]
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: Cursos, label: Libros, pager_type: 'simple' }
-        public: true
-
-    admin.level:
-        class: Britannia\Infraestructure\Symfony\Admin\Level\LevelAdmin
-        arguments: [~, Britannia\Domain\Entity\Course\Level, ~]
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: Cursos, label: Niveles, pager_type: 'simple'}
-        public: true
-
-    admin.academy:
-        class: Britannia\Infraestructure\Symfony\Admin\Academy\AcademyAdmin
-        arguments: [~, Britannia\Domain\Entity\Academy\Academy, ~]
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: Datos Extra, label: Otras academias, pager_type: 'simple' }
-        public: true
-
-    admin.school:
-        class: Britannia\Infraestructure\Symfony\Admin\School\SchoolAdmin
-        arguments: [~, Britannia\Domain\Entity\School\School, ~]
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: Datos Extra, label: Escuelas, pager_type: 'simple' }
-        public: true
-
-    admin.classroom:
-        class: Britannia\Infraestructure\Symfony\Admin\ClassRoom\ClassRoomAdmin
-        arguments: [~, Britannia\Domain\Entity\ClassRoom\ClassRoom, ~]
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: Datos Extra, label: Aulas, pager_type: 'simple' }
-        public: true
-
-
-    admin.calendar:
-        class: Britannia\Infraestructure\Symfony\Admin\Calendar\CalendarAdmin
-        arguments: [~, Britannia\Domain\Entity\Calendar\Calendar, Britannia\Infraestructure\Symfony\Controller\Admin\CalendarController]
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: Datos Extra, label: Calendario }
-        public: true
-
-    admin.student_course:
-        class: Britannia\Infraestructure\Symfony\Admin\StudentCourse\StudentCourseAdmin
-        arguments: [~, Britannia\Domain\Entity\Student\StudentCourse, ~]
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: StudentCourse }
-        public: true

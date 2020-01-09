@@ -16,46 +16,56 @@ namespace Britannia\Infraestructure\Symfony\Admin\Mark;
 
 use Britannia\Domain\Entity\Assessment\TermList;
 use Britannia\Domain\Entity\Course\Course;
-use Britannia\Domain\VO\Mark\TermName;
-use Britannia\Infraestructure\Symfony\Form\Type\Assessment\SetOfSkillsType;
+use Britannia\Domain\VO\Assessment\TermName;
 use Britannia\Infraestructure\Symfony\Form\Type\Assessment\TermListType;
-use PlanB\DDD\Domain\VO\Percent;
 use PlanB\DDDBundle\Sonata\Admin\AdminForm;
-use PlanB\DDDBundle\Symfony\Form\Type\PercentageType;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 final class MarkForm extends AdminForm
 {
 
     public function configure(Course $course)
     {
-      //  $this->assertNumOfUnits($course);
-
         $data = $this->organizeByTermName($course);
+
+        $this->tab('Diagnostic Test');
 
         foreach ($data as $key => $terms) {
             $name = $this->tabName($key);
             $this->tab($name);
-            $this->group($name)
+            $this->group('Unidades')
                 ->add($key, TermListType::class, [
                     'mapped' => false,
+                    'label' => false,
+                    'data' => TermList::collect($terms)
+                ]);
+
+            $this->group('Comentarios')
+                ->add($key . '-c', TermListType::class, [
+                    'mapped' => false,
+                    'label' => false,
+                    'data' => TermList::collect($terms)
+                ]);
+
+
+            $this->group('Verbos Irregulares')
+                ->add($key . '-v', TermListType::class, [
+                    'mapped' => false,
+                    'label' => false,
+                    'data' => TermList::collect($terms)
+                ]);
+
+
+            $this->group('Alphabet')
+                ->add($key . '-a', TermListType::class, [
+                    'mapped' => false,
+                    'label' => false,
                     'data' => TermList::collect($terms)
                 ]);
         }
 
-    }
+        $this->tab('Final Test');
 
-//    /**
-//     * @param Course $course
-//     */
-//    private function assertNumOfUnits(Course $course): void
-//    {
-//        if ($course->numOfUnits() === 0) {
-//            $message = sprintf('no se puede editar las calificaciones de un curso sin unidades definidas');
-//            throw new NotFoundHttpException($message);
-//        }
-//    }
+    }
 
     /**
      * @param Course $course

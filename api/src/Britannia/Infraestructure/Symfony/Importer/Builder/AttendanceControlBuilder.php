@@ -14,13 +14,11 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Importer\Builder;
 
 
-use Britannia\Domain\Entity\Course\Attendance;
+use Britannia\Domain\Entity\Attendance\Attendance;
 use Britannia\Domain\Entity\Course\Course;
-use Britannia\Domain\Entity\Record\StudentHasMissedLesson;
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Infraestructure\Symfony\Importer\Resume;
 use Carbon\CarbonImmutable;
-use PlanB\DDD\Domain\Event\EventDispatcher;
 
 class AttendanceControlBuilder extends BuilderAbstract
 {
@@ -94,9 +92,6 @@ class AttendanceControlBuilder extends BuilderAbstract
         }
 
         $attendance = Attendance::make($this->lesson, $this->student, $this->reason);
-
-        EventDispatcher::getInstance()
-            ->dispatch(StudentHasMissedLesson::make($attendance));
 
         return $attendance;
     }

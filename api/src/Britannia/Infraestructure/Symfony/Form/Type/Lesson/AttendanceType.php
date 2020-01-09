@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Form\Type\Lesson;
 
 
-use Britannia\Domain\Entity\Course\Attendance;
+use Britannia\Domain\Entity\Attendance\Attendance;
 use Britannia\Domain\Entity\Lesson\Lesson;
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Infraestructure\Symfony\Validator\FullName;

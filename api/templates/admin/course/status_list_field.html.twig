@@ -1,5 +1,7 @@
 {% extends '@SonataAdmin/CRUD/base_list_field.html.twig' %}
 
+{% use 'admin/core/status_column.html.twig' %}
+
 {% block field %}
     {% if object.status.pending %}
         {{ block('pending') }}
@@ -8,18 +10,7 @@
     {% else %}
         {{ block('finalized') }}
     {% endif %}
-
 {% endblock %}
 
 
-{% block pending %}
-    <span class="btn btn-warning btn-disable">{{ object.status.value }}</span>
-{% endblock %}
 
-{% block active %}
-    <span class="btn btn-success btn-disable">{{ object.status.value }}</span>
-{% endblock %}
-
-{% block finalized %}
-    <span class="btn btn-danger btn-disable">{{ object.status.value }}</span>
-{% endblock %}

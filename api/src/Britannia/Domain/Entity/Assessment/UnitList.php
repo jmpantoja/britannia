@@ -14,11 +14,9 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Assessment;
 
 
-use Britannia\Domain\VO\Mark\Mark;
-use Britannia\Domain\VO\Mark\MarkReportList;
-use Britannia\Domain\VO\Mark\MarkReport;
-use Britannia\Domain\VO\Mark\NumOfUnits;
-use Britannia\Domain\VO\Mark\SetOfSkills;
+use Britannia\Domain\VO\Assessment\MarkReport;
+use Britannia\Domain\VO\Assessment\MarkReportList;
+use Britannia\Domain\VO\Assessment\SetOfSkills;
 use PlanB\DDD\Domain\Model\EntityList;
 
 final class UnitList extends EntityList
@@ -29,17 +27,6 @@ final class UnitList extends EntityList
         return Unit::class;
     }
 
-    public function numOfUnits(): NumOfUnits
-    {
-        $count = $this->count();
-        return NumOfUnits::byValue($count);
-    }
-
-    public function completedUnits(): NumOfUnits
-    {
-        $count = $this->onlyCompleted()->count();
-        return NumOfUnits::byValue($count);
-    }
 
     public function onlyCompleted(): self
     {

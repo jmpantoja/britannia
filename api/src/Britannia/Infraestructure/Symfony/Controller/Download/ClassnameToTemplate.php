@@ -1,0 +1,50 @@
+<?php
+
+/**
+ * This file is part of the planb project.
+ *
+ * (c) jmpantoja <jmpantoja@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
+namespace Britannia\Infraestructure\Symfony\Controller\Download;
+
+
+use Britannia\Domain\Service\Report\ReportInterface;
+use Zend\Filter\Word\CamelCaseToSeparator;
+
+final class ClassnameToTemplate
+{
+    /**
+     * @var string
+     */
+    private $className;
+
+    public static function make(ReportInterface $report): self
+    {
+        return new self($report);
+
+    }
+
+    private function __construct(ReportInterface $report)
+    {
+        $fqn = get_class($report);
+        $pieces = explode('\\', $fqn);
+        $this->className = array_pop($pieces);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function filter(): string
+    {
+        $filter = new CamelCaseToSeparator('_');
+        $className = $filter->filter($this->className);
+
+        return sprintf('admin/report/%s.html.twig', strtolower($className));
+    }
+}

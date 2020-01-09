@@ -1,16 +1,7 @@
-{#<a class="dropdown-item" href="{{ admin.generateObjectUrl('report-info', object) }}">Info</a>#}
+{% if object.numOfStudents > 0 %}
+    {% set marks = admin.configurationPool.adminByAdminCode('admin.mark').generateObjectUrl('edit', object) %}
+    <a class="btn btn-link" href="{{ marks }}">Notas</a>
+{% endif %}
 
-<!-- Split button -->
-<div class="btn-group">
-    <button type="button" class="btn btn-primary">Descargar</button>
-    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-            aria-expanded="false">
-        <span class="caret"></span>
-        <span class="sr-only">Toggle Dropdown</span>
-    </button>
-    <ul class="dropdown-menu">
-        <li><a href="{{ admin.generateObjectUrl('report.info', object) }}">Información</a></li>
-        <li><a href="{{ admin.generateObjectUrl('report.certificate', object) }}">Diplomas</a></li>
-        <li><a href="{{ admin.generateObjectUrl('report.mark', object) }}">Boletin de notas</a></li>
-    </ul>
-</div>
+{% set reports = admin.configurationPool.adminByAdminCode('admin.report').generateObjectUrl('edit', object) %}
+<a class="btn btn-link" href="{{ reports }}">Informes</a>

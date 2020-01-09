@@ -51,10 +51,11 @@ class Academy
         $this->update($dto);
     }
 
-    public function update(AcademyDto $dto)
+    public function update(AcademyDto $dto): self
     {
         $this->name = $dto->name;
         $this->updatedAt = $this->createdAt = CarbonImmutable::now();
+        return $this;
     }
 
     /**

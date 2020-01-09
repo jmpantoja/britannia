@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Lesson;
 
 
+use Britannia\Domain\Entity\Attendance\AttendanceList;
 use Britannia\Domain\Entity\ClassRoom\ClassRoom;
-use Britannia\Domain\Entity\Course\AttendanceList;
 use Britannia\Domain\VO\Course\TimeTable\TimeSheet;
 use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\Model\Dto;

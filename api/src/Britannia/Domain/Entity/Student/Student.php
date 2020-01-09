@@ -6,8 +6,6 @@ namespace Britannia\Domain\Entity\Student;
 use Britannia\Domain\Entity\Academy\Academy;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Course\CourseList;
-use Britannia\Domain\Entity\Record\StudentHasJoinedToCourse;
-use Britannia\Domain\Entity\Record\StudentHasLeavedCourse;
 use Britannia\Domain\VO\Payment\Payment;
 use Britannia\Domain\VO\Student\ContactMode\ContactMode;
 use Britannia\Domain\VO\Student\OtherAcademy\NumOfYears;

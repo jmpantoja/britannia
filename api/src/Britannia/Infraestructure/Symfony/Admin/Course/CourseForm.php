@@ -15,8 +15,8 @@ namespace Britannia\Infraestructure\Symfony\Admin\Course;
 
 
 use Britannia\Domain\Entity\Course\Course;
+use Britannia\Infraestructure\Symfony\Form\Report\CourseInfo\CourseInformationType;
 use Britannia\Infraestructure\Symfony\Form\Type\Assessment\AssessmentDefinitionType;
-use Britannia\Infraestructure\Symfony\Form\Type\Assessment\SetOfSkillsType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\AgeType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\CourseHasStudentsType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\Discount\DiscountListTye;
@@ -27,10 +27,8 @@ use Britannia\Infraestructure\Symfony\Form\Type\Course\PeriodicityType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\SupportType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\TeachersType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\TimeTable\TimeTableType;
-use PlanB\DDD\Domain\VO\Percent;
 use PlanB\DDD\Domain\VO\Price;
 use PlanB\DDDBundle\Sonata\Admin\AdminForm;
-use PlanB\DDDBundle\Symfony\Form\Type\PercentageType;
 use PlanB\DDDBundle\Symfony\Form\Type\PositiveIntegerType;
 use PlanB\DDDBundle\Symfony\Form\Type\PriceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -56,7 +54,8 @@ final class CourseForm extends AdminForm
         $this->calendarTab('Calendario');
         $this->priceTab('Precio');
         $this->studentsTab('Alumnos y profesores');
-        $this->unitsTab('Unidades');
+        $this->unitsTab('Destrezas');
+
         return $this;
     }
 
@@ -140,7 +139,7 @@ final class CourseForm extends AdminForm
     {
         $this->tab($name);
 
-        $this->group('Unidades', ['class' => 'col-md-7'])
+        $this->group('Destrezas', ['class' => 'col-md-6'])
             ->add('assessmentDefinition', AssessmentDefinitionType::class, [
                 'label' => false,
                 'course' => $this->course

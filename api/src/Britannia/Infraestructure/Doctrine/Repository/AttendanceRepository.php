@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Doctrine\Repository;
 
 
-use Britannia\Domain\Entity\Course\Attendance;
+use Britannia\Domain\Entity\Attendance\Attendance;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Repository\AttendanceRepositoryInterface;

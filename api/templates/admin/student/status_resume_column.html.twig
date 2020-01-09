@@ -1,0 +1,11 @@
+{% extends '@SonataAdmin/CRUD/base_list_field.html.twig' %}
+
+{% use 'admin/core/status_column.html.twig' %}
+
+{% block field %}
+    {% if object.active %}
+        {{ block('active') }}
+    {% else %}
+        {{ block('pending') }}
+    {% endif %}
+{% endblock %}

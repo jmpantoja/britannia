@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Form\Type\Lesson;
 
 
-use Britannia\Domain\Entity\Course\AttendanceList;
+use Britannia\Domain\Entity\Attendance\AttendanceList;
 use Britannia\Domain\Entity\Lesson\Lesson;
 use Britannia\Infraestructure\Symfony\Validator\FullName;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
@@ -32,7 +32,6 @@ class AttendanceListType extends AbstractCompoundType
         }
 
         $course = $lesson->course();
-
         foreach ($course->students() as $student) {
 
             $key = (string)$student->id();
@@ -50,10 +49,6 @@ class AttendanceListType extends AbstractCompoundType
         $resolver->setRequired([
             'lesson'
         ]);
-//        $resolver->setDefaults([
-//            'data_class' => Collection::class
-//        ]);
-
         $resolver->setAllowedTypes('lesson', Lesson::class);
     }
 
@@ -67,6 +62,7 @@ class AttendanceListType extends AbstractCompoundType
 
     public function customMapping(array $data)
     {
+        $data = array_filter($data);
         return AttendanceList::collect($data);
     }
 }

@@ -18,8 +18,10 @@ use Britannia\Domain\Entity\ClassRoom\ClassRoom;
 use Britannia\Domain\Entity\ClassRoom\ClassRoomDto;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Course\CourseDto;
+use Britannia\Domain\Service\Assessment\AssessmentGenerator;
 use Britannia\Domain\Service\Course\LessonGenerator;
-use Britannia\Domain\Service\Course\AssessmentGenerator;
+use Britannia\Domain\VO\Assessment\AssessmentDefinition;
+use Britannia\Domain\VO\Assessment\SetOfSkills;
 use Britannia\Domain\VO\Course\Age\Age;
 use Britannia\Domain\VO\Course\Intensive\Intensive;
 use Britannia\Domain\VO\Course\Periodicity\Periodicity;
@@ -30,9 +32,10 @@ use Britannia\Infraestructure\Symfony\Importer\Builder\Traits\CourseMaker;
 use Britannia\Infraestructure\Symfony\Importer\Maker\FullNameMaker;
 use Britannia\Infraestructure\Symfony\Importer\Resume;
 use Carbon\CarbonImmutable;
+use PlanB\DDD\Domain\VO\Percent;
 use PlanB\DDD\Domain\VO\PositiveInteger;
 use PlanB\DDD\Domain\VO\Price;
-use stdClass;
+
 
 class CourseBuilder extends BuilderAbstract
 {
@@ -69,7 +72,7 @@ class CourseBuilder extends BuilderAbstract
     /**
      * @var AssessmentGenerator
      */
-    private AssessmentGenerator $unitGenerator;
+    private AssessmentGenerator $assessmentGenerator;
 
     public function initResume(array $input): Resume
     {
@@ -197,7 +200,7 @@ class CourseBuilder extends BuilderAbstract
     public function withGenerator(LessonGenerator $lessonGenerator, AssessmentGenerator $unitGenerator): self
     {
         $this->lessonGenerator = $lessonGenerator;
-        $this->unitGenerator = $unitGenerator;
+        $this->assessmentGenerator = $unitGenerator;
 
         return $this;
     }
@@ -216,32 +219,12 @@ class CourseBuilder extends BuilderAbstract
             'intensive' => $this->intensive,
             'timeTable' => $this->timeTable,
             'lessonCreator' => $this->lessonGenerator,
-            'unitGenerator' => $this->unitGenerator
+            'assessmentGenerator' => $this->assessmentGenerator,
+            'assessmentDefinition' => AssessmentDefinition::make(SetOfSkills::SET_OF_SIX(), Percent::make(30))
+
         ]);
 
-
         return Course::make($dto);
-
-        die("----");
-        return new stdClass();
-
-//        $course = new Course();
-//        $course->setOldId($this->id);
-//        $course->setName($this->name);
-//        $course->setSchoolCourse($this->schoolCourse);
-//        $course->setEnrolmentPayment($this->enrolmentPayment);
-//        $course->setMonthlyPayment($this->monthlyPayment);
-//
-//        $course->setSupport(Support::REGULAR());
-//
-//        $course->setNumOfPlaces($this->numOfPlaces);
-//        $course->setAge($this->age);
-//        $course->setPeriodicity($this->periodicity);
-//        $course->setIntensive($this->intensive);
-//
-//        $course->setTimeTable($this->timeTable);
-
-//        return $course;
     }
 }
 

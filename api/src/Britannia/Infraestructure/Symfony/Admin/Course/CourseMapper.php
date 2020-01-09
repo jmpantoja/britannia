@@ -16,7 +16,7 @@ namespace Britannia\Infraestructure\Symfony\Admin\Course;
 
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Course\CourseDto;
-use Britannia\Domain\Service\Course\AssessmentGenerator;
+use Britannia\Domain\Service\Assessment\AssessmentGenerator;
 use Britannia\Domain\Service\Course\LessonGenerator;
 use PlanB\DDDBundle\Sonata\Admin\AdminMapper;
 
@@ -52,12 +52,12 @@ final class CourseMapper extends AdminMapper
     /**
      * @param Course $course
      * @param array $values
+     * @return Course
      */
-    protected function update($course, array $values)
+    protected function update($course, array $values): Course
     {
         $dto = $this->makeDto($values);
-        $course
-            ->update($dto);
+        return $course->update($dto);
     }
 
     /**
