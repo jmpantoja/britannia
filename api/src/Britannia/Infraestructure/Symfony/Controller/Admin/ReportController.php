@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class ReportController extends CRUDController
 {
-    private const DEBUG_MODE = false;
+    private const DEBUG_MODE = true;
 
     /**
      * @var CommandBus

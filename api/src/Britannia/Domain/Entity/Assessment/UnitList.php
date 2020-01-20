@@ -18,6 +18,7 @@ use Britannia\Domain\VO\Assessment\MarkReport;
 use Britannia\Domain\VO\Assessment\MarkReportList;
 use Britannia\Domain\VO\Assessment\SetOfSkills;
 use PlanB\DDD\Domain\Model\EntityList;
+use PlanB\DDD\Domain\VO\PositiveInteger;
 
 final class UnitList extends EntityList
 {
@@ -28,13 +29,13 @@ final class UnitList extends EntityList
     }
 
 
-    public function onlyCompleted(): self
-    {
-        $input = $this->values()
-            ->filter(fn(Unit $unit) => $unit->isCompleted());
-
-        return static::collect($input);
-    }
+//    public function onlyCompleted(): self
+//    {
+//        $input = $this->values()
+//            ->filter(fn(Unit $unit) => $unit->isCompleted());
+//
+//        return static::collect($input);
+//    }
 
     public function sort()
     {
@@ -54,5 +55,25 @@ final class UnitList extends EntityList
             ->average($skills);
 
     }
+
+    public function adjustNumOfUnits(int $numOfUnits, Term $term): self
+    {
+        $keptList = $this->values()
+            ->filter(fn(Unit $unit) => $numOfUnits >= $unit->number()->toInt());
+
+        $current = $keptList->count();
+
+        while ($current < $numOfUnits) {
+            $current++;
+            $unit = Unit::make($term, PositiveInteger::make($current));
+            $keptList->add($unit);
+        }
+
+        $unitList = UnitList::collect($keptList);
+        return $this
+            ->forRemovedItems($unitList)
+            ->forAddedItems($unitList);
+    }
+
 
 }

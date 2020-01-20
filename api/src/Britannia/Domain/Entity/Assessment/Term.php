@@ -15,22 +15,19 @@ namespace Britannia\Domain\Entity\Assessment;
 
 
 use Britannia\Domain\Entity\Course\Course;
-use Britannia\Domain\Entity\Lesson\LessonList;
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Entity\Student\StudentCourse;
-use Britannia\Domain\Repository\TermsParametersInterface;
-use Britannia\Domain\VO\Assessment\AssessmentDefinition;
 use Britannia\Domain\VO\Assessment\Mark;
 use Britannia\Domain\VO\Assessment\MarkReport;
 use Britannia\Domain\VO\Assessment\MarkWeightedAverage;
 use Britannia\Domain\VO\Assessment\SetOfSkills;
+use Britannia\Domain\VO\Assessment\TermDefinition;
 use Britannia\Domain\VO\Assessment\TermName;
-use Carbon\CarbonImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use PlanB\DDD\Domain\Behaviour\Comparable;
 use PlanB\DDD\Domain\Behaviour\Traits\ComparableTrait;
 use PlanB\DDD\Domain\Model\Traits\AggregateRootTrait;
-use PlanB\DDD\Domain\VO\PositiveInteger;
+use PlanB\DDD\Domain\VO\Percent;
 
 final class Term implements Comparable
 {
@@ -57,7 +54,7 @@ final class Term implements Comparable
     private $termName;
 
     /**
-     * @var \PlanB\DDD\Domain\VO\Percent
+     * @var Percent
      */
     private $unitsWeight;
 
@@ -65,6 +62,12 @@ final class Term implements Comparable
      * @var SetOfSkills
      */
     private SetOfSkills $skills;
+
+    /**
+     * @var string|null
+     */
+    private $comment;
+
     /**
      * @var MarkReport
      */
@@ -85,16 +88,19 @@ final class Term implements Comparable
     private $units;
 
     public static function make(StudentCourse $studentCourse,
-                                AssessmentDefinition $definition,
-                                TermName $termName
+                                TermName $termName,
+                                SetOfSkills $skills,
+                                Percent $unitsWeight = null
     )
     {
-        return new self($studentCourse, $definition, $termName);
+        $unitsWeight ??= Percent::make(30);
+        return new self($studentCourse, $termName, $skills, $unitsWeight);
     }
 
     private function __construct(StudentCourse $studentCourse,
-                                 AssessmentDefinition $definition,
-                                 TermName $termName
+                                 TermName $termName,
+                                 SetOfSkills $skills,
+                                 Percent $unitsWeight
     )
     {
         $this->id = new TermId();
@@ -104,34 +110,54 @@ final class Term implements Comparable
         $this->termName = $termName;
         $this->units = new ArrayCollection();
 
-        $this->chageDefinition($definition);
-
-        $unitList = $this->calculeUnits();
-        $this->updateMarks($unitList, MarkReport::make());
+        $this->skills = $skills;
+        $this->unitsWeight = $unitsWeight;
+//        $unitList = $this->calculeUnits();
+//        $this->updateMarks($unitList, MarkReport::make());
     }
 
-    /**
-     * @return UnitList
-     */
-    private function calculeUnits(): UnitList
+//    /**
+//     * @return UnitList
+//     */
+//    private function calculeUnits(): UnitList
+//    {
+//        $data = [];
+//        $unit = 1;
+//
+//        while ($unit <= 3) {
+//            $data[] = Unit::make($this, PositiveInteger::make($unit));
+//            $unit++;
+//        }
+//
+//        return UnitList::collect($data);
+//    }
+
+    public function updateDefintion(TermDefinition $defintion): self
     {
-        $data = [];
-        $unit = 1;
+        $this->unitsWeight = $defintion->unitsWeight();
 
-        while ($unit <= 3) {
-            $data[] = Unit::make($this, PositiveInteger::make($unit));
-            $unit++;
-        }
+        $this->unitList()
+            ->adjustNumOfUnits($defintion->numOfUnits(), $this);
 
-        return UnitList::collect($data);
+        $this->updateTotal();
+
+        return $this;
     }
 
-    public function chageDefinition(AssessmentDefinition $definition): self
-    {
-        $this->unitsWeight = $definition->unitsWeight();
-        $this->skills = $definition->skills();
 
-        $this->updateTotal($this->exam());
+    public function updateSkills(SetOfSkills $skills): self
+    {
+        $this->skills = $skills;
+        //aqui asignamos tambien las destrezas "extras"
+
+        $this->updateTotal();
+        return $this;
+    }
+
+
+    public function updateComment(?string $comment): self
+    {
+        $this->comment = $comment;
         return $this;
     }
 
@@ -143,22 +169,29 @@ final class Term implements Comparable
             ->forRemovedItems($unitList)
             ->forAddedItems($unitList);
 
-        $this->updateTotal($exam);
+        $this->updateTotal();
 
         return $this;
     }
 
 
     /**
-     * @param MarkReport $exam
      * @return Term
      */
-    protected function updateTotal(MarkReport $exam): self
+    private function updateTotal(): self
     {
+        $exam = $this->exam();
         $skills = $this->skills();
 
+        if ($this->unitList()->isEmpty()) {
+            $this->total = $exam;
+            $this->final = $exam->someMissedSkils($skills) ? null : $exam->average($skills);
+            return $this;
+        }
+
         $average = $this->unitList()->average($skills);
-        $total = MarkWeightedAverage::make($average, $exam, $this->unitsWeight)
+
+        $total = MarkWeightedAverage::make($average, $exam, $this->unitsWeight())
             ->calcule($skills);
 
         $this->total = $total;
@@ -206,6 +239,23 @@ final class Term implements Comparable
     public function skills(): SetOfSkills
     {
         return $this->skills;
+    }
+
+    /**
+     * @return Percent
+     */
+    public function unitsWeight(): Percent
+    {
+        return $this->unitsWeight;
+    }
+
+
+    /**
+     * @return string|null
+     */
+    public function comment(): ?string
+    {
+        return $this->comment;
     }
 
     /**

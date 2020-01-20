@@ -16,18 +16,19 @@ namespace Britannia\Infraestructure\Symfony\Importer\Builder;
 
 use Britannia\Domain\Entity\ClassRoom\ClassRoom;
 use Britannia\Domain\Entity\ClassRoom\ClassRoomDto;
-use Britannia\Domain\Entity\Course\Course;
-use Britannia\Domain\Entity\Course\CourseDto;
+use Britannia\Domain\Entity\Course\Adult;
+use Britannia\Domain\Entity\Course\AdultDto;
+use Britannia\Domain\Entity\Course\PreSchool;
+use Britannia\Domain\Entity\Course\PreSchoolDto;
+use Britannia\Domain\Entity\Course\School;
+use Britannia\Domain\Entity\Course\SchoolDto;
 use Britannia\Domain\Service\Assessment\AssessmentGenerator;
 use Britannia\Domain\Service\Course\LessonGenerator;
 use Britannia\Domain\VO\Assessment\AssessmentDefinition;
 use Britannia\Domain\VO\Assessment\SetOfSkills;
-use Britannia\Domain\VO\Course\Age\Age;
 use Britannia\Domain\VO\Course\Intensive\Intensive;
-use Britannia\Domain\VO\Course\Periodicity\Periodicity;
 use Britannia\Domain\VO\Course\TimeTable\Schedule;
 use Britannia\Domain\VO\Course\TimeTable\TimeTable;
-use Britannia\Domain\VO\HoursPerWeek;
 use Britannia\Infraestructure\Symfony\Importer\Builder\Traits\CourseMaker;
 use Britannia\Infraestructure\Symfony\Importer\Maker\FullNameMaker;
 use Britannia\Infraestructure\Symfony\Importer\Resume;
@@ -51,8 +52,6 @@ class CourseBuilder extends BuilderAbstract
 
     private $monthlyPayment;
 
-    private $age;
-
     private $intensive;
 
     private $hoursPerWeek;
@@ -73,6 +72,10 @@ class CourseBuilder extends BuilderAbstract
      * @var AssessmentGenerator
      */
     private AssessmentGenerator $assessmentGenerator;
+    /**
+     * @var bool
+     */
+    private bool $isAdult;
 
     public function initResume(array $input): Resume
     {
@@ -112,14 +115,6 @@ class CourseBuilder extends BuilderAbstract
 
     public function withCategories(array $values): self
     {
-        if (in_array(1, $values, true)) {
-            $this->age = Age::CHILD();
-        }
-
-        if (in_array(2, $values, true)) {
-            $this->age = Age::ADULT();
-        }
-
         if (in_array(13, $values, true)) {
             $this->intensive = Intensive::NOT_INTENSIVE();
         }
@@ -128,24 +123,12 @@ class CourseBuilder extends BuilderAbstract
             $this->intensive = Intensive::INTENSIVE();
         }
 
-        return $this;
-    }
-
-    public function withPeriodicity(int $periodicity): self
-    {
-
-        if ($periodicity === 0) {
-            $this->periodicity = Periodicity::LIMITED();
-            return $this;
-        }
-
-        if ($periodicity === 1) {
-            $this->periodicity = Periodicity::UNLIMITED();
-            return $this;
+        $this->isAdult = false;
+        if (in_array(1, $values, true)) {
+            $this->isAdult = true;
         }
 
         return $this;
-
     }
 
     public function withNumOfPlaces(int $places): self
@@ -205,26 +188,55 @@ class CourseBuilder extends BuilderAbstract
         return $this;
     }
 
-    public function build(): object
+    public function build(): ?object
     {
-        $dto = CourseDto::fromArray([
+        $input = [
             'oldId' => $this->id,
             'name' => $this->name,
             'schoolCourse' => $this->schoolCourse,
             'enrollmentPayment' => $this->enrolmentPayment,
             'monthlyPayment' => $this->monthlyPayment,
             'numOfPlaces' => $this->numOfPlaces,
-            'age' => $this->age,
-            'periodicity' => $this->periodicity,
             'intensive' => $this->intensive,
             'timeTable' => $this->timeTable,
             'lessonCreator' => $this->lessonGenerator,
             'assessmentGenerator' => $this->assessmentGenerator,
             'assessmentDefinition' => AssessmentDefinition::make(SetOfSkills::SET_OF_SIX(), Percent::make(30))
+        ];
 
-        ]);
+        if ($this->isAdult === true) {
+            return $this->buildAdult($input);
+        }
 
-        return Course::make($dto);
+
+        if(strpos($this->name, 'KIDS') !== false){
+            return $this->buildPreSchool($input);
+        }
+
+        return $this->buildSchool($input);
+
+    }
+
+    /**
+     * @param array $input
+     * @return Adult
+     */
+    private function buildAdult(array $input): Adult
+    {
+        $dto = AdultDto::fromArray($input);
+        return Adult::make($dto);
+    }
+
+    private function buildPreSchool(array $input)
+    {
+        $dto = PreSchoolDto::fromArray($input);
+        return PreSchool::make($dto);
+    }
+
+    private function buildSchool(array $input)
+    {
+        $dto = SchoolDto::fromArray($input);
+        return School::make($dto);
     }
 }
 

@@ -42,6 +42,7 @@ class TotalType extends AbstractCompoundType
             $builder->add($skill, MarkType::class, [
                 'label' => false,
                 'required' => false,
+                'disabled'=>true,
                 'data' => $markReport->get($skill)
             ]);
         }
@@ -49,6 +50,7 @@ class TotalType extends AbstractCompoundType
         $builder->add('total', MarkType::class, [
             'label' => false,
             'required' => false,
+            'disabled'=>true,
             'data' => $term->final()
         ]);
 

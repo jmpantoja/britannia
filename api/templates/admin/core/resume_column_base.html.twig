@@ -1,4 +1,5 @@
-{% extends '@SonataAdmin/CRUD/base_list_field.html.twig' %}
+{#{% extends '@SonataAdmin/CRUD/base_list_field.html.twig' %}#}
+{% extends get_admin_template('base_list_field', admin.code) %}
 
 
 {% set body = block('body') | striptags | trim %}

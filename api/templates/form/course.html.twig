@@ -1,0 +1,162 @@
+{% block course_has_students_widget %}
+    {{ block('multiselect') }}
+{% endblock %}
+
+{% block teacher_has_courses_widget %}
+    {{ block('multiselect') }}
+{% endblock %}
+
+{% block teachers_widget %}
+    {{ block('multiselect') }}
+{% endblock %}
+
+
+{% block course_interval_widget %}
+    <div class="row">
+        <div class="col-md-6">
+            {{ form_row(form.start) }}
+        </div>
+
+        <div class="col-md-6">
+            {{ form_row(form.end) }}
+        </div>
+
+    </div>
+{% endblock %}
+
+
+{% block time_sheet_widget %}
+    <div class="row">
+        <div class="col-md-3">
+            {{ form_row(form.dayOfWeek) }}
+        </div>
+
+        <div class="col-md-3">
+            {{ form_row(form.start) }}
+        </div>
+
+        <div class="col-md-3">
+            {{ form_row(form.end) }}
+        </div>
+
+        <div class="col-md-3">
+            {{ form_row(form.classroomId) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block attendance_widget %}
+    <div class="row">
+        <div class="col-md-3">
+            <p class="fullName">{{ student.fullName }}</p>
+        </div>
+        <div class="col-md-1 missed">
+            {{ form_row(form.missed) }}
+        </div>
+
+        <div class="col-md-3 reason">
+            {{ form_row(form.reason) }}
+        </div>
+
+        <script>
+            $(function () {
+                var reason = $('#{{ form.reason.vars.id }}').parents('.form-group:first');
+
+                $('#{{ form.missed.vars.id }}').change(function () {
+                    if ($(this).prop('checked')) {
+                        reason.show()
+                    } else {
+                        reason.hide()
+                    }
+                })
+
+                if ($('#{{ form.missed.vars.id }}').prop('checked')) {
+                    reason.show()
+                } else {
+                    reason.hide()
+                }
+            })
+        </script>
+
+    </div>
+{% endblock %}
+
+
+{% block attendance_toggle_widget %}
+    {% set checked = '' %}
+
+    {% if value == "1" %}
+        {% set checked = 'checked' %}
+    {% endif %}
+
+    <input id="{{ id }}" name="{{ full_name }}" {{ checked }} type="checkbox" data-toggle="toggle" data-on="Falta"
+           data-off="Asiste"
+           data-onstyle="danger" data-offstyle="success">
+
+{% endblock %}
+
+{% block discount_widget %}
+    <div class="row discount">
+        <div class="col-md-3">
+            <span class="status"> {{ status.value }} </span>
+        </div>
+
+        <div class="col-md-2">
+            {{ form_row(form.discount) }}
+        </div>
+
+        <div class="col-md-7">
+            {{ form_row(form.freeEnrollment) }}
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block time_table_widget %}
+    {% if form.locked is defined %}
+        {{ form_row(form.locked, {widget: id ~ '-wrapper'}) }}
+    {% endif %}
+
+    <div id="{{ id }}-wrapper">
+        <div class="col-md-12" style="margin-top: 5em">
+            <legend class="control-label required">
+                Calendario
+            </legend>
+        </div>
+        <div class="col-md-4 col-md-offset-1">
+            {{ form_row(form.start) }}
+        </div>
+        <div class="col-md-4">
+            {{ form_row(form.end) }}
+        </div>
+        <div class="col-md-12">
+            {{ form_row(form.schedule) }}
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block assessment_definition_widget %}
+    {% if form.locked is defined %}
+        {{ form_row(form.locked, {widget: id ~ '-wrapper'}) }}
+    {% endif %}
+
+    <div id="{{ id }}-wrapper" class="row unit_definition">
+        <div class="col-md-12">
+            <legend class="control-label required">
+                Habilidades
+            </legend>
+            {{ form_row(form.skills) }}
+        </div>
+
+        <div class="col-md-12">
+           <h2 style="color: purple"> faltan las destrezas "extra" (verbos irregulares, alfabeto, etc)</h2>
+        </div>
+
+        <div class="col-md-2">
+            {{ form_row(form.numOfTerms) }}
+        </div>
+    </div>
+
+{% endblock %}

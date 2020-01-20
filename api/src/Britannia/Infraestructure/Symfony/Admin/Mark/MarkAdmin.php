@@ -11,12 +11,12 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 final class MarkAdmin extends AbstractAdmin
 {
     protected $baseRouteName = 'admin_britannia_domain_course_mark';
     protected $baseRoutePattern = '/britannia/domain/course-mark';
+
     /**
      * @var MarkTools
      */
@@ -67,7 +67,10 @@ final class MarkAdmin extends AbstractAdmin
 
     protected function configureRoutes(RouteCollection $collection)
     {
-        $collection->clearExcept(['list', 'edit']);
+        return $this->adminTools()
+            ->routes($collection, $this->getIdParameter())
+            ->build();
+
         return $collection;
     }
 

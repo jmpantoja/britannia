@@ -26,7 +26,7 @@ class MarkType extends Type
             return null;
         }
 
-        return $value->mark();
+        return $value->toFloat();
     }
 
     public function convertToPHPValue($value, AbstractPlatform $platform)

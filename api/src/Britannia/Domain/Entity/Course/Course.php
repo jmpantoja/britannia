@@ -30,11 +30,7 @@ use Britannia\Domain\Service\Assessment\AssessmentGenerator;
 use Britannia\Domain\Service\Course\LessonGenerator;
 use Britannia\Domain\VO\Assessment\AssessmentDefinition;
 use Britannia\Domain\VO\Assessment\SetOfSkills;
-use Britannia\Domain\VO\Course\Age\Age;
 use Britannia\Domain\VO\Course\CourseStatus;
-use Britannia\Domain\VO\Course\Examiner\Examiner;
-use Britannia\Domain\VO\Course\Intensive\Intensive;
-use Britannia\Domain\VO\Course\Periodicity\Periodicity;
 use Britannia\Domain\VO\Course\Support\Support;
 use Britannia\Domain\VO\Course\TimeTable\Schedule;
 use Britannia\Domain\VO\Course\TimeTable\TimeTable;
@@ -44,13 +40,12 @@ use Doctrine\Common\Collections\Collection;
 use PlanB\DDD\Domain\Behaviour\Comparable;
 use PlanB\DDD\Domain\Behaviour\Traits\ComparableTrait;
 use PlanB\DDD\Domain\Model\Traits\AggregateRootTrait;
-use PlanB\DDD\Domain\VO\Percent;
 use PlanB\DDD\Domain\VO\PositiveInteger;
 use PlanB\DDD\Domain\VO\Price;
 use PlanB\DDD\Domain\VO\RGBA;
 
 
-class Course implements Comparable
+abstract class Course implements Comparable
 {
 
     use AggregateRootTrait;
@@ -83,45 +78,16 @@ class Course implements Comparable
     private $status;
 
     /**
-     * @var null|string
-     */
-    private $schoolCourse;
-
-    /**
-     * @var null|Examiner
-     */
-    private $examiner;
-
-    /**
-     * @var null|Level
-     */
-    private $level;
-
-    /**
      * @var PositiveInteger
      */
     private $numOfPlaces;
 
 
     /**
-     * @var null|Periodicity
-     */
-    private $periodicity;
-
-    /**
      * @var null|Support
      */
     private $support;
 
-    /**
-     * @var null|Age
-     */
-    private $age;
-
-    /**
-     * @var null|Intensive
-     */
-    private $intensive;
 
     /**
      * @var null|Price
@@ -180,9 +146,9 @@ class Course implements Comparable
     private $skills;
 
     /**
-     * @var Percent
+     * @var integer
      */
-    private $unitsWeight;
+    protected $numOfTerms;
 
     /**
      * @var Collection
@@ -207,7 +173,7 @@ class Course implements Comparable
 
     public static function make(CourseDto $dto): self
     {
-        return new self($dto);
+        return new static($dto);
     }
 
     private function __construct(CourseDto $dto)
@@ -220,6 +186,7 @@ class Course implements Comparable
         $this->terms = new ArrayCollection();
         $this->units = new ArrayCollection();
         $this->numOfStudents = 0;
+        $this->numOfTerms = 0;
         $this->discount = new ArrayCollection();
         $this->records = new ArrayCollection();
         $this->status = CourseStatus::PENDING();
@@ -231,14 +198,8 @@ class Course implements Comparable
     public function update(CourseDto $dto): self
     {
         $this->name = $dto->name;
-        $this->schoolCourse = $dto->schoolCourse;
         $this->numOfPlaces = $dto->numOfPlaces;
         $this->support = $dto->support;
-        $this->periodicity = $dto->periodicity;
-        $this->intensive = $dto->intensive;
-        $this->age = $dto->age;
-        $this->examiner = $dto->examiner;
-        $this->level = $dto->level;
         $this->monthlyPayment = $dto->monthlyPayment;
         $this->enrollmentPayment = $dto->enrollmentPayment;
         $this->discount = $dto->discount;
@@ -309,12 +270,13 @@ class Course implements Comparable
     public function changeAssessmentDefinition(AssessmentDefinition $definition, AssessmentGenerator $generator): self
     {
         $this->skills = $definition->skills();
-        $this->unitsWeight = $definition->unitsWeight();
-        $termList = $generator->generateTerms($this->courseHasStudentList(), $definition);
+        $this->numOfTerms = $definition->numOfTerms();
 
+        $termList = $generator->generateTerms($this->courseHasStudentList(), $definition);
         $this->setTerms($termList);
 
-        $this->termList()->changeDefinition($definition);
+        /** falta un segundo parametro con las destrezas "extras" */
+        $this->termList()->updateSkills($definition->skills());
 
         return $this;
     }
@@ -461,29 +423,6 @@ class Course implements Comparable
         return $this->timeTable->schedule();
     }
 
-    /**
-     * @return string|null
-     */
-    public function schoolCourse(): ?string
-    {
-        return $this->schoolCourse;
-    }
-
-    /**
-     * @return Examiner|null
-     */
-    public function examiner(): ?Examiner
-    {
-        return $this->examiner;
-    }
-
-    /**
-     * @return Level|null
-     */
-    public function level(): ?Level
-    {
-        return $this->level;
-    }
 
     /**
      * @return PositiveInteger
@@ -501,13 +440,6 @@ class Course implements Comparable
         return $this->numOfStudents;
     }
 
-    /**
-     * @return Periodicity|null
-     */
-    public function periodicity(): ?Periodicity
-    {
-        return $this->periodicity;
-    }
 
     /**
      * @return Support|null
@@ -517,21 +449,6 @@ class Course implements Comparable
         return $this->support;
     }
 
-    /**
-     * @return Age|null
-     */
-    public function age(): ?Age
-    {
-        return $this->age;
-    }
-
-    /**
-     * @return Intensive|null
-     */
-    public function intensive(): ?Intensive
-    {
-        return $this->intensive;
-    }
 
     /**
      * @return Price|null
@@ -640,7 +557,7 @@ class Course implements Comparable
 
     public function assessmentDefinition(): AssessmentDefinition
     {
-        return AssessmentDefinition::make($this->skills(), $this->unitsWeight());
+        return AssessmentDefinition::make($this->skills(), $this->numOfTerms());
     }
 
     /**
@@ -652,12 +569,13 @@ class Course implements Comparable
     }
 
     /**
-     * @return Percent
+     * @return int
      */
-    public function unitsWeight(): Percent
+    public function numOfTerms(): int
     {
-        return $this->unitsWeight ?? Percent::make(30);
+        return $this->numOfTerms ?? 0;
     }
+
 
     /**
      * @return Collection
@@ -672,4 +590,18 @@ class Course implements Comparable
         return $this->name();
     }
 
+    public function isAdult(): bool
+    {
+        return static::class === Adult::class;
+    }
+
+    public function isSchool(): bool
+    {
+        return static::class === School::class;
+    }
+
+    public function isPreSchool(): bool
+    {
+        return static::class === PreSchool::class;
+    }
 }

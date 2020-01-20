@@ -55,7 +55,8 @@ final class MarkMapper extends AdminMapper
     protected function update($course, array $values): Course
     {
         $termList = $this->buildTermList($values);
-        return  $course->setTerms($termList);
+
+        return $course->setTerms($termList);
 
     }
 
@@ -65,8 +66,6 @@ final class MarkMapper extends AdminMapper
      */
     protected function buildTermList(array $values): TermList
     {
-
-
         $values = array_values($values);
         $data = collect($values)
             ->map(fn(TermList $termList) => $termList->toArray())

@@ -14,29 +14,27 @@ declare(strict_types=1);
 namespace Britannia\Domain\VO\Assessment;
 
 
-use PlanB\DDD\Domain\VO\Percent;
-
 class AssessmentDefinition
 {
     /**
      * @var SetOfSkills
      */
     private $skills;
-    /**
-     * @var Percent
-     */
-    private Percent $unitsWeight;
 
-    private function __construct(SetOfSkills $skills, Percent $unitsWeight)
+    /**
+     * @var int
+     */
+    private $numOfTerms;
+
+    private function __construct(SetOfSkills $skills, int $numOfTerms)
     {
         $this->skills = $skills;
-
-        $this->unitsWeight = $unitsWeight;
+        $this->numOfTerms = $numOfTerms;
     }
 
-    public static function make(SetOfSkills $skills, Percent $unitsWeight): self
+    public static function make(SetOfSkills $skills, int $numOfTerms): self
     {
-        return new self($skills, $unitsWeight);
+        return new self($skills, $numOfTerms);
 
     }
 
@@ -48,23 +46,19 @@ class AssessmentDefinition
         return $this->skills;
     }
 
-    /**
-     * @return Percent
-     */
-    public function unitsWeight(): Percent
+    public function numOfTerms(): int
     {
-        return $this->unitsWeight;
+        return $this->numOfTerms;
     }
 
-
     /**
-     * @return Percent
+     * @return TermName[]
      */
-    public function examWeight(): Percent
+    public function termNames(): array
     {
-        return $this->unitsWeight;
+        return collect(TermName::all())
+            ->filter(fn(TermName $termName) => $termName->toInt() <= $this->numOfTerms)
+            ->toArray();
+
     }
-
-
-
 }

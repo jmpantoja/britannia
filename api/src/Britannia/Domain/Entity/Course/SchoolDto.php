@@ -11,16 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Britannia\Infraestructure\Symfony\Admin\School;
+namespace Britannia\Domain\Entity\Course;
 
-
-use PlanB\DDDBundle\Sonata\Admin\AdminFilter;
-
-final class ShoolFilter extends AdminFilter
+class SchoolDto extends CourseDto
 {
+    public ?string $schoolCourse;
 
-    public function configure()
-    {
-        $this->add('name');
-    }
 }

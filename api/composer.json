@@ -5,6 +5,8 @@
         "php": "^7.4",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "ext-json": "*",
+        "ext-zip": "*",
         "api-platform/api-pack": "^1.1",
         "cocur/slugify": "^3.2",
         "doctrine/doctrine-fixtures-bundle": "^3.2",
@@ -32,6 +34,7 @@
         "symfony/yaml": "4.3.*",
         "tightenco/collect": "^6.5",
         "zendframework/zend-filter": "^2.9"
+
     },
     "require-dev": {
         "api-platform/schema-generator": "^2.1",

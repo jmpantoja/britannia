@@ -26,4 +26,14 @@ class Mark extends Constraint
     {
         return is_scalar($value) || $value instanceof \Britannia\Domain\VO\Assessment\Mark;
     }
+
+    public function isEmpty($value): bool
+    {
+
+        if (is_numeric($value) and 0.0 === (float)$value) {
+            return false;
+        }
+
+        return parent::isEmpty($value);
+    }
 }

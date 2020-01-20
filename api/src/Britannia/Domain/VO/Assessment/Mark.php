@@ -39,8 +39,12 @@ class Mark
         ]);
     }
 
-    public static function make(float $mark): self
+    public static function make(?float $mark): self
     {
+        if (is_null($mark)) {
+            return new self(null);
+        }
+
         $mark = self::assert($mark);
         return new self($mark);
     }
@@ -53,26 +57,33 @@ class Mark
     /**
      * @return float
      */
-    public function mark(): ?float
+    public function toFloat(): ?float
     {
         return $this->mark;
     }
 
     public function format(int $dec = 1): string
     {
-        return bcdiv((string)$this->mark(), '1', $dec);
+        return bcdiv((string)$this->toFloat(), '1', $dec);
     }
 
     public function range(): MarkRange
     {
-        return MarkRange::make($this->mark());
+        return MarkRange::make($this->toFloat());
     }
 
     public function __toString()
     {
+        if ($this->isMissingSkill()) {
+            return '';
+        }
 
         return (string)$this->format(1);
     }
 
+    public function isMissingSkill(): bool
+    {
+        return is_null($this->mark);
+    }
 
 }

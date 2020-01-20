@@ -15,12 +15,11 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Assessment;
 
 
 use Britannia\Domain\Entity\Course\Course;
-
 use Britannia\Domain\VO\Assessment\AssessmentDefinition;
 use Britannia\Infraestructure\Symfony\Validator\FullName;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractCompoundType;
-use PlanB\DDDBundle\Symfony\Form\Type\PercentageType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -31,26 +30,25 @@ class AssessmentDefinitionType extends AbstractCompoundType
     {
         /** @var Course $course */
         $course = $options['course'];
-
         $skills = $course->skills();
-        $unitsWeight = $course->unitsWeight();
-
+        $numOfTerms = $course->numOfTerms();
 
         $builder
             ->add('skills', SetOfSkillsType::class, [
                 'label' => false,
                 'data' => $skills
-            ])
-            ->add('unitsWeight', PercentageType::class, [
-                'label' => '% unidades',
-                'data' => $unitsWeight
-            ])
-            ->add('examWeight', PercentageType::class, [
-                'disabled' => true,
-                'required' => false,
-                'label' => '% examen',
-                'data' => $unitsWeight->complementary()
             ]);
+
+        $builder->add('numOfTerms', NumberType::class, [
+            'html5' => true,
+            'mapped' => false,
+            'data' => $numOfTerms,
+            'attr' => [
+                'max' => 3,
+                'min' => 0,
+                'class' => 'numOfTerms'
+            ]
+        ]);
     }
 
     public function customOptions(OptionsResolver $resolver)
@@ -75,7 +73,7 @@ class AssessmentDefinitionType extends AbstractCompoundType
     {
         return AssessmentDefinition::make(...[
             $data['skills'],
-            $data['unitsWeight']
+            (int) $data['numOfTerms'],
         ]);
     }
 }

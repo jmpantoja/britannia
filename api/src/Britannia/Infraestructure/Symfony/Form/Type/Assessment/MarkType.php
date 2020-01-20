@@ -29,7 +29,6 @@ final class MarkType extends AbstractSingleType
             'required' => false
         ]);
     }
-
     /**
      * @inheritDoc
      */

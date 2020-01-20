@@ -15,7 +15,6 @@ namespace Britannia\Infraestructure\Symfony\Admin\Course;
 
 
 use Britannia\Domain\Entity\Course\Course;
-use Britannia\Infraestructure\Symfony\Form\Report\CourseInfo\CourseInformationType;
 use Britannia\Infraestructure\Symfony\Form\Type\Assessment\AssessmentDefinitionType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\AgeType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\CourseHasStudentsType;
@@ -50,7 +49,9 @@ final class CourseForm extends AdminForm
     {
         $this->course = $course;
 
-        $this->cardTab('Ficha del curso');
+        $this->dataMapper()->setSubject($course);
+
+        $this->cardTab('Ficha del curso', $course);
         $this->calendarTab('Calendario');
         $this->priceTab('Precio');
         $this->studentsTab('Alumnos y profesores');
@@ -63,7 +64,7 @@ final class CourseForm extends AdminForm
      * @param $name
      * @return CourseForm
      */
-    private function cardTab($name): self
+    private function cardTab($name, Course $course): self
     {
         $this->tab($name);
 
@@ -83,26 +84,28 @@ final class CourseForm extends AdminForm
                 'label' => 'Plazas',
             ]);
 
-        $this->group('Descripción', ['class' => 'col-md-12 horizontal'])
-            ->add('schoolCourse')
-            ->add('periodicity', PeriodicityType::class, [
-                'label' => 'Periocidad'
-            ])
-            ->add('intensive', IntensiveType::class, [
-                'label' => '¿Es intensivo?'
-            ])
-            ->add('age', AgeType::class, [
-                'label' => 'Grupo de Edad'
-            ]);
 
-        $this->group('Titulación', ['class' => 'col-md-12 horizontal'])
-            ->add('examiner', ExaminerType::class, [
-                'label' => 'Examinador'
-            ])
-            ->add('level', LevelType::class, [
-                'required' => false,
-                'label' => 'Nivel'
-            ]);
+        if (!$course->isAdult()) {
+            $this->group('Descripción', ['class' => 'col-md-12 horizontal'])
+                ->add('schoolCourse');
+        }
+
+        if ($course->isAdult()) {
+
+            $this->group('Descripción', ['class' => 'col-md-12 horizontal'])
+                ->add('intensive', IntensiveType::class, [
+                    'label' => '¿Es intensivo?'
+                ]);
+
+            $this->group('Titulación', ['class' => 'col-md-12 horizontal'])
+                ->add('examiner', ExaminerType::class, [
+                    'label' => 'Examinador'
+                ])
+                ->add('level', LevelType::class, [
+                    'required' => false,
+                    'label' => 'Nivel'
+                ]);
+        }
 
         return $this;
     }

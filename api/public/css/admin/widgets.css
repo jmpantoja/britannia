@@ -1,3 +1,9 @@
+div.datalist {
+    max-height: 450px;
+    overflow-y: auto;
+    width: 100%;
+}
+
 .time_table_title .notice {
     color: red;
     margin-top: -15px;
@@ -5,128 +11,176 @@
     font-size: 1.5em;
 }
 
-table.term_marks {
+table.term,
+table.unit {
     table-layout: fixed;
     width: 100%;
-    border: solid 1px;
-    margin-top: 1em;
 }
 
-table.term_marks thead td {
-    border: solid 1px;
-    text-align: center;
+table.term {
+    border: solid 2px black;
 }
 
-table.term_marks tbody td {
-    border: solid 1px;
-    text-align: left;
+table.term td,
+table.term th {
+    border: solid 1px black;
+    border-collapse: collapse;
 }
 
-table.term_marks td.student {
-    font-size: 1.2em;
-    padding: 3px 10px;
+table.term-marks {
+    border-right: solid 3px black;
+    border-left: solid 3px black;
+    width: auto;
 }
 
-table.unit_header {
-    table-layout: fixed;
-    width: 100%;
+table.unit,
+table.unit th {
     border: none;
-    border-right: solid 1px;
-    border-left: solid 1px;
 }
 
-table.unit_header thead {
-    border-bottom: solid 1px;
+table.unit th {
+    border-bottom: solid 1px black;
 }
 
-table.unit_header thead td {
-    border: none;
-    text-align: center;
-    font-size: 1.3em;
-    padding: 5px;
-}
-
-table.unit_header tbody td {
+table.unit td {
     border: none;
     border-right: solid 1px black;
+    color: black;
+}
 
-    color: white;
-    font-weight: bold;
+table.unit td:last-child {
+    border: none;
+}
+
+table.unit {
+    border-left: solid 2px black;
+}
+
+table.term thead th {
     text-align: center;
+    font-size: 20px;
+    font-weight: normal;
+    height: 50px;
 }
 
-table.unit_header tbody td:last-child {
-    border-right: none;
+table.unit-header td {
+    color: white;
 }
 
-table.unit_header tbody td.reading {
+table.unit-header td.reading {
     background-color: black;
 }
 
-table.unit_header tbody td.writing {
+table.unit-header td.writing {
     background-color: green;
 }
 
-table.unit_header tbody td.listening {
+table.unit-header td.listening {
     background-color: dodgerblue;
 }
 
-table.unit_header tbody td.speaking {
+table.unit-header td.speaking {
     background-color: red;
 }
 
-table.unit_header tbody td.grammar {
+table.unit-header td.grammar {
     background-color: rebeccapurple;
 }
 
-table.unit_header tbody td.vocabulary {
+table.unit-header td.vocabulary {
     background-color: #e58f00;
 }
 
-table.unit_header tbody td.total {
+table.unit-header td.total {
+    font-weight: bold;
     background-color: yellow;
     color: black;
-
 }
 
-table.unit_body {
-    table-layout: fixed;
-    width: 100%;
-    border: none;
-    border-right: solid 1px;
-    border-left: solid 1px;
-}
-
-table.unit_body tr {
-    border: none;
-}
-
-table.unit_body tbody td {
-    border: none;
-    border-right: solid 1px;
-}
-
-table.unit_body tbody td.total {
+table.unit td.total {
     font-weight: bold;
 }
 
-table.unit_body tbody td.total input {
+
+table.term thead th.student,
+table.term tbody td.student {
+    width: 250px;
+}
+
+table.term tbody td.student {
+    padding: 0 10px;
+    font-size: 16px;
+
+}
+
+table.unit input {
+    border: none;
     padding: 3px;
-}
-
-table.unit_body tbody td:last-child {
-    border: none;
-}
-
-table.unit_body tbody td input {
-    border: none;
+    margin: 0;
     text-align: center;
-    padding: 6px;
 }
 
-table.unit_body td.error {
+table.unit-body td.error {
     border: solid 3px red;
 }
+
+
+table.term-comments tbody td,
+table.term-comments tbody div,
+table.term-comments tbody textarea
+{
+    height: 80px;
+}
+
+table.term-comments td.comment div,
+table.term-comments td.comment p {
+    margin: 0;
+}
+
+table.term-comments textarea {
+    resize: none;
+    margin: 0;
+    border: none;
+}
+
+table.term-comments tr td.counter,
+table.term-comments tr th.counter {
+    width: 95px;
+    border-left: none;
+    vertical-align: bottom;
+}
+
+table.term-comments th.comment,
+table.term-comments td.comment {
+    border-right: none;
+}
+
+table.term-comments th.student,
+table.term-comments td.student {
+    border-right: solid 2px black;
+}
+
+table.term-comments p.counter {
+    margin: auto;
+    float: right;
+    padding: 5px 10px;
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+}
+
+table.term-comments p.counter.success {
+    background-color: green;
+}
+
+table.term-comments p.counter.warning {
+    background-color: orange;
+}
+
+table.term-comments p.counter.error {
+    background-color: firebrick;
+}
+
 
 .label-round {
     border-radius: 100%;

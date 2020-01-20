@@ -32,7 +32,7 @@ use PlanB\DDD\Domain\VO\PositiveInteger;
 use PlanB\DDD\Domain\VO\Price;
 use PlanB\DDD\Domain\VO\RGBA;
 
-class CourseDto extends Dto
+abstract class CourseDto extends Dto
 {
 
     public int $oldId;
@@ -43,19 +43,9 @@ class CourseDto extends Dto
 
     public RGBA $color;
 
-    public ?Examiner $examiner = null;
-
-    public ?Level $level = null;
-
     public ?PositiveInteger $numOfPlaces;
 
-    public ?Periodicity $periodicity;
-
     public Support $support;
-
-    public ?Age $age;
-
-    public ?Intensive $intensive;
 
     public ?Price $monthlyPayment;
 

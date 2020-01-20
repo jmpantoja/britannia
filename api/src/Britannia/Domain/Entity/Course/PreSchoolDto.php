@@ -11,14 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Britannia\Domain\VO\Course\Periodicity;
+namespace Britannia\Domain\Entity\Course;
 
 
-use MabeEnum\Enum;
-
-class Periodicity extends Enum
+class PreSchoolDto extends CourseDto
 {
-    public const LIMITED = 'Limitada';
-    public const UNLIMITED = 'Ilimitada';
+    public ?string $schoolCourse;
 
 }

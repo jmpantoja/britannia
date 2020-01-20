@@ -43,13 +43,17 @@ services:
         arguments: [~, Britannia\Domain\Entity\Course\Course, ~]
         tags:
             - { name: sonata.admin, manager_type: orm, label: Cursos }
+        calls:
+            - [setSubClasses, [{adult: Britannia\Domain\Entity\Course\Adult, school: Britannia\Domain\Entity\Course\School, pre_school: Britannia\Domain\Entity\Course\PreSchool}]] 
         public: true
 
     admin.mark:
         class: Britannia\Infraestructure\Symfony\Admin\Mark\MarkAdmin
-        arguments: [~, Britannia\Domain\Entity\Course\Course, ~]
+        arguments: [~, Britannia\Domain\Entity\Course\Course, Britannia\Infraestructure\Symfony\Controller\Admin\MarkController]
         tags:
             - { name: sonata.admin, manager_type: orm, label: Calificaciones,  }
+        calls: 
+            - [setTemplate, ['edit', 'form/mark/edit.html.twig']] 
         public: true
 
     admin.report:

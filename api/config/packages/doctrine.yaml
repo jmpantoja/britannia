@@ -47,8 +47,6 @@ doctrine:
                     CourseStatus: CourseStatus
                     DayOfWeek: DayOfWeek
                     Examiner: Examiner
-                    Age: Age
-                    Periodicity: Periodicity
                     Support: Support
                     Intensive: Intensive
                     DiscountList: DiscountList
@@ -57,6 +55,7 @@ doctrine:
                     TermName: TermName
                     SetOfSkills: SetOfSkills
                     Mark: Mark
+                    MarkReport: MarkReport
                     UnitId: UnitId
                     TermId: TermId
 
@@ -96,11 +95,9 @@ doctrine:
             AttendanceId: Britannia\Infraestructure\Doctrine\DBAL\Type\Attendance\AttendanceId
 
             #Courses
-            Age: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\AgeType
             DayOfWeek: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\DayOfWeekType
             Examiner: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\ExaminerType
             Intensive: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\IntensiveType
-            Periodicity: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\PeriodicityType
             Support: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\SupportType
             CourseStatus: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\CourseStatusType
             CourseId: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\CourseId
@@ -111,6 +108,7 @@ doctrine:
             TermName: Britannia\Infraestructure\Doctrine\DBAL\Type\Assessment\TermNameType
             SetOfSkills: Britannia\Infraestructure\Doctrine\DBAL\Type\Assessment\SetOfSkillsType
             Mark: Britannia\Infraestructure\Doctrine\DBAL\Type\Assessment\MarkType
+            MarkReport: Britannia\Infraestructure\Doctrine\DBAL\Type\Assessment\MarkReportType
             UnitId: Britannia\Infraestructure\Doctrine\DBAL\Type\Assessment\UnitId
             TermId: Britannia\Infraestructure\Doctrine\DBAL\Type\Assessment\TermId
 

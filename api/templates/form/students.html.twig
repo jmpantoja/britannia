@@ -1,0 +1,112 @@
+{% block student_has_courses_widget %}
+    {{ block('multiselect') }}
+{% endblock %}
+
+{% block relatives_widget %}
+    {{ block('multiselect') }}
+{% endblock %}
+
+{% block job_widget %}
+
+    <div class="col-md-4 no-padding">
+        {{ form_row(form.status) }}
+    </div>
+    <div class="col-md-8">
+        {{ form_row(form.name) }}
+    </div>
+
+{% endblock %}
+
+
+{% block city_address_widget %}
+
+    <div class="col-md-8 no-padding">
+        {{ form_row(form.city) }}
+    </div>
+    <div class="col-md-4">
+        {{ form_row(form.province) }}
+    </div>
+
+{% endblock %}
+
+{% block payment_widget %}
+
+    <script>
+        {% autoescape 'js' %}
+
+        jQuery(function ($) {
+            $('#sonata-ba-field-container-{{ id }}')
+                .toggle_field({
+                    hide_values: ['CASH'],
+                    children: '.bank_account'
+                })
+        })
+        {% endautoescape %}
+    </script>
+
+    <div class="row">
+        <div class="col-md-3">
+            {{ form_row(form.mode, {legend: true}) }}
+        </div>
+    </div>
+
+    <div class="row col-md-12 bank_account">
+        {{ form_row(form.account, {legend: true}) }}
+    </div>
+
+
+{% endblock %}
+
+{% block bank_account_widget %}
+    <div class="row">
+        <div class="col-md-12">
+            {{ form_row(form.titular) }}
+        </div>
+    </div>
+
+    <legend>Nº de cuenta</legend>
+    <div class="row">
+        <div class="col-md-9">
+            {{ form_row(form.iban) }}
+        </div>
+        <div class="col-md-3">
+            {{ form_row(form.number) }}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            {{ form_row(form.cityAddress) }}
+        </div>
+    </div>
+
+
+{% endblock %}
+
+
+{% block other_academy_widget %}
+
+    <script>
+        {% autoescape 'js' %}
+
+        jQuery(function ($) {
+            $('#sonata-ba-field-container-{{ id }}')
+                .toggle_field({
+                    hide_values: [''],
+                    children: '.numOfYears'
+                })
+        })
+        {% endautoescape %}
+    </script>
+
+
+    <div class="row">
+        <div class="col-md-6">
+            {{ form_row(form.academy) }}
+        </div>
+
+        <div class="col-md-6 numOfYears">
+            {{ form_row(form.numOfYears) }}
+        </div>
+    </div>
+{% endblock %}

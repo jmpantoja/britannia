@@ -64,14 +64,26 @@ final class MarkReport
      */
     private function setMarks(Collection $marks): void
     {
-        $this->reading = $marks['reading'] ?? Mark::notAssessment();
-        $this->writing = $marks['writing'] ?? Mark::notAssessment();
-        $this->listening = $marks['listening'] ?? Mark::notAssessment();
-        $this->speaking = $marks['speaking'] ?? Mark::notAssessment();
-        $this->grammar = $marks['grammar'] ?? Mark::notAssessment();
-        $this->vocabulary = $marks['vocabulary'] ?? Mark::notAssessment();
+        $this->reading = $this->sanitize($marks['reading'] ?? null);
+        $this->writing = $this->sanitize($marks['writing'] ?? null);
+        $this->listening = $this->sanitize($marks['listening'] ?? null);
+        $this->speaking = $this->sanitize($marks['speaking'] ?? null);
+        $this->grammar = $this->sanitize($marks['grammar'] ?? null);
+        $this->vocabulary = $this->sanitize($marks['vocabulary'] ?? null);
     }
 
+    private function sanitize($mark): Mark
+    {
+        if ($mark instanceof Mark) {
+            return $mark;
+        }
+
+        if (is_null($mark)) {
+            return Mark::notAssessment();
+        }
+
+        return Mark::make($mark);
+    }
 
     /**
      * @return mixed
@@ -130,8 +142,20 @@ final class MarkReport
     {
         $mark = $this->get($skill);
 
-        return $mark->mark();
+        return $mark->toFloat();
 
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'reading' => $this->reading->toFloat(),
+            'writing' => $this->writing->toFloat(),
+            'listening' => $this->listening->toFloat(),
+            'speaking' => $this->speaking->toFloat(),
+            'grammar' => $this->grammar->toFloat(),
+            'vocabulary' => $this->vocabulary->toFloat()
+        ];
     }
 
     public function average(SetOfSkills $skills): Mark
@@ -143,12 +167,17 @@ final class MarkReport
         return Mark::make($average);
     }
 
-    public function isEmpty(SetOfSkills $skills): bool
+    public function someMissedSkils(SetOfSkills $skills): bool
     {
         return collect($skills)
-            ->map(fn(string $skill) => $this->get($skill))
-            ->filter()
-            ->isEmpty();
+            ->filter(fn(string $skill) => $this->isMissingSkill($skill))
+            ->isNotEmpty();
 
     }
+
+    public function isMissingSkill(string $skill): bool
+    {
+        return $this->get($skill)->isMissingSkill();
+    }
+
 }

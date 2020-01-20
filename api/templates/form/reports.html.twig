@@ -1,0 +1,28 @@
+{% block course_information_widget %}
+    <div class="row course_information student">
+        <div class="col-md-12">
+            <h2>Alumno</h2>
+        </div>
+
+        <div class="col-md-3">
+            {{ form_row(form.familyOrder) }}
+        </div>
+
+        <div class="col-md-3">
+            {{ form_row(form.jobStatus) }}
+        </div>
+
+        <div class="col-md-6">
+            {{ form_row(form.freeEnrollment) }}
+        </div>
+    </div>
+
+    <div class="row course_information start_date">
+        <div class="col-md-12">
+            <h2>Incorporación</h2>
+        </div>
+        <div class="col-md-6">
+            {{ form_row(form.startDate) }}
+        </div>
+    </div>
+{% endblock %}

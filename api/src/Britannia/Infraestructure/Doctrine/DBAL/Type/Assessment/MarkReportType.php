@@ -11,26 +11,33 @@
 
 declare(strict_types=1);
 
-namespace Britannia\Infraestructure\Doctrine\DBAL\Type\Course;
+namespace Britannia\Infraestructure\Doctrine\DBAL\Type\Assessment;
 
 
-use Britannia\Domain\VO\Course\Age\Age;
+use Britannia\Domain\VO\Assessment\MarkReport;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 
-class AgeType extends Type
+final class MarkReportType extends Type
 {
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
-        return (string)$value;
+        if (!($value instanceof MarkReport)) {
+            return null;
+        }
+
+//        dump($value->toArray());
+        return json_encode($value->toArray());
     }
 
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
-        if (empty($value)) {
-            return null;
+        if(empty($value)){
+            return MarkReport::make([]);
         }
-        return Age::byName($value);
+
+        $input = json_decode($value, true);
+        return MarkReport::make($input);
     }
 
 
@@ -44,7 +51,7 @@ class AgeType extends Type
      */
     public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
     {
-        return self::TEXT;
+        return self::JSON;
     }
 
     /**
@@ -56,6 +63,6 @@ class AgeType extends Type
      */
     public function getName()
     {
-        return 'Age';
+        return 'MarkReport';
     }
 }

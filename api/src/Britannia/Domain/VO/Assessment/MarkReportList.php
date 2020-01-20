@@ -44,11 +44,26 @@ final class MarkReportList
 
     private function averageBySkill(string $skill): ?Mark
     {
+        if ($this->isMissingSkill($skill)) {
+            return null;
+        }
+
         $average = collect($this->markReports)
             ->map(fn(MarkReport $markReport) => $markReport->toFloat($skill))
             ->average();
 
-        return $average ? Mark::make($average) : null;
+        return Mark::make($average);
+    }
+
+    /**
+     * @param string $skill
+     * @return bool
+     */
+    private function isMissingSkill(string $skill): bool
+    {
+        return collect($this->markReports)
+            ->filter(fn(MarkReport $markReport) => $markReport->isMissingSkill($skill))
+            ->isNotEmpty();
     }
 
 

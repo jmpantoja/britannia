@@ -58,6 +58,6 @@ final class MarkTools extends AdminTools
 
     public function routes(RouteCollection $collection, string $idParameter): ?AdminRoutes
     {
-        return null;
+        return MarkRoutes::make($collection, $idParameter);
     }
 }

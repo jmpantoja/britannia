@@ -1,0 +1,202 @@
+{% block term_list_widget %}
+
+    <div class="definition-wrapper">
+        {{ form_row(form.definition) }}
+    </div>
+    <div class="marks-wrapper">
+        <table class="term term-marks">
+            <thead>
+            <tr>
+                <th class="student">Alumno</th>
+                {% for unit in units %}
+                    <th>
+                        {% set title = 'Unidad %s' | format(unit.number) %}
+                        {% with {title: title } %}
+                            {{ block('unit_header') }}
+                        {% endwith %}
+                    </th>
+                {% endfor %}
+                <th>
+                    {% set title = 'Examen' %}
+                    {% with {title: title } %}
+                        {{ block('unit_header') }}
+                    {% endwith %}
+                </th>
+                <th>
+                    {% set title = 'Total' %}
+                    {% with {title: title, total: true, extra: 1 } %}
+                        {{ block('unit_header') }}
+                    {% endwith %}
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for term in form %}
+                <tr>
+                    <td class="student">
+                        {{ term.vars.label }}
+                    </td>
+                    {% for unit in term %}
+                        <td>
+                            {{ form_widget(unit) }}
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+{% block term_definition_widget %}
+    {{ form_widget(form) }}
+    {% if admin is not null %}
+        <script>
+            $(function () {
+                var units = $('#{{ form.unitsWeight.vars.id }}');
+                var exam = $('#{{ form.examWeight.vars.id }}');
+
+                $(units).on('keyup', function () {
+                    var value = $(this).val();
+
+                    if ($.isNumeric(value) && value >= 0 && value <= 100) {
+                        $(exam).val(100 - value);
+                        return;
+                    }
+
+                    $(exam).val('-');
+                })
+
+                $(units).trigger('keyup');
+
+                var update = function () {
+                    var wrapper = $(this).parents('.form-group').find('.marks-wrapper');
+                    var definition = $(this).parents('.form-group').find('.definition-wrapper');
+
+                    var courseId = definition.find('[name$="[courseId]"]');
+                    var numOfUnits = definition.find('[name$="[numOfUnits]"]');
+                    var termName = definition.find('[name$="[termName]"]');
+                    var unitsWeight = definition.find('[name$="[unitsWeight]"]');
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '{{ admin.generateUrl('marks') }}',
+                        data: {
+                            'courseId': $(courseId).val(),
+                            'numOfUnits': $(numOfUnits).val(),
+                            'termName': $(termName).val(),
+                            'unitsWeight': $(unitsWeight).val()
+                        },
+                        dataType: "html",
+
+                        success: function (data) {
+                            var html = $(data).find('.marks-wrapper').html()
+                            $(wrapper).html(html)
+                        }
+                    });
+                };
+                $('#{{ form.numOfUnits.vars.id }}').on('change', update);
+                $('#{{ form.unitsWeight.vars.id }}').on('change', update);
+            })
+        </script>
+    {% endif %}
+{% endblock %}
+
+
+{% block unit_header %}
+    <table class="unit unit-header">
+        <thead>
+        <tr>
+            {% set extra = extra|default(0) %}
+            <th colspan="{{ skills |length + extra }} ">{{ title }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            {% for key,skill in skills %}
+                <td class="{{ skill | lower }}">{{ key }}</td>
+            {% endfor %}
+            {% if total is defined and total %}
+                <td class="total">T</td>
+            {% endif %}
+        </tr>
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block unit_widget %}
+    <table class="unit unit-body">
+        <tr>
+            {% for name, mark in form %}
+                {% set hasErrors = mark.vars.errors is not empty %}
+
+                {% set tdClass = 'class='~name %}
+                {% if hasErrors %}
+                    {% set tdClass = 'class=error ' ~ name %}
+                {% endif %}
+
+                <td {{ tdClass }}>
+                    {{ form_widget(mark) }}
+                </td>
+            {% endfor %}
+        </tr>
+    </table>
+{% endblock %}
+
+{% block comment_list_widget %}
+    <table class="term term-comments">
+        <thead>
+        <tr>
+            <th class="student">Alumno</th>
+            <th class="comment">Comentario</th>
+            <th class="counter"></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for comment in form %}
+            <tr>
+                <td class="student">
+                    {{ comment.vars.label }}
+                </td>
+                <td class="comment">
+                    {{ form_widget(comment) }}
+                </td>
+                <td class="counter">
+                    <p class="counter"></p>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <script>
+        $(function () {
+            $('.term-comments textarea').on("input", function () {
+                var maxlength = $(this).attr("maxlength");
+                var currentLength = $(this).val().length;
+                var counter = $(this).closest('tr').find('p.counter');
+
+                var diff = maxlength - currentLength;
+
+                $(counter).removeClass('warning')
+                $(counter).removeClass('error')
+                $(counter).removeClass('success')
+
+                if (diff <= 0) {
+                    $(counter).addClass('error')
+                } else if (diff < 50) {
+                    $(counter).addClass('warning')
+                } else {
+                    $(counter).addClass('success')
+                }
+
+                var text = currentLength + " / " + maxlength
+                $(counter).text(text)
+            });
+
+            $('.term-comments textarea').trigger('input');
+        })
+
+    </script>
+
+{% endblock %}

@@ -48,12 +48,7 @@ final class Unit implements Comparable
      * @var MarkReport
      */
     private $marks;
-
-    /**
-     * @var CarbonImmutable
-     */
-    private $completedAt;
-
+    
     public static function make(Term $term, PositiveInteger $number)
     {
         return new self($term, $number);
@@ -73,21 +68,6 @@ final class Unit implements Comparable
     public function updateMarks(MarkReport $marks): self
     {
         $this->marks = $marks;
-        $this->updateCompletedAt($marks);
-
-        return $this;
-    }
-
-    /**
-     * @param MarkReport $marks
-     * @return Unit
-     */
-    private function updateCompletedAt(MarkReport $marks): self
-    {
-        $this->completedAt = null;
-        if (!$marks->isEmpty($this->skills())) {
-            $this->completedAt = CarbonImmutable::now();
-        }
         return $this;
     }
 

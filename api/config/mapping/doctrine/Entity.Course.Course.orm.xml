@@ -5,7 +5,15 @@
 
 
     <entity name="Britannia\Domain\Entity\Course\Course" table="courses"
+            inheritance-type="JOINED"
             repository-class="Britannia\Infraestructure\Doctrine\Repository\CourseRepository">
+
+        <discriminator-column name="type" type="string"/>
+        <discriminator-map>
+            <discriminator-mapping value="adult" class="Britannia\Domain\Entity\Course\Adult"/>
+            <discriminator-mapping value="school" class="Britannia\Domain\Entity\Course\School"/>
+            <discriminator-mapping value="pre_school" class="Britannia\Domain\Entity\Course\PreSchool"/>
+        </discriminator-map>
 
         <id name="id" type="CourseId" column="id">
             <generator strategy="CUSTOM"/>
@@ -18,16 +26,9 @@
         <field name="color" type="rgba" nullable="true"/>
 
         <field name="status" type="CourseStatus"/>
-        <field name="schoolCourse" nullable="true"/>
-
-        <field name="examiner" type="Examiner" nullable="true"/>
+        <field name="support" type="Support"/>
 
         <field name="numOfPlaces" type="positive_integer"/>
-        <field name="support" type="Support"/>
-        <field name="periodicity" type="Periodicity"/>
-
-        <field name="intensive" type="Intensive"/>
-        <field name="age" type="Age"/>
 
         <field name="monthlyPayment" type="price"/>
         <field name="enrollmentPayment" type="price" nullable="true"/>
@@ -38,15 +39,13 @@
 
         <field name="skills" type="SetOfSkills" nullable="true"></field>
 
-        <field name="unitsWeight" type="percent" nullable="true"></field>
+        <field name="numOfTerms" type="integer" nullable="true"></field>
 
         <field name="createdAt" type="datetime_immutable" nullable="true"></field>
 
         <field name="updatedAt" type="datetime_immutable" nullable="true"></field>
 
         <embedded name="timeTable" class="Britannia\Domain\VO\Course\TimeTable\TimeTable" use-column-prefix="false"/>
-
-        <many-to-one field="level" target-entity="Britannia\Domain\Entity\Course\Level"></many-to-one>
 
         <many-to-many field="books" target-entity="Britannia\Domain\Entity\Book\Book" inversed-by="courses">
             <join-table name="courses_books">
@@ -89,13 +88,13 @@
             </cascade>
         </one-to-many>
 
-<!--        <one-to-many field="units" target-entity="Britannia\Domain\Entity\Unit\Unit" mapped-by="course"-->
-<!--                     orphan-removal="true">-->
-<!--            <cascade>-->
-<!--                <cascade-persist/>-->
-<!--&lt;!&ndash;                <cascade-remove/>&ndash;&gt;-->
-<!--            </cascade>-->
-<!--        </one-to-many>-->
+        <!--        <one-to-many field="units" target-entity="Britannia\Domain\Entity\Unit\Unit" mapped-by="course"-->
+        <!--                     orphan-removal="true">-->
+        <!--            <cascade>-->
+        <!--                <cascade-persist/>-->
+        <!--&lt;!&ndash;                <cascade-remove/>&ndash;&gt;-->
+        <!--            </cascade>-->
+        <!--        </one-to-many>-->
     </entity>
 
 </doctrine-mapping>

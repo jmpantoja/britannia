@@ -17,8 +17,11 @@ namespace Britannia\Infraestructure\Symfony\Admin\Mark;
 use Britannia\Domain\Entity\Assessment\TermList;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\VO\Assessment\TermName;
+use Britannia\Infraestructure\Symfony\Form\Type\Assessment\CommentListType;
+use Britannia\Infraestructure\Symfony\Form\Type\Assessment\MarkType;
 use Britannia\Infraestructure\Symfony\Form\Type\Assessment\TermListType;
 use PlanB\DDDBundle\Sonata\Admin\AdminForm;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 final class MarkForm extends AdminForm
 {
@@ -28,42 +31,46 @@ final class MarkForm extends AdminForm
         $data = $this->organizeByTermName($course);
 
         $this->tab('Diagnostic Test');
+        $this->group('de momento este tab está vacio');
+
 
         foreach ($data as $key => $terms) {
             $name = $this->tabName($key);
             $this->tab($name);
+
             $this->group('Unidades')
                 ->add($key, TermListType::class, [
+                    'allow_extra_fields' => true,
                     'mapped' => false,
                     'label' => false,
-                    'data' => TermList::collect($terms)
+                    'data' => TermList::collect($terms),
                 ]);
 
             $this->group('Comentarios')
-                ->add($key . '-c', TermListType::class, [
+                ->add($key . '-c', CommentListType::class, [
                     'mapped' => false,
                     'label' => false,
                     'data' => TermList::collect($terms)
                 ]);
+//
+//            $this->group('Verbos Irregulares')
+//                ->add($key . '-v', TermListType::class, [
+//                    'mapped' => false,
+//                    'label' => false,
+//                    'data' => TermList::collect($terms)
+//                ]);
+//
+//            $this->group('Alphabet')
+//                ->add($key . '-a', TermListType::class, [
+//                    'mapped' => false,
+//                    'label' => false,
+//                    'data' => TermList::collect($terms)
+//                ]);
 
-
-            $this->group('Verbos Irregulares')
-                ->add($key . '-v', TermListType::class, [
-                    'mapped' => false,
-                    'label' => false,
-                    'data' => TermList::collect($terms)
-                ]);
-
-
-            $this->group('Alphabet')
-                ->add($key . '-a', TermListType::class, [
-                    'mapped' => false,
-                    'label' => false,
-                    'data' => TermList::collect($terms)
-                ]);
         }
 
         $this->tab('Final Test');
+        $this->group('de momento este tab está vacio');
 
     }
 

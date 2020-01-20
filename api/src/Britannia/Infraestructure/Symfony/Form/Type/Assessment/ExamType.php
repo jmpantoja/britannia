@@ -38,7 +38,6 @@ class ExamType extends AbstractCompoundType
         $markReport = $term->exam();
 
         foreach ($skills as $skill) {
-
             $builder->add($skill, MarkType::class, [
                 'label' => false,
                 'required' => false,

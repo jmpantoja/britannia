@@ -14,10 +14,12 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Assessment;
 
 
-use Britannia\Domain\Entity\Lesson\LessonList;
-use Britannia\Domain\VO\Assessment\AssessmentDefinition;
+use Britannia\Domain\Entity\Course\CourseId;
 use Britannia\Domain\VO\Assessment\SetOfSkills;
+use Britannia\Domain\VO\Assessment\TermDefinition;
+use Britannia\Domain\VO\Assessment\TermName;
 use PlanB\DDD\Domain\Model\EntityList;
+use PlanB\DDD\Domain\VO\Percent;
 
 final class TermList extends EntityList
 {
@@ -27,16 +29,36 @@ final class TermList extends EntityList
         return Term::class;
     }
 
-    public function changeDefinition(AssessmentDefinition $definition): self
+    public function updateSkills(SetOfSkills $skills): self
     {
         $this->values()
-            ->each(fn(Term $term) => $term->chageDefinition(($definition)));
+            ->each(fn(Term $term) => $term->updateSkills(($skills)));
         return $this;
     }
+
+    public function updateDefintion(TermDefinition $defintion): self
+    {
+        $this->values()
+            ->each(fn(Term $term) => $term->updateDefintion($defintion));
+
+        return $this;
+    }
+
+    public function courseId(): CourseId
+    {
+        return $this->first()->course()->id();
+    }
+
+    public function termName(): TermName
+    {
+        return $this->first()->termName();
+    }
+
 
     public function units(): UnitList
     {
         $input = $this->first()->units();
+
         return UnitList::collect($input);
     }
 
@@ -44,6 +66,12 @@ final class TermList extends EntityList
     {
         return $skills = $this->first()->skills();
     }
+
+    public function unitsWeight(): Percent
+    {
+        return $skills = $this->first()->unitsWeight();
+    }
+
 
     /**
      * @return mixed

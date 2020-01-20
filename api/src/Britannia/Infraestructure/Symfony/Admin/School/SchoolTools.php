@@ -52,9 +52,9 @@ final class SchoolTools extends AdminTools
         return null;
     }
 
-    public function filters(DatagridMapper $filterMapper): ShoolFilter
+    public function filters(DatagridMapper $filterMapper): SchoolFilter
     {
-        return ShoolFilter::make($filterMapper);
+        return SchoolFilter::make($filterMapper);
     }
 
     public function routes(RouteCollection $collection, string $idParameter): ?AdminRoutes

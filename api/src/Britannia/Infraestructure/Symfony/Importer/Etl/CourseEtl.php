@@ -105,7 +105,6 @@ class CourseEtl extends AbstractEtl
             ->withSchoolCourse((string)$input['curso'])
             ->withEnrolmentPayment((float)$input['matricula'])
             ->withMonthlyPayment((float)$input['precio'])
-            ->withPeriodicity((int)$input['periocidad'])
             ->withNumOfPlaces((int)$input['plazas'])
             ->withGenerator($this->lessonGenerator, $this->unitGenerator)
             ->withTimeTable(...[

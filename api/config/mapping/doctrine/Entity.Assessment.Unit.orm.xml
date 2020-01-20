@@ -11,9 +11,8 @@
             <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
         </id>
 
-        <embedded name="marks" class="Britannia\Domain\VO\Assessment\MarkReport" use-column-prefix="false"/>
+        <field name="marks" type="MarkReport" nullable="true"/>
         <field name="number" type="positive_integer"/>
-        <field name="completedAt" type="datetime_immutable" nullable="true"/>
 
         <many-to-one field="term" target-entity="Britannia\Domain\Entity\Assessment\Term" inversed-by="units">
             <cascade>

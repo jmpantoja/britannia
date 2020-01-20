@@ -18,14 +18,12 @@ use Britannia\Domain\Entity\Assessment\Term;
 use Britannia\Domain\Entity\Assessment\UnitList;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractCompoundType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TermType extends AbstractCompoundType
 {
-
-    private $skills;
-
     public function customForm(FormBuilderInterface $builder, array $options)
     {
         /** @var Term $term */

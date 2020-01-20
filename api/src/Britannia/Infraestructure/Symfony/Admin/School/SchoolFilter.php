@@ -11,14 +11,16 @@
 
 declare(strict_types=1);
 
-namespace Britannia\Domain\VO\Course\Age;
+namespace Britannia\Infraestructure\Symfony\Admin\School;
 
 
-use MabeEnum\Enum;
+use PlanB\DDDBundle\Sonata\Admin\AdminFilter;
 
-class Age extends Enum
+final class SchoolFilter extends AdminFilter
 {
-    public const PRESCHOOL = 'Pre Escolar';
-    public const CHILD = 'Infantil';
-    public const ADULT = 'Adulto';
+
+    public function configure()
+    {
+        $this->add('name');
+    }
 }

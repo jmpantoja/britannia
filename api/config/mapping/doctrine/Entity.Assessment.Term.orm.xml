@@ -15,9 +15,10 @@
         <field name="unitsWeight" type="percent"/>
         <field name="skills" type="SetOfSkills"/>
 
-        <embedded name="exam" class="Britannia\Domain\VO\Assessment\MarkReport"/>
-        <embedded name="total" class="Britannia\Domain\VO\Assessment\MarkReport"/>
-        <field name="final" type="Mark"/>
+        <field name="exam" type="MarkReport" nullable="true"/>
+        <field name="total" type="MarkReport" nullable="true"/>
+        <field name="final" type="Mark" nullable="true"/>
+        <field name="comment" type="text" nullable="true"/>
 
         <many-to-one field="student" target-entity="Britannia\Domain\Entity\Student\Student">
             <join-column nullable="false" on-delete="CASCADE"/>

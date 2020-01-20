@@ -51,6 +51,7 @@ final class MarkWeightedAverage
 
     public function calcule(SetOfSkills $skills): MarkReport
     {
+
         $data = [];
         foreach ($skills as $skill) {
             $data[$skill] = $this->weightedAverage($skill);
@@ -61,9 +62,17 @@ final class MarkWeightedAverage
 
     private function weightedAverage(string $skill): Mark
     {
-        $units = $this->units->toFloat($skill) * $this->unitsWeight->toFloat();
-        $exam = $this->exam->toFloat($skill) * $this->examWeight->toFloat();
+        $units = $this->units->toFloat($skill);
+        $exam = $this->exam->toFloat($skill);
 
-        return Mark::make($units + $exam);
+        if (is_null($units) || is_null($exam)) {
+            return Mark::notAssessment();
+        }
+
+        $unitsWeighted = $units * $this->unitsWeight->toFloat();
+        $examWeighted = $exam * $this->examWeight->toFloat();
+
+        $average = $unitsWeighted + $examWeighted;
+        return Mark::make($average);
     }
 }

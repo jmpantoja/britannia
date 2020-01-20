@@ -14,8 +14,14 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Admin\Course;
 
 
+use Britannia\Domain\Entity\Course\Adult;
+use Britannia\Domain\Entity\Course\AdultDto;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Course\CourseDto;
+use Britannia\Domain\Entity\Course\PreSchool;
+use Britannia\Domain\Entity\Course\PreSchoolDto;
+use Britannia\Domain\Entity\Course\School;
+use Britannia\Domain\Entity\Course\SchoolDto;
 use Britannia\Domain\Service\Assessment\AssessmentGenerator;
 use Britannia\Domain\Service\Course\LessonGenerator;
 use PlanB\DDDBundle\Sonata\Admin\AdminMapper;
@@ -30,6 +36,10 @@ final class CourseMapper extends AdminMapper
      * @var AssessmentGenerator
      */
     private AssessmentGenerator $assessmentGenerator;
+    /**
+     * @var Course
+     */
+    private Course $subject;
 
     public function __construct(LessonGenerator $lessonCreator, AssessmentGenerator $assessmentGenerator)
     {
@@ -43,10 +53,22 @@ final class CourseMapper extends AdminMapper
         return Course::class;
     }
 
+    public function setSubject(Course $subject): self
+    {
+        $this->subject = $subject;
+        return $this;
+    }
+
     protected function create(array $values): Course
     {
         $dto = $this->makeDto($values);
-        return Course::make($dto);
+
+        if ($dto instanceof PreSchoolDto) {
+            return PreSchool::make($dto);
+        } elseif ($dto instanceof SchoolDto) {
+            return School::make($dto);
+        }
+        return Adult::make($dto);
     }
 
     /**
@@ -68,7 +90,13 @@ final class CourseMapper extends AdminMapper
     {
         $values['lessonCreator'] = $this->lessonCreator;
         $values['assessmentGenerator'] = $this->assessmentGenerator;
-        $dto = CourseDto::fromArray($values);
+
+        $dto = AdultDto::fromArray($values);
+        if ($this->subject instanceof PreSchool) {
+            $dto = PreSchoolDto::fromArray($values);
+        } elseif ($this->subject instanceof School) {
+            $dto = SchoolDto::fromArray($values);
+        }
 
         return $dto;
     }
