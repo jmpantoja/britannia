@@ -26,7 +26,6 @@ class BankAccount extends Constraint
 
     public function sanitize($value)
     {
-
         if (is_numeric($value['number'])) {
             $value['number'] *= 1;
         }

@@ -13,36 +13,24 @@ declare(strict_types=1);
 
 namespace Britannia\Infraestructure\Doctrine\DBAL\Type\Assessment;
 
-
-use Britannia\Domain\VO\Assessment\MarkReport;
+use Britannia\Domain\VO\Assessment\Skill;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 
-final class MarkReportType extends Type
+class SkillType extends Type
 {
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
-        if (!($value instanceof MarkReport)) {
-            return null;
-        }
-
-        return json_encode($value->toArray());
+        return (string)$value;
     }
 
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
         if (empty($value)) {
-            return MarkReport::make();
+            return null;
         }
-
-        $input = json_decode($value, true);
-        if (empty($input)) {
-            return MarkReport::make();
-        }
-
-        return MarkReport::make($input);
+        return Skill::byName($value);
     }
-
 
     /**
      * Gets the SQL declaration snippet for a field of this type.
@@ -54,7 +42,7 @@ final class MarkReportType extends Type
      */
     public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
     {
-        return self::JSON;
+        return self::TEXT;
     }
 
     /**
@@ -66,6 +54,6 @@ final class MarkReportType extends Type
      */
     public function getName()
     {
-        return 'MarkReport';
+        return 'Skill';
     }
 }

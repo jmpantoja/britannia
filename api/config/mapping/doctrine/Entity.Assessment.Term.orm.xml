@@ -13,7 +13,7 @@
 
         <field name="termName" type="TermName"/>
         <field name="unitsWeight" type="percent"/>
-        <field name="skills" type="SetOfSkills"/>
+        <field name="setOfSkills" type="SetOfSkills"/>
 
         <field name="exam" type="MarkReport" nullable="true"/>
         <field name="total" type="MarkReport" nullable="true"/>
@@ -31,6 +31,13 @@
         </many-to-one>
 
         <one-to-many field="units" target-entity="Britannia\Domain\Entity\Assessment\Unit" mapped-by="term"
+                     orphan-removal="true">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </one-to-many>
+
+        <one-to-many field="skills" target-entity="Britannia\Domain\Entity\Assessment\SkillMark" mapped-by="term"
                      orphan-removal="true">
             <cascade>
                 <cascade-persist/>

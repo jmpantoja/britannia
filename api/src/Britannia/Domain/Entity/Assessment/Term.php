@@ -21,8 +21,10 @@ use Britannia\Domain\VO\Assessment\Mark;
 use Britannia\Domain\VO\Assessment\MarkReport;
 use Britannia\Domain\VO\Assessment\MarkWeightedAverage;
 use Britannia\Domain\VO\Assessment\SetOfSkills;
+use Britannia\Domain\VO\Assessment\Skill;
 use Britannia\Domain\VO\Assessment\TermDefinition;
 use Britannia\Domain\VO\Assessment\TermName;
+use Carbon\CarbonImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use PlanB\DDD\Domain\Behaviour\Comparable;
 use PlanB\DDD\Domain\Behaviour\Traits\ComparableTrait;
@@ -61,7 +63,12 @@ final class Term implements Comparable
     /**
      * @var SetOfSkills
      */
-    private SetOfSkills $skills;
+    private $setOfSkills;
+
+    /**
+     * @var ArrayCollection
+     */
+    private $skills;
 
     /**
      * @var string|null
@@ -99,7 +106,7 @@ final class Term implements Comparable
 
     private function __construct(StudentCourse $studentCourse,
                                  TermName $termName,
-                                 SetOfSkills $skills,
+                                 SetOfSkills $setOfSkills,
                                  Percent $unitsWeight
     )
     {
@@ -110,27 +117,11 @@ final class Term implements Comparable
         $this->termName = $termName;
         $this->units = new ArrayCollection();
 
-        $this->skills = $skills;
-        $this->unitsWeight = $unitsWeight;
-//        $unitList = $this->calculeUnits();
-//        $this->updateMarks($unitList, MarkReport::make());
-    }
+        $this->skills = new ArrayCollection();
 
-//    /**
-//     * @return UnitList
-//     */
-//    private function calculeUnits(): UnitList
-//    {
-//        $data = [];
-//        $unit = 1;
-//
-//        while ($unit <= 3) {
-//            $data[] = Unit::make($this, PositiveInteger::make($unit));
-//            $unit++;
-//        }
-//
-//        return UnitList::collect($data);
-//    }
+        $this->setOfSkills = $setOfSkills;
+        $this->unitsWeight = $unitsWeight;
+    }
 
     public function updateDefintion(TermDefinition $defintion): self
     {
@@ -145,10 +136,9 @@ final class Term implements Comparable
     }
 
 
-    public function updateSkills(SetOfSkills $skills): self
+    public function updateSkills(SetOfSkills $setOfSkills): self
     {
-        $this->skills = $skills;
-        //aqui asignamos tambien las destrezas "extras"
+        $this->setOfSkills = $setOfSkills;
 
         $this->updateTotal();
         return $this;
@@ -175,13 +165,26 @@ final class Term implements Comparable
     }
 
 
+    public function updateExtraMarks(Skill $skill, SkillMarkList $skillList): self
+    {
+        $this->skillList()
+            ->forRemovedItems($skillList, function (SkillMark $skillMark) use ($skill) {
+                if($skillMark->hasSkill($skill)){
+                    $this->skillList()->remove($skillMark);
+                }
+            })
+            ->forAddedItems($skillList);
+
+        return $this;
+    }
+
     /**
      * @return Term
      */
     private function updateTotal(): self
     {
         $exam = $this->exam();
-        $skills = $this->skills();
+        $skills = $this->setOfSkills();
 
         if ($this->unitList()->isEmpty()) {
             $this->total = $exam;
@@ -233,12 +236,55 @@ final class Term implements Comparable
         return $this->termName;
     }
 
+    public function belongsToTermName(TermName $termName): bool
+    {
+        return $this->termName()->is($termName);
+    }
+
     /**
      * @return SetOfSkills
      */
-    public function skills(): SetOfSkills
+    public function setOfSkills(): SetOfSkills
     {
-        return $this->skills;
+        return $this->setOfSkills;
+    }
+
+    /**
+     * @return Unit[]
+     */
+    public function skills(): array
+    {
+        return $this->skillList()->toArray();
+    }
+
+    private function skillList(): SkillMarkList
+    {
+        return SkillMarkList::collect($this->skills);
+    }
+
+
+    public function skillsByType(Skill $skill): SkillMarkList
+    {
+        return $this->skillList()->findByType($skill);
+
+    }
+
+    public function addSkill(CarbonImmutable $date, Skill $skill): self
+    {
+        $skillMark = SkillMark::make($this, $skill, Mark::notAssessment(), $date);
+        $this->skillList()
+            ->addIfNotExists($skillMark);
+
+        return $this;
+    }
+
+    public function removeSkill(CarbonImmutable $date, Skill $skill): self
+    {
+        $skillMark = SkillMark::make($this, $skill, Mark::notAssessment(), $date);
+        $this->skillList()
+            ->removeIfExists($skillMark);
+
+        return $this;
     }
 
     /**
@@ -303,5 +349,6 @@ final class Term implements Comparable
             $this->termName()
         ]);
     }
+
 
 }

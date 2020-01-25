@@ -22,19 +22,26 @@ class AssessmentDefinition
     private $skills;
 
     /**
+     * @var SkillList
+     */
+    private $otherSkills;
+
+    /**
      * @var int
      */
     private $numOfTerms;
 
-    private function __construct(SetOfSkills $skills, int $numOfTerms)
+
+    private function __construct(SetOfSkills $skills, SkillList $otherSkills, int $numOfTerms)
     {
         $this->skills = $skills;
+        $this->otherSkills = $otherSkills;
         $this->numOfTerms = $numOfTerms;
     }
 
-    public static function make(SetOfSkills $skills, int $numOfTerms): self
+    public static function make(SetOfSkills $skills, SkillList $otherSkills, int $numOfTerms): self
     {
-        return new self($skills, $numOfTerms);
+        return new self($skills, $otherSkills, $numOfTerms);
 
     }
 
@@ -45,6 +52,15 @@ class AssessmentDefinition
     {
         return $this->skills;
     }
+
+    /**
+     * @return SkillList
+     */
+    public function otherSkills(): SkillList
+    {
+        return $this->otherSkills;
+    }
+
 
     public function numOfTerms(): int
     {

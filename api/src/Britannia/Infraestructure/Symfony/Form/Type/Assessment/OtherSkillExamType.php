@@ -16,15 +16,15 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Assessment;
 
 use Britannia\Domain\Entity\Assessment\TermList;
 use Britannia\Domain\VO\Assessment\CourseTerm;
+use Britannia\Domain\VO\Assessment\Skill;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractCompoundType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class CommentListType extends AbstractCompoundType
+class OtherSkillExamType extends AbstractCompoundType
 {
     public function customForm(FormBuilderInterface $builder, array $options)
     {
@@ -32,11 +32,19 @@ class CommentListType extends AbstractCompoundType
         $courseTerm = $options['data'];
         $termList = $courseTerm->termList();
 
+        $builder->add('definition', OtherSkillDefinitionType::class, [
+            'data' => $courseTerm,
+            'admin' => $options['admin'],
+            'skill' => $options['skill']
+        ]);
+
         foreach ($termList as $term) {
             $field = (string)$term->id();
-            $builder->add($field, CommentType::class, [
+            $builder->add($field, SkillMarkListType::class, [
                 'label' => $term->student(),
-                'data' => $term
+                'data' => $term,
+                'skill' => $options['skill'],
+                'error_bubbling' => true
             ]);
         }
     }
@@ -45,7 +53,28 @@ class CommentListType extends AbstractCompoundType
     {
         $resolver->setDefaults([
             'data_class' => CourseTerm::class,
+            'admin' => null
         ]);
+
+        $resolver->setNormalizer('admin', function (OptionsResolver $resolver) {
+            if (empty($resolver['sonata_field_description'])) {
+                return null;
+            }
+            return $resolver['sonata_field_description']->getAdmin();
+        });
+
+        $resolver->setRequired('skill');
+        $resolver->setAllowedTypes('skill', [Skill::class]);
+    }
+
+    public function finishView(FormView $view, FormInterface $form, array $options)
+    {
+
+        /** @var CourseTerm $courseTerm */
+        $courseTerm = $options['data'];
+        $view->vars['dates'] = $courseTerm->otherExams($options['skill']);
+
+        parent::finishView($view, $form, $options);
     }
 
     public function buildConstraint(array $options): ?Constraint
@@ -55,6 +84,7 @@ class CommentListType extends AbstractCompoundType
 
     public function customMapping(array $data)
     {
+        unset($data['definition']);
         return TermList::collect($data);
     }
 }

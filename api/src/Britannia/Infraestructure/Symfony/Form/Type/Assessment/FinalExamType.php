@@ -14,7 +14,8 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Form\Type\Assessment;
 
 
-use Britannia\Domain\Entity\Assessment\Unit;
+use Britannia\Domain\Entity\Student\StudentCourse;
+use Britannia\Domain\VO\Assessment\Mark;
 use Britannia\Domain\VO\Assessment\MarkReport;
 use Britannia\Infraestructure\Symfony\Form\Type\Unit\FullName;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
@@ -22,32 +23,50 @@ use PlanB\DDDBundle\Symfony\Form\Type\AbstractCompoundType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UnitType extends AbstractCompoundType
+class FinalExamType extends AbstractCompoundType
 {
+
+    public function getBlockPrefix()
+    {
+        return 'unit';
+    }
 
     public function customForm(FormBuilderInterface $builder, array $options)
     {
-        /** @var Unit $unit */
-        $unit = $options['data'];
-        $skills = $unit->term()->setOfSkills();
-        $markReport = $unit->marks();
+        /** @var StudentCourse $studentCourse */
+        $studentCourse = $options['data'];
+
+        $skills = $studentCourse->course()->skills();
+        $markReport = $studentCourse->exam();
 
         foreach ($skills as $skill) {
             $builder->add($skill, MarkType::class, [
                 'label' => false,
                 'required' => false,
                 'data' => $markReport->get($skill),
-                'error_bubbling' => true,
-                //    'data' => Mark::make(mt_rand(40, 100)/10)
+            //    'data' => Mark::make(mt_rand(40, 100)/10)
             ]);
         }
+
+        $builder->add('total', MarkType::class, [
+            'label' => false,
+            'required' => false,
+            'disabled' => true,
+            'data' => $markReport->average($skills)
+        ]);
+
     }
+
+    protected function dataToForms($data, array $forms): void
+    {
+        parent::dataToForms($data, $forms);
+    }
+
 
     public function customOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Unit::class,
-            'error_bubbling' => true
+            'data_class' => StudentCourse::class
         ]);
     }
 
@@ -58,12 +77,10 @@ class UnitType extends AbstractCompoundType
 
     public function customMapping(array $data)
     {
-        /** @var Unit $unit */
-        $unit = $this->getOption('data');
-        //return $unit;
-        $marks = MarkReport::make($data);
-        $unit->updateMarks($marks);
+        /** @var StudentCourse $studentCourse */
+        $studentCourse = $this->getOption('data');
+        $markReport = MarkReport::make($data);
 
-        return $unit;
+        return $studentCourse->setExam($markReport);
     }
 }

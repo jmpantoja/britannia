@@ -15,12 +15,11 @@ namespace Britannia\Domain\Entity\Student;
 
 
 use Britannia\Domain\Entity\Course\Course;
+use Britannia\Domain\VO\Assessment\MarkReport;
 use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\Behaviour\Comparable;
 use PlanB\DDD\Domain\Behaviour\Traits\ComparableTrait;
 use PlanB\DDD\Domain\Model\AggregateRoot;
-use PlanB\DDD\Domain\Model\EntityId;
-use PlanB\DDD\Domain\Model\Traits\AggregateRootTrait;
 
 class StudentCourse implements Comparable
 {
@@ -35,6 +34,13 @@ class StudentCourse implements Comparable
      * @var Course
      */
     private $course;
+
+    /** @var MarkReport */
+    private $diagnostic;
+
+
+    /** @var MarkReport */
+    private $exam;
 
     /**
      * @var CarbonImmutable
@@ -56,6 +62,9 @@ class StudentCourse implements Comparable
         $this->student = $student;
         $this->course = $course;
         $this->joinedAt = $date;
+
+        $this->diagnostic = MarkReport::make();
+        $this->exam = MarkReport::make();
     }
 
     /**
@@ -74,6 +83,35 @@ class StudentCourse implements Comparable
         return $this->course;
     }
 
+    /**
+     * @return MarkReport
+     */
+    public function diagnostic(): MarkReport
+    {
+        return $this->diagnostic;
+    }
+
+    public function setDiagnostic(MarkReport $markReport): self
+    {
+        $this->diagnostic = $markReport;
+        return $this;
+    }
+
+    /**
+     * @return MarkReport
+     */
+    public function exam(): MarkReport
+    {
+        return $this->exam;
+    }
+
+    public function setExam(MarkReport $markReport): self
+    {
+        $this->exam = $markReport;
+        return $this;
+    }
+
+
     public function compareTo(object $other): int
     {
         $this->assertThatCanBeCompared($other);
@@ -85,5 +123,4 @@ class StudentCourse implements Comparable
         $this->assertThatCanBeCompared($other);
         return $this->student->equals($other->student) && $this->course->equals($other->course);
     }
-
 }

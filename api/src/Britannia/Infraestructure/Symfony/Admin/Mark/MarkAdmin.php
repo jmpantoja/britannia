@@ -12,6 +12,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 
+
 final class MarkAdmin extends AbstractAdmin
 {
     protected $baseRouteName = 'admin_britannia_domain_course_mark';
@@ -31,6 +32,8 @@ final class MarkAdmin extends AbstractAdmin
         parent::__construct($code, $class, $baseControllerName);
         $this->adminTools = $adminTools;
         $this->dataGridValues();
+
+        ini_set("memory_limit","512M");
     }
 
     /**
@@ -97,5 +100,4 @@ final class MarkAdmin extends AbstractAdmin
             ->form($formMapper)
             ->configure($course);
     }
-
 }

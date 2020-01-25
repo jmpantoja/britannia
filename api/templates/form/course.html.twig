@@ -143,19 +143,22 @@
     {% endif %}
 
     <div id="{{ id }}-wrapper" class="row unit_definition">
+
+        <div class="col-md-2">
+            {{ form_row(form.numOfTerms) }}
+        </div>
         <div class="col-md-12">
             <legend class="control-label required">
-                Habilidades
+                Destrezas
             </legend>
             {{ form_row(form.skills) }}
         </div>
 
         <div class="col-md-12">
-           <h2 style="color: purple"> faltan las destrezas "extra" (verbos irregulares, alfabeto, etc)</h2>
-        </div>
-
-        <div class="col-md-2">
-            {{ form_row(form.numOfTerms) }}
+            <legend class="control-label required">
+                Otras destrezas
+            </legend>
+            {{ form_row(form.extraSkills) }}
         </div>
     </div>
 

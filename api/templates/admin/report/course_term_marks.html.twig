@@ -200,7 +200,7 @@
             <td>{{ _self.label('academic_year', 'es') }}</td>
         </tr>
 
-        {% for skill in term.skills %}
+        {% for skill in term.setOfSkills %}
             {% set range = term.total.get(skill).range %}
             {% set mark = term.total.get(skill).format %}
             {% set params = {'%mark%': mark} %}

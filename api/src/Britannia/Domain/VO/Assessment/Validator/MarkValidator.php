@@ -35,7 +35,7 @@ class MarkValidator extends ConstraintValidator
             return;
         }
 
-        if (is_null($value)) {
+        if (is_null($value) || is_string($value) && trim($value) === '') {
             return;
         }
 

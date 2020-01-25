@@ -31,6 +31,7 @@ class TermType extends AbstractCompoundType
 
         foreach ($term->units() as $unit) {
             $key = (string)$unit->id();
+
             $builder->add($key, UnitType::class, [
                 'mapped' => false,
                 'data' => $unit
@@ -52,7 +53,8 @@ class TermType extends AbstractCompoundType
     public function customOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Term::class
+            'data_class' => Term::class,
+            'error_bubbling' => true
         ]);
     }
 
@@ -67,6 +69,7 @@ class TermType extends AbstractCompoundType
         $term = $this->getOption('data');
 
         $exam = $data['exam'];
+
         unset($data['exam']);
         unset($data['total']);
 

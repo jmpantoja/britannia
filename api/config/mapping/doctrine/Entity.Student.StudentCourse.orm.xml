@@ -18,6 +18,10 @@
         </many-to-one>
 
         <field name="joinedAt" type="date_immutable"/>
+        <field name="diagnostic" type="MarkReport"/>
+        <field name="exam" type="MarkReport"/>
+
+
 
     </entity>
 

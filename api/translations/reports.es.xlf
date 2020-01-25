@@ -39,7 +39,7 @@
       </trans-unit>
       <trans-unit id="hWCHi4e" resname="listening">
         <source>listening</source>
-        <target state="translated">Compresión escrita</target>
+        <target state="translated">Compresión oral</target>
       </trans-unit>
       <trans-unit id="h1w05hX" resname="speaking">
         <source>speaking</source>
@@ -53,8 +53,8 @@
         <source>vocabulary</source>
         <target state="translated">Vocabulario</target>
       </trans-unit>
-      <trans-unit id="wvllyoz" resname="not_assessed">
-        <source>not_assessed</source>
+      <trans-unit id="wvllyoz" resname="NOT_ASSESSED">
+        <source>NOT_ASSESSED</source>
         <target state="translated">No evaluado</target>
       </trans-unit>
       <trans-unit id="QlMF4l3" resname="FAIL">

@@ -34,7 +34,8 @@ class ExamType extends AbstractCompoundType
     {
         /** @var Term $term */
         $term = $options['data'];
-        $skills = $term->skills();
+
+        $skills = $term->setOfSkills();
         $markReport = $term->exam();
 
         foreach ($skills as $skill) {
@@ -42,7 +43,7 @@ class ExamType extends AbstractCompoundType
                 'label' => false,
                 'required' => false,
                 'data' => $markReport->get($skill),
-//                'data' => Mark::make(mt_rand(40, 100)/10)
+            //   'data' => Mark::make(mt_rand(40, 100)/10)
             ]);
         }
     }

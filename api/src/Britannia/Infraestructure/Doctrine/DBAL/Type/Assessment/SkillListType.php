@@ -14,35 +14,31 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Doctrine\DBAL\Type\Assessment;
 
 
-use Britannia\Domain\VO\Assessment\MarkReport;
+use Britannia\Domain\VO\Assessment\SkillList;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 
-final class MarkReportType extends Type
+class SkillListType extends Type
 {
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
-        if (!($value instanceof MarkReport)) {
+        if (!($value instanceof SkillList)) {
             return null;
         }
 
-        return json_encode($value->toArray());
+        $data = $value->toNamesList();
+        return json_encode($data);
     }
 
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
         if (empty($value)) {
-            return MarkReport::make();
+            return null;
         }
 
-        $input = json_decode($value, true);
-        if (empty($input)) {
-            return MarkReport::make();
-        }
-
-        return MarkReport::make($input);
+        $data = json_decode($value);
+        return SkillList::fromNameList(...$data);
     }
-
 
     /**
      * Gets the SQL declaration snippet for a field of this type.
@@ -54,18 +50,16 @@ final class MarkReportType extends Type
      */
     public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
     {
-        return self::JSON;
+        return self::TEXT;
     }
 
     /**
      * Gets the name of this type.
      *
      * @return string
-     *
-     * @todo Needed?
      */
     public function getName()
     {
-        return 'MarkReport';
+        return 'SkillList';
     }
 }

@@ -16,8 +16,12 @@ namespace Britannia\Domain\Service\Assessment;
 
 use Britannia\Domain\Entity\Assessment\Term;
 use Britannia\Domain\Entity\Assessment\TermList;
+use Britannia\Domain\Entity\Course\Course;
+use Britannia\Domain\Entity\Student\StudentCourse;
 use Britannia\Domain\Entity\Student\StudentCourseList;
 use Britannia\Domain\VO\Assessment\AssessmentDefinition;
+use Britannia\Domain\VO\Assessment\TermDefinition;
+use Britannia\Domain\VO\Assessment\TermName;
 use PlanB\DDD\Domain\VO\Percent;
 
 final class AssessmentGenerator
@@ -36,14 +40,19 @@ final class AssessmentGenerator
         return TermList::collect($input);
     }
 
-    private function generateTermsForStudent($studentCourse, AssessmentDefinition $definition): array
+    private function generateTermsForStudent(StudentCourse $studentCourse, AssessmentDefinition $definition): array
     {
         $data = [];
 
+        $course = $studentCourse->course();
+
         foreach ($definition->termNames() as $termName) {
-            $data[] = Term::make($studentCourse, $termName, $definition->skills());
+            $termDefinition = $course->termDefinition($termName);
+            $data[] = Term::make($studentCourse, $termName, $definition->skills())
+                ->updateDefintion($termDefinition);
         }
 
         return $data;
     }
+
 }

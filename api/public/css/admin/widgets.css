@@ -19,6 +19,7 @@ table.unit {
 
 table.term {
     border: solid 2px black;
+    margin-bottom: 1em;
 }
 
 table.term td,
@@ -113,22 +114,21 @@ table.term tbody td.student {
 
 }
 
-table.unit input {
+table.term input {
     border: none;
     padding: 3px;
     margin: 0;
     text-align: center;
 }
 
-table.unit-body td.error {
+table.term td.error {
     border: solid 3px red;
 }
 
 
 table.term-comments tbody td,
 table.term-comments tbody div,
-table.term-comments tbody textarea
-{
+table.term-comments tbody textarea {
     height: 80px;
 }
 
@@ -181,6 +181,47 @@ table.term-comments p.counter.error {
     background-color: firebrick;
 }
 
+.has-error div.definition-wrapper * {
+    /*border: solid blue 5px !important;*/
+    color: #333 !important;
+    border-color: #d2d6de !important;
+}
+
+table.term-skill {
+    width: auto;
+}
+
+table.term-skill tr td,
+table.term-skill tr td input {
+    height: 50px;
+}
+
+table.term-skill tr th.rotate {
+    width: 50px;
+    height: 150px;
+    white-space: nowrap;
+    transform: rotate(-90deg);
+}
+
+table.term-skill tr th.rotate span {
+    display: block;
+    position: absolute;
+    margin-top: -1em;
+    left: -1.5em;
+}
+
+
+.definition-wrapper {
+    padding-bottom: 1em;
+}
+
+.definition-wrapper button.delete{
+    color: orangered;
+}
+
+table.term-single {
+    width: 565px;
+}
 
 .label-round {
     border-radius: 100%;

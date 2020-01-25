@@ -18,7 +18,6 @@ use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\VO\Assessment\MarkReport;
 use Britannia\Domain\VO\Assessment\SetOfSkills;
-use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\Behaviour\Comparable;
 use PlanB\DDD\Domain\Behaviour\Traits\ComparableTrait;
 use PlanB\DDD\Domain\Model\Traits\AggregateRootTrait;
@@ -48,7 +47,7 @@ final class Unit implements Comparable
      * @var MarkReport
      */
     private $marks;
-    
+
     public static function make(Term $term, PositiveInteger $number)
     {
         return new self($term, $number);
@@ -92,7 +91,7 @@ final class Unit implements Comparable
      */
     public function skills(): SetOfSkills
     {
-        return $this->term()->skills();
+        return $this->term()->setOfSkills();
     }
 
     /**
@@ -127,16 +126,13 @@ final class Unit implements Comparable
         return $this->marks;
     }
 
-    /**
-     * @return CarbonImmutable
-     */
-    public function completedAt(): ?CarbonImmutable
+
+    public function termHash(): string
     {
-        return $this->completedAt;
+        return sprintf('%s-%s', ...[
+            $this->term()->termName(),
+            $this->number
+        ]);
     }
 
-    public function isCompleted()
-    {
-        return $this->completedAt instanceof CarbonImmutable;
-    }
 }

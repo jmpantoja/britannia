@@ -14,11 +14,15 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Controller\Admin;
 
 
-use Britannia\Domain\Entity\Assessment\TermList;
+use Britannia\Domain\Entity\Assessment\Term;
 use Britannia\Domain\Entity\Course\Course;
+use Britannia\Domain\VO\Assessment\CourseTerm;
+use Britannia\Domain\VO\Assessment\Skill;
 use Britannia\Domain\VO\Assessment\TermDefinition;
 use Britannia\Domain\VO\Assessment\TermName;
+use Britannia\Infraestructure\Symfony\Form\Type\Assessment\OtherSkillExamType;
 use Britannia\Infraestructure\Symfony\Form\Type\Assessment\TermListType;
+use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\VO\Percent;
 use PlanB\DDDBundle\Sonata\ModelManager;
 use Sonata\AdminBundle\Controller\CRUDController;
@@ -26,6 +30,7 @@ use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\FormRenderer;
 use Symfony\Component\Form\FormView;
+use Symfony\Component\HttpFoundation\Response;
 
 final class MarkController extends CRUDController
 {
@@ -42,51 +47,95 @@ final class MarkController extends CRUDController
 
     public function marksAction()
     {
-        $courseId = $this->getRequest()->request->get('courseId');
-        $termName = $this->getRequest()->request->get('termName');
-        $unitsWeight = $this->getRequest()->request->get('unitsWeight');
-        $numOfUnits = $this->getRequest()->request->get('numOfUnits');
+        $termName = $this->getTermName();
 
+        $unitsWeight = $this->getUnitsWeight();
+        $numOfUnits = $this->getNumOfUnits();
 
-        $course = $this->manager->find(Course::class, $courseId);
-        $terms = $this->organizeByTermName($course);
-
-        $input = $terms[$termName];
-        $termList = TermList::collect($input);
-
+        $courseTerm = $this->getCourseTerm();
 
         $termDefinition = TermDefinition::make(...[
-            TermName::byName($termName),
-            Percent::make((int)$unitsWeight),
-            (int)$numOfUnits
+            $termName,
+            $unitsWeight,
+            $numOfUnits
         ]);
 
-        $termList->updateDefintion($termDefinition);
+        $courseTerm->updateDefintion($termDefinition);
 
-        foreach ($termList as $term){
-            $this->manager->update($term);
-        }
+        $courseTerm->termList()
+            ->values()
+            ->each(fn(Term $term) => $this->manager->update($term));
 
+        $name = $termName->getName();
+        $paramsForm = ['data' => $courseTerm];
+        $paramsView = ['units' => $courseTerm->units(), 'skills' => $courseTerm->setOfSkills()];
+
+        return $this->buildResponse($name, TermListType::class, $paramsForm, $paramsView);
+    }
+
+    public function addSkillAction()
+    {
+        $course = $this->getCourse();
+        $termName = $this->getTermName();
+
+        $date = $this->getDate();
+        $skill = $this->getSkill();
+
+        $courseTerm = $this->getCourseTerm();
+
+        $courseTerm->addSkill($date, $skill);
+
+        $this->manager->update($course);
+
+        $name = sprintf('%s-%s', $termName, $skill);
+        $paramsForm = ['data' => $courseTerm, 'skill' => $skill];
+
+        return $this->buildResponse($name, OtherSkillExamType::class, $paramsForm);
+    }
+
+    public function removeSkillAction()
+    {
+        $course = $this->getCourse();
+        $termName = $this->getTermName();
+        $date = $this->getDate();
+        $skill = $this->getSkill();
+
+        $courseTerm = $this->getCourseTerm();
+
+        $courseTerm->removeSkill($date, $skill);
+
+        $this->manager->update($course);
+
+        $name = sprintf('%s-%s', $termName, $skill);
+        $paramsForm = ['data' => $courseTerm, 'skill' => $skill];
+
+        return $this->buildResponse($name, OtherSkillExamType::class, $paramsForm);
+    }
+
+
+    private function buildResponse(string $name, string $type, array $paramsForm, array $paramsView = []): Response
+    {
         /** @var FormFactory $factory */
         $factory = $this->get('form.factory');
 
+        $defaults = [
+            'mapped' => false,
+            'label' => false
+        ];
+        $paramsForm = array_replace($defaults, $paramsForm);
+
         $builder = $factory->createNamedBuilder($this->admin->getUniqid(), FormType::class)
-            ->add($termName, TermListType::class, [
-                'mapped' => false,
-                'label' => false,
-                'data' => $termList
-            ]);
+            ->add($name, $type, $paramsForm);
 
         $form = $builder->getForm();
-
         $formView = $form->createView();
         $this->setFormTheme($formView, $this->admin->getFormTheme());
 
-        return $this->renderWithExtraParams('admin/mark/marks_ajax.html.twig', [
-            'form' => $formView,
-            'units' => $termList->units(),
-            'skills' => $termList->skills()
-        ]);
+        $paramsView = array_replace([
+            'form' => $formView
+        ], $paramsView);
+
+        return $this->renderWithExtraParams('admin/mark/ajax_form.html.twig', $paramsView);
     }
 
     /**
@@ -99,22 +148,65 @@ final class MarkController extends CRUDController
         $twig->getRuntime(FormRenderer::class)->setTheme($formView, $theme);
     }
 
-    /**
-     * @param Course $course
-     * @return array
-     */
-    private function organizeByTermName(Course $course): array
+    private function getCourseTerm(): CourseTerm
     {
-        $data = [];
-        foreach (TermName::all() as $termName) {
-            $data[$termName->getName()] = [];
-        }
+        $course = $this->getCourse();
+        $termName = $this->getTermName();
 
-        foreach ($course->terms() as $term) {
-            $key = (string)$term->termName();
-            $data[$key][] = $term;
-        }
-
-        return array_filter($data);
+        return CourseTerm::make($course, $termName);
     }
+
+    /**
+     * @return object|void|null
+     */
+    private function getCourse(): Course
+    {
+        $courseId = $this->getRequest()->request->get('courseId');
+        return $this->manager->find(Course::class, $courseId);
+    }
+
+    /**
+     * @return TermName|mixed
+     */
+    private function getTermName(): TermName
+    {
+        $termName = $this->getRequest()->request->get('termName');
+        return TermName::byName($termName);
+    }
+
+    /**
+     * @return mixed
+     */
+    private function getUnitsWeight(): Percent
+    {
+        $unitsWeight = (int)$this->getRequest()->request->get('unitsWeight');
+        return Percent::make($unitsWeight);
+    }
+
+    /**
+     * @return mixed
+     */
+    private function getNumOfUnits(): int
+    {
+        return (int)$this->getRequest()->request->get('numOfUnits');
+    }
+
+    /**
+     * @return CarbonImmutable|false|mixed
+     */
+    private function getDate(): CarbonImmutable
+    {
+        $date = $this->getRequest()->request->get('date');
+        return CarbonImmutable::createFromLocaleFormat('d M. Y', 'es', $date);
+    }
+
+    /**
+     * @return Skill|mixed
+     */
+    private function getSkill(): Skill
+    {
+        $skill = $this->getRequest()->request->get('skill');
+        return Skill::byName($skill);
+    }
+
 }

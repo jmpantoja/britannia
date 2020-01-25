@@ -54,9 +54,12 @@ doctrine:
                     #Assessment
                     TermName: TermName
                     SetOfSkills: SetOfSkills
+                    SkillList: SkillList
+                    Skill: Skill
                     Mark: Mark
                     MarkReport: MarkReport
                     UnitId: UnitId
+                    SkillMarkId: SkillMarkId
                     TermId: TermId
 
                     #Staff
@@ -107,9 +110,12 @@ doctrine:
             #Assessment
             TermName: Britannia\Infraestructure\Doctrine\DBAL\Type\Assessment\TermNameType
             SetOfSkills: Britannia\Infraestructure\Doctrine\DBAL\Type\Assessment\SetOfSkillsType
+            SkillList: Britannia\Infraestructure\Doctrine\DBAL\Type\Assessment\SkillListType
+            Skill: Britannia\Infraestructure\Doctrine\DBAL\Type\Assessment\SkillType
             Mark: Britannia\Infraestructure\Doctrine\DBAL\Type\Assessment\MarkType
             MarkReport: Britannia\Infraestructure\Doctrine\DBAL\Type\Assessment\MarkReportType
             UnitId: Britannia\Infraestructure\Doctrine\DBAL\Type\Assessment\UnitId
+            SkillMarkId: Britannia\Infraestructure\Doctrine\DBAL\Type\Assessment\SkillMarkId
             TermId: Britannia\Infraestructure\Doctrine\DBAL\Type\Assessment\TermId
 
             #Lesson

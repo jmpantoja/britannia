@@ -15,60 +15,70 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Assessment;
 
 
 use Britannia\Domain\VO\Assessment\CourseTerm;
-use Britannia\Domain\VO\Assessment\TermDefinition;
-use Britannia\Domain\VO\Assessment\TermName;
+use Britannia\Domain\VO\Assessment\Skill;
 use Britannia\Infraestructure\Symfony\Admin\Mark\MarkAdmin;
+use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractCompoundType;
-use PlanB\DDDBundle\Symfony\Form\Type\PercentageType;
+use Sonata\Form\Type\DatePickerType;
+use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-final class TermDefinitionType extends AbstractCompoundType
+class OtherSkillDefinitionType extends AbstractCompoundType
 {
-
     public function customForm(FormBuilderInterface $builder, array $options)
     {
         /** @var CourseTerm $courseTerm */
         $courseTerm = $options['data'];
 
-        $unitsWeight = $courseTerm->unitsWeight();
+        $addUrl = null;
+        $removeUrl = null;
 
-        $builder->add('numOfUnits', NumberType::class, [
-            'html5' => true,
-            'mapped' => false,
-            'data' => $courseTerm->numOfUnits(),
-            'attr' => [
-                'max' => 3,
-                'min' => 0
-            ]
-        ])->add('courseId', HiddenType::class, [
-            'mapped' => false,
-            'data' => (string)$courseTerm->courseId()
+        if ($options['admin'] instanceof MarkAdmin) {
+            $addUrl = $options['admin']->generateUrl('add-skill');
+            $removeUrl = $options['admin']->generateUrl('remove-skill');
+        }
+
+        $builder->add('courseId', HiddenType::class, [
+            'data' => $courseTerm->courseId()
+
         ])->add('termName', HiddenType::class, [
-            'mapped' => false,
             'data' => $courseTerm->termName()
-        ])->add('unitsWeight', PercentageType::class, [
-            'label' => '% unidades',
-            'data' => $unitsWeight
-        ])->add('examWeight', PercentageType::class, [
-            'disabled' => true,
-            'required' => false,
-            'label' => '% examen',
-            'data' => $unitsWeight->complementary()
+
+        ])->add('skill', HiddenType::class, [
+            'data' => $options['skill']
+
+        ])->add('date', DatePickerType::class, [
+            'label' => 'Fecha',
+            'data' => CarbonImmutable::today()
+
+        ])->add('add', ButtonType::class, [
+            'label' => 'Nuevo examen',
+            'attr' => [
+                'class' => 'btn btn-primary',
+                'value' => $addUrl
+            ]
+
+        ])->add('delete', ButtonType::class, [
+            'label' => 'Borrar examen',
+            'attr' => [
+                'class' => 'btn btn-link delete',
+                'value' => $removeUrl
+            ]
         ]);
     }
 
     public function customOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => CourseTerm::class
+            'data_class' => CourseTerm::class,
         ]);
 
+        $resolver->setRequired('skill', [Skill::class]);
         $resolver->setRequired('admin', [MarkAdmin::class]);
     }
 
@@ -79,9 +89,7 @@ final class TermDefinitionType extends AbstractCompoundType
         parent::finishView($view, $form, $options);
     }
 
-    /**
-     * @inheritDoc
-     */
+
     public function buildConstraint(array $options): ?Constraint
     {
         return null;
@@ -89,13 +97,8 @@ final class TermDefinitionType extends AbstractCompoundType
 
     public function customMapping(array $data)
     {
-        $termName = TermName::byName($data['termName']);
-        $numOfUnits = (int)$data['numOfUnits'];
-
-        return TermDefinition::make(...[
-            $termName,
-            $data['unitsWeight'],
-            $numOfUnits
-        ]);
+        return $this->getOption('data');
     }
+
+
 }

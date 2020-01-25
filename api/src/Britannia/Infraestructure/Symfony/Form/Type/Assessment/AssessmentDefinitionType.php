@@ -31,13 +31,8 @@ class AssessmentDefinitionType extends AbstractCompoundType
         /** @var Course $course */
         $course = $options['course'];
         $skills = $course->skills();
+        $otherSkills = $course->otherSkills();
         $numOfTerms = $course->numOfTerms();
-
-        $builder
-            ->add('skills', SetOfSkillsType::class, [
-                'label' => false,
-                'data' => $skills
-            ]);
 
         $builder->add('numOfTerms', NumberType::class, [
             'html5' => true,
@@ -49,6 +44,20 @@ class AssessmentDefinitionType extends AbstractCompoundType
                 'class' => 'numOfTerms'
             ]
         ]);
+
+        $builder
+            ->add('skills', SetOfSkillsType::class, [
+                'label' => false,
+                'data' => $skills
+            ]);
+
+
+        $builder
+            ->add('extraSkills', ExtraSkillListType::class, [
+                'mapped' => false,
+                'label' => false,
+                'data' => $otherSkills->toNamesList()
+            ]);
     }
 
     public function customOptions(OptionsResolver $resolver)
@@ -73,7 +82,8 @@ class AssessmentDefinitionType extends AbstractCompoundType
     {
         return AssessmentDefinition::make(...[
             $data['skills'],
-            (int) $data['numOfTerms'],
+            $data['extraSkills'],
+            (int)$data['numOfTerms'],
         ]);
     }
 }

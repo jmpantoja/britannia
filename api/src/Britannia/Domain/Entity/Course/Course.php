@@ -29,7 +29,11 @@ use Britannia\Domain\Entity\Student\StudentList;
 use Britannia\Domain\Service\Assessment\AssessmentGenerator;
 use Britannia\Domain\Service\Course\LessonGenerator;
 use Britannia\Domain\VO\Assessment\AssessmentDefinition;
+use Britannia\Domain\VO\Assessment\CourseTerm;
+use Britannia\Domain\VO\Assessment\SkillList;
 use Britannia\Domain\VO\Assessment\SetOfSkills;
+use Britannia\Domain\VO\Assessment\TermDefinition;
+use Britannia\Domain\VO\Assessment\TermName;
 use Britannia\Domain\VO\Course\CourseStatus;
 use Britannia\Domain\VO\Course\Support\Support;
 use Britannia\Domain\VO\Course\TimeTable\Schedule;
@@ -146,6 +150,11 @@ abstract class Course implements Comparable
     private $skills;
 
     /**
+     * @var SkillList
+     */
+    private $otherSkills;
+
+    /**
      * @var integer
      */
     protected $numOfTerms;
@@ -169,7 +178,6 @@ abstract class Course implements Comparable
      * @var CarbonImmutable
      */
     private $updatedAt;
-
 
     public static function make(CourseDto $dto): self
     {
@@ -270,6 +278,7 @@ abstract class Course implements Comparable
     public function changeAssessmentDefinition(AssessmentDefinition $definition, AssessmentGenerator $generator): self
     {
         $this->skills = $definition->skills();
+        $this->otherSkills = $definition->otherSkills();
         $this->numOfTerms = $definition->numOfTerms();
 
         $termList = $generator->generateTerms($this->courseHasStudentList(), $definition);
@@ -557,7 +566,7 @@ abstract class Course implements Comparable
 
     public function assessmentDefinition(): AssessmentDefinition
     {
-        return AssessmentDefinition::make($this->skills(), $this->numOfTerms());
+        return AssessmentDefinition::make($this->skills(), $this->otherSkills(), $this->numOfTerms());
     }
 
     /**
@@ -569,11 +578,29 @@ abstract class Course implements Comparable
     }
 
     /**
+     * @return SkillList
+     */
+    public function otherSkills(): SkillList
+    {
+        return $this->otherSkills ?? SkillList::collect();
+    }
+
+
+    /**
      * @return int
      */
     public function numOfTerms(): int
     {
         return $this->numOfTerms ?? 0;
+    }
+
+    public function termDefinition(TermName $termName): TermDefinition
+    {
+        $courseTerm = CourseTerm::make($this, $termName);
+        $unitsWeight = $courseTerm->unitsWeight();
+        $numOfUnits = $courseTerm->numOfUnits();
+
+        return TermDefinition::make($termName, $unitsWeight, $numOfUnits);
     }
 
 
@@ -585,10 +612,6 @@ abstract class Course implements Comparable
         return $this->records;
     }
 
-    public function __toString()
-    {
-        return $this->name();
-    }
 
     public function isAdult(): bool
     {
@@ -604,4 +627,11 @@ abstract class Course implements Comparable
     {
         return static::class === PreSchool::class;
     }
+
+    public function __toString()
+    {
+        return $this->name();
+    }
+
+
 }

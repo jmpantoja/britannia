@@ -34,7 +34,7 @@ class TotalType extends AbstractCompoundType
     {
         /** @var Term $term */
         $term = $options['data'];
-        $skills = $term->skills();
+        $skills = $term->setOfSkills();
         $markReport = $term->total();
 
         foreach ($skills as $skill) {

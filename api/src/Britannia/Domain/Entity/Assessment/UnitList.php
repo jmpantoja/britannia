@@ -37,7 +37,14 @@ final class UnitList extends EntityList
 //        return static::collect($input);
 //    }
 
-    public function sort()
+    public function countByTermName(): int
+    {
+        return $this->values()
+            ->unique(fn(Unit $unit) => $unit->termHash())
+            ->count();
+    }
+
+    public function sort(): self
     {
         $input = $this->values()->sort(function (Unit $left, Unit $right) {
             return $left->number()->compare($right->number());

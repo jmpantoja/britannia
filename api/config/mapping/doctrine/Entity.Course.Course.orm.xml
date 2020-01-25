@@ -39,6 +39,8 @@
 
         <field name="skills" type="SetOfSkills" nullable="true"></field>
 
+        <field name="otherSkills" type="SkillList" nullable="true"></field>
+
         <field name="numOfTerms" type="integer" nullable="true"></field>
 
         <field name="createdAt" type="datetime_immutable" nullable="true"></field>
