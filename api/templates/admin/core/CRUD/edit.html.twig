@@ -1,0 +1,13 @@
+{% extends '@SonataAdmin/CRUD/base_edit.html.twig' %}
+
+{% block form %}
+    {{ block('parentForm') }}
+{% endblock %}
+
+{% block formactions %}
+    <div class="sonata-ba-form-actions well well-small form-actions stuck">
+        {% block sonata_form_actions %}
+            {{ parent() }}
+        {% endblock %}
+    </div>
+{% endblock %}

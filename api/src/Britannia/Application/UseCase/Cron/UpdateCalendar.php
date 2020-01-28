@@ -40,6 +40,5 @@ class UpdateCalendar
     {
         return $this->date->format('Y') * 1;
     }
-
-
+    
 }

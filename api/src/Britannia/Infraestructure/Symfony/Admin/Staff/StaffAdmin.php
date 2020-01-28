@@ -50,7 +50,7 @@ final class StaffAdmin extends AbstractAdmin
     protected function configureRoutes(RouteCollection $collection)
     {
         return $this->adminTools()
-            ->routes($collection, $this->getIdParameter())
+            ->routes($collection, $this->getRouterIdParameter())
             ->build();
     }
 

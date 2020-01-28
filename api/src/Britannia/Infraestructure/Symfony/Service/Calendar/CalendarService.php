@@ -41,8 +41,6 @@ class CalendarService
     public function createYears(int $first, int $num)
     {
         $max = $first + $num;
-
-
         for ($year = $first; $year <= $max; $year++) {
             $this->createYear($year);
         }
@@ -64,6 +62,7 @@ class CalendarService
             return;
         }
         $this->persister->persist(Calendar::fromDate($dateTime));
+        dump($dateTime);
     }
 
 }

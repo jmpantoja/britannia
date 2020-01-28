@@ -60,7 +60,7 @@ services:
         class: Britannia\Infraestructure\Symfony\Admin\Report\ReportAdmin
         arguments: [~, Britannia\Domain\Entity\Course\Course, Britannia\Infraestructure\Symfony\Controller\Admin\ReportController]
         calls:
-            - [setTemplate, ['edit', 'admin/report/edit.html.twig']]
+            - [setTemplate, ['edit', 'form/report/edit.html.twig']]
         tags:
             - { name: sonata.admin, manager_type: orm, label: Informes }
         public: true

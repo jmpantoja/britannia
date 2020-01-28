@@ -35,7 +35,7 @@ class BritanniaCronCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        $this->commandBus->handle(UpdateCourseStatus::make());
+        //$this->commandBus->handle(UpdateCourseStatus::make());
         $this->commandBus->handle(UpdateCalendar::make());
     }
 }

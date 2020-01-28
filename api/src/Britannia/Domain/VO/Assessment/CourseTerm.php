@@ -76,7 +76,7 @@ final class CourseTerm
     private function initTerms(Course $course, TermName $termName): self
     {
         $terms = collect($course->terms())
-            ->filter(fn(Term $term) => $term->belongsToTermName($termName));
+            ->filter(fn(Term $term) => $term->hasTermName($termName));
 
         $this->termList = TermList::collect($terms)->sortByStudentName();
         return $this;
@@ -131,6 +131,39 @@ final class CourseTerm
     public function termList(): TermList
     {
         return $this->termList;
+    }
+
+
+    public function start(): CarbonImmutable
+    {
+        $dates = $this->termList->values()
+            ->map(fn(Term $term) => $term->start())
+            ->filter()
+            ->unique();
+
+        if ($dates->isEmpty()) {
+            return $this->course->start();
+        }
+
+        return $dates
+            ->sortBy(fn(CarbonImmutable $date) => $date->timestamp)
+            ->first();
+    }
+
+    public function end(): ?CarbonImmutable
+    {
+        $dates = $this->termList->values()
+            ->map(fn(Term $term) => $term->end())
+            ->filter()
+            ->unique();
+
+        if ($dates->isEmpty()) {
+            return null;
+        }
+
+        return $dates
+            ->sortBy(fn(CarbonImmutable $date) => $date->timestamp)
+            ->first();
     }
 
     public function unitsWeight(): Percent

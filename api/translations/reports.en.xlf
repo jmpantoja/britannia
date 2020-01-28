@@ -97,6 +97,26 @@
         <source>signed_by</source>
         <target state="translated">Signed by the teacher</target>
       </trans-unit>
+      <trans-unit id="6shddeR" resname="IRREGULAR_VERBS">
+        <source>IRREGULAR_VERBS</source>
+        <target state="translated">Irregular Verbs</target>
+      </trans-unit>
+      <trans-unit id="b0oVXM4" resname="ALPHABET">
+        <source>ALPHABET</source>
+        <target state="translated">Alphabet</target>
+      </trans-unit>
+      <trans-unit id="OAqNbMt" resname="DAYS_OF_THE_WEEK">
+        <source>DAYS_OF_THE_WEEK</source>
+        <target state="translated">Days of the week</target>
+      </trans-unit>
+      <trans-unit id="BgwPM9O" resname="3term">
+        <source>3term</source>
+        <target state="translated">3rd Trimestre</target>
+      </trans-unit>
+      <trans-unit id="EOpJ_84" resname="year_average">
+        <source>year_average</source>
+        <target state="translated">Academic year average mark</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

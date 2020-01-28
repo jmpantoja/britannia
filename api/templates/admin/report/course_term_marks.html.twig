@@ -14,10 +14,21 @@
             font-family: 'Open Sans';
         }
 
+        div.extra_marks,
         span.gap {
             border: solid 1px black;
             border-radius: 10px;
             padding: 5px;
+        }
+
+        div.extra_marks {
+            height: 215px;
+            text-align: left;
+        }
+
+        table.marks td
+        {
+            border: solid 1px red;
         }
 
         table.marks {
@@ -55,6 +66,14 @@
 
         table.marks tr.top {
             height: 80px;
+        }
+
+        table.marks tr.skills.subtop span{
+            font-weight: bold;
+        }
+
+        table.marks tr.term3 span.gap {
+            width: 45%;
         }
 
         table.marks span {
@@ -173,7 +192,6 @@
 {% endblock %}
 
 {% block body %}
-
     <table class="marks">
         <thead>
         <tr class="head">
@@ -200,15 +218,38 @@
             <td>{{ _self.label('academic_year', 'es') }}</td>
         </tr>
 
+        {% if term.termName.isThird %}
+
+            <tr class="skills subtop term3">
+                {% set params = {'%year%': _self.course_year(term.course)} %}
+                <td>&nbsp</td>
+                <td>{{ _self.gap('3term', 'en') }} {{ _self.gap('xx', 'en') }}</td>
+                <td>{{ _self.gap('3term', 'es') }} {{ _self.gap('xx', 'es') }}</td>
+                <td>&nbsp</td>
+            </tr>
+
+            {% set final = term.course.marksByStudent(term.student) %}
+        {% endif %}
+
         {% for skill in term.setOfSkills %}
             {% set range = term.total.get(skill).range %}
             {% set mark = term.total.get(skill).format %}
             {% set params = {'%mark%': mark} %}
 
-            <tr class="skills">
+            <tr class="skills term{{ term.termName.toInt }}">
                 <td>{{ _self.label(skill, 'en') }}</td>
-                <td>{{ _self.gap(range, 'en', params) }}</td>
-                <td>{{ _self.gap(range, 'es', params) }}</td>
+                <td>
+                    {{ _self.mark(term.total, skill, 'en') }}
+                    {% if final is defined %}
+                        {{ _self.mark(final, skill, 'en') }}
+                    {% endif %}
+                </td>
+                <td>
+                    {{ _self.mark(term.total, skill, 'es') }}
+                    {% if final is defined %}
+                        {{ _self.mark(final, skill, 'es') }}
+                    {% endif %}
+                </td>
                 <td>{{ _self.label(skill, 'es') }}</td>
             </tr>
         {% endfor %}
@@ -228,7 +269,7 @@
         <tbody>
         <tr>
             <td class="marks">{{ _self.resume(term, 'en') }}</td>
-            <td class="notes">{{ _self.gap('notas') }}</td>
+            <td class="notes">{{ _self.notes(term, 'en') }}</td>
         </tr>
         <tr class="signed_by" style="height: 60px">
             <td>{{ _self.label('signed_by', 'en') }}</td>
@@ -265,6 +306,15 @@
     </span>
 {% endmacro %}
 
+{% macro mark(marks, skill, lang='es') %}
+    {% set range = marks.get(skill).range %}
+    {% set mark = marks.get(skill).format %}
+    {% set params = {'%mark%': mark} %}
+
+    {{ _self.gap(range, lang, params) }}
+{% endmacro %}
+
+
 {% macro course_year(course) %}
     {% set start = course.start.format('Y') %}
     {% set end = course.end.format('Y') %}
@@ -290,11 +340,23 @@
         <tbody>
         <tr>
             <td>{{ _self.gap(term.final.format) }}</td>
-            <td>{{ _self.gap('??') }}</td>
-            <td>{{ _self.gap('??') }}</td>
+            <td>{{ _self.gap(attendances.numOfAbsences(term)) }}</td>
+            <td>{{ _self.gap(attendances.attendancePercent(term) ~ ' %') }}</td>
         </tr>
         </tbody>
     </table>
+{% endmacro %}
+
+{% macro notes(term, lang='es', params={}) %}
+
+    <div class="extra_marks">
+        NOTES:
+        {% for skillMark in skill_marks.skills(term) %}
+            <p>
+                {{ skillMark.skill | trans(params, 'reports', lang) }} ( {{ skillMark.mark }} )
+            </p>
+        {% endfor %}
+    </div>
 {% endmacro %}
 
 {% block legend %}

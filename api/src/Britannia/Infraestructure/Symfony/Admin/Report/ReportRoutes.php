@@ -24,5 +24,7 @@ final class ReportRoutes extends AdminRoutes
         $this->clearExcept(['list', 'edit']);
 
         $this->add('pdf', $this->path('/pdf/generate'));
+        $this->add('range', $this->path('/ajax/range'));
+//        $this->add('range', '/ajax/range');
     }
 }

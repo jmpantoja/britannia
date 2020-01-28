@@ -30,8 +30,9 @@ use Britannia\Domain\Service\Assessment\AssessmentGenerator;
 use Britannia\Domain\Service\Course\LessonGenerator;
 use Britannia\Domain\VO\Assessment\AssessmentDefinition;
 use Britannia\Domain\VO\Assessment\CourseTerm;
-use Britannia\Domain\VO\Assessment\SkillList;
+use Britannia\Domain\VO\Assessment\MarkReport;
 use Britannia\Domain\VO\Assessment\SetOfSkills;
+use Britannia\Domain\VO\Assessment\SkillList;
 use Britannia\Domain\VO\Assessment\TermDefinition;
 use Britannia\Domain\VO\Assessment\TermName;
 use Britannia\Domain\VO\Course\CourseStatus;
@@ -262,6 +263,7 @@ abstract class Course implements Comparable
         $this->timeTable = $timeTable;
         $locked = $this->timeTable->locked();
 
+
         if ($locked->isLocked()) {
             return $this;
         }
@@ -271,6 +273,7 @@ abstract class Course implements Comparable
             ->update($lessons, $locked, $this);
 
         $this->timeTable->update($this->lessonList());
+
 
         return $this;
     }
@@ -297,6 +300,13 @@ abstract class Course implements Comparable
             ->forAddedItems($termList);
 
         return $this;
+    }
+
+    public function marksByStudent(Student $student): MarkReport
+    {
+        return $this->termList()
+            ->marksByStudent($student);
+
     }
 
     public function setTeachers(StaffList $teachers)
@@ -633,5 +643,14 @@ abstract class Course implements Comparable
         return $this->name();
     }
 
+    public function setLimitsToTerm(TermName $termName, CarbonImmutable $start, ?CarbonImmutable $end): self
+    {
+        if (is_null($end)) {
+            return $this;
+        }
 
+        $this->termList()
+            ->setLimits($termName, $start, $end);
+        return $this;
+    }
 }

@@ -53,7 +53,7 @@
         <source>vocabulary</source>
         <target state="translated">Vocabulario</target>
       </trans-unit>
-      <trans-unit id="wvllyoz" resname="NOT_ASSESSED">
+      <trans-unit id="ZzfmO1n" resname="NOT_ASSESSED">
         <source>NOT_ASSESSED</source>
         <target state="translated">No evaluado</target>
       </trans-unit>
@@ -96,6 +96,26 @@
       <trans-unit id="BGSiIab" resname="signed_by">
         <source>signed_by</source>
         <target state="translated">Firmado por el profesor</target>
+      </trans-unit>
+      <trans-unit id="6shddeR" resname="IRREGULAR_VERBS">
+        <source>IRREGULAR_VERBS</source>
+        <target state="translated">Verbos Irregulares</target>
+      </trans-unit>
+      <trans-unit id="b0oVXM4" resname="ALPHABET">
+        <source>ALPHABET</source>
+        <target state="translated">Alfabeto</target>
+      </trans-unit>
+      <trans-unit id="OAqNbMt" resname="DAYS_OF_THE_WEEK">
+        <source>DAYS_OF_THE_WEEK</source>
+        <target state="translated">Dias de la semana</target>
+      </trans-unit>
+      <trans-unit id="BgwPM9O" resname="3term">
+        <source>3term</source>
+        <target state="translated">3er Trimestre</target>
+      </trans-unit>
+      <trans-unit id="EOpJ_84" resname="year_average">
+        <source>year_average</source>
+        <target state="translated">Nota media curso académico</target>
       </trans-unit>
     </body>
   </file>

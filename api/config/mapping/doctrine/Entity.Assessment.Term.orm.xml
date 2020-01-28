@@ -20,6 +20,9 @@
         <field name="final" type="Mark" nullable="true"/>
         <field name="comment" type="text" nullable="true"/>
 
+        <field name="start" type="date_immutable" nullable="true"/>
+        <field name="end" type="date_immutable" nullable="true"/>
+
         <many-to-one field="student" target-entity="Britannia\Domain\Entity\Student\Student">
             <join-column nullable="false" on-delete="CASCADE"/>
         </many-to-one>

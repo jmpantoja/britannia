@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Doctrine\Repository;
 
 
+use Britannia\Domain\Entity\Assessment\Term;
 use Britannia\Domain\Entity\Attendance\Attendance;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Student\Student;
@@ -62,4 +63,24 @@ class AttendanceRepository extends ServiceEntityRepository implements Attendance
     }
 
 
+    public function countByTerm(Term $term): int
+    {
+        $query = $this->createQueryBuilder('A')
+            ->select('count(A.id)')
+            ->where('A.student = :student')
+            ->andWhere('A.course = :course')
+            ->andWhere('A.day >= :start')
+            ->andWhere('A.day <= :end')
+            ->getQuery();
+
+        $query->setParameters([
+            'course' => $term->course(),
+            'student' => $term->student(),
+            'start' => $term->start(),
+            'end' => $term->end()
+        ]);
+
+        return (int) $query->getSingleScalarResult();
+
+    }
 }

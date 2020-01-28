@@ -11,12 +11,15 @@
 
 declare(strict_types=1);
 
-namespace Britannia\Domain\VO\Assessment;
+namespace Britannia\Domain\Service\Assessment;
 
 
+use Britannia\Domain\VO\Assessment\Mark;
+use Britannia\Domain\VO\Assessment\MarkReport;
+use Britannia\Domain\VO\Assessment\SetOfSkills;
 use PlanB\DDD\Domain\VO\Percent;
 
-final class MarkWeightedAverage
+final class MarkWeightedAverageCalculator
 {
 
     /**

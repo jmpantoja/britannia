@@ -20,7 +20,8 @@ use PlanB\DDDBundle\ApiPlattform\DataPersister;
 
 class UpdateCalendarUseCase implements UseCaseInterface
 {
-    const NUM_OF_FUTURE_YEARS = 5;
+    private const NUM_OF_FUTURE_YEARS = 5;
+    private const FIRST_YEAR = 2009;
     /**
      * @var CalendarService
      */
@@ -34,7 +35,9 @@ class UpdateCalendarUseCase implements UseCaseInterface
     public function handle(UpdateCalendar $updateCalendar)
     {
         $year = $updateCalendar->year();
-        $this->calendar->createYears($year, self::NUM_OF_FUTURE_YEARS);
+        $numOfYears = $year + self::NUM_OF_FUTURE_YEARS - self::FIRST_YEAR;
+
+        $this->calendar->createYears(self::FIRST_YEAR, $numOfYears);
     }
 
 }

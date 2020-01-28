@@ -14,9 +14,11 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Service\Attendance;
 
 
+use Britannia\Domain\Entity\Assessment\Term;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Lesson\Lesson;
 use Britannia\Domain\Entity\Student\Student;
+use Britannia\Domain\Repository\AttendanceRepositoryInterface;
 use Britannia\Domain\Repository\LessonRepositoryInterface;
 use Carbon\CarbonImmutable;
 
@@ -26,19 +28,40 @@ class AttendanceService
      * @var LessonRepositoryInterface
      */
     private $lessons;
+    /**
+     * @var AttendanceRepositoryInterface
+     */
+    private AttendanceRepositoryInterface $attendance;
 
-    public function __construct(LessonRepositoryInterface $lessons)
+    public function __construct(LessonRepositoryInterface $lessons, AttendanceRepositoryInterface $attendance)
     {
         $this->lessons = $lessons;
+        $this->attendance = $attendance;
     }
 
-    public function getSummary(Student $student, Course $course, int $limit = 5): array
+    public function numOfAbsences(Term $term): int
+    {
+        return $this->attendance->countByTerm($term);
+    }
+
+    public function attendancePercent(Term $term): float
+    {
+        $total = $this->lessons->countByTerm($term);
+        $numOfAbsences = $this->numOfAbsences($term);
+
+        if ($total <= 0) {
+            return 100;
+        }
+        $percent = ($total - $numOfAbsences) * 100 / $total;
+
+        return round($percent, 1);
+    }
+
+    public function summary(Student $student, Course $course, int $limit = 5): array
     {
         $values = [];
         $today = CarbonImmutable::now();
-
         $lessons = $this->lessons->getLastLessonsByCourse($course, $today, $limit);
-
 
         foreach ($lessons as $lesson) {
             $value = [

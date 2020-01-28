@@ -15,17 +15,3 @@ parameters:
             unemployed: 5
             retired: 5
             disabled: 5
-
-    dates:
-        course_starts_on:
-            day: 1
-            month: 9
-        second_term_starts_on:
-            day: 1
-            month: 1
-        third_term_starts_on:
-            day: 1
-            month: 3
-        course_ends_on:
-            day: 1
-            month: 8

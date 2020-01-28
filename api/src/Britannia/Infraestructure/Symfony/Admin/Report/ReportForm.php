@@ -16,10 +16,10 @@ namespace Britannia\Infraestructure\Symfony\Admin\Report;
 
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Infraestructure\Symfony\Form\Report\CourseInfo\CourseInformationType;
+use Britannia\Infraestructure\Symfony\Form\Report\CourseMarks\CourseCertificateType;
 use Britannia\Infraestructure\Symfony\Form\Report\CourseMarks\CourseMarksType;
 use PlanB\DDDBundle\Sonata\Admin\AdminForm;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 final class ReportForm extends AdminForm
 {
@@ -56,7 +56,8 @@ final class ReportForm extends AdminForm
             'required' => false,
             'label' => false,
             'mapped' => false,
-            'data' => $course
+            'data' => $course,
+            'url' => $this->admin()->generateObjectUrl('range', $course)
         ]);
     }
 
@@ -64,11 +65,11 @@ final class ReportForm extends AdminForm
     {
         $this->tab('Diplomas');
         $this->group('Diploma fin de curso');
-        $this->add('certificate', TextType::class, [
+        $this->add('certificate', CourseCertificateType::class, [
             'required' => false,
             'label' => false,
             'mapped' => false,
-//            'data' => $course
+            'data' => $course
         ]);
     }
 

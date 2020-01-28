@@ -51,6 +51,18 @@ class TermName extends Enum
         }
     }
 
+    public function next(): ?TermName
+    {
+        if ($this->isFirst()) {
+            return self::SECOND_TERM();
+        }
+        if ($this->isSecond()) {
+            return self::THIRD_TERM();
+        }
+
+        return null;
+    }
+
     public function isFirst(): bool
     {
         return $this->is(TermName::FIRST_TERM());

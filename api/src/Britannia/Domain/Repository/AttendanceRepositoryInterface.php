@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Britannia\Domain\Repository;
 
+use Britannia\Domain\Entity\Assessment\Term;
 use Britannia\Domain\Entity\Attendance\Attendance;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Student\Student;
@@ -34,4 +35,6 @@ interface AttendanceRepositoryInterface
      * @return Attendance[]
      */
     public function findByStudent(Student $student, Course $course, CarbonImmutable $date, int $limit = null): array;
+
+    public function countByTerm(Term $term): int ;
 }

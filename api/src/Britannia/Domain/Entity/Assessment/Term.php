@@ -17,9 +17,9 @@ namespace Britannia\Domain\Entity\Assessment;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Entity\Student\StudentCourse;
+use Britannia\Domain\Service\Assessment\MarkWeightedAverageCalculator;
 use Britannia\Domain\VO\Assessment\Mark;
 use Britannia\Domain\VO\Assessment\MarkReport;
-use Britannia\Domain\VO\Assessment\MarkWeightedAverage;
 use Britannia\Domain\VO\Assessment\SetOfSkills;
 use Britannia\Domain\VO\Assessment\Skill;
 use Britannia\Domain\VO\Assessment\TermDefinition;
@@ -94,6 +94,15 @@ final class Term implements Comparable
      */
     private $units;
 
+    /**
+     * @var CarbonImmutable
+     */
+    private $start;
+    /**
+     * @var CarbonImmutable|null
+     */
+    private $end;
+
     public static function make(StudentCourse $studentCourse,
                                 TermName $termName,
                                 SetOfSkills $skills,
@@ -113,6 +122,9 @@ final class Term implements Comparable
         $this->id = new TermId();
         $this->student = $studentCourse->student();
         $this->course = $studentCourse->course();
+
+        $this->start = $this->course->start();
+        $this->end = $this->course->end();
 
         $this->termName = $termName;
         $this->units = new ArrayCollection();
@@ -169,7 +181,7 @@ final class Term implements Comparable
     {
         $this->skillList()
             ->forRemovedItems($skillList, function (SkillMark $skillMark) use ($skill) {
-                if($skillMark->hasSkill($skill)){
+                if ($skillMark->hasSkill($skill)) {
                     $this->skillList()->remove($skillMark);
                 }
             })
@@ -194,7 +206,7 @@ final class Term implements Comparable
 
         $average = $this->unitList()->average($skills);
 
-        $total = MarkWeightedAverage::make($average, $exam, $this->unitsWeight())
+        $total = MarkWeightedAverageCalculator::make($average, $exam, $this->unitsWeight())
             ->calcule($skills);
 
         $this->total = $total;
@@ -220,6 +232,12 @@ final class Term implements Comparable
         return $this->student;
     }
 
+
+    public function hasStudent(Student $student): bool
+    {
+        return $this->student->equals($student);
+    }
+
     /**
      * @return Course
      */
@@ -236,7 +254,7 @@ final class Term implements Comparable
         return $this->termName;
     }
 
-    public function belongsToTermName(TermName $termName): bool
+    public function hasTermName(TermName $termName): bool
     {
         return $this->termName()->is($termName);
     }
@@ -326,6 +344,7 @@ final class Term implements Comparable
     public function final(): ?Mark
     {
         return $this->final;
+
     }
 
     /**
@@ -341,6 +360,32 @@ final class Term implements Comparable
         return UnitList::collect($this->units);
     }
 
+    /**
+     * @return CarbonImmutable
+     */
+    public function start(): ?CarbonImmutable
+    {
+        return $this->start;
+    }
+
+    /**
+     * @return CarbonImmutable|null
+     */
+    public function end(): ?CarbonImmutable
+    {
+        return $this->end;
+    }
+
+
+    public function setLimits(CarbonImmutable $start, ?CarbonImmutable $end = null): self
+    {
+        $this->start = $start;
+        $this->end = $end;
+
+        return $this;
+    }
+
+
     public function hash(): string
     {
         return sprintf('%s-%s-%s', ...[
@@ -349,6 +394,5 @@ final class Term implements Comparable
             $this->termName()
         ]);
     }
-
 
 }

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Domain\Repository;
 
 
+use Britannia\Domain\Entity\Assessment\Term;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Lesson\Lesson;
 use Carbon\CarbonImmutable;
@@ -40,5 +41,7 @@ interface LessonRepositoryInterface
      * @return Lesson[]
      */
     public function findByDay(CarbonImmutable $day): array;
+
+    public function countByTerm(Term $term): int ;
 
 }

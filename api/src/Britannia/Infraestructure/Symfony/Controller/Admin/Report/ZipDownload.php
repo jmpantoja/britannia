@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Britannia\Infraestructure\Symfony\Controller\Download;
+namespace Britannia\Infraestructure\Symfony\Controller\Admin\Report;
 
 
 use Britannia\Domain\Service\Report\Report;

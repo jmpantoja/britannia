@@ -1,28 +1,83 @@
 {% block course_information_widget %}
-    <div class="row course_information student">
-        <div class="col-md-12">
-            <h2>Alumno</h2>
+    <div id="tab1" class="row">
+        <div class="col-md-12 course_information student">
+            <div class="col-md-12">
+                <h2>Alumno</h2>
+            </div>
+
+            <div class="col-md-3">
+                {{ form_row(form.selected) }}
+                {{ form_row(form.familyOrder) }}
+            </div>
+
+            <div class="col-md-3">
+                {{ form_row(form.jobStatus) }}
+            </div>
+
+            <div class="col-md-6">
+                {{ form_row(form.freeEnrollment) }}
+            </div>
         </div>
 
-        <div class="col-md-3">
-            {{ form_row(form.familyOrder) }}
-        </div>
-
-        <div class="col-md-3">
-            {{ form_row(form.jobStatus) }}
-        </div>
-
-        <div class="col-md-6">
-            {{ form_row(form.freeEnrollment) }}
+        <div class="col-md-12 course_information start_date">
+            <div class="col-md-12">
+                <h2>Incorporación</h2>
+            </div>
+            <div class="col-md-6">
+                {{ form_row(form.startDate) }}
+            </div>
         </div>
     </div>
+{% endblock %}
 
-    <div class="row course_information start_date">
-        <div class="col-md-12">
-            <h2>Incorporación</h2>
-        </div>
+{% block  course_marks_widget %}
+    <div id="tab2" class="row course_mark">
         <div class="col-md-6">
-            {{ form_row(form.startDate) }}
+            <div id="term" class="col-md-12">
+                {{ form_row(form.selected) }}
+                {{ form_row(form.termName) }}
+            </div>
+
+            <div id="range" class="col-md-12 no-padding">
+
+                <div id="range-start" class="col-md-4">
+                    {{ form_row(form.start) }}
+                </div>
+                <div id="range-end" class="col-md-4">
+                    {{ form_row(form.end) }}
+                </div>
+            </div>
         </div>
+
+        <div class="col-md-6">
+            {{ form_row(form.students) }}
+        </div>
+
+
+        <script type="application/javascript">
+            $(function () {
+                let start = $('#range-start input');
+                let end = $('#range-end input');
+
+                let update = function () {
+                    $.ajax({
+                        type: 'POST',
+                        url: '{{ url }}',
+                        data: {
+                            'term': $(this).val()
+                        },
+                        dataType: "json",
+                        success: function (data) {
+                            start.val(data.start)
+                            end.val(data.end)
+                        }
+                    });
+                }
+
+                $('#term select').on('change', update)
+                $('#term select').trigger('change')
+            })
+
+        </script>
     </div>
 {% endblock %}

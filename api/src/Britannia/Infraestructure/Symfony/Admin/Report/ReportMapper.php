@@ -46,8 +46,10 @@ final class ReportMapper extends AdminMapper
         $tab = $values['tab'] ?? 1;
         unset($values['tab']);
 
-        return collect($values)
+        $command = collect($values)
             ->values()
             ->get($tab - 1);
+
+        return $command;
     }
 }

@@ -42,6 +42,7 @@ final class MarkType extends AbstractSingleType
 
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
+
         if (!Mark::isValid($view->vars['data'])) {
             $view->vars['errors'] = true;
         }

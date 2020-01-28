@@ -34,12 +34,12 @@ class StudentSubscriber extends DomainEventSubscriber
     public function onStudentMissedLesson(StudentHasMissedLesson $event)
     {
 
-        die(__METHOD__);
+//        die(__METHOD__);
     }
 
     public function onStudentAttendedLesson(StudentHasMissedLesson $event)
     {
-        die(__METHOD__);
+//        die(__METHOD__);
     }
 
 }

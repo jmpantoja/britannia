@@ -2,6 +2,7 @@
 
 namespace Britannia\Infraestructure\Doctrine\Repository;
 
+use Britannia\Domain\Entity\Assessment\Term;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Lesson\Lesson;
 use Britannia\Domain\Repository\LessonRepositoryInterface;
@@ -26,11 +27,11 @@ class LessonRepository extends ServiceEntityRepository implements LessonReposito
     {
         $day->setTime(0, 0);
 
-        $inPastLessons = $this->getInPastLessons($course, $day, $limit);
+        $atPastLessons = $this->atPastLessons($course, $day, $limit);
 
-        $inFutureLessons = $this->getInFutureLessons($course, $day, $limit - count($inPastLessons));
+        $atFutureLessons = $this->atFutureLessons($course, $day, $limit - count($atPastLessons));
 
-        $lessons = array_merge($inFutureLessons, $inPastLessons);
+        $lessons = array_merge($atFutureLessons, $atPastLessons);
 
         usort($lessons, function (Lesson $lessonA, Lesson $lessonB) {
             return $lessonA->day()->getTimestamp() < $lessonB->day()->getTimestamp();
@@ -46,7 +47,7 @@ class LessonRepository extends ServiceEntityRepository implements LessonReposito
      * @param int $limit
      * @return array
      */
-    protected function getInPastLessons(Course $course, CarbonImmutable $day, int $limit): array
+    protected function atPastLessons(Course $course, CarbonImmutable $day, int $limit): array
     {
         $query = $this->createQueryBuilder('A')
             ->where('A.course = :course')
@@ -67,7 +68,7 @@ class LessonRepository extends ServiceEntityRepository implements LessonReposito
      * @param int $limit
      * @return array
      */
-    protected function getInFutureLessons(Course $course, CarbonImmutable $day, int $limit): array
+    protected function atFutureLessons(Course $course, CarbonImmutable $day, int $limit): array
     {
         $query = $this->createQueryBuilder('A')
             ->where('A.course = :course')
@@ -91,5 +92,23 @@ class LessonRepository extends ServiceEntityRepository implements LessonReposito
         return $this->findBy([
             'day' => $day
         ]);
+    }
+
+    public function countByTerm(Term $term): int
+    {
+        $query = $this->createQueryBuilder('A')
+            ->select('count(A.id)')
+            ->where('A.course = :course')
+            ->andWhere('A.day >= :start')
+            ->andWhere('A.day <= :end')
+            ->getQuery();
+
+        $query->setParameters([
+            'course' => $term->course(),
+            'start' => $term->start(),
+            'end' => $term->end(),
+        ]);
+
+        return $query->getSingleScalarResult();
     }
 }

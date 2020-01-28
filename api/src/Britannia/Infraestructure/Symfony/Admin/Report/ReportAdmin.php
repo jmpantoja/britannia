@@ -64,7 +64,7 @@ final class ReportAdmin extends AbstractAdmin
     protected function configureRoutes(RouteCollection $collection)
     {
         $collection = $this->adminTools()
-            ->routes($collection, $this->getIdParameter())
+            ->routes($collection, $this->getRouterIdParameter())
             ->build();
 
         return $collection;
