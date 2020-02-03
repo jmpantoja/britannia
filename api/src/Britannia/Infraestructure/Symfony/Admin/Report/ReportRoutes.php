@@ -25,6 +25,6 @@ final class ReportRoutes extends AdminRoutes
 
         $this->add('pdf', $this->path('/pdf/generate'));
         $this->add('range', $this->path('/ajax/range'));
-//        $this->add('range', '/ajax/range');
+        $this->add('boundaries-prices', $this->path('/ajax/prices'));
     }
 }

@@ -1,4 +1,10 @@
+{% set hasMarks = false %}
 {% if object.numOfStudents > 0 %}
+    {% set hasMarks = object.diagnosticTest or object.finalTest or object.numOfTerms > 0 %}
+{% endif %}
+
+
+{% if hasMarks %}
     {% set marks = admin.configurationPool.adminByAdminCode('admin.mark').generateObjectUrl('edit', object) %}
     <a class="btn btn-link" href="{{ marks }}">Notas</a>
 {% endif %}

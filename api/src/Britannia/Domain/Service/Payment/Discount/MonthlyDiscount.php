@@ -15,134 +15,73 @@ namespace Britannia\Domain\Service\Payment\Discount;
 
 
 use Britannia\Domain\Entity\Course\Course;
-use Britannia\Domain\Repository\FamilyDiscountParametersInterface;
 use Britannia\Domain\Service\Payment\Concept;
+use Britannia\Domain\Service\Payment\Discount\Monthly\FirstMonthDiscount;
+use Britannia\Domain\Service\Payment\Discount\Monthly\LastMonthDiscount;
+use Britannia\Domain\Service\Payment\Discount\Monthly\RegularMonthDiscount;
 use Britannia\Domain\Service\Payment\FamilyDiscountList;
 use Britannia\Domain\VO\Discount\StudentDiscount;
-use Britannia\Domain\VO\Student\Job\JobStatus;
 use Carbon\CarbonImmutable;
-use DateTimeZone;
-use PlanB\DDD\Domain\VO\Percent;
-use PlanB\DDD\Domain\VO\Price;
-use ReflectionException;
 
-class MonthlyDiscount extends DiscountCalculator
+class MonthlyDiscount
 {
-
     /**
-     * @var FamilyDiscountList\
+     * @var FirstMonthDiscount
      */
-    private $familyDiscountList;
+    private FirstMonthDiscount $firstMonthDiscount;
+    /**
+     * @var BoundariesCalculator
+     */
+    private BoundariesCalculator $startDayCalculator;
+    /**
+     * @var BoundariesCalculator
+     */
+    private BoundariesCalculator $boundariesCalculator;
+    /**
+     * @var RegularMonthDiscount
+     */
+    private RegularMonthDiscount $regularMonthDiscount;
+    /**
+     * @var LastMonthDiscount
+     */
+    private LastMonthDiscount $lastMonthDiscount;
 
 
-    public function __construct(FamilyDiscountParametersInterface $familyDiscountStorage)
+    public function __construct(FirstMonthDiscount $firstMonthDiscount,
+                                LastMonthDiscount $lastMonthDiscount,
+                                RegularMonthDiscount $regularMonthDiscount,
+                                BoundariesCalculator $boundariesCalculator
+    )
     {
-        $this->familyDiscountList = $familyDiscountStorage->getList();
+        $this->firstMonthDiscount = $firstMonthDiscount;
+        $this->lastMonthDiscount = $lastMonthDiscount;
+        $this->regularMonthDiscount = $regularMonthDiscount;
 
+        $this->boundariesCalculator = $boundariesCalculator;
     }
 
-    public function calcule(Course $course, StudentDiscount $discount, CarbonImmutable $date)
+    public function calcule(Course $course, StudentDiscount $discount, CarbonImmutable $date): ?Concept
     {
-        $price = $this->getPrice($course, $date);
-
-        if ($discount->applyJobStatusDiscount()) {
-            $percent = $this->getJobStausPercent($course, $discount->jobStatus());
-            return Concept::jobStatus($price, $percent);
+        if ($this->isFirstMonth($course, $discount, $date)) {
+            return $this->firstMonthDiscount->calcule($course, $discount);
         }
 
-        $order = $discount->familyOrder();
-        $percent = $this->getFamlilyPercent($order);
-
-        return Concept::family($price, $percent);
-    }
-
-    /**
-     * @param Course $course
-     * @param CarbonImmutable $date
-     * @return null|Price
-     * @throws ReflectionException
-     */
-    private function getPrice(Course $course, CarbonImmutable $date): Price
-    {
-        $percent = $this->getMonthlyPercent($date, $course->end());
-        $price = $course->monthlyPayment();
-
-        return $price->discount($percent);
-    }
-
-    /**
-     * @param CarbonImmutable $date
-     * @return Percent
-     * @throws ReflectionException
-     */
-    private function getMonthlyPercent(CarbonImmutable $date, CarbonImmutable $endDate): Percent
-    {
-        $day = $date->get('day');
-
-        $lastDay = $this->getLastDayOfMonth($date, $endDate);
-        $totalDays = $date->daysInMonth;
-
-        $remainingDays = $lastDay - $day + 1;
-        $fractionOfMonth = round($remainingDays / $totalDays, 1);
-
-        if ($fractionOfMonth <= 0.2) {
-            return Percent::make(100);
+        if ($this->isLastMonth($course, $date)) {
+            return $this->lastMonthDiscount->calcule($course, $discount);
         }
 
-        if ($fractionOfMonth <= 0.4) {
-            return Percent::make(75);
-        }
-
-        if ($fractionOfMonth <= 0.6) {
-            return Percent::make(50);
-        }
-
-        if ($fractionOfMonth < 1) {
-            return Percent::make(25);
-        }
-
-        return Percent::make(0);
+        return $this->regularMonthDiscount->calcule($course, $discount);
     }
 
-
-    /**
-     * @param CarbonImmutable $date
-     * @param CarbonImmutable $endDate
-     * @return bool|DateTimeZone|int|null|string
-     * @throws ReflectionException
-     */
-    private function getLastDayOfMonth(CarbonImmutable $date, CarbonImmutable $endDate): int
+    private function isFirstMonth(Course $course, StudentDiscount $discount, CarbonImmutable $date): bool
     {
-        $lastDayOfMonth = $date->modify('last day of this month');
-
-        if (!$date->isSameMonth($endDate)) {
-            return $lastDayOfMonth->get('day');
-        }
-
-        return $endDate->get('day');
+        $start = $this->boundariesCalculator->startDay($course, $discount);
+        return $start->isSameMonth($date);
     }
 
 
-    /**
-     * @param Course $course
-     * @param StudentDiscount $discount
-     * @return mixed
-     */
-    private function getJobStausPercent(Course $course, ?JobStatus $jobStatus): Percent
+    private function isLastMonth(Course $course, CarbonImmutable $date): bool
     {
-
-        $courseDiscount = $this->getCourseDiscount($course, $jobStatus);
-        return $courseDiscount->getDiscount();
+        return $course->end()->isSameMonth($date);
     }
-
-    /**
-     * @param $order
-     * @return Percent
-     */
-    private function getFamlilyPercent($order): Percent
-    {
-        return $this->familyDiscountList->getByFamilyOrder($order);
-    }
-
-
 }

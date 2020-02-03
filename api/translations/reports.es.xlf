@@ -83,7 +83,7 @@
       </trans-unit>
       <trans-unit id="GIgQHa4" resname="absence">
         <source>absence</source>
-        <target state="translated">Faltas asistencia</target>
+        <target state="translated">Ausencias</target>
       </trans-unit>
       <trans-unit id="WjvLzvW" resname="attendance">
         <source>attendance</source>
@@ -116,6 +116,10 @@
       <trans-unit id="EOpJ_84" resname="year_average">
         <source>year_average</source>
         <target state="translated">Nota media curso académico</target>
+      </trans-unit>
+      <trans-unit id="WZ93A1R" resname="term">
+        <source>term</source>
+        <target state="translated">Trimestre</target>
       </trans-unit>
     </body>
   </file>

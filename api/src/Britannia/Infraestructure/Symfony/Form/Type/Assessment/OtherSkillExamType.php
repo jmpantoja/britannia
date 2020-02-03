@@ -44,7 +44,9 @@ class OtherSkillExamType extends AbstractCompoundType
                 'label' => $term->student(),
                 'data' => $term,
                 'skill' => $options['skill'],
-                'error_bubbling' => true
+                'error_bubbling' => true,
+                'allow_extra_fields' => true
+
             ]);
         }
     }

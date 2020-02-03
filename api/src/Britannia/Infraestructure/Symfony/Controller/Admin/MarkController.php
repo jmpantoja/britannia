@@ -72,7 +72,6 @@ final class MarkController extends CRUDController
     private function buildResponse(MarkAction $markAction)
     {
         $params = $markAction->handle();
-
         return $this->renderWithExtraParams('admin/mark/ajax_form.html.twig', $params);
     }
 

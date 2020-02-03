@@ -111,4 +111,22 @@ class LessonRepository extends ServiceEntityRepository implements LessonReposito
 
         return $query->getSingleScalarResult();
     }
+
+    public function countByCourse(Course $course): int
+    {
+        $query = $this->createQueryBuilder('A')
+            ->select('count(A.id)')
+            ->where('A.course = :course')
+            ->andWhere('A.day >= :start')
+            ->andWhere('A.day <= :end')
+            ->getQuery();
+
+        $query->setParameters([
+            'course' => $course,
+            'start' => $course->start(),
+            'end' => $course->end(),
+        ]);
+
+        return $query->getSingleScalarResult();
+    }
 }

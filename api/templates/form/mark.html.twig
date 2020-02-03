@@ -51,6 +51,7 @@
 {% block term_definition_widget %}
     {{ form_row(form.courseId) }}
     {{ form_row(form.termName) }}
+    {{ form_row(form.uniqId) }}
 
     <div class="row">
         <div class="col-md-1">
@@ -88,6 +89,7 @@
                     var definition = $(this).parents('.form-group').find('.definition-wrapper');
 
                     var courseId = definition.find('[name$="[courseId]"]');
+                    var uniqId = definition.find('[name$="[uniqId]"]');
                     var numOfUnits = definition.find('[name$="[numOfUnits]"]');
                     var termName = definition.find('[name$="[termName]"]');
                     var unitsWeight = definition.find('[name$="[unitsWeight]"]');
@@ -97,6 +99,7 @@
                         url: '{{ admin.generateUrl('marks') }}',
                         data: {
                             'courseId': $(courseId).val(),
+                            'uniqId': $(uniqId).val(),
                             'numOfUnits': $(numOfUnits).val(),
                             'termName': $(termName).val(),
                             'unitsWeight': $(unitsWeight).val()
@@ -275,6 +278,7 @@
                 {{ form_widget(form.delete) }}
             </div>
             {{ form_widget(form.courseId) }}
+            {{ form_widget(form.uniqId) }}
             {{ form_widget(form.termName) }}
             {{ form_widget(form.skill) }}
         </div>
@@ -291,6 +295,7 @@
 
                     var date = definition.find('[name$="[date]"]');
                     var courseId = definition.find('[name$="[courseId]"]');
+                    var uniqId = definition.find('[name$="[uniqId]"]');
                     var termName = definition.find('[name$="[termName]"]');
                     var skill = definition.find('[name$="[skill]"]');
 
@@ -302,6 +307,7 @@
                         data: {
                             'date': $(date).val(),
                             'courseId': $(courseId).val(),
+                            'uniqId': $(uniqId).val(),
                             'termName': $(termName).val(),
                             'skill': $(skill).val(),
                         },

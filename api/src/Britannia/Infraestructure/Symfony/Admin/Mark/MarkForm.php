@@ -29,9 +29,22 @@ final class MarkForm extends AdminForm
 
     public function configure(Course $course)
     {
-        $data = $this->organizeByTermName($course);
+        $this->diagnosticTab($course);
 
-        $otherSkills = $course->otherSkills();
+        $this->termsTabs($course);
+
+        $this->finalTest($course);
+    }
+
+
+    /**
+     * @param Course $course
+     */
+    private function diagnosticTab(Course $course): void
+    {
+        if(!$course->hasDiagnosticTest()){
+            return;
+        }
 
         $this->tab('Prueba de nivel');
         $this->group('Prueba de nivel')
@@ -40,7 +53,15 @@ final class MarkForm extends AdminForm
                 'label' => false,
                 'data' => $course,
             ]);
+    }
 
+    /**
+     * @param Course $course
+     */
+    private function termsTabs(Course $course): void
+    {
+        $data = $this->organizeByTermName($course);
+        $otherSkills = $course->otherSkills();
         foreach ($data as $key => $courseTerm) {
 
             $this->tab($courseTerm->name());
@@ -70,7 +91,16 @@ final class MarkForm extends AdminForm
                     ]);
             }
         }
+    }
 
+    /**
+     * @param Course $course
+     */
+    private function finalTest(Course $course): void
+    {
+        if(!$course->hasFinalTest()){
+            return;
+        }
 
         $this->tab('Examen final');
         $this->group('Examen final')
@@ -79,7 +109,6 @@ final class MarkForm extends AdminForm
                 'label' => false,
                 'data' => $course,
             ]);
-
     }
 
     /**
@@ -99,6 +128,4 @@ final class MarkForm extends AdminForm
 
         return $list;
     }
-
-
 }

@@ -44,4 +44,6 @@ interface LessonRepositoryInterface
 
     public function countByTerm(Term $term): int ;
 
+    public function countByCourse(Course $course): int ;
+
 }

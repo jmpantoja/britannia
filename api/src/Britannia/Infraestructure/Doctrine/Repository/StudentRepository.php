@@ -4,6 +4,7 @@ namespace Britannia\Infraestructure\Doctrine\Repository;
 
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Repository\StudentRepositoryInterface;
+use Carbon\CarbonImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -28,5 +29,18 @@ class StudentRepository extends ServiceEntityRepository implements StudentReposi
             ->getQuery();
 
         return $query->execute();
+    }
+
+    public function findByBirthDay(CarbonImmutable $day): array
+    {
+        $query = $this->createQueryBuilder('A')
+            ->where('A.birthMonth = :month')
+            ->andWhere('DAY(A.birthDate) = :day')
+            ->getQuery();
+
+        return $query->execute([
+            'day' => $day->get('day'),
+            'month' => $day->get('month'),
+        ]);
     }
 }

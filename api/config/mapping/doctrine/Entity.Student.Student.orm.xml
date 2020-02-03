@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                  xmlns:gedmo="http://gediminasm.org/schemas/orm/doctrine-extensions-mapping"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
 
@@ -36,13 +35,15 @@
 
         <field name="birthMonth" column="birth_month" type="integer" nullable="true"/>
 
+        <field name="age" column="age" type="positive_integer" nullable="true"/>
+
         <field name="emails" column="emails" type="email_list"/>
 
         <embedded name="address" class="PlanB\DDD\Domain\VO\PostalAddress" use-column-prefix="false"/>
 
         <field name="phoneNumbers" column="phone_numbers" type="phone_number_list"/>
 
-        <field name="freeEnrollment" type="boolean" />
+        <field name="freeEnrollment" type="boolean"/>
 
         <many-to-many field="relatives" target-entity="Student">
             <cascade>

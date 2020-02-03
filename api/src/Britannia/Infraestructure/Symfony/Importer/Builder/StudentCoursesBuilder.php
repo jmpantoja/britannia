@@ -19,9 +19,7 @@ use Britannia\Domain\Entity\Course\CourseList;
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Service\Assessment\AssessmentGenerator;
 use Britannia\Domain\VO\Assessment\AssessmentDefinition;
-use Britannia\Domain\VO\Assessment\SetOfSkills;
 use Britannia\Infraestructure\Symfony\Importer\Resume;
-use PlanB\DDD\Domain\VO\Percent;
 
 class StudentCoursesBuilder extends BuilderAbstract
 {
@@ -37,10 +35,7 @@ class StudentCoursesBuilder extends BuilderAbstract
      * @var Course[]
      */
     private $courses = [];
-    /**
-     * @var AssessmentDefinition
-     */
-    private AssessmentDefinition $definition;
+
     /**
      * @var AssessmentGenerator
      */
@@ -86,7 +81,7 @@ class StudentCoursesBuilder extends BuilderAbstract
 
     public function withGenerator(AssessmentGenerator $assessmentGenerator): self
     {
-        $this->definition = AssessmentDefinition::make(SetOfSkills::SET_OF_SIX(), Percent::make(30));
+        //   $this->definition = AssessmentDefinition::make(SetOfSkills::SET_OF_SIX(), Percent::make(30));
         $this->assessmentGenerator = $assessmentGenerator;
         return $this;
     }
@@ -99,11 +94,22 @@ class StudentCoursesBuilder extends BuilderAbstract
         }
 
         foreach ($this->courses as $course) {
+            $definition = $this->getDefinition($course);
+
             $course->addStudent($this->student);
-            $course->changeAssessmentDefinition($this->definition, $this->assessmentGenerator);
+            $course->changeAssessmentDefinition($definition, $this->assessmentGenerator);
         }
 
         return $this->student;
+    }
+
+    private function getDefinition(Course $course): AssessmentDefinition
+    {
+        if ($course->isAdult()) {
+            return AssessmentDefinition::defaultForAdults();
+        }
+
+        return AssessmentDefinition::defaultForShool();
     }
 
 

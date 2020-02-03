@@ -229,6 +229,7 @@ table.term-single {
     margin: 0.8em;
     display: inline-block;
     font-size: 1em;
+    width: 2.6em;
 }
 
 .label-round:empty {

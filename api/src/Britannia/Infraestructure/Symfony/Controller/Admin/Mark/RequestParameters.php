@@ -113,4 +113,9 @@ final class RequestParameters
         ]);
     }
 
+    public function uniqId(): string
+    {
+        return $this->request->get('uniqId');
+    }
+
 }

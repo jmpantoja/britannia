@@ -16,7 +16,7 @@ namespace Britannia\Domain\Service\Report;
 
 use Britannia\Domain\Entity\Assessment\Term;
 
-final class CourseTermMarks extends Report
+final class CourseTermMarks  implements HtmlBasedPdfInterface
 {
     /**
      * @var array
@@ -79,4 +79,5 @@ final class CourseTermMarks extends Report
     {
         return $this->title;
     }
+
 }

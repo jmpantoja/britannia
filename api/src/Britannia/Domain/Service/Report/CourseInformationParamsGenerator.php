@@ -34,12 +34,13 @@ final class CourseInformationParamsGenerator
         $this->breakdown = $breakdown;
     }
 
-    public function generate(Course $course, ?StudentDiscount $discount): array
+    public function generate(Course $course, StudentDiscount $discount = null): array
     {
         $monthlyPayments = $this->breakdown->calculeMonthlyPayments($course, $discount);
 
         return [
             'course' => $course,
+            'startDate' => $discount->startDate(),
             'reserve' => $this->calculeReserve($course, $discount, $monthlyPayments),
             'limits' => $this->calculeLimits($discount, $course),
             'monthly' => $this->calculeMonthly($monthlyPayments),

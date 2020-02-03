@@ -15,6 +15,7 @@ namespace Britannia\Domain\Entity\Student;
 
 
 use Britannia\Domain\Entity\Course\Course;
+use Britannia\Domain\VO\Assessment\Mark;
 use Britannia\Domain\VO\Assessment\MarkReport;
 use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\Behaviour\Comparable;
@@ -111,6 +112,17 @@ class StudentCourse implements Comparable
         return $this;
     }
 
+    public function marks(): MarkReport
+    {
+        return $this->course->marksByStudent($this->student);
+    }
+
+
+    public function final(): Mark
+    {
+        return  $this->marks()->average($this->course->skills());
+    }
+
 
     public function compareTo(object $other): int
     {
@@ -123,4 +135,5 @@ class StudentCourse implements Comparable
         $this->assertThatCanBeCompared($other);
         return $this->student->equals($other->student) && $this->course->equals($other->course);
     }
+
 }

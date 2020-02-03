@@ -23,6 +23,7 @@ use PlanB\DDDBundle\Symfony\Form\Type\AbstractCompoundType;
 use Sonata\Form\Type\DatePickerType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -37,39 +38,46 @@ class OtherSkillDefinitionType extends AbstractCompoundType
 
         $addUrl = null;
         $removeUrl = null;
+        $uniqId = null;
 
         if ($options['admin'] instanceof MarkAdmin) {
             $addUrl = $options['admin']->generateUrl('add-skill');
             $removeUrl = $options['admin']->generateUrl('remove-skill');
+            $uniqId = $options['admin']->getUniqid();
         }
 
-        $builder->add('courseId', HiddenType::class, [
-            'data' => $courseTerm->courseId()
+        $builder
+            ->add('courseId', HiddenType::class, [
+                'data' => $courseTerm->courseId()
 
-        ])->add('termName', HiddenType::class, [
-            'data' => $courseTerm->termName()
+            ])
+            ->add('uniqId', HiddenType::class, [
+                'data' => $uniqId
+            ])
+            ->add('termName', HiddenType::class, [
+                'data' => $courseTerm->termName()
 
-        ])->add('skill', HiddenType::class, [
-            'data' => $options['skill']
+            ])->add('skill', HiddenType::class, [
+                'data' => $options['skill']
 
-        ])->add('date', DatePickerType::class, [
-            'label' => 'Fecha',
-            'data' => CarbonImmutable::today()
+            ])->add('date', DatePickerType::class, [
+                'label' => 'Fecha',
+                'data' => CarbonImmutable::today()
 
-        ])->add('add', ButtonType::class, [
-            'label' => 'Nuevo examen',
-            'attr' => [
-                'class' => 'btn btn-primary',
-                'value' => $addUrl
-            ]
+            ])->add('add', ButtonType::class, [
+                'label' => 'Nuevo examen',
+                'attr' => [
+                    'class' => 'btn btn-primary',
+                    'value' => $addUrl
+                ]
 
-        ])->add('delete', ButtonType::class, [
-            'label' => 'Borrar examen',
-            'attr' => [
-                'class' => 'btn btn-link delete',
-                'value' => $removeUrl
-            ]
-        ]);
+            ])->add('delete', ButtonType::class, [
+                'label' => 'Borrar examen',
+                'attr' => [
+                    'class' => 'btn btn-link delete',
+                    'value' => $removeUrl
+                ]
+            ]);
     }
 
     public function customOptions(OptionsResolver $resolver)

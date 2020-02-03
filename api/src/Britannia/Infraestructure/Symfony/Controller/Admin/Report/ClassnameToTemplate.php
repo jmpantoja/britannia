@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Controller\Admin\Report;
 
 
+use Britannia\Domain\Service\Report\FormBasedPdfInteface;
 use Britannia\Domain\Service\Report\ReportInterface;
 use Zend\Filter\Word\CamelCaseToSeparator;
 
@@ -23,6 +24,10 @@ final class ClassnameToTemplate
      * @var string
      */
     private $className;
+    /**
+     * @var string
+     */
+    private string $extension;
 
     public static function make(ReportInterface $report): self
     {
@@ -35,6 +40,11 @@ final class ClassnameToTemplate
         $fqn = get_class($report);
         $pieces = explode('\\', $fqn);
         $this->className = array_pop($pieces);
+
+        $this->extension = 'html.twig';
+        if ($report instanceof FormBasedPdfInteface) {
+            $this->extension = 'pdf';
+        }
     }
 
     /**
@@ -45,6 +55,6 @@ final class ClassnameToTemplate
         $filter = new CamelCaseToSeparator('_');
         $className = $filter->filter($this->className);
 
-        return sprintf('admin/report/%s.html.twig', strtolower($className));
+        return sprintf('admin/report/%s.%s', strtolower($className), $this->extension);
     }
 }

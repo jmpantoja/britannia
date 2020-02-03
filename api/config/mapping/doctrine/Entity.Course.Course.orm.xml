@@ -43,6 +43,9 @@
 
         <field name="numOfTerms" type="integer" nullable="true"></field>
 
+        <field name="diagnosticTest" type="boolean" nullable="true"></field>
+        <field name="finalTest" type="boolean" nullable="true"></field>
+
         <field name="createdAt" type="datetime_immutable" nullable="true"></field>
 
         <field name="updatedAt" type="datetime_immutable" nullable="true"></field>

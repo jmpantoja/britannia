@@ -18,6 +18,7 @@ use Britannia\Domain\VO\Discount\DiscountBuilder;
 use Britannia\Domain\VO\Student\Job\JobStatus;
 use Carbon\CarbonImmutable;
 use DateTimeInterface;
+use PlanB\DDD\Domain\VO\Price;
 
 class StudentDiscount
 {
@@ -39,30 +40,57 @@ class StudentDiscount
      * @var CarbonImmutable|null
      */
     private $startDate;
+    /**
+     * @var Price|null
+     */
+    private ?Price $firstMonthPrice;
+    /**
+     * @var Price|null
+     */
+    private ?Price $lastMonthPrice;
 
-    private function __construct(?FamilyOrder $familyOrder, ?JobStatus $jobStatus, ?CarbonImmutable $startDate, bool $hasFreeEnrollment)
+    private function __construct(?FamilyOrder $familyOrder,
+                                 ?JobStatus $jobStatus,
+                                 ?CarbonImmutable $startDate,
+                                 bool $hasFreeEnrollment,
+                                 ?Price $firstMonthPrice,
+                                 ?Price $lastMonthPrice
+    )
     {
         $this->familyOrder = $familyOrder ?? FamilyOrder::UPPER();
         $this->jobStatus = $jobStatus;
         $this->startDate = $startDate;
         $this->hasFreeEnrollment = $hasFreeEnrollment;
+        $this->firstMonthPrice = $firstMonthPrice;
+        $this->lastMonthPrice = $lastMonthPrice;
     }
 
     public static function byDefault(): self
     {
-        $familyOrder = FamilyOrder::UPPER();
-
-        return static::make($familyOrder);
+        return static::make(null);
     }
 
-    public static function make(?FamilyOrder $familyOrder, ?JobStatus $jobStatus = null, ?DateTimeInterface $startDate = null, bool $hasFreeEnrollment = false): self
+    public static function byStartDate(CarbonImmutable $date): self
+    {
+        return static::make(null, null, $date);
+    }
+
+    public static function make(?FamilyOrder $familyOrder,
+                                ?JobStatus $jobStatus = null,
+                                ?DateTimeInterface $startDate = null,
+                                bool $hasFreeEnrollment = false,
+                                ?Price $firstMonthPrice = null,
+                                ?Price $lastMonthPrice = null
+    ): self
     {
         $date = null;
         if ($startDate instanceof DateTimeInterface) {
             $date = CarbonImmutable::instance($startDate);
         }
 
-        return new self($familyOrder, $jobStatus, $date, $hasFreeEnrollment);
+        $familyOrder ??= FamilyOrder::UPPER();
+
+        return new self($familyOrder, $jobStatus, $date, $hasFreeEnrollment, $firstMonthPrice, $lastMonthPrice);
     }
 
     /**
@@ -104,5 +132,22 @@ class StudentDiscount
     {
         return $this->hasFreeEnrollment;
     }
+
+    /**
+     * @return Price|null
+     */
+    public function firstMonthPrice(): ?Price
+    {
+        return $this->firstMonthPrice;
+    }
+
+    /**
+     * @return Price|null
+     */
+    public function lastMonthPrice(): ?Price
+    {
+        return $this->lastMonthPrice;
+    }
+
 
 }

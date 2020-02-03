@@ -23,6 +23,7 @@ use PlanB\DDDBundle\Symfony\Form\Type\AbstractCompoundType;
 use PlanB\DDDBundle\Symfony\Form\Type\PercentageType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -33,10 +34,15 @@ final class TermDefinitionType extends AbstractCompoundType
 
     public function customForm(FormBuilderInterface $builder, array $options)
     {
+        $uniqId = $this->getUniqId($options);
+
         /** @var CourseTerm $courseTerm */
         $courseTerm = $options['data'];
 
         $unitsWeight = $courseTerm->unitsWeight();
+
+
+
 
         $builder->add('numOfUnits', NumberType::class, [
             'html5' => true,
@@ -52,6 +58,8 @@ final class TermDefinitionType extends AbstractCompoundType
         ])->add('termName', HiddenType::class, [
             'mapped' => false,
             'data' => $courseTerm->termName()
+        ])->add('uniqId', HiddenType::class, [
+            'data' => $uniqId
         ])->add('unitsWeight', PercentageType::class, [
             'label' => '% unidades',
             'data' => $unitsWeight
@@ -97,5 +105,20 @@ final class TermDefinitionType extends AbstractCompoundType
             $data['unitsWeight'],
             $numOfUnits
         ]);
+    }
+
+    /**
+     * @param array $options
+     * @return string
+     */
+    private function getUniqId(array $options): ?string
+    {
+        /** @var MarkAdmin $admin */
+        $admin = $options['admin'];
+        if(!($admin instanceof MarkAdmin)){
+            return null;
+        }
+
+        return $admin->getUniqid();
     }
 }

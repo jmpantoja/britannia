@@ -62,7 +62,6 @@ class CalendarService
             return;
         }
         $this->persister->persist(Calendar::fromDate($dateTime));
-        dump($dateTime);
     }
 
 }

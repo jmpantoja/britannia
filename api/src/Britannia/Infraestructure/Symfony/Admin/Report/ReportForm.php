@@ -39,7 +39,8 @@ final class ReportForm extends AdminForm
             'required' => false,
             'label' => false,
             'mapped' => false,
-            'data' => $course
+            'data' => $course,
+            'admin' => $this->admin()
         ]);
 
         $this->add('tab', HiddenType::class, [

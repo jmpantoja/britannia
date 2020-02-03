@@ -15,6 +15,7 @@ namespace Britannia\Domain\Service\Payment;
 
 
 use Britannia\Domain\Entity\Course\Course;
+use Britannia\Domain\Service\Payment\Discount\BoundariesCalculator;
 use Britannia\Domain\Service\Payment\Discount\EnrollmentDiscount;
 use Britannia\Domain\Service\Payment\Discount\MaterialDiscount;
 use Britannia\Domain\Service\Payment\Discount\MonthlyDiscount;
@@ -36,16 +37,24 @@ class PaymentBreakdownService
      * @var MonthlyDiscount
      */
     private $monthly;
+    /**
+     * @var BoundariesCalculator
+     */
+    private $boundariesCalculator;
 
     public function __construct(
         EnrollmentDiscount $enrollment,
         MaterialDiscount $material,
-        MonthlyDiscount $monthly
+        MonthlyDiscount $monthly,
+        BoundariesCalculator $boundariesCalculator
+
     )
     {
         $this->enrollment = $enrollment;
         $this->material = $material;
         $this->monthly = $monthly;
+
+        $this->boundariesCalculator = $boundariesCalculator;
     }
 
 
@@ -78,40 +87,19 @@ class PaymentBreakdownService
      */
     public function calculeMonthlyPayments(Course $course, StudentDiscount $discount): Collection
     {
+
         $monthlyPayments = [];
 
-        $date = $this->calculeStartDate($course, $discount);
+        $date = $this->boundariesCalculator->startDay($course, $discount);
         $endDate = $course->end();
 
         while ($date->lessThan($endDate)) {
             $key = $date->format('M-Y');
             $monthlyPayments[$key] = $this->monthly->calcule($course, $discount, $date);
-
             $date = $date->modify('first day of next month');
         }
 
         return collect($monthlyPayments);
-    }
-
-    /**
-     * @param Course $course
-     * @param StudentDiscount $discount
-     * @return \Carbon\CarbonImmutable|null
-     */
-    public function calculeStartDate(Course $course, StudentDiscount $discount)
-    {
-        $discountDate = $discount->startDate();
-        $courseDate = $course->start();
-
-        if (is_null($discountDate)) {
-            return $courseDate;
-        }
-
-        if ($courseDate->greaterThan($discountDate)) {
-            return $courseDate;
-        }
-
-        return $discountDate;
     }
 
 }

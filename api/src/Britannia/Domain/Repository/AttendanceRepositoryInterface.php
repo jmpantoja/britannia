@@ -36,5 +36,7 @@ interface AttendanceRepositoryInterface
      */
     public function findByStudent(Student $student, Course $course, CarbonImmutable $date, int $limit = null): array;
 
-    public function countByTerm(Term $term): int ;
+    public function countByTerm(Term $term): int;
+
+    public function countByCourse(Course $course, Student $student): int;
 }

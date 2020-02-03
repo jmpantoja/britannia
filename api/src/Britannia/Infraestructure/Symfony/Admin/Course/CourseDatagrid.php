@@ -29,14 +29,6 @@ final class CourseDatagrid extends AdminDataGrid
         return $this;
     }
 
-    private function addId(): self
-    {
-        $this->addIdentifier('name', 'string', [
-            'template' => 'admin/course/course_list_field.html.twig',
-            'label' => 'Cursos'
-        ]);
-        return $this;
-    }
 
     private function addStatus(): self
     {
@@ -50,11 +42,21 @@ final class CourseDatagrid extends AdminDataGrid
         return $this;
     }
 
+    private function addId(): self
+    {
+        $this->addIdentifier('name', 'string', [
+            'template' => 'admin/course/course_list_field.html.twig',
+            'label' => 'Cursos'
+        ]);
+        return $this;
+    }
+
+
     private function addActions(): self
     {
         $this->add('_action', null, [
             'label' => false,
-            'header_style' => 'width:210px; text-align: center',
+            'header_style' => 'width:210px;',
             'row_align' => 'right',
             'actions' => [
                 'report-info' => [

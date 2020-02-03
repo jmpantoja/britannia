@@ -117,6 +117,10 @@
         <source>year_average</source>
         <target state="translated">Academic year average mark</target>
       </trans-unit>
+      <trans-unit id="WZ93A1R" resname="term">
+        <source>term</source>
+        <target state="translated">Term</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

@@ -23,11 +23,55 @@
             <div class="col-md-12">
                 <h2>Incorporación</h2>
             </div>
-            <div class="col-md-6">
+
+            <div class="col-md-2">
                 {{ form_row(form.startDate) }}
+            </div>
+            <div class="col-md-2 price start_price">
+                {{ form_row(form.firstMonth) }}
+                <span class="info">{{ first_month_description }}</span>
+            </div>
+            <div class="col-md-2 price end_price">
+                {{ form_row(form.lastMonth) }}
+                <span class="info">{{ last_month_description }}</span>
             </div>
         </div>
     </div>
+
+    <script type="application/javascript">
+        $(function () {
+            let date = $('#dp_{{ form.startDate.vars.id }}');
+            let update = function () {
+
+                let first_month = $('#{{ form.firstMonth.vars.id }}');
+                let first_month_desc = $('.start_price .info');
+
+                let last_month = $('#{{ form.lastMonth.vars.id }}');
+                let last_month_desc = $('.end_price .info');
+
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ url }}',
+                    data: {
+                        'startDate': $(this).find('input').val()
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        $(first_month).val(data.first_month_price)
+                        $(first_month_desc).text(data.first_month_description)
+
+                        $(last_month).val(data.last_month_price)
+                        $(last_month_desc).text(data.last_month_description)
+                    }
+                });
+            }
+
+            $(date).change(update);
+        })
+
+
+    </script>
+
 {% endblock %}
 
 {% block  course_marks_widget %}

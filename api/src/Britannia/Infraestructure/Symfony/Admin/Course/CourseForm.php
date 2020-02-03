@@ -55,7 +55,7 @@ final class CourseForm extends AdminForm
         $this->calendarTab('Calendario');
         $this->priceTab('Precio');
         $this->studentsTab('Alumnos y profesores');
-        $this->unitsTab('Destrezas');
+        $this->unitsTab('Evaluación');
 
         return $this;
     }

@@ -32,13 +32,16 @@ final class DownloadFactory
      * @var ZipDownload
      */
     private ZipDownload $zip;
+    /**
+     * @var FileDownload
+     */
+    private FileDownload $download;
 
-    public function __construct(DebugDownload $debug, PdfDownload $pdf, ZipDownload $zip)
+    public function __construct(DebugDownload $debug, FileDownload $download)
     {
 
         $this->debug = $debug;
-        $this->pdf = $pdf;
-        $this->zip = $zip;
+        $this->download = $download;
     }
 
     public function create(ReportList $reportList, bool $debug): Response
@@ -47,11 +50,7 @@ final class DownloadFactory
             return $this->debug->createResponse($reportList);
         }
 
-        if(1 === $reportList->count()){
-            return $this->pdf->createResponse($reportList);
-        }
-
-        return $this->zip->createResponse($reportList);
+        return $this->download->createResponse($reportList);
     }
 
 }

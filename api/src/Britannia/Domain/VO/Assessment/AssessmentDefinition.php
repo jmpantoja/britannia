@@ -30,20 +30,65 @@ class AssessmentDefinition
      * @var int
      */
     private $numOfTerms;
+    /**
+     * @var bool
+     */
+    private bool $diagnostic;
+    /**
+     * @var bool
+     */
+    private bool $final;
 
 
-    private function __construct(SetOfSkills $skills, SkillList $otherSkills, int $numOfTerms)
+    private function __construct(SetOfSkills $skills,
+                                 SkillList $otherSkills,
+                                 int $numOfTerms,
+                                 bool $diagnostic,
+                                 bool $final
+
+    )
     {
         $this->skills = $skills;
         $this->otherSkills = $otherSkills;
         $this->numOfTerms = $numOfTerms;
+        $this->diagnostic = $diagnostic;
+        $this->final = $final;
     }
 
-    public static function make(SetOfSkills $skills, SkillList $otherSkills, int $numOfTerms): self
+    public static function defaultForAdults(): self
     {
-        return new self($skills, $otherSkills, $numOfTerms);
+        return new self(...[
+            SetOfSkills::SET_OF_FOUR(),
+            SkillList::collect(),
+            0,
+            false,
+            true
+        ]);
+    }
+
+    public static function defaultForShool(): self
+    {
+        return new self(...[
+            SetOfSkills::SET_OF_SIX(),
+            SkillList::collect([Skill::IRREGULAR_VERBS(), Skill::ALPHABET()]),
+            0,
+            true,
+            false
+        ]);
+    }
+
+
+    public static function make(SetOfSkills $skills,
+                                SkillList $otherSkills,
+                                int $numOfTerms,
+                                bool $diagnostic,
+                                bool $final
+    ): self
+    {
+        return new self($skills, $otherSkills, $numOfTerms, $diagnostic, $final);
 
     }
+
 
     /**
      * @return SetOfSkills
@@ -77,4 +122,22 @@ class AssessmentDefinition
             ->toArray();
 
     }
+
+    /**
+     * @return bool
+     */
+    public function hasDiagnosticTest(): bool
+    {
+        return $this->diagnostic;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasFinalTest(): bool
+    {
+        return $this->final;
+    }
+
+
 }

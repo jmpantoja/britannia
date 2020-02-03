@@ -161,6 +161,15 @@ abstract class Course implements Comparable
     protected $numOfTerms;
 
     /**
+     * @var bool
+     */
+    private $diagnosticTest;
+    /**
+     * @var bool
+     */
+    private $finalTest;
+
+    /**
      * @var Collection
      */
     private $units;
@@ -179,6 +188,7 @@ abstract class Course implements Comparable
      * @var CarbonImmutable
      */
     private $updatedAt;
+
 
     public static function make(CourseDto $dto): self
     {
@@ -284,6 +294,9 @@ abstract class Course implements Comparable
         $this->otherSkills = $definition->otherSkills();
         $this->numOfTerms = $definition->numOfTerms();
 
+        $this->diagnosticTest = $definition->hasDiagnosticTest();
+        $this->finalTest = $definition->hasFinalTest();
+
         $termList = $generator->generateTerms($this->courseHasStudentList(), $definition);
         $this->setTerms($termList);
 
@@ -306,7 +319,6 @@ abstract class Course implements Comparable
     {
         return $this->termList()
             ->marksByStudent($student);
-
     }
 
     public function setTeachers(StaffList $teachers)
@@ -576,7 +588,13 @@ abstract class Course implements Comparable
 
     public function assessmentDefinition(): AssessmentDefinition
     {
-        return AssessmentDefinition::make($this->skills(), $this->otherSkills(), $this->numOfTerms());
+        return AssessmentDefinition::make(...[
+            $this->skills(),
+            $this->otherSkills(),
+            $this->numOfTerms(),
+            $this->hasDiagnosticTest(),
+            $this->hasFinalTest()
+        ]);
     }
 
     /**
@@ -602,6 +620,22 @@ abstract class Course implements Comparable
     public function numOfTerms(): int
     {
         return $this->numOfTerms ?? 0;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasDiagnosticTest(): bool
+    {
+        return $this->diagnosticTest ?? false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasFinalTest(): bool
+    {
+        return $this->finalTest ?? false;
     }
 
     public function termDefinition(TermName $termName): TermDefinition

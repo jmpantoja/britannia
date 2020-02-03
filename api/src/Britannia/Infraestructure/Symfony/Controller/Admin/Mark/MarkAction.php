@@ -64,11 +64,9 @@ abstract class MarkAction
         $this->twig = $twig;
     }
 
-    public function initialize(string $uniqId, array $formTheme): self
+    public function initialize(array $formTheme): self
     {
-        $this->uniqId = $uniqId;
         $this->formTheme = $formTheme;
-
         return $this;
     }
 
@@ -96,7 +94,8 @@ abstract class MarkAction
      */
     private function createFormView(): FormView
     {
-        $builder = $this->formFactory->createNamedBuilder($this->uniqId, FormType::class);
+        $name = $this->parameters->uniqId();
+        $builder = $this->formFactory->createNamedBuilder($name, FormType::class);
 
         $this->configureForm($builder, $this->parameters);
 

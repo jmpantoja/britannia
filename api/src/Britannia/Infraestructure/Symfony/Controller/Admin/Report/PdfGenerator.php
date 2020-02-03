@@ -14,51 +14,81 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Controller\Admin\Report;
 
 
+use Britannia\Domain\Service\Report\HtmlBasedPdfInterface;
+use Britannia\Domain\Service\Report\ReportInterface;
+use Cocur\Slugify\Slugify;
 use Knp\Snappy\Pdf;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Twig\Environment;
 
 final class PdfGenerator
 {
     /**
      * @var Pdf
      */
-    private Pdf $pdfGenerator;
+    private Pdf $htmlToPdfParser;
+
     /**
-     * @var string
+     * @var Environment
      */
-    private $pathToTempDir;
+    private Environment $twig;
 
-    public function __construct(Pdf $pdfGenerator, ParameterBagInterface $parameterBag)
+    public function __construct(Pdf $htmlToPdfParser, Environment $twig)
     {
-        $this->pdfGenerator = $pdfGenerator;
+        $this->htmlToPdfParser = $htmlToPdfParser;
+        $this->twig = $twig;
 
-        $pathToLogDir = $parameterBag->get('kernel.logs_dir');
-        $this->setTempDir($pathToLogDir);
     }
 
-    private function setTempDir(string $pathToLogDir): self
+    public function create(HtmlBasedPdfInterface $report, string $pathToTempDir): string
     {
-        $format = '%s/tmp/%s';
-        $this->pathToTempDir = sprintf($format, ...[
-            dirname($pathToLogDir),
-            uniqid('reports-')
-        ]);
-        return $this;
+        $output = $this->renderReport($report);
+
+        $fileName = Slugify::create()->slugify($report->title());
+        $pathToFile = sprintf('%s/%s.pdf', $pathToTempDir, $fileName);
+
+        $this->htmlToPdfParser->generateFromHtml($output, $pathToFile, $report->options());
+
+        return $pathToFile;
+
     }
 
     /**
+     * @param ReportInterface $report
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
+    public function renderReport(HtmlBasedPdfInterface $report, array $params = []): string
+    {
+        $template = $this->templateByReport($report);
+        $params = $this->paramsFromReport($report, $params);
+
+
+        return $this->twig->render($template, $params);
+    }
+
+    /**
+     * @param ReportInterface $report
      * @return string
      */
-    public function pathToTempDir(): string
+    private function templateByReport(HtmlBasedPdfInterface $report): string
     {
-        return $this->pathToTempDir;
+        return ClassnameToTemplate::make($report)
+            ->filter();
     }
 
-    public function createTempFile(string $output, string $fileName, array $options): string
+    /**
+     * @param ReportInterface $report
+     * @param bool $debug
+     * @return array
+     */
+    private function paramsFromReport(HtmlBasedPdfInterface $report, array $params): array
     {
-        $pathToFile = sprintf('%s/%s.pdf', $this->pathToTempDir, $fileName);
-        $this->pdfGenerator->generateFromHtml($output, $pathToFile, $options);
-        return $pathToFile;
+        return array_merge([
+            'title' => $report->title(),
+            'assets_base' => 'http://api'
+        ], $report->params(), $params);
     }
 
 

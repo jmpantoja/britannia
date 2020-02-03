@@ -31,9 +31,9 @@ class GenerateCourseInformation implements ReportCommandInterface
     /**
      * GenerateCourseInformation constructor.
      * @param Course $course
-     * @param StudentDiscount|null $discount
+     * @param StudentDiscount $discount
      */
-    protected function __construct(Course $course, ?StudentDiscount $discount)
+    protected function __construct(Course $course, StudentDiscount $discount)
     {
         $this->course = $course;
         $this->discount = $discount;
@@ -60,7 +60,7 @@ class GenerateCourseInformation implements ReportCommandInterface
     /**
      * @return StudentDiscount
      */
-    public function discount(): ?StudentDiscount
+    public function discount(): StudentDiscount
     {
         return $this->discount;
     }

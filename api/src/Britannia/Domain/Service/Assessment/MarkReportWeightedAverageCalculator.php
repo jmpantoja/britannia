@@ -19,7 +19,7 @@ use Britannia\Domain\VO\Assessment\MarkReport;
 use Britannia\Domain\VO\Assessment\SetOfSkills;
 use PlanB\DDD\Domain\VO\Percent;
 
-final class MarkWeightedAverageCalculator
+final class MarkReportWeightedAverageCalculator
 {
 
     /**

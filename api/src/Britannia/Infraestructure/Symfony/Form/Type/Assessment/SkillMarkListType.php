@@ -17,7 +17,6 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Assessment;
 use Britannia\Domain\Entity\Assessment\SkillMark;
 use Britannia\Domain\Entity\Assessment\SkillMarkList;
 use Britannia\Domain\Entity\Assessment\Term;
-use Britannia\Domain\VO\Assessment\Mark;
 use Britannia\Domain\VO\Assessment\Skill;
 use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
@@ -61,7 +60,7 @@ class SkillMarkListType extends AbstractCompoundType
     public function customOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Term::class
+            'data_class' => Term::class,
         ]);
 
         $resolver->setRequired('skill');
@@ -75,11 +74,13 @@ class SkillMarkListType extends AbstractCompoundType
 
     public function customMapping($data)
     {
+
         /** @var Term $term */
         $term = $this->getOption('data');
         $skill = $this->getOption('skill');
 
         unset($data['total']);
+
         $input = [];
         $skill = Skill::byName((string)$skill);
 

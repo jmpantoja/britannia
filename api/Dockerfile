@@ -1,49 +1,49 @@
 # the different stages of this Dockerfile are meant to be built into separate images
 # https://docs.docker.com/compose/compose-file/#target
 
-ARG PHP_VERSION=7.4
+ARG PHP_VERSION=7.4.2
 ARG NGINX_VERSION=1.15
 ARG VARNISH_VERSION=6.0
+ARG VER_PDFTK=2.02
 
-FROM php:${PHP_VERSION}-fpm-alpine AS api_platform_php
+FROM php:${PHP_VERSION}-fpm-buster AS api_platform_php
 
+RUN apt update;
 # persistent / runtime deps
-RUN apk add --no-cache \
-		acl \
-		file \
-		gettext \
+RUN apt -y install \
+#		acl \
+#		file \
+#		gettext \
 		git \
 	;
 
-#paquetes para generear pdfs
-RUN apk add --update --no-cache \
-		libgcc \
-		libstdc++ \
-		libx11 \
-		glib \
-		libxrender \
-		libxext \
-		libintl \
-		ttf-dejavu \
-		ttf-droid \
-		ttf-freefont \
-		ttf-liberation \
-		ttf-ubuntu-font-family \
-		libzip-dev \
-		wkhtmltopdf;
+RUN mkdir -p /usr/share/man/man1
 
-ARG APCU_VERSION=5.1.16
+#paquetes para generear pdfs
+RUN apt update && \
+    apt install -y wget unzip wkhtmltopdf pdftk && \
+    apt clean
+
+
+
+#ADD https://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/pdftk-${PDFTK_VERSION}-src.zip /tmp/
+#RUN unzip /tmp/pdftk-${PDFTK_VERSION}-src.zip -d /tmp && \
+#    sed -i 's/VERSUFF=-4.6/VERSUFF=-5/g' /tmp/pdftk-${PDFTK_VERSION}-dist/pdftk/Makefile.Debian && \
+#    cd /tmp/pdftk-${PDFTK_VERSION}-dist/pdftk && \
+#    make -f Makefile.Debian && \
+#    make -f Makefile.Debian install && \
+#    rm -Rf /tmp/pdftk-*
+
+#ARG APCU_VERSION=5.1.16
 RUN set -eux; \
-	apk add --no-cache --virtual .build-deps \
+	apt -y install \
 		$PHPIZE_DEPS \
-		icu-dev \
-#		libzip-dev \
-#		postgresql-dev \
-		zlib-dev \
+		libicu-dev \
+		libzip-dev  \
+#		icu-dev \
+#		zlib-dev \
 	;
 
-#	docker-php-ext-configure zip --with-libzip; \
-#	docker-php-ext-configure zip; \
 RUN	docker-php-ext-install -j$(nproc) \
 		intl \
 #		pdo_pgsql \
@@ -52,29 +52,34 @@ RUN	docker-php-ext-install -j$(nproc) \
 		pdo_mysql \
 		zip \
 		bcmath \
-	; \
-	pecl install \
-		apcu-${APCU_VERSION} \
-	; \
-	pecl clear-cache;
+	;
+
+#	pecl install \
+#		apcu-${APCU_VERSION} \
+#	; \
+#	pecl clear-cache;
 RUN	docker-php-ext-enable \
-		apcu \
+#		apcu \
 		opcache \
 		mysqli \
-	; \
-	\
-	runDeps="$( \
-		scanelf --needed --nobanner --format '%n#p' --recursive /usr/local/lib/php/extensions \
-			| tr ',' '\n' \
-			| sort -u \
-			| awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
-	)"; \
-	apk add --no-cache --virtual .api-phpexts-rundeps $runDeps; \
-	\
-	apk del .build-deps
+	;
+
+#	\
+#	runDeps="$( \
+#		scanelf --needed --nobanner --format '%n#p' --recursive /usr/local/lib/php/extensions \
+#			| tr ',' '\n' \
+#			| sort -u \
+#			| awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
+#	)"; \
+#	apk add --no-cache --virtual .api-phpexts-rundeps $runDeps; \
+#	\
+#	apk del .build-deps
+
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
 RUN ln -s $PHP_INI_DIR/php.ini-production $PHP_INI_DIR/php.ini
+
 COPY docker/php/conf.d/api-platform.ini $PHP_INI_DIR/conf.d/api-platform.ini
 
 # https://getcomposer.org/doc/03-cli.md#composer-allow-superuser

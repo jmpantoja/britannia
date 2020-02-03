@@ -18,9 +18,5 @@ interface ReportInterface
 {
     public function params(): array;
 
-    public function options(): array;
-
     public function title(): string;
-
-    public function fileName(): string;
 }

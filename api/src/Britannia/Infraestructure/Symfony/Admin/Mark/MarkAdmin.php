@@ -32,8 +32,6 @@ final class MarkAdmin extends AbstractAdmin
         parent::__construct($code, $class, $baseControllerName);
         $this->adminTools = $adminTools;
         $this->dataGridValues();
-
-        ini_set("memory_limit","512M");
     }
 
     /**

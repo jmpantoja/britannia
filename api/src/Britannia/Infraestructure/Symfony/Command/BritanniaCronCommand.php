@@ -4,6 +4,7 @@ namespace Britannia\Infraestructure\Symfony\Command;
 
 use Britannia\Application\UseCase\Cron\UpdateCalendar;
 use Britannia\Application\UseCase\Cron\UpdateCourseStatus;
+use Britannia\Application\UseCase\Cron\UpdateStudentAge;
 use League\Tactician\CommandBus;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -35,7 +36,8 @@ class BritanniaCronCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        //$this->commandBus->handle(UpdateCourseStatus::make());
+        $this->commandBus->handle(UpdateStudentAge::make());
+        $this->commandBus->handle(UpdateCourseStatus::make());
         $this->commandBus->handle(UpdateCalendar::make());
     }
 }

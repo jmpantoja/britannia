@@ -18,10 +18,6 @@ use Sonata\AdminBundle\Admin\AdminInterface;
 final class ActionsRegistry
 {
     /**
-     * @var string
-     */
-    private string $uniqId;
-    /**
      * @var array
      */
     private array $formTheme;
@@ -52,20 +48,18 @@ final class ActionsRegistry
 
     public function initialize(AdminInterface $admin): self
     {
-        $this->uniqId = $admin->getUniqid();
         $this->formTheme = $admin->getFormTheme();
-
         return $this;
     }
 
     public function updateMarksAction(): UpdateMarksAction
     {
-        return $this->updateMarksAction->initialize($this->uniqId, $this->formTheme);
+        return $this->updateMarksAction->initialize($this->formTheme);
     }
 
     public function addSkillAction()
     {
-        return $this->addSkillAction->initialize($this->uniqId, $this->formTheme);
+        return $this->addSkillAction->initialize($this->formTheme);
     }
 
     /**
@@ -73,7 +67,7 @@ final class ActionsRegistry
      */
     public function removeSkillAction(): RemoveSkillAction
     {
-        return $this->removeSkillAction->initialize($this->uniqId, $this->formTheme);
+        return $this->removeSkillAction->initialize($this->formTheme);
     }
 
 

@@ -20,26 +20,36 @@ use Britannia\Domain\VO\Course\Discount\CourseDiscount;
 use Britannia\Domain\VO\Discount\StudentDiscount;
 use PlanB\DDD\Domain\VO\Percent;
 
-class EnrollmentDiscount extends DiscountCalculator
+class EnrollmentDiscount
 {
+    /**
+     * @var CourseDiscountCalculator
+     */
+    private CourseDiscountCalculator $discountCalculator;
+
+    public function __construct(CourseDiscountCalculator $discountCalculator)
+    {
+
+        $this->discountCalculator = $discountCalculator;
+    }
+
     public function calcule(Course $course, StudentDiscount $studentDiscount): Concept
     {
-        $courseDiscount = $this->getCourseDiscount($course, $studentDiscount->jobStatus());
-
+        $courseDiscount = $this->discountCalculator->calculate($course, $studentDiscount->jobStatus());
         $price = $course->enrollmentPayment();
         $percent = $this->calculePercent($courseDiscount, $studentDiscount);
 
         return Concept::jobStatus($price, $percent);
     }
 
-    private function calculePercent(CourseDiscount $courseDiscount, StudentDiscount $discount): Percent
+    private function calculePercent(CourseDiscount $courseDiscount, StudentDiscount $studentDiscount): Percent
     {
 
         if ($courseDiscount->isFreeEnrollment()) {
             return Percent::make(100);
         }
 
-        if ($discount->hasFreeEnrollment()) {
+        if ($studentDiscount->hasFreeEnrollment()) {
             return Percent::make(100);
         }
 

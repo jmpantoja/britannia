@@ -21,7 +21,7 @@ use PlanB\DDDBundle\ApiPlattform\DataPersister;
 class UpdateCalendarUseCase implements UseCaseInterface
 {
     private const NUM_OF_FUTURE_YEARS = 5;
-    private const FIRST_YEAR = 2009;
+    private const FIRST_YEAR = 2006;
     /**
      * @var CalendarService
      */

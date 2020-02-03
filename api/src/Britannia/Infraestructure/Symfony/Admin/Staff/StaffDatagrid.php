@@ -23,11 +23,17 @@ final class StaffDatagrid extends AdminDataGrid
 
         $this->addIdentifier('id', 'string', [
             'template' => 'admin/staff/staff_resume_column.html.twig',
-            'label' => 'Alumnos'
+            'label' => 'Empleado'
         ]);
 
+//        $this->add('courses', null, [
+//            'admin_code' => 'admin.course'
+//           // 'header_style' => 'width:150px',
+//            //'row_align' => 'left'
+//        ]);
+
         $this->add('userName', null, [
-            'header_style' => 'width:300px',
+            'header_style' => 'width:150px',
             'row_align' => 'left'
         ]);
     }

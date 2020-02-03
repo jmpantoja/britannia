@@ -23,6 +23,7 @@ final class MarkQuery extends AdminQuery
     protected function configure(QueryBuilder $builder, string $alias = 'o'): void
     {
         $builder->where('o.numOfStudents > 0')
+            ->where('o.numOfStudents > 0 AND (o.diagnosticTest = true OR o.finalTest = true OR o.numOfTerms > 0)')
             ->orderBy('o.timeTable.end', 'DESC');
     }
 }

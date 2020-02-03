@@ -17,7 +17,7 @@ namespace Britannia\Domain\Service\Report;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\VO\Discount\StudentDiscount;
 
-final class CourseInformation extends Report
+final class CourseInformation implements HtmlBasedPdfInterface
 {
     /**
      * @var array
@@ -44,7 +44,7 @@ final class CourseInformation extends Report
         ];
     }
 
-    public static function make(Course $course, ?StudentDiscount $discount, CourseInformationParamsGenerator $generator)
+    public static function make(Course $course, StudentDiscount $discount, CourseInformationParamsGenerator $generator)
     {
         $params = $generator->generate($course, $discount);
         return new self($params, $course->name());

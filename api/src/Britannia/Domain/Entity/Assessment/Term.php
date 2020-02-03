@@ -17,7 +17,7 @@ namespace Britannia\Domain\Entity\Assessment;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Entity\Student\StudentCourse;
-use Britannia\Domain\Service\Assessment\MarkWeightedAverageCalculator;
+use Britannia\Domain\Service\Assessment\MarkReportWeightedAverageCalculator;
 use Britannia\Domain\VO\Assessment\Mark;
 use Britannia\Domain\VO\Assessment\MarkReport;
 use Britannia\Domain\VO\Assessment\SetOfSkills;
@@ -206,7 +206,7 @@ final class Term implements Comparable
 
         $average = $this->unitList()->average($skills);
 
-        $total = MarkWeightedAverageCalculator::make($average, $exam, $this->unitsWeight())
+        $total = MarkReportWeightedAverageCalculator::make($average, $exam, $this->unitsWeight())
             ->calcule($skills);
 
         $this->total = $total;

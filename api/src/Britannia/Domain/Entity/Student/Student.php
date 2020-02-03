@@ -22,6 +22,7 @@ use PlanB\DDD\Domain\Model\Traits\AggregateRootTrait;
 use PlanB\DDD\Domain\VO\Email;
 use PlanB\DDD\Domain\VO\FullName;
 use PlanB\DDD\Domain\VO\PhoneNumber;
+use PlanB\DDD\Domain\VO\PositiveInteger;
 use PlanB\DDD\Domain\VO\PostalAddress;
 
 
@@ -60,6 +61,9 @@ abstract class Student implements Comparable
      * @var CarbonImmutable
      */
     private $birthDate;
+
+    /** @var PositiveInteger */
+    private $age;
 
     /**
      * @var Email[]
@@ -292,6 +296,26 @@ abstract class Student implements Comparable
 
         $this->birthDate = CarbonImmutable::make($birthDate);
         $this->birthMonth = $this->birthDate->get('month');
+        $this->updateAge();
+
+        return $this;
+    }
+
+    public function updateAge(): self
+    {
+        if (!($this->birthDate instanceof DateTimeInterface)) {
+            $this->age = null;
+            return $this;
+        }
+
+        $today = CarbonImmutable::today();
+        $age = $this->birthDate->diffInYears($today);
+
+        if ($age < 1) {
+            $this->age = 0;
+            return $this;
+        }
+        $this->age = PositiveInteger::make($age);
 
         return $this;
     }
@@ -358,6 +382,11 @@ abstract class Student implements Comparable
     public function birthDate(): ?CarbonImmutable
     {
         return $this->birthDate;
+    }
+
+    public function age(): ?PositiveInteger
+    {
+        return $this->age;
     }
 
     /**

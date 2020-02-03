@@ -23,10 +23,35 @@ final class SkillMarkService
 {
     public function skills(Term $term)
     {
-        return [
-            SkillMark::make($term, Skill::IRREGULAR_VERBS(), Mark::make(4.5)),
-            SkillMark::make($term, Skill::ALPHABET(), Mark::make(8.5)),
-            SkillMark::make($term, Skill::DAYS_OF_THE_WEEK(), Mark::make(3.2)),
-        ];
+
+        $skills = $term->skills();
+        $temp = [];
+
+        /** @var SkillMark $skillMark */
+        foreach ($skills as $skillMark) {
+            $key = $skillMark->skill()->getName();
+
+            $temp[$key] ??= [];
+            $temp[$key][] = $skillMark->mark();
+        }
+
+        $data = [];
+        foreach ($temp as $name => $marks) {
+            $data[] = SkillMark::make($term, Skill::byName($name), $this->average(...$marks));
+        }
+
+        return $data;
+
     }
+
+    protected function average(Mark ...$marks): Mark
+    {
+        $average = collect($marks)
+            ->map(fn(Mark $mark) => $mark->toFloat())
+            ->average();
+
+        return Mark::make($average);
+    }
+
+
 }

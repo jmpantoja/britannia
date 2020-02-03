@@ -1,14 +1,22 @@
 {% extends get_admin_template('base_list_field', admin.code) %}
 
-{% use 'admin/core/status_column.html.twig' %}
+{% import 'admin/core/status_column.html.twig' as status %}
 
 {% block field %}
-    {% if object.status.pending %}
-        {{ block('pending') }}
-    {% elseif object.status.active %}
-        {{ block('active') }}
+    {% if object.adult %}
+        {% set label = 'A' %}
+    {% elseif object.school %}
+        {% set label = 'E' %}
     {% else %}
-        {{ block('finalized') }}
+        {% set label = 'P' %}
+    {% endif %}
+
+    {% if object.status.pending %}
+        {{ status.pending(label) }}
+    {% elseif object.status.active %}
+        {{ status.active(label) }}
+    {% else %}
+        {{ status.finalized(label) }}
     {% endif %}
 {% endblock %}
 

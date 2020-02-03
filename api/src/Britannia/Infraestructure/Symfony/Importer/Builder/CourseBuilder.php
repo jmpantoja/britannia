@@ -25,7 +25,6 @@ use Britannia\Domain\Entity\Course\SchoolDto;
 use Britannia\Domain\Service\Assessment\AssessmentGenerator;
 use Britannia\Domain\Service\Course\LessonGenerator;
 use Britannia\Domain\VO\Assessment\AssessmentDefinition;
-use Britannia\Domain\VO\Assessment\SetOfSkills;
 use Britannia\Domain\VO\Course\Intensive\Intensive;
 use Britannia\Domain\VO\Course\TimeTable\Schedule;
 use Britannia\Domain\VO\Course\TimeTable\TimeTable;
@@ -33,7 +32,6 @@ use Britannia\Infraestructure\Symfony\Importer\Builder\Traits\CourseMaker;
 use Britannia\Infraestructure\Symfony\Importer\Maker\FullNameMaker;
 use Britannia\Infraestructure\Symfony\Importer\Resume;
 use Carbon\CarbonImmutable;
-use PlanB\DDD\Domain\VO\Percent;
 use PlanB\DDD\Domain\VO\PositiveInteger;
 use PlanB\DDD\Domain\VO\Price;
 
@@ -201,18 +199,21 @@ class CourseBuilder extends BuilderAbstract
             'timeTable' => $this->timeTable,
             'lessonCreator' => $this->lessonGenerator,
             'assessmentGenerator' => $this->assessmentGenerator,
-            'assessmentDefinition' => AssessmentDefinition::make(SetOfSkills::SET_OF_SIX(), Percent::make(30))
+
         ];
 
         if ($this->isAdult === true) {
+            $input['assessmentDefinition'] = AssessmentDefinition::defaultForAdults();
+
             return $this->buildAdult($input);
         }
 
-
-        if(strpos($this->name, 'KIDS') !== false){
+        if (strpos($this->name, 'KIDS') !== false) {
+            $input['assessmentDefinition'] = AssessmentDefinition::defaultForShool();
             return $this->buildPreSchool($input);
         }
 
+        $input['assessmentDefinition'] = AssessmentDefinition::defaultForShool();
         return $this->buildSchool($input);
 
     }

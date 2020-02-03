@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Britannia\Domain\Repository;
 
 
+use Carbon\CarbonImmutable;
+
 /**
  * @method Student|null find($id, $lockMode = null, $lockVersion = null)
  * @method Student|null findOneBy(array $criteria, array $orderBy = null)
@@ -23,6 +25,8 @@ namespace Britannia\Domain\Repository;
 interface StudentRepositoryInterface
 {
     public function findByIdList(array $list): array;
+
+    public function findByBirthDay(CarbonImmutable $day): array ;
 
 }
 

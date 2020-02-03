@@ -39,15 +39,33 @@ class AttendanceService
         $this->attendance = $attendance;
     }
 
-    public function numOfAbsences(Term $term): int
+    public function numOfAbsencesByTerm(Term $term): int
     {
         return $this->attendance->countByTerm($term);
     }
 
-    public function attendancePercent(Term $term): float
+    public function attendancePercentByTerm(Term $term): float
     {
         $total = $this->lessons->countByTerm($term);
-        $numOfAbsences = $this->numOfAbsences($term);
+        $numOfAbsences = $this->numOfAbsencesByTerm($term);
+
+        if ($total <= 0) {
+            return 100;
+        }
+        $percent = ($total - $numOfAbsences) * 100 / $total;
+
+        return round($percent, 1);
+    }
+
+    public function numOfAbsencesByCourse(Course $course, Student $student): int
+    {
+        return $this->attendance->countByCourse($course, $student);
+    }
+
+    public function attendancePercentByCourse(Course $course, Student $student): float
+    {
+        $total = $this->lessons->countByCourse($course);
+        $numOfAbsences = $this->numOfAbsencesByCourse($course, $student);
 
         if ($total <= 0) {
             return 100;

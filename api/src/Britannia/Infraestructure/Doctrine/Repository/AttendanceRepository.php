@@ -62,7 +62,6 @@ class AttendanceRepository extends ServiceEntityRepository implements Attendance
 
     }
 
-
     public function countByTerm(Term $term): int
     {
         $query = $this->createQueryBuilder('A')
@@ -80,7 +79,26 @@ class AttendanceRepository extends ServiceEntityRepository implements Attendance
             'end' => $term->end()
         ]);
 
-        return (int) $query->getSingleScalarResult();
+        return (int)$query->getSingleScalarResult();
+    }
 
+    public function countByCourse(Course $course, Student $student): int
+    {
+        $query = $this->createQueryBuilder('A')
+            ->select('count(A.id)')
+            ->where('A.student = :student')
+            ->andWhere('A.course = :course')
+            ->andWhere('A.day >= :start')
+            ->andWhere('A.day <= :end')
+            ->getQuery();
+
+        $query->setParameters([
+            'course' => $course,
+            'student' => $student,
+            'start' => $course->start(),
+            'end' => $course->end()
+        ]);
+
+        return (int)$query->getSingleScalarResult();
     }
 }

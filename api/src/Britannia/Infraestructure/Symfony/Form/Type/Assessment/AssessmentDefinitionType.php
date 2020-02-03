@@ -19,6 +19,7 @@ use Britannia\Domain\VO\Assessment\AssessmentDefinition;
 use Britannia\Infraestructure\Symfony\Validator\FullName;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractCompoundType;
+use PlanB\DDDBundle\Symfony\Form\Type\ToggleType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -34,6 +35,7 @@ class AssessmentDefinitionType extends AbstractCompoundType
         $otherSkills = $course->otherSkills();
         $numOfTerms = $course->numOfTerms();
 
+
         $builder->add('numOfTerms', NumberType::class, [
             'html5' => true,
             'mapped' => false,
@@ -43,6 +45,21 @@ class AssessmentDefinitionType extends AbstractCompoundType
                 'min' => 0,
                 'class' => 'numOfTerms'
             ]
+        ]);
+
+        $builder->add('diagnostic', ToggleType::class, [
+            'on_text' => 'Si',
+            'off_text' => 'No',
+            'off_style' => 'info',
+            'data' => $course->hasDiagnosticTest()
+
+        ]);
+
+        $builder->add('final', ToggleType::class, [
+            'on_text' => 'Si',
+            'off_text' => 'No',
+            'off_style' => 'info',
+            'data' => $course->hasFinalTest()
         ]);
 
         $builder
@@ -84,6 +101,8 @@ class AssessmentDefinitionType extends AbstractCompoundType
             $data['skills'],
             $data['extraSkills'],
             (int)$data['numOfTerms'],
+            $data['diagnostic'],
+            $data['final']
         ]);
     }
 }

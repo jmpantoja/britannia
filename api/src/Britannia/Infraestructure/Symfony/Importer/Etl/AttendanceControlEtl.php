@@ -30,14 +30,14 @@ class AttendanceControlEtl extends AbstractEtl
 
     public function clean(): void
     {
-        $this->truncate('attendance_control');
+    //    $this->truncate('attendance_control');
     }
 
     public function configureDataLoader(QueryBuilder $builder): void
     {
         $offset = 0;
         $limit = null;
-        $id = null;
+        $id = 34402;
 
         $builder->select('*')
             ->from('controlAsistencia')

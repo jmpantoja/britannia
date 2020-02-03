@@ -19,6 +19,7 @@ use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Entity\Student\StudentCourse;
 use Britannia\Domain\Entity\Student\StudentList;
 use Britannia\Infraestructure\Symfony\Validator\FullName;
+use Doctrine\ORM\QueryBuilder;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Sonata\ModelManager;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
@@ -49,12 +50,14 @@ class CourseHasStudentsType extends AbstractSingleType
 
     public function customOptions(OptionsResolver $resolver)
     {
+
         $resolver->setDefaults([
             'class' => Student::class,
             'property' => 'fullName.reversedMode',
             'model_manager' => $this->modelManager,
             'multiple' => true,
             'by_reference' => false,
+
             'attr' => [
                 'data-sonata-select2' => 'false'
             ]
@@ -68,6 +71,32 @@ class CourseHasStudentsType extends AbstractSingleType
         $resolver->setNormalizer('course', function (OptionsResolver $resolver, $value) {
             return $this->course = $value;
         });
+
+        $resolver->setNormalizer('query', function (OptionsResolver $resolver) {
+            return $this->createQuery($resolver['course']);
+        });
+    }
+
+    private function createQuery(Course $course): QueryBuilder
+    {
+        $query = $this->modelManager->getEntityManager(Student::class)
+            ->createQueryBuilder('o')
+            ->select('o')
+            ->from(Student::class, 'o');
+
+        if ($course->isAdult()) {
+            $query->where('o.age >= 17');
+        }
+
+        if ($course->isSchool()) {
+            $query->where('o.age >= 6 AND o.age <= 20');
+        }
+
+        if ($course->isPreSchool()) {
+            $query->where('o.age <= 6');
+        }
+
+        return $query;
     }
 
     /**

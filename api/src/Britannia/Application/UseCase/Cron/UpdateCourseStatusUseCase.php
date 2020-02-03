@@ -41,7 +41,6 @@ final class UpdateCourseStatusUseCase implements UseCaseInterface
 
         foreach ($courses as $course) {
             $course->updateStatus();
-            echo '.';
         }
     }
 
