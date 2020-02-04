@@ -3,13 +3,31 @@
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+imports:
+    - { resource: admins.yaml }
+
 parameters:
     locale: es
+
 services:
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    Sonata\AdminBundle\Command\GenerateObjectAclCommand:
+        class: Sonata\AdminBundle\Command\GenerateObjectAclCommand
+        public: true
+        arguments:
+            - '@sonata.admin.pool'
+            - []
+            - ~
+        tags: ['console.command']
+
+
+    Sonata\Form\Date\MomentFormatConverter:
+        alias: sonata.core.date.moment_format_converter
+
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -28,16 +46,25 @@ services:
         resource: '../src/Britannia/Infraestructure/Symfony/Controller/*'
         tags: ['controller.service_arguments']
 
-#
-#    Britannia\Application\UseCase\StaffMember\UpdatePasswordUseCase:
-#        tags:
-#        - { name: tactician.handler, typehints: true }
+    Britannia\Infraestructure\Symfony\Importer\Etl\:
+        resource: '../src/Britannia/Infraestructure/Symfony/Importer/Etl/*'
+        arguments:
+            - '@doctrine.dbal.original_connection'
+    #            - '@doctrine.dbal.default_connection'
+
+    Britannia\Infraestructure\Symfony\Importer\ImporterManager:
+        calls:
+#        - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\StaffEtl']]
+#        - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\StudentEtl']]
+#        - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\RelativesEtl']]
+#        - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\CourseEtl']]
+#        - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\TeacherCoursesEtl']]
+#        - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\StudentCoursesEtl']]
+        - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\AttendanceControlEtl']]
 
 
-    admin.staff_member:
-        class: Britannia\Infraestructure\Symfony\Admin\StaffMemberAdmin
-        arguments: [~, Britannia\Domain\Entity\Staff\StaffMember, ~]
-        tags:
-        - { name: sonata.admin, manager_type: orm, group: admin, label: StaffMember  }
+    event_dispatcher:
+        class: PlanB\DDD\Domain\Event\EventDispatcher
+        factory: ['PlanB\DDD\Domain\Event\EventDispatcher', 'getInstance']
         public: true
 

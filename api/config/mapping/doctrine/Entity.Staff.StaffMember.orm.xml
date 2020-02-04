@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xmlns:gedmo="http://gediminasm.org/schemas/orm/doctrine-extensions-mapping"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+
+    <entity name="Britannia\Domain\Entity\Staff\StaffMember" table="staff_members"
+            repository-class="Britannia\Infraestructure\Doctrine\Repository\StaffMemberRepository">
+
+        <id name="id" type="StaffMemberId" column="id">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
+        </id>
+
+        <field name="oldId" type="integer" nullable="true"/>
+
+        <field name="teacher" type="boolean" column="teacher"/>
+
+        <field name="userName" column="username" length="256" unique="true"/>
+
+        <field name="password" column="password" length="256"/>
+
+        <field name="plainPassword" column="plain_password" length="256" nullable="true"/>
+
+        <embedded name="fullName" class="PlanB\DDD\Domain\VO\FullName" use-column-prefix="false"/>
+
+        <embedded name="address" class="PlanB\DDD\Domain\VO\PostalAddress" use-column-prefix="false"/>
+
+
+        <field name="dni" column="dni" type="dni" nullable="true"/>
+        <field name="emails" column="emails" type="email_list"/>
+
+        <field name="phoneNumbers" column="phone_numbers" type="phone_number_list"/>
+
+        <field name="roles" column="roles" type="json"/>
+
+
+        <field name="createdAt" type="datetime_immutable" nullable="true"/>
+        <field name="updatedAt" type="datetime_immutable" nullable="true"/>
+
+
+        <many-to-many field="courses" target-entity="Britannia\Domain\Entity\Course\Course" inversed-by="teachers">
+            <join-table name="courses_teachers">
+                <join-columns>
+                    <join-column name="teacher_id"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="course_id"/>
+                </inverse-join-columns>
+            </join-table>
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </many-to-many>
+
+    </entity>
+
+</doctrine-mapping>

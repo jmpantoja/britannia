@@ -1,0 +1,17 @@
+parameters:
+    marks:
+        unit_percent_weight: 30
+
+    enrollment_price: 55
+
+    discount:
+        family:
+            upper: 0
+            lower: 15
+            default: 5
+
+        job_status:
+            student: 5
+            unemployed: 5
+            retired: 5
+            disabled: 5

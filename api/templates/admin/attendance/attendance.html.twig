@@ -1,0 +1,16 @@
+{% block attendance_sumary %}
+    {% set list = attendances.summary(object, course, limit) %}
+    {% set count = list | length %}
+
+    <div class="attendance_sumary">
+
+        {% for item in list.items %}
+            {% set attr = '' %}
+
+            {% if item.status %}
+                {% set attr = " class="~ item.status %}
+            {% endif %}
+            <span{{ attr }} title="{{ item.title }}"></span>
+        {% endfor %}
+    </div>
+{% endblock %}

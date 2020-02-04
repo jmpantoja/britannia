@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xmlns:gedmo="http://gediminasm.org/schemas/orm/doctrine-extensions-mapping"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+
+    <entity name="Britannia\Domain\Entity\Student\Child" table="students_child">
+
+        <many-to-one field="school" target-entity="Britannia\Domain\Entity\School\School"/>
+        <field name="schoolCourse" nullable="true"/>
+
+        <field name="firstTutorDescription" column="first_tutor_description" nullable="true"></field>
+        <many-to-one field="firstTutor" target-entity="Britannia\Domain\Entity\Student\Tutor"/>
+
+        <field name="secondTutorDescription" column="second_tutor_description" nullable="true"></field>
+        <many-to-one field="secondTutor" target-entity="Britannia\Domain\Entity\Student\Tutor"/>
+
+    </entity>
+
+</doctrine-mapping>

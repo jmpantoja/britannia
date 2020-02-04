@@ -1,0 +1,8 @@
+{% extends 'admin/core/resume_column_base.html.twig' %}
+
+{% block header %}
+
+    {{ object.date | localizeddate('full', 'none') }}
+{% endblock %}
+
+

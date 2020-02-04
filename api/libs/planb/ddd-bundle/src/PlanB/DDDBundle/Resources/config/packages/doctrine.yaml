@@ -1,0 +1,43 @@
+---
+doctrine:
+    dbal:
+        types:
+            email: PlanB\DDDBundle\Doctrine\DBAL\Type\EmailType
+            phone_number: PlanB\DDDBundle\Doctrine\DBAL\Type\PhoneNumberType
+            postal_code: PlanB\DDDBundle\Doctrine\DBAL\Type\PostalCodeType
+            dni: PlanB\DDDBundle\Doctrine\DBAL\Type\DNIType
+            phone_number_list: PlanB\DDDBundle\Doctrine\DBAL\Type\PhoneNumberListType
+            email_list: PlanB\DDDBundle\Doctrine\DBAL\Type\EmailListType
+            positive_integer: PlanB\DDDBundle\Doctrine\DBAL\Type\PositiveIntegerType
+            price: PlanB\DDDBundle\Doctrine\DBAL\Type\PriceType
+            percent: PlanB\DDDBundle\Doctrine\DBAL\Type\PercentType
+            rgba: PlanB\DDDBundle\Doctrine\DBAL\Type\RGBAType
+
+            
+            date: PlanB\DDDBundle\Doctrine\DBAL\Type\CarbonDateType
+            date_immutable: PlanB\DDDBundle\Doctrine\DBAL\Type\CarbonDateImmutableType
+            datetime: PlanB\DDDBundle\Doctrine\DBAL\Type\CarbonDateTimeType
+            datetime_immutable: PlanB\DDDBundle\Doctrine\DBAL\Type\CarbonDateTimeImmutableType
+            
+            time: PlanB\DDDBundle\Doctrine\DBAL\Type\CarbonTimeType
+            time_immutable: PlanB\DDDBundle\Doctrine\DBAL\Type\CarbonTimeImmutableType
+
+        mapping_types:
+            email: string
+            email_list: string
+            phone_number: string
+            phone_number_list: string
+            postal_code: string
+            dni: string
+            positive_integer: integer
+            price: float
+            rgba: string
+
+    orm:
+        mappings:
+            PlanBDDDBundle:
+                is_bundle: true
+                type: xml
+                prefix: PlanB\DDD\Domain
+                dir: 'Resources/config/mapping/doctrine'
+                alias: PlanB\DDD\Domain

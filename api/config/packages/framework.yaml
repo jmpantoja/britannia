@@ -2,7 +2,7 @@ framework:
     secret: '%env(APP_SECRET)%'
 
     translator: { fallbacks: ['%locale%'] }
-    default_locale: en
+    default_locale: es_ES
     csrf_protection: true
 
 
@@ -20,8 +20,8 @@ framework:
     php_errors:
         log: true
 
-
-    serializer:
-        mapping:
-            paths: ['%kernel.project_dir%/config/serialization']
-
+    assets:
+        version: 'v1.2'
+        version_format: '%%s?version=%%s'
+        base_path: ~
+        base_urls: ['%env(SITE_BASE_URL)%']

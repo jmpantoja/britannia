@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+
+    <entity name="Britannia\Domain\Entity\Student\Tutor" table="tutors">
+
+        <id name="id" type="TutorId" column="id">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
+        </id>
+
+        <embedded name="fullName" class="PlanB\DDD\Domain\VO\FullName" use-column-prefix="false"/>
+
+        <field name="emails" column="emails" type="email_list"/>
+        <field name="dni" column="dni" type="dni" nullable="true"/>
+
+        <field name="phoneNumbers" column="phone_numbers" type="phone_number_list"/>
+
+        <field name="createdAt" type="datetime_immutable" nullable="true"/>
+        <field name="updatedAt" type="datetime_immutable" nullable="true"/>
+
+        <embedded name="address" class="PlanB\DDD\Domain\VO\PostalAddress" use-column-prefix="false"/>
+        <embedded name="job" class="Britannia\Domain\VO\Student\Job\Job"/>
+
+    </entity>
+
+</doctrine-mapping>

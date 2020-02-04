@@ -4,12 +4,10 @@ namespace Britannia\Infraestructure\Symfony\Security;
 
 use Britannia\Domain\Entity\Staff\StaffMember;
 use Doctrine\ORM\EntityManagerInterface;
-use phpDocumentor\Reflection\Types\Nullable;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Encoder\EncoderFactory;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
@@ -87,20 +85,28 @@ class FormLoginAuthenticator extends AbstractFormLoginAuthenticator
     {
         $password = $credentials['password'] ?? null;
         $encoder = $this->encoderFactory->getEncoder($user);
-        $encodedPassword  = $encoder->encodePassword($password, $user->getSalt());
+        $encodedPassword = $encoder->encodePassword($password, $user->getSalt());
 
         return $encodedPassword === $user->getPassword();
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
-        $targetPath = $this->getTargetPath($request->getSession(), $providerKey) ??
-            $this->urlGenerator->generate('sonata_admin_dashboard');
-
+        $targetPath = $this->getRedirectPath($token);
         if ($targetPath) {
             return new RedirectResponse($targetPath);
         }
 
+    }
+
+    private function getRedirectPath(TokenInterface $token): string
+    {
+        if ($token->getUser()->isTeacher()) {
+            return $this->urlGenerator->generate('admin_britannia_domain_lesson_lesson_list');
+
+        }
+
+        return $this->urlGenerator->generate('sonata_admin_dashboard');
     }
 
     protected function getLoginUrl()

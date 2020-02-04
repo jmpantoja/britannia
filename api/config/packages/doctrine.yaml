@@ -7,26 +7,154 @@ parameters:
 
 doctrine:
     dbal:
-        # configure these for your database server
-        driver: 'pdo_pgsql'
-        server_version: '10'
+        default_connection: default
+        connections:
 
-        # With Symfony 3.3, remove the `resolve:` prefix
-        url: '%env(resolve:DATABASE_URL)%'
-        
+            original:
+                # configure these for your database server
+                driver: 'mysql'
+                server_version: '5.7'
+
+                # With Symfony 3.3, remove the `resolve:` prefix
+                url: '%env(resolve:DATABASE_OLD_URL)%'
+                charset: 'UTF8'
+
+            default:
+                logging: true
+                # configure these for your database server
+                driver: 'mysql'
+                server_version: '5.7'
+                charset: 'UTF8'
+
+                # With Symfony 3.3, remove the `resolve:` prefix
+                url: '%env(resolve:DATABASE_URL)%'
+
+                mapping_types:
+                    #Academy
+                    AcademyId: AcademyId
+
+                    #Book
+                    BookId: BookId
+                    BookCategory: BookCategory
+
+                    #ClassRoom
+                    ClassRoomId: ClassRoomId
+
+                    #Course
+                    AttendanceId: AttendanceId
+                    LevelId: LevelId
+                    CourseId: CourseId
+                    CourseStatus: CourseStatus
+                    DayOfWeek: DayOfWeek
+                    Examiner: Examiner
+                    Support: Support
+                    Intensive: Intensive
+                    DiscountList: DiscountList
+
+                    #Assessment
+                    TermName: TermName
+                    SetOfSkills: SetOfSkills
+                    SkillList: SkillList
+                    Skill: Skill
+                    Mark: Mark
+                    MarkReport: MarkReport
+                    UnitId: UnitId
+                    SkillMarkId: SkillMarkId
+                    TermId: TermId
+
+                    #Staff
+                    StaffMemberId: StaffMemberId
+
+                    #Student
+                    SchoolId: SchoolId
+                    StudentId: StudentId
+                    TutorId: TutorId
+                    JobStatus: JobStatus
+                    PartOfDay: PartOfDay
+                    NumOfYears: NumOfYears
+                    ContactMode: ContactMode
+                    PaymentMode: PaymentMode
+                    BankAccount: BankAccount
+
+                    #Lesson
+                    LessonId: LessonId
+
+                    #Record
+                    RecordId: RecordId
+                    TypeOfRecord: TypeOfRecord
+
         types:
-            StaffMemberId:  Britannia\Infraestructure\Doctrine\Entity\Staff\StaffMemberId
-            
-        mapping_types:
-            StaffMemberId: StaffMemberId
+            #Academy
+            AcademyId:  Britannia\Infraestructure\Doctrine\DBAL\Type\Academy\AcademyIdType
+
+            #Book
+            BookId: Britannia\Infraestructure\Doctrine\DBAL\Type\Book\BookIdType
+            BookCategory: Britannia\Infraestructure\Doctrine\DBAL\Type\Book\BookCategoryType
+
+            #Classroom
+            ClassRoomId: Britannia\Infraestructure\Doctrine\DBAL\Type\ClassRoom\ClassRoomIdType
+
+            #Attendance
+            AttendanceId: Britannia\Infraestructure\Doctrine\DBAL\Type\Attendance\AttendanceId
+
+            #Courses
+            DayOfWeek: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\DayOfWeekType
+            Examiner: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\ExaminerType
+            Intensive: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\IntensiveType
+            Support: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\SupportType
+            CourseStatus: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\CourseStatusType
+            CourseId: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\CourseId
+            LevelId: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\LevelId
+            DiscountList: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\DiscountListType
+
+            #Assessment
+            TermName: Britannia\Infraestructure\Doctrine\DBAL\Type\Assessment\TermNameType
+            SetOfSkills: Britannia\Infraestructure\Doctrine\DBAL\Type\Assessment\SetOfSkillsType
+            SkillList: Britannia\Infraestructure\Doctrine\DBAL\Type\Assessment\SkillListType
+            Skill: Britannia\Infraestructure\Doctrine\DBAL\Type\Assessment\SkillType
+            Mark: Britannia\Infraestructure\Doctrine\DBAL\Type\Assessment\MarkType
+            MarkReport: Britannia\Infraestructure\Doctrine\DBAL\Type\Assessment\MarkReportType
+            UnitId: Britannia\Infraestructure\Doctrine\DBAL\Type\Assessment\UnitId
+            SkillMarkId: Britannia\Infraestructure\Doctrine\DBAL\Type\Assessment\SkillMarkId
+            TermId: Britannia\Infraestructure\Doctrine\DBAL\Type\Assessment\TermId
+
+            #Lesson
+            LessonId: Britannia\Infraestructure\Doctrine\DBAL\Type\Lesson\LessonIdType
+
+            #Record
+            RecordId: Britannia\Infraestructure\Doctrine\DBAL\Type\Record\RecordId
+            TypeOfRecord: Britannia\Infraestructure\Doctrine\DBAL\Type\Record\TypeOfRecordType
+
+            #School
+            SchoolId:  Britannia\Infraestructure\Doctrine\DBAL\Type\School\SchoolIdType
+
+            #Staff
+            StaffMemberId:  Britannia\Infraestructure\Doctrine\DBAL\Type\Staff\StaffMemberIdType
+
+            #Student
+            StudentId: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\StudentIdType
+            TutorId: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\TutorIdType
+            JobStatus: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\JobStatusType
+            PartOfDay: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\PartOfDayType
+            NumOfYears: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\NumOfYearsType
+            ContactMode: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\ContactModeType
+            PaymentMode: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\PaymentModeType
+            BankAccount: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\BankAccountType
+
     orm:
         auto_generate_proxy_classes: true
         naming_strategy: doctrine.orm.naming_strategy.underscore
         auto_mapping: true
+        dql:
+            string_functions:
+                DAY: DoctrineExtensions\Query\Mysql\Day
+                MONTH: DoctrineExtensions\Query\Mysql\Month
+                YEAR: DoctrineExtensions\Query\Mysql\Year        
         mappings:
             Britannia:
                 is_bundle: false
                 type: xml
-                dir: '%kernel.project_dir%/config/doctrine'
+                dir: '%kernel.project_dir%/config/mapping/doctrine'
                 prefix: 'Britannia\Domain'
                 alias: Britannia
+

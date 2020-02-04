@@ -3,161 +3,260 @@
 namespace Britannia\Domain\Entity\Staff;
 
 
+use Britannia\Domain\Entity\Course\Course;
+use Britannia\Domain\Entity\Course\CourseList;
+use Carbon\CarbonImmutable;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use PlanB\DDD\Domain\Behaviour\Comparable;
+use PlanB\DDD\Domain\Behaviour\Traits\ComparableTrait;
 use PlanB\DDD\Domain\Model\AggregateRoot;
+use PlanB\DDD\Domain\Model\Traits\AggregateRootTrait;
+use PlanB\DDD\Domain\VO\DNI;
+use PlanB\DDD\Domain\VO\Email;
+use PlanB\DDD\Domain\VO\FullName;
+use PlanB\DDD\Domain\VO\PhoneNumber;
+use PlanB\DDD\Domain\VO\PostalAddress;
+use Serializable;
+use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 
-class StaffMember extends AggregateRoot implements UserInterface
+class StaffMember implements UserInterface, Serializable, Comparable
 {
+    use AggregateRootTrait;
+    use ComparableTrait;
 
-    private $userName;
+    const DEFAULT_ROLE = 'ROLE_SONATA_ADMIN';
 
-    private $password;
-
-    private $plainPassword;
-
-    private $email;
-
-    private $firstName;
-
-    private $lastName;
-
-    private $teacher = false;
-
-    private $roles;
-
-    private $createdAt;
-
-    private $updatedAt;
-
-    private $active = true;
-
+    /**
+     * @var StaffMemberId
+     */
     private $id;
 
-    const DEFAULT_ROLE = 'ROLE_STAFF_MEMBER';
+    /**
+     * @var int
+     */
+    private $oldId;
 
-    public function __construct()
+    /**
+     * @var bool
+     */
+    private $teacher = false;
+    /**
+     * @var string
+     */
+    private $userName;
+    /**
+     * @var  DNI
+     */
+    private $dni;
+    /**
+     * @var string
+     */
+    private $password;
+    /**
+     * @var string
+     */
+    private $plainPassword;
+    /**
+     * @var null|FullName
+     */
+    private $fullName;
+    /**
+     * @var null|PostalAddress
+     */
+    private $address;
+    /**
+     * @var null|Email[]
+     */
+    private $emails;
+    /**
+     * @var null|PhoneNumber[]
+     */
+    private $phoneNumbers;
+    /**
+     * @var Collection
+     */
+    private $courses;
+
+    /**
+     * @var array
+     */
+    private $roles;
+    /**
+     * @var CarbonImmutable
+     */
+    private $createdAt;
+    /**
+     * @var CarbonImmutable
+     */
+    private $updatedAt;
+
+    public static function make(StaffMemberDto $dto): self
+    {
+        return new self($dto);
+    }
+
+    private function __construct(StaffMemberDto $dto)
     {
         $this->id = new StaffMemberId();
-        $this->createdAt = new \DateTime();
-        $this->updatedAt = new \DateTime();
+        $this->teacher = true;
         $this->roles = [self::DEFAULT_ROLE];
-
+        $this->courses = new ArrayCollection();
+        $this->createdAt = CarbonImmutable::now();
+        $this->update($dto);
     }
 
-    public function getUserName(): ?string
+    public function update(StaffMemberDto $dto): self
     {
-        return $this->userName;
-    }
+        $this->userName = $dto->userName;
+        $this->dni = $dto->dni;
+        $this->fullName = $dto->fullName;
+        $this->address = $dto->address;
+        $this->emails = $dto->emails;
+        $this->phoneNumbers = $dto->phoneNumbers;
 
-    public function setUserName(string $userName): self
-    {
-        $this->userName = $userName;
+        $this->setCourses($dto->courses);
+
+        if (isset($dto->roles)) {
+            $this->setRoles($dto->roles);
+        }
+
+        if (isset($dto->password)) {
+            $this->changePassword($dto->password, $dto->encoder);
+        }
+
+        $this->updatedAt = CarbonImmutable::now();
+
+        if (isset($dto->oldId)) {
+            $this->oldId = $dto->oldId;
+        }
 
         return $this;
     }
 
-    public function getPassword(): ?string
+
+    public function changePassword(string $password, EncoderFactoryInterface $encoderFactory)
     {
-        return $this->password;
+        $encoder = $encoderFactory->getEncoder($this);
+        $salt = $this->getSalt();
+
+        $encodedPassword = $encoder->encodePassword($password, $salt);
+
+        $this->password = $encodedPassword;
     }
 
-    public function setPassword(string $password): self
-    {
-        $this->password = $password;
 
-        return $this;
-    }
-
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    public function setEmail(string $email): self
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    public function getFirstName(): ?string
-    {
-        return $this->firstName;
-    }
-
-    public function setFirstName(string $firstName): self
-    {
-        $this->firstName = $firstName;
-
-        return $this;
-    }
-
-    public function getLastName(): ?string
-    {
-        return $this->lastName;
-    }
-
-    public function setLastName(string $lastName): self
-    {
-        $this->lastName = $lastName;
-
-        return $this;
-    }
-
-    public function getTeacher(): ?bool
-    {
-        return $this->teacher;
-    }
-
-    public function setTeacher(bool $teacher): self
-    {
-        $this->teacher = $teacher;
-
-        return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeInterface
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    public function getId()
+    public function id(): ?StaffMemberId
     {
         return $this->id;
     }
 
-    public function getRoles(): ?array
+    public function isTeacher(): bool
     {
-        return $this->roles;
-
+        return $this->teacher;
     }
 
-    public function setRoles(array $roles): self
+
+    public function getUsername(): string
     {
-        $roles[] = self::DEFAULT_ROLE;
-        $this->roles = $roles;
+        return $this->userName;
+    }
+
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    /**
+     * @return FullName
+     */
+    public function fullName(): FullName
+    {
+        return $this->fullName;
+    }
+
+    /**
+     * @return PostalAddress
+     */
+    public function address(): ?PostalAddress
+    {
+        return $this->address;
+    }
+
+    /**
+     * @return DNI
+     */
+    public function dni(): ?DNI
+    {
+        return $this->dni;
+    }
+
+
+    /**
+     * @return null|Email[]
+     */
+    public function emails(): array
+    {
+        return $this->emails;
+    }
+
+    /**
+     * @return null|PhoneNumber[]
+     */
+    public function phoneNumbers(): array
+    {
+        return $this->phoneNumbers;
+    }
+
+    /**
+     * @return Course[]
+     */
+    public function courses(): array
+    {
+        return $this->courseList()->toArray();
+    }
+
+    private function courseList(): CourseList
+    {
+        return CourseList::collect($this->courses);
+    }
+
+    /**
+     * @param Collection $courses
+     * @return StaffMember
+     */
+    public function setCourses(CourseList $courses): self
+    {
+        $this->courseList()
+            ->forRemovedItems($courses, [$this, 'removeCourse'])
+            ->forAddedItems($courses, [$this, 'addCourse']);
 
         return $this;
+    }
+
+    public function addCourse(Course $course): self
+    {
+        $this->courseList()
+            ->add($course, fn(Course $course) => $course->addTeacher($this));
+
+        return $this;
+    }
+
+    public function removeCourse(Course $course): StaffMember
+    {
+        $this->courseList()
+            ->remove($course, fn(Course $course) => $course->removeTeacher($this));
+
+        return $this;
+    }
+
+    public function isTeacherOfCourse(Course $course): bool
+    {
+        return $this->courses->exists(function (int $index, Course $current) use ($course) {
+            return $current->equals($course);
+        });
     }
 
     /**
@@ -183,35 +282,56 @@ class StaffMember extends AggregateRoot implements UserInterface
 
     }
 
-    public function getActive(): ?bool
+    public function getRoles(): ?array
     {
-        return $this->active;
+        return $this->roles;
+
     }
 
-    public function setActive(bool $active): self
+    public function setRoles(array $roles): self
     {
-
-        $this->active = $active;
+        $roles[] = self::DEFAULT_ROLE;
+        $this->roles = $roles;
+        $this->teacher = in_array('ROLE_TEACHER', $this->roles, true);
 
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getPlainPassword(): ?string
+    public function activeCourses(): array
     {
-        return $this->plainPassword;
+        return $this->courses->filter(function (Course $course) {
+            return $course->isActive();
+        })->toArray();
+
+    }
+
+    public function serialize()
+    {
+        return serialize(array(
+            $this->id,
+            $this->userName,
+            $this->password
+        ));
     }
 
     /**
-     * @param string $plainPassword
-     * @return StaffMember
+     * Constructs the object
+     * @link http://php.net/manual/en/serializable.unserialize.php
+     * @param string $serialized <p>
+     * The string representation of the object.
+     * </p>
+     * @return void
+     * @since 5.1.0
      */
-    public function setPlainPassword(?string $plainPassword): self
+    public function unserialize($serialized)
     {
-        $this->notify(new PasswordWasChanged($this, $plainPassword));
-        return $this;
+        list (
+            $this->id,
+            $this->userName,
+            $this->password,
+            ) = unserialize($serialized, array('allowed_classes' => [StaffMemberId::class]));
+
     }
+
 
 }

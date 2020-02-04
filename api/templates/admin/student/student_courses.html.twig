@@ -1,0 +1,33 @@
+{% extends get_admin_template('base_list_field', admin.code) %}
+
+{% block field %}
+    {% set admin_course = admin.configurationPool.adminByAdminCode('admin.course') %}
+
+    {% set limit = 2 %}
+
+    {% for course in object.activeCourses | slice(0, limit) %}
+        <a href="{{ admin_course.generateObjectUrl('edit', course) }}">
+            {{ course.name }}
+            {% if loop.last is same as (false) %},&nbsp;{% endif %}
+        </a>
+    {% endfor %}
+
+    {% set  surplus = object.activeCourses | slice(limit) %}
+
+    {% if surplus | length > 0 %}
+        <div class="btn-group">
+            <button type="button" class="btn btn-link " data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">
+                <span class="fa fa-ellipsis-h"></span>
+            </button>
+            <ul class="dropdown-menu">
+                {% for course in surplus %}
+                    <li>
+                        <a href="{{ admin_course.generateObjectUrl('edit', course) }}">{{ course.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+{% endblock %}

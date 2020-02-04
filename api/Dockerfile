@@ -1,57 +1,85 @@
 # the different stages of this Dockerfile are meant to be built into separate images
 # https://docs.docker.com/compose/compose-file/#target
 
-ARG PHP_VERSION=7.2
+ARG PHP_VERSION=7.4.2
 ARG NGINX_VERSION=1.15
 ARG VARNISH_VERSION=6.0
+ARG VER_PDFTK=2.02
 
-FROM php:${PHP_VERSION}-fpm-alpine AS api_platform_php
+FROM php:${PHP_VERSION}-fpm-buster AS api_platform_php
 
+RUN apt update;
 # persistent / runtime deps
-RUN apk add --no-cache \
-		acl \
-		file \
-		gettext \
+RUN apt -y install \
+#		acl \
+#		file \
+#		gettext \
 		git \
 	;
 
-ARG APCU_VERSION=5.1.16
+RUN mkdir -p /usr/share/man/man1
+
+#paquetes para generear pdfs
+RUN apt update && \
+    apt install -y wget unzip wkhtmltopdf pdftk && \
+    apt clean
+
+
+
+#ADD https://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/pdftk-${PDFTK_VERSION}-src.zip /tmp/
+#RUN unzip /tmp/pdftk-${PDFTK_VERSION}-src.zip -d /tmp && \
+#    sed -i 's/VERSUFF=-4.6/VERSUFF=-5/g' /tmp/pdftk-${PDFTK_VERSION}-dist/pdftk/Makefile.Debian && \
+#    cd /tmp/pdftk-${PDFTK_VERSION}-dist/pdftk && \
+#    make -f Makefile.Debian && \
+#    make -f Makefile.Debian install && \
+#    rm -Rf /tmp/pdftk-*
+
+#ARG APCU_VERSION=5.1.16
 RUN set -eux; \
-	apk add --no-cache --virtual .build-deps \
+	apt -y install \
 		$PHPIZE_DEPS \
-		icu-dev \
-		libzip-dev \
-		postgresql-dev \
-		zlib-dev \
-	; \
-	\
-	docker-php-ext-configure zip --with-libzip; \
-	docker-php-ext-install -j$(nproc) \
+		libicu-dev \
+		libzip-dev  \
+#		icu-dev \
+#		zlib-dev \
+	;
+
+RUN	docker-php-ext-install -j$(nproc) \
 		intl \
-		pdo_pgsql \
+#		pdo_pgsql \
+		mysqli \
+		pdo \
+		pdo_mysql \
 		zip \
-	; \
-	pecl install \
-		apcu-${APCU_VERSION} \
-	; \
-	pecl clear-cache; \
-	docker-php-ext-enable \
-		apcu \
+		bcmath \
+	;
+
+#	pecl install \
+#		apcu-${APCU_VERSION} \
+#	; \
+#	pecl clear-cache;
+RUN	docker-php-ext-enable \
+#		apcu \
 		opcache \
-	; \
-	\
-	runDeps="$( \
-		scanelf --needed --nobanner --format '%n#p' --recursive /usr/local/lib/php/extensions \
-			| tr ',' '\n' \
-			| sort -u \
-			| awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
-	)"; \
-	apk add --no-cache --virtual .api-phpexts-rundeps $runDeps; \
-	\
-	apk del .build-deps
+		mysqli \
+	;
+
+#	\
+#	runDeps="$( \
+#		scanelf --needed --nobanner --format '%n#p' --recursive /usr/local/lib/php/extensions \
+#			| tr ',' '\n' \
+#			| sort -u \
+#			| awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
+#	)"; \
+#	apk add --no-cache --virtual .api-phpexts-rundeps $runDeps; \
+#	\
+#	apk del .build-deps
+
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
 RUN ln -s $PHP_INI_DIR/php.ini-production $PHP_INI_DIR/php.ini
+
 COPY docker/php/conf.d/api-platform.ini $PHP_INI_DIR/conf.d/api-platform.ini
 
 # https://getcomposer.org/doc/03-cli.md#composer-allow-superuser
@@ -70,9 +98,9 @@ ARG APP_ENV=prod
 COPY composer.json composer.lock symfony.lock ./
 # do not use .env files in production
 RUN echo '<?php return [];' > .env.local.php
-RUN set -eux; \
-	composer install --prefer-dist --no-dev --no-autoloader --no-scripts --no-progress --no-suggest; \
-	composer clear-cache
+#RUN set -eux; \
+#	composer install --prefer-dist --no-dev --no-autoloader --no-scripts --no-progress --no-suggest; \
+#	composer clear-cache
 
 # copy only specifically what we need
 COPY bin bin/
@@ -82,8 +110,8 @@ COPY src src/
 
 RUN set -eux; \
 	mkdir -p var/cache var/log; \
-	composer dump-autoload --classmap-authoritative --no-dev; \
-	composer run-script --no-dev post-install-cmd; \
+#	composer dump-autoload --classmap-authoritative --no-dev; \
+#	composer run-script --no-dev post-install-cmd; \
 	chmod +x bin/console; sync
 VOLUME /srv/api/var
 
@@ -96,6 +124,7 @@ CMD ["php-fpm"]
 FROM nginx:${NGINX_VERSION}-alpine AS api_platform_nginx
 
 COPY docker/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
+
 
 WORKDIR /srv/api
 

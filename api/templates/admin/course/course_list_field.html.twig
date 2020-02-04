@@ -1,0 +1,16 @@
+{% extends get_admin_template('base_list_field', admin.code) %}
+
+{% block field %}
+    <div class="planb_row">
+        <div class="resume">
+            <div class="header">
+                {{ block('header') }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block header %}
+    <a href="{{ admin.generateUrl('edit', {id:object.id}) }}"><strong>{{ object.name }}</strong></a>
+{% endblock %}

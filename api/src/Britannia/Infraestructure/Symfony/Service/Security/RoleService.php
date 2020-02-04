@@ -17,7 +17,8 @@ namespace Britannia\Infraestructure\Symfony\Service\Security;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 /**
- * @property mixed roles
+ * Class RoleService
+ * @package Britannia\Infraestructure\Symfony\Service\Security
  */
 class RoleService
 {
@@ -38,23 +39,16 @@ class RoleService
         $this->roles = $list;
     }
 
-    public function getList(): array
-    {
-
-
-        return $this->roles;
-    }
-
     /**
-     * @param $hierarchy
-     * @return array
+     * @param array $hierarchy
+     * @return string[]
      */
-    private function buildList($hierarchy): array
+    private function buildList(array $hierarchy): array
     {
 
         $list = [];
-        $values = array_values($hierarchy);
-        $roles = call_user_func_array('array_merge', $values);
+        unset($hierarchy['ROLE_SUPER_ADMIN']);
+        $roles = array_keys($hierarchy);
 
         foreach ($roles as $role) {
             $label = $this->beautify($role);
@@ -70,6 +64,13 @@ class RoleService
         $role = preg_replace(['/^role_(.*)$/', '/_+/'], ['$1', ' '], $role);
 
         return ucwords($role);
+    }
+
+    public function getList(): array
+    {
+
+
+        return $this->roles;
     }
 
 }

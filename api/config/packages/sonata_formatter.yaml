@@ -1,0 +1,8 @@
+sonata_formatter:
+    default_formatter: richhtml
+    formatters:
+        richhtml:
+            service: sonata.formatter.text.raw
+            extensions:
+            - sonata.formatter.twig.control_flow
+            - sonata.formatter.twig.gist

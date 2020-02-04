@@ -2,3 +2,4 @@ sonata_core:
     form:
         mapping:
             enabled: false
+

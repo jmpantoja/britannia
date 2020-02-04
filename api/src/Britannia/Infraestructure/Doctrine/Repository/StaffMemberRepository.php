@@ -6,6 +6,7 @@ use Britannia\Domain\Entity\Staff\StaffMember;
 use Britannia\Domain\Repository\StaffMemberRepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -28,20 +29,6 @@ class StaffMemberRepository extends ServiceEntityRepository implements StaffMemb
 
     }
 
-
-    public function save(StaffMember $member)
-    {
-        $this->getEntityManager()->persist($member);
-
-        $this->getEntityManager()->flush($member);
-    }
-
-
-    public function remove(StaffMember $member)
-    {
-        $this->getEntityManager()->remove($member);
-    }
-
     /**
      * Loads the user for the given username.
      *
@@ -50,14 +37,13 @@ class StaffMemberRepository extends ServiceEntityRepository implements StaffMemb
      * @param string $username The username
      *
      * @return UserInterface|null
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
     public function loadUserByUsername($username)
     {
         return $this->createQueryBuilder('u')
-            ->where('u.userName = :username OR u.email = :email')
+            ->where('u.userName = :username')
             ->setParameter('username', $username)
-            ->setParameter('email', $username)
             ->getQuery()
             ->getOneOrNullResult();
     }

@@ -1,0 +1,33 @@
+<tr>
+    <td colspan="{{ admin.list.elements|length - (app.request.isXmlHttpRequest ? (admin.list.has('_action') + admin.list.has('batch')) : 0) }}">
+        <div class="row">
+            {% for object in admin.datagrid.results %}
+
+                {% set course = object.course %}
+                {% set url = admin.generateUrl('edit', {'id' : object|sonata_urlsafeid(admin) }) %}
+
+                <div class="col-lg-3 col-xs-6">
+                    <div id="cms-block-{{ object.id }}" class="cms-block cms-block-element">
+                        <div class="small-box bg-green">
+                            <div class="inner">
+                                <h3>
+                                    <a href="{{ url }}">{{ course.name }}</a>
+                                </h3>
+                                <p>{{ course.numOfStudents }} Alumnos</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-graduation-cap"></i>
+                            </div>
+
+                            <a class="small-box-footer"
+                               href="{{ url }}">
+                                View more <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            {% endfor %}
+        </div>
+    </td>
+</tr>

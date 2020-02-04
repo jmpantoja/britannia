@@ -1,0 +1,411 @@
+{% extends 'base_pdf.html.twig' %}
+
+{% block stylesheets %}
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css">
+
+{% endblock %}
+
+{% block style %}
+    <style>
+        html, body, .wrapper {
+            height: 100%;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        .wrapper {
+            font-family: 'Open Sans';
+            font-size: 130%;
+            display: flex;
+            flex-direction: column;
+
+        }
+
+        header {
+            display: flex;
+            justify-items: center;
+        }
+
+        header .logo {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+        }
+
+        header .cambridge {
+            flex-grow: 0;
+            margin-right: 2em;
+        }
+
+        header .cambridge img {
+            height: 86px;
+        }
+
+
+        .info {
+            margin: 0 2em 2em 2em;
+            border: solid 5px darkblue;
+            border-top-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+
+        .info .timetable {
+            margin: 1.5em;
+        }
+
+        .info .payment {
+            margin: 1.5em;
+            flex: 2;
+        }
+
+        .info .footer {
+            padding: 0 1.5em;
+        }
+
+        h2.title {
+            margin-top: 0.5em;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .timetable {
+            display: flex;
+        }
+
+        .timetable .box {
+            flex-grow: 1;
+        }
+
+        p.notes {
+            margin-bottom: 0;
+            font-size: 0.8em;
+            font-style: italic;
+        }
+
+        p.notes::before {
+            content: '*';
+            padding-right: 0.5em;
+        }
+
+        .payment table thead td {
+            text-align: right;
+            font-weight: bold;
+            text-transform: uppercase;
+            padding-right: 1em;
+            font-size: 0.8em;
+        }
+
+
+        .payment table tbody td {
+            padding: 8px 0;
+            border-bottom: solid 1px #BBB;
+        }
+
+        .payment table tr.separator {
+            height: 5em;
+        }
+
+        .payment table tr.separator td {
+            padding-top: 8px;
+            vertical-align: top;
+            margin-top: 5px;
+            border-bottom: none;
+        }
+
+        .payment table td.title {
+            font-weight: bold;
+        }
+
+        .payment table td.subtitle {
+            text-align: right;
+            font-style: italic;
+        }
+
+        .payment table td.reason {
+            text-align: left;
+            text-transform: lowercase;
+            width: 55%;
+        }
+
+        .payment table td.reason::first-letter {
+            text-transform: uppercase;
+        }
+
+        .payment table td.number {
+            text-align: right;
+            padding-right: 1em;
+        }
+
+        .footer {
+            display: flex;
+            border-top: solid 2px darkblue;
+        }
+
+        .footer .box {
+            padding-top: 0.5em;
+            flex-grow: 1;
+        }
+
+        .footer .box:nth-child(2) {
+            flex-grow: 1;
+            border-left: solid 2px darkblue;
+            border-right: solid 2px darkblue;
+            flex-grow: 2;
+        }
+
+        .footer .box .title {
+            font-size: 0.9em;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .footer .box .content {
+            font-size: 0.8em;
+            padding: 1em;
+        }
+
+        .footer .box:last-child .content {
+            font-size: 0.7em;
+        }
+
+        .footer .box .content i {
+            min-width: 2em;
+            text-align: center;
+            font-size: 1.5em;
+        }
+
+    </style>
+
+{% endblock %}
+
+
+{% block body %}
+    <div class="wrapper">
+
+        <header>
+            <div class="logo">
+                <img src="{{ assets_base }}/images/admin/logo_h_300.jpg"/>
+            </div>
+            <div class="cambridge">
+                <img src="{{ assets_base }}/images/admin/cambridge.png"/>
+            </div>
+        </header>
+
+        <section class="info">
+            <h2 class="title">{{ course.name }}</h2>
+
+            <article class="timetable">
+                <div class="box calendar">
+                    <h3 class="title"><span class="fa fa-calendar" aria-hidden="true"></span> Calendario:</h3>
+                    <div class="content">
+                        Desde el <span class="date">{{ course.start | localizeddate('long', 'none') }}</span><br/>
+                        Hasta el <span class="date">{{ course.end | localizeddate('long', 'none') }}</span></td>
+                    </div>
+                </div>
+
+                <div class="box schedule">
+                    <h3><span class="fa fa-calendar" aria-hidden="true"></span> Horario:</h3>
+                    <div class="content">
+                        {% for timeSheet in course.schedule.toArray %}
+                            <p>
+                                <span>{{ timeSheet.dayOfWeek.value }}</span>
+                                <span>de {{ timeSheet.start | date('H:i') }}h</span>
+                                <span>a {{ timeSheet.end | date('H:i') }}h</span>
+                            </p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </article>
+
+            <article class="payment">
+
+                <div class="box payment">
+                    <h3><span class="fa fa-credit-card" aria-hidden="true"></span> Abonos:</h3>
+                    <div class="content">
+                        {{ block('notes') }}
+                        {{ block('payment_table') }}
+                    </div>
+                </div>
+
+
+            </article>
+            <article class="footer">
+                {{ block('footer') }}
+            </article>
+
+        </section>
+    </div>
+{% endblock %}
+
+
+{% block notes %}
+    {% if startDate != null %}
+        <p class="notes">Precios válidos para la incorporación al curso el {{ startDate | date('d/m/Y') }}</p>
+    {% endif %}
+
+    {% if reserve.enrollment.ofJobStatusType %}
+        <p class="notes">Matrícula gratis</p>
+    {% endif %}
+
+    {% if monthly != null %}
+        {% if monthly.ofJobStatusType %}
+            <p class="notes">Descuento en mensualidades por situación laboral</p>
+        {% endif %}
+
+        {% if monthly.ofFamilyType %}
+            <p class="notes">Descuento familiar en mensualidades</p>
+        {% endif %}
+    {% endif %}
+
+{% endblock %}
+
+{% block payment_table %}
+    <table>
+        <thead>
+        <tr>
+            {% with {reason: '', price: 'precio', discount: 'descuento', total: 'total' } %}
+                {{ block('row') }}
+            {% endwith %}
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr>
+            <td class="title" colspan="4">Reserva del curso</td>
+        </tr>
+        <tr>
+            {% with {reason: 'Matrícula', concept: reserve.enrollment } %}
+                {{ block('concept') }}
+            {% endwith %}
+        </tr>
+        <tr>
+            {% with {reason: 'Material', concept: reserve.material } %}
+                {{ block('concept') }}
+            {% endwith %}
+        </tr>
+        <tr>
+            {% set reason = 'Primera mensualidad (%s)' | format(_self.short_date(limits.start)) %}
+            {% with {reason: reason, concept: reserve.first_month } %}
+                {{ block('concept') }}
+            {% endwith %}
+        </tr>
+        <tr>
+            {% set reason = 'Última mensualidad (%s)' | format(_self.short_date(limits.end)) %}
+
+            {% with {reason: reason, concept: reserve.last_month } %}
+                {{ block('concept') }}
+            {% endwith %}
+        </tr>
+        <tr class="separator">
+            <td class="subtitle" colspan="3">Total reserva:</td>
+            <td class="number">
+                {{ _self.format_money(reserve.total) }}
+            </td>
+        </tr>
+
+        {% if monthly != null %}
+            <tr>
+                <td class="title" colspan="4">Mensualidades</td>
+            </tr>
+            <tr>
+                {% set start = _self.short_date(limits.start | date_modify('first day of next month')) %}
+                {% set end = _self.short_date(course.end | date_modify('first day of previous month')) %}
+                {% set reason = 'cada mes entre %s y %s' | format(start, end) %}
+
+                {% with {reason: reason, concept: monthly } %}
+                    {{ block('concept') }}
+                {% endwith %}
+            </tr>
+        {% endif %}
+
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block row %}
+    <td>{{ reason }}</td>
+    <td>{{ price }}</td>
+    <td>{{ discount }}</td>
+    <td>{{ total }}</td>
+{% endblock %}
+
+{% block concept %}
+    <td class="reason">{{ reason | raw }}</td>
+    <td class="number">{{ _self.format_money(concept.price) }}</td>
+
+    <td class="number">{{ _self.format_percent(concept.discount.toInt) }}</td>
+    <td class="total number">{{ _self.format_money(concept.total) }}</td>
+{% endblock %}
+
+{% block footer %}
+    <div class="box">
+        <h3 class="title">Teléfonos</h3>
+        <div class="content">
+            <p>
+                <i class="fa fa-phone"></i> 956 05 93 44
+            </p>
+            <p>
+                <i class="fa fa-mobile"></i> 601 03 50 27
+            </p>
+        </div>
+    </div>
+
+    <div class="box">
+        <div class="content">
+            <p><i class="fa fa-facebook-f"></i> AcademiabritanniaElpuerto</p>
+            <p><i class="fa fa-twitter"></i> @AcademiaBritann</p>
+            <p><i class="fa fa-envelope"></i> britannia.elpuerto.recepcion@gmail.com</p>
+            <p><i class="fa fa-info"></i> https://www.academiabritannia.es</p>
+        </div>
+    </div>
+
+
+    <div class="box">
+        <h3 class="title">Atención al público</h3>
+        <div class="content">
+            <p><i>&nbsp;</i> 9:30 a 11:30</p>
+            <p><i>&nbsp;</i>16:00 a 21:00</p>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% macro format_money(price) %}
+    {{ price.toFloat | number_format(2) }} €
+{% endmacro %}
+
+{% macro format_percent(price) %}
+    {% if price != 0 %}
+        {{ price }}%
+    {% endif %}
+{% endmacro %}
+
+{% macro short_date(date) %}
+
+    {% set month = date | date('m') %}
+    {% set year = date | date('Y') %}
+
+    {% if month == 1 %}{% set month_name = 'ene' %}{% endif %}
+    {% if month == 2 %}{% set month_name = 'feb' %}{% endif %}
+    {% if month == 3 %}{% set month_name = 'mar' %}{% endif %}
+    {% if month == 4 %}{% set month_name = 'abr' %}{% endif %}
+    {% if month == 5 %}{% set month_name = 'mayo' %}{% endif %}
+    {% if month == 6 %}{% set month_name = 'jun' %}{% endif %}
+    {% if month == 7 %}{% set month_name = 'jul' %}{% endif %}
+    {% if month == 8 %}{% set month_name = 'ago' %}{% endif %}
+    {% if month == 9 %}{% set month_name = 'sept' %}{% endif %}
+    {% if month == 10 %}{% set month_name = 'oct' %}{% endif %}
+    {% if month == 11 %}{% set month_name = 'nov' %}{% endif %}
+    {% if month == 12 %}{% set month_name = 'dic' %}{% endif %}
+
+    {{ '%s-%s' | format(month_name, year) | raw }}
+
+{% endmacro %}

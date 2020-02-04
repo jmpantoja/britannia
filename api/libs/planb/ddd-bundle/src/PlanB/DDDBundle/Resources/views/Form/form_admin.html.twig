@@ -1,0 +1,161 @@
+{% extends '@SonataAdmin/Form/form_admin_fields.html.twig' %}
+
+{% block form_row %}
+    {% set show_label = show_label ?? true %}
+
+    {% set isChild = form.isChild ?? false %}
+    {% set use_legend = legend ?? (isChild is not same as (true) or compound) %}
+
+    {% set tag = 'div' %}
+    {% if use_legend %}
+        {% set tag = 'fieldset' %}
+    {% endif %}
+
+    <{{ tag }} class="form-group{% if errors|length > 0 %} has-error{% endif %}" id="sonata-ba-field-container-{{ id }}">
+        {% if sonata_admin.field_description.options is defined %}
+            {% set label = sonata_admin.field_description.options.name|default(label) %}
+        {% endif %}
+
+        {% set div_class = 'sonata-ba-field' %}
+
+        {% if label is same as(false) %}
+            {% set div_class = div_class ~ ' sonata-collection-row-without-label' %}
+        {% endif %}
+
+        {% if sonata_admin is defined and sonata_admin.options['form_type'] == 'horizontal' %}
+            {# Add an offset if no label or is a checkbox/radio #}
+            {% if label is same as(false) or form.vars.checked is defined %}
+                {% if 'collection' in form.parent.vars.block_prefixes %}
+                    {% set div_class = div_class ~ ' col-sm-12' %}
+                {% else %}
+                    {% set div_class = div_class ~ ' col-sm-9 col-sm-offset-3' %}
+                {% endif %}
+            {% else %}
+                {% set div_class = div_class ~ ' col-sm-9' %}
+            {% endif %}
+        {% endif %}
+
+        {% if show_label %}
+            {{ form_label(form, label|default(null), {'use_legend': use_legend}) }}
+        {% endif %}
+
+        {% if sonata_help is defined and sonata_help %}
+            <span class="help-block sonata-ba-field-widget-help">
+                {{ sonata_help|raw }}
+            </span>
+        {% endif %}
+
+        {% if sonata_admin is defined and sonata_admin_enabled %}
+            {% set div_class = div_class ~ ' sonata-ba-field-' ~ sonata_admin.edit ~ '-' ~ sonata_admin.inline %}
+        {% endif %}
+
+        {% if errors|length > 0 %}
+            {% set div_class = div_class ~ ' sonata-ba-field-error' %}
+        {% endif %}
+
+        <div class="{{ div_class }}">
+
+            {{ block('decorated_widget') }}
+
+            {% if errors|length > 0 %}
+                <div class="help-block sonata-ba-field-error-messages">
+                    {{ form_errors(form) }}
+                </div>
+            {% endif %}
+
+            {% if sonata_admin is defined and sonata_admin_enabled and sonata_admin.field_description.help|default(false) %}
+                <span
+                    class="help-block sonata-ba-field-help">{{ sonata_admin.field_description.help|trans({}, sonata_admin.field_description.translationDomain ?: admin.translationDomain)|raw }}</span>
+            {% endif %}
+        </div>
+
+    </{{ tag }}>
+
+{% endblock %}
+
+{% block decorated_widget %}
+    {% set pre_icon = pre_icon | default(false) %}
+    {% set post_icon = post_icon | default(false) %}
+
+    {% if pre_icon or post_icon %}
+        <div class='input-group'>
+            {% if pre_icon %}
+                <span class="input-group-addon"><span class="{{ pre_icon }}"></span></span>
+            {% endif %}
+            {{ form_widget(form, {'horizontal': false}) }}
+            {% if post_icon %}
+                <span class="input-group-addon"><span class="{{ post_icon }}"></span></span>
+            {% endif %}
+        </div>
+
+    {% else %}
+        {{ form_widget(form, {'horizontal': false, 'horizontal_input_wrapper_class': ''}) }}
+    {% endif %}
+
+
+
+{% endblock %}
+
+
+{% block sonata_help %}
+{% endblock %}
+
+{% block form_label %}
+    {% apply spaceless %}
+
+        {% if label is not same as(false) and sonata_admin.options['form_type'] == 'horizontal' %}
+            {% set label_class = 'col-sm-3' %}
+        {% endif %}
+
+        {% set label_class = label_class|default('') ~ ' control-label' %}
+
+        {% if label is not same as(false) %}
+            {% set label_attr = label_attr|merge({'class': label_attr.class|default('') ~ ' ' ~ label_class }) %}
+
+            {% if not compound %}
+                {% set label_attr = label_attr|merge({'for': id}) %}
+            {% endif %}
+            {% if required %}
+                {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
+            {% endif %}
+
+            {% if label is empty %}
+                {%- if label_format is defined and label_format is not empty -%}
+                    {% set label = label_format|replace({
+                        '%name%': name,
+                        '%id%': id,
+                    }) %}
+                {%- else -%}
+                    {% set label = name|humanize %}
+                {%- endif -%}
+            {% endif %}
+
+            {% if use_legend ?? false %}
+                <legend{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
+                {% if translation_domain is same as(false) %}
+                    {{- label -}}
+                {% elseif not sonata_admin.admin %}
+                    {{- label|trans({}, translation_domain) -}}
+                {% else %}
+                    {{ label|trans({}, sonata_admin.field_description.translationDomain ?: admin.translationDomain) }}
+                {% endif %}
+                </legend>
+
+            {% else %}
+
+                <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
+                {% if translation_domain is same as(false) %}
+                    {{- label -}}
+                {% elseif not sonata_admin.admin %}
+                    {{- label|trans({}, translation_domain) -}}
+                {% else %}
+                    {{ label|trans({}, sonata_admin.field_description.translationDomain ?: admin.translationDomain) }}
+                {% endif %}
+                </label>
+
+            {% endif %}
+
+        {% endif %}
+    {% endapply %}
+{% endblock %}
+

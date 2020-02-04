@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+
+    <entity name="Britannia\Domain\Entity\Student\Student" table="students" inheritance-type="JOINED">
+
+        <discriminator-column name="type" type="string"/>
+        <discriminator-map>
+            <discriminator-mapping value="child" class="Britannia\Domain\Entity\Student\Child"/>
+            <discriminator-mapping value="adult" class="Britannia\Domain\Entity\Student\Adult"/>
+        </discriminator-map>
+
+        <id name="id" type="StudentId" column="id">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
+        </id>
+
+        <one-to-many field="studentHasCourses" target-entity="Britannia\Domain\Entity\Student\StudentCourse"
+                     mapped-by="student" orphan-removal="true">
+
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </one-to-many>
+
+        <field name="oldId" column="old_id" type="integer" nullable="true"></field>
+
+        <field name="active" type="boolean" column="active"/>
+
+        <embedded name="fullName" class="PlanB\DDD\Domain\VO\FullName" use-column-prefix="false"/>
+
+        <field name="birthDate" type="date_immutable" nullable="true"/>
+
+        <field name="birthMonth" column="birth_month" type="integer" nullable="true"/>
+
+        <field name="age" column="age" type="positive_integer" nullable="true"/>
+
+        <field name="emails" column="emails" type="email_list"/>
+
+        <embedded name="address" class="PlanB\DDD\Domain\VO\PostalAddress" use-column-prefix="false"/>
+
+        <field name="phoneNumbers" column="phone_numbers" type="phone_number_list"/>
+
+        <field name="freeEnrollment" type="boolean"/>
+
+        <many-to-many field="relatives" target-entity="Student">
+            <cascade>
+                <cascade-all/>
+            </cascade>
+        </many-to-many>
+
+
+        <embedded name="payment" class="Britannia\Domain\VO\Payment\Payment"/>
+
+        <field name="preferredPartOfDay" column="preferredPartOfDay" type="PartOfDay"/>
+
+        <field name="preferredContactMode" column="preferredContactMode" type="ContactMode"/>
+
+        <many-to-one field="academy" target-entity="Britannia\Domain\Entity\Academy\Academy">
+            <join-column name="other_academy_id"></join-column>
+        </many-to-one>
+
+
+        <one-to-many field="records" target-entity="Britannia\Domain\Entity\Record\Record" mapped-by="student"
+                     orphan-removal="true"/>
+
+        <field name="academyNumOfYears" column="other_academy_time" type="NumOfYears"/>
+        <field name="firstContact" nullable="true"/>
+
+        <field name="firstComment" column="first_comment" nullable="true" type="text"></field>
+
+        <field name="secondComment" column="second_comment" nullable="true" type="text"></field>
+
+        <field name="termsOfUseAcademy" type="boolean"/>
+
+        <field name="termsOfUseStudent" type="boolean"/>
+
+        <field name="termsOfUseImageRigths" type="boolean"/>
+
+        <field name="createdAt" type="datetime_immutable"/>
+
+        <field name="updatedAt" type="datetime_immutable"/>
+
+    </entity>
+
+</doctrine-mapping>

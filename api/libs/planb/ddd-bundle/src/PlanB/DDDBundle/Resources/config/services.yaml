@@ -1,0 +1,46 @@
+---
+
+services:
+
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.    
+
+
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    PlanB\DDDBundle\Symfony\Form\Type\:
+        resource: '../../Symfony/Form/Type/*'
+        tags: ['form.type']
+
+
+
+    PlanB\DDDBundle\Symfony\Normalizer\:
+        resource: '../../Symfony/Normalizer/*'
+        tags: ['serializer.normalizer']
+
+
+#    planb.ddd.api_platform.data_persister:
+#        class: PlanB\DDDBundle\ApiPlattform\DataPersister
+#        tags:
+#        - {name: 'api_platform.data_persister'}
+#
+
+    planb.ddd.sonata.model_manager:
+        class: \PlanB\DDDBundle\Sonata\ModelManager
+        
+    PlanB\DDDBundle\Sonata\ModelManager:
+        alias: planb.ddd.sonata.model_manager 
+
+    PlanB\DDD\Domain\Event\DomainEventCollectorInterface:
+        class: PlanB\DDDBundle\Symfony\DomainEventCollector
+
+#    planb.ddd.domain_event.collector:
+#        alias: PlanB\DDD\Domain\Event\DomainEventCollectorInterface
+
+
+    planb.ddd.domain_event.subscriber:
+        alias: PlanB\DDDBundle\Doctrine\DomainEventSubscriber
+
+
+

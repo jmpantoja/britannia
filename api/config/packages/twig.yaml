@@ -2,3 +2,15 @@ twig:
     default_path: '%kernel.project_dir%/templates'
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
+
+    globals:
+        attendances: '@Britannia\Infraestructure\Symfony\Service\Attendance\AttendanceService'
+        skill_marks: '@Britannia\Infraestructure\Symfony\Service\Assessment\SkillMarkService'
+        #        paymentInfo: '@Britannia\Domain\Service\Payment\PaymentInfoService'
+        #courseInfo: '@Britannia\Infraestructure\Symfony\Service\Course\CourseInformationReportService'
+    form_themes:
+        - '@SonataFormatter/Form/formatter.html.twig'
+        - '@SonataCore/Form/datepicker.html.twig'
+    #    - '@SonataCore/Form/color.html.twig'
+
+    

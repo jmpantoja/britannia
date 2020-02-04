@@ -1,0 +1,13 @@
+framework:
+    validation:
+        email_validation_mode: html5
+
+        #pongo el path en mapping porque me gusta que las rutas queden reflejadas en la config
+        #si no pongo nada, se va a leer a la ruta por defecto (config/validator) 
+        #por algun motivo, si pongo el valor '%kernel.project_dir%/config/validator' (que sería igual al por defecto)
+        #salen los mensajes de error por duplicado
+
+        mapping:
+            paths:
+                - '%planb.ddd.resources_dir%/config/mapping/validation'
+

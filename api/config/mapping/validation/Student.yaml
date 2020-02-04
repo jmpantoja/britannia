@@ -1,0 +1,15 @@
+Britannia\Domain\Entity\Student\Student:
+    properties:          
+#        fullName:
+#        - Valid: ~
+
+#        birthDate:
+#        - NotBlank: ~            
+#        - NotNull: ~            
+#        - Date: ~
+#
+#        email:
+#        - NotBlank: ~
+#
+#        address:
+#        - Valid: ~           

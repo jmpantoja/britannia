@@ -1,0 +1,29 @@
+{% block toggle_widget %}
+    {% set checked = '' %}
+
+    {% if value == "1" %}
+        {% set checked = 'checked' %}
+    {% endif %}
+
+    <input id="{{ id }}" name="{{ full_name }}" {{ checked }} type="checkbox" data-toggle="toggle"
+           value="yes"
+           data-width="{{ width }}"
+           data-height="{{ height }}"
+           data-on="{{ on_text }}"
+           data-off="{{ off_text }}"
+           data-onstyle="{{ on_style }}"
+           data-offstyle="{{ off_style }}"
+    >
+{% endblock %}
+
+{% block multiselect %}
+    {{ form_widget(form) }}
+    <script type="text/javascript">
+        var select = document.getElementById("{{ id }}");
+
+        multi(select, {
+            non_selected_header: "Todos",
+            selected_header: "Seleccionados"
+        });
+    </script>
+{% endblock %}

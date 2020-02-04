@@ -9,5 +9,5 @@ framework:
         
         mapping:
             paths:
-                - '%kernel.project_dir%/config/validation'
+                - '%kernel.project_dir%/config/mapping/validation'
                 

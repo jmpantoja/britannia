@@ -3,64 +3,87 @@
 namespace Britannia\Infraestructure\Symfony\DataFixtures;
 
 use ApiPlatform\Core\DataPersister\DataPersisterInterface;
-use Britannia\Domain\Entity\Staff\Staff;
-
 use Britannia\Domain\Entity\Staff\StaffMember;
 use Britannia\Domain\Entity\Staff\User;
-use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
+use PlanB\DDD\Domain\VO\Email;
+use PlanB\DDD\Domain\VO\FullName;
 use PlanB\OrigamiBundle\Api\DataPersister;
 
-class StaffMemberFixtures extends Fixture
+class StaffMemberFixtures extends BaseFixture implements FixtureGroupInterface
 {
 
-    /**
-     * @var DataPersister
-     */
-    private $dataPersister;
-
-    public function __construct(DataPersisterInterface $dataPersister)
+    public static function getGroups(): array
     {
-        $this->dataPersister = $dataPersister;
+        return ['staff'];
     }
 
-    public function load(ObjectManager $manager)
+    public function getBackupFiles(): array
     {
-        $user = new StaffMember();
-        $user->setUserName('admin');
+        return [
+            sprintf('%s/dumps/britannia_other_academies.sql', __DIR__),
+            sprintf('%s/dumps/britannia_schools.sql', __DIR__),
+            sprintf('%s/dumps/britannia_calendar.sql', __DIR__),
+            sprintf('%s/dumps/britannia_classrooms.sql', __DIR__),
+            sprintf('%s/dumps/britannia_staff_members.sql', __DIR__)
+        ];
+    }
 
-        $user->setFirstName('pepe');
-        $user->setLastName('botika');
+    public function loadData(DataPersisterInterface $dataPersister): void
+    {
 
-        $user->setPlainPassword('1234');
-        $user->setPassword('1234');
-        $user->setEmail('pepe@botika.es');
-        $user->setActive(true);
-
-
-        $this->dataPersister->persist($user);
-
-
-        for ($i = 0; $i < 1; $i++) {
-            $user = new StaffMember();
-
-            $name = sprintf('user-%02d', $i + 1);
-            $email = sprintf('%s@britannia.es', $name);
-
-            $user->setUserName($name);
-
-            $user->setFirstName($name);
-            $user->setLastName('britannia');
-
-            $user->setPlainPassword('1234');
-
-
-            $user->setEmail($email);
-            $user->setActive(true);
-
-            $this->dataPersister->persist($user);
-
-        }
+//        $this->createMany(StaffMember::class, 2, function (StaffMember $member, int $count) {
+//
+//            $userName = sprintf('manager-%02d', $count);
+//            $this->create($member, $userName, [
+//                'ROLE_MANAGER'
+//            ]);
+//            return $userName;
+//        });
+//
+//        $this->createMany(StaffMember::class, 5, function (StaffMember $member, int $count) {
+//            $userName = sprintf('reception-%02d', $count);
+//            $this->create($member, $userName, [
+//                'ROLE_RECEPTION'
+//            ]);
+//            return $userName;
+//        });
+//
+//
+//        $this->createMany(StaffMember::class, 15, function (StaffMember $member, int $count) {
+//            $userName = sprintf('teacher-%02d', $count);
+//            $this->create($member, $userName, [
+//                'ROLE_TEACHER'
+//            ]);
+//
+//            return $userName;
+//        });
 
     }
+
+
+    public function create(StaffMember $member, string $userName, array $roles)
+    {
+        $member->setUserName($userName);
+
+        $member->setFullName(FullName::make(...[
+            $this->faker->firstName(),
+            $this->faker->lastName()
+        ]));
+
+        $member->setPlainPassword('1234');
+
+        $email = sprintf('%s@britannia.es', $userName);
+        $member->setEmails([
+            Email::make($email),
+            Email::make($this->faker->email),
+            Email::make($this->faker->email)
+
+        ]);
+
+        $member->setRoles($roles);
+
+    }
+
+
 }
