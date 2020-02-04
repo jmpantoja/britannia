@@ -9,5 +9,5 @@ framework:
 
         mapping:
             paths:
-                - '%planb.ddd.bundle_dir%/config/mapping/validation'
+                - '%planb.ddd.resources_dir%/config/mapping/validation'
 

@@ -17,11 +17,11 @@ return [
     Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle::class => ['all' => true],
     Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle::class => ['all' => true],
     League\Tactician\Bundle\TacticianBundle::class => ['all' => true],
-    PlanB\DDDBundle\PlanBDDDBundle::class => ['all' => true],
     Symfony\Bundle\MonologBundle\MonologBundle::class => ['all' => true],
     Knp\Bundle\MarkdownBundle\KnpMarkdownBundle::class => ['all' => true],
     FOS\CKEditorBundle\FOSCKEditorBundle::class => ['all' => true],
     Sonata\FormatterBundle\SonataFormatterBundle::class => ['all' => true],
     Sonata\IntlBundle\SonataIntlBundle::class => ['all' => true],
     Knp\Bundle\SnappyBundle\KnpSnappyBundle::class => ['all' => true],
+    PlanB\DDDBundle\PlanBDDDBundle::class => ['all' => true]
 ];

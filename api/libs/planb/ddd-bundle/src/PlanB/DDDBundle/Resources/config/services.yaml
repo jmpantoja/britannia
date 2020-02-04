@@ -10,13 +10,13 @@ services:
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
     PlanB\DDDBundle\Symfony\Form\Type\:
-        resource: '../src/Symfony/Form/Type/*'
+        resource: '../../Symfony/Form/Type/*'
         tags: ['form.type']
 
 
 
     PlanB\DDDBundle\Symfony\Normalizer\:
-        resource: '../src/Symfony/Normalizer/*'
+        resource: '../../Symfony/Normalizer/*'
         tags: ['serializer.normalizer']
 
 

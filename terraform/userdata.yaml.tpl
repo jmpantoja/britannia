@@ -7,7 +7,6 @@ packages:
   - docker-compose
   - git
   - ansible
-  - composer
 write_files:
   - path: /root/env.tmp
     content: |
@@ -52,6 +51,5 @@ runcmd:
   - mv /root/docker-compose.override.yml.tmp /deploy/britannia/docker-compose.override.yml
   - mv /root/api.env.local.tmp /deploy/britannia/api/.env.local
   - cd /deploy/britannia/api
-  - composer install
   - cd /deploy/britannia
   - docker-compose up -d

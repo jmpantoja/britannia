@@ -16,10 +16,9 @@
         "league/tactician": "^1.0",
         "league/tactician-bundle": "^1.1",
         "league/tactician-doctrine": "^1.1",
+        "nesbot/carbon": "^2.26",
         "marc-mabe/php-enum": "^4.1",
         "mikehaertl/php-pdftk": "^0.8.0",
-        "planb/ddd": "*@dev",
-        "planb/ddd-bundle": "*@dev",
         "ramsey/uuid-doctrine": "^1.5",
         "sonata-project/admin-bundle": "^3.53",
         "sonata-project/doctrine-orm-admin-bundle": "^3.10",
@@ -50,7 +49,9 @@
     },
     "autoload": {
         "psr-4": {
-            "Britannia\\": "src/Britannia"
+            "Britannia\\": "src/Britannia",
+            "PlanB\\DDDBundle\\": "libs/planb/ddd-bundle/src/PlanB/DDDBundle",
+            "PlanB\\DDD\\": "libs/planb/ddd/src/PlanB/DDD"
         }
     },
     "autoload-dev": {
@@ -87,17 +88,5 @@
             "allow-contrib": false,
             "require": "5.0.*"
         }
-    },
-    "repositories": [
-        {
-            "type": "path",
-            "url": "./libs/planb/ddd-bundle",
-            "symlink": true
-        },
-        {
-            "type": "path",
-            "url": "./libs/planb/ddd",
-            "symlink": true
-        }
-    ]
+    }
 }

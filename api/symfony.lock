@@ -14,9 +14,6 @@
     "api-platform/schema-generator": {
         "version": "v2.1.0-beta.1"
     },
-    "beberlei/assert": {
-        "version": "v3.2.3"
-    },
     "beberlei/doctrineextensions": {
         "version": "v1.2.6"
     },
@@ -226,12 +223,6 @@
     },
     "phpdocumentor/type-resolver": {
         "version": "0.4.0"
-    },
-    "planb/ddd": {
-        "version": "dev-master"
-    },
-    "planb/ddd-bundle": {
-        "version": "dev-master"
     },
     "psr/cache": {
         "version": "1.0.1"

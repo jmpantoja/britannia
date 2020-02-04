@@ -36,9 +36,10 @@ class DDDExtension extends Extension implements PrependExtensionInterface
             'typehints' => true
         ]);
 
+        $pathToConfig = realpath(__DIR__ . '/../Resources/config');
         $loader = new YamlFileLoader(
             $container,
-            new FileLocator(__DIR__ . '/../../config')
+            new FileLocator($pathToConfig)
         );
         $loader->load('services.yaml');
     }
@@ -51,13 +52,13 @@ class DDDExtension extends Extension implements PrependExtensionInterface
 
         $extensions = array_keys($container->getExtensions());
 
-        $pathToPackages = __DIR__ . '/../../config/packages/';
+        $pathToPackages = realpath(__DIR__ . '/../Resources/config/packages');
         $config = $this->loadPackagesConfig($pathToPackages);
 
         foreach ($extensions as $extension) {
 
             if (isset($config[$extension])) {
-                  $container->prependExtensionConfig($extension, $config[$extension]);
+                $container->prependExtensionConfig($extension, $config[$extension]);
             }
         }
     }

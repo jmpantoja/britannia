@@ -31,8 +31,8 @@ class PlanBDDDBundle extends Bundle
 
         $container->addCompilerPass(new ModelManagerCompilerPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 10);
 
-        $pathToDir = realpath(__DIR__ . '/..');
-        $container->setParameter('planb.ddd.bundle_dir', $pathToDir);
+        $pathToDir = realpath(__DIR__.'/Resources' );
+        $container->setParameter('planb.ddd.resources_dir', $pathToDir);
     }
 
     public function getContainerExtension()
