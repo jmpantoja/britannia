@@ -7,33 +7,51 @@ packages:
   - docker-compose
   - git
   - ansible
+  - composer
 write_files:
-  - path: /root/env.local
+  - path: /root/env.tmp
     content: |
-        SITE_BASE_URL=https://www.planb.ovh
+        CONTAINER_REGISTRY_BASE=quay.io/api-platform
+
+        MYSQL_USER=${mysql_user}
+        MYSQL_ROOT_PASSWORD=${mysql_root_password}
+        MYSQL_PASSWORD=${mysql_password}
+        MYSQL_DATABASE=${mysql_database}
+
+  - path: /root/docker-compose.override.yml.tmp
+    content: |
+        version: '3.4'
+        services:
+            proxy:
+                environment:
+                    DOMAINS: 'www.${app_url} -> http://cache-proxy:80 #local, ${app_url} -> http://cache-proxy:80 #local'
+
+  - path: /root/api.env.local.tmp
+    content: |
+        SITE_BASE_URL=https://www.${app_url}
 
         ###> symfony/framework-bundle ###
         APP_ENV=dev
-        APP_SECRET=eZCmRupDXdcD
+        APP_SECRET=${app_secret}
         ###< symfony/framework-bundle ###
 
         ###> doctrine/doctrine-bundle ###
-        DATABASE_URL=mysql://britannia:Vq4q9HzEJ7VrHuZq@db/britannia
-        DATABASE_OLD_URL=mysql://britannia:Vq4q9HzEJ7VrHuZq@db/academia_mysql
+        DATABASE_URL=mysql://${mysql_user}:${mysql_password}@db/${mysql_database}
+        #DATABASE_OLD_URL=mysql://${mysql_user}:${mysql_password}@db/academia_mysql
         ###< doctrine/doctrine-bundle ###
 
-  - path: /root/index.html
-    content: |
-        sos un capo
 
 runcmd:
-  - docker run -d -v /root/index.html:/usr/share/nginx/html/index.html -p 80:80 nginx
-#  - mkdir /deploy
-#  - cd /deploy
-#  - git config --global user.name "jmpantoja"
-#  - git config --global user.email "jmpantoja@gmail.com"
-#  - git clone ${github_repository_url} britannia
-#  - cd /deploy/britannia
-#  - ./deploy.sh master
-#  - cp /root/env.tmp /deploy/britannia/.env
-#  - docker-compose -f /deploy/britannia/docker-compose.yml up -d
+  - mkdir /deploy
+  - git config --global user.name "jmpantoja"
+  - git config --global user.email "jmpantoja@gmail.com"
+  - cd /deploy
+  - git clone ${github_repository_url} britannia
+  - git checkout ${github_branch}
+  - mv /root/env.tmp /deploy/britannia/.env
+  - mv /root/docker-compose.override.yml.tmp /deploy/britannia/docker-compose.override.yml
+  - mv /root/api.env.local.tmp /deploy/britannia/api/.env.local
+  - cd /deploy/britannia/api
+  - composer install
+  - cd /deploy/britannia
+  - docker-compose up -d

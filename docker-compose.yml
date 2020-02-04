@@ -48,16 +48,6 @@ services:
     tmpfs:
     - /usr/local/var/varnish:exec
 
-  #  db:
-  #    # In production, you may want to use a managed database service
-  #    image: postgres:10-alpine
-  #    environment:
-  #    - POSTGRES_DB=${POSTGRES_DB}
-  #    - POSTGRES_USER=${POSTGRES_USER}
-  #    - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-  #    volumes:
-  #    - ./data/database:/var/lib/postgresql/data:rw
-
   db:
     image: mysql:5.7
     environment:

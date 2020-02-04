@@ -3,21 +3,26 @@
 
 variable "github_user" {}
 variable "github_password" {}
-#variable "mysql_root_password" {}
-#variable "mysql_database" {}
-#variable "mysql_user" {}
-#variable "mysql_password" {}
-#variable "hostname" {}
+variable "github_repository_url" {}
+variable "github_branch" {}
+variable "app_url" {}
+variable "app_secret" {}
+variable "mysql_root_password" {}
+variable "mysql_database" {}
+variable "mysql_user" {}
+variable "mysql_password" {}
 
 data "template_file" "init" {
 template = "${file("userdata.yaml.tpl")}"
 vars = {
-    github_repository_url = "https://github.com/jmpantoja/britannia.git"
-#    mysql_root_password = "${var.mysql_root_password}"
-#    mysql_database = "${var.mysql_database}"
-#    mysql_user = "${var.mysql_user}"
-#    mysql_password = "${var.mysql_password}"
-#    hostname = "${var.hostname}"
+    github_repository_url = "${var.github_repository_url}"
+    github_branch = "${var.github_branch}"
+    app_url = "${var.app_url}"
+    app_secret = "${var.app_secret}"
+    mysql_root_password = "${var.mysql_root_password}"
+    mysql_database = "${var.mysql_database}"
+    mysql_user = "${var.mysql_user}"
+    mysql_password = "${var.mysql_password}"
   }
 }
 
