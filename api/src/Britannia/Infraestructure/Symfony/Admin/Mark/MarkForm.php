@@ -117,6 +117,7 @@ final class MarkForm extends AdminForm
      */
     private function organizeByTermName(Course $course): array
     {
+        $list = [];
         $total = $course->numOfTerms();
 
         for ($num = 0; $num < $total; $num++) {

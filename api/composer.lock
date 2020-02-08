@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "080df82aed5160619f33c25cb3396fd1",
+    "content-hash": "3dab84e2db3bf8c5c66373ff13e0c124",
     "packages": [
         {
             "name": "api-platform/api-pack",
@@ -3191,87 +3191,6 @@
             "time": "2019-08-22T18:11:29+00:00"
         },
         {
-            "name": "planb/ddd",
-            "version": "dev-master",
-            "dist": {
-                "type": "path",
-                "url": "./libs/planb/ddd",
-                "reference": "1e51255700371bf641cd53b565088a247070d670",
-                "shasum": null
-            },
-            "require": {
-                "php": "^7.2",
-                "psr/event-dispatcher": "^1.0",
-                "symfony/event-dispatcher": "^4.2"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "PlanB\\DDD\\": "src/"
-                }
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "PlanB\\DDD\\Tests\\": "tests/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jose Manuel Pantoja",
-                    "email": "jmpantoja@gmail.com"
-                }
-            ],
-            "description": "DDD Utils",
-            "keywords": [
-                "DDD"
-            ]
-        },
-        {
-            "name": "planb/ddd-bundle",
-            "version": "dev-master",
-            "dist": {
-                "type": "path",
-                "url": "./libs/planb/ddd-bundle",
-                "reference": "f251ea6e80312b919826501105d8eda59d2c8424",
-                "shasum": null
-            },
-            "require": {
-                "api-platform/core": "^2.4",
-                "php": "^7.2",
-                "symfony/http-kernel": "^4.2"
-            },
-            "type": "symfony-bundle",
-            "autoload": {
-                "psr-4": {
-                    "PlanB\\DDDBundle\\": "src/"
-                }
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "PlanB\\DDDBundle\\Tests\\": "tests/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jose Manuel Pantoja",
-                    "email": "jmpantoja@gmail.com"
-                }
-            ],
-            "description": "Api Platform and Sonata Admin Integration",
-            "keywords": [
-                "Admin Generator",
-                "Api Platfomr",
-                "admin",
-                "sonata"
-            ]
-        },
-        {
             "name": "psr/cache",
             "version": "1.0.1",
             "source": {
@@ -3365,52 +3284,6 @@
                 "psr"
             ],
             "time": "2017-02-14T16:28:37+00:00"
-        },
-        {
-            "name": "psr/event-dispatcher",
-            "version": "1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/php-fig/event-dispatcher.git",
-                "reference": "dbefd12671e8a14ec7f180cab83036ed26714bb0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/event-dispatcher/zipball/dbefd12671e8a14ec7f180cab83036ed26714bb0",
-                "reference": "dbefd12671e8a14ec7f180cab83036ed26714bb0",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.2.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Psr\\EventDispatcher\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "PHP-FIG",
-                    "homepage": "http://www.php-fig.org/"
-                }
-            ],
-            "description": "Standard interfaces for event handling.",
-            "keywords": [
-                "events",
-                "psr",
-                "psr-14"
-            ],
-            "time": "2019-01-08T18:20:26+00:00"
         },
         {
             "name": "psr/http-message",
@@ -4300,16 +4173,16 @@
         },
         {
             "name": "sonata-project/exporter",
-            "version": "2.0.1",
+            "version": "2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/exporter.git",
-                "reference": "9e84fd03ef0c696b9b4e9617b73cb6defaf3b476"
+                "reference": "018474961b03bce8c24280520f8f8ed7e0a69cb1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/exporter/zipball/9e84fd03ef0c696b9b4e9617b73cb6defaf3b476",
-                "reference": "9e84fd03ef0c696b9b4e9617b73cb6defaf3b476",
+                "url": "https://api.github.com/repos/sonata-project/exporter/zipball/018474961b03bce8c24280520f8f8ed7e0a69cb1",
+                "reference": "018474961b03bce8c24280520f8f8ed7e0a69cb1",
                 "shasum": ""
             },
             "require": {
@@ -4319,19 +4192,18 @@
                 "doctrine/dbal": "^2.5",
                 "doctrine/orm": "^2.4.5",
                 "matthiasnoback/symfony-config-test": "^4.0",
-                "matthiasnoback/symfony-dependency-injection-test": "^3.0",
+                "matthiasnoback/symfony-dependency-injection-test": "^4.0",
                 "propel/propel1": "^1.6",
                 "symfony/config": "^3.4 || ^4.0",
                 "symfony/dependency-injection": "^3.4 || ^4.0",
                 "symfony/http-foundation": "^3.4 || ^4.0",
                 "symfony/http-kernel": "^3.4 || ^4.0",
-                "symfony/phpunit-bridge": "^4.1",
+                "symfony/phpunit-bridge": "^4.3.8",
                 "symfony/property-access": "^3.4 || ^4.0",
                 "symfony/routing": "^3.4 || ^4.0"
             },
             "suggest": {
-                "ext-curl": "*",
-                "propel/propel1": "^1.6",
+                "propel/propel1": "To export propel collections",
                 "symfony/property-access": "To be able to export from database entities",
                 "symfony/routing": "To be able to export the routes of a Symfony app"
             },
@@ -4366,7 +4238,7 @@
                 "export",
                 "xls"
             ],
-            "time": "2019-01-26T10:32:20+00:00"
+            "time": "2020-02-06T19:17:41+00:00"
         },
         {
             "name": "sonata-project/formatter-bundle",
@@ -9166,10 +9038,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "planb/ddd-bundle": 20,
-        "planb/ddd": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

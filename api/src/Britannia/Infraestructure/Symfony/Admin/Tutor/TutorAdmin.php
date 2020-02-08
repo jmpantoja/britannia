@@ -29,6 +29,9 @@ final class TutorAdmin extends AbstractAdmin
      */
     private TutorTools $adminTools;
 
+    protected $maxPerPage = 50;
+    protected $maxPageLinks = 10;
+
     public function __construct($code, $class, $baseControllerName, TutorTools $adminTools)
     {
         parent::__construct($code, $class, $baseControllerName);
@@ -73,5 +76,14 @@ final class TutorAdmin extends AbstractAdmin
         $this->adminTools()
             ->form($formMapper)
             ->configure();
+    }
+
+    public function getDataSourceIterator()
+    {
+
+        return $this->adminTools()
+            ->dataSource($this->getDatagrid())
+            ->build();
+
     }
 }

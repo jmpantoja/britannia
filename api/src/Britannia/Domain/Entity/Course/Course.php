@@ -284,7 +284,6 @@ abstract class Course implements Comparable
 
         $this->timeTable->update($this->lessonList());
 
-
         return $this;
     }
 
@@ -300,7 +299,6 @@ abstract class Course implements Comparable
         $termList = $generator->generateTerms($this->courseHasStudentList(), $definition);
         $this->setTerms($termList);
 
-        /** falta un segundo parametro con las destrezas "extras" */
         $this->termList()->updateSkills($definition->skills());
 
         return $this;
@@ -511,6 +509,11 @@ abstract class Course implements Comparable
     public function teachers(): array
     {
         return $this->teachersList()->toArray();
+    }
+
+    public function mainTeacher(): ?StaffMember
+    {
+        return $this->teachersList()->values()->first();
     }
 
     /**

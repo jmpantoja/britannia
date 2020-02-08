@@ -21,7 +21,7 @@ framework:
         log: true
 
     assets:
-        version: 'v1.2'
+        version: 'v1.3'
         version_format: '%%s?version=%%s'
         base_path: ~
         base_urls: ['%env(SITE_BASE_URL)%']

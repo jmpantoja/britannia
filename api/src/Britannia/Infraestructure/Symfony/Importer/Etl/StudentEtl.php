@@ -30,7 +30,7 @@ class StudentEtl extends AbstractEtl
 
     public function clean(): void
     {
-        $this->truncate('students', 'students_child', 'students_adult', 'tutors');
+        $this->truncate('students', 'students_child', 'students_adult', 'tutors', 'student_records');
     }
 
     public function configureDataLoader(QueryBuilder $builder): void

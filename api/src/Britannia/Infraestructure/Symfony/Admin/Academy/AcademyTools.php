@@ -14,11 +14,15 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Admin\Academy;
 
 
+use Britannia\Domain\Entity\Academy\Academy;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Infraestructure\Symfony\Admin\Course\CourseMapper;
+use PlanB\DDDBundle\Sonata\Admin\AdminDataGrid;
+use PlanB\DDDBundle\Sonata\Admin\AdminDataSource;
 use PlanB\DDDBundle\Sonata\Admin\AdminQuery;
 use PlanB\DDDBundle\Sonata\Admin\AdminRoutes;
 use PlanB\DDDBundle\Sonata\Admin\AdminTools;
+use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -62,5 +66,10 @@ final class AcademyTools extends AdminTools
     public function routes(RouteCollection $collection, string $idParameter): ?AdminRoutes
     {
         return null;
+    }
+
+    public function dataSource(DatagridInterface $datagrid): ?AdminDataSource
+    {
+        return AcademyDataSource::make($datagrid);
     }
 }

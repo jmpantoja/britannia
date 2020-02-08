@@ -103,7 +103,6 @@ class Record
      */
     public function getStudent(): Student
     {
-
         return $this->student;
     }
 

@@ -25,6 +25,10 @@ final class BookAdmin extends AbstractAdmin
      */
     private BookTools $adminTools;
 
+    protected $maxPerPage = 50;
+    protected $maxPageLinks = 10;
+
+
     public function __construct($code, $class, $baseControllerName, BookTools $adminTools)
     {
         parent::__construct($code, $class, $baseControllerName);
@@ -72,4 +76,12 @@ final class BookAdmin extends AbstractAdmin
             ->configure();
     }
 
+    public function getDataSourceIterator()
+    {
+
+        return $this->adminTools()
+            ->dataSource($this->getDatagrid())
+            ->build();
+
+    }
 }

@@ -71,7 +71,7 @@ class AssessmentDefinition
         return new self(...[
             SetOfSkills::SET_OF_SIX(),
             SkillList::collect([Skill::IRREGULAR_VERBS(), Skill::ALPHABET()]),
-            0,
+            3,
             true,
             false
         ]);

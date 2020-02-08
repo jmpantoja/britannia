@@ -22,6 +22,10 @@ final class ClassRoomAdmin extends AbstractAdmin
      */
     private ClassRoomTools $adminTools;
 
+    protected $maxPerPage = 50;
+    protected $maxPageLinks = 10;
+
+
     public function __construct($code, $class, $baseControllerName, ClassRoomTools $adminTools)
     {
         parent::__construct($code, $class, $baseControllerName);
@@ -67,6 +71,15 @@ final class ClassRoomAdmin extends AbstractAdmin
         $this->adminTools()
             ->form($formMapper)
             ->configure();
+    }
+
+    public function getDataSourceIterator()
+    {
+
+        return $this->adminTools()
+            ->dataSource($this->getDatagrid())
+            ->build();
+
     }
 
 }

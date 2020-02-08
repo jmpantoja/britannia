@@ -77,7 +77,7 @@ class Attendance implements Comparable
 
         $this->reason = empty($reason) ? null : $reason;
 
-        $this->notify(StudentHasMissedLesson::make($this));
+    //   $this->notify(StudentHasMissedLesson::make($this));
     }
 
     public static function make(Lesson $lesson, Student $student, ?string $reason): self

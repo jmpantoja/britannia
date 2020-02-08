@@ -22,6 +22,8 @@ final class AcademyAdmin extends AbstractAdmin
         '_sort_by' => 'fullName.lastName',
     ];
 
+    protected $maxPerPage = 50;
+    protected $maxPageLinks = 10;
 
     public function __construct($code, $class, $baseControllerName, AcademyTools $academyTools)
     {
@@ -65,6 +67,15 @@ final class AcademyAdmin extends AbstractAdmin
         $this->adminTools()
             ->form($formMapper)
             ->configure();
+    }
+
+    public function getDataSourceIterator()
+    {
+
+        return $this->adminTools()
+            ->dataSource($this->getDatagrid())
+            ->build();
+
     }
 }
 

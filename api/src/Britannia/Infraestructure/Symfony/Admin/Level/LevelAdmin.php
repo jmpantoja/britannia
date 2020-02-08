@@ -23,6 +23,9 @@ final class LevelAdmin extends AbstractAdmin
      */
     private LevelTools $adminTools;
 
+    protected $maxPerPage = 50;
+    protected $maxPageLinks = 10;
+
     public function __construct($code, $class, $baseControllerName, LevelTools $adminTools)
     {
         parent::__construct($code, $class, $baseControllerName);
@@ -68,4 +71,12 @@ final class LevelAdmin extends AbstractAdmin
             ->form($formMapper)
             ->configure();
     }
+
+    public function getDataSourceIterator()
+    {
+        return $this->adminTools()
+            ->dataSource($this->getDatagrid())
+            ->build();
+    }
+
 }

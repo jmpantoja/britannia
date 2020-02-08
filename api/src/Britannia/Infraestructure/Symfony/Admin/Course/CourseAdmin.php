@@ -19,6 +19,10 @@ final class CourseAdmin extends AbstractAdmin
      */
     private CourseTools $adminTools;
 
+
+    protected $maxPerPage = 50;
+    protected $maxPageLinks = 10;
+
     public function __construct(
         string $code,
         string $class,
@@ -38,6 +42,12 @@ final class CourseAdmin extends AbstractAdmin
     {
         return $this->adminTools;
     }
+
+    public function getExportFields()
+    {
+        return ['name', 'status', 'numOfPlaces', 'monthlyPayment', 'numOfStudents' ];
+    }
+
 
     private function dataGridValues(): void
     {
@@ -91,6 +101,14 @@ final class CourseAdmin extends AbstractAdmin
     }
 
 
+    public function getDataSourceIterator()
+    {
+
+        return $this->adminTools()
+            ->dataSource($this->getDatagrid())
+            ->build();
+
+    }
     /**
      * @param Course $object
      * @return string

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace PlanB\DDDBundle\Sonata\Admin;
 
 
+use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -22,6 +23,8 @@ use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 
 abstract class AdminTools
 {
+    abstract public function dataSource(DatagridInterface $listMapper): ?AdminDataSource;
+
     abstract public function dataGrid(ListMapper $listMapper): ?AdminDataGrid;
 
     abstract public function form(FormMapper $formMapper): ?AdminForm;
