@@ -49,23 +49,6 @@ final class StudentFilter extends AdminFilter
             'show_filter' => true
         ]);
 
-
-//        $this->add('Cumple', 'doctrine_orm_callback', [
-//            'callback' => function (ProxyQuery $queryBuilder, $alias, $field, $value) {
-//                if (!$value['value']) {
-//                    return;
-//                }
-//
-//                $where = sprintf('%s.birthMonth = :month', $alias);
-//                $queryBuilder
-//                    ->andwhere($where)
-//                    ->setParameter('month', $value['value']);
-//                return true;
-//            }
-//        ], PartOfDayType::class);
-
-
-
         $this->add('Cumple', 'doctrine_orm_callback', [
             'callback' => function (ProxyQuery $queryBuilder, $alias, $field, $value) {
                 if (!$value['value']) {

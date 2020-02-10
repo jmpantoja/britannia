@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Britannia\Infraestructure\Symfony\Admin\ClassRoom;
 
+use Britannia\Infraestructure\Symfony\Admin\AdminFilterableInterface;
 use PlanB\DDDBundle\Sonata\Admin\AdminRoutes;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -11,7 +12,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 
-final class ClassRoomAdmin extends AbstractAdmin
+final class ClassRoomAdmin extends AbstractAdmin implements AdminFilterableInterface
 {
 
     protected $datagridValues = [
@@ -44,6 +45,11 @@ final class ClassRoomAdmin extends AbstractAdmin
     public function getBatchActions()
     {
         return [];
+    }
+
+    public function dataGridValues(): array
+    {
+        return $this->datagridValues;
     }
 
     protected function configureRoutes(RouteCollection $collection)

@@ -6,13 +6,14 @@ namespace Britannia\Infraestructure\Symfony\Admin\Course;
 
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\VO\Course\CourseStatus;
+use Britannia\Infraestructure\Symfony\Admin\AdminFilterableInterface;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 
-final class CourseAdmin extends AbstractAdmin
+final class CourseAdmin extends AbstractAdmin implements AdminFilterableInterface
 {
     /**
      * @var CourseTools
@@ -48,13 +49,17 @@ final class CourseAdmin extends AbstractAdmin
         return ['name', 'status', 'numOfPlaces', 'monthlyPayment', 'numOfStudents' ];
     }
 
-
-    private function dataGridValues(): void
+    /**
+     * @return array
+     */
+    public function datagridValues(): array
     {
         $status = CourseStatus::ACTIVE();
         $this->datagridValues = [
             'status' => ['value' => $status->getName()]
         ];
+
+        return $this->datagridValues;
     }
 
     public function createQuery($context = 'list')

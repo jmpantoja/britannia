@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Admin\Report;
 
 use Britannia\Domain\VO\Course\CourseStatus;
-use mikehaertl\pdftk\Pdf;
+use Britannia\Infraestructure\Symfony\Admin\AdminFilterableInterface;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 
-final class ReportAdmin extends AbstractAdmin
+final class ReportAdmin extends AbstractAdmin implements AdminFilterableInterface
 {
 
     protected $baseRouteName = 'admin_britannia_domain_course_report';
@@ -38,12 +38,14 @@ final class ReportAdmin extends AbstractAdmin
         return $this->adminTools;
     }
 
-    protected function dataGridValues(): void
+    public function dataGridValues(): array
     {
         $status = CourseStatus::ACTIVE();
         $this->datagridValues = [
             'status' => ['value' => $status->getName()]
         ];
+
+        return $this->datagridValues;
     }
 
     public function configureActionButtons($action, $object = null)

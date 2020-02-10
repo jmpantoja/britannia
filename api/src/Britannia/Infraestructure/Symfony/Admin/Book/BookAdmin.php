@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Britannia\Infraestructure\Symfony\Admin\Book;
 
+use Britannia\Infraestructure\Symfony\Admin\AdminFilterableInterface;
 use Britannia\Infraestructure\Symfony\Form\Type\Book\BookCategoryType;
 use PlanB\DDDBundle\Sonata\Admin\AdminRoutes;
 use PlanB\DDDBundle\Symfony\Form\Type\PriceType;
@@ -14,7 +15,7 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-final class BookAdmin extends AbstractAdmin
+final class BookAdmin extends AbstractAdmin implements AdminFilterableInterface
 {
 
     protected $datagridValues = [
@@ -47,6 +48,11 @@ final class BookAdmin extends AbstractAdmin
     public function getBatchActions()
     {
         return [];
+    }
+
+    public function dataGridValues(): array
+    {
+        return $this->datagridValues;
     }
 
     protected function configureRoutes(RouteCollection $collection)

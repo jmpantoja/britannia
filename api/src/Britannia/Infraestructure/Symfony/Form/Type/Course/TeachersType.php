@@ -51,7 +51,7 @@ class TeachersType extends AbstractSingleType
     {
         $resolver->setDefaults([
             'class' => StaffMember::class,
-            'property' => 'fullName.firstName',
+            'property' => 'fullName.reversedMode',
             'model_manager' => $this->modelManager,
             'multiple' => true,
             'by_reference' => false,

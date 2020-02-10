@@ -22,9 +22,8 @@ class StudentHasBeenCreated extends AbstractRecordEvent
 
     public static function make(Student $student): self
     {
-        $description = sprintf('Nuevo alumno %s', $student->fullName());
-        $date = $student->getCreatedAt();
-
+        $description = sprintf('Nuevo alumno');
+        $date = $student->createdAt();
 
         return new self($student, null, $description, $date);
     }

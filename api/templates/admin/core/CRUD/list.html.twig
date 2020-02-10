@@ -81,8 +81,6 @@
     </div>
 {% endblock %}
 
-
-
 {% block table_header %}
     <div class="datalist-header">
         <table class="table table-bordered">
@@ -220,17 +218,7 @@
 
 {% block sonata_admin_content_actions_wrappers %}
 
-    {% set has_filters = false %}
-    {% set filters = app.request.get('filter') %}
-    {% if filters is not empty %}
-        {% set filters = filters | filter((v, k) => k!= '_sort_by') %}
-        {% set filters = filters | filter((v, k) => k!= '_sort_order') %}
-        {% set filters = filters | filter((v, k) => k!= '_per_page') %}
-        {% set filters = filters | filter((v, k) => k!= '_page') %}
-
-
-        {% set has_filters = true %}
-    {% endif %}
+    {% set has_filters = sonata_has_filters(admin) %}
 
     <label class="show_filters">
         <input type="checkbox" checked="checked">

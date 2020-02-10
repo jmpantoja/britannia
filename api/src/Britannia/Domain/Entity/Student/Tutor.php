@@ -104,7 +104,7 @@ class Tutor
     /**
      * @return null|FullName
      */
-    public function fullName(): FullName
+    public function fullName(): ?FullName
     {
         return $this->fullName;
     }
@@ -160,7 +160,7 @@ class Tutor
 
     public function __toString()
     {
-        return $this->fullName()->getReversedMode();
+        return (string)$this->fullName();
     }
 
 }

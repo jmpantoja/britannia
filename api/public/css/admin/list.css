@@ -42,6 +42,12 @@
     height: 83vh;
 }
 
+.card-table form {
+    display: flex;
+    height: 83vh;
+    flex-direction: column;
+}
+
 .datalist-header
 {
     margin-right: 12px;
@@ -50,3 +56,4 @@
 .datalist-header table{
     margin-bottom: 0;
 }
+

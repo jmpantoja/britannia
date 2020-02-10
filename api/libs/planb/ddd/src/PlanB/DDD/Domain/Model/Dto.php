@@ -25,10 +25,6 @@ abstract class Dto
                 unset($values[$name]);
             }
         }
-//        if (count($values)) {
-//            $message = sprintf('Datos extra: [%s]', implode(', ', array_keys($values)));
-//            throw new \InvalidArgumentException($message);
-//        }
     }
 
     protected function defaults(): array

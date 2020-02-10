@@ -22,14 +22,15 @@ final class CalendarDataGrid extends AdminDataGrid
     public function configure()
     {
         $this->add('workingDay', null, [
-                'editable' => true,
-                'header_style' => 'width:30px',
-                'label' => 'Laborable',
-                'row_align' => 'center'
-            ]);
+            'editable' => true,
+            'header_style' => 'width:76px',
+            'label' => 'Laborable',
+            'row_align' => 'center'
+        ]);
 
         $this->add('date', 'date', [
-                'template' => 'admin/calendar/calendar_resume_column.html.twig'
+            'label' => 'Fecha',
+            'template' => 'admin/calendar/calendar_resume_column.html.twig'
         ]);
     }
 }

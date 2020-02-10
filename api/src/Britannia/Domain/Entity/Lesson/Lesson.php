@@ -129,6 +129,7 @@ class Lesson implements Comparable
             ->add($attendance, function (Attendance $attendance) {
                 $this->notify(StudentHasMissedLesson::make($attendance));
             });
+
         return $this;
     }
 

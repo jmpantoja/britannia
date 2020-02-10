@@ -9,10 +9,152 @@
         <source>Age</source>
         <target>Edad</target>
       </trans-unit>
+
       <trans-unit id="hzMwvtd" resname="link_pdf">
         <source>link_pdf</source>
         <target>Generar PDF</target>
       </trans-unit>
+
+      <trans-unit id="0000000" resname="User Name">
+        <source>User Name</source>
+        <target>Usuario</target>
+      </trans-unit>
+
+      <trans-unit id="0000001" resname="Repeat Password">
+        <source>Repeat Password</source>
+        <target>Repetir Password</target>
+      </trans-unit>
+
+      <trans-unit id="0000002" resname="Full Name">
+        <source>Full Name</source>
+        <target>Nombre completo</target>
+      </trans-unit>
+
+      <trans-unit id="0000003" resname="Address">
+        <source>Address</source>
+        <target>Dirección</target>
+      </trans-unit>
+
+      <trans-unit id="0000004" resname="Phone Numbers">
+        <source>Phone Numbers</source>
+        <target>Números de teléfono</target>
+      </trans-unit>
+
+      <trans-unit id="0000005" resname="child">
+        <source>child</source>
+        <target>Menor de edad</target>
+      </trans-unit>
+
+      <trans-unit id="0000006" resname="adult">
+        <source>adult</source>
+        <target>Adulto</target>
+      </trans-unit>
+
+      <trans-unit id="0000007" resname="Staff Member List">
+        <source>Staff Member List</source>
+        <target>Listado de Usuarios</target>
+      </trans-unit>
+
+      <trans-unit id="0000008" resname="Student List">
+        <source>Student List</source>
+        <target>Listado de Alumnos</target>
+      </trans-unit>
+
+      <trans-unit id="0000009" resname="Tutor List">
+        <source>Tutor List</source>
+        <target>Listado de Tutores</target>
+
+      </trans-unit>
+
+      <trans-unit id="0000010" resname="Free Enrollment">
+        <source>Free Enrollment</source>
+        <target>Matrícula gratis</target>
+      </trans-unit>
+
+      <trans-unit id="0000011" resname="School Course">
+        <source>School Course</source>
+        <target>Curso escolar</target>
+      </trans-unit>
+
+      <trans-unit id="0000012" resname="Num of terms">
+        <source>Num of terms</source>
+        <target>Num. trimestres</target>
+      </trans-unit>
+
+      <trans-unit id="0000013" resname="Diagnostic">
+        <source>Diagnostic</source>
+        <target>Prueba de diagnóstico</target>
+      </trans-unit>
+
+      <trans-unit id="0000014" resname="Final">
+        <source>Final</source>
+        <target>Examen Final</target>
+      </trans-unit>
+
+      <trans-unit id="0000015" resname="school">
+        <source>School</source>
+        <target>Escolar</target>
+      </trans-unit>
+
+        <trans-unit id="0000016" resname="pre_school">
+          <source>pre_school</source>
+          <target>Pre Escolar</target>
+        </trans-unit>
+
+        <trans-unit id="0000017" resname="Course List">
+          <source>Course List</source>
+          <target>Listado de cursos</target>
+        </trans-unit>
+
+        <trans-unit id="0000018" resname="Lesson List">
+          <source>Lesson List</source>
+          <target>Asistencia</target>
+        </trans-unit>
+
+        <trans-unit id="0000019" resname="Record List">
+          <source>Record List</source>
+          <target>Historial</target>
+        </trans-unit>
+
+        <trans-unit id="0000020" resname="Type">
+          <source>Type</source>
+          <target>Tipo</target>
+        </trans-unit>
+
+        <trans-unit id="0000021" resname="Course">
+          <source>Course</source>
+          <target>Curso</target>
+        </trans-unit>
+
+        <trans-unit id="0000022" resname="Academy List">
+          <source>Academy List</source>
+          <target>Listado de academias</target>
+        </trans-unit>
+
+        <trans-unit id="0000023" resname="School List">
+          <source>School List</source>
+          <target>Listado de escuelas</target>
+        </trans-unit>
+
+        <trans-unit id="0000024" resname="Class Room List">
+          <source>Class Room List</source>
+          <target>Listado de aulas</target>
+        </trans-unit>
+
+        <trans-unit id="0000025" resname="Book List">
+          <source>Book List</source>
+          <target>Listado de libros</target>
+        </trans-unit>
+
+        <trans-unit id="0000026" resname="Level List">
+          <source>Level List</source>
+          <target>Listado de niveles</target>
+        </trans-unit>
+
+        <trans-unit id="0000027" resname="Calendar List">
+          <source>Calendar List</source>
+          <target>Calendario</target>
+        </trans-unit>
     </body>
   </file>
 </xliff>

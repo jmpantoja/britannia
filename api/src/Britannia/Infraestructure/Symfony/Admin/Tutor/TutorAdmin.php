@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Britannia\Infraestructure\Symfony\Admin\Tutor;
 
+use Britannia\Infraestructure\Symfony\Admin\AdminFilterableInterface;
 use Britannia\Infraestructure\Symfony\Form\Type\Student\JobType;
 use PlanB\DDDBundle\Sonata\Admin\AdminRoutes;
 use PlanB\DDDBundle\Symfony\Form\Type\DNIType;
@@ -18,7 +19,7 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 
-final class TutorAdmin extends AbstractAdmin
+final class TutorAdmin extends AbstractAdmin implements AdminFilterableInterface
 {
 
     protected $datagridValues = [
@@ -49,6 +50,14 @@ final class TutorAdmin extends AbstractAdmin
     public function getBatchActions()
     {
         return [];
+    }
+
+    /**
+     * @return array
+     */
+    public function datagridValues(): array
+    {
+        return $this->datagridValues;
     }
 
     protected function configureRoutes(RouteCollection $collection)

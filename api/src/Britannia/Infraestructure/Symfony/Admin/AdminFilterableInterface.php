@@ -11,16 +11,13 @@
 
 declare(strict_types=1);
 
-namespace Britannia\Domain\Entity\Record;
+namespace Britannia\Infraestructure\Symfony\Admin;
 
 
-use MabeEnum\Enum;
-
-class TypeOfRecord extends Enum
+interface AdminFilterableInterface
 {
-    public const CREATED = 'Nuevo Alumno';
-    public const COURSE = 'Altas / Bajas';
-    public const ATTENDANCE = 'Asistencia';
-
-
+    /**
+     * @return array
+     */
+    public function datagridValues(): array;
 }

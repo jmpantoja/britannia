@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Britannia\Infraestructure\Symfony\Admin\Record;
 
+use Britannia\Infraestructure\Symfony\Admin\AdminFilterableInterface;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\Route\RouteCollection;
 
-final class RecordAdmin extends AbstractAdmin
+final class RecordAdmin extends AbstractAdmin implements AdminFilterableInterface
 {
 
     protected $datagridValues = [
@@ -40,6 +42,20 @@ final class RecordAdmin extends AbstractAdmin
     public function getBatchActions()
     {
         return [];
+    }
+
+    protected function configureRoutes(RouteCollection $collection)
+    {
+//        dump($collection->getElements());
+//        die();
+        $collection->clearExcept(['list', 'export']);
+        parent::configureRoutes($collection);
+    }
+
+
+    public function dataGridValues(): array
+    {
+        return $this->datagridValues;
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void

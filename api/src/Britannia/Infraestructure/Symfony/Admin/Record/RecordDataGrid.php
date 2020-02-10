@@ -23,11 +23,29 @@ final class RecordDataGrid extends AdminDataGrid
     {
         $this->add('date', 'date', [
             'header_style' => 'width:120px',
-            'row_align' => 'left'
+            'row_align' => 'left',
+            'label' => 'Fecha'
+
         ]);
 
         $this->add('student', 'string', [
-            'template' => 'admin/record/record_resume_column.html.twig',
+            'label' => 'Alumno',
+            'template' => 'admin/record/record_student_column.html.twig',
+            'header_style' => 'width:300px',
+        ]);
+
+
+        $this->add('course', 'string', [
+            'label' => 'Curso',
+            'template' => 'admin/record/record_course_column.html.twig',
+            'admin_code' => 'admin.course',
+            'header_style' => 'width:300px',
+        ]);
+
+        $this->add('description', 'string', [
+            'label' => 'Descripción',
+        //    'template' => 'admin/record/record_course_column.html.twig',
+            // 'admin_code' => 'admin.course'
         ]);
 
     }

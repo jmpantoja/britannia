@@ -115,11 +115,15 @@ final class CourseForm extends AdminForm
         $this->tab($name);
 
         $this->group('Profesores', ['class' => 'col-md-5'])
-            ->add('teachers', TeachersType::class);
+            ->add('teachers', TeachersType::class, [
+                'btn_add' => false,
+                'label' => false
+            ]);
 
         $this->group('Alumnos', ['class' => 'col-md-7'])
             ->add('courseHasStudents', CourseHasStudentsType::class, [
-                'course' => $this->course
+                'course' => $this->course,
+                'label' => false
             ]);
 
         return $this;
@@ -142,7 +146,7 @@ final class CourseForm extends AdminForm
     {
         $this->tab($name);
 
-        $this->group('Destrezas', ['class' => 'col-md-6'])
+        $this->group('Evaluación', ['class' => 'col-md-6'])
             ->add('assessmentDefinition', AssessmentDefinitionType::class, [
                 'label' => false,
                 'course' => $this->course

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Britannia\Infraestructure\Symfony\Admin\Staff;
 
+use Britannia\Infraestructure\Symfony\Admin\AdminFilterableInterface;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -11,7 +12,7 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\Exporter\Source\ArraySourceIterator;
 
-final class StaffAdmin extends AbstractAdmin
+final class StaffAdmin extends AbstractAdmin implements AdminFilterableInterface
 {
     /**
      * @var StaffTools
@@ -48,6 +49,14 @@ final class StaffAdmin extends AbstractAdmin
     public function getBatchActions()
     {
         return [];
+    }
+
+    /**
+     * @return array
+     */
+    public function datagridValues(): array
+    {
+        return $this->datagridValues;
     }
 
     protected function configureRoutes(RouteCollection $collection)

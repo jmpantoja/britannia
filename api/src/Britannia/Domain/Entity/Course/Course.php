@@ -148,12 +148,12 @@ abstract class Course implements Comparable
     /**
      * @var SetOfSkills
      */
-    private $skills;
+    protected $skills;
 
     /**
      * @var SkillList
      */
-    private $otherSkills;
+    protected $otherSkills;
 
     /**
      * @var integer
@@ -163,11 +163,11 @@ abstract class Course implements Comparable
     /**
      * @var bool
      */
-    private $diagnosticTest;
+    protected $diagnosticTest;
     /**
      * @var bool
      */
-    private $finalTest;
+    protected $finalTest;
 
     /**
      * @var Collection
@@ -209,7 +209,9 @@ abstract class Course implements Comparable
         $this->discount = new ArrayCollection();
         $this->records = new ArrayCollection();
         $this->status = CourseStatus::PENDING();
+
         $this->createdAt = CarbonImmutable::now();
+
 
         $this->update($dto);
     }
@@ -226,6 +228,10 @@ abstract class Course implements Comparable
 
         $this->changeCalendar($dto->timeTable, $dto->lessonCreator);
         $this->changeAssessmentDefinition($dto->assessmentDefinition, $dto->assessmentGenerator);
+
+        if (is_null($this->color)) {
+            $this->color = $dto->color;
+        }
 
         if (isset($dto->oldId)) {
             $this->oldId = $dto->oldId;
@@ -421,9 +427,9 @@ abstract class Course implements Comparable
     /**
      * @return RGBA|null
      */
-    public function color(): ?RGBA
+    public function color(): RGBA
     {
-        return $this->color;
+        return $this->color ?? RGBA::make(100, 0, 100);
     }
 
     /**

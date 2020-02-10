@@ -22,7 +22,7 @@ use PlanB\DDD\Domain\VO\PostalAddress;
 
 final class TutorDto extends Dto
 {
-    public FullName $fullName;
+    public ?FullName $fullName;
     public ?DNI $dni;
     public ?PostalAddress $address;
     public array $emails;

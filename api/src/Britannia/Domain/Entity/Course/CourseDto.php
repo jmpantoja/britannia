@@ -21,8 +21,6 @@ use Britannia\Domain\Service\Assessment\AssessmentGenerator;
 use Britannia\Domain\Service\Course\LessonGenerator;
 use Britannia\Domain\VO\Assessment\AssessmentDefinition;
 use Britannia\Domain\VO\Course\Age\Age;
-use Britannia\Domain\VO\Course\Examiner\Examiner;
-use Britannia\Domain\VO\Course\Intensive\Intensive;
 use Britannia\Domain\VO\Course\Periodicity\Periodicity;
 use Britannia\Domain\VO\Course\Support\Support;
 use Britannia\Domain\VO\Course\TimeTable\TimeTable;
@@ -70,8 +68,31 @@ abstract class CourseDto extends Dto
     protected function defaults(): array
     {
         return [
-            'support' => Support::REGULAR()
+            'support' => Support::REGULAR(),
+            'color' => $this->randomColor()
         ];
+    }
+
+    private function randomColor(): RGBA
+    {
+
+        #e8e598
+//        die('xxx');
+        return collect([
+            RGBA::make(232, 229, 152),
+            RGBA::make(237, 177, 45),
+            RGBA::make(204, 28, 75),
+            RGBA::make(171, 87, 164),
+            RGBA::make(101, 48, 64),
+            RGBA::make(40, 175, 169),
+            RGBA::make(136, 149, 70),
+            RGBA::make(215, 208, 192),
+            RGBA::make(212, 188, 176),
+        ])
+            ->shuffle(time())
+            ->first();
+
+
     }
 
 

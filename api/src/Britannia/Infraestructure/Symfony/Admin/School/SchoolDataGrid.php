@@ -22,6 +22,7 @@ final class SchoolDataGrid extends AdminDataGrid
     public function configure()
     {
         $this->addIdentifier('name', null, [
+            'label' => 'Escuela',
             'template' => 'admin/core/resume_column.html.twig',
         ]);
     }

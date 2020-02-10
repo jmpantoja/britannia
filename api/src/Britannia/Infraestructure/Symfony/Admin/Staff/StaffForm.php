@@ -71,7 +71,9 @@ final class StaffForm extends AdminForm
         }
 
         $group = $this->group('Acceso', ['class' => 'col-md-3'])
-            ->add('userName')
+            ->add('userName', null, [
+            //    'label'=>'userName'
+            ])
             ->add('password', RepeatedType::class, [
                 'mapped' => true,
                 'type' => PasswordType::class,
