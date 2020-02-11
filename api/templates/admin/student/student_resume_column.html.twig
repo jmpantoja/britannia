@@ -16,7 +16,7 @@
 
 {% block adult %}
     {% if (object.phoneNumbers is not empty or object.emails is not empty) %}
-        <div class="col-md-3">
+        <div class="col-md-12">
             {% for phoneNumber in object.phoneNumbers %}
                 <p class="phone">
                     <i class="fa fa-phone" aria-hidden="true"></i>
@@ -36,9 +36,9 @@
         </div>
     {% endif %}
 
-    {% if object.active %}
-        {{ block('courses') }}
-    {% endif %}
+{#    {% if object.active %}#}
+{#        {{ block('courses') }}#}
+{#    {% endif %}#}
 
 {% endblock %}
 
@@ -62,7 +62,7 @@
 {% endblock %}
 
 {% block tutor %}
-    <div class="col-md-3">
+    <div class="col-md-12">
         <strong>{{ tutor }} </strong>
         {% for phoneNumber in tutor.phoneNumbers %}
             <p class="phone">
@@ -83,29 +83,29 @@
     </div>
 {% endblock %}
 
-{% block courses %}
-    <div class="col-md-3">
-        {% for course in object.activeCourses %}
-            {{ block('course') }}
-        {% endfor %}
-    </div>
-{% endblock %}
+{#{% block courses %}#}
+{#    <div class="col-md-3">#}
+{#        {% for course in object.activeCourses %}#}
+{#            {{ block('course') }}#}
+{#        {% endfor %}#}
+{#    </div>#}
+{#{% endblock %}#}
 
 
-{% block course %}
-    <div class="course">
-        {% set adminCourse = admin.configurationPool.adminByAdminCode('admin.course') %}
+{#{% block course %}#}
+{#    <div class="course">#}
+{#        {% set adminCourse = admin.configurationPool.adminByAdminCode('admin.course') %}#}
 
-        {% if  adminCourse.hasAccess('edit', course) %}
-            <a href="{{ adminCourse.generateUrl('edit', {id:course.id}) }}"><strong>{{ course.name }}</strong></a>
-        {% else %}
-            <strong>{{ course.name }}</strong>
-        {% endif %}
+{#        {% if  adminCourse.hasAccess('edit', course) %}#}
+{#            <a href="{{ adminCourse.generateUrl('edit', {id:course.id}) }}"><strong>{{ course.name }}</strong></a>#}
+{#        {% else %}#}
+{#            <strong>{{ course.name }}</strong>#}
+{#        {% endif %}#}
 
-        {% with {'student': object, 'course':course, 'limit': 5} %}
-            {{ block('attendance_sumary') }}
-        {% endwith %}
-    </div>
-{% endblock %}
+{#        {% with {'student': object, 'course':course, 'limit': 5} %}#}
+{#            {{ block('attendance_sumary') }}#}
+{#        {% endwith %}#}
+{#    </div>#}
+{#{% endblock %}#}
 
 
