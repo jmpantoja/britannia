@@ -36,10 +36,6 @@
         </div>
     {% endif %}
 
-{#    {% if object.active %}#}
-{#        {{ block('courses') }}#}
-{#    {% endif %}#}
-
 {% endblock %}
 
 {% block child %}
@@ -55,9 +51,6 @@
         {% endwith %}
 
     {% endif %}
-{#    {% if object.active %}#}
-{#        {{ block('courses') }}#}
-{#    {% endif %}#}
 
 {% endblock %}
 
@@ -83,29 +76,5 @@
     </div>
 {% endblock %}
 
-{#{% block courses %}#}
-{#    <div class="col-md-3">#}
-{#        {% for course in object.activeCourses %}#}
-{#            {{ block('course') }}#}
-{#        {% endfor %}#}
-{#    </div>#}
-{#{% endblock %}#}
-
-
-{#{% block course %}#}
-{#    <div class="course">#}
-{#        {% set adminCourse = admin.configurationPool.adminByAdminCode('admin.course') %}#}
-
-{#        {% if  adminCourse.hasAccess('edit', course) %}#}
-{#            <a href="{{ adminCourse.generateUrl('edit', {id:course.id}) }}"><strong>{{ course.name }}</strong></a>#}
-{#        {% else %}#}
-{#            <strong>{{ course.name }}</strong>#}
-{#        {% endif %}#}
-
-{#        {% with {'student': object, 'course':course, 'limit': 5} %}#}
-{#            {{ block('attendance_sumary') }}#}
-{#        {% endwith %}#}
-{#    </div>#}
-{#{% endblock %}#}
 
 
