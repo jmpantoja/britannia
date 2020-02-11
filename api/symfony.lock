@@ -224,19 +224,10 @@
     "phpdocumentor/type-resolver": {
         "version": "0.4.0"
     },
-    "planb/ddd": {
-        "version": "dev-master"
-    },
-    "planb/ddd-bundle": {
-        "version": "dev-master"
-    },
     "psr/cache": {
         "version": "1.0.1"
     },
     "psr/container": {
-        "version": "1.0.0"
-    },
-    "psr/event-dispatcher": {
         "version": "1.0.0"
     },
     "psr/http-message": {

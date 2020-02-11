@@ -68,7 +68,14 @@ class PostalAddress
 
     public function getFullAddress(): string
     {
-        return sprintf('%s. %s', $this->getAddress(), $this->getPostalCode());
+        $address = $this->getAddress();
+        $postalCode = $this->getPostalCode();
+
+        if (empty($address)) {
+            return '';
+        }
+
+        return sprintf('%s. %s', $address, $postalCode);
     }
 
     /**

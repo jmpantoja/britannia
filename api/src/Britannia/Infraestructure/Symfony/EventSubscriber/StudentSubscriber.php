@@ -37,7 +37,7 @@ class StudentSubscriber extends DomainEventSubscriber
 //        die(__METHOD__);
     }
 
-    public function onStudentAttendedLesson(StudentHasMissedLesson $event)
+    public function onStudentAttendedLesson(StudentHasAttendedLesson $event)
     {
 //        die(__METHOD__);
     }

@@ -137,37 +137,39 @@ class Calendar
         return $this->workingDay;
     }
 
-    /**
-     * @param bool $workingDay
-     * @return Calendar
-     */
-    public function setWorkingDay(bool $workingDay): self
-    {
-        if ($workingDay) {
-            $this->setAsLaborable();
-            return $this;
-        }
+//    /**
+//     * @param bool $workingDay
+//     * @return Calendar
+//     */
+//    public function setWorkingDay(bool $workingDay): self
+//    {
+//        if ($workingDay) {
+//            $this->markAsLaborable();
+//            return $this;
+//        }
+//
+//        $this->markAsHoliday();
+//        return $this;
+//    }
 
-        $this->setAsHoliday();
-        return $this;
-    }
-
-    public function setAsLaborable(): self
+    public function markAsLaborable(): self
     {
         if ($this->isWorkingDay()) {
             return $this;
         }
 
         $this->workingDay = true;
+        return $this;
     }
 
-    public function setAsHoliday()
+    public function markAsHoliday(): self
     {
         if (!$this->isWorkingDay()) {
             return $this;
         }
 
         $this->workingDay = false;
+        return $this;
     }
 
 

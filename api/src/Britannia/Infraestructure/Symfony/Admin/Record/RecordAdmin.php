@@ -4,19 +4,16 @@ declare(strict_types=1);
 
 namespace Britannia\Infraestructure\Symfony\Admin\Record;
 
-use Britannia\Domain\Entity\Record\TypeOfRecord;
-use IntlDateFormatter;
+use Britannia\Infraestructure\Symfony\Admin\AdminFilterableInterface;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
-use Sonata\Form\Type\DateRangePickerType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Sonata\AdminBundle\Route\RouteCollection;
 
-final class RecordAdmin extends AbstractAdmin
+final class RecordAdmin extends AbstractAdmin implements AdminFilterableInterface
 {
 
     protected $datagridValues = [
-
         '_sort_by' => 'date',
         '_sort_order' => 'DESC',
     ];
@@ -24,6 +21,9 @@ final class RecordAdmin extends AbstractAdmin
      * @var RecordTools
      */
     private RecordTools $adminTools;
+
+    protected $maxPerPage = 50;
+    protected $maxPageLinks = 10;
 
     public function __construct($code, $class, $baseControllerName, RecordTools $adminTools)
     {
@@ -44,8 +44,23 @@ final class RecordAdmin extends AbstractAdmin
         return [];
     }
 
+    protected function configureRoutes(RouteCollection $collection)
+    {
+//        dump($collection->getElements());
+//        die();
+        $collection->clearExcept(['list', 'export']);
+        parent::configureRoutes($collection);
+    }
+
+
+    public function dataGridValues(): array
+    {
+        return $this->datagridValues;
+    }
+
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
+
         $this->adminTools()
             ->filters($datagridMapper)
             ->configure();
@@ -56,6 +71,14 @@ final class RecordAdmin extends AbstractAdmin
         $this->adminTools()
             ->dataGrid($listMapper)
             ->configure();
+    }
+
+    public function getDataSourceIterator()
+    {
+
+        return $this->adminTools()
+            ->dataSource($this->getDatagrid())
+            ->build();
 
     }
 

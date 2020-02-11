@@ -41,5 +41,7 @@ interface CalendarRepositoryInterface
      * @return DaysList
      */
     public function getWorkingDays(CarbonImmutable $start, CarbonImmutable $end, Schedule $schedule): DaysList;
+
+    public function getRange(CarbonImmutable $start, CarbonImmutable $end): DaysList;
 }
 

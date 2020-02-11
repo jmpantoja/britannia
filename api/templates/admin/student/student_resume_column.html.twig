@@ -55,9 +55,9 @@
         {% endwith %}
 
     {% endif %}
-    {% if object.active %}
-        {{ block('courses') }}
-    {% endif %}
+{#    {% if object.active %}#}
+{#        {{ block('courses') }}#}
+{#    {% endif %}#}
 
 {% endblock %}
 
@@ -86,7 +86,6 @@
 {% block courses %}
     <div class="col-md-3">
         {% for course in object.activeCourses %}
-
             {{ block('course') }}
         {% endfor %}
     </div>

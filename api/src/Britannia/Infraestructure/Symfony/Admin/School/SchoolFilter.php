@@ -21,6 +21,8 @@ final class SchoolFilter extends AdminFilter
 
     public function configure()
     {
-        $this->add('name');
+        $this->add('name', null, [
+            'label' => 'Escuela',
+        ]);
     }
 }

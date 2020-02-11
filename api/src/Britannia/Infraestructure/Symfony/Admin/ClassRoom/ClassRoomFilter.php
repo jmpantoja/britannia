@@ -23,8 +23,11 @@ final class ClassRoomFilter extends AdminFilter
     {
         $this
             ->add('name', null, [
+                'label' => 'Aula',
                 'show_filter' => true
             ])
-            ->add('capacity');
+            ->add('capacity', null, [
+                'label' => 'Capacidad',
+            ]);
     }
 }

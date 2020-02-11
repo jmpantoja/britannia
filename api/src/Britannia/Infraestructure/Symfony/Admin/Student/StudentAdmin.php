@@ -4,42 +4,24 @@ declare(strict_types=1);
 
 namespace Britannia\Infraestructure\Symfony\Admin\Student;
 
-use Britannia\Domain\Entity\Academy\Academy;
-use Britannia\Domain\Entity\Student\Adult;
-use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\VO\SchoolCourse;
-use Britannia\Infraestructure\Symfony\Form\Type\Student\ContactModeType;
-use Britannia\Infraestructure\Symfony\Form\Type\Student\JobType;
-use Britannia\Infraestructure\Symfony\Form\Type\Student\OtherAcademyType;
-use Britannia\Infraestructure\Symfony\Form\Type\Student\PartOfDayType;
-use Britannia\Infraestructure\Symfony\Form\Type\Student\PaymentType;
-use Britannia\Infraestructure\Symfony\Form\Type\Student\RelativesType;
-use Britannia\Infraestructure\Symfony\Form\Type\Student\StudentHasCoursesType;
-use Britannia\Infraestructure\Symfony\Form\Type\Student\TutorType;
-use IntlDateFormatter;
+use Britannia\Infraestructure\Symfony\Admin\AdminFilterableInterface;
 use PlanB\DDDBundle\Sonata\Admin\AdminRoutes;
 use PlanB\DDDBundle\Symfony\Form\Type\DateType;
-use PlanB\DDDBundle\Symfony\Form\Type\DNIType;
-use PlanB\DDDBundle\Symfony\Form\Type\EmailListType;
-use PlanB\DDDBundle\Symfony\Form\Type\FullNameType;
-use PlanB\DDDBundle\Symfony\Form\Type\PhoneNumberListType;
-use PlanB\DDDBundle\Symfony\Form\Type\PostalAddressType;
-use PlanB\DDDBundle\Symfony\Form\Type\WYSIWYGType;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Route\RouteCollection;
-use Sonata\Form\Type\BooleanType;
-use Sonata\Form\Type\DatePickerType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-final class StudentAdmin extends AbstractAdmin
+final class StudentAdmin extends AbstractAdmin implements AdminFilterableInterface
 {
     protected $datagridValues = [
         'active' => ['value' => true],
     ];
+
+    protected $maxPerPage = 50;
+    protected $maxPageLinks = 10;
     /**
      * @var StudentTools
      */
@@ -61,6 +43,14 @@ final class StudentAdmin extends AbstractAdmin
     public function adminTools(): StudentTools
     {
         return $this->adminTools;
+    }
+
+    /**
+     * @return array
+     */
+    public function datagridValues(): array
+    {
+        return $this->datagridValues;
     }
 
     public function getBatchActions()
@@ -88,6 +78,7 @@ final class StudentAdmin extends AbstractAdmin
         $this->adminTools()
             ->filters($datagridMapper)
             ->configure();
+
     }
 
     protected function configureListFields(ListMapper $listMapper): void
@@ -105,6 +96,15 @@ final class StudentAdmin extends AbstractAdmin
         $this->adminTools()
             ->form($formMapper)
             ->configure($student);
+    }
+
+    public function getDataSourceIterator()
+    {
+
+        return $this->adminTools()
+            ->dataSource($this->getDatagrid())
+            ->build();
+
     }
 
 

@@ -35,6 +35,7 @@ final class CalendarFilters extends AdminFilter
     public function configure()
     {
         $this->add('month', 'doctrine_orm_choice', [
+            'label' => 'Mes',
             'show_filter' => true
         ], ChoiceType::class, [
             'choices' => [
@@ -55,6 +56,7 @@ final class CalendarFilters extends AdminFilter
         ]);
 
         $this->add('year', 'doctrine_orm_choice', [
+            'label' => 'Año',
             'show_filter' => true
         ], ChoiceType::class, [
             'choices' => $this->yearOptions(),

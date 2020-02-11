@@ -30,17 +30,18 @@ final class StudentDataGrid extends AdminDataGrid
 
         $this->addIdentifier('fullName.lastName', 'string', [
             'template' => 'admin/student/student_resume_column.html.twig',
-            'label' => 'Alumnos',
-            'header_style' => 'width:400px',
+            'label' => 'Nombre',
+            'header_style' => 'width:300px',
         ]);
 
         $this->add('activeCourses', 'string', [
             'template' => 'admin/student/student_courses.html.twig',
+            'label' => 'Cursos',
             'row_align' => 'left',
-//            'header_style' => 'width:500px',
         ]);
 
         $this->add('birthdate', 'date', [
+            'label' => 'Fecha Nac.',
             'header_style' => 'width:140px',
         ]);
 

@@ -309,6 +309,7 @@ class StudentBuilder extends BuilderAbstract
             'secondComment' => $this->secondComment,
             'firstTutorDescription' => $this->firstTutorDescription,
             'secondTutorDescription' => $this->secondTutorDescription,
+            'createdAt'=>$this->createdAt
         ]);
 
         return $dto;

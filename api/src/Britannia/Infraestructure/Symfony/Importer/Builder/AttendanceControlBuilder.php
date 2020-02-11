@@ -17,12 +17,16 @@ namespace Britannia\Infraestructure\Symfony\Importer\Builder;
 use Britannia\Domain\Entity\Attendance\Attendance;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Student\Student;
+use Britannia\Domain\Entity\Student\StudentHasMissedLesson;
 use Britannia\Infraestructure\Symfony\Importer\Resume;
 use Carbon\CarbonImmutable;
+use PlanB\DDD\Domain\Event\DomainEvent;
+use PlanB\DDD\Domain\Event\EventDispatcher;
+use PlanB\DDD\Domain\Model\EntityId;
+use PlanB\DDD\Domain\Model\Traits\AggregateRootTrait;
 
 class AttendanceControlBuilder extends BuilderAbstract
 {
-
     private const TYPE = 'Asistencia';
 
     /**
@@ -70,6 +74,15 @@ class AttendanceControlBuilder extends BuilderAbstract
         $date = CarbonImmutable::createFromFormat('Y-m-d', $fecha)
             ->setTime(0, 0);
 
+
+
+//        /**
+//         *
+//         * Esta linea solo es necesaria si ya se han camibado las fechas para sumarles un año
+//         *
+//         */
+//       $date = $date->subDay()->addYear();
+
         $lessons = $course->lessons();
         $this->lesson = null;
 
@@ -88,11 +101,20 @@ class AttendanceControlBuilder extends BuilderAbstract
     public function build(): ?object
     {
         if (empty($this->lesson)) {
+
             return null;
         }
 
         $attendance = Attendance::make($this->lesson, $this->student, $this->reason);
+        $this->notify(StudentHasMissedLesson::make($attendance));
 
         return $attendance;
     }
+
+    private function notify(DomainEvent $domainEvent)
+    {
+        EventDispatcher::getInstance()
+            ->dispatch($domainEvent);
+    }
+
 }

@@ -132,6 +132,7 @@
 
             {% if use_legend ?? false %}
                 <legend{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
+
                 {% if translation_domain is same as(false) %}
                     {{- label -}}
                 {% elseif not sonata_admin.admin %}

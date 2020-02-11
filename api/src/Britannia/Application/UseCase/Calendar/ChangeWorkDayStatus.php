@@ -15,6 +15,7 @@ namespace Britannia\Application\UseCase\Calendar;
 
 
 use Britannia\Domain\Entity\Calendar\Calendar;
+use Carbon\CarbonImmutable;
 
 class ChangeWorkDayStatus
 {
@@ -25,40 +26,38 @@ class ChangeWorkDayStatus
     /**
      * @var bool
      */
-    private $workDay;
-
-    private function __construct(array $list, bool $value)
-    {
-        $this->workDay = $value;
-
-        foreach ($list as $day) {
-            $this->addDay($day);
-        }
-
-    }
-
-    private function addDay(Calendar $day): self
-    {
-        $this->days[] = $day;
-        return $this;
-    }
-
-    public static function toHoliday(array $list): self
-    {
-        return new self($list, false);
-    }
-
-    public static function toWorkday(array $list): self
-    {
-        return new self($list, true);
-    }
-
+    private $workDay = true;
     /**
-     * @return Calendar[]
+     * @var CarbonImmutable
      */
-    public function getDays(): array
+    private CarbonImmutable $start;
+    /**
+     * @var CarbonImmutable
+     */
+    private CarbonImmutable $end;
+
+    public static function toHoliday(CarbonImmutable $start, CarbonImmutable $end): self
     {
-        return $this->days;
+        return (new self($start, $end))
+            ->markAsHoliday();
+    }
+
+    public static function toWorkday(CarbonImmutable $start, CarbonImmutable $end): self
+    {
+        return new self($start, $end);
+    }
+
+
+    private function __construct(CarbonImmutable $start, CarbonImmutable $end)
+    {
+        $this->start = $start;
+        $this->end = $end;
+    }
+
+    private function markAsHoliday(): self
+    {
+        $this->workDay = false;
+        return $this;
     }
 
     /**
@@ -69,5 +68,20 @@ class ChangeWorkDayStatus
         return $this->workDay;
     }
 
+    /**
+     * @return CarbonImmutable
+     */
+    public function start(): CarbonImmutable
+    {
+        return $this->start;
+    }
+
+    /**
+     * @return CarbonImmutable
+     */
+    public function end(): CarbonImmutable
+    {
+        return $this->end;
+    }
 
 }

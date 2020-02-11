@@ -14,9 +14,11 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Admin\Level;
 
 
+use PlanB\DDDBundle\Sonata\Admin\AdminDataSource;
 use PlanB\DDDBundle\Sonata\Admin\AdminQuery;
 use PlanB\DDDBundle\Sonata\Admin\AdminRoutes;
 use PlanB\DDDBundle\Sonata\Admin\AdminTools;
+use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -59,5 +61,10 @@ final class LevelTools extends AdminTools
     public function routes(RouteCollection $collection, string $idParameter): ?AdminRoutes
     {
         return null;
+    }
+
+    public function dataSource(DatagridInterface $dataGrid): ?AdminDataSource
+    {
+        return LevelDataSource::make($dataGrid);
     }
 }

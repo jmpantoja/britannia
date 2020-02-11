@@ -1,0 +1,119 @@
+{% extends get_global_template('layout') %}
+
+{% block content %}
+
+    <div id="calendar"/>
+    <script>
+        $(function () {
+
+            var calendarEl = document.getElementById('calendar');
+
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                plugins: ['interaction', 'dayGrid', 'resourceTimeGrid'],
+                selectable: true,
+                locale: 'es',
+                firstDay: 1,
+                header: {
+                    rigt: 'prev,next today',
+                    left: 'title',
+                    //    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                events: '{{ path(calendar_endpoint) }}',
+                eventRender: function (info) {
+                    var data = info.event.extendedProps;
+                    var date = info.event.start;
+                    var end = info.event.end;
+
+                    while (date < end) {
+                        const options = {year: 'numeric', month: 'numeric', day: 'numeric'};
+                        var formatted = moment(date).format('YYYY-MM-DD');
+                        var td = $('[data-date="' + formatted + '"]');
+
+                        date.setDate(date.getDate() + 1)
+
+                        td.removeClass('holiday')
+                        if (data.holiday) {
+                            td.addClass('holiday')
+                        }
+                    }
+
+                },
+                select: function (info) {
+
+//                    $('.modal .modal-title').text(info.startStr)
+
+                    var start = moment(info.start).format('YYYY-MM-DD');
+                    var end = moment(info.end).format('YYYY-MM-DD');
+
+                    $('input[name="holiday"]').bootstrapToggle('off')
+                    $('input[name="start"]').val(start)
+                    $('input[name="end"]').val(end)
+
+
+                    $('.modal').modal({
+                        keyboard: false,
+                    })
+                }
+            });
+
+            calendar.render();
+
+            $('.modal button.submit').on('click', function () {
+
+                var holiday = $('input[name="holiday"]').prop('checked');
+
+                var start = $('.modal input[name="start"]').val()
+                var end = $('.modal input[name="end"]').val()
+
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ path(change_status_action) }}',
+                    data: {
+                        'start': start,
+                        'end': end,
+                        'holiday': holiday
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        calendar.refetchEvents()
+                    }
+                });
+            })
+        });
+
+
+    </script>
+
+
+    <div class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-md ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Modal title</h4>
+                </div>
+                <div class="modal-body">
+
+                    <input name="holiday" type="checkbox" data-toggle="toggle"
+                           value="yes"
+                           data-width="150px"
+                           data-on="Festivo"
+                           data-off="Laborable"
+                           data-onstyle="danger"
+                           data-offstyle="success"
+                    />
+                    <hr/>
+                    <input name="start" type="hidden"/>
+                    <input name="end" type="hidden"/>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary submit" data-dismiss="modal">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

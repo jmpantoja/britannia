@@ -105,6 +105,7 @@ class StaffMember implements UserInterface, Serializable, Comparable
         $this->roles = [self::DEFAULT_ROLE];
         $this->courses = new ArrayCollection();
         $this->createdAt = CarbonImmutable::now();
+
         $this->update($dto);
     }
 
@@ -172,7 +173,7 @@ class StaffMember implements UserInterface, Serializable, Comparable
     /**
      * @return FullName
      */
-    public function fullName(): FullName
+    public function fullName(): ?FullName
     {
         return $this->fullName;
     }

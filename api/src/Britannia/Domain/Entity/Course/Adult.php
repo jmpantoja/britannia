@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Course;
 
 
+use Britannia\Domain\VO\Assessment\SetOfSkills;
 use Britannia\Domain\VO\Course\Examiner\Examiner;
 use Britannia\Domain\VO\Course\Intensive\Intensive;
 
@@ -51,7 +52,6 @@ final class Adult extends Course
     }
 
 
-
     /**
      * @return Examiner|null
      */
@@ -68,5 +68,20 @@ final class Adult extends Course
         return $this->level;
     }
 
+    /**
+     * @return SetOfSkills
+     */
+    public function skills(): SetOfSkills
+    {
+        return $this->skills ?? SetOfSkills::SET_OF_FOUR();
+    }
 
+
+    /**
+     * @return bool
+     */
+    public function hasFinalTest(): bool
+    {
+        return $this->diagnosticTest ?? true;
+    }
 }

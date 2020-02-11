@@ -58,7 +58,7 @@ final class Book
 
     private function __construct(BookDto $dto)
     {
-        $this->id = new TermId();
+        $this->id = new BookId();
         $this->update($dto);
 
         $this->createdAt = CarbonImmutable::now();

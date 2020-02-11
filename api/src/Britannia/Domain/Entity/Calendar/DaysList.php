@@ -46,4 +46,20 @@ final class DaysList implements IteratorAggregate
     {
         return $this->days;
     }
+
+    public function markAsLaborable(): self
+    {
+        $this->days
+            ->each(fn(Calendar $calendar) => $calendar->markAsLaborable());
+
+        return $this;
+    }
+
+    public function markAsHoliday(): self
+    {
+        $this->days
+            ->each(fn(Calendar $calendar) => $calendar->markAsHoliday());
+
+        return $this;
+    }
 }

@@ -21,6 +21,7 @@ use Britannia\Domain\VO\Student\ContactMode\ContactMode;
 use Britannia\Domain\VO\Student\Job\Job;
 use Britannia\Domain\VO\Student\OtherAcademy\OtherAcademy;
 use Britannia\Domain\VO\Student\PartOfDay\PartOfDay;
+use Carbon\CarbonImmutable;
 use DateTimeInterface;
 use PlanB\DDD\Domain\Model\Dto;
 use PlanB\DDD\Domain\VO\DNI;
@@ -67,6 +68,8 @@ final class StudentDto extends Dto
 
     public bool $termsOfUseImageRigths = false;
 
+    public ?CarbonImmutable $createdAt;
+
     //Child
     public ?School $school;
 
@@ -83,6 +86,8 @@ final class StudentDto extends Dto
     //Adult
     public ?Job $job;
     public ?DNI $dni;
+
+
 
     protected function defaults(): array
     {

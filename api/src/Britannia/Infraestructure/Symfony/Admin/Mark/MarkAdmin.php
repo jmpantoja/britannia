@@ -45,10 +45,23 @@ final class MarkAdmin extends AbstractAdmin
 
     protected function dataGridValues(): void
     {
+
         $status = CourseStatus::ACTIVE();
         $this->datagridValues = [
             'status' => ['value' => $status->getName()]
         ];
+    }
+
+    public function configureActionButtons($action, $object = null)
+    {
+
+        $actions = parent::configureActionButtons($action, $object);
+
+        $actions['list_courses'] = [
+            'template' => 'admin/course/list_courses_button.html.twig'
+        ];
+
+        return $actions;
     }
 
     public function getBatchActions()
@@ -58,6 +71,7 @@ final class MarkAdmin extends AbstractAdmin
 
     public function createQuery($context = 'list')
     {
+
         $query = parent::createQuery($context);
 
         return $this->adminTools()
@@ -68,11 +82,12 @@ final class MarkAdmin extends AbstractAdmin
 
     protected function configureRoutes(RouteCollection $collection)
     {
+        $original = $this->getConfigurationPool()->getAdminByAdminCode('admin.course');
+
+
         return $this->adminTools()
             ->routes($collection, $this->getRouterIdParameter())
             ->build();
-
-        return $collection;
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
@@ -91,7 +106,6 @@ final class MarkAdmin extends AbstractAdmin
 
     protected function configureFormFields(FormMapper $formMapper): void
     {
-
         $course = $this->getSubject();
 
         $this->adminTools()

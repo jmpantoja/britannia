@@ -28,3 +28,15 @@
     border-bottom: solid 1px whitesmoke;
 }
 
+span.fc-day-number {
+    font-weight: 400;
+}
+
+.holiday {
+    background-color: rgba(205, 92, 92, 0.30);
+}
+
+
+.holiday span.fc-day-number{
+    color: red;
+}

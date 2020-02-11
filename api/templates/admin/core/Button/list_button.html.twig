@@ -1,0 +1,10 @@
+{% if admin.hasAccess('list') and admin.hasRoute('list') %}
+
+    <li>
+        <div class="btn-group">
+            <a class="btn btn-info" href="{{ admin.generateUrl('list') }}">
+                {{ 'link_action_list'|trans({}, 'SonataAdminBundle') }}
+            </a>
+        </div>
+    </li>
+{% endif %}

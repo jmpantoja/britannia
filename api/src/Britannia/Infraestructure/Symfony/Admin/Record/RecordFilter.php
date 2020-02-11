@@ -34,6 +34,18 @@ final class RecordFilter extends AdminFilter
             ]
         );
 
+        $this->add('course', null, [
+                'label' => 'Course',
+                'show_filter' => true,
+                'advanced_filter' => false,
+                'admin_code' => 'admin.course',
+                'field_options' => [
+                    'placeholder' => 'Ver todos',
+                ]
+            ]
+        );
+
+
         $this->add('type', 'doctrine_orm_choice', [
                 'show_filter' => true,
                 'advanced_filter' => false,
@@ -46,6 +58,7 @@ final class RecordFilter extends AdminFilter
         );
 
         $this->add('date', 'doctrine_orm_date_range', [
+            'label' => false,
             'field_type' => DateRangePickerType::class,
             'field_options' => [
                 'field_options' => [

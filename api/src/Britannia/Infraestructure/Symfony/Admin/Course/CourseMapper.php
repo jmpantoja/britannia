@@ -91,14 +91,17 @@ final class CourseMapper extends AdminMapper
         $values['lessonCreator'] = $this->lessonCreator;
         $values['assessmentGenerator'] = $this->assessmentGenerator;
 
-        $dto = AdultDto::fromArray($values);
-        if ($this->subject instanceof PreSchool) {
-            $dto = PreSchoolDto::fromArray($values);
-        } elseif ($this->subject instanceof School) {
-            $dto = SchoolDto::fromArray($values);
+        if ($this->subject instanceof Adult) {
+            return AdultDto::fromArray($values);
         }
 
-        return $dto;
+        if ($this->subject instanceof PreSchool) {
+            return PreSchoolDto::fromArray($values);
+        }
+
+        if ($this->subject instanceof School) {
+            return SchoolDto::fromArray($values);
+        }
     }
 
 }

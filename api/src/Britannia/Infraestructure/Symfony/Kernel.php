@@ -2,6 +2,7 @@
 
 namespace Britannia\Infraestructure\Symfony;
 
+use PlanB\DDDBundle\PlanBDDDBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Config\Resource\FileResource;
@@ -18,6 +19,8 @@ class Kernel extends BaseKernel
     public function registerBundles(): iterable
     {
         $contents = require $this->getProjectDir() . '/config/bundles.php';
+        $contents[PlanBDDDBundle::class] = ['all' => true];
+
         foreach ($contents as $class => $envs) {
             if ($envs[$this->environment] ?? $envs['all'] ?? false) {
                 yield new $class();

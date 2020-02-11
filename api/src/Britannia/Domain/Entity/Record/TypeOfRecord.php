@@ -18,7 +18,9 @@ use MabeEnum\Enum;
 
 class TypeOfRecord extends Enum
 {
-    public const CREATED = 'Altas';
-    public const COURSE = 'Cursos';
+    public const CREATED = 'Nuevo Alumno';
+    public const COURSE = 'Altas / Bajas';
     public const ATTENDANCE = 'Asistencia';
+
+
 }

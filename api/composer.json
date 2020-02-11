@@ -48,6 +48,7 @@
         "sort-packages": true
     },
     "autoload": {
+        "files": ["libs/planb/ddd-bundle/src/PlanB/DDDBundle/Resources/functions/date.php"],
         "psr-4": {
             "Britannia\\": "src/Britannia",
             "PlanB\\DDDBundle\\": "libs/planb/ddd-bundle/src/PlanB/DDDBundle",

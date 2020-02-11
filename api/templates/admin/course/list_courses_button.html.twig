@@ -1,0 +1,9 @@
+{% set admin_course = admin.configurationPool.adminByAdminCode('admin.course') %}
+
+<li>
+    <div class="btn-group">
+        <a class="btn btn-info" href="{{ admin_course.generateUrl('list') }}">
+            {{ 'link_action_list'|trans({}, 'SonataAdminBundle') }}
+        </a>
+    </div>
+</li>
