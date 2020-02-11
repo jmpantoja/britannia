@@ -137,14 +137,13 @@ sonata_admin:
             - js/fullcalendar/core.min.js
             - js/fullcalendar/daygrid.min.js
             - js/fullcalendar/timegrid.min.js
+            - js/fullcalendar/interaction.min.js
 
             - js/fullcalendar/resource-common.min.js
             - js/fullcalendar/resource-daygrid.min.js
             - js/fullcalendar/resource-timegrid.min.js
             - 
             - js/toast/jquery.toast.min.js
-
-
 
             - bundles/fosckeditor/ckeditor.js
             - bundles/sonataformatter/vendor/markitup-markitup/markitup/jquery.markitup.js

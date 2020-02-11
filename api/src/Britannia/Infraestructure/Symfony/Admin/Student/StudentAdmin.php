@@ -79,9 +79,6 @@ final class StudentAdmin extends AbstractAdmin implements AdminFilterableInterfa
             ->filters($datagridMapper)
             ->configure();
 
-//
-//        dump($this->datagridValues);
-//        dump($this->getFilterParameters());
     }
 
     protected function configureListFields(ListMapper $listMapper): void

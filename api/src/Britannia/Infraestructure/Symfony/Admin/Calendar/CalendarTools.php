@@ -63,7 +63,7 @@ final class CalendarTools extends AdminTools
 
     public function routes(RouteCollection $collection, string $idParameter): ?AdminRoutes
     {
-        return null;
+        return CalendarRoutes::make($collection, $idParameter);
     }
 
     public function dataSource(DatagridInterface $dataGrid): ?AdminDataSource

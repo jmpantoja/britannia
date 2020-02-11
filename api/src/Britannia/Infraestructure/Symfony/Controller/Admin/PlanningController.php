@@ -36,7 +36,7 @@ class PlanningController extends AbstractController
     {
         $classRooms = $this->service->getClassRooms();
 
-        return $this->render('admin/occupation/index.html.twig', [
+        return $this->render('admin/occupation/calendar.html.twig', [
             'classRooms' => json_encode($classRooms),
             'events_route' => 'planning_events'
         ]);

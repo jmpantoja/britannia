@@ -81,7 +81,6 @@ final class CourseAdmin extends AbstractAdmin implements AdminFilterableInterfac
         return $this->adminTools()
             ->routes($collection, $this->getRouterIdParameter())
             ->build();
-
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void

@@ -68,8 +68,11 @@ final class CalendarAdmin extends AbstractAdmin //implements AdminFilterableInte
 
     protected function configureRoutes(RouteCollection $collection)
     {
-        $collection->clearExcept(['list', 'batch']);
-        return $collection;
+
+        return $this->adminTools()
+            ->routes($collection, $this->getRouterIdParameter())
+            ->build();
+
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
