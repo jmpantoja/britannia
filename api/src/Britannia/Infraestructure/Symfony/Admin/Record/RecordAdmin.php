@@ -46,7 +46,7 @@ final class RecordAdmin extends AbstractAdmin implements AdminFilterableInterfac
 
     protected function configureRoutes(RouteCollection $collection)
     {
-//        dump($collection->getElements());
+//        dumps($collection->getElements());
 //        die();
         $collection->clearExcept(['list', 'export']);
         parent::configureRoutes($collection);

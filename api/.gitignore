@@ -1,6 +1,6 @@
 /helm/api/charts
 
-/src/Britannia/Infraestructure/Symfony/DataFixtures/dumps
+/dumps
 
 ###> symfony/framework-bundle ###
 /.env.local

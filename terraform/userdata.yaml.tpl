@@ -23,7 +23,7 @@ write_files:
         services:
             proxy:
                 environment:
-                    DOMAINS: 'www.${app_url} -> http://cache-proxy:80 #local, ${app_url} -> http://cache-proxy:80 #local'
+                    DOMAINS: 'www.${app_url} -> http://cache-proxy:80 #production'
 
   - path: /root/api.env.local.tmp
     content: |
@@ -50,6 +50,6 @@ runcmd:
   - mv /root/env.tmp /deploy/britannia/.env
   - mv /root/docker-compose.override.yml.tmp /deploy/britannia/docker-compose.override.yml
   - mv /root/api.env.local.tmp /deploy/britannia/api/.env.local
-  - cd /deploy/britannia/api
+  - mv /root/dumps /deploy/britannia/dumps
   - cd /deploy/britannia
   - docker-compose up -d
