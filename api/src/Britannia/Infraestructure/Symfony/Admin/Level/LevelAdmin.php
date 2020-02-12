@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Britannia\Infraestructure\Symfony\Admin\Level;
 
+use Britannia\Infraestructure\Symfony\Admin\AdminFilterableInterface;
 use Britannia\Infraestructure\Symfony\Form\ExaminerType;
 use PlanB\DDDBundle\Sonata\Admin\AdminRoutes;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
@@ -12,7 +13,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 
-final class LevelAdmin extends AbstractAdmin
+final class LevelAdmin extends AbstractAdmin implements AdminFilterableInterface
 {
 
     protected $datagridValues = [
@@ -22,6 +23,9 @@ final class LevelAdmin extends AbstractAdmin
      * @var LevelTools
      */
     private LevelTools $adminTools;
+
+    protected $maxPerPage = 50;
+    protected $maxPageLinks = 10;
 
     public function __construct($code, $class, $baseControllerName, LevelTools $adminTools)
     {
@@ -40,6 +44,11 @@ final class LevelAdmin extends AbstractAdmin
     public function getBatchActions()
     {
         return [];
+    }
+
+    public function dataGridValues(): array
+    {
+        return $this->datagridValues;
     }
 
     protected function configureRoutes(RouteCollection $collection)
@@ -68,4 +77,12 @@ final class LevelAdmin extends AbstractAdmin
             ->form($formMapper)
             ->configure();
     }
+
+    public function getDataSourceIterator()
+    {
+        return $this->adminTools()
+            ->dataSource($this->getDatagrid())
+            ->build();
+    }
+
 }

@@ -21,7 +21,7 @@ final class ReportRoutes extends AdminRoutes
 
     protected function configure(): void
     {
-        $this->clearExcept(['list', 'edit']);
+        $this->clearExcept(['edit']);
 
         $this->add('pdf', $this->path('/pdf/generate'));
         $this->add('range', $this->path('/ajax/range'));

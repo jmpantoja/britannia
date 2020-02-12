@@ -4,18 +4,23 @@ declare(strict_types=1);
 
 namespace Britannia\Infraestructure\Symfony\Admin\Staff;
 
+use Britannia\Infraestructure\Symfony\Admin\AdminFilterableInterface;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
+use Sonata\Exporter\Source\ArraySourceIterator;
 
-final class StaffAdmin extends AbstractAdmin
+final class StaffAdmin extends AbstractAdmin implements AdminFilterableInterface
 {
     /**
      * @var StaffTools
      */
     private StaffTools $staffTools;
+
+    protected $maxPerPage = 50;
+    protected $maxPageLinks = 10;
 
     public function __construct(string $code,
                                 string $class,
@@ -46,6 +51,13 @@ final class StaffAdmin extends AbstractAdmin
         return [];
     }
 
+    /**
+     * @return array
+     */
+    public function datagridValues(): array
+    {
+        return $this->datagridValues;
+    }
 
     protected function configureRoutes(RouteCollection $collection)
     {
@@ -81,6 +93,15 @@ final class StaffAdmin extends AbstractAdmin
         return;
     }
 
+    public function getDataSourceIterator()
+    {
+
+        return $this->adminTools()
+            ->dataSource($this->getDatagrid())
+            ->build();
+
+    }
+
     public function checkAccess($action, $object = null)
     {
         if (!$this->hasAccess($action, $object)) {
@@ -100,4 +121,11 @@ final class StaffAdmin extends AbstractAdmin
 
         return parent::hasAccess($action, $object);
     }
+
+    public function toString($object)
+    {
+        return $object->fullName();
+    }
+
+
 }

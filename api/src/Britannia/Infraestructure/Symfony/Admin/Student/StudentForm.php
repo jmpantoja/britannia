@@ -42,7 +42,7 @@ final class StudentForm extends AdminForm
     {
         $isAdult = $student instanceof Adult;
 
-        if($this->dataMapper() instanceof StudentMapper){
+        if ($this->dataMapper() instanceof StudentMapper) {
             $this->dataMapper()->setAdult($isAdult);
         }
 
@@ -130,6 +130,7 @@ final class StudentForm extends AdminForm
         $this->group('Cursos en Activo ', ['class' => 'col-md-12'])
             ->add('studentHasCourses', StudentHasCoursesType::class, [
                 'student' => $student,
+                'label' => false
             ]);
     }
 

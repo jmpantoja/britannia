@@ -22,6 +22,7 @@ final class AcademyFilters extends AdminFilter
     public function configure()
     {
         $this->add('name', null, [
+            'label' => 'Academia',
             'show_filter' => true
         ]);
     }

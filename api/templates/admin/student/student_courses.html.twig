@@ -1,33 +1,46 @@
-{% extends get_admin_template('base_list_field', admin.code) %}
+{% extends 'admin/course/list_of_courses.html.twig' %}
+
+{% use 'admin/attendance/attendance.html.twig' %}
 
 {% block field %}
-    {% set admin_course = admin.configurationPool.adminByAdminCode('admin.course') %}
-
-    {% set limit = 2 %}
-
-    {% for course in object.activeCourses | slice(0, limit) %}
-        <a href="{{ admin_course.generateObjectUrl('edit', course) }}">
-            {{ course.name }}
-            {% if loop.last is same as (false) %},&nbsp;{% endif %}
-        </a>
-    {% endfor %}
-
-    {% set  surplus = object.activeCourses | slice(limit) %}
-
-    {% if surplus | length > 0 %}
-        <div class="btn-group">
-            <button type="button" class="btn btn-link " data-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false">
-                <span class="fa fa-ellipsis-h"></span>
-            </button>
-            <ul class="dropdown-menu">
-                {% for course in surplus %}
-                    <li>
-                        <a href="{{ admin_course.generateObjectUrl('edit', course) }}">{{ course.name }}</a>
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
-    {% endif %}
-
+    {% with {limit: 20, separator: '<br />'} %}
+        {{ block('list_of_courses') }}
+    {% endwith %}
 {% endblock %}
+
+
+{% block course %}
+    {% set admin_staff = admin.configurationPool.adminByAdminCode('admin.staff_member') %}
+
+    <div class="row">
+        <div class="col-md-3">
+            <a href="{{ admin_course.generateObjectUrl('edit', course) }}">{{ course.name }}</a>
+        </div>
+
+        <div class="col-md-3">
+            {% set items = schedule.resume(course.schedule) %}
+            {% for day, hour in items %}
+                {{ day }} &nbsp; ({{ hour }})
+                {% if loop.last == false %} <br/> {% endif %}
+
+            {% endfor %}
+        </div>
+
+        <div class="col-md-3">
+            {% with {'student': object, 'course':course, 'limit': 5} %}
+                {{ block('attendance_sumary') }}
+            {% endwith %}
+        </div>
+
+        <div class="col-md-3">
+            {% if course.mainTeacher is  not null %}
+                <a href="{{ admin_staff.generateObjectUrl('edit', course.mainTeacher) }}">
+                    {{ course.mainTeacher.fullName }}
+                </a>
+            {% endif %}
+        </div>
+
+    </div>
+{% endblock %}
+
+

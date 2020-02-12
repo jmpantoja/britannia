@@ -6,7 +6,7 @@
 
 
 {% block body %}
-    <div class="col-md-3">
+    <div class="col-md-12">
         {% for phoneNumber in object.phoneNumbers %}
             <p class="phone">
                 <i class="fa fa-phone" aria-hidden="true"></i>
@@ -16,10 +16,6 @@
                 {% endif %}
             </p>
         {% endfor %}
-
-    </div>
-
-    <div class="col-md-3">
         {% for email in object.emails %}
             <p class="mail">
                 <i class="fa fa-envelope" aria-hidden="true"></i>
@@ -27,6 +23,7 @@
             </p>
         {% endfor %}
     </div>
+
 {% endblock %}
 
 

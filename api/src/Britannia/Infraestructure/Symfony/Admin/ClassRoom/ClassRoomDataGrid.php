@@ -22,6 +22,7 @@ final class ClassRoomDataGrid extends AdminDataGrid
     public function configure()
     {
         $this->addIdentifier('name', null, [
+            'label' => 'Aula',
             'template' => 'admin/core/resume_column.html.twig',
         ]);
     }

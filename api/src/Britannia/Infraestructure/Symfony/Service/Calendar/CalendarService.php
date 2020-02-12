@@ -64,4 +64,13 @@ class CalendarService
         $this->persister->persist(Calendar::fromDate($dateTime));
     }
 
+
+    public function holidaysInRange(CarbonImmutable $start, CarbonImmutable $end)
+    {
+        $dayList = $this->repository->getHoliDays($start, $end);
+
+        dump($dayList);
+        die;
+
+    }
 }

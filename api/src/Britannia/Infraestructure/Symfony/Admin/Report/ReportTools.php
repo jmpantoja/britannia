@@ -14,8 +14,10 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Admin\Report;
 
 
+use PlanB\DDDBundle\Sonata\Admin\AdminDataSource;
 use PlanB\DDDBundle\Sonata\Admin\AdminForm;
 use PlanB\DDDBundle\Sonata\Admin\AdminTools;
+use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -60,5 +62,10 @@ final class ReportTools extends AdminTools
     public function routes(RouteCollection $collection, string $idParameter): ?ReportRoutes
     {
         return ReportRoutes::make($collection, $idParameter);
+    }
+
+    public function dataSource(DatagridInterface $dataGrid): ?AdminDataSource
+    {
+        return null;
     }
 }

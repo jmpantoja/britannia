@@ -109,4 +109,9 @@ div.horizontal .box .box-body fieldset{
     margin-right: 1em;
 }
 
+.sonata-ba-form .tab-content {
+    height: 72vh;
+    overflow: hidden auto;
+}
+
 

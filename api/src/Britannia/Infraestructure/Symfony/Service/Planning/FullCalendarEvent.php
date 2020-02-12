@@ -57,8 +57,7 @@ class FullCalendarEvent
 
     private function getColorByCourse(Course $course): RGBA
     {
-        return RGBA::make(100, 0, 100);
-        return $course->getColor();
+        return $course->color();
     }
 
     private function withAttendances(Course $course, Lesson $lesson): self

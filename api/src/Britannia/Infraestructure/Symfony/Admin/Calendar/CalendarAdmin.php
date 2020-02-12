@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Britannia\Infraestructure\Symfony\Admin\Calendar;
 
+use Britannia\Infraestructure\Symfony\Admin\AdminFilterableInterface;
 use Carbon\CarbonImmutable;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 
-final class CalendarAdmin extends AbstractAdmin
+final class CalendarAdmin extends AbstractAdmin //implements AdminFilterableInterface
 {
     /**
      * @var CalendarTools
@@ -36,7 +37,7 @@ final class CalendarAdmin extends AbstractAdmin
         return $this->adminTools;
     }
 
-    protected function dataGridValues(): void
+    public function dataGridValues(): array
     {
         $today = CarbonImmutable::now();
 
@@ -44,8 +45,9 @@ final class CalendarAdmin extends AbstractAdmin
             'month' => array('value' => $today->format('m')),
             'year' => array('value' => $today->format('Y'))
         ];
-    }
 
+        return $this->datagridValues;
+    }
 
     public function configureActionButtons($action, $object = null)
     {
@@ -66,8 +68,11 @@ final class CalendarAdmin extends AbstractAdmin
 
     protected function configureRoutes(RouteCollection $collection)
     {
-        $collection->clearExcept(['list', 'batch']);
-        return $collection;
+
+        return $this->adminTools()
+            ->routes($collection, $this->getRouterIdParameter())
+            ->build();
+
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Britannia\Infraestructure\Symfony\Admin\School;
 
+use Britannia\Infraestructure\Symfony\Admin\AdminFilterableInterface;
 use PlanB\DDDBundle\Sonata\Admin\AdminRoutes;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -11,7 +12,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 
-final class SchoolAdmin extends AbstractAdmin
+final class SchoolAdmin extends AbstractAdmin implements AdminFilterableInterface
 {
     protected $datagridValues = [
         '_sort_by' => 'fullName.lastName',
@@ -20,6 +21,9 @@ final class SchoolAdmin extends AbstractAdmin
      * @var SchoolTools
      */
     private SchoolTools $adminTools;
+
+    protected $maxPerPage = 50;
+    protected $maxPageLinks = 10;
 
     public function __construct($code, $class, $baseControllerName, SchoolTools $adminTools)
     {
@@ -38,6 +42,11 @@ final class SchoolAdmin extends AbstractAdmin
     public function getBatchActions()
     {
         return [];
+    }
+
+    public function dataGridValues(): array
+    {
+        return $this->datagridValues;
     }
 
     protected function configureRoutes(RouteCollection $collection)
@@ -66,5 +75,12 @@ final class SchoolAdmin extends AbstractAdmin
             ->form($formMapper)
             ->configure();
     }
+    public function getDataSourceIterator()
+    {
 
+        return $this->adminTools()
+            ->dataSource($this->getDatagrid())
+            ->build();
+
+    }
 }

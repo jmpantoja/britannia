@@ -6,18 +6,23 @@ namespace Britannia\Infraestructure\Symfony\Admin\Course;
 
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\VO\Course\CourseStatus;
+use Britannia\Infraestructure\Symfony\Admin\AdminFilterableInterface;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 
-final class CourseAdmin extends AbstractAdmin
+final class CourseAdmin extends AbstractAdmin implements AdminFilterableInterface
 {
     /**
      * @var CourseTools
      */
     private CourseTools $adminTools;
+
+
+    protected $maxPerPage = 50;
+    protected $maxPageLinks = 10;
 
     public function __construct(
         string $code,
@@ -39,12 +44,22 @@ final class CourseAdmin extends AbstractAdmin
         return $this->adminTools;
     }
 
-    private function dataGridValues(): void
+    public function getExportFields()
+    {
+        return ['name', 'status', 'numOfPlaces', 'monthlyPayment', 'numOfStudents' ];
+    }
+
+    /**
+     * @return array
+     */
+    public function datagridValues(): array
     {
         $status = CourseStatus::ACTIVE();
         $this->datagridValues = [
             'status' => ['value' => $status->getName()]
         ];
+
+        return $this->datagridValues;
     }
 
     public function createQuery($context = 'list')
@@ -66,7 +81,6 @@ final class CourseAdmin extends AbstractAdmin
         return $this->adminTools()
             ->routes($collection, $this->getRouterIdParameter())
             ->build();
-
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
@@ -91,6 +105,14 @@ final class CourseAdmin extends AbstractAdmin
     }
 
 
+    public function getDataSourceIterator()
+    {
+
+        return $this->adminTools()
+            ->dataSource($this->getDatagrid())
+            ->build();
+
+    }
     /**
      * @param Course $object
      * @return string

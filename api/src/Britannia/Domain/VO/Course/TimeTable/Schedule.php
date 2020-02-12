@@ -85,4 +85,5 @@ final class Schedule
     {
         return $this->days->toArray();
     }
+
 }

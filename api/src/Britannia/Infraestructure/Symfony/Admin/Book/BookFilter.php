@@ -24,6 +24,7 @@ final class BookFilter extends AdminFilter
     public function configure()
     {
         $this->add('name', null, [
+            'label' => 'Libro',
             'show_filter' => true
         ]);
 
@@ -31,6 +32,7 @@ final class BookFilter extends AdminFilter
             'show_filter' => true,
             'advanced_filter' => false,
             'field_type' => ChoiceType::class,
+            'label' => 'Categoría',
             'field_options' => [
                 'label' => 'Categoria',
                 'choices' => array_flip(BookCategory::getConstants()),
@@ -38,6 +40,8 @@ final class BookFilter extends AdminFilter
             ],
         ]);
 
-        $this->add('price');
+        $this->add('price', null, [
+            'label' => 'Precio',
+        ]);
     }
 }

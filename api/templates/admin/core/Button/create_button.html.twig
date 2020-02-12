@@ -1,0 +1,34 @@
+{% if admin.hasAccess('create') and admin.hasRoute('create') %}
+    {% if admin.subClasses is empty %}
+        <li>
+            <div class="btn-group">
+                <a class="btn btn-primary" href="{{ admin.generateUrl('create') }}">
+                    {{ 'link_action_create'|trans({}, 'SonataAdminBundle') }}
+                </a>
+            </div>
+        </li>
+    {% else %}
+
+        <!-- Split button -->
+        <div class="btn-group">
+            <button type="button" class="btn btn-primary">
+                {{ 'link_action_create'|trans({}, 'SonataAdminBundle') }}
+            </button>
+            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="caret"></span>
+                <span class="sr-only">Toggle Dropdown</span>
+            </button>
+            <ul class="dropdown-menu">
+                        {% for subclass in admin.subclasses|keys %}
+                            <li>
+                                <a href="{{ admin.generateUrl('create', {'subclass': subclass}) }}">
+                                    {{ subclass|trans({}, admin.translationdomain) }}
+                                </a>
+                            </li>
+                        {% endfor %}
+            </ul>
+        </div>
+
+
+    {% endif %}
+{% endif %}

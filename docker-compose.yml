@@ -50,6 +50,7 @@ services:
 
   db:
     image: mysql:5.7
+    command: --max_allowed_packet=32505856
     environment:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}

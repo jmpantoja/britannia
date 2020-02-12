@@ -39,7 +39,6 @@ abstract class AdminRoutes
         $this->idParameter = $idParameter;
 
         $this->clearExcept(self::ROUTE_LIST);
-        $this->configure();
     }
 
     final public function add(
@@ -77,6 +76,7 @@ abstract class AdminRoutes
 
     public function build(): RouteCollection
     {
+        $this->configure();
         return $this->collection;
     }
 

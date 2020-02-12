@@ -39,7 +39,7 @@ class PriceType extends AbstractSingleType
 //    public function transform($value)
 //    {
 //        return $value;
-//        dump($value);
+//        dumps($value);
 //        die("asdadasd");
 //        if (is_null($value)) {
 //            return $value;

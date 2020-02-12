@@ -1,5 +1,7 @@
 <?php
 
+use PlanB\DDDBundle\PlanBDDDBundle;
+
 return [
     Symfony\Bundle\FrameworkBundle\FrameworkBundle::class => ['all' => true],
     Symfony\Bundle\TwigBundle\TwigBundle::class => ['all' => true],
@@ -21,7 +23,8 @@ return [
     Knp\Bundle\MarkdownBundle\KnpMarkdownBundle::class => ['all' => true],
     FOS\CKEditorBundle\FOSCKEditorBundle::class => ['all' => true],
     Sonata\FormatterBundle\SonataFormatterBundle::class => ['all' => true],
+    Sonata\Exporter\Bridge\Symfony\Bundle\SonataExporterBundle::class => ['all' => true],
     Sonata\IntlBundle\SonataIntlBundle::class => ['all' => true],
-    Knp\Bundle\SnappyBundle\KnpSnappyBundle::class => ['all' => true],
-    PlanB\DDDBundle\PlanBDDDBundle::class => ['all' => true]
+    Knp\Bundle\SnappyBundle\KnpSnappyBundle::class => ['all' => true]
+
 ];

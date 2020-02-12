@@ -14,6 +14,9 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Course;
 
 
+use Britannia\Domain\VO\Assessment\Skill;
+use Britannia\Domain\VO\Assessment\SkillList;
+
 final class School extends Course
 {
     /**
@@ -41,5 +44,21 @@ final class School extends Course
     public function numOfTerms(): int
     {
         return $this->numOfTerms ?? 3;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasDiagnosticTest(): bool
+    {
+        return $this->diagnosticTest ?? true;
+    }
+
+    /**
+     * @return SkillList
+     */
+    public function otherSkills(): SkillList
+    {
+        return $this->otherSkills ?? SkillList::collect([Skill::IRREGULAR_VERBS(), Skill::ALPHABET()]);
     }
 }

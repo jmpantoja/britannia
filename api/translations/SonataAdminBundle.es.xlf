@@ -35,7 +35,7 @@
       </trans-unit>
       <trans-unit id="negd2oK" resname="btn_filter">
         <source>btn_filter</source>
-        <target>Filtrar</target>
+        <target>Buscar</target>
       </trans-unit>
       <trans-unit id="Nz8cDNT" resname="btn_advanced_filters">
         <source>btn_advanced_filters</source>
@@ -59,7 +59,7 @@
       </trans-unit>
       <trans-unit id="xKFcK_a" resname="link_action_create">
         <source>link_action_create</source>
-        <target>Agregar nuevo</target>
+        <target>Nuevo</target>
       </trans-unit>
       <trans-unit id="RPO89HT" resname="link_action_list">
         <source>link_action_list</source>

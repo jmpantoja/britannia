@@ -1,0 +1,7 @@
+{% extends 'admin/course/list_of_courses.html.twig' %}
+
+{% block field %}
+    {% with {limit: 10} %}
+        {{ block('list_of_courses') }}
+    {% endwith %}
+{% endblock %}

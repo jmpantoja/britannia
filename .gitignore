@@ -4,5 +4,6 @@
 /proxy/conf.d
 /proxy/ssl_certs
 /data
+/data.backup
 .idea/
 

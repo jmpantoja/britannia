@@ -17,7 +17,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use PlanB\DDD\Domain\Behaviour\Comparable;
 use PlanB\DDD\Domain\Behaviour\Traits\ComparableTrait;
-use PlanB\DDD\Domain\Model\AggregateRoot;
 use PlanB\DDD\Domain\Model\Traits\AggregateRootTrait;
 use PlanB\DDD\Domain\VO\Email;
 use PlanB\DDD\Domain\VO\FullName;
@@ -182,6 +181,8 @@ abstract class Student implements Comparable
         $this->createdAt = CarbonImmutable::now();
 
         static::update($dto);
+
+        $this->notify(StudentHasBeenCreated::make($this));
     }
 
     public function update(StudentDto $dto): self
@@ -213,6 +214,7 @@ abstract class Student implements Comparable
 
         if (isset($dto->oldId)) {
             $this->oldId = $dto->oldId;
+            $this->createdAt = $dto->createdAt;
         }
 
         return $this;
@@ -581,6 +583,24 @@ abstract class Student implements Comparable
     {
         return $this->records;
     }
+
+    /**
+     * @return CarbonImmutable
+     */
+    public function createdAt(): CarbonImmutable
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @return CarbonImmutable
+     */
+    public function updatedAt(): CarbonImmutable
+    {
+        return $this->updatedAt;
+    }
+
+
 
     public function __toString()
     {

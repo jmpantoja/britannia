@@ -1,0 +1,13 @@
+{% extends 'admin/core/resume_column_base.html.twig' %}
+
+{% block header %}
+    {% if object.course is not empty %}
+
+        {% set adminCourse = admin.configurationPool.adminByAdminCode('admin.course') %}
+        <a href="{{ adminCourse.generateObjectUrl('edit', object.course) }}">
+            <strong>{{ object.course.name }}</strong>
+        </a>
+    {% endif %}
+{% endblock %}
+
+

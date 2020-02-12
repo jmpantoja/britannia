@@ -23,7 +23,7 @@ final class MarkDataGrid extends AdminDataGrid
     {
         $this->add('status', null, [
             'label' => false,
-            'header_style' => 'width:30px;',
+            'header_style' => 'width:76px',
             'template' => 'admin/course/status_list_field.html.twig',
             'row_align' => 'center'
         ]);

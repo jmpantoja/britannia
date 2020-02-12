@@ -33,4 +33,15 @@ resource "digitalocean_droplet" "web" {
   size      = "s-1vcpu-1gb"
   user_data = "${data.template_file.init.rendered}"
   ssh_keys  = ["${digitalocean_ssh_key.britannia.fingerprint}"]
+
+  provisioner "remote-exec" {
+    inline = [
+      "mkdir /root/dumps/"
+    ]
+  }
+
+  provisioner "file" {
+    source      = "../api/dumps/"
+    destination = "/root/dumps/"
+  }
 }

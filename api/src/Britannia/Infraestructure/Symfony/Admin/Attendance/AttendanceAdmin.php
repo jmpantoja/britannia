@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Britannia\Infraestructure\Symfony\Admin\Attendance;
 
+use Britannia\Infraestructure\Symfony\Admin\AdminFilterableInterface;
 use Carbon\Carbon;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -11,7 +12,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 
-final class AttendanceAdmin extends AbstractAdmin
+final class AttendanceAdmin extends AbstractAdmin implements AdminFilterableInterface
 {
     /**
      * @var AttendanceTools
@@ -37,16 +38,20 @@ final class AttendanceAdmin extends AbstractAdmin
         return $this->adminTools;
     }
 
-    protected function dataGridValues(): void
+    /**
+     * @return array
+     */
+    public function datagridValues(): array
     {
         $today = Carbon::now();
 
         $this->datagridValues = [
             'day' => ['value' => \IntlDateFormatter::formatObject($today, "d MMM Y")]
         ];
+
+        return $this->datagridValues;
     }
-
-
+    
     public function createQuery($context = 'list')
     {
         $query = parent::createQuery($context);

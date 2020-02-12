@@ -72,3 +72,11 @@
 .cms-block-element .small-box .inner a{
     color: #FFF;
 }
+
+.show_filters {
+    cursor: pointer;
+}
+.show_filters span{
+    display: inline-block;
+    margin-left: 0.8em;
+}

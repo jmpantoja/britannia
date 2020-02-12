@@ -102,6 +102,7 @@ class CalendarRepository extends ServiceEntityRepository implements CalendarRepo
         $daysOfWeek = $schedule->workDays();
         $query = $this->createQueryBuilder('A')
             ->where('A.weekday IN (:days)')
+            ->andWhere('A.workingDay = 1')
             ->andWhere('A.date >= :start AND A.date <= :end')
             ->orderBy('A.id', 'ASC')
             ->getQuery();
@@ -115,5 +116,37 @@ class CalendarRepository extends ServiceEntityRepository implements CalendarRepo
         return DaysList::collect(...$data);
 
     }
+
+    public function getHoliDays(CarbonImmutable $start, CarbonImmutable $end): DaysList
+    {
+        $query = $this->createQueryBuilder('A')
+            ->where('A.workingDay = 0')
+            ->andWhere('A.date >= :start AND A.date <= :end')
+            ->orderBy('A.id', 'ASC')
+            ->getQuery();
+
+        $data = $query->execute([
+            'start' => $start,
+            'end' => $end
+        ]);
+
+        return DaysList::collect(...$data);
+    }
+
+    public function getRange(CarbonImmutable $start, CarbonImmutable $end): DaysList
+    {
+        $query = $this->createQueryBuilder('A')
+            ->where('A.date >= :start AND A.date <= :end')
+            ->orderBy('A.id', 'ASC')
+            ->getQuery();
+
+        $data = $query->execute([
+            'start' => $start,
+            'end' => $end
+        ]);
+
+        return DaysList::collect(...$data);
+    }
+
 
 }
