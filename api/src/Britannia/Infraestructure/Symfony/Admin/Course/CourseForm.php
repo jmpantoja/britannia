@@ -82,6 +82,7 @@ final class CourseForm extends AdminForm
             ])
             ->add('numOfPlaces', PositiveIntegerType::class, [
                 'label' => 'Plazas',
+                'required' => true
             ]);
 
 

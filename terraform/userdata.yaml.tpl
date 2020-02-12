@@ -50,6 +50,6 @@ runcmd:
   - mv /root/env.tmp /deploy/britannia/.env
   - mv /root/docker-compose.override.yml.tmp /deploy/britannia/docker-compose.override.yml
   - mv /root/api.env.local.tmp /deploy/britannia/api/.env.local
-  - mv /root/dumps /deploy/britannia/dumps
+  - mv /root/dumps /deploy/britannia/api/dumps
   - cd /deploy/britannia
   - docker-compose up -d
