@@ -227,7 +227,7 @@ abstract class Course implements Comparable
         $this->updatedAt = CarbonImmutable::now();
 
         $this->changeCalendar($dto->timeTable, $dto->lessonCreator);
-        $this->changeAssessmentDefinition($dto->assessmentDefinition, $dto->assessmentGenerator);
+    //   $this->changeAssessmentDefinition($dto->assessmentDefinition, $dto->assessmentGenerator);
 
         if (is_null($this->color)) {
             $this->color = $dto->color;
@@ -457,7 +457,6 @@ abstract class Course implements Comparable
     {
         return $this->timeTable->schedule();
     }
-
 
     /**
      * @return PositiveInteger

@@ -1,12 +1,12 @@
 {% macro pending(label = '') %}
-    <span class="label label-warning label-round">{{ label }}</span>
+    <span class="label label-warning label-square">{{ label }}</span>
 {% endmacro %}
 
 {% macro active(label = '') %}
-    <span class="label label-success label-round">{{ label }}</span>
+    <span class="label label-success label-square">{{ label }}</span>
 
 {% endmacro %}
 
 {% macro finalized(label = '') %}
-    <span class="label label-danger label-round">{{ label }}</span>
+    <span class="label label-danger label-square">{{ label }}</span>
 {% endmacro %}

@@ -22,8 +22,8 @@ final class StudentQuery extends AdminQuery
 
     protected function configure(QueryBuilder $builder, string $alias = 'o'): void
     {
-        $builder
-            ->orderBy('o.active', 'DESC')
-            ->addOrderBy('o.fullName.lastName', 'ASC');
+        //$builder
+            //->orderBy('o.active', 'DESC')
+            //->addOrderBy('o.fullName.lastName', 'ASC');
     }
 }

@@ -100,6 +100,8 @@ sonata_admin:
     templates:
         user_block: admin/core/user_block.html.twig
         layout: admin/core/standard_layout.html.twig
+        outer_list_rows_list: admin/core/CRUD/list_outer_rows_list.html.twig
+        inner_list_row: admin/core/CRUD/list_inner_row.html.twig        
         list: admin/core/CRUD/list.html.twig
         edit: admin/core/CRUD/edit.html.twig
         base_list_field: admin/core/CRUD/base_list_field.html.twig
@@ -112,7 +114,8 @@ sonata_admin:
             - css/admin/core.css
             - css/admin/list.css
             - css/admin/forms.css
-            - css/admin/datagrid.css
+            - css/admin/attendance.css
+            - css/admin/students.css
             - css/admin/widgets.css
             - css/toggle/bootstrap-toggle.min.css
 

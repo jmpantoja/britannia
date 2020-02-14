@@ -1,0 +1,24 @@
+.attendance_sumary {
+    float: left;
+}
+
+.attendance_sumary {
+    margin-left: 1em;
+}
+
+.attendance_sumary span {
+    background-color: gainsboro;
+    display: inline-block;
+    margin: 0.1em 0.2em;
+    width: 1.5em;
+    height: 1.5em;
+}
+
+.attendance_sumary span.missed {
+    background-color: #bf2405;
+}
+
+
+.attendance_sumary span.attended {
+    background-color: green;
+}

@@ -83,9 +83,14 @@
 
 {% block table_header %}
     <div class="datalist-header">
-        <table class="table table-bordered">
+        <table class="table table-header table-bordered">
             <thead>
             <tr class="sonata-ba-list-field-header">
+                {% if admin.list.elements['_collapsed'] is defined %}
+                    <th style="width:30px;">
+                        &nbsp;
+                    </th>
+                {% endif %}
                 {% for field_description in admin.list.elements %}
                     {% if admin.hasRoute('batch') and field_description.getOption('code') == '_batch' and batchactions|length > 0 %}
                         <th class="sonata-ba-list-field-header sonata-ba-list-field-header-batch">
@@ -94,9 +99,12 @@
                     {% elseif field_description.getOption('code') == '_select' %}
                         <th class="sonata-ba-list-field-header sonata-ba-list-field-header-select"></th>
                     {% elseif field_description.name == '_action' and app.request.isXmlHttpRequest %}
-                        Action buttons disabled in ajax view!
+                        {#                        Action buttons disabled in ajax view!#}
                     {% elseif field_description.getOption('ajax_hidden') == true and app.request.isXmlHttpRequest %}
-                        Disable fields with 'ajax_hidden' option set to true
+                        {#                        Disable fields with 'ajax_hidden' option set to true#}
+                    {% elseif field_description.name == '_collapsed' %}
+
+
                     {% else %}
                         {% set sortable = false %}
                         {% if field_description.options.sortable is defined and field_description.options.sortable %}
@@ -130,7 +138,7 @@
 
 {% block table_body %}
     <div class="datalist">
-        <table class="table table-bordered table-striped table-hover sonata-ba-list ">
+        <table class="table table-bordered table-hover sonata-ba-list ">
             <tbody>
             {% include get_admin_template('outer_list_rows_' ~ admin.getListMode(), admin.code) %}
             </tbody>

@@ -20,40 +20,32 @@ final class CourseDatagrid extends AdminDataGrid
 {
     public function configure(): self
     {
-        $this
-            ->addStatus()
-            ->addId()
-            ->addActions()
-        ;
-
-        return $this;
-    }
-
-
-    private function addStatus(): self
-    {
         $this->add('status', null, [
             'label' => false,
             'header_style' => 'width:76px',
-            'template' => 'admin/course/status_list_field.html.twig',
+            'template' => 'admin/course/course_status_column.html.twig',
             'row_align' => 'center'
         ]);
 
-        return $this;
-    }
-
-    private function addId(): self
-    {
         $this->addIdentifier('name', 'string', [
-            'template' => 'admin/course/course_list_field.html.twig',
-            'label' => 'Cursos'
+            'template' => 'admin/course/course_name_column.html.twig',
+            'label' => 'Nombre'
         ]);
-        return $this;
-    }
 
+        $this->add('timeTable.start', null, [
+            'label' => 'Curso',
+            'header_style' => 'width:250px',
+            'template' => 'admin/course/course_date_column.html.twig',
+            'row_align' => 'left'
+        ]);
 
-    private function addActions(): self
-    {
+        $this->add('numOfStudents', null, [
+            'label' => 'Plazas',
+            'header_style' => 'width:120px',
+            'template' => 'admin/course/course_places_column.html.twig',
+            'row_align' => 'left'
+        ]);
+
         $this->add('_action', null, [
             'label' => false,
             'header_style' => 'width:210px;',
@@ -67,4 +59,6 @@ final class CourseDatagrid extends AdminDataGrid
 
         return $this;
     }
+
+
 }

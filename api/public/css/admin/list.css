@@ -26,7 +26,7 @@
 .card-body {
     max-height: available;
     flex-grow: 1;
-    overflow-y: auto;
+    overflow-y: scroll;
     overflow-x: hidden;
 
 }
@@ -48,12 +48,79 @@
     flex-direction: column;
 }
 
-.datalist-header
-{
+.datalist-header {
+    margin-right: 12px;
+
+}
+
+.datalist-header table {
+    margin-bottom: 0;
     margin-right: 12px;
 }
 
-.datalist-header table{
-    margin-bottom: 0;
+.sonata-ba-list-field-header-batch {
+    width: 40px;
 }
 
+table.sonata-ba-list td.sonata-ba-list-field {
+    overflow: hidden;
+}
+
+table.sonata-ba-list td.sonata-ba-list-field {
+    padding: 1em 0.5em;
+}
+
+td.sonata-ba-list-field .label-square {
+    margin: 0;
+}
+
+.table-responsive {
+    min-height: 20em;
+}
+
+.btn-disable {
+    cursor: default;
+}
+
+
+.cms-block-element .small-box .inner a {
+    color: #FFF;
+}
+
+.show_filters {
+    cursor: pointer;
+}
+
+.show_filters span {
+    display: inline-block;
+    margin-left: 0.8em;
+}
+
+.table-header {
+    background-color: #f8f8f8;
+}
+
+table.sonata-ba-list,
+.table-bordered > tbody > tr:first-of-type > td {
+    border-top: none;
+}
+
+.table-bordered > thead > tr > th,
+.table-bordered > tbody > tr > th,
+.table-bordered > tfoot > tr > th,
+.table-bordered > thead > tr > td,
+.table-bordered > tbody > tr > td,
+.table-bordered > tfoot > tr > td {
+    border: 1px solid #ccc;
+    border-right: none;
+    border-left: none;
+
+    /*border-right: 1px solid #eee;*/
+    /*border-left: 1px solid #eee;*/
+    vertical-align: middle;
+}
+
+.table-bordered {
+    border: 1px solid #ccc;
+    /*border-top: none;*/
+}

@@ -21,8 +21,13 @@ final class TutorDataGrid extends AdminDataGrid
 
     public function configure()
     {
-        $this->addIdentifier('id', 'string', [
-            'template' => 'admin/student/tutor_resume_column.html.twig',
+        $this->addIdentifier('fullName.lastName', 'string', [
+            'template' => 'admin/student/tutor_name_column.html.twig',
+            'label' => 'Tutor'
+        ]);
+
+        $this->addIdentifier('_collapsed', 'string', [
+            'template' => 'admin/student/tutor_collapsed_column.html.twig',
             'label' => 'Tutor'
         ]);
     }

@@ -1,0 +1,29 @@
+{% extends get_admin_template('base_list_field', admin.code) %}
+
+{% block field %}
+    {{ object.fullName }}
+{% endblock %}
+
+
+{% block body %}
+    <div class="col-md-12">
+        {% for phoneNumber in object.phoneNumbers %}
+            <p class="phone">
+                <i class="fa fa-phone" aria-hidden="true"></i>
+                <span> {{ phoneNumber }} </span>
+                {% if phoneNumber.description %}
+                    <span> ({{ phoneNumber.description }})</span>
+                {% endif %}
+            </p>
+        {% endfor %}
+        {% for email in object.emails %}
+            <p class="mail">
+                <i class="fa fa-envelope" aria-hidden="true"></i>
+                <span> {{ email }} </span>
+            </p>
+        {% endfor %}
+    </div>
+
+{% endblock %}
+
+

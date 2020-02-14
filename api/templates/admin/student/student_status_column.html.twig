@@ -1,0 +1,19 @@
+{% extends get_admin_template('base_list_field', admin.code) %}
+
+{% import 'admin/core/status_column.html.twig' as status %}
+
+{% block field %}
+
+    {% if object.adult %}
+        {% set label = 'A' %}
+    {% else %}
+        {% set label = 'N' %}
+    {% endif %}
+
+
+    {% if object.active %}
+        {{ status.active(label) }}
+    {% else %}
+        {{ status.pending(label) }}
+    {% endif %}
+{% endblock %}

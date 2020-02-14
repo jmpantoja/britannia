@@ -23,32 +23,38 @@ final class StudentDataGrid extends AdminDataGrid
     {
         $this->add('active', 'string', [
             'label' => false,
-            'header_style' => 'width:76px',
-            'template' => 'admin/student/status_resume_column.html.twig',
+            'header_style' => 'width:40px',
+            'template' => 'admin/student/student_status_column.html.twig',
             'row_align' => 'center'
         ]);
 
         $this->addIdentifier('fullName.lastName', 'string', [
-            'template' => 'admin/student/student_resume_column.html.twig',
+            'template' => 'admin/student/student_name_column.html.twig',
             'label' => 'Nombre',
-            'header_style' => 'width:330px',
+            'header_style' => 'width:220px',
         ]);
 
         $this->add('activeCourses', 'string', [
-            'template' => 'admin/student/student_courses.html.twig',
+            'template' => 'admin/student/student_courses_column.html.twig',
             'label' => 'Cursos',
             'row_align' => 'left',
         ]);
 
-        $this->add('birthdate', 'date', [
+        $this->add('birthDate', null, [
+            'header_style' => 'width:150px; line-height: 100%',
+            'template' => 'admin/student/student_age_column.html.twig',
             'label' => 'Fecha Nac.',
+            'row_align' => 'center'
+        ]);
+
+
+        $this->add('createdAt', 'date', [
+            'label' => 'Fec. Alta',
             'header_style' => 'width:140px',
         ]);
 
-        $this->add('edad', null, [
-            'header_style' => 'width:76px; line-height: 100%',
-            'template' => 'admin/student/age_resume_column.html.twig',
-            'row_align' => 'center'
+        $this->add('_collapsed', null, [
+            'template' => 'admin/student/student_collapsed_column.html.twig',
         ]);
     }
 }

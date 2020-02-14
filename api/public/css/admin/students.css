@@ -1,0 +1,16 @@
+.contact {
+    margin-bottom: 0.8em;
+}
+
+.contact .contact-name {
+
+}
+
+.contact .contact-info {
+
+}
+.contact .contact-info span {
+    display: inline-block;
+    margin-right: 1em;
+    padding-left: 0.5em;
+}

@@ -17,6 +17,7 @@ namespace Britannia\Infraestructure\Symfony\Twig\Extensions;
 use Britannia\Infraestructure\Symfony\Admin\AdminFilterableInterface;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
 use Twig\TwigFunction;
 
 final class SonataExtension extends AbstractExtension
@@ -25,6 +26,14 @@ final class SonataExtension extends AbstractExtension
     {
         return [
             new TwigFunction('sonata_has_filters', [$this, 'hasFilters']),
+        ];
+    }
+
+    public function getFilters()
+    {
+        return [
+            // the logic of this filter is now implemented in a different class
+            new TwigFilter('unset', [$this, 'unset']),
         ];
     }
 
@@ -56,6 +65,12 @@ final class SonataExtension extends AbstractExtension
         }
 
         return array_filter($data);
+    }
+
+    public function unset(array $value, string $key)
+    {
+        unset($value[$key]);
+        return $value;
     }
 }
 
