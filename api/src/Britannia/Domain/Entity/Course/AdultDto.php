@@ -15,6 +15,8 @@ namespace Britannia\Domain\Entity\Course;
 
 
 use Britannia\Domain\Entity\Lesson\UpdateCalendarOrder;
+use Britannia\Domain\Service\Assessment\AssessmentGenerator;
+use Britannia\Domain\VO\Assessment\AssessmentDefinition;
 use Britannia\Domain\VO\Course\Age\Age;
 use Britannia\Domain\VO\Course\Examiner\Examiner;
 use Britannia\Domain\VO\Course\Intensive\Intensive;
@@ -28,5 +30,10 @@ class AdultDto extends CourseDto
     public ?Examiner $examiner = null;
 
     public ?Level $level = null;
+
+
+    public AssessmentDefinition $assessmentDefinition;
+
+    public AssessmentGenerator $assessmentGenerator;
 
 }

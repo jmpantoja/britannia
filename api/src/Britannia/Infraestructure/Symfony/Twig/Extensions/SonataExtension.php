@@ -14,17 +14,29 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Twig\Extensions;
 
 
+use Britannia\Domain\Entity\Course\Course;
+use Britannia\Domain\Entity\Course\EvaluableInterface;
 use Britannia\Infraestructure\Symfony\Admin\AdminFilterableInterface;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
+use Twig\TwigTest;
 
 final class SonataExtension extends AbstractExtension
 {
+    public function getTests()
+    {
+        return [
+            new TwigTest('evaluable', [$this, 'is_evaluable']),
+        ];
+    }
+
+
     public function getFunctions()
     {
         return [
+            new TwigFunction('sonata_has_filters', [$this, 'hasFilters']),
             new TwigFunction('sonata_has_filters', [$this, 'hasFilters']),
         ];
     }
@@ -72,5 +84,11 @@ final class SonataExtension extends AbstractExtension
         unset($value[$key]);
         return $value;
     }
+
+    public function is_evaluable(Course $course)
+    {
+        return $course instanceof EvaluableInterface;
+    }
+
 }
 

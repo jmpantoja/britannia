@@ -22,6 +22,8 @@ use Britannia\Domain\Entity\Course\PreSchool;
 use Britannia\Domain\Entity\Course\PreSchoolDto;
 use Britannia\Domain\Entity\Course\School;
 use Britannia\Domain\Entity\Course\SchoolDto;
+use Britannia\Domain\Entity\Course\Support;
+use Britannia\Domain\Entity\Course\SupportDto;
 use Britannia\Domain\Service\Assessment\AssessmentGenerator;
 use Britannia\Domain\Service\Course\LessonGenerator;
 use PlanB\DDDBundle\Sonata\Admin\AdminMapper;
@@ -68,6 +70,9 @@ final class CourseMapper extends AdminMapper
         } elseif ($dto instanceof SchoolDto) {
             return School::make($dto);
         }
+        elseif ($dto instanceof SupportDto){
+            return Support::make($dto);
+        }
         return Adult::make($dto);
     }
 
@@ -95,12 +100,16 @@ final class CourseMapper extends AdminMapper
             return AdultDto::fromArray($values);
         }
 
+        if ($this->subject instanceof School) {
+            return SchoolDto::fromArray($values);
+        }
+
         if ($this->subject instanceof PreSchool) {
             return PreSchoolDto::fromArray($values);
         }
 
-        if ($this->subject instanceof School) {
-            return SchoolDto::fromArray($values);
+        if ($this->subject instanceof Support) {
+            return SupportDto::fromArray($values);
         }
     }
 

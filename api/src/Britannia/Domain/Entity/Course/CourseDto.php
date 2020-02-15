@@ -43,8 +43,6 @@ abstract class CourseDto extends Dto
 
     public ?PositiveInteger $numOfPlaces;
 
-    public Support $support;
-
     public ?Price $monthlyPayment;
 
     public ?Price $enrollmentPayment;
@@ -61,14 +59,10 @@ abstract class CourseDto extends Dto
 
     public ?Collection $discount = null;
 
-    public AssessmentDefinition $assessmentDefinition;
-
-    public AssessmentGenerator $assessmentGenerator;
 
     protected function defaults(): array
     {
         return [
-            'support' => Support::REGULAR(),
             'color' => $this->randomColor()
         ];
     }

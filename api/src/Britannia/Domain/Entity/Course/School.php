@@ -14,11 +14,24 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Course;
 
 
+use Britannia\Domain\Entity\Course\Traits\EvaluableTrait;
 use Britannia\Domain\VO\Assessment\Skill;
 use Britannia\Domain\VO\Assessment\SkillList;
+use Doctrine\Common\Collections\ArrayCollection;
 
-final class School extends Course
+final class School extends Course implements EvaluableInterface
 {
+    use EvaluableTrait;
+
+    public function __construct(AdultDto $dto)
+    {
+        $this->terms = new ArrayCollection();
+        $this->units = new ArrayCollection();
+        $this->numOfTerms = 0;
+
+        parent::__construct($dto);
+    }
+
     /**
      * @var null|string
      */
@@ -27,7 +40,11 @@ final class School extends Course
     public function update(CourseDto $dto): School
     {
         $this->schoolCourse = $dto->schoolCourse;
-        return parent::update($dto);
+        parent::update($dto);
+
+
+        $this->changeAssessmentDefinition($dto->assessmentDefinition, $dto->assessmentGenerator);
+        return $this;
     }
 
     /**

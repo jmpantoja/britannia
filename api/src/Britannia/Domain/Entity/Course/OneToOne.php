@@ -13,14 +13,8 @@ declare(strict_types=1);
 
 namespace Britannia\Domain\Entity\Course;
 
-use Britannia\Domain\Service\Assessment\AssessmentGenerator;
-use Britannia\Domain\VO\Assessment\AssessmentDefinition;
 
-class SchoolDto extends CourseDto
+final class OneToOne extends Course
 {
-    public ?string $schoolCourse;
 
-    public AssessmentDefinition $assessmentDefinition;
-
-    public AssessmentGenerator $assessmentGenerator;
 }

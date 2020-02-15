@@ -11,13 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Britannia\Domain\VO\Course\Support;
+namespace Britannia\Domain\Entity\Course;
 
-
-use MabeEnum\Enum;
-
-class Support extends Enum
+class SupportDto extends CourseDto
 {
-    public const REGULAR = 'Curso Regular';
-    public const SUPPORTED = 'Curso de apoyo';
+
+
 }

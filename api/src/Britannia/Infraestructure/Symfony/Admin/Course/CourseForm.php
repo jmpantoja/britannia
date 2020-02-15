@@ -15,6 +15,7 @@ namespace Britannia\Infraestructure\Symfony\Admin\Course;
 
 
 use Britannia\Domain\Entity\Course\Course;
+use Britannia\Domain\Entity\Course\EvaluableInterface;
 use Britannia\Infraestructure\Symfony\Form\Type\Assessment\AssessmentDefinitionType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\AgeType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\CourseHasStudentsType;
@@ -55,7 +56,11 @@ final class CourseForm extends AdminForm
         $this->calendarTab('Calendario');
         $this->priceTab('Precio');
         $this->studentsTab('Alumnos y profesores');
-        $this->unitsTab('Evaluación');
+
+        if ($course instanceof EvaluableInterface) {
+            $this->unitsTab('Evaluación');
+        }
+
 
         return $this;
     }
@@ -76,17 +81,13 @@ final class CourseForm extends AdminForm
                     new NotBlank()
                 ]
             ])
-            ->add('support', SupportType::class, [
-                'label' => '¿Es de apoyo?',
-                'required' => true
-            ])
             ->add('numOfPlaces', PositiveIntegerType::class, [
                 'label' => 'Plazas',
                 'required' => true
             ]);
 
 
-        if (!$course->isAdult()) {
+        if ($course->isSchool()) {
             $this->group('Descripción', ['class' => 'col-md-12 horizontal'])
                 ->add('schoolCourse');
         }

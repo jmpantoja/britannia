@@ -14,12 +14,27 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Course;
 
 
+use Britannia\Domain\Entity\Course\Traits\EvaluableTrait;
 use Britannia\Domain\VO\Assessment\SetOfSkills;
 use Britannia\Domain\VO\Course\Examiner\Examiner;
 use Britannia\Domain\VO\Course\Intensive\Intensive;
+use Doctrine\Common\Collections\ArrayCollection;
 
-final class Adult extends Course
+final class Adult extends Course implements EvaluableInterface
 {
+    use EvaluableTrait;
+
+
+    public function __construct(AdultDto $dto)
+    {
+        $this->terms = new ArrayCollection();
+        $this->units = new ArrayCollection();
+
+        $this->numOfTerms = 0;
+        parent::__construct($dto);
+    }
+
+
     /**
      * @var null|Intensive
      */
@@ -40,7 +55,10 @@ final class Adult extends Course
         $this->examiner = $dto->examiner;
         $this->level = $dto->level;
         $this->intensive = $dto->intensive;
-        return parent::update($dto);
+        parent::update($dto);
+
+        $this->changeAssessmentDefinition($dto->assessmentDefinition, $dto->assessmentGenerator);
+        return $this;
     }
 
     /**

@@ -13,6 +13,8 @@
             <discriminator-mapping value="adult" class="Britannia\Domain\Entity\Course\Adult"/>
             <discriminator-mapping value="school" class="Britannia\Domain\Entity\Course\School"/>
             <discriminator-mapping value="pre_school" class="Britannia\Domain\Entity\Course\PreSchool"/>
+            <discriminator-mapping value="support" class="Britannia\Domain\Entity\Course\Support"/>
+            <discriminator-mapping value="one_to_one" class="Britannia\Domain\Entity\Course\OneToOne"/>
         </discriminator-map>
 
         <id name="id" type="CourseId" column="id">
@@ -26,7 +28,6 @@
         <field name="color" type="rgba" nullable="true"/>
 
         <field name="status" type="CourseStatus"/>
-        <field name="support" type="Support"/>
 
         <field name="numOfPlaces" type="positive_integer"/>
 
@@ -36,15 +37,6 @@
         <field name="discount" type="DiscountList" nullable="true"></field>
 
         <field name="numOfStudents" type="integer" nullable="true"></field>
-
-        <field name="skills" type="SetOfSkills" nullable="true"></field>
-
-        <field name="otherSkills" type="SkillList" nullable="true"></field>
-
-        <field name="numOfTerms" type="integer" nullable="true"></field>
-
-        <field name="diagnosticTest" type="boolean" nullable="true"></field>
-        <field name="finalTest" type="boolean" nullable="true"></field>
 
         <field name="createdAt" type="datetime_immutable" nullable="true"></field>
 
@@ -86,20 +78,6 @@
             </cascade>
         </one-to-many>
 
-        <one-to-many field="terms" target-entity="Britannia\Domain\Entity\Assessment\Term" mapped-by="course"
-                     orphan-removal="true">
-            <cascade>
-                <cascade-persist/>
-            </cascade>
-        </one-to-many>
-
-        <!--        <one-to-many field="units" target-entity="Britannia\Domain\Entity\Unit\Unit" mapped-by="course"-->
-        <!--                     orphan-removal="true">-->
-        <!--            <cascade>-->
-        <!--                <cascade-persist/>-->
-        <!--&lt;!&ndash;                <cascade-remove/>&ndash;&gt;-->
-        <!--            </cascade>-->
-        <!--        </one-to-many>-->
     </entity>
 
 </doctrine-mapping>

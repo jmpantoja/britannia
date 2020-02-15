@@ -57,7 +57,6 @@ class CourseHasStudentsType extends AbstractSingleType
             'model_manager' => $this->modelManager,
             'multiple' => true,
             'by_reference' => false,
-
             'attr' => [
                 'data-sonata-select2' => 'false'
             ]
@@ -88,7 +87,7 @@ class CourseHasStudentsType extends AbstractSingleType
             $query->where('o.age >= 17');
         }
 
-        if ($course->isSchool()) {
+        if ($course->isSchool() or $course->isSupport()) {
             $query->where('o.age >= 6 AND o.age <= 20');
         }
 

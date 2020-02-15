@@ -47,7 +47,6 @@ doctrine:
                     CourseStatus: CourseStatus
                     DayOfWeek: DayOfWeek
                     Examiner: Examiner
-                    Support: Support
                     Intensive: Intensive
                     DiscountList: DiscountList
 
@@ -101,7 +100,6 @@ doctrine:
             DayOfWeek: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\DayOfWeekType
             Examiner: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\ExaminerType
             Intensive: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\IntensiveType
-            Support: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\SupportType
             CourseStatus: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\CourseStatusType
             CourseId: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\CourseId
             LevelId: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\LevelId

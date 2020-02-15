@@ -8,6 +8,23 @@
     <entity name="Britannia\Domain\Entity\Course\Adult" table="course_adult">
         <field name="examiner" type="Examiner" nullable="true"/>
         <field name="intensive" type="Intensive"/>
+
+        <field name="skills" type="SetOfSkills" nullable="true"></field>
+
+        <field name="otherSkills" type="SkillList" nullable="true"></field>
+
+        <field name="numOfTerms" type="integer" nullable="true"></field>
+
+        <field name="diagnosticTest" type="boolean" nullable="true"></field>
+        <field name="finalTest" type="boolean" nullable="true"></field>
+
+        <one-to-many field="terms" target-entity="Britannia\Domain\Entity\Assessment\Term" mapped-by="course"
+                     orphan-removal="true">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </one-to-many>
+
         <many-to-one field="level" target-entity="Britannia\Domain\Entity\Course\Level"></many-to-one>
     </entity>
 

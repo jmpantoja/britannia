@@ -3,8 +3,8 @@ services:
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
-    
-    
+
+
     admin.staff_member:
         class: Britannia\Infraestructure\Symfony\Admin\Staff\StaffAdmin
         arguments: [~, Britannia\Domain\Entity\Staff\StaffMember, ~]
@@ -44,7 +44,12 @@ services:
         tags:
             - { name: sonata.admin, manager_type: orm, label: Cursos }
         calls:
-            - [setSubClasses, [{adult: Britannia\Domain\Entity\Course\Adult, school: Britannia\Domain\Entity\Course\School, pre_school: Britannia\Domain\Entity\Course\PreSchool}]] 
+            - [setSubClasses, [{adult: Britannia\Domain\Entity\Course\Adult,
+                                school: Britannia\Domain\Entity\Course\School,
+                                pre_school: Britannia\Domain\Entity\Course\PreSchool,
+                                support: Britannia\Domain\Entity\Course\Support,
+                                one_to_one: Britannia\Domain\Entity\Course\OneToOne,
+                               }]]
         public: true
 
     admin.mark:
@@ -52,8 +57,8 @@ services:
         arguments: [~, Britannia\Domain\Entity\Course\Course, Britannia\Infraestructure\Symfony\Controller\Admin\MarkController]
         tags:
             - { name: sonata.admin, manager_type: orm, label: Calificaciones,  }
-        calls: 
-            - [setTemplate, ['edit', 'form/mark/edit.html.twig']] 
+        calls:
+            - [setTemplate, ['edit', 'form/mark/edit.html.twig']]
         public: true
 
     admin.report:

@@ -1,5 +1,6 @@
 {% set hasMarks = false %}
-{% if object.numOfStudents > 0 %}
+
+{% if object.numOfStudents > 0 and object is evaluable %}
     {% set hasMarks = object.diagnosticTest or object.finalTest or object.numOfTerms > 0 %}
 {% endif %}
 

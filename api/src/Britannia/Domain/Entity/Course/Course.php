@@ -14,8 +14,6 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Course;
 
 
-use Britannia\Domain\Entity\Assessment\Term;
-use Britannia\Domain\Entity\Assessment\TermList;
 use Britannia\Domain\Entity\Lesson\Lesson;
 use Britannia\Domain\Entity\Lesson\LessonList;
 use Britannia\Domain\Entity\Staff\StaffList;
@@ -26,17 +24,8 @@ use Britannia\Domain\Entity\Student\StudentCourseList;
 use Britannia\Domain\Entity\Student\StudentHasJoinedToCourse;
 use Britannia\Domain\Entity\Student\StudentHasLeavedCourse;
 use Britannia\Domain\Entity\Student\StudentList;
-use Britannia\Domain\Service\Assessment\AssessmentGenerator;
 use Britannia\Domain\Service\Course\LessonGenerator;
-use Britannia\Domain\VO\Assessment\AssessmentDefinition;
-use Britannia\Domain\VO\Assessment\CourseTerm;
-use Britannia\Domain\VO\Assessment\MarkReport;
-use Britannia\Domain\VO\Assessment\SetOfSkills;
-use Britannia\Domain\VO\Assessment\SkillList;
-use Britannia\Domain\VO\Assessment\TermDefinition;
-use Britannia\Domain\VO\Assessment\TermName;
 use Britannia\Domain\VO\Course\CourseStatus;
-use Britannia\Domain\VO\Course\Support\Support;
 use Britannia\Domain\VO\Course\TimeTable\Schedule;
 use Britannia\Domain\VO\Course\TimeTable\TimeTable;
 use Carbon\CarbonImmutable;
@@ -83,15 +72,14 @@ abstract class Course implements Comparable
     private $status;
 
     /**
+     * @var int
+     */
+    private $numOfStudents;
+
+    /**
      * @var PositiveInteger
      */
     private $numOfPlaces;
-
-
-    /**
-     * @var null|Support
-     */
-    private $support;
 
 
     /**
@@ -132,47 +120,8 @@ abstract class Course implements Comparable
     /**
      * @var Collection
      */
-    private $terms;
-
-
-    /**
-     * @var Collection
-     */
     private $discount;
 
-    /**
-     * @var int
-     */
-    private $numOfStudents;
-
-    /**
-     * @var SetOfSkills
-     */
-    protected $skills;
-
-    /**
-     * @var SkillList
-     */
-    protected $otherSkills;
-
-    /**
-     * @var integer
-     */
-    protected $numOfTerms;
-
-    /**
-     * @var bool
-     */
-    protected $diagnosticTest;
-    /**
-     * @var bool
-     */
-    protected $finalTest;
-
-    /**
-     * @var Collection
-     */
-    private $units;
 
     /**
      * @var Collection
@@ -195,18 +144,18 @@ abstract class Course implements Comparable
         return new static($dto);
     }
 
-    private function __construct(CourseDto $dto)
+    protected function __construct(CourseDto $dto)
     {
         $this->id = new CourseId();
         $this->courseHasStudents = new ArrayCollection();
         $this->teachers = new ArrayCollection();
         $this->books = new ArrayCollection();
         $this->lessons = new ArrayCollection();
-        $this->terms = new ArrayCollection();
         $this->units = new ArrayCollection();
         $this->numOfStudents = 0;
-        $this->numOfTerms = 0;
+
         $this->discount = new ArrayCollection();
+
         $this->records = new ArrayCollection();
         $this->status = CourseStatus::PENDING();
 
@@ -220,14 +169,12 @@ abstract class Course implements Comparable
     {
         $this->name = $dto->name;
         $this->numOfPlaces = $dto->numOfPlaces;
-        $this->support = $dto->support;
         $this->monthlyPayment = $dto->monthlyPayment;
         $this->enrollmentPayment = $dto->enrollmentPayment;
         $this->discount = $dto->discount;
         $this->updatedAt = CarbonImmutable::now();
 
         $this->changeCalendar($dto->timeTable, $dto->lessonCreator);
-    //   $this->changeAssessmentDefinition($dto->assessmentDefinition, $dto->assessmentGenerator);
 
         if (is_null($this->color)) {
             $this->color = $dto->color;
@@ -245,8 +192,6 @@ abstract class Course implements Comparable
             $this->setStudents($dto->courseHasStudents);
         }
 
-        $this->changeAssessmentDefinition($dto->assessmentDefinition, $dto->assessmentGenerator);
-
         return $this;
     }
 
@@ -259,6 +204,17 @@ abstract class Course implements Comparable
         $this->setStatus($timeTable->status());
         $this->setTimeTable($timeTable, $generator);
 
+        return $this;
+    }
+
+    /**
+     * Usado desde el cron
+     * @return $this
+     */
+    public function updateStatus(): self
+    {
+
+        $this->setStatus($this->timeTable->status());
         return $this;
     }
 
@@ -293,37 +249,6 @@ abstract class Course implements Comparable
         return $this;
     }
 
-    public function changeAssessmentDefinition(AssessmentDefinition $definition, AssessmentGenerator $generator): self
-    {
-        $this->skills = $definition->skills();
-        $this->otherSkills = $definition->otherSkills();
-        $this->numOfTerms = $definition->numOfTerms();
-
-        $this->diagnosticTest = $definition->hasDiagnosticTest();
-        $this->finalTest = $definition->hasFinalTest();
-
-        $termList = $generator->generateTerms($this->courseHasStudentList(), $definition);
-        $this->setTerms($termList);
-
-        $this->termList()->updateSkills($definition->skills());
-
-        return $this;
-    }
-
-    public function setTerms(TermList $termList): self
-    {
-        $this->termList()
-            ->forRemovedItems($termList)
-            ->forAddedItems($termList);
-
-        return $this;
-    }
-
-    public function marksByStudent(Student $student): MarkReport
-    {
-        return $this->termList()
-            ->marksByStudent($student);
-    }
 
     public function setTeachers(StaffList $teachers)
     {
@@ -368,8 +293,6 @@ abstract class Course implements Comparable
                 $this->notify($event);
             });
 
-
-        $this->numOfStudents = $this->courseHasStudentList()->count();
         return $this;
     }
 
@@ -382,13 +305,11 @@ abstract class Course implements Comparable
                 $this->notify($event);
             });
 
-        $this->numOfStudents = $this->courseHasStudentList()->count();
         return $this;
     }
 
-    public function updateStatus(): self
+    public function updateNumOfStudents(): self
     {
-        $this->setStatus($this->timeTable->status());
         $this->numOfStudents = $this->courseHasStudentList()->count();
         return $this;
     }
@@ -476,15 +397,6 @@ abstract class Course implements Comparable
 
 
     /**
-     * @return Support|null
-     */
-    public function support(): ?Support
-    {
-        return $this->support;
-    }
-
-
-    /**
      * @return Price|null
      */
     public function monthlyPayment(): ?Price
@@ -540,7 +452,7 @@ abstract class Course implements Comparable
     /**
      * @return StudentCourseList
      */
-    private function courseHasStudentList(): StudentCourseList
+    protected function courseHasStudentList(): StudentCourseList
     {
         return StudentCourseList::collect($this->courseHasStudents);
     }
@@ -577,86 +489,6 @@ abstract class Course implements Comparable
     }
 
     /**
-     * @return Term[]
-     */
-    public function terms(): array
-    {
-        return $this->termList()->toArray();
-    }
-
-    /**
-     * @return TermList
-     */
-    private function termList(): TermList
-    {
-
-        return TermList::collect($this->terms);
-    }
-
-
-    public function assessmentDefinition(): AssessmentDefinition
-    {
-        return AssessmentDefinition::make(...[
-            $this->skills(),
-            $this->otherSkills(),
-            $this->numOfTerms(),
-            $this->hasDiagnosticTest(),
-            $this->hasFinalTest()
-        ]);
-    }
-
-    /**
-     * @return SetOfSkills
-     */
-    public function skills(): SetOfSkills
-    {
-        return $this->skills ?? SetOfSkills::SET_OF_SIX();
-    }
-
-    /**
-     * @return SkillList
-     */
-    public function otherSkills(): SkillList
-    {
-        return $this->otherSkills ?? SkillList::collect();
-    }
-
-
-    /**
-     * @return int
-     */
-    public function numOfTerms(): int
-    {
-        return $this->numOfTerms ?? 0;
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasDiagnosticTest(): bool
-    {
-        return $this->diagnosticTest ?? false;
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasFinalTest(): bool
-    {
-        return $this->finalTest ?? false;
-    }
-
-    public function termDefinition(TermName $termName): TermDefinition
-    {
-        $courseTerm = CourseTerm::make($this, $termName);
-        $unitsWeight = $courseTerm->unitsWeight();
-        $numOfUnits = $courseTerm->numOfUnits();
-
-        return TermDefinition::make($termName, $unitsWeight, $numOfUnits);
-    }
-
-
-    /**
      * @return Collection
      */
     public function records(): Collection
@@ -680,19 +512,14 @@ abstract class Course implements Comparable
         return static::class === PreSchool::class;
     }
 
+    public function isSupport(): bool
+    {
+        return static::class === Support::class;
+    }
+
     public function __toString()
     {
         return $this->name();
     }
 
-    public function setLimitsToTerm(TermName $termName, CarbonImmutable $start, ?CarbonImmutable $end): self
-    {
-        if (is_null($end)) {
-            return $this;
-        }
-
-        $this->termList()
-            ->setLimits($termName, $start, $end);
-        return $this;
-    }
 }
