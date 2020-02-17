@@ -4,11 +4,15 @@
 
 {% block field %}
     {% if object.adult %}
-        {% set label = 'A' %}
+        {% set label = '+18' %}
     {% elseif object.school %}
-        {% set label = 'E' %}
-    {% else %}
-        {% set label = 'P' %}
+        {% set label = 'Reg' %}
+    {% elseif object.preschool %}
+        {% set label = 'Pre' %}
+    {% elseif object.support %}
+        {% set label = 'Apo' %}
+    {% elseif object.onetoone %}
+        {% set label = '1to1' %}
     {% endif %}
 
     {% if object.status.pending %}

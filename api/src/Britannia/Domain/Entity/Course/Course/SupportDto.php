@@ -11,11 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Britannia\Domain\Entity\Course;
+namespace Britannia\Domain\Entity\Course\Course;
 
+use Britannia\Domain\Entity\Course\CourseDto;
 
-class PreSchoolDto extends CourseDto
+class SupportDto extends CourseDto
 {
-    public ?string $schoolCourse;
 
 }

@@ -44,11 +44,11 @@ services:
         tags:
             - { name: sonata.admin, manager_type: orm, label: Cursos }
         calls:
-            - [setSubClasses, [{adult: Britannia\Domain\Entity\Course\Adult,
-                                school: Britannia\Domain\Entity\Course\School,
-                                pre_school: Britannia\Domain\Entity\Course\PreSchool,
-                                support: Britannia\Domain\Entity\Course\Support,
-                                one_to_one: Britannia\Domain\Entity\Course\OneToOne,
+            - [setSubClasses, [{adult: Britannia\Domain\Entity\Course\Course\Adult,
+                                school: Britannia\Domain\Entity\Course\Course\School,
+                                pre_school: Britannia\Domain\Entity\Course\Course\PreSchool,
+                                support: Britannia\Domain\Entity\Course\Course\Support,
+                                one_to_one: Britannia\Domain\Entity\Course\Course\OneToOne,
                                }]]
         public: true
 

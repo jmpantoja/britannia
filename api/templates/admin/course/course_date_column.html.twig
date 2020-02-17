@@ -7,11 +7,10 @@
             {% set end = object.end | date('Y') %}
 
             {% if start == end %}
-                {{ start }}
+                <span class="label label-info label-square">{{ start }}</span>
             {% else %}
                 <span class="label label-info label-square">{{ start }} / {{ end }}</span>
             {% endif %}
-
 
         </div>
 

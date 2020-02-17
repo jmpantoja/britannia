@@ -11,8 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Britannia\Domain\Entity\Course;
+namespace Britannia\Domain\Entity\Course\Course;
 
+
+use Britannia\Domain\Entity\Course\Course;
+use Britannia\Domain\Entity\Course\CourseDto;
 
 final class PreSchool extends Course
 {

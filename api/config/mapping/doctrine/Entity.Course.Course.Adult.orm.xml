@@ -5,19 +5,13 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
 
-    <entity name="Britannia\Domain\Entity\Course\Adult" table="course_adult">
+    <entity name="Britannia\Domain\Entity\Course\Course\Adult" table="course_adult">
         <field name="examiner" type="Examiner" nullable="true"/>
         <field name="intensive" type="Intensive"/>
 
-        <field name="skills" type="SetOfSkills" nullable="true"></field>
+        <embedded name="assessment" class="Britannia\Domain\VO\Course\Assessment\Assessment" use-column-prefix="false"/>
 
-        <field name="otherSkills" type="SkillList" nullable="true"></field>
-
-        <field name="numOfTerms" type="integer" nullable="true"></field>
-
-        <field name="diagnosticTest" type="boolean" nullable="true"></field>
-        <field name="finalTest" type="boolean" nullable="true"></field>
-
+        <many-to-one field="level" target-entity="Britannia\Domain\Entity\Level\Level"></many-to-one>
         <one-to-many field="terms" target-entity="Britannia\Domain\Entity\Assessment\Term" mapped-by="course"
                      orphan-removal="true">
             <cascade>
@@ -25,7 +19,7 @@
             </cascade>
         </one-to-many>
 
-        <many-to-one field="level" target-entity="Britannia\Domain\Entity\Course\Level"></many-to-one>
+
     </entity>
 
 </doctrine-mapping>

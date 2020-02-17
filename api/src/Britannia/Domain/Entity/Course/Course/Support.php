@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Britannia\Domain\Entity\Course;
+namespace Britannia\Domain\Entity\Course\Course;
 
 
-use PlanB\DDD\Domain\Model\Dto;
+use Britannia\Domain\Entity\Course\Course;
 
-final class LevelDto extends Dto
+final class Support extends Course
 {
-    public ?string $name;
+
 }

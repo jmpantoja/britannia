@@ -16,15 +16,19 @@ namespace Britannia\Infraestructure\Symfony\Importer\Builder;
 
 use Britannia\Domain\Entity\ClassRoom\ClassRoom;
 use Britannia\Domain\Entity\ClassRoom\ClassRoomDto;
-use Britannia\Domain\Entity\Course\Adult;
-use Britannia\Domain\Entity\Course\AdultDto;
-use Britannia\Domain\Entity\Course\PreSchool;
-use Britannia\Domain\Entity\Course\PreSchoolDto;
-use Britannia\Domain\Entity\Course\School;
-use Britannia\Domain\Entity\Course\SchoolDto;
+use Britannia\Domain\Entity\Course\Course\Adult;
+use Britannia\Domain\Entity\Course\Course\AdultDto;
+use Britannia\Domain\Entity\Course\Course\OneToOne;
+use Britannia\Domain\Entity\Course\Course\OneToOneDto;
+use Britannia\Domain\Entity\Course\Course\PreSchool;
+use Britannia\Domain\Entity\Course\Course\PreSchoolDto;
+use Britannia\Domain\Entity\Course\Course\School;
+use Britannia\Domain\Entity\Course\Course\SchoolDto;
+use Britannia\Domain\Entity\Course\Course\Support;
+use Britannia\Domain\Entity\Course\Course\SupportDto;
 use Britannia\Domain\Service\Assessment\AssessmentGenerator;
 use Britannia\Domain\Service\Course\LessonGenerator;
-use Britannia\Domain\VO\Assessment\AssessmentDefinition;
+use Britannia\Domain\VO\Course\Assessment\Assessment;
 use Britannia\Domain\VO\Course\Intensive\Intensive;
 use Britannia\Domain\VO\Course\TimeTable\Schedule;
 use Britannia\Domain\VO\Course\TimeTable\TimeTable;
@@ -199,23 +203,60 @@ class CourseBuilder extends BuilderAbstract
             'timeTable' => $this->timeTable,
             'lessonCreator' => $this->lessonGenerator,
             'assessmentGenerator' => $this->assessmentGenerator,
-
         ];
 
-        if ($this->isAdult === true) {
-            $input['assessmentDefinition'] = AssessmentDefinition::defaultForAdults();
+        $name = strtoupper($this->name);
 
-            return $this->buildAdult($input);
-        }
-
-        if (strpos($this->name, 'KIDS') !== false) {
-            $input['assessmentDefinition'] = AssessmentDefinition::defaultForShool();
+        if (strpos($name, 'KIDS') !== false) {
+            return null;
             return $this->buildPreSchool($input);
         }
 
-        $input['assessmentDefinition'] = AssessmentDefinition::defaultForShool();
+        if (strpos($name, 'ONE TO ONE') !== false) {
+            return null;
+            return $this->buildOneToOne($input);
+        }
+
+        if (strpos($name, 'APOYO') !== false) {
+            return null;
+            return $this->buildSupport($input);
+        }
+
+        if ($this->isAdult === true) {
+            return null;
+            return $this->buildAdult($input);
+        }
+
         return $this->buildSchool($input);
 
+    }
+
+
+    private function buildPreSchool(array $input)
+    {
+        $input['assessmentDefinition'] = Assessment::defaultForShool();
+        $dto = PreSchoolDto::fromArray($input);
+        return PreSchool::make($dto);
+    }
+
+    private function buildSchool(array $input)
+    {
+        $input['assessmentDefinition'] = Assessment::defaultForShool();
+        $dto = SchoolDto::fromArray($input);
+
+        return School::make($dto);
+    }
+
+    private function buildOneToOne(array $input)
+    {
+        $dto = OneToOneDto::fromArray($input);
+        return OneToOne::make($dto);
+    }
+
+    private function buildSupport(array $input)
+    {
+        $dto = SupportDto::fromArray($input);
+        return Support::make($dto);
     }
 
     /**
@@ -224,20 +265,9 @@ class CourseBuilder extends BuilderAbstract
      */
     private function buildAdult(array $input): Adult
     {
+        $input['assessmentDefinition'] = Assessment::defaultForAdults();
         $dto = AdultDto::fromArray($input);
         return Adult::make($dto);
-    }
-
-    private function buildPreSchool(array $input)
-    {
-        $dto = PreSchoolDto::fromArray($input);
-        return PreSchool::make($dto);
-    }
-
-    private function buildSchool(array $input)
-    {
-        $dto = SchoolDto::fromArray($input);
-        return School::make($dto);
     }
 }
 

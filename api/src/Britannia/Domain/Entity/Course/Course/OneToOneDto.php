@@ -11,9 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Britannia\Domain\Entity\Course;
+namespace Britannia\Domain\Entity\Course\Course;
 
-class SupportDto extends CourseDto
+use Britannia\Domain\Entity\Course\CourseDto;
+
+class OneToOneDto extends CourseDto
 {
 
 

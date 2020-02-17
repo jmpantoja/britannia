@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Admin\Course;
 
 
-use Britannia\Domain\Entity\Course\Adult;
 use Britannia\Domain\Entity\Course\Course;
-use Britannia\Domain\Entity\Course\School;
+use Britannia\Domain\Entity\Course\Course\Adult;
+use Britannia\Domain\Entity\Course\Course\School;
 use Britannia\Domain\Entity\Staff\StaffMember;
 use Britannia\Domain\Entity\Student\StudentCourse;
 use Britannia\Domain\VO\Course\TimeTable\Schedule;

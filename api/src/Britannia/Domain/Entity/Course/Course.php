@@ -14,6 +14,11 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Course;
 
 
+use Britannia\Domain\Entity\Course\Course\Adult;
+use Britannia\Domain\Entity\Course\Course\OneToOne;
+use Britannia\Domain\Entity\Course\Course\PreSchool;
+use Britannia\Domain\Entity\Course\Course\School;
+use Britannia\Domain\Entity\Course\Course\Support;
 use Britannia\Domain\Entity\Lesson\Lesson;
 use Britannia\Domain\Entity\Lesson\LessonList;
 use Britannia\Domain\Entity\Staff\StaffList;
@@ -151,16 +156,13 @@ abstract class Course implements Comparable
         $this->teachers = new ArrayCollection();
         $this->books = new ArrayCollection();
         $this->lessons = new ArrayCollection();
-        $this->units = new ArrayCollection();
-        $this->numOfStudents = 0;
 
+        $this->numOfStudents = 0;
         $this->discount = new ArrayCollection();
 
         $this->records = new ArrayCollection();
         $this->status = CourseStatus::PENDING();
-
         $this->createdAt = CarbonImmutable::now();
-
 
         $this->update($dto);
     }
@@ -174,7 +176,7 @@ abstract class Course implements Comparable
         $this->discount = $dto->discount;
         $this->updatedAt = CarbonImmutable::now();
 
-        $this->changeCalendar($dto->timeTable, $dto->lessonCreator);
+    //    $this->changeCalendar($dto->timeTable, $dto->lessonCreator);
 
         if (is_null($this->color)) {
             $this->color = $dto->color;
@@ -195,17 +197,7 @@ abstract class Course implements Comparable
         return $this;
     }
 
-    public function changeCalendar(?TimeTable $timeTable, LessonGenerator $generator): self
-    {
-        if (is_null($timeTable) || $timeTable->isLocked()) {
-            return $this;
-        }
 
-        $this->setStatus($timeTable->status());
-        $this->setTimeTable($timeTable, $generator);
-
-        return $this;
-    }
 
     /**
      * Usado desde el cron
@@ -241,10 +233,11 @@ abstract class Course implements Comparable
         }
 
         $lessons = $generator->generateLessons($timeTable);
+
         $this->lessonList()
             ->update($lessons, $locked, $this);
 
-        $this->timeTable->update($this->lessonList());
+    //    $this->timeTable->update($this->lessonList());
 
         return $this;
     }
@@ -516,6 +509,12 @@ abstract class Course implements Comparable
     {
         return static::class === Support::class;
     }
+
+    public function isOnetoOne(): bool
+    {
+        return static::class === OneToOne::class;
+    }
+
 
     public function __toString()
     {

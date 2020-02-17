@@ -11,10 +11,15 @@
 
 declare(strict_types=1);
 
-namespace Britannia\Domain\VO\Assessment;
+namespace Britannia\Domain\VO\Course\Assessment;
 
 
-class AssessmentDefinition
+use Britannia\Domain\VO\Assessment\SetOfSkills;
+use Britannia\Domain\VO\Assessment\Skill;
+use Britannia\Domain\VO\Assessment\SkillList;
+use Britannia\Domain\VO\Assessment\TermName;
+
+class Assessment
 {
     /**
      * @var SetOfSkills
@@ -33,11 +38,11 @@ class AssessmentDefinition
     /**
      * @var bool
      */
-    private bool $diagnostic;
+    private bool $diagnosticTest;
     /**
      * @var bool
      */
-    private bool $final;
+    private bool $finalTest;
 
 
     private function __construct(SetOfSkills $skills,
@@ -51,8 +56,8 @@ class AssessmentDefinition
         $this->skills = $skills;
         $this->otherSkills = $otherSkills;
         $this->numOfTerms = $numOfTerms;
-        $this->diagnostic = $diagnostic;
-        $this->final = $final;
+        $this->diagnosticTest = $diagnostic;
+        $this->finalTest = $final;
     }
 
     public static function defaultForAdults(): self
@@ -128,7 +133,7 @@ class AssessmentDefinition
      */
     public function hasDiagnosticTest(): bool
     {
-        return $this->diagnostic;
+        return $this->diagnosticTest;
     }
 
     /**
@@ -136,8 +141,12 @@ class AssessmentDefinition
      */
     public function hasFinalTest(): bool
     {
-        return $this->final;
+        return $this->finalTest;
     }
 
+    public function hasAnyMarks(): bool
+    {
+        return $this->hasFinalTest() || $this->hasDiagnosticTest() || $this->numOfTerms > 0;
+    }
 
 }

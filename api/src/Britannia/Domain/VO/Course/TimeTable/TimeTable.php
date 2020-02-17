@@ -139,18 +139,18 @@ class TimeTable
     }
 
 
-    public function status(): CourseStatus
-    {
-        if ($this->start->isFuture()) {
-            return CourseStatus::PENDING();
-        }
-
-        if ($this->end->isPast()) {
-            return CourseStatus::FINALIZED();
-        }
-
-        return CourseStatus::ACTIVE();
-    }
+//    public function status(): CourseStatus
+//    {
+//        if ($this->start->isFuture()) {
+//            return CourseStatus::PENDING();
+//        }
+//
+//        if ($this->end->isPast()) {
+//            return CourseStatus::FINALIZED();
+//        }
+//
+//        return CourseStatus::ACTIVE();
+//    }
 
     public function update(LessonList $lessonList): self
     {

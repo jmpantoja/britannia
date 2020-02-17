@@ -16,9 +16,10 @@ namespace Britannia\Infraestructure\Symfony\Importer\Builder;
 
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Course\CourseList;
+use Britannia\Domain\Entity\Course\CourseAssessmentInterface;
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Service\Assessment\AssessmentGenerator;
-use Britannia\Domain\VO\Assessment\AssessmentDefinition;
+use Britannia\Domain\VO\Course\Assessment\Assessment;
 use Britannia\Infraestructure\Symfony\Importer\Resume;
 
 class StudentCoursesBuilder extends BuilderAbstract
@@ -97,19 +98,22 @@ class StudentCoursesBuilder extends BuilderAbstract
             $definition = $this->getDefinition($course);
 
             $course->addStudent($this->student);
-            $course->changeAssessmentDefinition($definition, $this->assessmentGenerator);
+
+            if ($course instanceof CourseAssessmentInterface) {
+                $course->changeAssessmentDefinition($definition, $this->assessmentGenerator);
+            }
         }
 
         return $this->student;
     }
 
-    private function getDefinition(Course $course): AssessmentDefinition
+    private function getDefinition(Course $course): Assessment
     {
         if ($course->isAdult()) {
-            return AssessmentDefinition::defaultForAdults();
+            return Assessment::defaultForAdults();
         }
 
-        return AssessmentDefinition::defaultForShool();
+        return Assessment::defaultForShool();
     }
 
 

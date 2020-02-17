@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Britannia\Domain\Entity\Course;
+namespace Britannia\Domain\Entity\Level;
 
 
 use Carbon\CarbonImmutable;
 
-final class Level
+class Level
 {
     /**
      * @var LevelId

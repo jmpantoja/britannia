@@ -11,10 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Britannia\Domain\Entity\Course;
+namespace Britannia\Domain\Entity\Level;
 
 
-final class OneToOne extends Course
+use PlanB\DDD\Domain\Model\EntityId;
+
+class LevelId extends EntityId
 {
 
 }

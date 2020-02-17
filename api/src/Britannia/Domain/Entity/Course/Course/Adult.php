@@ -11,28 +11,23 @@
 
 declare(strict_types=1);
 
-namespace Britannia\Domain\Entity\Course;
+namespace Britannia\Domain\Entity\Course\Course;
 
 
-use Britannia\Domain\Entity\Course\Traits\EvaluableTrait;
-use Britannia\Domain\VO\Assessment\SetOfSkills;
+use Britannia\Domain\Entity\Course\Course;
+use Britannia\Domain\Entity\Course\CourseAssessmentInterface;
+use Britannia\Domain\Entity\Course\CourseDto;
+use Britannia\Domain\Entity\Course\Traits\AssessmentTrait;
+use Britannia\Domain\Entity\Level\Level;
+use Britannia\Domain\VO\Course\Assessment\Assessment;
 use Britannia\Domain\VO\Course\Examiner\Examiner;
 use Britannia\Domain\VO\Course\Intensive\Intensive;
 use Doctrine\Common\Collections\ArrayCollection;
 
-final class Adult extends Course implements EvaluableInterface
+final class Adult extends Course implements CourseAssessmentInterface
 {
-    use EvaluableTrait;
 
-
-    public function __construct(AdultDto $dto)
-    {
-        $this->terms = new ArrayCollection();
-        $this->units = new ArrayCollection();
-
-        $this->numOfTerms = 0;
-        parent::__construct($dto);
-    }
+    use AssessmentTrait;
 
 
     /**
@@ -50,14 +45,26 @@ final class Adult extends Course implements EvaluableInterface
      */
     private $level;
 
+
+    public function __construct(AdultDto $dto)
+    {
+        $this->assessment = $dto->assessment;
+        $this->terms = new ArrayCollection();
+
+        parent::__construct($dto);
+    }
+
+
     public function update(CourseDto $dto): self
     {
+        parent::update($dto);
+
         $this->examiner = $dto->examiner;
         $this->level = $dto->level;
         $this->intensive = $dto->intensive;
-        parent::update($dto);
 
-        $this->changeAssessmentDefinition($dto->assessmentDefinition, $dto->assessmentGenerator);
+        $this->updateAssessment($dto);
+
         return $this;
     }
 
@@ -86,20 +93,9 @@ final class Adult extends Course implements EvaluableInterface
         return $this->level;
     }
 
-    /**
-     * @return SetOfSkills
-     */
-    public function skills(): SetOfSkills
-    {
-        return $this->skills ?? SetOfSkills::SET_OF_FOUR();
-    }
 
-
-    /**
-     * @return bool
-     */
-    public function hasFinalTest(): bool
+    public function assessment(): Assessment
     {
-        return $this->diagnosticTest ?? true;
+        return  $this->assessment ?? Assessment::defaultForAdults();
     }
 }

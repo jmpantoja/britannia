@@ -11,19 +11,20 @@
 
 declare(strict_types=1);
 
-namespace Britannia\Domain\Entity\Course;
+namespace Britannia\Domain\Entity\Course\Course;
 
 
+use Britannia\Domain\Entity\Course\CourseDto;
 use Britannia\Domain\Entity\Lesson\UpdateCalendarOrder;
+use Britannia\Domain\Entity\Level\Level;
 use Britannia\Domain\Service\Assessment\AssessmentGenerator;
-use Britannia\Domain\VO\Assessment\AssessmentDefinition;
 use Britannia\Domain\VO\Course\Age\Age;
+use Britannia\Domain\VO\Course\Assessment\Assessment;
 use Britannia\Domain\VO\Course\Examiner\Examiner;
 use Britannia\Domain\VO\Course\Intensive\Intensive;
 use Britannia\Domain\VO\Course\Periodicity\Periodicity;
-use PlanB\DDD\Domain\Model\Dto;
 
-class AdultDto extends CourseDto
+class AdultDto extends CourseDto implements AssessmentDtoInterface
 {
     public ?Intensive $intensive;
 
@@ -32,8 +33,25 @@ class AdultDto extends CourseDto
     public ?Level $level = null;
 
 
-    public AssessmentDefinition $assessmentDefinition;
+    public Assessment $assessment;
 
     public AssessmentGenerator $assessmentGenerator;
+
+    /**
+     * @return Assessment
+     */
+    public function assessment(): Assessment
+    {
+        return $this->assessment ?? Assessment::defaultForAdults();
+    }
+
+    /**
+     * @return AssessmentGenerator
+     */
+    public function assessmentGenerator(): AssessmentGenerator
+    {
+        return $this->assessmentGenerator;
+    }
+
 
 }

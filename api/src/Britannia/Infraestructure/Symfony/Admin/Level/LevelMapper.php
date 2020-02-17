@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Admin\Level;
 
 
-use Britannia\Domain\Entity\Course\Level;
-use Britannia\Domain\Entity\Course\LevelDto;
+use Britannia\Domain\Entity\Level\Level;
+use Britannia\Domain\Entity\Level\LevelDto;
 use PlanB\DDDBundle\Sonata\Admin\AdminMapper;
 
 final class LevelMapper extends AdminMapper

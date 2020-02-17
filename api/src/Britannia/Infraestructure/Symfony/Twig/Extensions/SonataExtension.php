@@ -15,7 +15,7 @@ namespace Britannia\Infraestructure\Symfony\Twig\Extensions;
 
 
 use Britannia\Domain\Entity\Course\Course;
-use Britannia\Domain\Entity\Course\EvaluableInterface;
+use Britannia\Domain\Entity\Course\CourseAssessmentInterface;
 use Britannia\Infraestructure\Symfony\Admin\AdminFilterableInterface;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Twig\Extension\AbstractExtension;
@@ -87,7 +87,7 @@ final class SonataExtension extends AbstractExtension
 
     public function is_evaluable(Course $course)
     {
-        return $course instanceof EvaluableInterface;
+        return $course instanceof CourseAssessmentInterface;
     }
 
 }

@@ -10,11 +10,11 @@
 
         <discriminator-column name="type" type="string"/>
         <discriminator-map>
-            <discriminator-mapping value="adult" class="Britannia\Domain\Entity\Course\Adult"/>
-            <discriminator-mapping value="school" class="Britannia\Domain\Entity\Course\School"/>
-            <discriminator-mapping value="pre_school" class="Britannia\Domain\Entity\Course\PreSchool"/>
-            <discriminator-mapping value="support" class="Britannia\Domain\Entity\Course\Support"/>
-            <discriminator-mapping value="one_to_one" class="Britannia\Domain\Entity\Course\OneToOne"/>
+            <discriminator-mapping value="adult" class="Britannia\Domain\Entity\Course\Course\Adult"/>
+            <discriminator-mapping value="school" class="Britannia\Domain\Entity\Course\Course\School"/>
+            <discriminator-mapping value="pre_school" class="Britannia\Domain\Entity\Course\Course\PreSchool"/>
+            <discriminator-mapping value="support" class="Britannia\Domain\Entity\Course\Course\Support"/>
+            <discriminator-mapping value="one_to_one" class="Britannia\Domain\Entity\Course\Course\OneToOne"/>
         </discriminator-map>
 
         <id name="id" type="CourseId" column="id">

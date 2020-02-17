@@ -14,7 +14,12 @@ declare(strict_types=1);
 namespace Britannia\Domain\Repository;
 
 
+use Britannia\Domain\Entity\Course\Course;
+
 interface CourseRepositoryInterface
 {
+    /**
+     * @return Course[]
+     */
     public function findCoursesForUpdateStatus(): array;
 }

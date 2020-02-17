@@ -14,16 +14,16 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Admin\Course;
 
 
-use Britannia\Domain\Entity\Course\Adult;
-use Britannia\Domain\Entity\Course\AdultDto;
 use Britannia\Domain\Entity\Course\Course;
+use Britannia\Domain\Entity\Course\Course\Adult;
+use Britannia\Domain\Entity\Course\Course\AdultDto;
+use Britannia\Domain\Entity\Course\Course\PreSchool;
+use Britannia\Domain\Entity\Course\Course\PreSchoolDto;
+use Britannia\Domain\Entity\Course\Course\School;
+use Britannia\Domain\Entity\Course\Course\SchoolDto;
+use Britannia\Domain\Entity\Course\Course\Support;
+use Britannia\Domain\Entity\Course\Course\SupportDto;
 use Britannia\Domain\Entity\Course\CourseDto;
-use Britannia\Domain\Entity\Course\PreSchool;
-use Britannia\Domain\Entity\Course\PreSchoolDto;
-use Britannia\Domain\Entity\Course\School;
-use Britannia\Domain\Entity\Course\SchoolDto;
-use Britannia\Domain\Entity\Course\Support;
-use Britannia\Domain\Entity\Course\SupportDto;
 use Britannia\Domain\Service\Assessment\AssessmentGenerator;
 use Britannia\Domain\Service\Course\LessonGenerator;
 use PlanB\DDDBundle\Sonata\Admin\AdminMapper;
@@ -73,6 +73,7 @@ final class CourseMapper extends AdminMapper
         elseif ($dto instanceof SupportDto){
             return Support::make($dto);
         }
+
         return Adult::make($dto);
     }
 
@@ -84,6 +85,7 @@ final class CourseMapper extends AdminMapper
     protected function update($course, array $values): Course
     {
         $dto = $this->makeDto($values);
+
         return $course->update($dto);
     }
 

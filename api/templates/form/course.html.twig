@@ -137,7 +137,7 @@
 {% endblock %}
 
 
-{% block assessment_definition_widget %}
+{% block assessment_widget %}
     {% if form.locked is defined %}
         {{ form_row(form.locked, {widget: id ~ '-wrapper'}) }}
     {% endif %}

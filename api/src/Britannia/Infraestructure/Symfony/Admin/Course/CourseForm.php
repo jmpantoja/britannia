@@ -15,8 +15,9 @@ namespace Britannia\Infraestructure\Symfony\Admin\Course;
 
 
 use Britannia\Domain\Entity\Course\Course;
-use Britannia\Domain\Entity\Course\EvaluableInterface;
-use Britannia\Infraestructure\Symfony\Form\Type\Assessment\AssessmentDefinitionType;
+use Britannia\Domain\Entity\Course\CourseAssessmentInterface;
+use Britannia\Domain\Entity\Level\Level;
+use Britannia\Infraestructure\Symfony\Form\Type\Assessment\AssessmentType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\AgeType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\CourseHasStudentsType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\Discount\DiscountListTye;
@@ -57,9 +58,7 @@ final class CourseForm extends AdminForm
         $this->priceTab('Precio');
         $this->studentsTab('Alumnos y profesores');
 
-        if ($course instanceof EvaluableInterface) {
-            $this->unitsTab('Evaluación');
-        }
+        $this->assessmentTab($course, 'Evaluación');
 
 
         return $this;
@@ -105,7 +104,8 @@ final class CourseForm extends AdminForm
                 ])
                 ->add('level', LevelType::class, [
                     'required' => false,
-                    'label' => 'Nivel'
+                    'label' => 'Nivel',
+                    'class' => Level::class
                 ]);
         }
 
@@ -144,14 +144,18 @@ final class CourseForm extends AdminForm
         return $this;
     }
 
-    private function unitsTab(string $name): self
+    private function assessmentTab(Course $course, string $name): self
     {
+        if (!($course instanceof CourseAssessmentInterface)) {
+            return $this;
+        }
+
         $this->tab($name);
 
         $this->group('Evaluación', ['class' => 'col-md-6'])
-            ->add('assessmentDefinition', AssessmentDefinitionType::class, [
+            ->add('assessment', AssessmentType::class, [
                 'label' => false,
-                'course' => $this->course
+                'data' => $course->assessment()
             ]);
 
         return $this;
@@ -167,7 +171,6 @@ final class CourseForm extends AdminForm
                 'attr' => [
                     'readonly' => true
                 ]
-                // 'disabled' => true
             ])
             ->add('monthlyPayment', PriceType::class, [
                 'label' => 'Mensualidad',

@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Admin\Level;
 
 
-use Britannia\Domain\Entity\Course\Level;
+use Britannia\Domain\Entity\Level\Level;
 use PlanB\DDDBundle\Sonata\Admin\AdminDataSource;
 
 final class LevelDataSource extends AdminDataSource

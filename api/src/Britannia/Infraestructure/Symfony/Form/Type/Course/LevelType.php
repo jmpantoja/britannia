@@ -14,30 +14,62 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Form\Type\Course;
 
 
-use Britannia\Domain\Entity\Course\Level;
+use Britannia\Domain\Entity\Level\Level;
+use Britannia\Domain\Entity\Level\LevelDto;
+use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Sonata\ModelManager;
+use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
 use Sonata\AdminBundle\Form\Type\ModelType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
-class LevelType extends ModelType
+class LevelType extends AbstractSingleType
 {
-    /**
-     * @var ModelManager
-     */
-    private $modelManager;
+//    /**
+//     * @var ModelManager
+//     */
+//    private $modelManager;
+//
+//    public function __construct(PropertyAccessorInterface $propertyAccessor, ModelManager $modelManager)
+//    {
+//        $this->modelManager = $modelManager;
+//        parent::__construct($propertyAccessor);
+//
+//    }
 
-    public function __construct(PropertyAccessorInterface $propertyAccessor, ModelManager $modelManager)
+//    public function configureOptions(OptionsResolver $resolver)
+//    {
+//        parent::configureOptions($resolver);
+//
+
+
+//        $resolver->setNormalizer('query', function (OptionsResolver $resolver) {
+//            return $this->getQuery();
+//        });
+//    }
+
+
+//    /**
+//     * @return mixed
+//     */
+//    private function getQuery()
+//    {
+//        $query = $this->modelManager->createQuery(Level::class)
+//            ->getQueryBuilder()
+//            ->orderBy('o.name')
+//            ->getQuery();
+//
+//        return $query;
+//    }
+    public function getParent()
     {
-        $this->modelManager = $modelManager;
-        parent::__construct($propertyAccessor);
-
+        return EntityType::class;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
-    {
-        parent::configureOptions($resolver);
 
+    public function customOptions(OptionsResolver $resolver)
+    {
         $resolver->setDefaults([
             'multiple' => false,
             'expanded' => false,
@@ -46,24 +78,18 @@ class LevelType extends ModelType
                 'style' => 'width:200px'
             ]
         ]);
-
-        $resolver->setNormalizer('query', function (OptionsResolver $resolver) {
-            return $this->getQuery();
-        });
     }
-
 
     /**
-     * @return mixed
+     * @inheritDoc
      */
-    private function getQuery()
+    public function buildConstraint(array $options): ?Constraint
     {
-        $query = $this->modelManager->createQuery(Level::class)
-            ->getQueryBuilder()
-            ->orderBy('o.name')
-            ->getQuery();
-
-        return $query;
+        return null;
     }
 
+    public function customMapping($data)
+    {
+        return $data;
+    }
 }

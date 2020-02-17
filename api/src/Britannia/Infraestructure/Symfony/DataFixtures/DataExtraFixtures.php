@@ -4,7 +4,7 @@ namespace Britannia\Infraestructure\Symfony\DataFixtures;
 
 use ApiPlatform\Core\DataPersister\DataPersisterInterface;
 use Britannia\Domain\Entity\Book\Book;
-use Britannia\Domain\Entity\Course\Level;
+use Britannia\Domain\Entity\Level\Level;
 use Britannia\Domain\VO\Course\Book\BookCategory;
 use PlanB\DDD\Domain\VO\Price;
 
