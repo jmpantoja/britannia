@@ -14,25 +14,19 @@ declare(strict_types=1);
 namespace Britannia\Domain\VO\Course\TimeTable;
 
 
-use Britannia\Domain\Entity\Lesson\LessonList;
-use Britannia\Domain\VO\Course\CourseStatus;
 use Britannia\Domain\VO\Course\Locked\Locked;
-use Britannia\Domain\VO\Course\TimeTable\Validator;
+use Britannia\Domain\VO\Course\TimeRange\TimeRange;
 use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\VO\Traits\Validable;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 
 class TimeTable
 {
-
     use Validable;
-
-    /** @var CarbonImmutable */
-    private $start;
-
-    /** @var CarbonImmutable */
-    private $end;
-
+    /**
+     * @var TimeRange
+     */
+    private $range;
     /**
      * @var TimeSheet[]
      */
@@ -52,17 +46,16 @@ class TimeTable
     }
 
     /**
-     * @param CarbonImmutable $start
-     * @param CarbonImmutable $end
+     * @param TimeRange $range
      * @param Schedule $schedule
      * @param Locked|null $locked
      * @return static
      */
-    public static function make(CarbonImmutable $start, CarbonImmutable $end, Schedule $schedule, ?Locked $locked = null): self
+    public static function make(TimeRange $range, Schedule $schedule, ?Locked $locked = null): self
     {
         $locked = $locked ?? Locked::RESET();
 
-        return new self($start, $end, $schedule, $locked);
+        return new self($range, $schedule, $locked);
     }
 
     /**
@@ -72,33 +65,21 @@ class TimeTable
      * @param Schedule $schedule
      * @param Locked $locked
      */
-    private function __construct(CarbonImmutable $start, CarbonImmutable $end, Schedule $schedule, Locked $locked)
+    private function __construct(TimeRange $range, Schedule $schedule, Locked $locked)
     {
 
-        $this->start = $start;
-        $this->end = $end;
+        $this->range = $range;
         $this->schedule = $schedule;
-
         $this->locked = $locked;
     }
 
-
     /**
-     * @return CarbonImmutable
+     * @return TimeRange
      */
-    public function start(): CarbonImmutable
+    public function range(): TimeRange
     {
-        return CarbonImmutable::instance($this->start);
+        return $this->range;
     }
-
-    /**
-     * @return CarbonImmutable
-     */
-    public function end(): CarbonImmutable
-    {
-        return CarbonImmutable::instance($this->end);
-    }
-
 
     /**
      * @return array
@@ -138,28 +119,8 @@ class TimeTable
         return $this->locked ?? Locked::LOCKED();
     }
 
-
-//    public function status(): CourseStatus
-//    {
-//        if ($this->start->isFuture()) {
-//            return CourseStatus::PENDING();
-//        }
-//
-//        if ($this->end->isPast()) {
-//            return CourseStatus::FINALIZED();
-//        }
-//
-//        return CourseStatus::ACTIVE();
-//    }
-
-    public function update(LessonList $lessonList): self
+    public function status(): CourseStatus
     {
-        if ($lessonList->count() === 0) {
-            return $this;
-        }
-
-        $this->start = $lessonList->firstDay();
-        $this->end = $lessonList->lastDay();
-        return $this;
+        return $this->range->status();
     }
 }

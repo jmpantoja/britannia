@@ -30,6 +30,7 @@ use Britannia\Domain\Service\Assessment\AssessmentGenerator;
 use Britannia\Domain\Service\Course\LessonGenerator;
 use Britannia\Domain\VO\Course\Assessment\Assessment;
 use Britannia\Domain\VO\Course\Intensive\Intensive;
+use Britannia\Domain\VO\Course\TimeRange\TimeRange;
 use Britannia\Domain\VO\Course\TimeTable\Schedule;
 use Britannia\Domain\VO\Course\TimeTable\TimeTable;
 use Britannia\Infraestructure\Symfony\Importer\Builder\Traits\CourseMaker;
@@ -146,6 +147,8 @@ class CourseBuilder extends BuilderAbstract
         $start = CarbonImmutable::make($startDate);
         $end = CarbonImmutable::make($endDate);
 
+        $timeRange = TimeRange::make($start, $end);
+
 
         $schedule = $this->toLessons($field1, $classRoomId);
         if (empty($schedule)) {
@@ -154,7 +157,7 @@ class CourseBuilder extends BuilderAbstract
 
         $schedule = Schedule::fromArray($schedule);
 
-        $this->timeTable = TimeTable::make($start, $end, $schedule);
+        $this->timeTable = TimeTable::make($timeRange, $schedule);
 
         return $this;
     }
@@ -234,14 +237,14 @@ class CourseBuilder extends BuilderAbstract
 
     private function buildPreSchool(array $input)
     {
-        $input['assessmentDefinition'] = Assessment::defaultForShool();
+        $input['assessment'] = Assessment::defaultForShool();
         $dto = PreSchoolDto::fromArray($input);
         return PreSchool::make($dto);
     }
 
     private function buildSchool(array $input)
     {
-        $input['assessmentDefinition'] = Assessment::defaultForShool();
+        $input['assessment'] = Assessment::defaultForShool();
         $dto = SchoolDto::fromArray($input);
 
         return School::make($dto);
@@ -265,7 +268,7 @@ class CourseBuilder extends BuilderAbstract
      */
     private function buildAdult(array $input): Adult
     {
-        $input['assessmentDefinition'] = Assessment::defaultForAdults();
+        $input['assessment'] = Assessment::defaultForAdults();
         $dto = AdultDto::fromArray($input);
         return Adult::make($dto);
     }

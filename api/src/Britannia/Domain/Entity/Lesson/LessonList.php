@@ -87,6 +87,8 @@ class LessonList extends EntityList
 
     public function firstDay(): CarbonImmutable
     {
+
+
         return $this->values()->first()->day();
     }
 

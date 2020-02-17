@@ -27,7 +27,6 @@
         <field name="name"/>
         <field name="color" type="rgba" nullable="true"/>
 
-        <field name="status" type="CourseStatus"/>
 
         <field name="numOfPlaces" type="positive_integer"/>
 
@@ -42,7 +41,8 @@
 
         <field name="updatedAt" type="datetime_immutable" nullable="true"></field>
 
-        <embedded name="timeTable" class="Britannia\Domain\VO\Course\TimeTable\TimeTable" use-column-prefix="false"/>
+        <embedded name="timeRange" class="Britannia\Domain\VO\Course\TimeRange\TimeRange" use-column-prefix="false"/>
+        <field name="schedule" type="object"/>
 
         <many-to-many field="books" target-entity="Britannia\Domain\Entity\Book\Book" inversed-by="courses">
             <join-table name="courses_books">

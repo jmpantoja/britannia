@@ -8,14 +8,16 @@
             <a href="{{ admin.generateObjectUrl('edit', object) }}">{{ object.name }}</a>
         </div>
 
-        <div class="col-md-3">
-            {% set items = schedule.resume(object.schedule) %}
-            {% for day, hour in items %}
-                {{ day }} &nbsp; ({{ hour }})
-                {% if loop.last == false %} <br/> {% endif %}
+        {% if object.schedule is defined %}
+            <div class="col-md-3">
+                {% set items = schedule.resume(object.schedule) %}
+                {% for day, hour in items %}
+                    {{ day }} &nbsp; ({{ hour }})
+                    {% if loop.last == false %} <br/> {% endif %}
 
-            {% endfor %}
-        </div>
+                {% endfor %}
+            </div>
+        {% endif %}
 
         <div class="col-md-2">
             {% if object.mainTeacher is  not null %}

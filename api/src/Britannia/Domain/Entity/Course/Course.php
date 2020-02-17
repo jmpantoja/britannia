@@ -31,6 +31,7 @@ use Britannia\Domain\Entity\Student\StudentHasLeavedCourse;
 use Britannia\Domain\Entity\Student\StudentList;
 use Britannia\Domain\Service\Course\LessonGenerator;
 use Britannia\Domain\VO\Course\CourseStatus;
+use Britannia\Domain\VO\Course\TimeRange\TimeRange;
 use Britannia\Domain\VO\Course\TimeTable\Schedule;
 use Britannia\Domain\VO\Course\TimeTable\TimeTable;
 use Carbon\CarbonImmutable;
@@ -72,11 +73,6 @@ abstract class Course implements Comparable
     private $color;
 
     /**
-     * @var CourseStatus
-     */
-    private $status;
-
-    /**
      * @var int
      */
     private $numOfStudents;
@@ -85,7 +81,6 @@ abstract class Course implements Comparable
      * @var PositiveInteger
      */
     private $numOfPlaces;
-
 
     /**
      * @var null|Price
@@ -113,9 +108,14 @@ abstract class Course implements Comparable
     private $books;
 
     /**
-     * @var TimeTable
+     * @var TimeRange
      */
-    private $timeTable;
+    private $timeRange;
+
+    /**
+     * @var Schedule
+     */
+    private $schedule;
 
     /**
      * @var Collection
@@ -176,7 +176,7 @@ abstract class Course implements Comparable
         $this->discount = $dto->discount;
         $this->updatedAt = CarbonImmutable::now();
 
-    //    $this->changeCalendar($dto->timeTable, $dto->lessonCreator);
+        $this->changeCalendar($dto->timeTable, $dto->lessonCreator);
 
         if (is_null($this->color)) {
             $this->color = $dto->color;
@@ -198,47 +198,52 @@ abstract class Course implements Comparable
     }
 
 
-
-    /**
-     * Usado desde el cron
-     * @return $this
-     */
-    public function updateStatus(): self
+    public function changeCalendar(?TimeTable $timeTable, LessonGenerator $generator): self
     {
-
-        $this->setStatus($this->timeTable->status());
-        return $this;
-    }
-
-    private function setStatus(CourseStatus $status): self
-    {
-        if ($this->status->is($status)) {
+        if (is_null($timeTable) || $timeTable->isLocked()) {
             return $this;
         }
+        $this->setTimeTable($timeTable, $generator);
 
-        $this->status = $status;
-        $this->notify(CourseHasChangedStatus::make($this, $status));
 
         return $this;
     }
 
     private function setTimeTable(TimeTable $timeTable, LessonGenerator $generator): self
     {
-        $this->timeTable = $timeTable;
-        $locked = $this->timeTable->locked();
-
+        $locked = $timeTable->locked();
 
         if ($locked->isLocked()) {
             return $this;
         }
+
+        $this->schedule = $timeTable->schedule();
 
         $lessons = $generator->generateLessons($timeTable);
 
         $this->lessonList()
             ->update($lessons, $locked, $this);
 
-    //    $this->timeTable->update($this->lessonList());
+        if ($this->lessonList()->isEmpty()) {
+            $this->timeRange = $timeTable->range();
+            return $this;
+        }
 
+        $this->timeRange = TimeRange::make(...[
+            $lessons->firstDay(),
+            $lessons->lastDay()
+        ]);
+
+        return $this;
+    }
+
+    public function updateStatus(): self
+    {
+
+        if ($this->timeRange->hasBeenUpdated()) {
+            $status = $this->timeRange->status();
+            $this->notify(CourseHasChangedStatus::make($this, $status));
+        }
         return $this;
     }
 
@@ -351,17 +356,17 @@ abstract class Course implements Comparable
      */
     public function status(): CourseStatus
     {
-        return $this->status ?? CourseStatus::PENDING();
+        return $this->timeRange->status();
     }
 
     public function start(): CarbonImmutable
     {
-        return $this->timeTable->start();
+        return $this->timeRange->start();
     }
 
     public function end(): CarbonImmutable
     {
-        return $this->timeTable->end();
+        return $this->timeRange->end();
     }
 
     /**
@@ -369,7 +374,7 @@ abstract class Course implements Comparable
      */
     public function schedule(): Schedule
     {
-        return $this->timeTable->schedule();
+        return $this->schedule;
     }
 
     /**

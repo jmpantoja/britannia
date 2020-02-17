@@ -44,11 +44,6 @@ final class CourseAdmin extends AbstractAdmin implements AdminFilterableInterfac
         return $this->adminTools;
     }
 
-    public function getExportFields()
-    {
-        return ['name', 'status', 'numOfPlaces', 'monthlyPayment', 'numOfStudents' ];
-    }
-
     /**
      * @return array
      */

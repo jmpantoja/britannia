@@ -137,6 +137,7 @@ final class CourseForm extends AdminForm
 
         $this->group('Fechas', ['class' => 'col-md-7 box-with-locked'])
             ->add('timeTable', TimeTableType::class, [
+                'mapped' => false,
                 'label' => false,
                 'course' => $this->course
             ]);
