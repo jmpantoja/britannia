@@ -16,16 +16,22 @@
                 var parent = $('#{{ widget }}');
                 var inputs = $(parent).find('input');
                 var select = $(parent).find('select');
+                var btn_add = $(parent).find('.sonata-collection-add');
+                var btn_delete = $(parent).find('.sonata-collection-delete');
 
                 if (value === 'LOCKED') {
                     $(inputs).prop("readonly", true);
                     $(select).select2("readonly", true);
+                    $(btn_delete).addClass('disabled');
+                    $(btn_add).addClass('disabled');
                     return;
                 }
 
                 if (value === 'RESET') {
                     $(inputs).prop("readonly", false);
                     $(select).select2("readonly", false);
+                    $(btn_delete).removeClass('disabled');
+                    $(btn_add).removeClass('disabled');
                     return;
                 }
 
@@ -38,6 +44,16 @@
                     $(select).each(function () {
                         var locked = $(this).data('disabled') === 'data-disabled';
                         $(this).select2('readonly', locked)
+                    })
+
+                    $(btn_add).removeClass('disabled');
+
+                    $(btn_delete).each(function () {
+                        var locked = $(this).data('disabled') === 'data-disabled';
+                        $(this).removeClass('disabled');
+                        if (locked) {
+                            $(this).addClass('disabled');
+                        }
                     })
 
                 }
@@ -78,7 +94,16 @@
                     var key = $(el).val();
                     var background = backgrounds[key];
 
-                    $(popover).popover('show')
+
+                    $(popover).popover('show');
+
+                    var wrapper = $(popover).siblings('.popover')
+                    var arrow = $(popover).siblings('.popover').find('.arrow')
+
+                    wrapper.css('top', -15);
+                    wrapper.css('min-height', 140);
+                    arrow.css('top', '38%');
+
                     var title = $(popover).siblings('.popover').find('h3.popover-title')
                     $(title).css({'background-color': background, 'color': 'white', 'font-size': '1.4em'})
                 }

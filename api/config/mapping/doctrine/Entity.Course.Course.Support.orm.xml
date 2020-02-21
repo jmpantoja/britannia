@@ -5,6 +5,11 @@
 
 
     <entity name="Britannia\Domain\Entity\Course\Course\Support" table="course_support">
+        <field name="schedule" type="object"/>
+        <field name="monthlyPayment" type="price"/>
+        <field name="enrollmentPayment" type="price" nullable="true"/>
+
+        <field name="discount" type="DiscountList" nullable="true"></field>
     </entity>
 
 </doctrine-mapping>

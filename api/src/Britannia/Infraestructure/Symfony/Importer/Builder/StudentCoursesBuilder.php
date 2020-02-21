@@ -15,8 +15,8 @@ namespace Britannia\Infraestructure\Symfony\Importer\Builder;
 
 
 use Britannia\Domain\Entity\Course\Course;
-use Britannia\Domain\Entity\Course\CourseList;
 use Britannia\Domain\Entity\Course\CourseAssessmentInterface;
+use Britannia\Domain\Entity\Course\CourseList;
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Service\Assessment\AssessmentGenerator;
 use Britannia\Domain\VO\Course\Assessment\Assessment;
@@ -115,6 +115,4 @@ class StudentCoursesBuilder extends BuilderAbstract
 
         return Assessment::defaultForShool();
     }
-
-
 }

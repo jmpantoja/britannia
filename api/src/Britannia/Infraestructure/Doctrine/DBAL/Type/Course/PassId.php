@@ -11,20 +11,19 @@
 
 declare(strict_types=1);
 
-namespace Britannia\Infraestructure\Doctrine\Entity\Staff;
+namespace Britannia\Infraestructure\Doctrine\DBAL\Type\Course;
 
+use PlanB\DDDBundle\Doctrine\DBAL\Type\EntityIdType;
 
-use Britannia\Infraestructure\Doctrine\Entity\DoctrineEntityId;
-
-class StaffMemberId extends DoctrineEntityId
+class PassId extends EntityIdType
 {
     public function getName()
     {
-        return 'StaffMemberId';
+        return 'PassId';
     }
 
     protected function getNamespace()
     {
-        return 'Britannia\Domain\Entity\Staff';
+        return 'Britannia\Domain\Entity\Course\Pass';
     }
 }

@@ -17,12 +17,14 @@ namespace Britannia\Infraestructure\Symfony\Admin\Course;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Course\Course\Adult;
 use Britannia\Domain\Entity\Course\Course\AdultDto;
+use Britannia\Domain\Entity\Course\Course\OneToOneDto;
 use Britannia\Domain\Entity\Course\Course\PreSchool;
 use Britannia\Domain\Entity\Course\Course\PreSchoolDto;
 use Britannia\Domain\Entity\Course\Course\School;
 use Britannia\Domain\Entity\Course\Course\SchoolDto;
 use Britannia\Domain\Entity\Course\Course\Support;
 use Britannia\Domain\Entity\Course\Course\SupportDto;
+use Britannia\Domain\Entity\Course\Course\OneToOne;
 use Britannia\Domain\Entity\Course\CourseDto;
 use Britannia\Domain\Service\Assessment\AssessmentGenerator;
 use Britannia\Domain\Service\Course\LessonGenerator;
@@ -73,6 +75,10 @@ final class CourseMapper extends AdminMapper
         elseif ($dto instanceof SupportDto){
             return Support::make($dto);
         }
+        elseif ($dto instanceof OneToOneDto){
+            return  OneToOne::make($dto);
+        }
+
 
         return Adult::make($dto);
     }
@@ -112,6 +118,10 @@ final class CourseMapper extends AdminMapper
 
         if ($this->subject instanceof Support) {
             return SupportDto::fromArray($values);
+        }
+
+        if ($this->subject instanceof OneToOne) {
+            return OneToOneDto::fromArray($values);
         }
     }
 

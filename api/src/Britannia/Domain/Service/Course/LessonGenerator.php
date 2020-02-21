@@ -55,7 +55,7 @@ final class LessonGenerator
         if ($timeTable->shouldBeResetted()) {
             return $this->generateCompleteList($timeRange, $schedule);
         }
-        return $this->generateFutureList($timeTable);
+        return $this->generateFutureList($timeRange, $schedule);
     }
 
 
@@ -98,9 +98,12 @@ final class LessonGenerator
 
     private function makeLesson(Calendar $day, Schedule $schedule)
     {
+        $timeSheet = $schedule->timeSheetByDay($day->weekday());
+
         return Lesson::fromArray([
             'classRoom' => $this->getClassRoomByShedule($schedule, $day),
-            'timeSheet' => $schedule->timeSheetByDay($day->weekday()),
+            'start' => $timeSheet->start(),
+            'end' => $timeSheet->end(),
             'date' => $day->date()
         ]);
     }

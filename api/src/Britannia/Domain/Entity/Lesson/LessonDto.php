@@ -23,7 +23,8 @@ use PlanB\DDD\Domain\Model\Dto;
 final class LessonDto extends Dto
 {
     public ClassRoom $classRoom;
-    public TimeSheet $timeSheet;
+    public CarbonImmutable $start;
+    public CarbonImmutable $end;
     public CarbonImmutable $date;
     public AttendanceList $attendances;
 

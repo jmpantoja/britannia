@@ -18,6 +18,6 @@ use Britannia\Domain\Entity\Course\CourseDto;
 
 class PreSchoolDto extends CourseDto
 {
-    public ?string $schoolCourse;
+    public ?string $schoolCourse = null;
 
 }

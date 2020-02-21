@@ -75,7 +75,7 @@ class StudentHasCoursesType extends AbstractSingleType
             $builder = $this->modelManager->createQuery(Course::class, 'A');
 
             return $builder
-                ->where('A.status != :finalized')
+                ->where('A.timeRange.status != :finalized')
                 ->setParameter('finalized', CourseStatus::FINALIZED());
         });
     }

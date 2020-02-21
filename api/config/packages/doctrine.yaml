@@ -49,6 +49,8 @@ doctrine:
                     Examiner: Examiner
                     Intensive: Intensive
                     DiscountList: DiscountList
+                    PassId: PassId
+                    PassHours: PassHours
 
                     #Assessment
                     TermName: TermName
@@ -102,7 +104,9 @@ doctrine:
             Intensive: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\IntensiveType
             CourseStatus: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\CourseStatusType
             CourseId: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\CourseId
+            PassId: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\PassId        
             LevelId: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\LevelId
+            PassHours: \Britannia\Infraestructure\Doctrine\DBAL\Type\Course\PassHoursType
             DiscountList: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\DiscountListType
 
             #Assessment

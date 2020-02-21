@@ -15,8 +15,23 @@ namespace Britannia\Domain\Entity\Course\Course;
 
 
 use Britannia\Domain\Entity\Course\Course;
+use Britannia\Domain\Entity\Course\CourseCalendarInterface;
+use Britannia\Domain\Entity\Course\CourseDto;
+use Britannia\Domain\Entity\Course\CoursePaymentInterface;
+use Britannia\Domain\Entity\Course\Traits\CalendarTrait;
+use Britannia\Domain\Entity\Course\Traits\PaymentTrait;
 
-final class Support extends Course
+final class Support extends Course implements CourseCalendarInterface, CoursePaymentInterface
 {
+    use CalendarTrait;
+    use PaymentTrait;
 
+    public function update(CourseDto $dto): Support
+    {
+        $this->changeCalendar($dto->timeTable, $dto->lessonCreator);
+        $this->updatePayment($dto);
+
+        parent::update($dto);
+        return $this;
+    }
 }

@@ -60,7 +60,7 @@ class TeacherHasCoursesType extends AbstractSingleType
         $resolver->setNormalizer('query', function (OptionsResolver $resolver, $value) {
             $builder = $this->modelManager->createQuery(Course::class, 'A');
             return $builder
-                ->where('A.status= :param')
+                ->where('A.timeRange.status= :param')
                 ->setParameter('param', CourseStatus::ACTIVE());
         });
 

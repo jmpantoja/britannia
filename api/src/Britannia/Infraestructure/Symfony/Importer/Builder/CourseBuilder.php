@@ -211,22 +211,21 @@ class CourseBuilder extends BuilderAbstract
         $name = strtoupper($this->name);
 
         if (strpos($name, 'KIDS') !== false) {
-            return null;
+
             return $this->buildPreSchool($input);
         }
 
         if (strpos($name, 'ONE TO ONE') !== false) {
-            return null;
             return $this->buildOneToOne($input);
         }
 
         if (strpos($name, 'APOYO') !== false) {
-            return null;
+
             return $this->buildSupport($input);
         }
 
         if ($this->isAdult === true) {
-            return null;
+
             return $this->buildAdult($input);
         }
 
@@ -253,6 +252,8 @@ class CourseBuilder extends BuilderAbstract
     private function buildOneToOne(array $input)
     {
         $dto = OneToOneDto::fromArray($input);
+        $dto->timeRange = $dto->timeTable->range();
+
         return OneToOne::make($dto);
     }
 

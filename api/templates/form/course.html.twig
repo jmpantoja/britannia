@@ -169,3 +169,149 @@
     </div>
 
 {% endblock %}
+
+{% block pass_list_widget %}
+    {% if form.locked is defined %}
+        {{ form_row(form.locked, {widget: id ~ '-wrapper'}) }}
+    {% endif %}
+
+    <div id="{{ id }}-wrapper" style="margin-top: 5em" data-locked-id="{{ form.locked.vars.id }}">
+        {{ form_row(form.passes) }}
+    </div>
+{% endblock %}
+
+{% block pass_widget %}
+
+    {{ form_row(form.id) }}
+
+    <div id="{{ id }}" class="row pass_widget">
+        <div class="col-md-3">
+            {{ form_row(form.hours) }}
+        </div>
+        <div class="col-md-3">
+            {{ form_row(form.start) }}
+        </div>
+        <div class="col-md-3">
+            {{ form_row(form.end) }}
+        </div>
+
+        <div class="col-md-3">
+            <div class="left_time">
+                <label>Quedan:</label>
+                <p class="left"></p>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <label>Lecciones: </label>
+            {{ form_widget(form.lessons) }}
+        </div>
+    </div>
+
+    <script type="application/javascript">
+        $(function () {
+            var update = function () {
+
+                var pass_hours = $('#{{ form.hours.vars.id }}');
+                var pass_start = $('#{{ form.start.vars.id }}');
+                var pass_end = $('#{{ form.end.vars.id }}');
+                var btn = $({{ id }}).parents('.sonata-collection-row')
+                    .first()
+                    .find('.btn-link');
+
+
+
+                var date = moment(pass_start.val(), 'DD MMM yyy');
+
+                if (moment().diff(date) > 0) {
+                    pass_hours.data('disabled', 'data-disabled');
+                    pass_start.data('disabled', 'data-disabled');
+                    pass_end.data('disabled', 'data-disabled');
+                    btn.data('disabled', 'data-disabled');
+                }
+
+
+                var total = $('#{{ form.hours.vars.id }} :selected').text();
+                var total = parseInt(total) * 60;
+
+                var lessons = $('#{{ id }}').find('.pass_lesson');
+                var label = $('#{{ id }}').find('.left_time p.left');
+
+                var consumed = 0;
+                lessons.each2(function () {
+                    var day = $(this).find('.day input');
+                    var start = $(this).find('.start_time input');
+                    var end = $(this).find('.end_time input');
+                    var classroom = $(this).find('.classroom select');
+                    var btn = $(this).parents('.sonata-collection-row')
+                        .first()
+                        .find('.btn-link');
+
+
+                    var date = moment(day.val(), 'DD MMM yyy');
+
+                    if (moment().diff(date) > 0) {
+                        day.data('disabled', 'data-disabled');
+                        start.data('disabled', 'data-disabled');
+                        end.data('disabled', 'data-disabled');
+                        classroom.data('disabled', 'data-disabled');
+
+                        btn.data('disabled', 'data-disabled');
+                    }
+
+                    var startTime = moment(start.val(), 'HH:mm');
+                    var endTime = moment(end.val(), 'HH:mm');
+
+                    consumed += moment.duration(endTime.diff(startTime)).asMinutes();
+                })
+
+                var left = total - consumed;
+                var hours = parseInt(left / 60);
+                var minutes = parseInt(left % 60);
+                var formattedLeft = moment(hours + ':' + minutes, 'HH:mm').format('HH:mm');
+
+
+                if (left > 0 && left <= 60) {
+                    label.addClass('warning')
+                }
+                if (left < 0) {
+                    label.addClass('danger')
+                    formattedLeft = '-' + formattedLeft
+                }
+
+                label.text(formattedLeft);
+            }
+
+            update();
+
+            var locked_id = $('#{{ id }}').parents('[data-locked-id]').data('locked-id');
+            var locked = $('#' + locked_id);
+            locked.trigger('change');
+        })
+
+    </script>
+
+
+{% endblock %}
+
+
+{% block pass_lesson_widget %}
+
+    <div class="row pass_lesson">
+        <div class="col-md-3 day">
+            {{ form_row(form.day) }}
+        </div>
+        <div class="col-md-3 start_time">
+            {{ form_row(form.startTime) }}
+        </div>
+
+        <div class="col-md-3 end_time">
+            {{ form_row(form.endTime) }}
+        </div>
+
+        <div class="col-md-3 classroom">
+            {{ form_row(form.classroomId) }}
+        </div>
+    </div>
+
+{% endblock %}

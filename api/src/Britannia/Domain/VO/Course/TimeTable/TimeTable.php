@@ -82,7 +82,7 @@ class TimeTable
     }
 
     /**
-     * @return array
+     * @return Schedule
      */
     public function schedule(): Schedule
     {

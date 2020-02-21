@@ -170,7 +170,8 @@ abstract class EntityList implements Countable, IteratorAggregate
      */
     public function toArray(): array
     {
-        return $this->data->toArray();
+        return $this->data
+            ->toArray();
     }
 
     public function toCollection(): Collection

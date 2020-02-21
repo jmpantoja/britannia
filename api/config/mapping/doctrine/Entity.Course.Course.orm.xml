@@ -30,11 +30,6 @@
 
         <field name="numOfPlaces" type="positive_integer"/>
 
-        <field name="monthlyPayment" type="price"/>
-        <field name="enrollmentPayment" type="price" nullable="true"/>
-
-        <field name="discount" type="DiscountList" nullable="true"></field>
-
         <field name="numOfStudents" type="integer" nullable="true"></field>
 
         <field name="createdAt" type="datetime_immutable" nullable="true"></field>
@@ -42,7 +37,6 @@
         <field name="updatedAt" type="datetime_immutable" nullable="true"></field>
 
         <embedded name="timeRange" class="Britannia\Domain\VO\Course\TimeRange\TimeRange" use-column-prefix="false"/>
-        <field name="schedule" type="object"/>
 
         <many-to-many field="books" target-entity="Britannia\Domain\Entity\Book\Book" inversed-by="courses">
             <join-table name="courses_books">

@@ -20,6 +20,13 @@
             </cascade>
         </many-to-one>
 
+        <many-to-one field="pass" target-entity="Britannia\Domain\Entity\Course\Pass\Pass" inversed-by="lessons"
+                     fetch="EAGER">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </many-to-one>
+
         <many-to-one field="classRoom" target-entity="Britannia\Domain\Entity\ClassRoom\ClassRoom"/>
 
         <one-to-many field="attendances" target-entity="Britannia\Domain\Entity\Attendance\Attendance" mapped-by="lesson"

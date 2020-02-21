@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+
+    <entity name="Britannia\Domain\Entity\Course\Pass\Pass" table="course_passes">
+
+        <id name="id" type="PassId" column="id">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
+        </id>
+
+        <field name="hours" type="PassHours"/>
+
+        <embedded name="timeRange" class="Britannia\Domain\VO\Course\TimeRange\TimeRange" use-column-prefix="false"/>
+
+        <many-to-one field="course" target-entity="Britannia\Domain\Entity\Course\Course\OneToOne" inversed-by="passes"
+                     fetch="EAGER">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </many-to-one>
+
+        <one-to-many field="lessons" target-entity="Britannia\Domain\Entity\Lesson\Lesson" mapped-by="pass"
+                     orphan-removal="true">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </one-to-many>
+    </entity>
+
+</doctrine-mapping>

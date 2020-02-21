@@ -15,6 +15,7 @@ namespace Britannia\Domain\VO\Course\Intensive\Validator;
 
 
 use Britannia\Domain\VO;
+use Britannia\Domain\VO\Course\Pass\Validator\PassHours;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDD\Domain\VO\Validator\ConstraintValidator;
 
@@ -26,7 +27,7 @@ class IntensiveValidator extends ConstraintValidator
      */
     public function getConstraintType(): string
     {
-        return Intensive::class;
+        return PassHours::class;
     }
 
     public function handle($value, Constraint $constraint)

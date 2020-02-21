@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                  xmlns:gedmo="http://gediminasm.org/schemas/orm/doctrine-extensions-mapping"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
 
     <entity name="Britannia\Domain\Entity\Course\Course\Adult" table="course_adult">
         <field name="examiner" type="Examiner" nullable="true"/>
         <field name="intensive" type="Intensive"/>
+        <field name="schedule" type="object"/>
+
+        <field name="monthlyPayment" type="price"/>
+        <field name="enrollmentPayment" type="price" nullable="true"/>
+        <field name="discount" type="DiscountList" nullable="true"></field>
 
         <embedded name="assessment" class="Britannia\Domain\VO\Course\Assessment\Assessment" use-column-prefix="false"/>
 

@@ -19,7 +19,7 @@ use Carbon\CarbonImmutable;
 
 final class TimeRange
 {
-    
+
 
     /**
      * @var CarbonImmutable

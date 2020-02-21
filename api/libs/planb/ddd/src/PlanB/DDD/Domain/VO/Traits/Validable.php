@@ -27,7 +27,7 @@ trait Validable
      */
     public static function assert($value, array $options = [])
     {
-        $constraint = self::buildConstraint($options);
+        $constraint = static::buildConstraint($options);
         $violationList = self::validateWithConstraint($value, $constraint);
 
         $value = $constraint->sanitize($value);
@@ -59,7 +59,7 @@ trait Validable
 
     public static function validate($value, array $options = []): ConstraintViolationListInterface
     {
-        $constraint = self::buildConstraint($options);
+        $constraint = static::buildConstraint($options);
 
         return self::validateWithConstraint($value, $constraint);
     }

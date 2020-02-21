@@ -15,10 +15,16 @@ namespace Britannia\Domain\Entity\Course\Course;
 
 
 use Britannia\Domain\Entity\Course\Course;
+use Britannia\Domain\Entity\Course\CourseCalendarInterface;
 use Britannia\Domain\Entity\Course\CourseDto;
+use Britannia\Domain\Entity\Course\CoursePaymentInterface;
+use Britannia\Domain\Entity\Course\Traits\CalendarTrait;
+use Britannia\Domain\Entity\Course\Traits\PaymentTrait;
 
-final class PreSchool extends Course
+final class PreSchool extends Course implements CourseCalendarInterface, CoursePaymentInterface
 {
+    use CalendarTrait;
+    use PaymentTrait;
     /**
      * @var null|string
      */
@@ -27,7 +33,11 @@ final class PreSchool extends Course
     public function update(CourseDto $dto): PreSchool
     {
         $this->schoolCourse = $dto->schoolCourse;
-        return parent::update($dto);
+        $this->changeCalendar($dto->timeTable, $dto->lessonCreator);
+        $this->updatePayment($dto);
+
+        parent::update($dto);
+        return  $this;
     }
 
     /**

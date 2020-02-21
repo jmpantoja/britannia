@@ -17,8 +17,10 @@ namespace Britannia\Domain\Entity\Course\Traits;
 use Britannia\Domain\Entity\Assessment\Term;
 use Britannia\Domain\Entity\Assessment\TermList;
 use Britannia\Domain\Entity\Course\Course\AssessmentDtoInterface;
+use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Service\Assessment\AssessmentGenerator;
 use Britannia\Domain\VO\Assessment\CourseTerm;
+use Britannia\Domain\VO\Assessment\MarkReport;
 use Britannia\Domain\VO\Assessment\SetOfSkills;
 use Britannia\Domain\VO\Assessment\SkillList;
 use Britannia\Domain\VO\Assessment\TermDefinition;
@@ -111,6 +113,21 @@ trait AssessmentTrait
     public function numOfTerms(): int
     {
         return $this->assessment()->numOfTerms();
+    }
+
+    public function marksByStudent(Student $student): MarkReport
+    {
+        // TODO: Implement marksByStudent() method.
+    }
+
+    public function hasDiagnosticTest(): bool
+    {
+        return $this->assessment->hasDiagnosticTest();
+    }
+
+    public function hasFinalTest(): bool
+    {
+        return $this->assessment->hasFinalTest();
     }
 
 }

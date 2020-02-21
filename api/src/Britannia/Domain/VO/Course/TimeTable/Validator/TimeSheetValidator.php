@@ -85,7 +85,7 @@ class TimeSheetValidator extends ConstraintValidator
         }
 
         if ($end->lessThanOrEqualTo($start)) {
-            $this->addViolation('La hora inicial no puede ser mayor que la final');
+            $this->addViolation('La hora de fin debe ser mayor que la de inicio');
         }
     }
 

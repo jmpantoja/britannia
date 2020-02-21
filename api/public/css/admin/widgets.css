@@ -210,7 +210,7 @@ table.term-skill tr th.rotate span {
     padding-bottom: 1em;
 }
 
-.definition-wrapper button.delete{
+.definition-wrapper button.delete {
     color: orangered;
 }
 
@@ -239,3 +239,16 @@ table.term-single {
     margin: 0.8em;
 }
 
+
+.pass_widget .left_time .left {
+    font-size: 2em;
+    color: green;
+}
+
+.pass_widget .left_time .warning {
+    color: orange;
+}
+
+.pass_widget .left_time .left.danger {
+    color: red;
+}

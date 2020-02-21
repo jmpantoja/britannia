@@ -16,14 +16,20 @@ namespace Britannia\Domain\Entity\Course\Course;
 
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Course\CourseAssessmentInterface;
+use Britannia\Domain\Entity\Course\CourseCalendarInterface;
 use Britannia\Domain\Entity\Course\CourseDto;
+use Britannia\Domain\Entity\Course\CoursePaymentInterface;
 use Britannia\Domain\Entity\Course\Traits\AssessmentTrait;
+use Britannia\Domain\Entity\Course\Traits\CalendarTrait;
+use Britannia\Domain\Entity\Course\Traits\PaymentTrait;
 use Britannia\Domain\VO\Course\Assessment\Assessment;
 use Doctrine\Common\Collections\ArrayCollection;
 
-final class School extends Course implements CourseAssessmentInterface
+final class School extends Course implements CourseAssessmentInterface, CourseCalendarInterface, CoursePaymentInterface
 {
     use AssessmentTrait;
+    use CalendarTrait;
+    use PaymentTrait;
 
     /**
      * @var null|string
@@ -41,11 +47,12 @@ final class School extends Course implements CourseAssessmentInterface
 
     public function update(CourseDto $dto): School
     {
-        parent::update($dto);
-
         $this->schoolCourse = $dto->schoolCourse;
         $this->updateAssessment($dto);
+        $this->changeCalendar($dto->timeTable, $dto->lessonCreator);
+        $this->updatePayment($dto);
 
+        parent::update($dto);
         return $this;
     }
 
@@ -61,4 +68,5 @@ final class School extends Course implements CourseAssessmentInterface
     {
         return  $this->assessment ?? Assessment::defaultForShool();
     }
+
 }

@@ -35,7 +35,7 @@ class FreeEnrollmentType extends ToggleType
             'required' => false,
             'width' => 170,
 
-            'off_text' => 'NO, matricula de pago',
+            'off_text' => 'NO, paga matricula',
             'off_style' => 'info',
             'on_text' => 'SI, matricula gratis',
             'on_style' => 'success',

@@ -27,27 +27,21 @@ use Carbon\CarbonImmutable;
 
 interface CourseAssessmentInterface
 {
- //   public function changeAssessmentDefinition(Assessment $assessment, AssessmentGenerator $generator): self;
-//
-//    public function setTerms(TermList $termList): self;
-//
-//    public function marksByStudent(Student $student): MarkReport;
-//
-//    public function terms(): array;
+    public function changeAssessmentDefinition(Assessment $assessment, AssessmentGenerator $generator): self;
+
+    public function setTerms(TermList $termList): self;
+
+    public function terms(): array;
 
     public function assessment(): Assessment;
 
-//    public function skills(): SetOfSkills;
-//
-//    public function otherSkills(): SkillList;
-//
-//    public function numOfTerms(): int;
-//
-//    public function hasDiagnosticTest(): bool;
-//
-//    public function hasFinalTest(): bool;
-//
-//    public function termDefinition(TermName $termName): TermDefinition;
-//
-//    public function setLimitsToTerm(TermName $termName, CarbonImmutable $start, ?CarbonImmutable $end): self;
+    public function skills(): SetOfSkills;
+
+    public function otherSkills(): SkillList;
+
+    public function numOfTerms(): int;
+
+    public function termDefinition(TermName $termName): TermDefinition;
+
+    public function setLimitsToTerm(TermName $termName, CarbonImmutable $start, ?CarbonImmutable $end): self;
 }

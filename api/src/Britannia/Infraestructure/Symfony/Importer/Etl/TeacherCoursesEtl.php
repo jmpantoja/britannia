@@ -37,7 +37,7 @@ final class TeacherCoursesEtl extends AbstractEtl
         $sql = <<<eof
 SELECT id, user, nombre, password, null as email, dni, telefono, cursos, null as teacherId, true as is_teacher, false as is_admin  FROM academia_mysql.profesores
 UNION
-SELECT id, user, name as nombre, password, email, null as dni, null as telefono, null as cursos, idProfesorVinculado as teacherId, false as is_teacher, true as is_admin   FROM academia_mysql.user
+SELECT id, user, name as nombre, password, email, null as dni, null as telefono, null as cursos, idProfesorVinculado as teacherId, false as is_teacher, true as is_admin   FROM academia_mysql.user where idProfesorVinculado is null
 eof;
 
         $query = $builder->getConnection()->executeQuery($sql);
