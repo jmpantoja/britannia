@@ -129,6 +129,12 @@ services:
         tags:
             - { name: sonata.admin, manager_type: orm, label: Niveles}
         public: true
-    
+
+    admin.school_course:
+        class: Britannia\Infraestructure\Symfony\Admin\SchoolCourse\SchoolCourseAdmin
+        arguments: [~, Britannia\Domain\Entity\SchoolCourse\SchoolCourse, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm,  label: Curso Escolar }
+        public: true
     
     

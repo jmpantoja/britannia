@@ -37,11 +37,13 @@ trait CourseTrait
      */
     private $id;
 
-
     /**
      * @var string
      */
     private $name;
+
+    /** @var string */
+    private $description;
 
     /**
      * @var null|RGBA
@@ -51,6 +53,7 @@ trait CourseTrait
     protected function updateCourse(CourseDto $dto)
     {
         $this->name = $dto->name;
+        $this->description = $dto->description;
         if (isset($dto->oldId)) {
             $this->oldId = $dto->oldId;
         }
@@ -64,6 +67,15 @@ trait CourseTrait
     {
         return $this->name ?? (string)$this->id();
     }
+
+    /**
+     * @return string
+     */
+    public function description(): ?string
+    {
+        return $this->description;
+    }
+
 
     private function setColor(RGBA $color): Course
     {

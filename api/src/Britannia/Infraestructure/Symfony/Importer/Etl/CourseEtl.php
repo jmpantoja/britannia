@@ -102,7 +102,7 @@ class CourseEtl extends AbstractEtl
         $builder
             ->withId($input['id'])
             ->withName((string)$input['nombre'])
-            ->withSchoolCourse((string)$input['curso'])
+            ->withDescription((string)$input['curso'])
             ->withEnrolmentPayment((float)$input['matricula'])
             ->withMonthlyPayment((float)$input['precio'])
             ->withNumOfPlaces((int)$input['plazas'])

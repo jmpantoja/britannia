@@ -16,18 +16,17 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Course\OneToOne;
 
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Course\Pass\Pass;
+use Britannia\Domain\Entity\Course\Pass\PassDto;
 use Britannia\Domain\Entity\Lesson\LessonList;
 use Britannia\Domain\VO\Course\Pass\PassHours;
 use Britannia\Domain\VO\Course\Pass\Validator\Pass as PassConstraint;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\PassHoursType;
 use Britannia\Infraestructure\Symfony\Validator\FullName;
 use Carbon\CarbonImmutable;
-use Doctrine\ORM\EntityManagerInterface;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractCompoundType;
 use Sonata\AdminBundle\Form\Type\CollectionType;
 use Sonata\Form\Type\DatePickerType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -38,8 +37,6 @@ class PassType extends AbstractCompoundType
 
     public function customForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('id', TextType::class);
-
         $builder->add('hours', PassHoursType::class, [
             'label' => 'Num. Horas'
         ]);
@@ -102,14 +99,19 @@ class PassType extends AbstractCompoundType
         return new PassConstraint();
     }
 
-    public function customMapping(array $data)
+    public function customMapping(array $data, ?Pass $pass = null)
     {
-        $lessonList = LessonList::collect($data['lessons']);
+        $dto = PassDto::fromArray([
+            'lessonList' => LessonList::collect($data['lessons']),
+            'course' => $this->getOption('course'),
+            'hours' => $data['hours'],
+            'start' => CarbonImmutable::make($data['start']),
+        ]);
+        
+        if ($pass instanceof Pass) {
+            return $pass->update($dto);
+        }
 
-        $course = $this->getOption('course');
-        $hours = $data['hours'];
-        $start = CarbonImmutable::make($data['start']);
-
-        return Pass::make($course, $hours, $start, $lessonList);
+        return Pass::make($dto);
     }
 }

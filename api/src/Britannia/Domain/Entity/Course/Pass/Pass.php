@@ -25,7 +25,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use PlanB\DDD\Domain\Behaviour\Comparable;
 use PlanB\DDD\Domain\Behaviour\Traits\ComparableTrait;
 use PlanB\DDD\Domain\Model\Traits\AggregateRootTrait;
-use PlanB\DDD\Domain\VO\PositiveInteger;
 
 class Pass implements Comparable
 {
@@ -57,20 +56,25 @@ class Pass implements Comparable
      */
     private $hours;
 
-    public static function make(Course $course, PassHours $hours, CarbonImmutable $start, LessonList $lessonList): self
+    public static function make(PassDto $dto): self
     {
-        return new self($course, $hours, $start, $lessonList);
+        return new self($dto);
     }
 
-    protected function __construct(Course $course, PassHours $hours, CarbonImmutable $start, LessonList $lessonList)
+    protected function __construct(PassDto $dto)
     {
-        $this->id = new PassId();
-        $this->course = $course;
-        $this->hours = $hours;
         $this->lessons = new ArrayCollection();
+        $this->id = new PassId();
+    }
 
-        $this->setTimeRange($start);
-        $this->setLessons($lessonList);
+    public function update(PassDto $dto): self
+    {
+        $this->course = $dto->course;
+        $this->hours = $dto->hours;
+
+        $this->setTimeRange($dto->start);
+        $this->setLessons($dto->lessonList);
+        return $this;
     }
 
     public function id(): ?PassId
@@ -141,7 +145,7 @@ class Pass implements Comparable
 
     private function setLessons(LessonList $lessonList): self
     {
-        $this->lessonList()->update($lessonList, Locked::RESET(), $this->course, $this);
+        $this->lessonList()->update($lessonList, Locked::UPDATE(), $this->course, $this);
         return $this;
     }
 

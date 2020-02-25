@@ -20,11 +20,17 @@ use Britannia\Domain\VO\Assessment\MarkReport;
 use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\Behaviour\Comparable;
 use PlanB\DDD\Domain\Behaviour\Traits\ComparableTrait;
-use PlanB\DDD\Domain\Model\AggregateRoot;
+use PlanB\DDD\Domain\Model\Traits\AggregateRootTrait;
 
 class StudentCourse implements Comparable
 {
+    use AggregateRootTrait;
     use ComparableTrait;
+
+    /**
+     * @var StudentCourseId
+     */
+    private StudentCourseId $id;
 
     /**
      * @var Student
@@ -48,25 +54,39 @@ class StudentCourse implements Comparable
      */
     private $joinedAt;
 
+    /**
+     * @var CarbonImmutable
+     */
+    private $leavedAt;
+
 
     public static function make(Student $student, Course $course): self
     {
         $date = CarbonImmutable::now();
-        if ($course->isFinalized()) {
+        if (PHP_SAPI === 'cli') {
             $date = $course->start();
         }
+
         return new self($student, $course, $date);
     }
 
     private function __construct(Student $student, Course $course, CarbonImmutable $date)
     {
+        $this->id = new StudentCourseId();
         $this->student = $student;
         $this->course = $course;
         $this->joinedAt = $date;
+        $this->leavedAt = null;
 
         $this->diagnostic = MarkReport::make();
         $this->exam = MarkReport::make();
     }
+
+    public function id(): StudentCourseId
+    {
+        return $this->id;
+    }
+
 
     /**
      * @return Student
@@ -120,20 +140,31 @@ class StudentCourse implements Comparable
 
     public function final(): Mark
     {
-        return  $this->marks()->average($this->course->skills());
+        return $this->marks()->average($this->course->skills());
     }
 
-
-    public function compareTo(object $other): int
+    public function hash(): string
     {
-        $this->assertThatCanBeCompared($other);
-        return $this->student->compareTo($other->student) * $this->course->compareTo($other->course);
+        return sprintf('%s-%s-%s', ...[
+            $this->course->id(),
+            $this->student->id(),
+            $this->joinedAt,
+        ]);
     }
 
-    public function equals(object $other): bool
+    public function isActive(): bool
     {
-        $this->assertThatCanBeCompared($other);
-        return $this->student->equals($other->student) && $this->course->equals($other->course);
+        return is_null($this->leavedAt) AND $this->course()->isActive();
+    }
+
+    public function finish(): self
+    {
+        $this->leavedAt = CarbonImmutable::today();
+
+        $event = StudentHasLeavedCourse::make($this);
+        $this->notify($event);
+
+        return $this;
     }
 
 }

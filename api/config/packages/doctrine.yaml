@@ -66,8 +66,15 @@ doctrine:
                     #Staff
                     StaffMemberId: StaffMemberId
 
-                    #Student
+                    #School
                     SchoolId: SchoolId
+
+                    #SchoolCourse
+                    SchoolCourseId: SchoolCourseId
+                    SchoolLevel: SchoolLevel
+
+
+                    #Student                    
                     StudentId: StudentId
                     TutorId: TutorId
                     JobStatus: JobStatus
@@ -104,7 +111,7 @@ doctrine:
             Intensive: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\IntensiveType
             CourseStatus: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\CourseStatusType
             CourseId: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\CourseId
-            PassId: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\PassId        
+            PassId: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\PassId
             LevelId: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\LevelId
             PassHours: \Britannia\Infraestructure\Doctrine\DBAL\Type\Course\PassHoursType
             DiscountList: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\DiscountListType
@@ -130,11 +137,16 @@ doctrine:
             #School
             SchoolId:  Britannia\Infraestructure\Doctrine\DBAL\Type\School\SchoolIdType
 
+            #SchoolCourse
+            SchoolCourseId:  Britannia\Infraestructure\Doctrine\DBAL\Type\SchoolCourse\SchoolCourseIdType
+            SchoolLevel:  Britannia\Infraestructure\Doctrine\DBAL\Type\SchoolCourse\SchoolLevelType
+
             #Staff
             StaffMemberId:  Britannia\Infraestructure\Doctrine\DBAL\Type\Staff\StaffMemberIdType
 
             #Student
             StudentId: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\StudentIdType
+            StudentCourseId: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\StudentCourseIdType
             TutorId: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\TutorIdType
             JobStatus: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\JobStatusType
             PartOfDay: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\PartOfDayType
@@ -151,7 +163,7 @@ doctrine:
             string_functions:
                 DAY: DoctrineExtensions\Query\Mysql\Day
                 MONTH: DoctrineExtensions\Query\Mysql\Month
-                YEAR: DoctrineExtensions\Query\Mysql\Year        
+                YEAR: DoctrineExtensions\Query\Mysql\Year
         mappings:
             Britannia:
                 is_bundle: false

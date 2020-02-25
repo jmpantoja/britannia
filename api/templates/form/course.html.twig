@@ -171,18 +171,17 @@
 {% endblock %}
 
 {% block pass_list_widget %}
-    {% if form.locked is defined %}
-        {{ form_row(form.locked, {widget: id ~ '-wrapper'}) }}
-    {% endif %}
+    {#    {% if form.locked is defined %}#}
+    {#        {{ form_row(form.locked, {widget: id ~ '-wrapper'}) }}#}
+    {#    {% endif %}#}
 
-    <div id="{{ id }}-wrapper" style="margin-top: 5em" data-locked-id="{{ form.locked.vars.id }}">
+    {#    style="margin-top: 5em" data-locked-id="{{ form.locked.vars.id }}"#}
+    <div id="{{ id }}-wrapper">
         {{ form_row(form.passes) }}
     </div>
 {% endblock %}
 
 {% block pass_widget %}
-
-    {{ form_row(form.id) }}
 
     <div id="{{ id }}" class="row pass_widget">
         <div class="col-md-3">
@@ -211,26 +210,6 @@
     <script type="application/javascript">
         $(function () {
             var update = function () {
-
-                var pass_hours = $('#{{ form.hours.vars.id }}');
-                var pass_start = $('#{{ form.start.vars.id }}');
-                var pass_end = $('#{{ form.end.vars.id }}');
-                var btn = $({{ id }}).parents('.sonata-collection-row')
-                    .first()
-                    .find('.btn-link');
-
-
-
-                var date = moment(pass_start.val(), 'DD MMM yyy');
-
-                if (moment().diff(date) > 0) {
-                    pass_hours.data('disabled', 'data-disabled');
-                    pass_start.data('disabled', 'data-disabled');
-                    pass_end.data('disabled', 'data-disabled');
-                    btn.data('disabled', 'data-disabled');
-                }
-
-
                 var total = $('#{{ form.hours.vars.id }} :selected').text();
                 var total = parseInt(total) * 60;
 
@@ -239,25 +218,8 @@
 
                 var consumed = 0;
                 lessons.each2(function () {
-                    var day = $(this).find('.day input');
                     var start = $(this).find('.start_time input');
                     var end = $(this).find('.end_time input');
-                    var classroom = $(this).find('.classroom select');
-                    var btn = $(this).parents('.sonata-collection-row')
-                        .first()
-                        .find('.btn-link');
-
-
-                    var date = moment(day.val(), 'DD MMM yyy');
-
-                    if (moment().diff(date) > 0) {
-                        day.data('disabled', 'data-disabled');
-                        start.data('disabled', 'data-disabled');
-                        end.data('disabled', 'data-disabled');
-                        classroom.data('disabled', 'data-disabled');
-
-                        btn.data('disabled', 'data-disabled');
-                    }
 
                     var startTime = moment(start.val(), 'HH:mm');
                     var endTime = moment(end.val(), 'HH:mm');
@@ -314,4 +276,34 @@
         </div>
     </div>
 
+{% endblock %}
+
+{% block enrollment_payment_widget %}
+
+    <div class="enrollment_payment">
+        <div style="float: left">
+            {{ form_widget(form) }}
+        </div>
+        <div style="float: left; padding-left: 0.5em">
+            <span class="btn btn-link">Desbloquear</span>
+        </div>
+    </div>
+    <script type="application/javascript">
+        $(function () {
+            var el = $('#{{ id }}');
+
+            var update = function () {
+                if ($(el).attr('readonly') === 'readonly') {
+                    $(el).attr('readonly', false);
+                    $(this).text('Bloquear')
+                } else {
+                    $(el).attr('readonly', 'readonly');
+                    $(this).text('Desbloquear')
+                }
+            };
+
+            $('.enrollment_payment .btn').on('click', update)
+            upate();
+        })
+    </script>
 {% endblock %}

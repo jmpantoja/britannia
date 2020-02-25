@@ -20,10 +20,12 @@ use Britannia\Domain\Entity\Course\CourseAssessmentInterface;
 use Britannia\Domain\Entity\Course\CourseCalendarInterface;
 use Britannia\Domain\Entity\Course\CoursePaymentInterface;
 use Britannia\Domain\Entity\Level\Level;
+use Britannia\Domain\Entity\SchoolCourse\SchoolCourse;
 use Britannia\Infraestructure\Symfony\Form\Type\Assessment\AssessmentType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\AgeType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\CourseHasStudentsType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\Discount\DiscountListTye;
+use Britannia\Infraestructure\Symfony\Form\Type\Course\EnrollmentPaymentType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\ExaminerType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\IntensiveType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\LevelType;
@@ -32,10 +34,11 @@ use Britannia\Infraestructure\Symfony\Form\Type\Course\PeriodicityType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\SupportType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\TeachersType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\TimeTable\TimeTableType;
-use PlanB\DDD\Domain\VO\Price;
+use Doctrine\ORM\EntityRepository;
 use PlanB\DDDBundle\Sonata\Admin\AdminForm;
 use PlanB\DDDBundle\Symfony\Form\Type\PositiveIntegerType;
 use PlanB\DDDBundle\Symfony\Form\Type\PriceType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -46,10 +49,6 @@ final class CourseForm extends AdminForm
      * @var Course
      */
     private $course;
-    /**
-     * @var Price
-     */
-    private Price $enrollmentPrice;
 
     public function configure(Course $course): self
     {
@@ -83,6 +82,13 @@ final class CourseForm extends AdminForm
                     new NotBlank()
                 ]
             ])
+            ->add('description', TextType::class, [
+                'required' => false,
+                'label' => 'Descripción',
+                'attr' => [
+                    'style' => 'width:350px'
+                ]
+            ])
             ->add('numOfPlaces', PositiveIntegerType::class, [
                 'label' => 'Plazas',
                 'required' => true
@@ -91,7 +97,14 @@ final class CourseForm extends AdminForm
 
         if ($course->isSchool()) {
             $this->group('Descripción', ['class' => 'col-md-12 horizontal'])
-                ->add('schoolCourse');
+                ->add('schoolCourses', EntityType::class, [
+                    'class' => SchoolCourse::class,
+                    'multiple' => true,
+                    'query_builder' => function (EntityRepository $er) {
+                        return $er->createQueryBuilder('u')
+                            ->orderBy('u.weight', 'ASC');
+                    },
+                ]);
         }
 
         if ($course->isAdult()) {
@@ -177,12 +190,8 @@ final class CourseForm extends AdminForm
 
         $this->tab($name);
         $this->group('Coste', ['class' => 'col-md-6'])
-            ->add('enrollmentPayment', PriceType::class, [
+            ->add('enrollmentPayment', EnrollmentPaymentType::class, [
                 'label' => 'Matrícula',
-                'empty_data' => $this->enrollmentPrice,
-                'attr' => [
-                    'readonly' => true
-                ]
             ]);
 
         $this->add('monthlyPayment', PriceType::class, [
@@ -208,19 +217,15 @@ final class CourseForm extends AdminForm
         }
 
         $this->tab($name);
-        $this->group('Bonos', ['class' => 'col-md-7 box-with-locked'])
+        $this->group('Bonos', ['class' => 'col-md-7'])
             ->add('passes', PassListType::class, [
                 'label' => false,
                 'course' => $course
             ]);
 
         $this->group('Coste', ['class' => 'col-md-5'])
-            ->add('enrollmentPayment', PriceType::class, [
-                'label' => 'Matrícula',
-                'empty_data' => $this->enrollmentPrice,
-                'attr' => [
-                    'readonly' => true
-                ]
+            ->add('enrollmentPayment', EnrollmentPaymentType::class, [
+                'label' => 'Matrícula'
             ])
             ->add('discount', DiscountListTye::class, [
                 'label' => 'Descuentos',
@@ -229,12 +234,5 @@ final class CourseForm extends AdminForm
 
         return $this;
     }
-
-    public function setEnrollmentPrice(Price $enrollmentPrice): self
-    {
-        $this->enrollmentPrice = $enrollmentPrice;
-        return $this;
-    }
-
 }
 

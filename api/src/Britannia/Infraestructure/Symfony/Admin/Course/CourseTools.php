@@ -43,13 +43,9 @@ final class CourseTools extends AdminTools
     private ScheduleService $scheduleService;
 
     public function __construct(CourseMapper $mapper,
-                                ParameterBagInterface $parameterBag,
                                 ScheduleService $scheduleService)
     {
         $this->mapper = $mapper;
-
-        $enrollmentPrice = $parameterBag->get('enrollment_price');
-        $this->enrollmentPrice = Price::make($enrollmentPrice);
         $this->scheduleService = $scheduleService;
     }
 
@@ -61,7 +57,6 @@ final class CourseTools extends AdminTools
     public function form(FormMapper $formMapper): CourseForm
     {
         return CourseForm::make($formMapper)
-            ->setEnrollmentPrice($this->enrollmentPrice)
             ->setDataMapper($this->mapper);
     }
 

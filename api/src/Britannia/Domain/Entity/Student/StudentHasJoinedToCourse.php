@@ -27,7 +27,8 @@ class StudentHasJoinedToCourse extends AbstractRecordEvent
         $description = sprintf('Se une al curso %s', $course->name());
 
         $date = null;
-        if ($course->isFinalized()) {
+
+        if (PHP_SAPI === 'cli') {
             $date = $course->start();
         }
 

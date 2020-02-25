@@ -224,6 +224,7 @@ abstract class Student implements Comparable
     public function setCourses(CourseList $courses): self
     {
         $this->studentHasCoursesList()
+            ->onlyActives()
             ->toCourseList()
             ->forRemovedItems($courses, [$this, 'removeCourse'])
             ->forAddedItems($courses, [$this, 'addCourse']);
@@ -233,23 +234,23 @@ abstract class Student implements Comparable
 
     public function removeCourse(Course $course): self
     {
-        $joined = StudentCourse::make($this, $course);
-
         $this->studentHasCoursesList()
-            ->remove($joined, function (StudentCourse $studentCourse) {
-                $event = StudentHasLeavedCourse::make($studentCourse);
-                $this->notify($event);
-            });
+            ->studentLeaveACourse($course);
 
         return $this;
     }
 
     public function addCourse(Course $course): self
     {
+//        $this->studentHasCoursesList()
+//            ->studentJoinAtCourse($course);
+//
+//        die('xx');
         $joined = StudentCourse::make($this, $course);
 
         $this->studentHasCoursesList()
             ->add($joined, function (StudentCourse $student) {
+
                 $event = StudentHasJoinedToCourse::make($student, $this);
                 $this->notify($event);
             });
@@ -429,8 +430,8 @@ abstract class Student implements Comparable
     public function activeCourses(): CourseList
     {
         return $this->studentHasCoursesList()
-            ->toCourseList()
-            ->onlyActives();
+            ->onlyActives()
+            ->toCourseList();
     }
 
     public function studentHasCourses(): array

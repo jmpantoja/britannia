@@ -20,31 +20,28 @@ use Britannia\Domain\Entity\Course\CourseDto;
 use Britannia\Domain\Entity\Course\CoursePaymentInterface;
 use Britannia\Domain\Entity\Course\Traits\CalendarTrait;
 use Britannia\Domain\Entity\Course\Traits\PaymentTrait;
+use Doctrine\Common\Collections\ArrayCollection;
 
 final class PreSchool extends Course implements CourseCalendarInterface, CoursePaymentInterface
 {
     use CalendarTrait;
     use PaymentTrait;
-    /**
-     * @var null|string
-     */
-    private $schoolCourse;
+
 
     public function update(CourseDto $dto): PreSchool
     {
-        $this->schoolCourse = $dto->schoolCourse;
         $this->changeCalendar($dto->timeTable, $dto->lessonCreator);
         $this->updatePayment($dto);
 
         parent::update($dto);
-        return  $this;
+        return $this;
     }
 
     /**
      * @return string|null
      */
-    public function schoolCourse(): ?string
+    public function schoolCourses(): array
     {
-        return $this->schoolCourse;
+        return $this->schoolCourses;
     }
 }

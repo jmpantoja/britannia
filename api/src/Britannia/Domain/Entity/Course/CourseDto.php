@@ -35,7 +35,7 @@ abstract class CourseDto extends Dto
 
     public ?string $name;
 
-    public ?string  $schoolCourse;
+    public ?string $description;
 
     public RGBA $color;
 

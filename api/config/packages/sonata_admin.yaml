@@ -59,6 +59,7 @@ sonata_admin:
                     - admin.book
                     - admin.level
                     - admin.calendar
+                    - admin.school_course
 
         blocks:
             -   class:    col-lg-3 col-xs-6
@@ -100,6 +101,8 @@ sonata_admin:
     templates:
         user_block: admin/core/user_block.html.twig
         layout: admin/core/standard_layout.html.twig
+        ajax: admin/core/ajax_layout.html.twig
+        
         outer_list_rows_list: admin/core/CRUD/list_outer_rows_list.html.twig
         inner_list_row: admin/core/CRUD/list_inner_row.html.twig        
         list: admin/core/CRUD/list.html.twig

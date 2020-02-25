@@ -24,6 +24,7 @@ use Britannia\Domain\Entity\Course\Traits\CalendarTrait;
 use Britannia\Domain\Entity\Course\Traits\PaymentTrait;
 use Britannia\Domain\VO\Course\Assessment\Assessment;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 final class School extends Course implements CourseAssessmentInterface, CourseCalendarInterface, CoursePaymentInterface
 {
@@ -34,12 +35,13 @@ final class School extends Course implements CourseAssessmentInterface, CourseCa
     /**
      * @var null|string
      */
-    private $schoolCourse;
+    private $schoolCourses;
 
     public function __construct(SchoolDto $dto)
     {
         $this->assessment = $dto->assessment;
         $this->terms = new ArrayCollection();
+        $this->schoolCourses = new ArrayCollection();
 
         parent::__construct($dto);
     }
@@ -47,7 +49,7 @@ final class School extends Course implements CourseAssessmentInterface, CourseCa
 
     public function update(CourseDto $dto): School
     {
-        $this->schoolCourse = $dto->schoolCourse;
+        $this->setSchoolCourses($dto->schoolCourses);
         $this->updateAssessment($dto);
         $this->changeCalendar($dto->timeTable, $dto->lessonCreator);
         $this->updatePayment($dto);
@@ -59,14 +61,28 @@ final class School extends Course implements CourseAssessmentInterface, CourseCa
     /**
      * @return string|null
      */
-    public function schoolCourse(): ?string
+    public function schoolCourses(): array
     {
-        return $this->schoolCourse;
+        return $this->schoolCourses->toArray();
     }
+
+    /**
+     * @param string|null $schoolCourses
+     * @return School
+     */
+    private function setSchoolCourses(?Collection $schoolCourses): School
+    {
+        if (!($schoolCourses instanceof Collection)) {
+            return $this;
+        }
+        $this->schoolCourses = $schoolCourses;
+        return $this;
+    }
+
 
     public function assessment(): Assessment
     {
-        return  $this->assessment ?? Assessment::defaultForShool();
+        return $this->assessment ?? Assessment::defaultForShool();
     }
 
 }

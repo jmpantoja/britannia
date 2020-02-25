@@ -29,7 +29,7 @@ final class ReportDataGrid extends AdminDataGrid
         ]);
 
         $this->addIdentifier('name', 'string', [
-            'template' => 'admin/course/course_name_column.html.twig',
+            'template' => 'admin/course/school_course_column.html.twig',
             'label' => 'Cursos'
         ]);
     }

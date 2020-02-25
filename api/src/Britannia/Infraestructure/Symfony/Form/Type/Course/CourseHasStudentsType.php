@@ -17,6 +17,7 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Course;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Entity\Student\StudentCourse;
+use Britannia\Domain\Entity\Student\StudentCourseList;
 use Britannia\Domain\Entity\Student\StudentList;
 use Britannia\Infraestructure\Symfony\Validator\FullName;
 use Doctrine\ORM\QueryBuilder;
@@ -104,16 +105,11 @@ class CourseHasStudentsType extends AbstractSingleType
      */
     public function transform($value)
     {
-        if (empty($value)) {
-            return $value;
-        }
 
-        $results = [];
-        foreach ($value as $studentCourse) {
-            $results[] = $studentCourse->student();
-        }
-
-        return $results;
+        return StudentCourseList::collect($value)
+            ->onlyActives()
+            ->toStudentList()
+            ->toArray();
     }
 
     /**

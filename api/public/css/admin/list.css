@@ -10,6 +10,18 @@
     height: 85vh;
 }
 
+.content.list.ajax {
+    height: 100%;
+}
+
+.ajax .column .card {
+    height: 73vh;
+}
+
+.ajax .card-table .card-footer {
+    display: none;
+}
+
 .card {
     flex-grow: 1;
     display: flex;
@@ -24,7 +36,6 @@
 }
 
 .card-body {
-    max-height: available;
     flex-grow: 1;
     overflow-y: scroll;
     overflow-x: hidden;

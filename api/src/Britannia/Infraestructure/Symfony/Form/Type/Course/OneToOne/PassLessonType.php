@@ -15,6 +15,7 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Course\OneToOne;
 
 
 use Britannia\Domain\Entity\Lesson\Lesson;
+use Britannia\Domain\Entity\Lesson\LessonDto;
 use Britannia\Domain\Repository\ClassRoomRepositoryInterface;
 use Britannia\Domain\VO\Course\Pass\Validator\PassLesson;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\TimeTable\ClassRoomType;
@@ -79,21 +80,20 @@ final class PassLessonType extends AbstractCompoundType
         return new PassLesson();
     }
 
-    public function customMapping(array $data, ?Lesson $original = null)
+    public function customMapping(array $data, ?Lesson $lesson = null)
     {
 
-        $date = CarbonImmutable::make($data['day']);
-        $start = CarbonImmutable::make($data['startTime']);
-        $end = CarbonImmutable::make($data['endTime']);
-
-        $classRoom = $this->classRoomRepository->find($data['classroomId']);
-
-        return Lesson::fromArray([
-            'date' => $date,
-            'start' => $start,
-            'end' => $end,
-            'classRoom' => $classRoom
+        $dto = LessonDto::fromArray([
+            'date' => CarbonImmutable::make($data['day']),
+            'start' => CarbonImmutable::make($data['startTime']),
+            'end' => CarbonImmutable::make($data['endTime']),
+            'classRoom' => $this->classRoomRepository->find($data['classroomId'])
         ]);
-    }
 
+        if($lesson instanceof Lesson){
+            return $lesson->update($dto);
+        }
+
+        return Lesson::make($dto);
+    }
 }

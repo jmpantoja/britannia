@@ -15,7 +15,7 @@ use Sonata\AdminBundle\Route\RouteCollection;
 final class SchoolAdmin extends AbstractAdmin implements AdminFilterableInterface
 {
     protected $datagridValues = [
-        '_sort_by' => 'fullName.lastName',
+        '_sort_by' => 'name',
     ];
     /**
      * @var SchoolTools

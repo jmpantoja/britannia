@@ -20,7 +20,7 @@ use Britannia\Domain\VO\Course\TimeRange\TimeRange;
 
 class OneToOneDto extends CourseDto
 {
-    public PassInfo $passes;
+    public PassList $passes;
 
     public TimeRange $timeRange;
 }

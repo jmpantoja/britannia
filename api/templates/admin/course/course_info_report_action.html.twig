@@ -10,5 +10,9 @@
     <a class="btn btn-link" href="{{ marks }}">Notas</a>
 {% endif %}
 
-{% set reports = admin.configurationPool.adminByAdminCode('admin.report').generateObjectUrl('edit', object) %}
-<a class="btn btn-link" href="{{ reports }}">Informes</a>
+{% if object.isOnetoOne == false %}
+    {% set reports = admin.configurationPool.adminByAdminCode('admin.report').generateObjectUrl('edit', object) %}
+    <a class="btn btn-link" href="{{ reports }}">Informes</a>
+{% endif %}
+
+

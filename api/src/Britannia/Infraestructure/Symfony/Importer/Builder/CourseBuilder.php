@@ -51,6 +51,8 @@ class CourseBuilder extends BuilderAbstract
 
     private $name;
 
+    private $description;
+
     private $enrolmentPayment;
 
     private $monthlyPayment;
@@ -80,6 +82,7 @@ class CourseBuilder extends BuilderAbstract
      */
     private bool $isAdult;
 
+
     public function initResume(array $input): Resume
     {
         return Resume::make((int)$input['id'], self::TYPE, $input['nombre']);
@@ -97,9 +100,9 @@ class CourseBuilder extends BuilderAbstract
         return $this;
     }
 
-    public function withSchoolCourse(string $schoolCourse): self
+    public function withDescription(string $schoolCourse): self
     {
-        $this->schoolCourse = $schoolCourse;
+        $this->description = $schoolCourse;
         return $this;
     }
 
@@ -198,7 +201,7 @@ class CourseBuilder extends BuilderAbstract
         $input = [
             'oldId' => $this->id,
             'name' => $this->name,
-            'schoolCourse' => $this->schoolCourse,
+            'description' => $this->description,
             'enrollmentPayment' => $this->enrolmentPayment,
             'monthlyPayment' => $this->monthlyPayment,
             'numOfPlaces' => $this->numOfPlaces,

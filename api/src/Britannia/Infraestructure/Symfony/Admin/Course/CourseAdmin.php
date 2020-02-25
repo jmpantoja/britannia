@@ -15,11 +15,15 @@ use Sonata\AdminBundle\Route\RouteCollection;
 
 final class CourseAdmin extends AbstractAdmin implements AdminFilterableInterface
 {
+    protected $datagridValues = [
+        '_sort_order' => 'DESC',
+        '_sort_by' => 'timeRange.start',
+    ];
+
     /**
      * @var CourseTools
      */
     private CourseTools $adminTools;
-
 
     protected $maxPerPage = 50;
     protected $maxPageLinks = 10;

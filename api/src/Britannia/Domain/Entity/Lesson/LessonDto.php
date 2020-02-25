@@ -26,13 +26,13 @@ final class LessonDto extends Dto
     public CarbonImmutable $start;
     public CarbonImmutable $end;
     public CarbonImmutable $date;
-    public AttendanceList $attendances;
-
-    protected function defaults(): array
-    {
-        return [
-            'attendances' => AttendanceList::collect(),
-        ];
-    }
+    public ?AttendanceList $attendances = null;
+//
+//    protected function defaults(): array
+//    {
+//        return [
+//            'attendances' => null,
+//        ];
+//    }
 
 }

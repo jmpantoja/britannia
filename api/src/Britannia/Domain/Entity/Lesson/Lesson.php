@@ -101,17 +101,22 @@ class Lesson implements Comparable
         $this->update($dto);
     }
 
-    public function update(LessonDto $dto)
+    public function update(LessonDto $dto): self
     {
         $this->classRoom = $dto->classRoom;
         $this->setDay($dto->date);
         $this->setStartTime($dto->start);
         $this->setEndTime($dto->end);
         $this->updateAttendances($dto->attendances);
+        return $this;
     }
 
-    public function updateAttendances(AttendanceList $attendances): self
+    public function updateAttendances(?AttendanceList $attendances): self
     {
+        if (!($attendances instanceof AttendanceList)) {
+            return $this;
+        }
+
         $this->attendanceList()
             ->forRemovedItems($attendances, [$this, 'removeAttendance'])
             ->forAddedItems($attendances, [$this, 'addAttendance']);

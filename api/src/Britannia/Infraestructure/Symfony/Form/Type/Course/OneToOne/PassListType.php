@@ -16,8 +16,6 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Course\OneToOne;
 
 use Britannia\Domain\Entity\Course\Course\OneToOne;
 use Britannia\Domain\Entity\Course\Pass\PassList;
-use Britannia\Domain\VO\Course\Pass\PassInfo;
-use Britannia\Infraestructure\Symfony\Form\Type\Course\LockedType;
 use Britannia\Infraestructure\Symfony\Validator\FullName;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractCompoundType;
@@ -45,16 +43,6 @@ class PassListType extends AbstractCompoundType
                 'course' => $course
             ]
         ]);
-
-        if (!$options['course']->isPending()) {
-            $builder
-                ->add('locked', LockedType::class, [
-                    'label' => false,
-                    'msg_update' => 'Se <b>descartará</b> la información de las <b>lecciones que aún no se han producido</b><br/>pero se <b>conservará la de las lecciones ya pasadas</b><br/><br/>Elija esta opción si no quiere perder el control de asistencia.',
-                    'msg_reset' => 'Se <b>borrará la información de todas las lecciones</b>, incluidas las ya pasadas<br/><br/>Esto implica que <b>se perderá el control de asistencia</b>'
-                ]);
-        }
-
     }
 
     public function customOptions(OptionsResolver $resolver)
@@ -74,10 +62,7 @@ class PassListType extends AbstractCompoundType
     public function customMapping(array $data)
     {
         $passes = $data['passes'];
-        $locked = $data['locked'];
 
-        $passList = PassList::collect($passes);
-
-        return PassInfo::make($passList, $locked);
+        return PassList::collect($passes);
     }
 }

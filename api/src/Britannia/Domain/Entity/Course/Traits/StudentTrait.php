@@ -21,7 +21,6 @@ use Britannia\Domain\Entity\Student\StudentCourseList;
 use Britannia\Domain\Entity\Student\StudentHasJoinedToCourse;
 use Britannia\Domain\Entity\Student\StudentHasLeavedCourse;
 use Britannia\Domain\Entity\Student\StudentList;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use PlanB\DDD\Domain\VO\PositiveInteger;
 
@@ -66,6 +65,11 @@ trait StudentTrait
 
     public function removeStudent(Student $student): self
     {
+        $this->courseHasStudentList()
+            ->courseHasBeenLeavedByStudent($student);
+
+        return $this;
+
         $joined = StudentCourse::make($student, $this);
 
         $this->courseHasStudentList()

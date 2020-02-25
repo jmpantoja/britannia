@@ -21,7 +21,7 @@ use Britannia\Domain\Entity\Course\Pass\Pass;
 use Britannia\Domain\Entity\Course\Pass\PassList;
 use Britannia\Domain\Entity\Course\Traits\LessonTrait;
 use Britannia\Domain\Entity\Course\Traits\PaymentTrait;
-use Britannia\Domain\VO\Course\Pass\PassInfo;
+use Britannia\Domain\VO\Course\TimeRange\TimeRange;
 use Doctrine\Common\Collections\ArrayCollection;
 
 final class OneToOne extends Course implements CoursePaymentInterface
@@ -56,16 +56,16 @@ final class OneToOne extends Course implements CoursePaymentInterface
     }
 
 
-    public function updatePasses(PassInfo $passInfo): self
+    public function updatePasses(PassList $passList): self
     {
-        $passList = $passInfo->passList();
-
         $this->passList()
             ->forRemovedItems($passList)
             ->forAddedItems($passList);
 
         $timeRange = $this->passList()->timeRange();
-        $this->timeRange = $timeRange;
+        if ($timeRange instanceof TimeRange) {
+            $this->timeRange = $timeRange;
+        }
 
         return $this;
     }

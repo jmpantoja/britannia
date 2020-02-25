@@ -32,7 +32,7 @@ final class CourseDatagrid extends AdminDataGrid
             'label' => 'Nombre'
         ]);
 
-        $this->add('timeTable.start', null, [
+        $this->add('timeRange.start', null, [
             'label' => 'Curso',
             'header_style' => 'width:250px',
             'template' => 'admin/course/course_date_column.html.twig',

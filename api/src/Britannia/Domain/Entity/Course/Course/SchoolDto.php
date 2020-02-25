@@ -16,10 +16,11 @@ namespace Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Course\CourseDto;
 use Britannia\Domain\Service\Assessment\AssessmentGenerator;
 use Britannia\Domain\VO\Course\Assessment\Assessment;
+use Doctrine\Common\Collections\Collection;
 
 class SchoolDto extends CourseDto implements AssessmentDtoInterface
 {
-    public ?string $schoolCourse;
+    public ?Collection $schoolCourses = null;
 
     public Assessment $assessment;
 
@@ -40,4 +41,5 @@ class SchoolDto extends CourseDto implements AssessmentDtoInterface
     {
         return $this->assessmentGenerator;
     }
+
 }

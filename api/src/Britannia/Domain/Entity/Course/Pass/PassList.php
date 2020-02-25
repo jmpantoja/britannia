@@ -34,8 +34,12 @@ final class PassList extends EntityList
         return LessonList::collect($lessons);
     }
 
-    public function timeRange(): TimeRange
+    public function timeRange(): ?TimeRange
     {
+        if($this->isEmpty()){
+            return  null;
+        }
+
         $start = $this->values()
             ->map(fn(Pass $pass) => $pass->start())
             ->min();
