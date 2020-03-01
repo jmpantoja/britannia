@@ -1,6 +1,7 @@
 /helm/api/charts
 
 /dumps
+/uploads/
 
 ###> symfony/framework-bundle ###
 /.env.local

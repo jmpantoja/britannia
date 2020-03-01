@@ -31,8 +31,8 @@ class AttendanceListType extends AbstractCompoundType
             return;
         }
 
-        $course = $lesson->course();
-        foreach ($course->students() as $student) {
+
+        foreach ($lesson->students() as $student) {
 
             $key = (string)$student->id();
             $builder->add($key, AttendanceType::class, [

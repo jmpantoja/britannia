@@ -15,8 +15,10 @@ namespace Britannia\Domain\Entity\Student;
 
 
 use Britannia\Domain\Entity\Course\Course;
+use Britannia\Domain\Entity\Lesson\Lesson;
 use Britannia\Domain\VO\Assessment\Mark;
 use Britannia\Domain\VO\Assessment\MarkReport;
+use Britannia\Domain\VO\Course\TimeRange\TimeRange;
 use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\Behaviour\Comparable;
 use PlanB\DDD\Domain\Behaviour\Traits\ComparableTrait;
@@ -104,6 +106,15 @@ class StudentCourse implements Comparable
         return $this->course;
     }
 
+    public function timeRange(): TimeRange
+    {
+        $start = $this->joinedAt ?? $this->course->start();
+        $end = $this->leavedAt ?? $this->course->end();
+
+        return TimeRange::make($start, $end);
+
+    }
+
     /**
      * @return MarkReport
      */
@@ -154,7 +165,16 @@ class StudentCourse implements Comparable
 
     public function isActive(): bool
     {
-        return is_null($this->leavedAt) AND $this->course()->isActive();
+        $course = $this->course();
+        if ($course->isPending()) {
+            return true;
+        }
+
+        /** @var CarbonImmutable $leavedAt */
+        $leavedAt = $this->leavedAt;
+        $endDate = $course->end();
+
+        return is_null($leavedAt) || $leavedAt->greaterThanOrEqualTo($endDate);
     }
 
     public function finish(): self
@@ -166,5 +186,26 @@ class StudentCourse implements Comparable
 
         return $this;
     }
+
+    public function hasAvaiableLesson(Lesson $lesson): bool
+    {
+        if ($lesson->course()->equals($this->course())) {
+            return $this->isActiveOnDate($lesson->day());
+
+        }
+        return false;
+    }
+
+    public function isActiveOnDate(CarbonImmutable $date): bool
+    {
+
+        if ($this->leavedAt instanceof CarbonImmutable) {
+            return $date->isBetween($this->joinedAt, $this->leavedAt);
+        }
+
+        return $date->isAfter($this->joinedAt);
+
+    }
+
 
 }

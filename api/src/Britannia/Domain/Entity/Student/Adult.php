@@ -19,10 +19,11 @@ final class Adult extends Student
 
     public function update(StudentDto $dto): Adult
     {
+        parent::update($dto);
         $this->dni = $dto->dni;
         $this->job = $dto->job;
 
-        return parent::update($dto);
+        return $this;
     }
 
     /**

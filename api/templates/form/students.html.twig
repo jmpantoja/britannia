@@ -110,3 +110,100 @@
         </div>
     </div>
 {% endblock %}
+
+{% block alert_widget %}
+
+    {{ form_row(form.alert) }}
+    {{ form_row(form.description) }}
+
+    <script>
+        $(function () {
+            var alert = $('#{{ form.alert.vars.id }}')
+            var description = $('#{{ form.description.vars.id }}')
+            var wysiwyg = $(description).parents('.form-group').first();
+
+            $(alert).on('change', function () {
+                var checked = $(this).is(':checked');
+
+                if (checked) {
+                    $(wysiwyg).show();
+                } else {
+                    $(wysiwyg).hide();
+                }
+            });
+
+            $(alert).trigger('change');
+
+        });
+    </script>
+
+
+{% endblock %}
+
+
+
+{% block photo_widget %}
+    <div class="row">
+
+        <div class="col-md-12">
+            <div class="thumb">
+                <label class="thumb-upload">
+                    {% set path =  form.path.vars.value | default(shape) %}
+                    {% set src =  downloadUrl ~ '/' ~ path %}
+                    <img id="{{ id }}-thumb" src="{{ src }}" />
+                    {{ form_widget(form.upload, {attr: {'class': 'hidden' }}) }}
+                    <span class="help-block">click en la foto para cambiar</span>
+                </label>
+            </div>
+
+            {{ form_widget(form.path) }}
+        </div>
+
+        <script type="application/javascript">
+            $(function () {
+                $('#{{ form.upload.vars.id }}').on('change', function () {
+
+                    var fd = new FormData();
+                    var files = $(this)[0].files[0];
+                    fd.append('file', files);
+
+                    if (files.size > 2048000) {
+                        alert('este archivo es demasiado grande (2Mb máximo)');
+                        return;
+                    }
+
+                    if (files.type !== 'image/jpeg') {
+                        alert('Tipo incorrecto (solo JPG)');
+                        return;
+                    }
+
+                    $.ajax({
+                        url: '{{ uploadUrl }}',
+                        type: 'post',
+                        data: fd,
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+                            if (response.success) {
+                                $('#{{ form.upload.vars.id }}').val('');
+
+
+                                $('#{{ form.path.vars.id }}').val(response.path);
+                                var ext = String(response.ext).toUpperCase();
+                                $('#{{ id }}-thumb').attr('src', '{{ downloadUrl }}/' + response.path)
+
+                            } else {
+                                alert("Error al subir el archivo: " + response.message);
+                            }
+                        },
+                        error: function (a, b, c) {
+                            alert('error al subir el archivo');
+                        }
+                    });
+                });
+            });
+        </script>
+
+    </div>
+
+{% endblock %}

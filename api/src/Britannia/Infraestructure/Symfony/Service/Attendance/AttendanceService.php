@@ -64,7 +64,7 @@ class AttendanceService
 
     public function attendancePercentByCourse(Course $course, Student $student): float
     {
-        $total = $this->lessons->countByCourse($course);
+        $total = $this->lessons->countByCourseAndStudent($course, $student);
         $numOfAbsences = $this->numOfAbsencesByCourse($course, $student);
 
         if ($total <= 0) {
@@ -81,10 +81,11 @@ class AttendanceService
         $today = CarbonImmutable::now();
         $lessons = $this->lessons->getLastLessonsByCourse($course, $today, $limit);
 
+
         foreach ($lessons as $lesson) {
             $value = [
                 'title' => $this->title($lesson, $student),
-                'status' => $lesson->hasBeenMissing($student) ? 'missed' : 'attended'
+                'status' => $lesson->attendanceStatusByStudent($student)->getValue()
             ];
 
             $values[] = $value;

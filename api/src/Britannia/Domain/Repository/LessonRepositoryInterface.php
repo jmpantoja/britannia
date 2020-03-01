@@ -17,6 +17,7 @@ namespace Britannia\Domain\Repository;
 use Britannia\Domain\Entity\Assessment\Term;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Lesson\Lesson;
+use Britannia\Domain\Entity\Student\Student;
 use Carbon\CarbonImmutable;
 
 /**
@@ -44,6 +45,6 @@ interface LessonRepositoryInterface
 
     public function countByTerm(Term $term): int ;
 
-    public function countByCourse(Course $course): int ;
+    public function countByCourseAndStudent(Course $course, Student $student): int ;
 
 }

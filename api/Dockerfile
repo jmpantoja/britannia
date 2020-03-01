@@ -20,11 +20,14 @@ RUN apt -y install \
 RUN mkdir -p /usr/share/man/man1
 
 #paquetes para generear pdfs
-RUN apt update && \
-    apt install -y wget unzip wkhtmltopdf pdftk && \
-    apt clean
-
-
+RUN apt update \
+	#pdfs
+	&& apt install -y wget unzip wkhtmltopdf pdftk \
+	#imagemgick
+	&& apt-get install -y libmagickwand-dev --no-install-recommends \
+    && pecl install imagick \
+	&& docker-php-ext-enable imagick \
+	&& apt clean ;
 
 #ADD https://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/pdftk-${PDFTK_VERSION}-src.zip /tmp/
 #RUN unzip /tmp/pdftk-${PDFTK_VERSION}-src.zip -d /tmp && \

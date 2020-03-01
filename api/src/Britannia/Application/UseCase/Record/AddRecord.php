@@ -20,7 +20,7 @@ use Britannia\Domain\Entity\Record\TypeOfRecord;
 use Britannia\Domain\Entity\Student\Student;
 use Carbon\CarbonImmutable;
 
-class UpdateRecord
+class AddRecord
 {
     /**
      * @var Student

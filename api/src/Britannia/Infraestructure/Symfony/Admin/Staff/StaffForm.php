@@ -14,7 +14,9 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Admin\Staff;
 
 
+use Britannia\Domain\Entity\Staff\Photo;
 use Britannia\Domain\Entity\Staff\StaffMember;
+use Britannia\Infraestructure\Symfony\Form\Type\Photo\PhotoType;
 use Britannia\Infraestructure\Symfony\Form\Type\Staff\RoleType;
 use Britannia\Infraestructure\Symfony\Form\Type\Staff\TeacherHasCoursesType;
 use PlanB\DDDBundle\Sonata\Admin\AdminForm;
@@ -29,74 +31,27 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 final class StaffForm extends AdminForm
 {
-    /**
-     * @var StaffMember
-     */
-    private StaffMember $staffMember;
-    /**
-     * @var bool
-     */
-    private bool $hasRootPrivileges;
-
-    private function isRoot(): bool
-    {
-        return $this->hasRootPrivileges;
-    }
-
-    private function isTeacher()
-    {
-        return $this->staffMember->isTeacher();
-    }
-
-    private function isNewStaffMember(): bool
-    {
-        return null === $this->staffMember->id();
-    }
 
     public function configure(StaffMember $staffMember, bool $hasRootPrivileges)
     {
-        $this->hasRootPrivileges = $hasRootPrivileges;
-        $this->staffMember = $staffMember;
-
-        $this->firstTab();
+        $this->contactTab('Contacto', $staffMember);
+        $this->accessTab('Acceso', $staffMember, $hasRootPrivileges);
+        $this->coursesTab('Cursos', $staffMember, $hasRootPrivileges);
     }
 
-    private function firstTab()
+    private function contactTab(string $name, StaffMember $staffMember)
     {
-        $this->tab('Personal');
+        $this->tab($name);
 
-        $constraints = [];
-        if ($this->isNewStaffMember()) {
-            $constraints = [new NotBlank()];
-        }
-
-        $group = $this->group('Acceso', ['class' => 'col-md-3'])
-            ->add('userName', null, [
-            //    'label'=>'userName'
-            ])
-            ->add('password', RepeatedType::class, [
-                'mapped' => true,
-                'type' => PasswordType::class,
-                'invalid_message' => 'The password fields must match.',
-                'required' => $this->isNewStaffMember(),
-                'first_options' => ['label' => 'Password',
-                    'constraints' => $constraints,
-                    'attr' => [
-                        'autocomplete' => 'new-password',
-                    ]],
-                'second_options' => [
-                    'constraints' => $constraints,
-                    'label' => 'Repeat Password'
-                ],
+        $this->group('Foto', ['class' => 'col-md-3'])
+            ->add('photo', PhotoType::class, [
+                'label' => false,
+                'owner' => $staffMember,
+                'data_class' => Photo::class
             ]);
 
-        if ($this->isRoot()) {
-            $group->add('roles', RoleType::class, [
-                'required' => false
-            ]);
-        }
 
-        $this->group('Personal', ['class' => 'col-md-5'])
+        $this->group('Personal', ['class' => 'col-md-4'])
             ->add('fullName', FullNameType::class)
             ->add('address', PostalAddressType::class, [
                 'required' => false
@@ -109,18 +64,74 @@ final class StaffForm extends AdminForm
             ->add('emails', EmailListType::class)
             ->add('phoneNumbers', PhoneNumberListType::class);
 
-
-        if ($this->isRoot() && $this->isTeacher()) {
-            $this->tab('Cursos');
-            $this->group('Cursos en Activo', ['class' => 'col-md-12']);
-
-            $this->add('courses', TeacherHasCoursesType::class, [
-                'label' => 'Cursos',
-            ], [
-                'admin_code' => 'admin.course'
-            ]);
-        }
-
         return $this;
     }
+
+    private function accessTab(string $name, StaffMember $staffMember, bool $hasRootPrivileges)
+    {
+        $this->tab($name);
+
+        $constraints = [];
+        $creating = null === $staffMember->id();
+
+        if ($creating) {
+            $constraints = [new NotBlank()];
+        }
+
+        $group = $this->group('Acceso', ['class' => 'col-md-4'])
+            ->add('userName', null, [
+                'attr' => [
+                    'style' => 'width:450px'
+                ]
+            ])
+            ->add('password', RepeatedType::class, [
+                'mapped' => true,
+                'type' => PasswordType::class,
+                'invalid_message' => 'The password fields must match.',
+                'required' => $creating,
+                'first_options' => ['label' => 'Password',
+                    'constraints' => $constraints,
+                    'attr' => [
+                        'autocomplete' => 'new-password',
+                        'style' => 'width:300px'
+                    ]],
+                'second_options' => [
+                    'constraints' => $constraints,
+                    'label' => 'Repeat Password',
+                    'attr' => [
+                        'style' => 'width:300px'
+                    ]
+
+                ],
+            ]);
+
+        if ($hasRootPrivileges) {
+            $this->group('Roles', ['class' => 'col-md-4'])
+                ->add('roles', RoleType::class, [
+                    'label' => false,
+                    'required' => false
+                ]);
+        }
+
+    }
+
+    private function coursesTab(string $name, StaffMember $staffMember, $hasRootPrivileges)
+    {
+
+        if (!$hasRootPrivileges || !$staffMember->isTeacher()) {
+            return;
+        }
+
+        $this->tab($name);
+        $this->tab('Cursos');
+        $this->group('Cursos en Activo', ['class' => 'col-md-12']);
+
+        $this->add('courses', TeacherHasCoursesType::class, [
+            'label' => 'Cursos',
+        ], [
+            'admin_code' => 'admin.course'
+        ]);
+    }
+
+
 }

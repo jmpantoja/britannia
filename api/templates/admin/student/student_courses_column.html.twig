@@ -17,6 +17,7 @@
             <a href="{{ admin_course.generateObjectUrl('edit', course) }}">{{ course.name }}</a>
         </div>
 
+        {% if course.oneToOne == false %}
         <div class="col-md-3">
             {% set items = schedule.resume(course.schedule) %}
             {% for day, hour in items %}
@@ -25,6 +26,7 @@
 
             {% endfor %}
         </div>
+        {% endif %}
 
         <div class="col-md-2">
             {% if course.mainTeacher is  not null %}

@@ -15,7 +15,11 @@ namespace Britannia\Infraestructure\Symfony\Admin\Student;
 
 
 use Britannia\Domain\Entity\Student\Adult;
+use Britannia\Domain\Entity\Student\Photo;
 use Britannia\Domain\Entity\Student\Student;
+use Britannia\Infraestructure\Symfony\Form\Type\Photo\PhotoType;
+use Britannia\Infraestructure\Symfony\Form\Type\Student\AlertType;
+use Britannia\Infraestructure\Symfony\Form\Type\Student\AttachmentListType;
 use Britannia\Infraestructure\Symfony\Form\Type\Student\ContactModeType;
 use Britannia\Infraestructure\Symfony\Form\Type\Student\JobType;
 use Britannia\Infraestructure\Symfony\Form\Type\Student\OtherAcademyType;
@@ -46,20 +50,27 @@ final class StudentForm extends AdminForm
             $this->dataMapper()->setAdult($isAdult);
         }
 
-        $this->fistTab('Personal', $isAdult);
-        $this->secondTab('Cursos', $student);
-        $this->thirdTab('Pago', $student);
-        $this->fourthTab('Tutores', $isAdult);
-        $this->fifthTab('Observaciones');
-        $this->sixthTab('Información Extra');
+        $this->contactTab('Contacto', $student);
+        $this->personalTab('Personal', $student);
+        $this->coursesTab('Cursos', $student);
+        $this->paymentTab('Pago', $student);
+        $this->tutorsTab('Tutores', $isAdult);
+        $this->attachedTab('Adjuntos', $student);
+        $this->extraTab('Información Extra');
     }
 
-    /**
-     * @param bool $isAdult
-     */
-    protected function fistTab(string $name, bool $isAdult): void
+    protected function contactTab(string $name, Student $student): void
     {
         $this->tab($name);
+        $isAdult = $student instanceof Adult;
+
+        $this->group('Foto', ['class' => 'col-md-3'])
+            ->add('photo', PhotoType::class, [
+                'label' => false,
+                'owner' => $student,
+                'data_class' => Photo::class
+            ]);
+
 
         $group = $this->group('Datos personales', ['class' => 'col-md-4'])
             ->add('fullName', FullNameType::class, [
@@ -96,6 +107,14 @@ final class StudentForm extends AdminForm
             ]);
 
 
+    }
+
+    protected function personalTab(string $name, Student $student): void
+    {
+        $isAdult = $student instanceof Adult;
+
+        $this->tab($name);
+
         $group = $this->group($isAdult ? 'Profesión' : 'Colegio', ['class' => 'col-md-4']);
 
         if ($isAdult) {
@@ -118,12 +137,31 @@ final class StudentForm extends AdminForm
                     'required' => false
                 ]);
         }
+
+
+        $this->group('Condiciones', ['class' => 'col-md-4'])
+            ->add('termsOfUseAcademy', null, [
+                'label' => 'Acepta las condiciones de uso de la academia'
+            ])
+            ->add('termsOfUseStudent', null, [
+                'label' => 'Acepta las condiciones de uso de la academia'
+            ])
+            ->add('termsOfUseImageRigths', null, [
+                'label' => 'Consentimiento de Imagen'
+            ]);
+
+
+        $this->group('¡Cuidado!', ['class' => 'col-md-8'])
+            ->add('alert', AlertType::class, [
+                'label' => false,
+                'required' => false
+            ]);
     }
 
     /**
      * @param Student $student
      */
-    protected function secondTab(string $name, Student $student): void
+    protected function coursesTab(string $name, Student $student): void
     {
         $this->tab($name);
 
@@ -137,7 +175,7 @@ final class StudentForm extends AdminForm
     /**
      * @param Student $student
      */
-    protected function thirdTab(string $name, Student $student): void
+    protected function paymentTab(string $name, Student $student): void
     {
         $this->tab($name);
         $this->group('Descuento', ['class' => 'col-md-6'])
@@ -164,8 +202,9 @@ final class StudentForm extends AdminForm
     /**
      * @param bool $isAdult
      */
-    protected function fourthTab(string $name, bool $isAdult): void
+    protected function tutorsTab(string $name, bool $isAdult): void
     {
+
         if (!$isAdult) {
             $this->tab($name);
 
@@ -193,21 +232,21 @@ final class StudentForm extends AdminForm
         }
     }
 
-    protected function fifthTab($name): void
+    private function attachedTab(string $name, Student $student): void
     {
+        if ($student->id() == null) {
+            return;
+        }
         $this->tab($name);
 
-        $this->group('Observaciones A', ['class' => 'col-md-6'])
-            ->add('firstComment', WYSIWYGType::class, [
-                'label' => false
-            ]);
-        $this->group('Observaciones B', ['class' => 'col-md-6'])
-            ->add('secondComment', WYSIWYGType::class, [
+        $this->group('Documentos', ['class' => 'col-md-8'])
+            ->add('attachments', AttachmentListType::class, [
+                'student' => $student,
                 'label' => false
             ]);
     }
 
-    protected function sixthTab($name): void
+    protected function extraTab($name): void
     {
         $this->tab($name);
 
@@ -230,15 +269,14 @@ final class StudentForm extends AdminForm
                 'label' => '¿Como nos conociste?.'
             ]);
 
-        $this->group('Condiciones', ['class' => 'col-md-4'])
-            ->add('termsOfUseAcademy', null, [
-                'label' => 'Acepta las condiciones de uso de la academia'
-            ])
-            ->add('termsOfUseStudent', null, [
-                'label' => 'Acepta las condiciones de uso de la academia'
-            ])
-            ->add('termsOfUseImageRigths', null, [
-                'label' => 'Consentimiento de Imagen'
+
+        $this->group('Otros datos de Interes', ['class' => 'col-md-8'])
+            ->add('comment', WYSIWYGType::class, [
+                'label' => false
             ]);
+
+
     }
+
+
 }

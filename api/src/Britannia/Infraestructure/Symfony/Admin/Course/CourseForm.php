@@ -192,11 +192,10 @@ final class CourseForm extends AdminForm
         $this->group('Coste', ['class' => 'col-md-6'])
             ->add('enrollmentPayment', EnrollmentPaymentType::class, [
                 'label' => 'Matrícula',
-            ]);
-
-        $this->add('monthlyPayment', PriceType::class, [
-            'label' => 'Mensualidad',
-        ])
+            ])
+            ->add('monthlyPayment', PriceType::class, [
+                'label' => 'Mensualidad',
+            ])
             ->add('books', null, [
                 'label' => 'Material'
             ]);
@@ -230,7 +229,6 @@ final class CourseForm extends AdminForm
             ->add('discount', DiscountListTye::class, [
                 'label' => 'Descuentos',
             ]);
-
 
         return $this;
     }

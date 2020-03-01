@@ -21,8 +21,10 @@ use Britannia\Domain\Entity\ClassRoom\ClassRoomId;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Course\Pass\Pass;
 use Britannia\Domain\Entity\Student\Student;
+use Britannia\Domain\Entity\Student\StudentCourseList;
 use Britannia\Domain\Entity\Student\StudentHasAttendedLesson;
 use Britannia\Domain\Entity\Student\StudentHasMissedLesson;
+use Britannia\Domain\VO\Attendance\AttendanceStatus;
 use Carbon\CarbonImmutable;
 use Doctrine\Common\Collections\Collection;
 use PlanB\DDD\Domain\Behaviour\Comparable;
@@ -235,6 +237,31 @@ class Lesson implements Comparable
     private function attendanceList(): AttendanceList
     {
         return AttendanceList::collect($this->attendances);
+    }
+
+    public function attendanceStatusByStudent(Student $student): AttendanceStatus
+    {
+
+        $lessonIsAvaiable = StudentCourseList::fromStudent($student)
+            ->hasAvaiableLesson($this);
+
+        if (!$lessonIsAvaiable) {
+            return AttendanceStatus::DISABLED();
+        }
+
+        if ($this->hasBeenMissing($student)) {
+            return AttendanceStatus::MISSED();
+        }
+
+        return AttendanceStatus::ATTENDED();
+    }
+
+    public function students(): array
+    {
+        return StudentCourseList::fromCourse($this->course())
+            ->onlyActivesOnDate($this->day())
+            ->toStudentList()
+            ->toArray();
     }
 
     public function hasBeenMissing(Student $student): bool

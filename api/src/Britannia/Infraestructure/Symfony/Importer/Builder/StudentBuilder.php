@@ -53,8 +53,7 @@ class StudentBuilder extends BuilderAbstract
     private $schoolCourse;
     private $firstTutor;
     private $secondTutor;
-    private $firstComment;
-    private $secondComment;
+    private $comment;
     private $firstTutorDescription;
     private $secondTutorDescription;
 
@@ -213,8 +212,8 @@ class StudentBuilder extends BuilderAbstract
 
     public function withComments(string $firstComment, string $secondComment): self
     {
-        $this->firstComment = $firstComment;
-        $this->secondComment = $secondComment;
+        $this->comment = sprintf('%s<br/>%s', $firstComment, $secondComment);
+
         return $this;
     }
 
@@ -284,6 +283,7 @@ class StudentBuilder extends BuilderAbstract
      */
     private function makeDto(): StudentDto
     {
+
         $dto = StudentDto::fromArray([
             'oldId' => $this->id,
             'fullName' => $this->fullName,
@@ -305,11 +305,10 @@ class StudentBuilder extends BuilderAbstract
             'schoolCourse' => $this->schoolCourse,
             'firstTutor' => $this->firstTutor,
             'secondTutor' => $this->secondTutor,
-            'firstComment' => $this->firstComment,
-            'secondComment' => $this->secondComment,
+            'comment' => $this->comment,
             'firstTutorDescription' => $this->firstTutorDescription,
             'secondTutorDescription' => $this->secondTutorDescription,
-            'createdAt'=>$this->createdAt
+            'createdAt' => $this->createdAt
         ]);
 
         return $dto;

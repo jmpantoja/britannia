@@ -15,7 +15,6 @@ namespace PlanB\DDD\Domain\VO\Validator;
 
 
 use PlanB\DDD\Domain\Filter\ProperName;
-use Zend\Filter\StringToUpper;
 
 class CityAddress extends Constraint
 {

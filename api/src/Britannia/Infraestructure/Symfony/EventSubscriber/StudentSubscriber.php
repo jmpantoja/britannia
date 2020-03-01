@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\EventSubscriber;
 
 
+use Britannia\Application\UseCase\Lesson\LessonHasBeenAttended;
 use Britannia\Application\UseCase\Student\StudentUpdatedStatus;
 use Britannia\Domain\Entity\Student\StudentHasAttendedLesson;
 use Britannia\Domain\Entity\Student\StudentHasJoinedToCourse;
@@ -42,20 +43,20 @@ class StudentSubscriber extends DomainEventSubscriber
         $this->handle($command);
     }
 
-    public function onStudentLeaveACourse(StudentHasLeavedCourse $event){
+    public function onStudentLeaveACourse(StudentHasLeavedCourse $event)
+    {
         $command = StudentUpdatedStatus::make($event->getStudent(), $event->getCourse());
         $this->handle($command);
     }
 
     public function onStudentMissedLesson(StudentHasMissedLesson $event)
     {
-
-//        die(__METHOD__);
     }
 
     public function onStudentAttendedLesson(StudentHasAttendedLesson $event)
     {
-//        die(__METHOD__);
+        $command = LessonHasBeenAttended::make($event->attendance());
+        $this->handle($command);
     }
 
 }

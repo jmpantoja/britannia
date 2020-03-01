@@ -18,7 +18,7 @@ use Britannia\Domain\Service\Report\HtmlBasedPdfInterface;
 use Britannia\Domain\Service\Report\ReportInterface;
 use Britannia\Domain\Service\Report\ReportList;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Response;
 use ZipArchive;
 
@@ -125,17 +125,7 @@ final class FileDownload
 
     private function createResponseFromFilePath(string $pathToFile)
     {
-        $extension = pathinfo($pathToFile, PATHINFO_EXTENSION);
-        $contentType = sprintf('application/%s', $extension);
-
-        $headers = [
-            'Content-Type' => $contentType,
-            'Content-Disposition' => sprintf('attachment; filename="%s"', basename($pathToFile)),
-        ];
-
-        $content = file_get_contents($pathToFile);
-        (new Filesystem())->remove(dirname($pathToFile));
-
-        return new Response($content, 200, $headers);
+        return (new BinaryFileResponse($pathToFile))
+            ->setContentDisposition('attachment');
     }
 }

@@ -33,8 +33,8 @@ final class MarkForm extends AdminForm
         $this->diagnosticTab($course);
 
         $this->termsTabs($course);
-//
-//        $this->finalTest($course);
+
+        $this->finalTest($course);
     }
 
 

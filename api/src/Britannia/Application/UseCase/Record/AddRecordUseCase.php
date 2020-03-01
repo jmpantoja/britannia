@@ -20,7 +20,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use PlanB\DDD\Application\UseCase\UseCaseInterface;
 use Symfony\Component\Security\Core\Security;
 
-class UpdateRecordUseCase implements UseCaseInterface
+class AddRecordUseCase implements UseCaseInterface
 {
     /**
      * @var Security
@@ -46,7 +46,7 @@ class UpdateRecordUseCase implements UseCaseInterface
         $this->entityManager = $entityManager;
     }
 
-    public function handle(UpdateRecord $command)
+    public function handle(AddRecord $command)
     {
         $student = $command->getStudent();
         $type = $command->getType();

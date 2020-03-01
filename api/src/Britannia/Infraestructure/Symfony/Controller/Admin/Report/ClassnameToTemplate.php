@@ -16,7 +16,7 @@ namespace Britannia\Infraestructure\Symfony\Controller\Admin\Report;
 
 use Britannia\Domain\Service\Report\FormBasedPdfInteface;
 use Britannia\Domain\Service\Report\ReportInterface;
-use Zend\Filter\Word\CamelCaseToSeparator;
+use Laminas\Filter\Word\CamelCaseToSeparator;
 
 final class ClassnameToTemplate
 {

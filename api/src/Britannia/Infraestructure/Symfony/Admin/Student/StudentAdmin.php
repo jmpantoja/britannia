@@ -60,8 +60,9 @@ final class StudentAdmin extends AbstractAdmin implements AdminFilterableInterfa
 
     protected function configureRoutes(RouteCollection $collection)
     {
-        $collection->clearExcept(AdminRoutes::ROUTE_LIST);
-        return $collection;
+        return $this->adminTools()
+            ->routes($collection, $this->getRouterIdParameter())
+            ->build();
     }
 
     public function createQuery($context = 'list')

@@ -24,6 +24,7 @@ use Britannia\Domain\VO\Assessment\SetOfSkills;
 use Britannia\Domain\VO\Assessment\Skill;
 use Britannia\Domain\VO\Assessment\TermDefinition;
 use Britannia\Domain\VO\Assessment\TermName;
+use Britannia\Domain\VO\Course\TimeRange\TimeRange;
 use Carbon\CarbonImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use PlanB\DDD\Domain\Behaviour\Comparable;
@@ -393,6 +394,11 @@ final class Term implements Comparable
             $this->course()->id(),
             $this->termName()
         ]);
+    }
+
+    public function timeRange(): TimeRange
+    {
+        return TimeRange::make($this->start, $this->end);
     }
 
 }

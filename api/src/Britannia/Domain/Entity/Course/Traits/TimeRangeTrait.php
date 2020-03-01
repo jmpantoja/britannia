@@ -16,6 +16,7 @@ namespace Britannia\Domain\Entity\Course\Traits;
 
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Course\CourseHasChangedStatus;
+use Britannia\Domain\Entity\Student\StudentCourse;
 use Britannia\Domain\VO\Course\CourseStatus;
 use Britannia\Domain\VO\Course\TimeRange\TimeRange;
 use Carbon\CarbonImmutable;
@@ -52,11 +53,20 @@ trait TimeRangeTrait
 
     public function updateStatus(): self
     {
-
-        if ($this->timeRange->hasBeenUpdated()) {
-            $status = $this->timeRange->status();
-            $this->notify(CourseHasChangedStatus::make($this, $status));
+        if (!$this->timeRange->hasBeenUpdated()) {
+            return $this;
         }
+
+        $status = $this->timeRange->status();
+        $this->notify(CourseHasChangedStatus::make($this, $status));
+
+        if($status->isFinalized()){
+            collect($this->courseHasStudents())
+                ->each(function (StudentCourse $studentCourse){
+                    $studentCourse->finish();
+                });
+        }
+
         return $this;
     }
 

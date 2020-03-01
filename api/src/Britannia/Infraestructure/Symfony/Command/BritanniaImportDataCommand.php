@@ -71,7 +71,7 @@ class BritanniaImportDataCommand extends Command implements ContainerAwareInterf
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        ini_set('memory_limit', '512M');
+    //    ini_set('memory_limit', '512M');
         $this->login();
 
         $console = ConsoleReport::make($input, $output);

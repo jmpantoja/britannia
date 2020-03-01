@@ -12,13 +12,15 @@
         "cocur/slugify": "^3.2",
         "doctrine/doctrine-fixtures-bundle": "^3.2",
         "guzzlehttp/guzzle": "^6.3",
+        "impulze/intervention-image-bundle": "^1.2",
         "knplabs/knp-snappy-bundle": "^1.6",
+        "laminas/laminas-filter": "^2.9",
         "league/tactician": "^1.0",
         "league/tactician-bundle": "^1.1",
         "league/tactician-doctrine": "^1.1",
-        "nesbot/carbon": "^2.26",
         "marc-mabe/php-enum": "^4.1",
         "mikehaertl/php-pdftk": "^0.8.0",
+        "nesbot/carbon": "^2.26",
         "ramsey/uuid-doctrine": "^1.5",
         "sonata-project/admin-bundle": "^3.53",
         "sonata-project/doctrine-orm-admin-bundle": "^3.10",
@@ -33,8 +35,7 @@
         "symfony/maker-bundle": "^1.13",
         "symfony/monolog-bundle": "^3.4",
         "symfony/yaml": "4.3.*",
-        "tightenco/collect": "^6.5",
-        "zendframework/zend-filter": "^2.9"
+        "tightenco/collect": "^6.5"
     },
     "require-dev": {
         "api-platform/schema-generator": "^2.1",
@@ -48,7 +49,9 @@
         "sort-packages": true
     },
     "autoload": {
-        "files": ["libs/planb/ddd-bundle/src/PlanB/DDDBundle/Resources/functions/date.php"],
+        "files": [
+            "libs/planb/ddd-bundle/src/PlanB/DDDBundle/Resources/functions/format.date.php"
+        ],
         "psr-4": {
             "Britannia\\": "src/Britannia",
             "PlanB\\DDDBundle\\": "libs/planb/ddd-bundle/src/PlanB/DDDBundle",

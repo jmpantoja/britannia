@@ -1,0 +1,34 @@
+planning:
+    path:     /admin/britannia/planning
+    controller: Britannia\Infraestructure\Symfony\Controller\Admin\PlanningController::index
+
+
+planning_events:
+    path:     /admin/britannia/planning/events
+    controller: Britannia\Infraestructure\Symfony\Controller\Admin\PlanningController::events
+
+
+attachment_upload:
+    path:     /admin/britannia/attachment/upload
+    controller: \Britannia\Infraestructure\Symfony\Controller\Admin\AttachmentController::upload
+
+attachment_download:
+    path:     /admin/britannia/attachment/download/{path_to_file}
+    controller: Britannia\Infraestructure\Symfony\Controller\Admin\AttachmentController::download
+    requirements:
+        path_to_file: ".+"
+    defaults:
+        path_to_file: ""
+
+
+photo_upload:
+    path:     /admin/britannia/photo/upload
+    controller: \Britannia\Infraestructure\Symfony\Controller\Admin\PhotoController::upload
+
+photo_download:
+    path:     /admin/britannia/photo/download/{path_to_file}
+    controller: Britannia\Infraestructure\Symfony\Controller\Admin\PhotoController::download
+    requirements:
+        path_to_file: ".+"
+    defaults:
+        path_to_file: ""

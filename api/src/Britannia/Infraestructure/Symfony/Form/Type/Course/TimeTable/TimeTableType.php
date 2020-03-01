@@ -43,7 +43,7 @@ class TimeTableType extends AbstractCompoundType
 
         $builder
             ->add('start', DatePickerType::class, [
-                'format' => IntlDateFormatter::LONG,
+                'format' => IntlDateFormatter::MEDIUM,
                 'label' => 'Inicio',
                 'data' => $start,
                 'attr' => [
@@ -51,7 +51,7 @@ class TimeTableType extends AbstractCompoundType
                 ]
             ])
             ->add('end', DatePickerType::class, [
-                'format' => IntlDateFormatter::LONG,
+                'format' => IntlDateFormatter::MEDIUM,
                 'data' => $end,
                 'label' => 'Fin'
             ])

@@ -125,6 +125,12 @@
     "guzzlehttp/psr7": {
         "version": "1.4.2"
     },
+    "impulze/intervention-image-bundle": {
+        "version": "1.2"
+    },
+    "intervention/image": {
+        "version": "2.5.1"
+    },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
     },
@@ -151,6 +157,9 @@
         "files": [
             "config/packages/knp_snappy.yaml"
         ]
+    },
+    "laminas/laminas-zendframework-bridge": {
+        "version": "1.0.1"
     },
     "league/html-to-markdown": {
         "version": "4.6.2"
@@ -208,6 +217,9 @@
     },
     "nikic/php-parser": {
         "version": "v4.2.4"
+    },
+    "ocramius/package-versions": {
+        "version": "1.5.1"
     },
     "php": {
         "version": "7.4"

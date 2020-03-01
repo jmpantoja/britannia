@@ -86,7 +86,6 @@ abstract class AdminMapper implements DataMapperInterface
             return $form->getData();
         }, $forms);
 
-
         $id = $this->propertyAccessor->getValue($data, 'id');
         if (null === $id) {
             $data = $this->create($values);

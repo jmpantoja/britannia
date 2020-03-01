@@ -5,6 +5,8 @@ namespace Britannia\Infraestructure\Symfony\Controller;
 
 use Acelaya\Doctrine\Type\PhpEnumType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\Request;
 
 class HomeController extends AbstractController
 {
@@ -16,4 +18,5 @@ class HomeController extends AbstractController
             'controller_name' => 'HomeController',
         ]);
     }
+
 }

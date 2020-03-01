@@ -14,8 +14,12 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Student;
 
 
+use Britannia\Domain\Entity\Assessment\Term;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Course\CourseList;
+use Britannia\Domain\Entity\Lesson\Lesson;
+use Britannia\Domain\VO\Course\TimeRange\TimeRangeList;
+use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\Model\EntityList;
 
 final class StudentCourseList extends EntityList
@@ -26,12 +30,61 @@ final class StudentCourseList extends EntityList
         return StudentCourse::class;
     }
 
+    public static function fromStudent(Student $student): self
+    {
+        return static::collect($student->studentHasCourses());
+    }
+
+    public static function fromCourse(Course $course): self
+    {
+        return static::collect($course->courseHasStudents());
+    }
+
+    public static function fromTerm(Term $term): self
+    {
+        $course = $term->course();
+        $student = $term->student();
+        return static::fromCourseAndStudent($course, $student);
+    }
+
+    public static function fromCourseAndStudent(Course $course, Student $student): self
+    {
+        $values = collect($student->studentHasCourses())
+            ->filter(fn(StudentCourse $studentCourse) => $studentCourse->course()->equals($course));
+
+        return static::collect($values);
+    }
+
+    public function timeRangeList(): TimeRangeList
+    {
+        $input = $this
+            ->values()
+            ->map(fn(StudentCourse $studentCourse) => $studentCourse->timeRange());
+
+        return TimeRangeList::collect($input);
+    }
+
     public function onlyActives(): self
     {
         $studentCourses = $this->values()
             ->filter(fn(StudentCourse $studentCourse) => $studentCourse->isActive());
 
         return StudentCourseList::collect($studentCourses);
+    }
+
+    public function onlyActivesOnDate(CarbonImmutable $day): self
+    {
+        $studentCourses = $this->values()
+            ->filter(fn(StudentCourse $studentCourse) => $studentCourse->isActiveOnDate($day));
+
+        return StudentCourseList::collect($studentCourses);
+    }
+
+    public function hasAvaiableLesson(Lesson $lesson): bool
+    {
+        return $this->values()
+            ->filter(fn(StudentCourse $studentCourse) => $studentCourse->hasAvaiableLesson($lesson))
+            ->isNotEmpty();
     }
 
 

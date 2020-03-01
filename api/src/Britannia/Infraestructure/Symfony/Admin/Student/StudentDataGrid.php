@@ -28,6 +28,13 @@ final class StudentDataGrid extends AdminDataGrid
             'row_align' => 'center'
         ]);
 
+        $this->add('alert', 'string', [
+            'label' => false,
+            'header_style' => 'width:40px',
+            'template' => 'admin/student/student_alert_column.html.twig',
+            'row_align' => 'center'
+        ]);
+
         $this->addIdentifier('fullName.lastName', 'string', [
             'template' => 'admin/student/student_name_column.html.twig',
             'label' => 'Nombre',

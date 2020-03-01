@@ -117,7 +117,8 @@ trait AssessmentTrait
 
     public function marksByStudent(Student $student): MarkReport
     {
-        // TODO: Implement marksByStudent() method.
+        return $this->termList()
+            ->marksByStudent($student);
     }
 
     public function hasDiagnosticTest(): bool

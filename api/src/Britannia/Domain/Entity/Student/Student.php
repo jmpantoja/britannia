@@ -6,7 +6,9 @@ namespace Britannia\Domain\Entity\Student;
 use Britannia\Domain\Entity\Academy\Academy;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Course\CourseList;
+use Britannia\Domain\Entity\Student\Attachment\AttachmentList;
 use Britannia\Domain\VO\Payment\Payment;
+use Britannia\Domain\VO\Student\Alert\Alert;
 use Britannia\Domain\VO\Student\ContactMode\ContactMode;
 use Britannia\Domain\VO\Student\OtherAcademy\NumOfYears;
 use Britannia\Domain\VO\Student\OtherAcademy\OtherAcademy;
@@ -124,13 +126,10 @@ abstract class Student implements Comparable
     /**
      * @var string
      */
-    private $firstComment;
+    private $comment;
 
-    /**
-     * @var string
-     */
-    private $secondComment;
-
+    /** @var Alert */
+    private $alert;
 
     /**
      * @var bool
@@ -151,6 +150,14 @@ abstract class Student implements Comparable
      * @var int
      */
     private $birthMonth;
+
+    /** @var Photo */
+    private $photo;
+
+    /**
+     * @var Collection
+     */
+    private $attachments;
 
     /**
      * @var Collection
@@ -185,6 +192,7 @@ abstract class Student implements Comparable
         $this->notify(StudentHasBeenCreated::make($this));
     }
 
+
     public function update(StudentDto $dto): self
     {
         $this->fullName = $dto->fullName;
@@ -195,8 +203,9 @@ abstract class Student implements Comparable
         $this->freeEnrollment = $dto->freeEnrollment;
         $this->payment = $dto->payment;
 
-        $this->firstComment = $dto->firstComment;
-        $this->secondComment = $dto->secondComment;
+        $this->comment = $dto->comment;
+
+        $this->alert = $dto->alert;
 
         $this->preferredPartOfDay = $dto->preferredPartOfDay;
         $this->preferredContactMode = $dto->preferredContactMode;
@@ -205,10 +214,14 @@ abstract class Student implements Comparable
         $this->termsOfUseStudent = $dto->termsOfUseStudent;
         $this->termsOfUseImageRigths = $dto->termsOfUseImageRigths;
 
+        $this->photo = $dto->photo;
+
         $this->setOtherAcademy($dto->otherAcademy);
         $this->setRelatives($dto->relatives);
         $this->setCourses($dto->studentHasCourses);
+        $this->setAttachments($dto->attachments);
         $this->setBirthDate($dto->birthDate);
+
 
         $this->updatedAt = CarbonImmutable::now();
 
@@ -242,10 +255,6 @@ abstract class Student implements Comparable
 
     public function addCourse(Course $course): self
     {
-//        $this->studentHasCoursesList()
-//            ->studentJoinAtCourse($course);
-//
-//        die('xx');
         $joined = StudentCourse::make($this, $course);
 
         $this->studentHasCoursesList()
@@ -254,6 +263,15 @@ abstract class Student implements Comparable
                 $event = StudentHasJoinedToCourse::make($student, $this);
                 $this->notify($event);
             });
+
+        return $this;
+    }
+
+    public function setAttachments(AttachmentList $attachments): self
+    {
+        $this->attachmentList()
+            ->forRemovedItems($attachments)
+            ->forAddedItems($attachments);
 
         return $this;
     }
@@ -457,6 +475,28 @@ abstract class Student implements Comparable
         return StudentList::collect($this->relatives);
     }
 
+
+    /**
+     * @return Student[]
+     */
+    public function attachments(): array
+    {
+        return $this->attachmentList()->toArray();
+    }
+
+    private function attachmentList(): AttachmentList
+    {
+        return AttachmentList::collect($this->attachments);
+    }
+
+    /**
+     * @return Photo
+     */
+    public function photo(): ?Photo
+    {
+        return $this->photo;
+    }
+
     /**
      * @return Payment
      */
@@ -539,17 +579,17 @@ abstract class Student implements Comparable
     /**
      * @return string
      */
-    public function firstComment(): string
+    public function comment(): string
     {
-        return $this->firstComment;
+        return $this->comment;
     }
 
     /**
-     * @return string
+     * @return Alert
      */
-    public function secondComment(): string
+    public function alert(): ?Alert
     {
-        return $this->secondComment;
+        return $this->alert;
     }
 
     /**
@@ -600,7 +640,6 @@ abstract class Student implements Comparable
     {
         return $this->updatedAt;
     }
-
 
 
     public function __toString()

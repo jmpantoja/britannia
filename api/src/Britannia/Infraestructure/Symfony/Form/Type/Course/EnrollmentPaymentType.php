@@ -15,12 +15,14 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Course;
 
 
 use PlanB\DDD\Domain\VO\Price;
+use PlanB\DDD\Domain\VO\Validator\Constraint;
+use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
 use PlanB\DDDBundle\Symfony\Form\Type\PriceType;
 use PlanB\DDDBundle\Symfony\Form\Type\ToggleType;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class EnrollmentPaymentType extends ToggleType
+class EnrollmentPaymentType extends AbstractSingleType
 {
     /**
      * @var Price
@@ -40,8 +42,6 @@ class EnrollmentPaymentType extends ToggleType
 
     public function customOptions(OptionsResolver $resolver)
     {
-        parent::customOptions($resolver);
-
         $resolver->setDefaults([
             'empty_data' => $this->enrollmentPrice,
             'attr' => [
@@ -49,7 +49,18 @@ class EnrollmentPaymentType extends ToggleType
                 'style' => 'width:180px'
             ]
         ]);
+    }
 
+    /**
+     * @inheritDoc
+     */
+    public function buildConstraint(array $options): ?Constraint
+    {
+        return  null;
+    }
 
+    public function customMapping($data)
+    {
+        return $data;
     }
 }

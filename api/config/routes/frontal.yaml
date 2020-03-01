@@ -1,4 +1,3 @@
 home:
     path:     /
-    controller: Britannia\Infraestructure\Symfony\Controller\HomeController::index
-
+    controller: Britannia\Infraestructure\Symfony\Controller\HomeController::index    

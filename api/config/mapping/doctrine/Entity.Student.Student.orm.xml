@@ -66,12 +66,33 @@
         <one-to-many field="records" target-entity="Britannia\Domain\Entity\Record\Record" mapped-by="student"
                      orphan-removal="true"/>
 
+        <one-to-many field="attachments" target-entity="Britannia\Domain\Entity\Student\Attachment\Attachment"
+                     mapped-by="student"
+                     orphan-removal="true">
+            <order-by>
+                <order-by-field name="createdAt"/>
+
+            </order-by>
+
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </one-to-many>
+
+        <one-to-one field="photo" target-entity="Britannia\Domain\Entity\Student\Photo" mapped-by="student"
+                    orphan-removal="true">
+
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </one-to-one>
+
         <field name="academyNumOfYears" column="other_academy_time" type="NumOfYears"/>
         <field name="firstContact" nullable="true"/>
 
-        <field name="firstComment" column="first_comment" nullable="true" type="text"></field>
+        <field name="comment" column="comment" nullable="true" type="text"></field>
 
-        <field name="secondComment" column="second_comment" nullable="true" type="text"></field>
+        <field name="alert" column="alert" nullable="true" type="Alert"></field>
 
         <field name="termsOfUseAcademy" type="boolean"/>
 

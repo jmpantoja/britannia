@@ -102,9 +102,9 @@ sonata_admin:
         user_block: admin/core/user_block.html.twig
         layout: admin/core/standard_layout.html.twig
         ajax: admin/core/ajax_layout.html.twig
-        
+
         outer_list_rows_list: admin/core/CRUD/list_outer_rows_list.html.twig
-        inner_list_row: admin/core/CRUD/list_inner_row.html.twig        
+        inner_list_row: admin/core/CRUD/list_inner_row.html.twig
         list: admin/core/CRUD/list.html.twig
         edit: admin/core/CRUD/edit.html.twig
         base_list_field: admin/core/CRUD/base_list_field.html.twig
@@ -127,7 +127,7 @@ sonata_admin:
             - css/fullcalendar/timegrid.min.css
 
             - css/admin/fullcalendar.css
-            - 
+
             - css/toast/jquery.toast.min.css
 
             - bundles/sonataformatter/markitup/skins/sonata/style.css
@@ -148,7 +148,7 @@ sonata_admin:
             - js/fullcalendar/resource-common.min.js
             - js/fullcalendar/resource-daygrid.min.js
             - js/fullcalendar/resource-timegrid.min.js
-            - 
+
             - js/toast/jquery.toast.min.js
 
             - bundles/fosckeditor/ckeditor.js
@@ -159,6 +159,7 @@ sonata_admin:
 
     security:
         handler: sonata.admin.security.handler.role
+
 sonata_block:
     blocks:
         sonata.admin.block.admin_list:

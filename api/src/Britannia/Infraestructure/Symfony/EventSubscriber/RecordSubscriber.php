@@ -14,10 +14,11 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\EventSubscriber;
 
 
-use Britannia\Application\UseCase\Record\UpdateRecord;
+use Britannia\Application\UseCase\Record\AddRecord;
 use Britannia\Application\UseCase\Student\StudentJoinToCourse;
 use Britannia\Domain\Entity\Record\BorrameEvent;
 use Britannia\Domain\Entity\Record\RecordEventInterface;
+use Britannia\Domain\Entity\Student\StudentHasAttendedLesson;
 use Britannia\Domain\Entity\Student\StudentHasBeenCreated;
 use Britannia\Domain\Entity\Student\StudentHasJoinedToCourse;
 use Britannia\Domain\Entity\Student\StudentHasLeavedCourse;
@@ -42,8 +43,9 @@ class RecordSubscriber extends DomainEventSubscriber
 
     public function onUpdateRecord(RecordEventInterface $event)
     {
-        $command = UpdateRecord::fromEvent($event);
+        $command = AddRecord::fromEvent($event);
         $this->handle($command);
     }
+
 
 }

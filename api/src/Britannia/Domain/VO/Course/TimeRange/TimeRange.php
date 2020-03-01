@@ -19,8 +19,6 @@ use Carbon\CarbonImmutable;
 
 final class TimeRange
 {
-
-
     /**
      * @var CarbonImmutable
      */
@@ -90,6 +88,20 @@ final class TimeRange
             return false;
         }
         return true;
+    }
+
+    /**
+     * Devuelve el rango más pequeño compatible con el actual y el pasado como parámetro
+     *
+     * @param TimeRange $timeRange
+     * @return TimeRange
+     */
+    public function limitToRange(TimeRange $timeRange): TimeRange
+    {
+        $start = $timeRange->start()->maximum($this->start());
+        $end = $timeRange->end()->min($this->end());
+
+        return TimeRange::make($start, $end);
     }
 
 

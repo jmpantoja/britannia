@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+
+    <entity name="Britannia\Domain\Entity\Image\Image" table="images" inheritance-type="JOINED">
+
+        <discriminator-column name="type" type="string"/>
+        <discriminator-map>
+            <discriminator-mapping value="student" class="Britannia\Domain\Entity\Student\Photo"/>
+            <discriminator-mapping value="staff" class="Britannia\Domain\Entity\Staff\Photo"/>
+
+        </discriminator-map>
+
+
+        <id name="id" type="ImageId" column="id">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
+        </id>
+
+        <field name="path"/>
+
+        <field name="basename"/>
+
+        <field name="mimeType"/>
+
+        <field name="size" type="integer"/>
+
+        <field name="humanReadableSize"/>
+
+        <field name="width" type="integer" nullable="true"/>
+
+        <field name="height" type="integer" nullable="true"/>
+
+        <field name="createdAt" type="datetime_immutable"/>
+
+        <field name="updatedAt" type="datetime_immutable"/>
+
+    </entity>
+
+</doctrine-mapping>

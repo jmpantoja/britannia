@@ -54,6 +54,8 @@ final class Child extends Student
 
     public function update(StudentDto $dto): Child
     {
+        parent::update($dto);
+
         $this->school = $dto->school;
         $this->schoolCourse = $dto->schoolCourse;
 
@@ -63,7 +65,7 @@ final class Child extends Student
         $this->secondTutor = $dto->secondTutor;
         $this->secondTutorDescription = $dto->secondTutorDescription;
 
-        return parent::update($dto);
+        return $this;
     }
 
 

@@ -1,4 +1,7 @@
 parameters:
+    attachments_dir: '%kernel.project_dir%/uploads/attachments'
+    photos_dir: '%kernel.project_dir%/uploads/photos'
+    
     marks:
         unit_percent_weight: 30
 

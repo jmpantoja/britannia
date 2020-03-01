@@ -10,7 +10,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use PlanB\DDD\Domain\Behaviour\Comparable;
 use PlanB\DDD\Domain\Behaviour\Traits\ComparableTrait;
-use PlanB\DDD\Domain\Model\AggregateRoot;
 use PlanB\DDD\Domain\Model\Traits\AggregateRootTrait;
 use PlanB\DDD\Domain\VO\DNI;
 use PlanB\DDD\Domain\VO\Email;
@@ -81,6 +80,11 @@ class StaffMember implements UserInterface, Serializable, Comparable
     private $courses;
 
     /**
+     * @var Photo
+     */
+    private $photo;
+
+    /**
      * @var array
      */
     private $roles;
@@ -117,6 +121,7 @@ class StaffMember implements UserInterface, Serializable, Comparable
         $this->address = $dto->address;
         $this->emails = $dto->emails;
         $this->phoneNumbers = $dto->phoneNumbers;
+        $this->photo = $dto->photo;
 
         $this->setCourses($dto->courses);
 
@@ -305,6 +310,16 @@ class StaffMember implements UserInterface, Serializable, Comparable
         })->toArray();
 
     }
+
+    /**
+     * @return Photo
+     */
+    public function photo(): Photo
+    {
+        return $this->photo;
+    }
+
+
 
     public function serialize()
     {

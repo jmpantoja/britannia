@@ -16,6 +16,11 @@ namespace Britannia\Domain\Entity\Record;
 
 use MabeEnum\Enum;
 
+/**
+ * @method static self CREATED()
+ * @method static self COURSE()
+ * @method static self ATTENDANCE()
+ */
 class TypeOfRecord extends Enum
 {
     public const CREATED = 'Nuevo Alumno';

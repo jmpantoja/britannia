@@ -54,6 +54,14 @@
             </cascade>
         </many-to-many>
 
+        <one-to-one field="photo" target-entity="Britannia\Domain\Entity\Staff\Photo" mapped-by="staffMember"
+                    orphan-removal="true">
+
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </one-to-one>
+
     </entity>
 
 </doctrine-mapping>

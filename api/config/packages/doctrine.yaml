@@ -76,6 +76,7 @@ doctrine:
 
                     #Student                    
                     StudentId: StudentId
+                    AttachmentId: AttachmentId
                     TutorId: TutorId
                     JobStatus: JobStatus
                     PartOfDay: PartOfDay
@@ -83,6 +84,7 @@ doctrine:
                     ContactMode: ContactMode
                     PaymentMode: PaymentMode
                     BankAccount: BankAccount
+                    Alert: Alert
 
                     #Lesson
                     LessonId: LessonId
@@ -90,6 +92,9 @@ doctrine:
                     #Record
                     RecordId: RecordId
                     TypeOfRecord: TypeOfRecord
+
+                    #Image
+                    ImageId: ImageId
 
         types:
             #Academy
@@ -146,6 +151,7 @@ doctrine:
 
             #Student
             StudentId: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\StudentIdType
+            AttachmentId: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\AttachmentIdType
             StudentCourseId: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\StudentCourseIdType
             TutorId: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\TutorIdType
             JobStatus: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\JobStatusType
@@ -154,6 +160,10 @@ doctrine:
             ContactMode: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\ContactModeType
             PaymentMode: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\PaymentModeType
             BankAccount: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\BankAccountType
+            Alert: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\AlertType
+
+            #Image
+            ImageId: \Britannia\Infraestructure\Doctrine\DBAL\Type\Image\ImageIdType
 
     orm:
         auto_generate_proxy_classes: true
