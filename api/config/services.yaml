@@ -41,6 +41,12 @@ services:
         resource: '../src/Britannia/Infraestructure/*'
         exclude: '../src/Britannia/Infraestructure/Symfony/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
 
+
+    Britannia\Domain\Entity\Setting\Setting:
+        class: Britannia\Domain\Entity\Setting\Setting
+        factory: '@Britannia\Infraestructure\Symfony\Service\Setting\SettingFactory'
+
+
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
     Britannia\Infraestructure\Symfony\Controller\:
@@ -57,12 +63,11 @@ services:
         calls:
             #            - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\StaffEtl']]
             #            - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\StudentEtl']]
-            #            - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\AttachmentEtl']]
-            #            - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\RelativesEtl']]
-
-            - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\CourseEtl']]
-            - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\TeacherCoursesEtl']]
-            - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\StudentCoursesEtl']]
+            - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\AttachmentEtl']]
+    #            - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\RelativesEtl']]
+    #            - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\CourseEtl']]
+    #            - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\TeacherCoursesEtl']]
+    #            - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\StudentCoursesEtl']]
     #            - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\AttendanceControlEtl']]
 
 
@@ -70,3 +75,4 @@ services:
         class: PlanB\DDD\Domain\Event\EventDispatcher
         factory: ['PlanB\DDD\Domain\Event\EventDispatcher', 'getInstance']
         public: true
+

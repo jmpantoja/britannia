@@ -24,14 +24,7 @@ final class DownloadFactory
      * @var DebugDownload
      */
     private DebugDownload $debug;
-    /**
-     * @var PdfDownload
-     */
-    private PdfDownload $pdf;
-    /**
-     * @var ZipDownload
-     */
-    private ZipDownload $zip;
+
     /**
      * @var FileDownload
      */

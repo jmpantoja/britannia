@@ -10,7 +10,7 @@
         <field name="monthlyPayment" type="price"/>
         <field name="enrollmentPayment" type="price" nullable="true"/>
 
-        <field name="discount" type="DiscountList" nullable="true"></field>
+        <field name="discount" type="JobStatusDiscountList" nullable="true"></field>
         <embedded name="assessment" class="Britannia\Domain\VO\Course\Assessment\Assessment" use-column-prefix="false"/>
 
         <many-to-many field="schoolCourses" target-entity="Britannia\Domain\Entity\SchoolCourse\SchoolCourse"

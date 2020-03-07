@@ -21,10 +21,11 @@ use Britannia\Domain\Entity\Course\CourseCalendarInterface;
 use Britannia\Domain\Entity\Course\CoursePaymentInterface;
 use Britannia\Domain\Entity\Level\Level;
 use Britannia\Domain\Entity\SchoolCourse\SchoolCourse;
+use Britannia\Domain\Entity\Setting\Setting;
 use Britannia\Infraestructure\Symfony\Form\Type\Assessment\AssessmentType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\AgeType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\CourseHasStudentsType;
-use Britannia\Infraestructure\Symfony\Form\Type\Course\Discount\DiscountListTye;
+use Britannia\Infraestructure\Symfony\Form\Type\Course\Discount\JobStatusDiscountListType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\EnrollmentPaymentType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\ExaminerType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\IntensiveType;
@@ -49,6 +50,18 @@ final class CourseForm extends AdminForm
      * @var Course
      */
     private $course;
+    /**
+     * @var Setting
+     */
+    private Setting $setting;
+
+
+    public function setSettings(Setting $setting): self
+    {
+        $this->setting = $setting;
+        return $this;
+
+    }
 
     public function configure(Course $course): self
     {
@@ -192,17 +205,20 @@ final class CourseForm extends AdminForm
         $this->group('Coste', ['class' => 'col-md-6'])
             ->add('enrollmentPayment', EnrollmentPaymentType::class, [
                 'label' => 'Matrícula',
+                'empty_data' => $this->setting->enrollmentPayment()
             ])
             ->add('monthlyPayment', PriceType::class, [
                 'label' => 'Mensualidad',
+                'empty_data' => $this->setting->monthlyPayment()
+
             ])
             ->add('books', null, [
                 'label' => 'Material'
             ]);
 
         $this->group('Descuentos', ['class' => 'col-md-6'])
-            ->add('discount', DiscountListTye::class, [
-                'label' => false,
+            ->add('discount', JobStatusDiscountListType::class, [
+                'label' => false
             ]);
 
         return $this;
@@ -226,11 +242,12 @@ final class CourseForm extends AdminForm
             ->add('enrollmentPayment', EnrollmentPaymentType::class, [
                 'label' => 'Matrícula'
             ])
-            ->add('discount', DiscountListTye::class, [
-                'label' => 'Descuentos',
+            ->add('discount', JobStatusDiscountListType::class, [
+                'label' => 'Descuentos'
             ]);
 
         return $this;
     }
+
 }
 

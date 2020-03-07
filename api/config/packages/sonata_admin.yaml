@@ -36,7 +36,6 @@ sonata_admin:
                     - admin.attendance
                     - admin.report
 
-
             admin.group.tools:
                 label: Herramientas
                 label_catalogue: App
@@ -48,18 +47,29 @@ sonata_admin:
 
                     - admin.record
 
+
             admin.group.extra:
-                label: Configuración
+                label: Datos auxiliares
                 label_catalogue: App
-                icon: "<i class=\"fa fa-cog\"></i>"
+                icon: "<i class=\"fa fa-info\"></i>"
                 items:
                     - admin.academy
                     - admin.school
                     - admin.classroom
                     - admin.book
                     - admin.level
-                    - admin.calendar
                     - admin.school_course
+
+            admin.group.config:
+                label: Configuración
+                label_catalogue: App
+                icon: "<i class=\"fa fa-cog\"></i>"
+                items:
+                    - admin.calendar
+                    -   route:        admin_britannia_domain_setting_setting_edit
+                        route_params: { id: "__main__" }
+                        label:        Parámetros
+                        roles: ['ROLE_MANAGER']
 
         blocks:
             -   class:    col-lg-3 col-xs-6

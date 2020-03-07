@@ -22,6 +22,7 @@ use Britannia\Domain\VO\Course\Age\Age;
 use Britannia\Domain\VO\Course\Periodicity\Periodicity;
 use Britannia\Domain\VO\Course\Support\Support;
 use Britannia\Domain\VO\Course\TimeTable\TimeTable;
+use Britannia\Domain\VO\Discount\JobStatusDiscountList;
 use Doctrine\Common\Collections\Collection;
 use PlanB\DDD\Domain\Model\Dto;
 use PlanB\DDD\Domain\VO\PositiveInteger;
@@ -55,7 +56,7 @@ abstract class CourseDto extends Dto
 
     public LessonGenerator $lessonCreator;
 
-    public ?Collection $discount = null;
+    public ?JobStatusDiscountList $discount = null;
 
 
     protected function defaults(): array
@@ -68,8 +69,6 @@ abstract class CourseDto extends Dto
     private function randomColor(): RGBA
     {
 
-        #e8e598
-//        die('xxx');
         return collect([
             RGBA::make(232, 229, 152),
             RGBA::make(237, 177, 45),

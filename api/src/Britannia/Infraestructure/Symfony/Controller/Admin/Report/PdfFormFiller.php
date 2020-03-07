@@ -59,7 +59,7 @@ final class PdfFormFiller
     private function getPathToTemplate(FormBasedPdfInteface $report, string $pathToTemplatesDir): string
     {
         $template = ClassnameToTemplate::make($report)
-            ->filter();
+            ->main();
 
         return sprintf('%s/%s', $pathToTemplatesDir, $template);
     }

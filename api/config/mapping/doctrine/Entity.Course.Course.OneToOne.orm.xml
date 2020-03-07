@@ -6,7 +6,7 @@
 
     <entity name="Britannia\Domain\Entity\Course\Course\OneToOne" table="course_one_to_one">
         <field name="enrollmentPayment" type="price" nullable="true"/>
-        <field name="discount" type="DiscountList" nullable="true"></field>
+        <field name="discount" type="JobStatusDiscountList" nullable="true"></field>
 
         <one-to-many field="passes" target-entity="\Britannia\Domain\Entity\Course\Pass\Pass" mapped-by="course"
                      orphan-removal="true">

@@ -314,11 +314,10 @@ class StaffMember implements UserInterface, Serializable, Comparable
     /**
      * @return Photo
      */
-    public function photo(): Photo
+    public function photo(): ?Photo
     {
         return $this->photo;
     }
-
 
 
     public function serialize()

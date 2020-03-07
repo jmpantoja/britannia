@@ -51,8 +51,8 @@
         }
 
         table.marks tbody tr.resume {
-            height: 250px;
-            height: 240px;
+            /*height: 250px;*/
+            /*height: 240px;*/
         }
 
         table.marks {
@@ -60,7 +60,7 @@
         }
 
         table.marks tr.top {
-            height: 80px;
+            /*height: 80px;*/
         }
 
         table.marks tr.skills.subtop span {
@@ -105,7 +105,7 @@
 
         table.resume {
             width: 100%;
-            height: 100%;
+            /*height: 100%;*/
         }
 
         table.resume tbody tr td.marks {
@@ -130,7 +130,7 @@
         }
 
         table.resume-right tr td.notes span {
-            height: 312px;
+            height: 308px;
         }
 
         table.resume tr.signed_by td {
@@ -186,7 +186,7 @@
         }
 
         table.final tr.course_final {
-            height: 65px;
+            /*height: 65px;*/
         }
 
         div.legend {
@@ -220,6 +220,11 @@
             display: inline-block;
             margin: 0 0 0 8px;
         }
+
+        tr.footer td {
+            vertical-align: top;
+        }
+
     </style>
 
 {% endblock %}
@@ -252,7 +257,6 @@
         </tr>
 
         {% if term.termName.isThird %}
-
             <tr class="skills subtop term3">
                 {% set params = {'%year%': _self.course_year(term.course)} %}
                 <td>&nbsp</td>
@@ -287,9 +291,13 @@
             </tr>
         {% endfor %}
 
-        <tr class="resume">
-            <td colspan="2">{{ block('foot_left') }}</td>
-            <td colspan="2">{{ block('foot_right') }}</td>
+        <tr class="footer">
+            <td colspan="2">
+                {{ block('foot_left') }}
+            </td>
+            <td colspan="2">
+                {{ block('foot_right') }}
+            </td>
         </tr>
         </tbody>
 
@@ -306,9 +314,10 @@
             </td>
             <td class="notes">{{ _self.notes(term, 'en') }}</td>
         </tr>
-        <tr class="signed_by" style="height: 60px">
-            <td>{{ _self.label('signed_by', 'en') }}</td>
-            <td>{{ _self.gap(term.course.teachers[0].fullName.firstName ) }}</td>
+        <tr class="signed_by"
+        /*style="height: 60px" */ >
+        <td>{{ _self.label('signed_by', 'en') }}</td>
+        <td>{{ _self.gap(term.course.teachers[0].fullName.firstName ) }}</td>
         </tr>
         </tbody>
     </table>

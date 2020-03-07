@@ -16,9 +16,23 @@ namespace Britannia\Domain\VO\Student\PartOfDay;
 
 use MabeEnum\Enum;
 
+/**
+ * @method static self MORNING
+ * @method static self AFTERNOON
+ */
 class PartOfDay extends Enum
 {
     public const MORNING = 'Mañanas';
     public const AFTERNOON = 'Tardes';
+
+    public function isMorning()
+    {
+        return $this->is(self::MORNING());
+    }
+
+    public function isAfternoon()
+    {
+        return $this->is(self::AFTERNOON());
+    }
 
 }

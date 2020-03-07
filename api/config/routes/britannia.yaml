@@ -32,3 +32,8 @@ photo_download:
         path_to_file: ".+"
     defaults:
         path_to_file: ""
+
+
+student_registration_form_report:
+    path:     /admin/britannia/student-reports/{id}/registration
+    controller: Britannia\Infraestructure\Symfony\Controller\Admin\StudentReportController::registration

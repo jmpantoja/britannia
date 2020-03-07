@@ -48,7 +48,8 @@ doctrine:
                     DayOfWeek: DayOfWeek
                     Examiner: Examiner
                     Intensive: Intensive
-                    DiscountList: DiscountList
+                    JobStatusDiscountList: JobStatusDiscountList
+                    FamilyDiscountList: FamilyDiscountList
                     PassId: PassId
                     PassHours: PassHours
 
@@ -96,6 +97,9 @@ doctrine:
                     #Image
                     ImageId: ImageId
 
+                    #Setting
+                    SettingId: SettingId
+
         types:
             #Academy
             AcademyId:  Britannia\Infraestructure\Doctrine\DBAL\Type\Academy\AcademyIdType
@@ -118,8 +122,9 @@ doctrine:
             CourseId: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\CourseId
             PassId: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\PassId
             LevelId: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\LevelId
-            PassHours: \Britannia\Infraestructure\Doctrine\DBAL\Type\Course\PassHoursType
-            DiscountList: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\DiscountListType
+            PassHours: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\PassHoursType
+            JobStatusDiscountList: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\JobStatusDiscountListType
+            FamilyDiscountList: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\FamilyDiscountListType
 
             #Assessment
             TermName: Britannia\Infraestructure\Doctrine\DBAL\Type\Assessment\TermNameType
@@ -163,7 +168,10 @@ doctrine:
             Alert: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\AlertType
 
             #Image
-            ImageId: \Britannia\Infraestructure\Doctrine\DBAL\Type\Image\ImageIdType
+            ImageId: Britannia\Infraestructure\Doctrine\DBAL\Type\Image\ImageIdType
+
+            #Setting
+            SettingId: Britannia\Infraestructure\Doctrine\DBAL\Type\Setting\SettingIdType
 
     orm:
         auto_generate_proxy_classes: true

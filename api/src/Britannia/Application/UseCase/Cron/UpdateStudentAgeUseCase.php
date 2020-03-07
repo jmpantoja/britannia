@@ -43,7 +43,6 @@ final class UpdateStudentAgeUseCase implements UseCaseInterface
 
 
         foreach ($students as $student) {
-            dump($student->id());
             $student->updateAge();
         }
     }

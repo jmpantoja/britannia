@@ -14,9 +14,8 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Admin\Course;
 
 
-use Britannia\Domain\VO\Course\TimeTable\Schedule;
+use Britannia\Domain\Entity\Setting\Setting;
 use Britannia\Infraestructure\Symfony\Service\Schedule\ScheduleService;
-use PlanB\DDD\Domain\VO\Price;
 use PlanB\DDDBundle\Sonata\Admin\AdminDataSource;
 use PlanB\DDDBundle\Sonata\Admin\AdminQuery;
 use PlanB\DDDBundle\Sonata\Admin\AdminTools;
@@ -26,7 +25,6 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 final class CourseTools extends AdminTools
 {
@@ -36,17 +34,24 @@ final class CourseTools extends AdminTools
      */
     private CourseMapper $mapper;
 
-    private $enrollmentPrice;
+    /**
+     * @var Setting
+     */
+    private Setting $setting;
     /**
      * @var ScheduleService
      */
     private ScheduleService $scheduleService;
 
+
     public function __construct(CourseMapper $mapper,
+                                Setting $setting,
                                 ScheduleService $scheduleService)
     {
         $this->mapper = $mapper;
+        $this->setting = $setting;
         $this->scheduleService = $scheduleService;
+
     }
 
     public function dataGrid(ListMapper $listMapper): CourseDatagrid
@@ -57,6 +62,7 @@ final class CourseTools extends AdminTools
     public function form(FormMapper $formMapper): CourseForm
     {
         return CourseForm::make($formMapper)
+            ->setSettings($this->setting)
             ->setDataMapper($this->mapper);
     }
 

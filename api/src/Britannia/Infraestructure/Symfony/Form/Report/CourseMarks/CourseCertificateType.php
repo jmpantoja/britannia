@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Form\Report\CourseMarks;
 
 
-use Britannia\Application\UseCase\Report\GenerateCertificate;
+use Britannia\Application\UseCase\CourseReport\GenerateCertificate;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\VO\CourseInfoData;
 use Britannia\Infraestructure\Symfony\Validator\FullName;

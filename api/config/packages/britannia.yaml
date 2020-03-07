@@ -1,7 +1,7 @@
 parameters:
     attachments_dir: '%kernel.project_dir%/uploads/attachments'
     photos_dir: '%kernel.project_dir%/uploads/photos'
-    
+
     marks:
         unit_percent_weight: 30
 
@@ -18,3 +18,4 @@ parameters:
             unemployed: 5
             retired: 5
             disabled: 5
+            

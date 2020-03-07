@@ -369,7 +369,7 @@ abstract class Student implements Comparable
      */
     public function isChild(): bool
     {
-        return static::class === Adult::class;
+        return static::class === Child::class;
     }
 
     /**

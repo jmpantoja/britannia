@@ -16,23 +16,8 @@ namespace Britannia\Domain\Service\Report;
 
 use Britannia\Domain\Entity\Assessment\Term;
 
-final class CourseTermMarks  implements HtmlBasedPdfInterface
+final class CourseTermMarks extends HtmlBasedPdfReport
 {
-    /**
-     * @var array
-     */
-    private array $params;
-
-    /**
-     * @var array
-     */
-    private array $options;
-
-    /**
-     * @var string
-     */
-    private string $title;
-
 
     /**
      * @param Term[] $terms
@@ -40,44 +25,17 @@ final class CourseTermMarks  implements HtmlBasedPdfInterface
      */
     public static function make(Term $term): self
     {
-        return new self($term);
-    }
-
-    private function __construct(Term $term)
-    {
-        $this->params = [
+        $name = (string)$term->student();
+        $params = [
             'term' => $term
         ];
 
-        $this->title = (string)$term->student();
-        $this->options = [
+        $options = [
             'page-size' => 'A4',
             'orientation' => 'Landscape',
         ];
-    }
 
-    /**
-     * @return array
-     */
-    public function params(): array
-    {
-        return $this->params;
-    }
-
-    /**
-     * @return array
-     */
-    public function options(): array
-    {
-        return $this->options;
-    }
-
-    /**
-     * @return string
-     */
-    public function title(): string
-    {
-        return $this->title;
+        return new self($name, $params, $options);
     }
 
 }

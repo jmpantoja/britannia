@@ -11,6 +11,8 @@
     <style>
         html, body, .wrapper {
             height: 100%;
+            padding: 0;
+            margin: 0;
         }
 
         table {
@@ -19,68 +21,77 @@
 
         .wrapper {
             font-family: 'Open Sans';
-            font-size: 130%;
-            display: flex;
-            flex-direction: column;
-
         }
 
         header {
-            display: flex;
-            justify-items: center;
+            overflow: hidden;
         }
 
         header .logo {
-            flex-grow: 1;
-            display: flex;
-            justify-content: center;
+            float: left;
         }
 
         header .cambridge {
-            flex-grow: 0;
-            margin-right: 2em;
+            float: right;
+
         }
 
         header .cambridge img {
-            height: 86px;
+            height: 50px;
+            margin-top: 14px;
         }
-
 
         .info {
-            margin: 0 2em 2em 2em;
+            margin: 0;
+            padding: 0;
             border: solid 5px darkblue;
-            border-top-radius: 6px;
-            display: flex;
-            flex-direction: column;
-            flex: 1;
         }
 
-
-        .info .timetable {
-            margin: 1.5em;
+        .info article {
+            margin: 0.5em;
         }
 
-        .info .payment {
-            margin: 1.5em;
-            flex: 2;
-        }
-
-        .info .footer {
-            padding: 0 1.5em;
+        .info article.footer {
+            padding: 0;
         }
 
         h2.title {
-            margin-top: 0.5em;
+            padding-top: 1em;
             text-align: center;
             text-transform: uppercase;
         }
 
-        .timetable {
-            display: flex;
+        h3.title {
+            font-size: 1.2em;
         }
 
-        .timetable .box {
-            flex-grow: 1;
+        .box {
+            margin-top: 1em;
+        }
+
+        .timetable {
+            overflow: hidden;
+        }
+
+        .timetable .box.calendar {
+            float: left;
+            width: 49%;
+        }
+
+        .timetable .box.schedule {
+            float: right;
+            width: 49%;
+        }
+
+        .timetable .box p {
+            font-size: 0.8em;
+            margin: 0;
+            padding: 0 0 0.5em 0;
+        }
+
+        .notes-wrapper {
+            margin-top: 0.5em;
+            height: 100px;
         }
 
         p.notes {
@@ -143,21 +154,24 @@
             padding-right: 1em;
         }
 
-        .footer {
-            display: flex;
+        article.footer {
             border-top: solid 2px darkblue;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
         }
 
         .footer .box {
             padding-top: 0.5em;
-            flex-grow: 1;
+            margin: 0;
+            width: 27%;
+            float: left;
         }
 
         .footer .box:nth-child(2) {
-            flex-grow: 1;
             border-left: solid 2px darkblue;
             border-right: solid 2px darkblue;
-            flex-grow: 2;
+            width: 46%;
         }
 
         .footer .box .title {
@@ -171,14 +185,13 @@
             padding: 1em;
         }
 
-        .footer .box:last-child .content {
-            font-size: 0.7em;
+        .footer .box .content p.email {
+            font-size: 0.9em;
         }
 
         .footer .box .content i {
-            min-width: 2em;
             text-align: center;
-            font-size: 1.5em;
+            font-size: 1em;
         }
 
     </style>
@@ -194,7 +207,7 @@
                 <img src="{{ assets_base }}/images/admin/logo_h_300.jpg"/>
             </div>
             <div class="cambridge">
-                <img src="{{ assets_base }}/images/admin/cambridge.png"/>
+                <img src="{{ assets_base }}/images/admin/cambridge_168.jpg"/>
             </div>
         </header>
 
@@ -205,13 +218,17 @@
                 <div class="box calendar">
                     <h3 class="title"><span class="fa fa-calendar" aria-hidden="true"></span> Calendario:</h3>
                     <div class="content">
-                        Desde el <span class="date">{{ course.start | localizeddate('long', 'none') }}</span><br/>
-                        Hasta el <span class="date">{{ course.end | localizeddate('long', 'none') }}</span></td>
+                        <p>
+                            Desde el <span class="date">{{ course.start | localizeddate('long', 'none') }}</span><br/>
+                        </p>
+                        <p>
+                            Hasta el <span class="date">{{ course.end | localizeddate('long', 'none') }}</span></td>
+                        </p>
                     </div>
                 </div>
 
                 <div class="box schedule">
-                    <h3><span class="fa fa-calendar" aria-hidden="true"></span> Horario:</h3>
+                    <h3 class="title"><span class="fa fa-calendar" aria-hidden="true"></span> Horario:</h3>
                     <div class="content">
                         {% for timeSheet in course.schedule.toArray %}
                             <p>
@@ -225,16 +242,13 @@
             </article>
 
             <article class="payment">
-
                 <div class="box payment">
-                    <h3><span class="fa fa-credit-card" aria-hidden="true"></span> Abonos:</h3>
+                    <h3 class="title"><span class="fa fa-credit-card" aria-hidden="true"></span> Abonos:</h3>
                     <div class="content">
-                        {{ block('notes') }}
                         {{ block('payment_table') }}
+                        {{ block('notes') }}
                     </div>
                 </div>
-
-
             </article>
             <article class="footer">
                 {{ block('footer') }}
@@ -246,6 +260,7 @@
 
 
 {% block notes %}
+    <div class="notes-wrapper">
     {% if startDate != null %}
         <p class="notes">Precios válidos para la incorporación al curso el {{ startDate | date('d/m/Y') }}</p>
     {% endif %}
@@ -263,7 +278,7 @@
             <p class="notes">Descuento familiar en mensualidades</p>
         {% endif %}
     {% endif %}
-
+    </div>
 {% endblock %}
 
 {% block payment_table %}
@@ -359,10 +374,10 @@
 
     <div class="box">
         <div class="content">
-            <p><i class="fa fa-facebook-f"></i> AcademiabritanniaElpuerto</p>
-            <p><i class="fa fa-twitter"></i> @AcademiaBritann</p>
-            <p><i class="fa fa-envelope"></i> britannia.elpuerto.recepcion@gmail.com</p>
-            <p><i class="fa fa-info"></i> https://www.academiabritannia.es</p>
+            <p class="facebook"><i class="fa fa-facebook-f"></i> AcademiabritanniaElpuerto</p>
+            <p class="twitter"><i class="fa fa-twitter"></i> @AcademiaBritann</p>
+            <p class="email"><i class="fa fa-envelope"></i> britannia.elpuerto.recepcion@gmail.com</p>
+            <p class="web"><i class="fa fa-info"></i> https://www.academiabritannia.es</p>
         </div>
     </div>
 

@@ -32,7 +32,6 @@ final class ClassnameToTemplate
     public static function make(ReportInterface $report): self
     {
         return new self($report);
-
     }
 
     private function __construct(ReportInterface $report)
@@ -50,11 +49,22 @@ final class ClassnameToTemplate
     /**
      * @inheritDoc
      */
-    public function filter(): string
+    public function main(): string
     {
         $filter = new CamelCaseToSeparator('_');
         $className = $filter->filter($this->className);
 
         return sprintf('admin/report/%s.%s', strtolower($className), $this->extension);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function footer(): string
+    {
+        $filter = new CamelCaseToSeparator('_');
+        $className = $filter->filter($this->className);
+
+        return sprintf('admin/report/%s_footer.%s', strtolower($className), $this->extension);
     }
 }

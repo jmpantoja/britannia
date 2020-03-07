@@ -200,7 +200,7 @@ trait StudentMaker
     protected function toAcademy(string $name)
     {
         $dto = AcademyDto::fromArray([
-            'name'=>$name
+            'name' => $name
         ]);
 
         $academy = Academy::make($dto);
@@ -279,14 +279,6 @@ trait StudentMaker
 
         $tutor = Tutor::make($dto);
 
-//        $tutor = new Tutor();
-//        $tutor->setFullName($fullName);
-//        $tutor->setDni($dni);
-//        $tutor->setAddress($address);
-//        $tutor->setJob($job);
-//        $tutor->setPhoneNumbers($phoneNumbers);
-//        $tutor->setEmails($emails);
-
         return $this->findOneOrCreate($tutor, [
 
         ]);
@@ -343,8 +335,8 @@ trait StudentMaker
         $lastName = str_replace([','], '', $lastName);
 
 
-        $firstName = empty($firstName)? 'NOMBRE DESCONOCIDO': $firstName;
-        $lastName = empty($lastName)? 'APELLIDOS DESCONOCIDOS': $lastName;
+        $firstName = empty($firstName) ? 'NOMBRE DESCONOCIDO' : $firstName;
+        $lastName = empty($lastName) ? 'APELLIDOS DESCONOCIDOS' : $lastName;
 
         return [
             'firstName' => $firstName,

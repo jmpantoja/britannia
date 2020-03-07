@@ -21,6 +21,7 @@ use Britannia\Infraestructure\Symfony\Form\Type\Photo\PhotoType;
 use Britannia\Infraestructure\Symfony\Form\Type\Student\AlertType;
 use Britannia\Infraestructure\Symfony\Form\Type\Student\AttachmentListType;
 use Britannia\Infraestructure\Symfony\Form\Type\Student\ContactModeType;
+use Britannia\Infraestructure\Symfony\Form\Type\Student\DocumentListType;
 use Britannia\Infraestructure\Symfony\Form\Type\Student\JobType;
 use Britannia\Infraestructure\Symfony\Form\Type\Student\OtherAcademyType;
 use Britannia\Infraestructure\Symfony\Form\Type\Student\PartOfDayType;
@@ -55,7 +56,7 @@ final class StudentForm extends AdminForm
         $this->coursesTab('Cursos', $student);
         $this->paymentTab('Pago', $student);
         $this->tutorsTab('Tutores', $isAdult);
-        $this->attachedTab('Adjuntos', $student);
+        $this->attachedTab('Documentos', $student);
         $this->extraTab('Información Extra');
     }
 
@@ -239,8 +240,14 @@ final class StudentForm extends AdminForm
         }
         $this->tab($name);
 
-        $this->group('Documentos', ['class' => 'col-md-8'])
+        $this->group('Adjuntos', ['class' => 'col-md-7'])
             ->add('attachments', AttachmentListType::class, [
+                'student' => $student,
+                'label' => false
+            ]);
+
+        $this->group('Documentos', ['class' => 'col-md-3 col-md-push-1'])
+            ->add('documents', DocumentListType::class, [
                 'student' => $student,
                 'label' => false
             ]);

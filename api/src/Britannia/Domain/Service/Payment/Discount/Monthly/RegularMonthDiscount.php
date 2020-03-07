@@ -15,6 +15,7 @@ namespace Britannia\Domain\Service\Payment\Discount\Monthly;
 
 
 use Britannia\Domain\Entity\Course\Course;
+use Britannia\Domain\Entity\Setting\Setting;
 use Britannia\Domain\Repository\FamilyDiscountParametersInterface;
 use Britannia\Domain\Service\Payment\Concept;
 use Britannia\Domain\Service\Payment\Discount\CourseDiscountCalculator;
@@ -35,10 +36,10 @@ final class RegularMonthDiscount
      */
     private CourseDiscountCalculator $discountCalculator;
 
-    public function __construct(FamilyDiscountParametersInterface $familyDiscountStorage,
+    public function __construct(Setting $setting,
                                 CourseDiscountCalculator $discountCalculator)
     {
-        $this->familyDiscountList = $familyDiscountStorage->getList();
+        $this->familyDiscountList = $setting->familyDiscount();
         $this->discountCalculator = $discountCalculator;
     }
 
@@ -74,6 +75,7 @@ final class RegularMonthDiscount
      */
     private function getFamlilyPercent($order): Percent
     {
+
         return $this->familyDiscountList->getByFamilyOrder($order);
     }
 }

@@ -11,7 +11,7 @@
         <field name="monthlyPayment" type="price"/>
         <field name="enrollmentPayment" type="price" nullable="true"/>
 
-        <field name="discount" type="DiscountList" nullable="true"></field>
+        <field name="discount" type="JobStatusDiscountList" nullable="true"></field>
     </entity>
 
 </doctrine-mapping>

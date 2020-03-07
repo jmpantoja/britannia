@@ -136,11 +136,7 @@
 
         });
     </script>
-
-
 {% endblock %}
-
-
 
 {% block photo_widget %}
     <div class="row">
@@ -150,7 +146,7 @@
                 <label class="thumb-upload">
                     {% set path =  form.path.vars.value | default(shape) %}
                     {% set src =  downloadUrl ~ '/' ~ path %}
-                    <img id="{{ id }}-thumb" src="{{ src }}" />
+                    <img id="{{ id }}-thumb" src="{{ src }}"/>
                     {{ form_widget(form.upload, {attr: {'class': 'hidden' }}) }}
                     <span class="help-block">click en la foto para cambiar</span>
                 </label>
@@ -205,5 +201,24 @@
         </script>
 
     </div>
+
+{% endblock %}
+
+
+{% block document_list_widget %}
+
+    {% for report in reports %}
+
+        <div class="row">
+            <div class="col-md-3">
+                <a href="{{ report.href }}" class="btn btn-primary" target="_blank">
+                    <i class="fa fa-download"></i>
+                    <span>{{ report.anchor }}</span>
+                </a>
+            </div>
+        </div>
+
+    {% endfor %}
+
 
 {% endblock %}

@@ -62,8 +62,8 @@ services:
         public: true
 
     admin.report:
-        class: Britannia\Infraestructure\Symfony\Admin\Report\ReportAdmin
-        arguments: [~, Britannia\Domain\Entity\Course\Course, Britannia\Infraestructure\Symfony\Controller\Admin\ReportController]
+        class: Britannia\Infraestructure\Symfony\Admin\CourseReport\CourseReportAdmin
+        arguments: [~, Britannia\Domain\Entity\Course\Course, Britannia\Infraestructure\Symfony\Controller\Admin\CourseReportController]
         calls:
             - [setTemplate, ['edit', 'form/report/edit.html.twig']]
         tags:
@@ -136,5 +136,10 @@ services:
         tags:
             - { name: sonata.admin, manager_type: orm,  label: Curso Escolar }
         public: true
-    
-    
+
+    admin.setting:
+        class: Britannia\Infraestructure\Symfony\Admin\Setting\SettingAdmin
+        arguments: [~, Britannia\Domain\Entity\Setting\Setting, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Setting }
+        public: true

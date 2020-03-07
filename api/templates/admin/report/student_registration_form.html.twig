@@ -1,0 +1,690 @@
+{% extends 'base_pdf.html.twig' %}
+
+{% block stylesheets %}
+    {#    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">#}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css">
+{% endblock %}
+
+
+{% block style %}
+    <style>
+        body {
+            padding: 0;
+            font-family: 'Open Sans';
+        }
+
+        .page {
+            margin: auto;
+            width: 997.033px;
+            height: 1140px;
+        }
+
+        .double_page {
+            margin: auto;
+            width: 997.033px;
+            height: 2280px;
+        }
+
+        .page::after {
+            content: "";
+            background-image: url("{{ assets_base }}/images/admin/watermark.jpg");
+            background-repeat: no-repeat;
+            background-position: 50% 200px;
+            background-size: 700px auto;
+            width: 997.033px;
+            /*height: 1195px;*/
+            top: 0;
+            position: absolute;
+            z-index: -1;
+        }
+
+        .page table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 2px;
+            margin: 0 auto;
+            margin: 0;
+        }
+
+
+        .num-of-page {
+            text-align: center;
+            font-size: 22px;
+            margin-top: 0.6em
+        }
+
+        .field {
+            text-align: left;
+            border: 3px solid #24226d;
+            border-radius: 2px;
+            padding-top: 2px;
+            padding-bottom: 2px;
+            padding-left: 10px;
+            word-wrap: break-word;
+            background-color: #f1f3ff;
+        }
+
+        .label {
+            color: #24226d;
+            font-weight: bold;
+        }
+
+        .labeled-option {
+            text-transform: uppercase;
+            text-align: center;
+            font-size: 1.2em;
+        }
+
+        .labeled-option .box {
+            border: 3px solid #24226d;
+            display: inline-block;
+            margin-top: 2px;
+            width: 25px;
+            height: 25px;
+            vertical-align: -5px;
+            margin-left: 15px;
+        }
+
+        span.field,
+        span.label {
+            display: inline-block;
+            width: 100%;
+        }
+
+        .label-to-right span.label {
+            text-align: right;
+        }
+
+        td {
+            padding-bottom: 0.5em;
+        }
+
+        tr.header td {
+            padding-bottom: 2em;
+        }
+
+        td.quarter-col {
+            width: 25%;
+        }
+
+        td.center-col {
+            text-align: center;
+        }
+
+        td.horizontal {
+
+            vertical-align: bottom;
+        }
+
+        td.horizontal .field,
+        td.horizontal .label {
+            width: 49.3%;
+        }
+
+        td.lopd {
+            font-size: 0.7em;
+        }
+
+        .photo {
+            text-align: center;
+            border: 1px solid #24226d;
+            width: 96px;
+            height: 127px;
+            line-height: 127px;
+            display: inline-block;
+            margin: auto;
+        }
+
+        .printed_date {
+            font-size: 0.5em;
+            font-weight: bold;
+        }
+
+        .title-box {
+            margin-left: 2em;
+        }
+
+        .title-box span {
+            display: block;
+        }
+
+        .title-box span.name {
+            text-transform: uppercase;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+    </style>
+{% endblock %}
+
+{% block body %}
+
+    {% if student.adult %}
+        {% with {page:1, total:4} %} {{ block('personal_data_1') }} {% endwith %}
+        {% with {page:2, total:4} %} {{ block('personal_data_2') }} {% endwith %}
+        {% with {page:3, total:4} %} {{ block('general_considerations') }} {% endwith %}
+        {% with {page:4, total:4} %} {{ block('data_protection') }} {% endwith %}
+    {% else %}
+        {% with {page:1, total:5} %} {{ block('personal_data_1') }} {% endwith %}
+        {% with {page:2, total:5} %} {{ block('personal_data_2') }} {% endwith %}
+        {% with {page:3, total:5} %} {{ block('image_rights') }} {% endwith %}
+        {% with {page:4, total:5} %} {{ block('data_protection') }} {% endwith %}
+        {% with {page:5, total:5} %} {{ block('general_considerations') }} {% endwith %}
+    {% endif %}
+{% endblock %}
+
+
+{% block personal_data_1 %}
+    <div class="page">
+        <table>
+            <tr>
+                <td colspan="4">
+                    {{ block('printed_date') }}
+                    <div class="num-of-page">
+                        {{ _self.title(student, page, total) }}
+                    </div>
+                </td>
+            </tr>
+            <tr class="header">
+                <td colspan="4">
+                    {{ block('logo') }}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <table class="info">
+                        <tr>
+                            <td colspan="3" class="horizontal">
+                                <span class="label">Apellidos</span>
+                                {{ _self.field(student.fullName.lastName) }}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="3" class="horizontal">
+                                <span class="label">Nombre</span>
+                                {{ _self.field(student.fullName.firstName) }}
+                            </td>
+                        </tr>
+                        {% if student.adult %}
+                            <tr>
+                                <td colspan="3" class="horizontal">
+                                    <span class="label">Número de documento (DNI)</span>
+                                    {{ _self.field(student.dni) }}
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </table>
+                </td>
+                <td colspan="1" class="center-col">
+                    {{ block('photo') }}
+                </td>
+            </tr>
+
+            {% if student.adult %}
+
+                <tr>
+                    <td>
+                        <span class="label">Teléfono contacto 1</span>
+                        {{ _self.field(student.phoneNumbers.0 | default(null)) }}
+                    </td>
+                    <td>
+                        <span class="label">Teléfono contacto 2</span>
+                        {{ _self.field(student.phoneNumbers.1 | default(null)) }}
+                    </td>
+                    <td colspan="2" class="horizontal">
+                        <span class="label">Fecha Nac.</span>
+                        {{ _self.field(student.birthDate | localizeddate('medium', 'none')) }}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <span class="label">Correo electronico de Contacto</span>
+                        {{ _self.field(student.emails.0 | default(null)) }}
+                    </td>
+                    <td>
+                        <span class="label">Situación Laboral</span>
+                        {% set job_status = student.job.status | default({value: ''}) %}
+                        {{ _self.field(job_status.value) }}
+                    </td>
+                    <td>
+                        <span class="label">Profesión</span>
+                        {{ _self.field(student.job.name) }}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <span class="label">Domicilio</span>
+                        {{ _self.field(student.address.address) }}
+                    </td>
+                    <td>
+                        <span class="label">Código Postal</span>
+                        {{ _self.field(student.address.postalCode) }}
+                    </td>
+                </tr>
+
+            {% else %}
+                <tr>
+                    <td colspan="3" class="horizontal">
+                        <span class="label">Fecha de Nacimiento</span>
+                        {{ _self.field(student.birthDate | localizeddate('medium', 'none')) }}
+                    </td>
+                </tr>
+            {% endif %}
+
+            <tr>
+                <td colspan="4">
+                    <span class="label">Curso en el que te matriculas</span>
+                    {% set course = student.activeCourses.toArray.0 | default(null) %}
+                    {% set course_name = '' %}
+                    {% if course %}
+                        {% set course_name = '%s %s' | format(course.name, course.description) %}
+                    {% endif %}
+                    {{ _self.field(course_name) }}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="label-to-right">
+                    <span class="label">Preferencia Horaria</span>
+                </td>
+                <td class="horizontal label-to-right">
+                    <span class="label">Mañana</span>
+                    {% set part_of_day = student.preferredPartOfDay | default({morning: false}) %}
+                    {{ _self.checkbox(assets_base, part_of_day.morning) }}
+                </td>
+                <td class="horizontal label-to-right">
+                    <span class="label">Tarde</span>
+                    {% set part_of_day = student.preferredPartOfDay | default({afternoon: false}) %}
+                    {{ _self.checkbox(assets_base, part_of_day.afternoon) }}
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="4">
+                    <span class="label">Observaciones</span>
+                    {{ _self.field(student.comment) }}
+                </td>
+            </tr>
+
+            {% if student.isChild %}
+                <tr>
+                    <td colspan="2">
+                        <span class="label">Próximo curso escolar que realizarás</span>
+                        {{ _self.field(student.schoolCourse) }}
+                    </td>
+                    <td colspan="2">
+                        <span class="label">¿En que colegio?</span>
+                        {{ _self.field(student.school) }}
+                    </td>
+                </tr>
+            {% endif %}
+
+            <tr>
+                <td colspan="2" class="label-to-right">
+                    <span class="label">¿Has estado en otra academia?</span>
+                </td>
+                <td class="horizontal label-to-right">
+                    <span class="label">SI</span>
+                    {{ _self.checkbox(assets_base, student.otherAcademy is not null) }}
+                </td>
+                <td class="horizontal label-to-right">
+                    <span class="label">NO</span>
+                    {{ _self.checkbox(assets_base, student.otherAcademy is null ) }}
+                </td>
+            </tr>
+
+            {% if student.otherAcademy is not null %}
+                <tr>
+                    <td colspan="2" class="textoizq">¿Recuerdas su nombre?</td>
+                    <td colspan="2" class="textoizq">¿Cuánto tiempo o cursos estuviste?</td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        {{ student.otherAcademy.academy }}
+                    </td>
+                    <td colspan="2">
+                        {{ student.otherAcademy.numOfYears.value }}
+                    </td>
+                </tr>
+            {% endif %}
+
+            <tr>
+                <td colspan="4">
+                    <span class="label">¿Cómo nos conociste?</span>
+                    {{ _self.field(student.firstContact) }}
+                </td>
+            </tr>
+
+            {% if student.isChild %}
+                {% with {tutor: student.firstTutor, description: student.firstTutorDescription} %}
+                    {{ block('tutor') }}
+                {% endwith %}
+            {% endif %}
+        </table>
+    </div>
+{% endblock %}
+
+{% block personal_data_2 %}
+    <div class="page">
+
+        <table>
+            <tr>
+                <td colspan="4">
+                    {{ block('printed_date') }}
+                    <div class="num-of-page">
+                        {{ _self.title(student, page, total) }}
+                    </div>
+                </td>
+            </tr>
+            <tr class="header">
+                <td colspan="4">
+                    {{ block('logo') }}
+                </td>
+            </tr>
+            {% if student.isChild %}
+                {% with {tutor: student.secondTutor, description: student.secondTutorDescription} %}
+                    {{ block('tutor') }}
+                {% endwith %}
+            {% endif %}
+
+            <tr>
+                <td colspan="2" class="label-to-right">
+                    <span class="label">Forma de pago</span>
+                </td>
+                <td class="horizontal label-to-right">
+                    <span class="label">Efectivo</span>
+                    {{ _self.checkbox(assets_base, student.payment.mode.cash) }}
+
+                </td>
+                <td class="horizontal label-to-right">
+                    <span class="label">Domiciliado</span>
+                    {{ _self.checkbox(assets_base, student.payment.mode.cash == false) }}
+                </td>
+            </tr>
+
+            {% if student.payment.mode.cash == false %}
+                <tr>
+                    <td colspan="3">
+                        <span class="label">Titular de la cuenta</span>
+                        {{ _self.field(student.payment.account.titular) }}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <span class="label">(IBAN)Nº de cuenta</span>
+                        {{ _self.field(student.payment.account.iban) }}
+                    </td>
+                </tr>
+            {% endif %}
+
+            <tr>
+                <td colspan="4" class="izquierda">Como prefiere que contactemos con usted:</td>
+            </tr>
+
+            <tr>
+                <td class="quarter-col horizontal label-to-right">
+                    <span class="label">Enviar e-mail:</span>
+                    {{ _self.checkbox(assets_base, student.preferredContactMode.email) }}
+                </td>
+                <td class="quarter-col horizontal label-to-right">
+                    <span class="label">Enviar Whatsapp:</span>
+                    {{ _self.checkbox(assets_base, student.preferredContactMode.whatsapp) }}
+                </td>
+                <td class="quarter-col horizontal label-to-right">
+                    <span class="label">Realizar llamadas:</span>
+                    {{ _self.checkbox(assets_base, student.preferredContactMode.telephone) }}
+                </td>
+                <td class="quarter-col horizontal label-to-right">
+                    <span class="label">Correo ord.:</span>
+                    {{ _self.checkbox(assets_base, student.preferredContactMode.postMail) }}
+                </td>
+            </tr>
+        </table>
+    </div>
+{% endblock %}
+
+{% block general_considerations %}
+    <div class="page double_page">
+        <table>
+            <tr>
+                <td colspan="4">
+                    {{ block('printed_date') }}
+                    <div class="num-of-page">
+                        {{ _self.title(student, page, total) }}
+                    </div>
+                </td>
+            </tr>
+            <tr class="header">
+                <td colspan="1" class="quarter-col">
+                    {{ block('logo') }}
+                </td>
+                <td colspan="3">
+                    <div class="title-box">
+                        <span class="name">CONSIDERACIONES GENERALES</span>
+                        <span class="type">Ejemplar para la Academia</span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" class="lopd">
+                    <div class="field" style="font-size: 10px">
+                        {{ setting.generalConsiderationsClause | raw }}
+                    </div>
+
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="4" class="label-to-right">
+                    <span class="label">
+                        He leído y acepto las condiciones..................*
+                        {{ _self.checkbox(assets_base, student.termsOfUseAcademy) }}
+                    </span>
+                </td>
+
+            </tr>
+
+        </table>
+    </div>
+{% endblock %}
+
+
+{% block data_protection %}
+    <div class="page">
+        <table>
+            <tr>
+                <td colspan="4">
+                    {{ block('printed_date') }}
+                    <div class="num-of-page">
+                        {{ _self.title(student, page, total) }}
+                    </div>
+                </td>
+            </tr>
+            <tr class="header">
+                <td colspan="1" class="quarter-col">
+                    {{ block('logo') }}
+                </td>
+                <td colspan="3">
+                    <div class="title-box">
+                        <span class="name">INFORMACIÓN BÁSICA SOBRE PROTECCIÓN DE DATOS</span>
+                        <span class="type">Ejemplar para la Academia</span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" class="lopd">
+                    <div class="field">
+                        {{ setting.personalDataConsentClause | raw }}
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="4" class="label-to-right">
+                    &nbsp;
+                </td>
+
+            </tr>
+
+        </table>
+    </div>
+{% endblock %}
+
+{% block image_rights %}
+    <div class="page">
+        <table>
+            <tr>
+                <td colspan="4">
+                    {{ block('printed_date') }}
+                    <div class="num-of-page">
+                        {{ _self.title(student, page, total) }}
+                    </div>
+                </td>
+            </tr>
+            <tr class="header">
+                <td colspan="1" class="quarter-col">
+                    {{ block('logo') }}
+                </td>
+                <td colspan="3">
+                    <div class="title-box">
+                        <span class="name">CONSENTIMIENTO PARA EL USO DE IMÁGENES DE LOS ALUMNOS/AS</span>
+                        <span class="type">Ejemplar para la Academia</span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    D/Dña <strong>{{ student.firstTutor.fullName }}</strong>, tutor legal del alumno
+                    <strong>{{ student.fullName }}</strong>, con DNI <strong>{{ student.firstTutor.dni }}</strong>
+                    expresa su:
+                    <br/>
+                    <i>(marquese con una cruz lo que proceda)</i>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <p class="labeled-option">
+                        SI CONSIENTO
+                        <span class="box"></span>
+                    </p>
+                </td>
+                <td colspan="2">
+                    <p class="labeled-option">
+                        NO CONSIENTO
+                        <span class="box"></span>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    {{ setting.consentClause | raw }}
+                </td>
+            </tr>
+        </table>
+    </div>
+{% endblock %}
+
+
+{% block logo %}
+    <img src="{{ assets_base }}/images/admin/logo_h_300.jpg" width="300" height="65"/>
+{% endblock %}
+
+
+{% block printed_date %}
+    <div class="printed_date">
+        Academia Britannia a {{ date() | localizeddate('medium', 'none') }}
+    </div>
+{% endblock %}
+
+{% block photo %}
+    {% set photo = student.photo %}
+    <div class="photo">
+        {% if photo %}
+            <img src="{{ path('photo_download', {'path_to_file': photo.path }) }}"/>
+        {% else %}
+            <span>FOTO</span>
+        {% endif %}
+
+    </div>
+
+
+{% endblock %}
+
+{% block tutor %}
+    <tr>
+        <td colspan="2" class="izquierda">Datos del Tutor 1 del alumno:
+            {{ description }}
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <span class="label">Primer Apellido</span>
+            {{ _self.field(tutor.fullName.lastName) }}
+        </td>
+        <td colspan="2">
+            <span class="label">Nombre</span>
+            {{ _self.field(tutor.fullName.firstName) }}
+        </td>
+    </tr>
+    <tr>
+        <td class="quarter-col">
+            <span class="label">Número de documento (DNI)</span>
+            {{ _self.field(tutor.dni) }}
+        </td>
+        <td class="quarter-col">
+            <span class="label">Telf. Contacto 1</span>
+            {{ _self.field(tutor.phoneNumbers.0 | default (null)) }}
+        </td>
+        <td class="quarter-col">
+            <span class="label">Telf. Contacto 2</span>
+            {{ _self.field(tutor.phoneNumbers.1 | default (null)) }}
+        </td>
+        <td class="quarter-col">
+            <span class="label">Telf. Adicional</span>
+            {{ _self.field(tutor.phoneNumbers.2 | default (null)) }}
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <span class="label">Correo electronico de Contacto</span>
+            {{ _self.field(tutor.emails.0 | default (null)) }}
+        </td>
+        <td>
+            <span class="label">Situación Laboral</span>
+            {% set job_status = tutor.job.status | default({value:null}) %}
+            {{ _self.field(job_status.value) }}
+        </td>
+        <td>
+            <span class="label">Profesión</span>
+            {{ _self.field(tutor.job.name ) }}
+        </td>
+    </tr>
+    <tr>
+        <td colspan="3">
+            <span class="label">Domicilio</span>
+            {{ _self.field(tutor.address ) }}
+        </td>
+        <td>
+            <span class="label">Código Postal</span>
+            {{ _self.field(tutor.address.postalCode ) }}
+        </td>
+    </tr>
+{% endblock %}
+
+
+{% macro title(student, page, total) %}
+    Ficha de Inscripción {{ page }}/{{ total }}
+{% endmacro %}
+
+{% macro field(value) %}
+    <span class="field">{{ value | default("&nbsp;") | raw }}</span>
+{% endmacro %}
+
+{% macro checkbox(assets_base, value) %}
+    {% if value %}
+        <img src="{{ assets_base }}/images/admin/checkbox_yes_20x20.png"/>
+    {% else %}
+        <img src="{{ assets_base }}/images/admin/checkbox_no_20x20.png"/>
+    {% endif %}
+
+{% endmacro %}

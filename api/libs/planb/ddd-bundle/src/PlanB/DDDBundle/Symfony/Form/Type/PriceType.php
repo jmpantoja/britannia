@@ -36,24 +36,14 @@ class PriceType extends AbstractSingleType
         return Price::buildConstraint($options);
     }
 
-//    public function transform($value)
-//    {
-//        return $value;
-//        dumps($value);
-//        die("asdadasd");
-//        if (is_null($value)) {
-//            return $value;
-//        }
-//
-//        if (is_a($value, Price::class)) {
-//            return $value;
-//        }
-//
-//        return (string)$value;
-//    }
-
     public function customMapping($data)
     {
+
+        if($data instanceof Price){
+            return $data;
+        }
+
+
         return Price::make((float)$data);
     }
 

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Course;
 
 
+use Britannia\Domain\VO\Discount\JobStatusDiscountList;
 use Doctrine\Common\Collections\Collection;
 use PlanB\DDD\Domain\VO\Price;
 
@@ -23,5 +24,5 @@ interface CoursePaymentInterface
 
     public function enrollmentPayment(): ?Price;
 
-    public function discount(): Collection;
+    public function discount(): ?JobStatusDiscountList;
 }

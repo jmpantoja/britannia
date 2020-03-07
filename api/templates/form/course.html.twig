@@ -95,21 +95,20 @@
 
 {% endblock %}
 
-{% block discount_widget %}
+{% block job_discount_widget %}
     <div class="row discount">
         <div class="col-md-3">
             <span class="status"> {{ status.value }} </span>
         </div>
 
-        <div class="col-md-2">
+        <div class="col-md-3">
             {{ form_row(form.discount) }}
         </div>
 
-        <div class="col-md-7">
+        <div class="col-md-6">
             {{ form_row(form.freeEnrollment) }}
         </div>
     </div>
-
 {% endblock %}
 
 {% block time_table_widget %}
@@ -282,17 +281,23 @@
 
     <div class="enrollment_payment">
         <div style="float: left">
-            {{ form_widget(form) }}
+            <div class="input-group">
+                {{ form_widget(form) }}
+                <span class="input-group-addon"><span class="fa fa-euro"></span></span>
+            </div>
         </div>
-        <div style="float: left; padding-left: 0.5em">
-            <span class="btn btn-link">Desbloquear</span>
-        </div>
+        {% if show_unlock %}
+            <div style="float: left; padding-left: 0.5em">
+                <span class="btn btn-link">Desbloquear</span>
+            </div>
+        {% endif %}
     </div>
     <script type="application/javascript">
         $(function () {
             var el = $('#{{ id }}');
 
             var update = function () {
+
                 if ($(el).attr('readonly') === 'readonly') {
                     $(el).attr('readonly', false);
                     $(this).text('Bloquear')
@@ -302,8 +307,7 @@
                 }
             };
 
-            $('.enrollment_payment .btn').on('click', update)
-            upate();
+            $('.enrollment_payment .btn').on('click', update);
         })
     </script>
 {% endblock %}

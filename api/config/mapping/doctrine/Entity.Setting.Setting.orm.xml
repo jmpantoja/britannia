@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+
+    <entity name="Britannia\Domain\Entity\Setting\Setting" table="settings">
+
+        <id name="id" type="SettingId" column="id">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
+        </id>
+
+        <field name="enrollmentPayment" type="price" nullable="true"/>
+        <field name="monthlyPayment" type="price" nullable="true"/>
+
+        <field name="jobStatusDiscount" type="JobStatusDiscountList" nullable="true"/>
+        <field name="familyDiscount" type="FamilyDiscountList" nullable="true"/>
+
+        <field name="informationClause" type="text"/>
+        <field name="consentClause" type="text"/>
+        <field name="generalConsiderationsClause" type="text"/>
+        <field name="cashPaymentsClause" type="text"/>
+        <field name="personalDataConsentClause" type="text"/>
+        <field name="faqs" type="text"/>
+
+    </entity>
+
+</doctrine-mapping>
