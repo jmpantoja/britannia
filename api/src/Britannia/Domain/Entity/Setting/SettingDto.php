@@ -21,9 +21,9 @@ use PlanB\DDD\Domain\VO\Price;
 
 final class SettingDto extends Dto
 {
-    public ?Price $enrollmentPayment;
-    public ?Price $monthlyPayment;
-    
+    public ?Price $enrollmentPayment = null;
+    public ?Price $monthlyPayment = null;
+
     public ?FamilyDiscountList $familyDiscount = null;
     public ?JobStatusDiscountList $jobStatusDiscount = null;
     public string $informationClause = '';

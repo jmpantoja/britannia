@@ -42,6 +42,7 @@ final class School extends Course implements CourseAssessmentInterface, CourseCa
         $this->assessment = $dto->assessment;
         $this->terms = new ArrayCollection();
         $this->schoolCourses = new ArrayCollection();
+        $this->lessons = new ArrayCollection();
 
         parent::__construct($dto);
     }
@@ -51,6 +52,7 @@ final class School extends Course implements CourseAssessmentInterface, CourseCa
     {
         $this->setSchoolCourses($dto->schoolCourses);
         $this->updateAssessment($dto);
+
         $this->changeCalendar($dto->timeTable, $dto->lessonCreator);
         $this->updatePayment($dto);
 

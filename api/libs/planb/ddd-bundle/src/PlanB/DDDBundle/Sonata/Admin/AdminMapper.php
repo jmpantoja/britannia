@@ -76,6 +76,7 @@ abstract class AdminMapper implements DataMapperInterface
 
     public function mapFormsToData($forms, &$data)
     {
+
         if (!($data instanceof $this->className)) {
             throw new UnexpectedTypeException($data, $this->className);
         }
@@ -87,6 +88,7 @@ abstract class AdminMapper implements DataMapperInterface
         }, $forms);
 
         $id = $this->propertyAccessor->getValue($data, 'id');
+
         if (null === $id) {
             $data = $this->create($values);
             $this->assertType($data);

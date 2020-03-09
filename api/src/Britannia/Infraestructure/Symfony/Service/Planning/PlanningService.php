@@ -61,6 +61,7 @@ class PlanningService
         $lessons = $this->lessonRepository->findByDay($date);
 
         $data = [];
+
         foreach ($lessons as $lesson) {
             $event = FullCalendarEvent::fromLesson($lesson);
             $data[] = $event->toArray();

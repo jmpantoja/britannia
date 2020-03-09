@@ -15,6 +15,7 @@ namespace Britannia\Infraestructure\Symfony\Service\Setting;
 
 
 use Britannia\Domain\Entity\Setting\Setting;
+use Britannia\Domain\Entity\Setting\SettingDto;
 use Britannia\Domain\Entity\Setting\SettingId;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -27,6 +28,7 @@ final class SettingFactory
 
     public function __invoke(): Setting
     {
-        return $this->setting;
+        $dto = SettingDto::fromArray([]);
+        return $this->setting ?? Setting::make($dto);
     }
 }

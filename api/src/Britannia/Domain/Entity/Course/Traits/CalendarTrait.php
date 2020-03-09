@@ -43,6 +43,7 @@ trait CalendarTrait
     {
         $locked = $timeTable->locked();
 
+
         if ($locked->isLocked()) {
             return $this;
         }

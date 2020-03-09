@@ -88,6 +88,12 @@ class StaffMember implements UserInterface, Serializable, Comparable
      * @var array
      */
     private $roles;
+
+    /**
+     * @var Collection
+     */
+    private $issues;
+
     /**
      * @var CarbonImmutable
      */
@@ -108,6 +114,8 @@ class StaffMember implements UserInterface, Serializable, Comparable
         $this->teacher = true;
         $this->roles = [self::DEFAULT_ROLE];
         $this->courses = new ArrayCollection();
+        $this->issues = new ArrayCollection();
+
         $this->createdAt = CarbonImmutable::now();
 
         $this->update($dto);
@@ -345,8 +353,5 @@ class StaffMember implements UserInterface, Serializable, Comparable
             $this->userName,
             $this->password,
             ) = unserialize($serialized, array('allowed_classes' => [StaffMemberId::class]));
-
     }
-
-
 }

@@ -57,7 +57,7 @@ final class FullCalendarAttendance
      */
     private function initMissedStatus(Student $student, Lesson $lesson): void
     {
-        $this->hasBeenMissing = $lesson->attendanceStatusByStudent($student);
+        $this->hasBeenMissing = $lesson->attendanceStatusByStudent($student)->isMissed();
     }
 
     private function initStatus(Student $student, Lesson $lesson): self

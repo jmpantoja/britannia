@@ -34,7 +34,7 @@ final class StaffMemberDto extends Dto
     public array $emails = [];
     public array $phoneNumbers = [];
     public CourseList $courses;
-    public ?Photo $photo;
+    public ?Photo $photo = null;
     public ?array $roles;
     public EncoderFactory $encoder;
 

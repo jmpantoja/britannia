@@ -23,9 +23,9 @@ services:
         calls:
             - [setSubClasses, [{child: Britannia\Domain\Entity\Student\Child, adult: Britannia\Domain\Entity\Student\Adult}]]
 
-    admin.record:
-        class: Britannia\Infraestructure\Symfony\Admin\Record\RecordAdmin
-        arguments: [~, Britannia\Domain\Entity\Record\Record, ~]
+    admin.notification:
+        class: Britannia\Infraestructure\Symfony\Admin\Notification\NotificationAdmin
+        arguments: [~, Britannia\Domain\Entity\Notification\Notification, ~]
         tags:
             - { name: sonata.admin, manager_type: orm, label: Historial }
         public: true
@@ -142,4 +142,12 @@ services:
         arguments: [~, Britannia\Domain\Entity\Setting\Setting, ~]
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: Setting }
+        public: true
+
+
+    admin.issue:
+        class: Britannia\Infraestructure\Symfony\Admin\Issue\IssueAdmin
+        arguments: [~, Britannia\Domain\Entity\Issue\Issue, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Observaciones }
         public: true

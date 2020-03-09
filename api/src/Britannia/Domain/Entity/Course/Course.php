@@ -41,7 +41,7 @@ abstract class Course implements Comparable
     use TimeRangeTrait;
     use LessonTrait;
     use BookTrait;
-    use RecordTrait;
+  //  use RecordTrait;
 
     /**
      * @var CarbonImmutable

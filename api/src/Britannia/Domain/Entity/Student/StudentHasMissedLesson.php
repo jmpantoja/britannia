@@ -14,59 +14,71 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Student;
 
 use Britannia\Domain\Entity\Attendance\Attendance;
-use Britannia\Domain\Entity\Record\AbstractRecordEvent;
-use Britannia\Domain\Entity\Record\TypeOfRecord;
+use Britannia\Domain\Entity\Notification\NotificationEvent;
+use Britannia\Domain\Entity\Notification\TypeOfNotification;
+use Carbon\CarbonImmutable;
 
-class StudentHasMissedLesson extends AbstractRecordEvent
+class StudentHasMissedLesson extends NotificationEvent
 {
 
     public static function make(Attendance $attendance): self
     {
-        return new self($attendance);
-    }
-
-    public function __construct(Attendance $attendance)
-    {
-
         $student = $attendance->student();
         $course = $attendance->course();
-        $description = $this->descriptionFromAttendance($attendance);
-        $date = $this->dateFromAttendance($attendance);
 
-        parent::__construct($student, $course, $description, $date);
+        return self::builder($student, $course)
+            ->witAttendance($attendance);
     }
 
 
-    public function getType(): TypeOfRecord
+    public function type(): TypeOfNotification
     {
-        return TypeOfRecord::ATTENDANCE();
+        return TypeOfNotification::ATTENDANCE();
+    }
+
+    public function witAttendance(Attendance $attendance): self
+    {
+        $subject = $this->subjectByAttendance($attendance);
+        $date = $this->dateFromAttendance($attendance);
+
+        $this->withSubject($subject);
+        $this->withDate($date);
+
+        return $this;
     }
 
     /**
      * @param Attendance $attendance
      * @return array
      */
-    private function descriptionFromAttendance(Attendance $attendance): string
+    private function subjectByAttendance(Attendance $attendance): string
     {
         $student = $attendance->student();
+        $course = $attendance->course();
+        $reason = $this->reasonByAttendance($attendance);
 
+        return sprintf('%s ha faltado a clase de %s %s', $student, $course, $reason);
+    }
+
+    private function reasonByAttendance(Attendance $attendance): string
+    {
         $reason = $attendance->reason();
-        $description = sprintf('%s falta a clase', $student->fullName());
-
-        if (!is_null($reason)) {
-            $description = sprintf('%s falta a clase (%s)', $student->fullName(), $reason);
+        if (null === $reason) {
+            return '';
         }
-
-        return $description;
+        
+        return sprintf('(%s)', $reason);
     }
 
     /**
      * @param Attendance $attendance
-     * @return \Carbon\CarbonImmutable
+     * @return CarbonImmutable
      */
-    private function dateFromAttendance(Attendance $attendance): \Carbon\CarbonImmutable
+    private function dateFromAttendance(Attendance $attendance): CarbonImmutable
     {
         $lesson = $attendance->lesson();
         return $lesson->day();
     }
+
+
 }

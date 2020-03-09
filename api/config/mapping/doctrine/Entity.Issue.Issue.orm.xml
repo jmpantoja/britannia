@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+
+    <entity name="Britannia\Domain\Entity\Issue\Issue" table="issues">
+
+        <id name="id" type="IssueId" column="id">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
+        </id>
+
+        <field name="subject"/>
+        <field name="message" type="text"/>
+<!--        <field name="priority" type="Priority"/>-->
+        <field name="createdAt" type="datetime_immutable" nullable="true"/>
+
+        <many-to-one field="author" target-entity="Britannia\Domain\Entity\Staff\StaffMember"/>
+        <many-to-one field="student" target-entity="Britannia\Domain\Entity\Student\Student"/>
+
+        <one-to-many field="issueHasRecipients" target-entity="Britannia\Domain\Entity\Issue\IssueRecipient"
+                     mapped-by="issue" orphan-removal="true">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </one-to-many>
+
+    </entity>
+
+</doctrine-mapping>

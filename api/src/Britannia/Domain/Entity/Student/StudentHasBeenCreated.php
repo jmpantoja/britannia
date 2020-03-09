@@ -14,22 +14,28 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Student;
 
 
-use Britannia\Domain\Entity\Record\AbstractRecordEvent;
-use Britannia\Domain\Entity\Record\TypeOfRecord;
+use Britannia\Domain\Entity\Notification\NotificationEvent;
+use Britannia\Domain\Entity\Notification\TypeOfNotification;
 
-class StudentHasBeenCreated extends AbstractRecordEvent
+class StudentHasBeenCreated extends NotificationEvent
 {
 
     public static function make(Student $student): self
     {
-        $description = sprintf('Nuevo alumno');
         $date = $student->createdAt();
-
-        return new self($student, null, $description, $date);
+        return self::builder($student)
+            ->withDate($date);
     }
 
-    public function getType(): TypeOfRecord
+    public function type(): TypeOfNotification
     {
-        return TypeOfRecord::CREATED();
+        return TypeOfNotification::NEW_STUDENT();
     }
+
+    protected function makeSubject(): string
+    {
+        return sprintf('Nuevo alumno (%s)', $this->student);
+    }
+
+
 }

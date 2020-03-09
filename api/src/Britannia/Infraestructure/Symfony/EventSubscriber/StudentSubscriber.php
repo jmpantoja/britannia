@@ -39,13 +39,13 @@ class StudentSubscriber extends DomainEventSubscriber
 
     public function onStudentJoinToCourse(StudentHasJoinedToCourse $event)
     {
-        $command = StudentUpdatedStatus::make($event->getStudent(), $event->getCourse());
+        $command = StudentUpdatedStatus::make($event->student(), $event->course());
         $this->handle($command);
     }
 
     public function onStudentLeaveACourse(StudentHasLeavedCourse $event)
     {
-        $command = StudentUpdatedStatus::make($event->getStudent(), $event->getCourse());
+        $command = StudentUpdatedStatus::make($event->student(), $event->course());
         $this->handle($command);
     }
 

@@ -90,15 +90,19 @@ doctrine:
                     #Lesson
                     LessonId: LessonId
 
-                    #Record
-                    RecordId: RecordId
-                    TypeOfRecord: TypeOfRecord
+                    #Notification
+                    NotificationId: NotificationId
+                    TypeOfNotification: TypeOfNotification
 
                     #Image
                     ImageId: ImageId
 
                     #Setting
                     SettingId: SettingId
+
+                    #Issue
+                    IssueId: IssueId
+                    IssueRecipientId: IssueRecipientId
 
         types:
             #Academy
@@ -140,9 +144,9 @@ doctrine:
             #Lesson
             LessonId: Britannia\Infraestructure\Doctrine\DBAL\Type\Lesson\LessonIdType
 
-            #Record
-            RecordId: Britannia\Infraestructure\Doctrine\DBAL\Type\Record\RecordId
-            TypeOfRecord: Britannia\Infraestructure\Doctrine\DBAL\Type\Record\TypeOfRecordType
+            #NotificationId
+            NotificationId: Britannia\Infraestructure\Doctrine\DBAL\Type\Notification\NotificationId
+            TypeOfNotification: \Britannia\Infraestructure\Doctrine\DBAL\Type\Notification\TypeOfNotificationType
 
             #School
             SchoolId:  Britannia\Infraestructure\Doctrine\DBAL\Type\School\SchoolIdType
@@ -172,6 +176,10 @@ doctrine:
 
             #Setting
             SettingId: Britannia\Infraestructure\Doctrine\DBAL\Type\Setting\SettingIdType
+
+            #Issue
+            IssueId: Britannia\Infraestructure\Doctrine\DBAL\Type\Issue\IssueIdType
+            IssueRecipientId: Britannia\Infraestructure\Doctrine\DBAL\Type\Issue\IssueRecipientIdType
 
     orm:
         auto_generate_proxy_classes: true

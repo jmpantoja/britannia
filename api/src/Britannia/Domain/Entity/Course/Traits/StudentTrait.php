@@ -55,7 +55,9 @@ trait StudentTrait
 
     public function setStudents(StudentList $students): self
     {
+
         $this->courseHasStudentList()
+            ->onlyActives()
             ->toStudentList()
             ->forRemovedItems($students, [$this, 'removeStudent'])
             ->forAddedItems($students, [$this, 'addStudent']);
@@ -65,31 +67,14 @@ trait StudentTrait
 
     public function removeStudent(Student $student): self
     {
-        $this->courseHasStudentList()
-            ->courseHasBeenLeavedByStudent($student);
-
-        return $this;
-
-        $joined = StudentCourse::make($student, $this);
-
-        $this->courseHasStudentList()
-            ->remove($joined, function (StudentCourse $studentCourse) {
-                $event = StudentHasLeavedCourse::make($studentCourse);
-                $this->notify($event);
-            });
+        $student->removeCourse($this);
 
         return $this;
     }
 
     public function addStudent(Student $student): self
     {
-        $joined = StudentCourse::make($student, $this);
-        $this->courseHasStudentList()
-            ->add($joined, function (StudentCourse $student) {
-                $event = StudentHasJoinedToCourse::make($student, $this);
-                $this->notify($event);
-            });
-
+        $student->addCourse($this);
         return $this;
     }
 

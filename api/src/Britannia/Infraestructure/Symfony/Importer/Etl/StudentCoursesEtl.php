@@ -54,7 +54,7 @@ class StudentCoursesEtl extends AbstractEtl
 
     public function configureDataLoader(QueryBuilder $builder): void
     {
-        $offset = 0;
+        $offset = null;
         $limit = null;
         $id = null;
 
@@ -68,9 +68,7 @@ class StudentCoursesEtl extends AbstractEtl
                 ->andWhere('id = ?')
                 ->setParameter(0, $id);
         }
-
     }
-
 
     public function createBuilder(array $input, EntityManagerInterface $entityManager): BuilderInterface
     {

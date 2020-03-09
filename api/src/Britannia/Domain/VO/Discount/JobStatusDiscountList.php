@@ -34,7 +34,7 @@ class JobStatusDiscountList
 
     }
 
-    public static function make(array $data): self
+    public static function make(array $data = []): self
     {
         return new self($data);
     }

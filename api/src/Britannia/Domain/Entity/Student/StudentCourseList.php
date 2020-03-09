@@ -111,16 +111,6 @@ final class StudentCourseList extends EntityList
             ->isNotEmpty();
     }
 
-    public function studentJoinAtCourse(Student $student, Course $course)
-    {
-        $joined = StudentCourse::make($this, $course);
-
-        $this->add($joined, function (StudentCourse $student) {
-            $event = StudentHasJoinedToCourse::make($student, $co);
-            $student->notify($event);
-        });
-    }
-
     public function studentLeaveACourse(Course $course): self
     {
         $this->values()
@@ -133,19 +123,4 @@ final class StudentCourseList extends EntityList
 
         return $this;
     }
-
-    public function courseHasBeenLeavedByStudent(Student $student): self
-    {
-        $this->values()
-            ->filter(function (StudentCourse $studentCourse) use ($student) {
-                return $studentCourse->student()->equals($student) && $studentCourse->isActive();
-            })
-            ->each(function (StudentCourse $studentCourse) {
-                $studentCourse->finish();
-            });
-
-        return $this;
-    }
-
-
 }

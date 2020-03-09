@@ -126,7 +126,7 @@ final class Setting
     public function jobStatusDiscount(): ?JobStatusDiscountList
     {
 
-        return $this->jobStatusDiscount;
+        return $this->jobStatusDiscount ?? JobStatusDiscountList::make();
     }
 
     /**

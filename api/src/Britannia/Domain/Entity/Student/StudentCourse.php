@@ -156,10 +156,11 @@ class StudentCourse implements Comparable
 
     public function hash(): string
     {
-        return sprintf('%s-%s-%s', ...[
+        return sprintf('%s-%s-%s-%s', ...[
             $this->course->id(),
             $this->student->id(),
             $this->joinedAt,
+            $this->leavedAt
         ]);
     }
 
@@ -170,11 +171,11 @@ class StudentCourse implements Comparable
             return true;
         }
 
-        /** @var CarbonImmutable $leavedAt */
-        $leavedAt = $this->leavedAt;
-        $endDate = $course->end();
+        if($course->isFinalized()){
+            return false;
+        }
 
-        return is_null($leavedAt) || $leavedAt->greaterThanOrEqualTo($endDate);
+        return is_null($this->leavedAt);
     }
 
     public function finish(): self

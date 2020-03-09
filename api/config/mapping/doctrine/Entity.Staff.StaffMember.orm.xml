@@ -62,6 +62,14 @@
             </cascade>
         </one-to-one>
 
+        <one-to-many field="issues" target-entity="Britannia\Domain\Entity\Issue\IssueRecipient"
+                     mapped-by="student" orphan-removal="true">
+
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </one-to-many>
+
     </entity>
 
 </doctrine-mapping>

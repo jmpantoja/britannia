@@ -15,6 +15,7 @@ namespace PlanB\DDD\Domain\Model;
 
 
 use Britannia\Domain\Entity\Course\Course;
+use Britannia\Domain\Entity\Student\StudentCourse;
 use Countable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -101,10 +102,15 @@ abstract class EntityList implements Countable, IteratorAggregate
     {
         $key = $this->indexOf($entity);
 
+        if($entity instanceof StudentCourse){
+            dump($entity, $key);
+            die('xx');
+        }
         if (false === $key) {
             return $this;
         }
         $element = $this->data->get($key);
+
 
         if (is_null($element)) {
             return $this;
@@ -112,6 +118,8 @@ abstract class EntityList implements Countable, IteratorAggregate
 
         $this->data->removeElement($element);
         $this->values()->forget($key);
+
+
 
         if (is_callable($callback)) {
             $callback($element);

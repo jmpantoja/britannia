@@ -28,4 +28,18 @@ final class AttendanceStatus extends Enum
     public const MISSED = 'missed';
     public const DISABLED = 'disabled';
 
+    public function isMissed(): bool
+    {
+        return $this->is(self::MISSED());
+    }
+
+    public function isDisabled(): bool
+    {
+        return $this->is(self::DISABLED());
+    }
+
+    public function isAttended(): bool
+    {
+        return $this->is(self::ATTENDED());
+    }
 }

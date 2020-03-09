@@ -96,7 +96,6 @@ class StudentCoursesBuilder extends BuilderAbstract
 
         foreach ($this->courses as $course) {
             $definition = $this->getDefinition($course);
-
             $course->addStudent($this->student);
 
             if ($course instanceof CourseAssessmentInterface) {

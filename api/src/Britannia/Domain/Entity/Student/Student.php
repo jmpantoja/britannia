@@ -159,10 +159,10 @@ abstract class Student implements Comparable
      */
     private $attachments;
 
-    /**
-     * @var Collection
-     */
-    private $records;
+//    /**
+//     * @var Collection
+//     */
+//    private $records;
 
     /**
      * @var CarbonImmutable
@@ -236,6 +236,7 @@ abstract class Student implements Comparable
 
     public function setCourses(CourseList $courses): self
     {
+
         $this->studentHasCoursesList()
             ->onlyActives()
             ->toCourseList()
@@ -255,16 +256,17 @@ abstract class Student implements Comparable
 
     public function addCourse(Course $course): self
     {
+
         $joined = StudentCourse::make($this, $course);
 
         $this->studentHasCoursesList()
-            ->add($joined, function (StudentCourse $student) {
-
-                $event = StudentHasJoinedToCourse::make($student, $this);
-                $this->notify($event);
+            ->add($joined, function (StudentCourse $joined) {
+                $event = StudentHasJoinedToCourse::make($joined);
+                $joined->notify($event);
             });
 
         return $this;
+
     }
 
     public function setAttachments(AttachmentList $attachments): self
@@ -343,7 +345,9 @@ abstract class Student implements Comparable
 
     public function updateStatus(): self
     {
+
         $total = $this->activeCourses()->count();
+
         $this->active = $total > 0;
         return $this;
     }

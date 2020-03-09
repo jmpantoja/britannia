@@ -63,8 +63,8 @@
         </many-to-one>
 
 
-        <one-to-many field="records" target-entity="Britannia\Domain\Entity\Record\Record" mapped-by="student"
-                     orphan-removal="true"/>
+<!--        <one-to-many field="records" target-entity="Britannia\Domain\Entity\Record\Record" mapped-by="student"-->
+<!--                     orphan-removal="true"/>-->
 
         <one-to-many field="attachments" target-entity="Britannia\Domain\Entity\Student\Attachment\Attachment"
                      mapped-by="student"

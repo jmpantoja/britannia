@@ -45,7 +45,8 @@ sonata_admin:
                         label:        Planning
                         roles: ['ROLE_MANAGER']
 
-                    - admin.record
+                    - admin.issue
+                    - admin.notification
 
 
             admin.group.extra:

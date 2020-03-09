@@ -14,11 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Application\UseCase\Lesson;
 
 
-use ApiPlatform\Core\DataPersister\DataPersisterInterface;
-use Britannia\Domain\Entity\Record\Record;
-use Britannia\Domain\Entity\Record\TypeOfRecord;
 use Britannia\Domain\Repository\RecordRepositoryInterface;
-use Doctrine\ORM\EntityManagerInterface;
 use PlanB\DDD\Application\UseCase\UseCaseInterface;
 
 final class LessonHasBeenAttendedUseCase implements UseCaseInterface

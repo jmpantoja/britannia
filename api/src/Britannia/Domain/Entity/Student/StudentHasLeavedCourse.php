@@ -14,37 +14,31 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Student;
 
 
-use Britannia\Domain\Entity\Course\Course;
-use Britannia\Domain\Entity\Record\AbstractRecordEvent;
-use Britannia\Domain\Entity\Record\TypeOfRecord;
+use Britannia\Domain\Entity\Notification\NotificationEvent;
+use Britannia\Domain\Entity\Notification\TypeOfNotification;
 
-class StudentHasLeavedCourse extends AbstractRecordEvent
+class StudentHasLeavedCourse extends NotificationEvent
 {
     public static function make(StudentCourse $studentCourse): self
     {
         $student = $studentCourse->student();
         $course = $studentCourse->course();
 
-        $description = self::parseDescription($course);
-
-        return new self($student, $course, $description);
+        return self::builder($student, $course);
     }
 
-    /**
-     * @param Course $course
-     * @return string
-     */
-    private static function parseDescription(Course $course): string
+
+    public function type(): TypeOfNotification
     {
-        $description = sprintf('Abandona el  curso %s', $course->name());
-        if ($course->isFinalized()) {
-            $description = sprintf('Finaliza el  curso %s', $course->name());
+        return TypeOfNotification::STUDENT_LEAVE_COURSE();
+    }
+
+    protected function makeSubject(): string
+    {
+        $pattern = '%s abandona el  curso %s';
+        if ($this->course->isFinalized()) {
+            $pattern = '%s finaliza el  curso %s';
         }
-        return $description;
-    }
-
-    public function getType(): TypeOfRecord
-    {
-        return TypeOfRecord::COURSE();
+        return sprintf($pattern, $this->student, $this->course);
     }
 }
