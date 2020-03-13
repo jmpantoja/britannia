@@ -54,11 +54,19 @@ security:
             - ROLE_ADMIN_ACADEMY_ALL
             - ROLE_ADMIN_SCHOOL_ALL
 
+            - ROLE_ADMIN_ISSUE_LIST
+            - ROLE_ADMIN_ISSUE_CREATE
+            - ROLE_ADMIN_ISSUE_EDIT
+            
         ROLE_TEACHER:
             - ROLE_SONATA_ADMIN
-            - ROLE_ADMIN_STAFF_MEMBER_EDIT
+            #- ROLE_ADMIN_STAFF_MEMBER_EDIT
             #        - ROLE_ADMIN_STAFF_MEMBER_PROFILE
             - ROLE_ADMIN_ATTENDANCE_ALL
+
+            - ROLE_ADMIN_ISSUE_LIST
+            - ROLE_ADMIN_ISSUE_CREATE
+            - ROLE_ADMIN_ISSUE_VIEW
 
         ROLE_SUPER_ADMIN:
             - ROLE_SONATA_ADMIN

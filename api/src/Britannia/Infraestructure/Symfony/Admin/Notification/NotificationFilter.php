@@ -45,7 +45,6 @@ final class NotificationFilter extends AdminFilter
             ]
         );
 
-
         $this->add('type', 'doctrine_orm_choice', [
                 'show_filter' => true,
                 'advanced_filter' => false,

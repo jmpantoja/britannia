@@ -102,10 +102,6 @@ abstract class EntityList implements Countable, IteratorAggregate
     {
         $key = $this->indexOf($entity);
 
-        if($entity instanceof StudentCourse){
-            dump($entity, $key);
-            die('xx');
-        }
         if (false === $key) {
             return $this;
         }

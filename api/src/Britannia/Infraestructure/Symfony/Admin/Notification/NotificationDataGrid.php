@@ -29,7 +29,7 @@ final class NotificationDataGrid extends AdminDataGrid
             'template' => 'admin/notification/notification_author_column.html.twig',
         ]);
 
-        $this->add('subject', 'string', [
+        $this->addId('subject', 'string', [
             'label' => 'Asunto',
             'template' => 'admin/notification/notification_subject_column.html.twig',
         ]);
@@ -39,8 +39,6 @@ final class NotificationDataGrid extends AdminDataGrid
             'row_align' => 'left',
             'label' => 'Fecha'
         ]);
-
-
 
         $this->add('_collapsed', null, [
             'template' => 'admin/notification/notification_collapsed_column.html.twig',

@@ -128,6 +128,7 @@ sonata_admin:
             - css/admin/core.css
             - css/admin/list.css
             - css/admin/forms.css
+            - css/admin/show.css
             - css/admin/attendance.css
             - css/admin/students.css
             - css/admin/widgets.css

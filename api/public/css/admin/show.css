@@ -1,0 +1,21 @@
+.sonata-ba-show .tab-content {
+    min-height: 81vh;
+}
+
+.sonata-ba-show .form-group fieldset {
+    font-weight: bolder;
+}
+
+.sonata-ba-show .form-group .sonata-ba-field .value {
+    display: block;
+    padding: 0.5em 0.5em;
+    border: solid 1px #ccc;
+    cursor: not-allowed;
+}
+
+.sonata-ba-show .form-group .sonata-ba-field span.message {
+    min-height: 28em;
+    font-family: 'Courier New', Monospace;
+    font-size: 1.33em;
+
+}

@@ -31,7 +31,7 @@ final class IssueDto extends Dto
 
     public StaffMember $author;
 
-    public Student $student;
+    public ?Student $student;
 
     public StaffList $issueHasRecipients;
 

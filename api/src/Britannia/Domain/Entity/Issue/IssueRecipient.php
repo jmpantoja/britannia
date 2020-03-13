@@ -81,6 +81,27 @@ final class IssueRecipient implements Comparable
         return $this->readAt;
     }
 
+    public function hasBeenReadByUser(StaffMember $user): bool
+    {
+        return $this->isAssignedTo($user) and $this->hasBeenRead();
+    }
+
+    public function isAssignedTo(StaffMember $user): bool
+    {
+        return $this->recipient()->equals($user);
+    }
+
+    public function hasBeenRead(): bool
+    {
+        return $this->readAt instanceof CarbonImmutable;
+    }
+
+    public function toggleReadState(): self {
+        $this->readAt = $this->hasBeenRead() ? null : CarbonImmutable::now();
+        return $this;
+    }
+
+
     public function hash(): string
     {
         return sprintf('%s-%s', ...[
@@ -88,5 +109,4 @@ final class IssueRecipient implements Comparable
             $this->recipient->id(),
         ]);
     }
-
 }

@@ -1,0 +1,16 @@
+{% extends get_admin_template('base_list_field', admin.code) %}
+
+{% block field %}
+    {% set adminStaff = admin.configurationPool.adminByAdminCode('admin.staff_member') %}
+
+    {% if adminStaff.hasAccess('edit', object.author) %}
+        <a href="{{ adminStaff.generateUrl('edit', {id:object.author.id}) }}">
+            {{ object.author.fullName }}
+        </a>
+    {% else %}
+        {{ object.author.fullName }}
+    {% endif %}
+
+{% endblock %}
+
+

@@ -1,0 +1,16 @@
+{% extends get_admin_template('base_list_field', admin.code) %}
+
+{% block field %}
+    {% if admin.hasAccess('edit', object) %}
+        <a href="{{ admin.generateObjectUrl('edit', object) }}">
+            <strong>{{ object.subject }}</strong>
+        </a>
+    {% elseif admin.hasAccess('show', object) %}
+        <a href="{{ admin.generateObjectUrl('show', object) }}">
+            <strong>{{ object.subject }}</strong>
+        </a>
+    {% else %}
+        <strong>{{ object.subject }}</strong>
+    {% endif %}
+
+{% endblock %}

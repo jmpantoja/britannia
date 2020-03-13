@@ -9,7 +9,8 @@ sonata_doctrine_orm_admin:
             - 'form/locked.html.twig'
             - 'form/mark.html.twig'
             - 'form/reports.html.twig'
-            - 'form/students.html.twig'
+            - 'form/students.html.twig'            
             - 'form/widgets.html.twig'
 
-        filter: [ '@SonataDoctrineORMAdmin/Form/filter_admin_fields.html.twig' ]
+        filter: 
+            - '@SonataDoctrineORMAdmin/Form/filter_admin_fields.html.twig'

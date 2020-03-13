@@ -95,8 +95,31 @@ final class Issue
     {
         $joined = IssueRecipient::make($this, $recipient);
         $this->recipientList()->remove($joined);
-        
+
         return $this;
+    }
+
+    public function containsRecipient(StaffMember $user): bool
+    {
+        return $this->recipientList()->contains($user);
+    }
+
+    public function equalAuthor(StaffMember $author): bool
+    {
+        return $this->author()->equals($author);
+    }
+
+    public function toggleReadStateByUser(StaffMember $user): self
+    {
+       $this->recipientList()
+           ->toggleReadStateByUser($user);
+
+        return $this;
+    }
+
+    public function hasBeenReadByUser(StaffMember $user): bool
+    {
+        return $this->recipientList()->hasBeenReadByUser($user);
     }
 
     /**
@@ -126,7 +149,7 @@ final class Issue
     /**
      * @return mixed
      */
-    public function author()
+    public function author(): StaffMember
     {
         return $this->author;
     }

@@ -1,0 +1,55 @@
+{% extends '@SonataAdmin/CRUD/base_show.html.twig' %}
+
+{% block show %}
+    <div class="sonata-ba-view">
+        <div class="row">
+            {{ block('show_groups') }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block show_groups %}
+    <div class="col-md-12">
+        <div class="row ">
+            <div class="col-md-12">
+                <div class="box box-primary tab-content">
+                    <div class="box-header">
+                        <h4 class="box-title">
+                            Observaciones
+                        </h4>
+                    </div>
+                    <div class="box-body">
+                        {{ block('issue') }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block issue %}
+    <div class="row">
+        <div class="col-md-9">
+            {{ _self.field('subject', object.subject) }}
+        </div>
+        <div class="col-md-3">
+            {{ _self.field('student', object.student) }}
+        </div>
+        <div class="col-md-12">
+            {{ _self.field('message', object.message) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% macro field(label, value) %}
+    <fieldset class="form-group">
+        <legend class="control-label">
+            {{ label | trans({}, 'messages') }}
+        </legend>
+        <div class="sonata-ba-field">
+            <span class="value {{ label }}">
+                {{ value | raw }}
+            </span>
+        </div>
+    </fieldset>
+{% endmacro %}

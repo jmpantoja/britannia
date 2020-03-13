@@ -14,12 +14,9 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Admin\Issue;
 
 
-use PlanB\DDDBundle\Sonata\Admin\AdminDataGrid;
 use PlanB\DDDBundle\Sonata\Admin\AdminDataSource;
-use PlanB\DDDBundle\Sonata\Admin\AdminFilter;
 use PlanB\DDDBundle\Sonata\Admin\AdminForm;
 use PlanB\DDDBundle\Sonata\Admin\AdminQuery;
-use PlanB\DDDBundle\Sonata\Admin\AdminRoutes;
 use PlanB\DDDBundle\Sonata\Admin\AdminTools;
 use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -46,9 +43,9 @@ final class IssueTools extends AdminTools
         return null;
     }
 
-    public function dataGrid(ListMapper $listMapper): ?AdminDataGrid
+    public function dataGrid(ListMapper $listMapper): ?IssueDatagrid
     {
-        return null;
+        return IssueDatagrid::make($listMapper);
     }
 
     public function form(FormMapper $formMapper): ?AdminForm
@@ -62,13 +59,13 @@ final class IssueTools extends AdminTools
         return null;
     }
 
-    public function filters(DatagridMapper $filterMapper): ?AdminFilter
+    public function filters(DatagridMapper $filterMapper): ?IssueFilter
     {
-        return null;
+        return IssueFilter::make($filterMapper);
     }
 
-    public function routes(RouteCollection $collection, string $idParameter): ?AdminRoutes
+    public function routes(RouteCollection $collection, string $idParameter): ?IssueRoutes
     {
-        return null;
+        return IssueRoutes::make($collection, $idParameter);
     }
 }

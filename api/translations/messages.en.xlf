@@ -9,6 +9,26 @@
         <source>link_pdf</source>
         <target>__link_pdf</target>
       </trans-unit>
+      <trans-unit id="fgcJblr" resname="link_action_mark_as_read">
+        <source>link_action_mark_as_read</source>
+        <target>Mark as read</target>
+      </trans-unit>
+      <trans-unit id="wQCti_K" resname="link_action_mark_as_unread">
+        <source>link_action_mark_as_unread</source>
+        <target>Mark as unread</target>
+      </trans-unit>
+      <trans-unit id="qUkfTBv" resname="subject">
+        <source>subject</source>
+        <target>Subject</target>
+      </trans-unit>
+      <trans-unit id="JkyMOBv" resname="student">
+        <source>student</source>
+        <target>Student</target>
+      </trans-unit>
+      <trans-unit id="q1MKE_R" resname="message">
+        <source>message</source>
+        <target>Message</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

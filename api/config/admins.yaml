@@ -147,7 +147,10 @@ services:
 
     admin.issue:
         class: Britannia\Infraestructure\Symfony\Admin\Issue\IssueAdmin
-        arguments: [~, Britannia\Domain\Entity\Issue\Issue, ~]
+        arguments: [~, Britannia\Domain\Entity\Issue\Issue, Britannia\Infraestructure\Symfony\Controller\Admin\IssueController]
+        calls:
+            - [setTemplate, ['edit', 'admin/issue/issue_edit_template.html.twig']]
+            - [setTemplate, ['show', 'admin/issue/issue_show_template.html.twig']]
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: Observaciones }
         public: true

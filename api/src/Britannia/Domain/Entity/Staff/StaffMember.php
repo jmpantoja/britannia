@@ -172,6 +172,11 @@ class StaffMember implements UserInterface, Serializable, Comparable
         return $this->teacher;
     }
 
+    public function isManager(): bool
+    {
+        return in_array('ROLE_MANAGER', $this->roles);
+    }
+
 
     public function getUsername(): string
     {
@@ -327,6 +332,19 @@ class StaffMember implements UserInterface, Serializable, Comparable
         return $this->photo;
     }
 
+    public function name(): string
+    {
+        if (!is_null($this->fullName)) {
+            return (string)$this->fullName;
+        }
+
+        return (string)$this->id();
+    }
+
+    public function __toString()
+    {
+        return $this->name();
+    }
 
     public function serialize()
     {
@@ -354,4 +372,5 @@ class StaffMember implements UserInterface, Serializable, Comparable
             $this->password,
             ) = unserialize($serialized, array('allowed_classes' => [StaffMemberId::class]));
     }
+
 }

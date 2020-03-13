@@ -15,12 +15,11 @@ namespace Britannia\Infraestructure\Symfony\Admin\Issue;
 
 
 use Britannia\Domain\Entity\Issue\Issue;
-use Britannia\Domain\Entity\Staff\StaffMember;
-use Britannia\Infraestructure\Doctrine\DBAL\Type\Issue\IssueRecipientIdType;
 use Britannia\Infraestructure\Symfony\Form\Type\Issue\IssueRecipientsType;
-use Doctrine\ORM\EntityRepository;
 use PlanB\DDDBundle\Sonata\Admin\AdminForm;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use PlanB\DDDBundle\Symfony\Form\Type\WYSIWYGType;
+use Symfony\Component\Validator\Constraints\Count;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 final class IssueForm extends AdminForm
 {
@@ -28,11 +27,25 @@ final class IssueForm extends AdminForm
     public function configure(Issue $issue)
     {
         $this
-            ->add('subject')
-            ->add('message')
-            ->add('student')
-            ->add('issueHasRecipients', IssueRecipientsType::class, [
+            ->add('subject', null, [
+                'label' => 'Asunto',
 
+                'constraints' => [
+                    new NotBlank()
+                ]
+            ])
+            ->add('student', null, [
+                'label' => 'Alumno',
+                'constraints' => [
+                    new NotBlank()
+                ]
+            ])
+            ->add('issueHasRecipients', IssueRecipientsType::class, [
+                'label' => 'Destinatarios',
+            ])
+            ->add('message', WYSIWYGType::class, [
+                'label' => 'Mensaje',
+                'required' => false
             ]);
     }
 
