@@ -20,7 +20,7 @@ use Carbon\CarbonImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
-final class Issue
+class Issue
 {
     /** @var ?IssueId */
     private $id;
@@ -54,7 +54,7 @@ final class Issue
     {
         $this->id = new IssueId();
 
-        $this->createdAt = CarbonImmutable::now();
+        $this->createdAt = $dto->createdAt ?? CarbonImmutable::now();
         $this->issueHasRecipients = new ArrayCollection();
 
         $this->update($dto);
@@ -68,6 +68,7 @@ final class Issue
         $this->message = $dto->message;
 
         $this->setRecipients($dto->issueHasRecipients);
+
 
         return $this;
     }
@@ -111,8 +112,8 @@ final class Issue
 
     public function toggleReadStateByUser(StaffMember $user): self
     {
-       $this->recipientList()
-           ->toggleReadStateByUser($user);
+        $this->recipientList()
+            ->toggleReadStateByUser($user);
 
         return $this;
     }

@@ -279,6 +279,16 @@ class StaffMember implements UserInterface, Serializable, Comparable
     }
 
     /**
+     * @return Collection
+     */
+    public function issues(): Collection
+    {
+        return $this->issues;
+    }
+
+
+
+    /**
      * Returns the salt that was originally used to encode the password.
      *
      * This can return null if the password was not encoded using a salt.

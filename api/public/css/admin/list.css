@@ -148,11 +148,11 @@ table.sonata-ba-list,
 /*    -moz-border-radius: 9px;*/
 /*    border-radius: 9px;*/
 /*}*/
-.badge:hover {
-    color: #ffffff;
-    text-decoration: none;
-    cursor: pointer;
-}
+/*.badge:hover {*/
+/*    color: #ffffff;*/
+/*    text-decoration: none;*/
+/*    cursor: pointer;*/
+/*}*/
 .badge-error {
     background-color: #b94a48;
 }

@@ -7,6 +7,7 @@ twig:
         attendances: '@Britannia\Infraestructure\Symfony\Service\Attendance\AttendanceService'
         schedule: '@Britannia\Infraestructure\Symfony\Service\Schedule\ScheduleService'
         skill_marks: '@Britannia\Infraestructure\Symfony\Service\Assessment\SkillMarkService'
+        issue_repository: '@Britannia\Domain\Repository\IssueRepositoryInterface'
         
         #        paymentInfo: '@Britannia\Domain\Service\Payment\PaymentInfoService'
         #courseInfo: '@Britannia\Infraestructure\Symfony\Service\Course\CourseInformationReportService'

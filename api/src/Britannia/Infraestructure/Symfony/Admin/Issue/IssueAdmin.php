@@ -20,7 +20,9 @@ final class IssueAdmin extends AbstractAdmin implements AdminFilterableInterface
         'status' => ['value' => [
             'status' => 1,
             'recipient' => 2,
-        ]]
+        ]],
+        '_sort_order' => 'DESC',
+        '_sort_by' => 'createdAt',
     ];
 
     /**
@@ -80,7 +82,6 @@ final class IssueAdmin extends AbstractAdmin implements AdminFilterableInterface
             ->build();
 
     }
-
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {

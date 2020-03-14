@@ -37,6 +37,11 @@ final class IssueFormType extends AbstractCompoundType
 
     public function customForm(FormBuilderInterface $builder, array $options)
     {
+        $builder->add('recipient', ChoiceType::class, [
+            'label' => 'Autor / Destinatario',
+            'choices' => $this->recipientChoices()
+        ]);
+
         $builder->add('status', ChoiceType::class, [
             'label' => 'Estado',
             'choices' => [
@@ -45,12 +50,6 @@ final class IssueFormType extends AbstractCompoundType
                 'Leidos' => 2
             ]
         ]);
-
-        $builder->add('recipient', ChoiceType::class, [
-            'label' => 'Autor / Destinatario',
-            'choices' => $this->recipientChoices()
-        ]);
-
     }
 
     public function customOptions(OptionsResolver $resolver)
@@ -77,14 +76,14 @@ final class IssueFormType extends AbstractCompoundType
     private function recipientChoices(): array
     {
         $choices = [
-            'Todos' => 0,
+            'Todos los mios' => 0,
             'Creados por mi' => 1,
             'Dirigidos a mi' => 2
         ];
 
         $user = $this->user();
         if ($user->isManager()) {
-            $choices['Ver todos los usuarios'] = 3;
+            $choices['Del resto de usuarios'] = 3;
         }
 
         return $choices;

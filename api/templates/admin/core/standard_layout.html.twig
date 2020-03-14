@@ -10,10 +10,13 @@
             <ul class="nav navbar-nav">
                 {% block sonata_top_nav_menu_issues_block %}
                     <li class="dropdown">
-                        <a  href="{{ path('admin_britannia_domain_issue_issue_list') }}">
+                        <a href="{{ path('admin_britannia_domain_issue_issue_list') }}">
                             <i class="fa fa-envelope fa-fw" aria-hidden="true"></i>
 
-                            <span class="badge badge-info">5</span>
+                            {% set unread = issue_repository.numOfUnread(app.user) %}
+                            {% if 0 < unread %}
+                                <span class="badge badge-error">{{ unread }}</span>
+                            {% endif %}
                         </a>
                     </li>
                 {% endblock %}

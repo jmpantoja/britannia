@@ -63,7 +63,7 @@
         </one-to-one>
 
         <one-to-many field="issues" target-entity="Britannia\Domain\Entity\Issue\IssueRecipient"
-                     mapped-by="student" orphan-removal="true">
+                     mapped-by="recipient" orphan-removal="true">
 
             <cascade>
                 <cascade-persist/>

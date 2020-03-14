@@ -14,12 +14,10 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Issue;
 
 
-use Britannia\Domain\Entity\Course\CourseList;
 use Britannia\Domain\Entity\Staff\StaffList;
 use Britannia\Domain\Entity\Staff\StaffMember;
-use Britannia\Domain\Entity\Student\Attachment\AttachmentList;
 use Britannia\Domain\Entity\Student\Student;
-use Britannia\Domain\Entity\Student\StudentList;
+use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\Model\Dto;
 
 final class IssueDto extends Dto
@@ -35,10 +33,13 @@ final class IssueDto extends Dto
 
     public StaffList $issueHasRecipients;
 
+    public ?CarbonImmutable $createdAt;
+
     protected function defaults(): array
     {
         return [
             'issueHasRecipients' => IssueRecipientList::collect(),
+            'createdAt' => CarbonImmutable::now(),
         ];
     }
 }

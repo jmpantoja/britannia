@@ -4,7 +4,8 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
 
-    <entity name="Britannia\Domain\Entity\Issue\Issue" table="issues">
+    <entity name="Britannia\Domain\Entity\Issue\Issue" table="issues"
+            repository-class="Britannia\Infraestructure\Doctrine\Repository\IssueRepository">
 
         <id name="id" type="IssueId" column="id">
             <generator strategy="CUSTOM"/>

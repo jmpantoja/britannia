@@ -163,6 +163,8 @@ sonata_admin:
 
             - js/toast/jquery.toast.min.js
 
+            - js/admin/issues.js                
+
             - bundles/fosckeditor/ckeditor.js
             - bundles/sonataformatter/vendor/markitup-markitup/markitup/jquery.markitup.js
             - bundles/sonataformatter/markitup/sets/markdown/set.js
