@@ -7,7 +7,7 @@ use Britannia\Domain\VO\Employment;
 use Britannia\Domain\VO\Student\Job\Job;
 use PlanB\DDD\Domain\VO\DNI;
 
-final class Adult extends Student
+class Adult extends Student
 {
     /** @var DNI */
     private $dni;

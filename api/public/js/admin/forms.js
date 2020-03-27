@@ -19,8 +19,7 @@ $.widget('britannia.toggle_field', {
   toggle: function (value) {
     if (this.shouldBeVisible(value)) {
       this.children.show();
-    }
-    else {
+    } else {
       this.children.hide();
     }
   },
@@ -31,5 +30,4 @@ $.widget('britannia.toggle_field', {
 
     return hasErrors || !isHideValue;
   }
-
 });

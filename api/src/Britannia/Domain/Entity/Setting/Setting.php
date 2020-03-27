@@ -17,7 +17,7 @@ namespace Britannia\Domain\Entity\Setting;
 use Britannia\Domain\VO\Discount\FamilyDiscountList;
 use Britannia\Domain\VO\Discount\JobStatusDiscountList;
 
-final class Setting
+class Setting
 {
     /**
      * @var SettingId

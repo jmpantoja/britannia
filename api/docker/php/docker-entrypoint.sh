@@ -34,4 +34,6 @@ if [ "$1" = 'php-fpm' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 	fi
 fi
 
+service cron restart
+
 exec docker-php-entrypoint "$@"

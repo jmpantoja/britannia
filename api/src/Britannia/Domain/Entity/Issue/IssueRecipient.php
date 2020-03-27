@@ -20,7 +20,7 @@ use PlanB\DDD\Domain\Behaviour\Comparable;
 use PlanB\DDD\Domain\Behaviour\Traits\ComparableTrait;
 use PlanB\DDD\Domain\Model\Traits\AggregateRootTrait;
 
-final class IssueRecipient implements Comparable
+class IssueRecipient implements Comparable
 {
     use AggregateRootTrait;
     use ComparableTrait;

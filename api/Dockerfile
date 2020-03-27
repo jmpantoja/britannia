@@ -8,9 +8,12 @@ ARG VER_PDFTK=2.02
 
 FROM php:${PHP_VERSION}-fpm-buster AS api_platform_php
 
+ENV TZ=Europe/Madrid
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 RUN apt update;
 # persistent / runtime deps
-RUN apt -y install \
+RUN apt -y --fix-missing install \
 #		acl \
 #		file \
 #		gettext \
@@ -27,12 +30,22 @@ RUN apt update \
 	#imagemgick
 	&& apt-get install -y libmagickwand-dev --no-install-recommends \
     && pecl install imagick \
+
 	&& docker-php-ext-enable imagick \
 	&& apt clean ;
 
 RUN wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.buster_amd64.deb \
 	&& apt install -y ./wkhtmltox_0.12.5-1.buster_amd64.deb \
 	&& rm ./wkhtmltox_0.12.5-1.buster_amd64.deb
+
+
+RUN apt update \
+&& apt-get install -y cron;
+
+COPY docker/php/crontab /srv/cron.crontab
+RUN chmod 0644 /srv/cron.crontab
+RUN crontab /srv/cron.crontab
+RUN service cron start
 
 #ADD https://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/pdftk-${PDFTK_VERSION}-src.zip /tmp/
 #RUN unzip /tmp/pdftk-${PDFTK_VERSION}-src.zip -d /tmp && \

@@ -32,7 +32,7 @@ use PlanB\DDD\Domain\Behaviour\Traits\ComparableTrait;
 use PlanB\DDD\Domain\Model\Traits\AggregateRootTrait;
 use PlanB\DDD\Domain\VO\Percent;
 
-final class Term implements Comparable
+class Term implements Comparable
 {
     use ComparableTrait;
     use AggregateRootTrait;

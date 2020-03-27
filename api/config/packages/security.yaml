@@ -38,6 +38,9 @@ security:
             - ROLE_ADMIN_ISSUE_ALL
             - ROLE_ADMIN_SCHOOL_COURSE_ALL
             - ROLE_ADMIN_SETTING_EDIT
+            - ROLE_ADMIN_MESSAGE_ALL
+            - ROLE_ADMIN_MESSAGE_ALL
+            - ROLE_ADMIN_MESSAGE_TEMPLATE_ALL
 
 
         ROLE_RECEPTION:

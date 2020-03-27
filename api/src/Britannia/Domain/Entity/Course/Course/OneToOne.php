@@ -24,7 +24,7 @@ use Britannia\Domain\Entity\Course\Traits\PaymentTrait;
 use Britannia\Domain\VO\Course\TimeRange\TimeRange;
 use Doctrine\Common\Collections\ArrayCollection;
 
-final class OneToOne extends Course implements CoursePaymentInterface
+class OneToOne extends Course implements CoursePaymentInterface
 {
     use PaymentTrait;
     use LessonTrait;

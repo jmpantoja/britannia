@@ -15,6 +15,9 @@ final class SettingAdmin extends AbstractAdmin
      */
     private SettingTools $adminTools;
 
+    protected $maxPerPage = 50;
+    protected $maxPageLinks = 10;
+
     public function __construct($code, $class, $baseControllerName, SettingTools $adminTools)
     {
         parent::__construct($code, $class, $baseControllerName);

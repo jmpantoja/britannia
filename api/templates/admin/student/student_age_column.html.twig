@@ -9,11 +9,11 @@
 
         {% if object.adult %}
             <span class="label label-primary label-square">
-            {{ date().diff(date(object.birthdate)).y }}
+            {{ object.age }}
         </span>
         {% else %}
             <span class="label label-warning label-square">
-            {{ date().diff(date(object.birthdate)).y }}
+            {{ object.age }}
         </span>
         {% endif %}
     {% endif %}

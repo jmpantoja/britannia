@@ -18,7 +18,6 @@
 
         <field name="createdAt" type="datetime_immutable"/>
 
-
         <many-to-one field="author" target-entity="Britannia\Domain\Entity\Staff\StaffMember"/>
         <many-to-one field="student" target-entity="Britannia\Domain\Entity\Student\Student"/>
 

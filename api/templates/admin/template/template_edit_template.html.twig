@@ -1,0 +1,30 @@
+{% extends 'admin/core/CRUD/edit.html.twig' %}
+
+{% block sonata_tab_content %}
+    <div class="col-md-12">
+        <div class="row ">
+            <div class="col-md-12">
+                <div class="box box-primary tab-content">
+                    <div class="box-header">
+                        <h4 class="box-title">
+                            Plantilla SMS
+                        </h4>
+                    </div>
+                    <div class="box-body message-edit">
+                        {{ block('template') }}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block template %}
+    <div class="row">
+        <div class="col-md-3 col-md-offset-4">
+            {{ form_row(form.name) }}
+            {{ form_row(form.template) }}
+        </div>
+    </div>
+{% endblock %}

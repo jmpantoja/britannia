@@ -104,6 +104,12 @@ doctrine:
                     IssueId: IssueId
                     IssueRecipientId: IssueRecipientId
 
+                    #Message
+                    MessageId: MessageId
+                    ShipmentId: ShipmentId
+                    TemplateId: TemplateId
+                    MessageMailer: MessageMailer
+
         types:
             #Academy
             AcademyId:  Britannia\Infraestructure\Doctrine\DBAL\Type\Academy\AcademyIdType
@@ -181,6 +187,11 @@ doctrine:
             IssueId: Britannia\Infraestructure\Doctrine\DBAL\Type\Issue\IssueIdType
             IssueRecipientId: Britannia\Infraestructure\Doctrine\DBAL\Type\Issue\IssueRecipientIdType
 
+            #Message
+            MessageId: Britannia\Infraestructure\Doctrine\DBAL\Type\Message\MessageIdType
+            ShipmentId: Britannia\Infraestructure\Doctrine\DBAL\Type\Message\ShipmentIdType
+            TemplateId: Britannia\Infraestructure\Doctrine\DBAL\Type\Message\TemplateIdType
+            MessageMailer: Britannia\Infraestructure\Doctrine\DBAL\Type\Message\MessageMailerType
     orm:
         auto_generate_proxy_classes: true
         naming_strategy: doctrine.orm.naming_strategy.underscore

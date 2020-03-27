@@ -25,4 +25,5 @@ return [
     Sonata\IntlBundle\SonataIntlBundle::class => ['all' => true],
     Knp\Bundle\SnappyBundle\KnpSnappyBundle::class => ['all' => true],
     Impulze\Bundle\InterventionImageBundle\ImpulzeInterventionImageBundle::class => ['all' => true],
+    Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle::class => ['all' => true],
 ];

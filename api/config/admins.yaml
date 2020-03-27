@@ -101,7 +101,6 @@ services:
             - { name: sonata.admin, manager_type: orm, label: Aulas }
         public: true
 
-
     admin.calendar:
         class: Britannia\Infraestructure\Symfony\Admin\Calendar\CalendarAdmin
         arguments: [~, Britannia\Domain\Entity\Calendar\Calendar, Britannia\Infraestructure\Symfony\Controller\Admin\CalendarController]
@@ -154,3 +153,25 @@ services:
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: Observaciones }
         public: true
+
+    admin.message:
+        class: Britannia\Infraestructure\Symfony\Admin\Message\MessageAdmin
+        arguments: [~, Britannia\Domain\Entity\Message\Message, Britannia\Infraestructure\Symfony\Controller\Admin\MessageController]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Mensajería }
+        calls:
+            - [setSubClasses, [{email: Britannia\Domain\Entity\Message\Message\Email, sms: Britannia\Domain\Entity\Message\Message\Sms }]]
+            - [setTemplate, ['edit', 'admin/message/message_edit_template.html.twig']]            
+        public: true
+
+    admin.message.template:
+        class: Britannia\Infraestructure\Symfony\Admin\MessageTemplate\TemplateAdmin
+        arguments: [~, Britannia\Domain\Entity\Message\Template, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Plantillas SMS }   
+            
+        calls:
+            - [setTemplate, ['edit', 'admin/template/template_edit_template.html.twig']]
+        public: true
+
+

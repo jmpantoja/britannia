@@ -20,7 +20,7 @@ use PlanB\DDD\Domain\Behaviour\Comparable;
 use PlanB\DDD\Domain\Behaviour\Traits\ComparableTrait;
 use PlanB\DDD\Domain\Model\Traits\AggregateRootTrait;
 
-final class Attachment implements Comparable
+class Attachment implements Comparable
 {
     use ComparableTrait;
     use AggregateRootTrait;

@@ -1,0 +1,33 @@
+swiftmailer:
+    default_mailer: managers
+    mailers:
+        managers:
+            delivery_addresses: ['000.micorreo@gmail.com']
+            url: '%env(MANAGERS_MAILER_URL)%'
+        #            host: smtp.googlemail.com
+        #            username: xxxx@gmail.com
+        #            password: xxxx
+        #            port: 465
+        #            encryption: ssl
+        #            auth_mode: login
+
+        teachers:
+            delivery_addresses: ['000.micorreo@gmail.com']
+            url: '%env(TEACHERS_MAILER_URL)%'
+        #            host: smtp.googlemail.com
+        #            username: xxxx@gmail.com
+        #            password: xxxx
+        #            port: 465
+        #            encryption: ssl
+        #            auth_mode: login
+
+        reception:
+            delivery_addresses: ['000.micorreo@gmail.com']
+            url: '%env(RECEPTION_MAILER_URL)%'
+    #            host: smtp.googlemail.com
+    #            username: xxxx@gmail.com
+    #            password: xxxx
+    #            port: 465
+    #            encryption: ssl
+    #            auth_mode: login
+    

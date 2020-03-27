@@ -18,7 +18,7 @@ use Britannia\Domain\VO\Course\Book\BookCategory;
 use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\VO\Price;
 
-final class Book
+class Book
 {
     /**
      * @var TermId

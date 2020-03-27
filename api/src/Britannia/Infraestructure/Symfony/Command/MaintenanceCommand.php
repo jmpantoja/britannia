@@ -15,9 +15,9 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
-class BritanniaCronCommand extends Command implements ContainerAwareInterface
+class MaintenanceCommand extends Command implements ContainerAwareInterface
 {
-    protected static $defaultName = 'britannia:cron';
+    protected static $defaultName = 'britannia:maintenance';
     /**
      * @var CommandBus
      */
@@ -42,7 +42,7 @@ class BritanniaCronCommand extends Command implements ContainerAwareInterface
     protected function configure()
     {
         $this
-            ->setDescription('Cron tasks for britannia');
+            ->setDescription('maintenance tasks for britannia');
     }
 
     /**
@@ -61,6 +61,8 @@ class BritanniaCronCommand extends Command implements ContainerAwareInterface
         $this->commandBus->handle(UpdateStudentAge::make());
         $this->commandBus->handle(UpdateCourseStatus::make());
         $this->commandBus->handle(UpdateCalendar::make());
+
+        return 0;
     }
 
     protected function login()
@@ -80,6 +82,5 @@ class BritanniaCronCommand extends Command implements ContainerAwareInterface
             $user->getRoles());
 
         $this->container->get('security.token_storage')->setToken($token);
-
     }
 }

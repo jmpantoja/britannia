@@ -1,0 +1,41 @@
+{% use 'form/widgets.html.twig' %}
+
+{% block template_widget %}
+    <div class="sms-template">
+        {{ block('counter_widget') }}
+    </div>
+{% endblock %}
+
+
+{% block sms_widget %}
+    {{ form_row(form.template) }}
+    {{ form_row(form.message) }}
+
+    <ul id="templates-{{ id }}" style="visibility: hidden; position: absolute; top: 0">
+        {%- for template in templates -%}
+            <li id="template-{{ template.id }}">
+                {{- template.template -}}
+            </li>
+        {%- endfor -%}
+    </ul>
+
+    <script type="application/javascript">
+        $(function () {
+            $template = $('#{{ form.template.vars.id }}');
+            $message = $('#{{ form.message.vars.id }}');
+
+            $template.on('change', function () {
+                $id = $(this).children("option:selected").val();
+                $text = $('#templates-{{ id }}').find('#template-' + $id)
+
+                $message.text('ssss')
+
+//                $message.text($text.text())
+                $message.val($text.text())
+
+                $message.trigger('input')
+            })
+        });
+
+    </script>
+{% endblock %}

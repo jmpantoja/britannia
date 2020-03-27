@@ -9,7 +9,6 @@ use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Show\ShowMapper;
 
 final class SchoolCourseAdmin extends AbstractAdmin implements AdminFilterableInterface
 {
@@ -18,6 +17,9 @@ final class SchoolCourseAdmin extends AbstractAdmin implements AdminFilterableIn
         '_sort_by' => 'weight',
     ];
 
+    protected $maxPerPage = 50;
+    protected $maxPageLinks = 10;
+    
     /**
      * @var SchoolCourseTools
      */

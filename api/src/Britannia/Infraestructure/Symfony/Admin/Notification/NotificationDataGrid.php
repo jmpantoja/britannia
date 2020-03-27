@@ -29,7 +29,7 @@ final class NotificationDataGrid extends AdminDataGrid
             'template' => 'admin/notification/notification_author_column.html.twig',
         ]);
 
-        $this->addId('subject', 'string', [
+        $this->addIdentifier('subject', 'string', [
             'label' => 'Asunto',
             'template' => 'admin/notification/notification_subject_column.html.twig',
         ]);

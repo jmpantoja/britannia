@@ -18,7 +18,7 @@ use Britannia\Domain\VO\SchoolCourse\SchoolLevel;
 use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\VO\PositiveInteger;
 
-final class SchoolCourse
+class SchoolCourse
 {
     private $id;
 

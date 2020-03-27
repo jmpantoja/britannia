@@ -32,7 +32,7 @@ class StudentCourse implements Comparable
     /**
      * @var StudentCourseId
      */
-    private StudentCourseId $id;
+    private $id;
 
     /**
      * @var Student

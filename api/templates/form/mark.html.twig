@@ -166,7 +166,7 @@
         <tr>
             <th class="student">Alumno</th>
             <th class="comment">Comentario</th>
-            <th class="counter"></th>
+            {#            <th class="counter"></th>#}
         </tr>
         </thead>
         <tbody>
@@ -178,42 +178,12 @@
                 <td class="comment">
                     {{ form_widget(comment) }}
                 </td>
-                <td class="counter">
-                    <p class="counter"></p>
-                </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <script>
-        $(function () {
-            $('.term-comments textarea').on("input", function () {
-                var maxlength = $(this).attr("maxlength");
-                var currentLength = $(this).val().length;
-                var counter = $(this).closest('tr').find('p.counter');
 
-                var diff = maxlength - currentLength;
-
-                $(counter).removeClass('warning')
-                $(counter).removeClass('error')
-                $(counter).removeClass('success')
-
-                if (diff <= 0) {
-                    $(counter).addClass('error')
-                } else if (diff < 50) {
-                    $(counter).addClass('warning')
-                } else {
-                    $(counter).addClass('success')
-                }
-
-                var text = currentLength + " / " + maxlength
-                $(counter).text(text)
-            });
-
-            $('.term-comments textarea').trigger('input');
-        })
-    </script>
 {% endblock %}
 
 {% block other_skill_exam_widget %}

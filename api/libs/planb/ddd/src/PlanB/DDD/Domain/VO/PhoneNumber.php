@@ -15,9 +15,8 @@ namespace PlanB\DDD\Domain\VO;
 
 
 use PlanB\DDD\Domain\VO\Traits\Validable;
-use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDD\Domain\VO\Validator;
-use Symfony\Component\Validator\ConstraintViolationListInterface;
+use PlanB\DDD\Domain\VO\Validator\Constraint;
 
 class PhoneNumber
 {
@@ -73,6 +72,11 @@ class PhoneNumber
         return $this->phoneNumber;
     }
 
+    public function getRaw(): string
+    {
+        return str_replace(' ', '', $this->phoneNumber);
+    }
+
     /**
      * @return string
      */
@@ -97,5 +101,27 @@ class PhoneNumber
         return $this->getPhoneNumber();
     }
 
+    /**
+     * ver mas en https://www.consumoresponde.es/art%C3%ADculos/rangos_de_numeracion_existentes_en_espana
+     * @return bool
+     */
+    public function isMobile(): bool
+    {
+        $number = $this->phoneNumber;
+
+        return (bool)preg_match('/^(6|71|72|73|74)/', $number);
+    }
+
+
+    /**
+     * ver mas en https://www.consumoresponde.es/art%C3%ADculos/rangos_de_numeracion_existentes_en_espana
+     * @return bool
+     */
+    public function isLandline(): bool
+    {
+        $number = $this->phoneNumber;
+
+        return (bool)preg_match('/^(9|8)[^0]/', $number);
+    }
 
 }

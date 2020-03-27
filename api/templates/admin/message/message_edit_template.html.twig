@@ -1,0 +1,94 @@
+{% extends 'admin/core/CRUD/edit.html.twig' %}
+
+{% block sonata_tab_content %}
+    <div class="col-md-12">
+        <div class="row ">
+            <div class="col-md-12">
+                <div class="box box-primary tab-content">
+                    <div class="box-header">
+                        <h4 class="box-title">
+                            {% if admin.subject.sms %}
+                                SMS
+                            {% else %}
+                                Email
+                            {% endif %}
+                        </h4>
+                    </div>
+                    <div class="box-body message-edit">
+                        {% if admin.subject.sms %}
+                            {{ block('sms') }}
+                        {% else %}
+                            {{ block('email') }}
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block email %}
+    <div class="row">
+        <div class="col-md-8">
+            {{ form_row(form.subject) }}
+        </div>
+        <div class="col-md-2">
+            {{ form_row(form.schedule) }}
+        </div>
+        <div class="col-md-2">
+            {{ form_row(form.mailer) }}
+        </div>
+
+        <div class="col-md-8 message">
+            {{ form_row(form.message) }}
+        </div>
+
+
+        <div class="col-md-4">
+            <fieldset class="message-recipients-wrapper">
+                <legend>Enviar a</legend>
+                <div class="col-md-12 message-recipients">
+                    <span>Alumnos</span>
+                    {{ form_widget(form.students) }}
+                </div>
+
+                <div class="col-md-12 message-recipients">
+                    <span>Cursos</span>
+                    {{ form_widget(form.courses) }}
+                </div>
+
+            </fieldset>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block sms %}
+
+    <div class="col-md-3 col-md-offset-2">
+        <div class="col-md-12">
+            {{ form_row(form.subject) }}
+        </div>
+        <div class="col-md-12">
+            {{ form_row(form.message) }}
+        </div>
+
+    </div>
+    <div class="col-md-5">
+        {{ form_row(form.schedule) }}
+
+        <fieldset class="message-recipients-wrapper">
+            <legend>Enviar a</legend>
+            <div class="col-md-12 message-recipients">
+                <span>Alumnos</span>
+                {{ form_widget(form.students) }}
+            </div>
+
+            <div class="col-md-12 message-recipients">
+                <span>Cursos</span>
+                {{ form_widget(form.courses) }}
+            </div>
+        </fieldset>
+    </div>
+{% endblock %}

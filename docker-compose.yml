@@ -10,6 +10,8 @@ services:
       - quay.io/api-platform/php
       - quay.io/api-platform/nginx
       - quay.io/api-platform/varnish
+    environment:
+      - APP_ENV=prod
     depends_on:
     - db
     # Comment out these volumes in production

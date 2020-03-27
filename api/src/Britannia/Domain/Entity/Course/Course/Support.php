@@ -21,7 +21,7 @@ use Britannia\Domain\Entity\Course\CoursePaymentInterface;
 use Britannia\Domain\Entity\Course\Traits\CalendarTrait;
 use Britannia\Domain\Entity\Course\Traits\PaymentTrait;
 
-final class Support extends Course implements CourseCalendarInterface, CoursePaymentInterface
+class Support extends Course implements CourseCalendarInterface, CoursePaymentInterface
 {
     use CalendarTrait;
     use PaymentTrait;

@@ -29,19 +29,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class IssueRecipientsType extends AbstractSingleType
 {
-//    /**
-//     * @var Student
-//     */
-//    private $course;
-//    /**
-//     * @var ModelManager
-//     */
-//    private $modelManager;
-//
-//    public function __construct(ModelManager $modelManager)
-//    {
-//        $this->modelManager = $modelManager;
-//    }
 
     public function getParent()
     {

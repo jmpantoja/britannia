@@ -47,6 +47,21 @@ services:
         factory: '@Britannia\Infraestructure\Symfony\Service\Setting\SettingFactory'
 
 
+    Britannia\Domain\Service\Message\MailerFactoryInterface:
+        class: Britannia\Infraestructure\Symfony\Service\Message\MailerFactory
+        public: true
+        calls:
+            - [addMailer, ['MANAGERS', '@swiftmailer.mailer.managers', 'britannia.elpuerto.gestion@gmail.com', 'Gestión Academia Britannia']]
+            - [addMailer, ['RECEPTION', '@swiftmailer.mailer.reception', 'britannia.elpuerto.recepcion@gmail.com', 'Recepción Academia Britannia']]
+            - [addMailer, ['TEACHERS', '@swiftmailer.mailer.teachers', 'britannia.elpuerto.teachers@gmail.com', 'Teachers  Academia Britannia']]
+
+
+    #    Britannia\Domain\Service\Message\SmsLauncherInterface:
+    #        class: Britannia\Infraestructure\Symfony\Service\Message\DescomSMSLauncher
+    #        public: true
+    #        arguments:
+    #            - '@eight_points_guzzle.client.descom'
+
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
     Britannia\Infraestructure\Symfony\Controller\:
@@ -69,7 +84,9 @@ services:
             #            - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\CourseEtl']]
             #            - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\TeacherCoursesEtl']]
             #            - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\StudentCoursesEtl']]
-            - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\IssueEtl']]
+            #- [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\IssueEtl']]
+            - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\MessageEtl']]
+
         #        - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\AttendanceControlEtl']]
 
 

@@ -8,6 +8,7 @@ sonata_doctrine_orm_admin:
             - 'form/course.html.twig'
             - 'form/locked.html.twig'
             - 'form/mark.html.twig'
+            - 'form/sms.html.twig'
             - 'form/reports.html.twig'
             - 'form/students.html.twig'            
             - 'form/widgets.html.twig'

@@ -30,7 +30,7 @@ use Britannia\Domain\VO\Course\Examiner\Examiner;
 use Britannia\Domain\VO\Course\Intensive\Intensive;
 use Doctrine\Common\Collections\ArrayCollection;
 
-final class Adult extends Course implements CourseAssessmentInterface,  CourseCalendarInterface, CoursePaymentInterface
+class Adult extends Course implements CourseAssessmentInterface,  CourseCalendarInterface, CoursePaymentInterface
 {
 
     use AssessmentTrait;

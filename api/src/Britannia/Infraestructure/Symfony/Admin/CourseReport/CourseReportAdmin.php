@@ -23,6 +23,9 @@ final class CourseReportAdmin extends AbstractAdmin implements AdminFilterableIn
      */
     private CourseReportTools $adminTools;
 
+    protected $maxPerPage = 50;
+    protected $maxPageLinks = 10;
+
     public function __construct($code, $class, $baseControllerName, CourseReportTools $adminTools)
     {
         parent::__construct($code, $class, $baseControllerName);

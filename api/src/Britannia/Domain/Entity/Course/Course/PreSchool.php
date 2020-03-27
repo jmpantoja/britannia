@@ -22,7 +22,7 @@ use Britannia\Domain\Entity\Course\Traits\CalendarTrait;
 use Britannia\Domain\Entity\Course\Traits\PaymentTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 
-final class PreSchool extends Course implements CourseCalendarInterface, CoursePaymentInterface
+class PreSchool extends Course implements CourseCalendarInterface, CoursePaymentInterface
 {
     use CalendarTrait;
     use PaymentTrait;

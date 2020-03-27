@@ -45,6 +45,7 @@ final class UpdateStudentAgeUseCase implements UseCaseInterface
         foreach ($students as $student) {
             $student->updateAge();
         }
+
     }
 
 }

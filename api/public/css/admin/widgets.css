@@ -120,29 +120,21 @@ table.term td.error {
     border: solid 3px red;
 }
 
-
 table.term-comments tbody td,
-table.term-comments tbody div,
-table.term-comments tbody textarea {
-    height: 80px;
-}
-
-table.term-comments td.comment div,
-table.term-comments td.comment p {
+table.term-comments tbody div {
+    height: 120px;
     margin: 0;
+
 }
 
-table.term-comments textarea {
-    resize: none;
+table.term-comments tbody .counter-area {
+    height: 90px;
     margin: 0;
     border: none;
 }
 
-table.term-comments tr td.counter,
-table.term-comments tr th.counter {
-    width: 95px;
-    border-left: none;
-    vertical-align: bottom;
+table.term-comments tbody .counter-info {
+    margin: 0;
 }
 
 table.term-comments th.comment,
@@ -153,27 +145,6 @@ table.term-comments td.comment {
 table.term-comments th.student,
 table.term-comments td.student {
     border-right: solid 2px black;
-}
-
-table.term-comments p.counter {
-    margin: auto;
-    float: right;
-    padding: 5px 10px;
-    font-size: 14px;
-    font-weight: bold;
-    color: white;
-}
-
-table.term-comments p.counter.success {
-    background-color: green;
-}
-
-table.term-comments p.counter.warning {
-    background-color: orange;
-}
-
-table.term-comments p.counter.error {
-    background-color: firebrick;
 }
 
 .has-error div.definition-wrapper * {
@@ -251,4 +222,25 @@ table.term-single {
 
 .pass_widget .left_time .left.danger {
     color: red;
+}
+
+/**sms template **/
+
+.sms-template .counter-wrapper {
+    border: solid 1px #d2d6de;
+
+}
+
+.sms-template .counter-area {
+    padding: 10px;
+    font-size: 19px;
+    font-family: 'Consolas', 'Inconsolata', 'Droid Sans Mono', 'Monaco', monospace;
+    min-height: 350px;
+}
+
+/**sms template **/
+
+.label-big {
+    font-size: 14px;
+    margin-left: 0.5em;
 }

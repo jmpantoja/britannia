@@ -26,7 +26,7 @@ use Britannia\Domain\VO\Course\Assessment\Assessment;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
-final class School extends Course implements CourseAssessmentInterface, CourseCalendarInterface, CoursePaymentInterface
+class School extends Course implements CourseAssessmentInterface, CourseCalendarInterface, CoursePaymentInterface
 {
     use AssessmentTrait;
     use CalendarTrait;

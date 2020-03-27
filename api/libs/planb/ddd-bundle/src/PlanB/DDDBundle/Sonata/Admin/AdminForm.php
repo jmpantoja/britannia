@@ -32,6 +32,7 @@ abstract class AdminForm
     protected function __construct(FormMapper $mapper)
     {
         $this->mapper = $mapper;
+
     }
 
     public function admin(): AbstractAdmin
@@ -44,8 +45,16 @@ abstract class AdminForm
         $this->mapper->getFormBuilder()->setDataMapper($dataMapper);
 
 
+
         return $this;
     }
+
+    public function addViewTransformer($aa)
+    {
+
+        return $this;
+    }
+
 
     public function dataMapper(): ?DataMapperInterface
     {

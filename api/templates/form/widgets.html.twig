@@ -27,3 +27,10 @@
         });
     </script>
 {% endblock %}
+
+{% block counter_widget %}
+    <div class="counter counter-wrapper">
+        {{ form_widget(form, {'attr': {'class':'counter-area'}}) }}
+        <p class="counter-info">asd</p>
+    </div>
+{% endblock %}

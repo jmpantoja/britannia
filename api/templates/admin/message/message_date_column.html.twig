@@ -1,0 +1,13 @@
+{% extends get_admin_template('base_list_field', admin.code) %}
+
+{% block field %}
+    <i class="fa fa-calendar"></i>
+    {{ object.schedule | localizeddate('medium', 'none') }}
+
+    <br />
+    <i class="fa fa-clock-o"></i>
+    {{ object.schedule | localizeddate('none', 'short') }}
+
+{% endblock %}
+
+

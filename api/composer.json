@@ -75,6 +75,7 @@
     "scripts": {
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
+            "ckeditor:install --clear=drop": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd"
         },
         "post-install-cmd": [
@@ -89,8 +90,7 @@
     },
     "extra": {
         "symfony": {
-            "allow-contrib": false,
-            "require": "5.0.*"
+            "allow-contrib": false
         }
     },
     "repositories": [

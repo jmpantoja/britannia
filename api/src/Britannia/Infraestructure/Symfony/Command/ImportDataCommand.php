@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
-class BritanniaImportDataCommand extends Command implements ContainerAwareInterface
+class ImportDataCommand extends Command implements ContainerAwareInterface
 {
     protected static $defaultName = 'britannia:import:data';
 
@@ -71,7 +71,6 @@ class BritanniaImportDataCommand extends Command implements ContainerAwareInterf
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-    //    ini_set('memory_limit', '512M');
         $this->login();
 
         $console = ConsoleReport::make($input, $output);

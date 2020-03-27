@@ -14,7 +14,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 
-final class StudentAdmin extends AbstractAdmin implements AdminFilterableInterface
+final class  StudentAdmin extends AbstractAdmin implements AdminFilterableInterface
 {
     protected $datagridValues = [
         'active' => ['value' => true],
