@@ -21,38 +21,77 @@ use Symfony\Component\Yaml\Yaml;
 
 trait DataProviderTrait
 {
-    public function dataFixtures($method)
+    public function dataFixtures(string $method)
     {
-        $fileSystem = new Filesystem();
+        $method = preg_replace('/^(test)(_*)(.*)$/', '$3', $method);
 
-        $className = str_replace(__NAMESPACE__, null, __CLASS__);
-        $relativePathToDir = str_replace('\\', DIRECTORY_SEPARATOR, $className);
-
-        $pathToDir = sprintf('%s/%s', __DIR__, $relativePathToDir);
-
-        $fileSystem->mkdir($pathToDir, 0777);
-        $fileSystem->chown($pathToDir, 1000, true);
-        $fileSystem->chgrp($pathToDir, 1000, true);
-
-        $finder = Finder::create()
-            ->in($pathToDir)
-            ->name("$method.*");
+        $pathToDir = $this->pathToDir();
+        $finder = $this->finder($pathToDir, $method);
 
         $data = [];
-
-        if($finder->count() == 0){
-            $pathToFile = sprintf('%s/%s.yaml', $pathToDir, $method);
-            $fileSystem->appendToFile($pathToFile, '---');
-            $fileSystem->chmod($pathToFile, 0666);
-            $fileSystem->chown($pathToFile, 1000, true);
-            $fileSystem->chgrp($pathToFile, 1000, true);
-        }
-
         foreach ($finder as $file) {
             $data[] = $this->loadDataFixturesFromFile($file);
         }
 
         return array_merge(...$data);
+    }
+
+    /**
+     * @return string
+     */
+    private function pathToDir(): string
+    {
+        $className = str_replace(__NAMESPACE__, null, __CLASS__);
+        $relativePathToDir = str_replace('\\', DIRECTORY_SEPARATOR, $className);
+        $pathToDir = sprintf('%s/%s', __DIR__, $relativePathToDir);
+
+        $this->makeDirectory($pathToDir);
+
+        return $pathToDir;
+    }
+
+    /**
+     * @param string $pathToDir
+     */
+    private function makeDirectory(string $pathToDir): void
+    {
+        $fileSystem = new Filesystem();
+        $fileSystem->mkdir($pathToDir, 0777);
+        $fileSystem->chown($pathToDir, 1000, true);
+        $fileSystem->chgrp($pathToDir, 1000, true);
+    }
+
+    /**
+     * @param string $pathToDir
+     * @param string $method
+     * @return Finder
+     */
+    private function finder(string $pathToDir, string $method): Finder
+    {
+        $finder = Finder::create()
+            ->in($pathToDir)
+            ->name("$method.*");
+
+        if ($finder->count() == 0) {
+            $this->touch($pathToDir, $method);
+        }
+        return $finder;
+    }
+
+    /**
+     * @param string $pathToDir
+     * @param string $method
+     * @param Filesystem $fileSystem
+     */
+    private function touch(string $pathToDir, string $method): void
+    {
+        $pathToFile = sprintf('%s/%s.yaml', $pathToDir, $method);
+
+        $fileSystem = new Filesystem();
+        $fileSystem->appendToFile($pathToFile, '---');
+        $fileSystem->chmod($pathToFile, 0666);
+        $fileSystem->chown($pathToFile, 1000, true);
+        $fileSystem->chgrp($pathToFile, 1000, true);
     }
 
     private function loadDataFixturesFromFile(SplFileInfo $fileInfo): array
@@ -69,4 +108,5 @@ trait DataProviderTrait
     {
         return Yaml::parseFile($fileInfo->getPathname());
     }
+
 }

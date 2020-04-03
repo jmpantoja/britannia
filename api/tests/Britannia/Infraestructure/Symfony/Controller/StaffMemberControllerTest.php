@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Britannia\Tests\Infraestructure\Symfony\Controller;
 
+use Britannia\Domain\Entity\Staff\StaffMember;
 use Britannia\Domain\Repository\StaffMemberRepositoryInterface;
 use Britannia\Tests\DataProviderTrait;
 use Britannia\Tests\WebTestTrait;
@@ -28,11 +29,15 @@ class StaffMemberControllerTest extends WebTestCase
     /**
      * @dataProvider dataFixtures
      */
-    public function test_staff_member_list_returns_correct_code_according_to_the_role($rol, $code)
+    public function test_crud_returns_correct_code_according_to_the_role_and_action($url, $users)
     {
-        $client = $this->login([$rol]);
-        $client->request('GET', '/admin/britannia/domain/staff-staffmember/list');
-        $this->assertEquals($code, $client->getResponse()->getStatusCode());
+        foreach ($users as $rol => $code) {
+            $client = $this->login([$rol]);
+            $client->request('GET', $url);
+            $this->assertEquals($code, $client->getResponse()->getStatusCode());
+        }
+
+        ob_clean();
     }
 
     public function test_list_contains_all_staff_members()
@@ -65,6 +70,7 @@ class StaffMemberControllerTest extends WebTestCase
 
         $this->assertNumOfRowsInDataList($crawler, 17);
     }
+
 
     /**
      * @dataProvider dataFixtures
@@ -118,21 +124,51 @@ class StaffMemberControllerTest extends WebTestCase
         $this->assertEquals($beforeTotal + 1, $repository->count([]), 'No se ha creado el usuario');
     }
 
-//    public function test_it_is_able_to_edit_a_staff_member()
-//    {
-//        $client = $this->login();
-//       // /admin/britannia/domain/staff-staffmember/30a39a43-ca02-4519-b361-e906f48bc263/edit?_tab=tab_s5e86308c16e02_431061910_1
-//        $client->request('GET', '/admin/britannia/domain/staff-staffmember/create?uniqid=form_id');
-//        $repository = static::$container->get(StaffMemberRepositoryInterface::class);
-//
-//        $beforeTotal = $repository->count([]);
-//
-//        $client->submitForm('Crear y editar', [
-//            'form_id' => $data
-//        ]);
-//
-//        $this->assertEquals($beforeTotal + 1, $repository->count([]), 'No se ha creado el usuario');
-//    }
+    /**
+     * @dataProvider dataFixtures
+     */
+    public function test_it_is_able_to_edit_a_staff_member(string $id, array $data, array $entity)
+    {
+
+        $client = $this->login();
+        $repository = static::$container->get(StaffMemberRepositoryInterface::class);
+
+        $url = sprintf('/admin/britannia/domain/staff-staffmember/%s/edit?uniqid=form_id', $id);
+        $client->request('GET', $url);
+
+        $client->submitForm('Actualizar', [
+            'form_id' => $data
+        ]);
+
+        /** @var StaffMember $user */
+        $user = $repository->find($id);
+        foreach ($entity as $method => $value) {
+            $this->assertEqualsCanonicalizing($value, $user->$method());
+        }
+    }
 
 
+    /**
+     * @dataProvider dataFixtures
+     */
+    public function test_it_is_able_to_delete_a_staff_member(string $id)
+    {
+        $client = $this->login();
+        $repository = static::$container->get(StaffMemberRepositoryInterface::class);
+
+        $url = sprintf('/admin/britannia/domain/staff-staffmember/%s/delete?', $id);
+        $client->request('GET', $url);
+
+        $foundUser = $repository->findOneBy([
+            'id' => $id
+        ]);
+
+        $this->assertInstanceOf(StaffMember::class, $foundUser);
+        $client->submitForm('Sí, borrar');
+
+        $foundUser = $repository->findOneBy([
+            'id' => $id
+        ]);
+        $this->assertNull($foundUser);
+    }
 }
