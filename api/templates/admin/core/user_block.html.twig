@@ -20,17 +20,18 @@ file that was distributed with this source code.
 
         <li class="user-header {{ _bg_class }}">
             {% if _user_image %}
-                <img src="{{ _user_image }}" class="img-circle" alt="Avatar" />
+                <img src="{{ _user_image }}" class="img-circle" alt="Avatar"/>
             {% endif %}
             <p>{{ app.user.fullName }}</p>
         </li>
         <li class="user-footer">
-            <div class="pull-left">
-                <a href="{{ _profile_uri }}" class="btn btn-default btn-flat"><i class="fa fa-user"></i> {{ _profile_text }}</a>
-            </div>
+            {#            <div class="pull-left">#}
+            {#                <a href="{{ _profile_uri }}" class="btn btn-default btn-flat"><i class="fa fa-user"></i> {{ _profile_text }}</a>#}
+            {#            </div>#}
 
-            <div class="pull-right">
-                <a href="{{ _logout_uri }}" class="btn btn-default btn-flat"><i class="fa fa-sign-out fa-fw"></i> {{ _logout_text }}</a>
+            <div class="text-center">
+                <a href="{{ _logout_uri }}" class="btn btn-default btn-flat"><i
+                        class="fa fa-sign-out fa-fw"></i> {{ _logout_text }}</a>
             </div>
         </li>
     {% endif %}

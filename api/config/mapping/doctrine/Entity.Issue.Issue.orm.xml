@@ -19,7 +19,9 @@
         <field name="createdAt" type="datetime_immutable"/>
 
         <many-to-one field="author" target-entity="Britannia\Domain\Entity\Staff\StaffMember"/>
-        <many-to-one field="student" target-entity="Britannia\Domain\Entity\Student\Student"/>
+        <many-to-one field="student" target-entity="Britannia\Domain\Entity\Student\Student">
+            <join-column on-delete="CASCADE"/>
+        </many-to-one>
 
         <one-to-many field="issueHasRecipients" target-entity="Britannia\Domain\Entity\Issue\IssueRecipient"
                      mapped-by="issue" orphan-removal="true">

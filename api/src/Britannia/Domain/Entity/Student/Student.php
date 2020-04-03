@@ -159,6 +159,8 @@ abstract class Student implements Comparable
      */
     private $attachments;
 
+    private $notifications;
+
 //    /**
 //     * @var Collection
 //     */
@@ -174,6 +176,7 @@ abstract class Student implements Comparable
      */
     private $updatedAt;
 
+
     public static function make(StudentDto $dto): self
     {
         return new static($dto);
@@ -185,6 +188,7 @@ abstract class Student implements Comparable
         $this->relatives = new ArrayCollection();
         $this->studentHasCourses = new ArrayCollection();
         $this->records = new ArrayCollection();
+        $this->notifications = new ArrayCollection();
         $this->createdAt = CarbonImmutable::now();
 
         static::update($dto);
@@ -492,6 +496,15 @@ abstract class Student implements Comparable
     {
         return AttachmentList::collect($this->attachments);
     }
+
+    /**
+     * @return mixed
+     */
+    public function notifications(): array
+    {
+        return $this->notifications->toArray();
+    }
+
 
     /**
      * @return Photo

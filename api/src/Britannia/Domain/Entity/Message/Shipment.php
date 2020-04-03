@@ -20,7 +20,7 @@ use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\Behaviour\Comparable;
 use PlanB\DDD\Domain\Behaviour\Traits\ComparableTrait;
 
-final class Shipment implements Comparable
+class Shipment implements Comparable
 {
     use ComparableTrait;
 

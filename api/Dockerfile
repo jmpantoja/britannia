@@ -8,6 +8,8 @@ ARG VER_PDFTK=2.02
 
 FROM php:${PHP_VERSION}-fpm-buster AS api_platform_php
 
+ENV PANTHER_NO_SANDBOX 1
+
 ENV TZ=Europe/Madrid
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
@@ -17,6 +19,7 @@ RUN apt -y --fix-missing install \
 #		acl \
 #		file \
 #		gettext \
+		apt-utils \
 		git \
 	;
 
@@ -30,14 +33,31 @@ RUN apt update \
 	#imagemgick
 	&& apt-get install -y libmagickwand-dev --no-install-recommends \
     && pecl install imagick \
-
 	&& docker-php-ext-enable imagick \
 	&& apt clean ;
 
-RUN wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.buster_amd64.deb \
-	&& apt install -y ./wkhtmltox_0.12.5-1.buster_amd64.deb \
+COPY docker/php/wkhtmltox_0.12.5-1.buster_amd64.deb ./wkhtmltox_0.12.5-1.buster_amd64.deb
+RUN apt install -y ./wkhtmltox_0.12.5-1.buster_amd64.deb \
 	&& rm ./wkhtmltox_0.12.5-1.buster_amd64.deb
 
+#RUN wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.buster_amd64.deb \
+#	&& apt install -y ./wkhtmltox_0.12.5-1.buster_amd64.deb \
+#	&& rm ./wkhtmltox_0.12.5-1.buster_amd64.deb
+
+
+
+ARG WITH_XDEBUG=false
+RUN if [ $WITH_XDEBUG = "true" ] ; then \
+	    pecl install xdebug; \
+	    docker-php-ext-enable xdebug; \
+	    echo "xdebug.remote_enable=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
+
+	    echo "xdebug.remote_port=9001" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
+	    echo "xdebug.idekey=PHPSTORM" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
+	    echo "xdebug.remote_autostart=0" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
+	    echo "error_reporting=E_ALL" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
+	    echo "display_startup_err=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
+	fi ;
 
 RUN apt update \
 && apt-get install -y cron;
@@ -47,20 +67,13 @@ RUN chmod 0644 /srv/cron.crontab
 RUN crontab /srv/cron.crontab
 RUN service cron start
 
-#ADD https://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/pdftk-${PDFTK_VERSION}-src.zip /tmp/
-#RUN unzip /tmp/pdftk-${PDFTK_VERSION}-src.zip -d /tmp && \
-#    sed -i 's/VERSUFF=-4.6/VERSUFF=-5/g' /tmp/pdftk-${PDFTK_VERSION}-dist/pdftk/Makefile.Debian && \
-#    cd /tmp/pdftk-${PDFTK_VERSION}-dist/pdftk && \
-#    make -f Makefile.Debian && \
-#    make -f Makefile.Debian install && \
-#    rm -Rf /tmp/pdftk-*
-
 #ARG APCU_VERSION=5.1.16
 RUN set -eux; \
 	apt -y install \
 		$PHPIZE_DEPS \
 		libicu-dev \
 		libzip-dev  \
+		zlib1g-dev  \
 #		icu-dev \
 #		zlib-dev \
 	;
@@ -131,6 +144,7 @@ COPY src src/
 
 RUN set -eux; \
 	mkdir -p var/cache var/log; \
+	chmod 777 /var/www; \
 #	composer dumps-autoload --classmap-authoritative --no-dev; \
 #	composer run-script --no-dev post-install-cmd; \
 	chmod +x bin/console; sync
@@ -154,3 +168,4 @@ COPY --from=api_platform_php /srv/api/public public/
 FROM cooptilleuls/varnish:${VARNISH_VERSION}-alpine AS api_platform_varnish
 
 COPY docker/varnish/conf/default.vcl /usr/local/etc/varnish/default.vcl
+

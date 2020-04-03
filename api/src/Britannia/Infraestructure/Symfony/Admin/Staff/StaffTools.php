@@ -43,12 +43,6 @@ final class StaffTools extends AdminTools
         $this->mapper = $mapper;
     }
 
-    public function security(): StaffSecurity
-    {
-        return StaffSecurity::make($this->security);
-    }
-
-
     public function dataGrid(ListMapper $listMapper): StaffDatagrid
     {
         return StaffDatagrid::make($listMapper);

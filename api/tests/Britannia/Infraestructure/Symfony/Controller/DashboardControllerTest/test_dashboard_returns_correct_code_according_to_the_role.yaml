@@ -1,0 +1,19 @@
+---
+MANAGER:
+    rol: ROLE_MANAGER
+    status: 200
+RECEPTION:
+    rol: ROLE_RECEPTION
+    status: 200
+TEACHER:
+    rol: ROLE_TEACHER
+    status: 200
+SONATA_ADMIN:
+    rol: ROLE_SONATA_ADMIN
+    status: 200
+SUPER_ADMIN:
+    rol: ROLE_SUPER_ADMIN
+    status: 200
+ADMIN:
+    rol: ROLE_ADMIN
+    status: 403

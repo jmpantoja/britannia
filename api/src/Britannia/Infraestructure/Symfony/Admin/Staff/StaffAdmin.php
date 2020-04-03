@@ -102,30 +102,8 @@ final class StaffAdmin extends AbstractAdmin implements AdminFilterableInterface
 
     }
 
-    public function checkAccess($action, $object = null)
-    {
-        if (!$this->hasAccess($action, $object)) {
-            parent::checkAccess($action, $object);
-        }
-    }
-
-    public function hasAccess($action, $object = null): bool
-    {
-        $isEditAllowed = $this->staffTools
-            ->security()
-            ->isAllowed($action, $object);
-
-        if ($isEditAllowed) {
-            return true;
-        }
-
-        return parent::hasAccess($action, $object);
-    }
-
     public function toString($object)
     {
         return $object->fullName();
     }
-
-
 }

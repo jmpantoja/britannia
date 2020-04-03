@@ -50,7 +50,6 @@ final class StaffForm extends AdminForm
                 'data_class' => Photo::class
             ]);
 
-
         $this->group('Personal', ['class' => 'col-md-4'])
             ->add('fullName', FullNameType::class)
             ->add('address', PostalAddressType::class, [
@@ -87,7 +86,7 @@ final class StaffForm extends AdminForm
             ->add('password', RepeatedType::class, [
                 'mapped' => true,
                 'type' => PasswordType::class,
-                'invalid_message' => 'The password fields must match.',
+                'invalid_message' => 'Los passwords deben coincidir.',
                 'required' => $creating,
                 'first_options' => ['label' => 'Password',
                     'constraints' => $constraints,
