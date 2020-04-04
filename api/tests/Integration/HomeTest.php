@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Britannia\Tests\Infraestructure\Symfony\Controller;
+namespace Britannia\Tests\Integration;
 
 use Britannia\Tests\WebTestTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class HomeControllerTest extends WebTestCase
+class HomeTest extends WebTestCase
 {
 
     use WebTestTrait;

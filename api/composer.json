@@ -65,7 +65,9 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Britannia\\Tests\\": "tests/Britannia"
+            "Britannia\\Tests\\": "tests",
+            "Britannia\\Tests\\Unit\\": "tests/Unit",
+            "Britannia\\Tests\\Integration\\": "tests/Integration"
         }
     },
     "replace": {

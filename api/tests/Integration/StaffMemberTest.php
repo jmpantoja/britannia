@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Britannia\Tests\Infraestructure\Symfony\Controller;
+namespace Britannia\Tests\Integration;
 
 use Britannia\Domain\Entity\Staff\StaffMember;
 use Britannia\Domain\Repository\StaffMemberRepositoryInterface;
@@ -20,7 +20,7 @@ use Britannia\Tests\WebTestTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 
-class StaffMemberControllerTest extends WebTestCase
+class StaffMemberTest extends WebTestCase
 {
     use WebTestTrait;
     use DataProviderTrait;

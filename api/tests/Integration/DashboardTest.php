@@ -11,14 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Britannia\Tests\Infraestructure\Symfony\Controller;
+namespace Britannia\Tests\Integration;
 
 use Britannia\Tests\DataProviderTrait;
 use Britannia\Tests\WebTestTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 
-class DashboardControllerTest extends WebTestCase
+class DashboardTest extends WebTestCase
 {
     use WebTestTrait;
     use DataProviderTrait;

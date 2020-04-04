@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Britannia\Tests\Domain\VO\Assessment;
+namespace Britannia\Tests\Unit\Domain\VO\Assessment;
 
 use Britannia\Domain\VO\Assessment\TermName;
 use PHPUnit\Framework\TestCase;

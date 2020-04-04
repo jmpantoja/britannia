@@ -43,7 +43,9 @@ trait DataProviderTrait
     {
         $className = str_replace(__NAMESPACE__, null, __CLASS__);
         $relativePathToDir = str_replace('\\', DIRECTORY_SEPARATOR, $className);
-        $pathToDir = sprintf('%s/%s', __DIR__, $relativePathToDir);
+        $temp = sprintf('%s/%s', __DIR__, trim($relativePathToDir, '/') );
+
+        $pathToDir = sprintf('%s/fixtures/%s', dirname($temp), basename($temp));
 
         $this->makeDirectory($pathToDir);
 

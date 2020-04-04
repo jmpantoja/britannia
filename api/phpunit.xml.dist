@@ -9,11 +9,11 @@
          testdox="true"
 >
     <php>
-        <ini name="error_reporting" value="-1" />
-        <server name="APP_ENV" value="test" force="true" />
-        <server name="SHELL_VERBOSITY" value="-1" />
-        <server name="SYMFONY_PHPUNIT_REMOVE" value="" />
-        <server name="SYMFONY_PHPUNIT_VERSION" value="9.0" />
+        <ini name="error_reporting" value="-1"/>
+        <server name="APP_ENV" value="test" force="true"/>
+        <server name="SHELL_VERBOSITY" value="-1"/>
+        <server name="SYMFONY_PHPUNIT_REMOVE" value=""/>
+        <server name="SYMFONY_PHPUNIT_VERSION" value="9.0"/>
         <env name="SYMFONY_DEPRECATIONS_HELPER" value="disabled"/>
     </php>
 
@@ -22,14 +22,20 @@
             <directory>tests</directory>
         </testsuite>
         <testsuite name="domain">
-            <directory>tests/Britannia/Domain</directory>
+            <directory>tests/Unit/Domain</directory>
         </testsuite>
         <testsuite name="infrastructure">
-            <directory>tests/Britannia/Infraestructure</directory>
-            <exclude>tests/Britannia/Infraestructure/Symfony/Controller</exclude>
+            <directory>tests/Unit/Infraestructure</directory>
         </testsuite>
-        <testsuite name="controllers">
-            <directory>tests/Britannia/Infraestructure/Symfony/Controller</directory>
+        <testsuite name="application">
+            <directory>tests/Unit/Application</directory>
+        </testsuite>
+
+        <testsuite name="unit">
+            <directory>tests/Unit</directory>
+        </testsuite>
+        <testsuite name="integration">
+            <directory>tests/Integration</directory>
         </testsuite>
     </testsuites>
 
@@ -40,7 +46,7 @@
     </filter>
 
     <listeners>
-        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
+        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener"/>
     </listeners>
 
     <extensions>
