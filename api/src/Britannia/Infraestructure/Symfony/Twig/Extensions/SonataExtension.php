@@ -36,8 +36,7 @@ final class SonataExtension extends AbstractExtension
     public function getFunctions()
     {
         return [
-            new TwigFunction('sonata_has_filters', [$this, 'hasFilters']),
-            new TwigFunction('sonata_has_filters', [$this, 'hasFilters']),
+            new TwigFunction('sonata_has_filters', [$this, 'hasFilters'])
         ];
     }
 
@@ -75,6 +74,7 @@ final class SonataExtension extends AbstractExtension
         foreach ($filters as $name => $value) {
             $data[$name] = $value['value'] ?? null;
         }
+
 
         return array_filter($data);
     }

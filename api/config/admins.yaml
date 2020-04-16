@@ -161,17 +161,25 @@ services:
             - { name: sonata.admin, manager_type: orm, group: admin, label: Mensajería }
         calls:
             - [setSubClasses, [{email: Britannia\Domain\Entity\Message\Message\Email, sms: Britannia\Domain\Entity\Message\Message\Sms }]]
-            - [setTemplate, ['edit', 'admin/message/message_edit_template.html.twig']]            
+            - [setTemplate, ['edit', 'admin/message/message_edit_template.html.twig']]
         public: true
 
     admin.message.template:
         class: Britannia\Infraestructure\Symfony\Admin\MessageTemplate\TemplateAdmin
         arguments: [~, Britannia\Domain\Entity\Message\Template, ~]
+
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Plantillas SMS }   
-            
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Plantillas }
+
         calls:
+            - [setSubClasses, [{email: Britannia\Domain\Entity\Message\Template\EmailTemplate, sms: Britannia\Domain\Entity\Message\Template\SmsTemplate }]]
             - [setTemplate, ['edit', 'admin/template/template_edit_template.html.twig']]
         public: true
 
 
+    admin.invoice:
+        class: Britannia\Infraestructure\Symfony\Admin\Invoice\InvoiceAdmin
+        arguments: [~, Britannia\Domain\Entity\Invoice\Invoice, Britannia\Infraestructure\Symfony\Controller\Admin\InvoiceController]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Recibos }
+        public: true

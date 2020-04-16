@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Image;
 
 
+use Britannia\Domain\Entity\Invoice\InvoiceId;
 use Britannia\Domain\Entity\Staff\Photo\Student;
 use Britannia\Domain\VO\Attachment\FileInfo;
 use Carbon\CarbonImmutable;
@@ -27,7 +28,7 @@ abstract class Image implements Comparable
     use AggregateRootTrait;
 
     /**
-     * @var ImageId
+     * @var InvoiceId
      */
     protected $id;
 
@@ -69,7 +70,7 @@ abstract class Image implements Comparable
 
     protected function __construct(FileInfo $info)
     {
-        $this->id = new ImageId();
+        $this->id = new InvoiceId();
         $this->createdAt = CarbonImmutable::now();
 
         $this->update($info);
@@ -93,9 +94,9 @@ abstract class Image implements Comparable
     }
 
     /**
-     * @return ImageId
+     * @return InvoiceId
      */
-    public function id(): ImageId
+    public function id(): InvoiceId
     {
         return $this->id;
     }

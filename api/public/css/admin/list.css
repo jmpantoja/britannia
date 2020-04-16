@@ -74,12 +74,13 @@
 }
 
 table.sonata-ba-list td.sonata-ba-list-field {
-    overflow: hidden;
-}
-
-table.sonata-ba-list td.sonata-ba-list-field {
+    overflow: visible !important;
     padding: 1em 0.5em;
 }
+
+/*table.sonata-ba-list td.sonata-ba-list-field .btn-group.open {*/
+/*    z-index: 9 !important;*/
+/*}*/
 
 td.sonata-ba-list-field .label-square {
     margin: 0;
@@ -92,7 +93,6 @@ td.sonata-ba-list-field .label-square {
 .btn-disable {
     cursor: default;
 }
-
 
 .cms-block-element .small-box .inner a {
     color: #FFF;

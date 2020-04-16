@@ -17,6 +17,7 @@ namespace Britannia\Domain\Entity\Student;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Notification\NotificationEvent;
 use Britannia\Domain\Entity\Notification\TypeOfNotification;
+use Carbon\CarbonImmutable;
 
 class StudentHasJoinedToCourse extends NotificationEvent
 {
@@ -26,7 +27,7 @@ class StudentHasJoinedToCourse extends NotificationEvent
         $student = $studentCourse->student();
         $course = $studentCourse->course();
 
-        $date = PHP_SAPI === 'cli' ? $date = $course->start() : null;
+        $date = PHP_SAPI === 'cli' ? $date = $course->start() : CarbonImmutable::now();
 
         return self::builder($student, $course)
             ->withDate($date);

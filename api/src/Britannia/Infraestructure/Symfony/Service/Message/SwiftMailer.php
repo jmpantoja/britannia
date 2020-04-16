@@ -17,6 +17,7 @@ namespace Britannia\Infraestructure\Symfony\Service\Message;
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Service\Message\Mailer;
 use PlanB\DDD\Domain\VO\Email;
+use Swift_Attachment;
 use Swift_Mailer;
 use Swift_Message;
 
@@ -47,14 +48,14 @@ final class SwiftMailer extends Mailer
         $this->mailer = $mailer;
     }
 
-    public function send(Student $student, string $message, string $subject): bool
+    public function send(Student $student, string $message, string $subject, array $attachments = []): bool
     {
         $recipient = $this->emailByStudent($student);
         if (!($recipient instanceof Email)) {
             return false;
         }
 
-        $message = $this->createMessage($recipient, $message, $subject);
+        $message = $this->createMessage($recipient, $message, $subject, $attachments);
 
         $failedRecipients = [];
         $this->mailer->send($message, $failedRecipients);
@@ -68,14 +69,19 @@ final class SwiftMailer extends Mailer
      * @param $recipient
      * @return Swift_Message
      */
-    private function createMessage(Email $recipient, string $message, string $subject): Swift_Message
+    private function createMessage(Email $recipient, string $message, string $subject, array $attachments = []): Swift_Message
     {
-
-
-        return (new Swift_Message($subject))
+        $message = (new Swift_Message($subject))
             ->setFrom([$this->from => $this->name])
             ->setTo([$recipient->getEmail()])
             ->setBody($message)
             ->setContentType('text/html');
+
+        foreach ($attachments as $pathToFile) {
+            $attachment = Swift_Attachment::fromPath($pathToFile, basename($pathToFile));
+            $message->attach($attachment);
+        }
+
+        return $message;
     }
 }

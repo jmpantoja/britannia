@@ -1,0 +1,83 @@
+---
+adult without data:
+    type: adult
+    values: {}
+    messages:
+        fullName: "Se necesitan un nombre y apellidos"
+        
+child without data:
+    type: child
+    values: {}
+    messages:
+        fullName: "Se necesitan un nombre y apellidos"
+        firstTutor: "Se necesita al menos un tutor"
+
+empty last name:
+    type: adult
+    values:
+        fullName:
+            firstName: pepe
+            lastName: ~
+
+    messages:
+        fullName: "Se necesitan unos apellidos"
+
+empty first name:
+    type: adult
+    values:
+        fullName:
+            firstName: ~
+            lastName: gonzalez
+
+    messages:
+        fullName: "Se necesita un nombre"
+
+
+completely wrong address:
+    type: adult
+    values:
+        address:
+            address: xxxxx
+            postalCode: 1150
+    messages:
+        address:
+            - "Se necesitan 6 o más caracteres."
+            - "Código Postal incorrecto (ej. 99 999)"
+
+address too short:
+    type: adult
+    values:
+        address:
+            address: xxxxx
+            postalCode: 11500
+    messages:
+        address:
+            - "Se necesitan 6 o más caracteres."
+
+missing postal code:
+    type: adult
+    values:
+        address:
+            address: dirección correcta
+            postalCode:
+    messages:
+        address:
+            - "Se necesita un código postal"
+
+wrong postal code:
+    type: adult
+    values:
+        address:
+            address: dirección correcta
+            postalCode: asdefg
+    messages:
+        address:
+            - "Código Postal incorrecto (ej. 99 999)"
+
+wrong dni:
+    type: adult
+    values:
+        dni: 5656
+    messages:
+        dni:
+            - "DNI incorrecto (ej. 99 99 99 99 A)"

@@ -21,7 +21,6 @@ use Doctrine\DBAL\Types\Type;
 
 final class MessageMailerType extends Type
 {
-
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
         return (string)$value;

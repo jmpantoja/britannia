@@ -75,10 +75,10 @@ final class MessageMapper extends AdminMapper
         $values['students'] = StudentList::collect($values['students']);
         $values['courses'] = CourseList::collect($values['courses']);
 
-
         if ($this->subject instanceof Message\Email) {
             return Message\EmailDto::fromArray($values);
         }
+
         return Message\SmsDto::fromArray($values);
     }
 }

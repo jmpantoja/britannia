@@ -39,6 +39,10 @@ class PriceValidator extends ConstraintValidator
             return;
         }
 
+        if($constraint->refund === true){
+            return;
+        }
+
         if ($value < 0) {
             $this->context->buildViolation($constraint->message)
                 ->addViolation();

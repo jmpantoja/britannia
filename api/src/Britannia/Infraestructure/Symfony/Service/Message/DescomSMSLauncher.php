@@ -38,7 +38,7 @@ final class DescomSMSLauncher extends SmsLauncher
         $this->password = $descom['password'];
     }
 
-    public function send(Student $student, string $message, string $subject): bool
+    public function send(Student $student, string $message): bool
     {
         $client = new CurlHttpClient();
 

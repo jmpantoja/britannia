@@ -1,0 +1,18 @@
+---
+resetted:
+    expected: 17
+    query:
+        filters: reset
+
+all:
+    expected: 17
+    query: []
+    
+
+by name:
+    expected: 2
+    query:
+        filter:
+            fullName:
+                value: pantoja
+    

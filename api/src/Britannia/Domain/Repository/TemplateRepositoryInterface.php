@@ -14,6 +14,9 @@ declare(strict_types=1);
 namespace Britannia\Domain\Repository;
 
 
+use Britannia\Domain\Entity\Message\Template\EmailTemplate;
+use Britannia\Domain\VO\Message\EmailPurpose;
+
 /**
  *
  * @method Template|null findOneBy(array $criteria, array $orderBy = null)
@@ -23,5 +26,20 @@ namespace Britannia\Domain\Repository;
 interface TemplateRepositoryInterface
 {
 
+    /**
+     * @return Template[]
+     */
+    public function findAllSms(): array;
+
+    /**
+     * @return Template[]
+     */
+    public function findAllEmail(): array;
+
+    /**
+     * @param EmailPurpose $purpose
+     * @return EmailTemplate
+     */
+    public function getByEmailPurpose(EmailPurpose $purpose);
 }
 

@@ -19,6 +19,8 @@ class Price extends Constraint
     public $requiredMessage = 'Se necesita un número positivo (ej. 99.99)';
     public $message = 'Se necesita un número positivo (ej. 99.99)';
 
+    public $refund = false;
+
     public function isValidType($value): bool
     {
         return is_scalar($value) || $value instanceof \PlanB\DDD\Domain\VO\Price;

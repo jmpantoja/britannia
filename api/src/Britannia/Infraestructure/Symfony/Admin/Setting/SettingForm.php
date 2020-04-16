@@ -16,7 +16,7 @@ namespace Britannia\Infraestructure\Symfony\Admin\Setting;
 
 use Britannia\Infraestructure\Symfony\Form\Type\Course\Discount\FamilyDiscountListType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\Discount\JobStatusDiscountListType;
-use Britannia\Infraestructure\Symfony\Form\Type\Course\EnrollmentPaymentType;
+use Britannia\Infraestructure\Symfony\Form\Type\Course\PassPriceListType;
 use PlanB\DDDBundle\Sonata\Admin\AdminForm;
 use PlanB\DDDBundle\Symfony\Form\Type\PriceType;
 use PlanB\DDDBundle\Symfony\Form\Type\WYSIWYGType;
@@ -27,7 +27,6 @@ final class SettingForm extends AdminForm
     {
         $this->tabPrice('Precios');
         $this->tabLopd('Cláusulas');
-
     }
 
     private function tabPrice(string $tabName)
@@ -35,12 +34,20 @@ final class SettingForm extends AdminForm
         $this->tab($tabName);
 
         $this->group('Precios', ['class' => 'col-md-3'])
-            ->add('enrollmentPayment', EnrollmentPaymentType::class, [
+            ->add('enrollmentPayment', PriceType::class, [
                 'label' => 'Matrícula',
-                'show_unlock' => false
+                'attr' => [
+                    'style' => 'width:120px'
+                ]
             ])
             ->add('monthlyPayment', PriceType::class, [
                 'label' => 'Mensualidad',
+                'attr' => [
+                    'style' => 'width:120px'
+                ]
+            ])
+            ->add('passPriceList', PassPriceListType::class, [
+                'label' => 'Bonos',
             ]);
 
         $this->group('Descuento Familiar', ['class' => 'col-md-3'])
@@ -53,6 +60,8 @@ final class SettingForm extends AdminForm
                 'label' => false,
                 'enable_default_data' => false
             ]);
+
+
     }
 
     private function tabLopd(string $tabName): void

@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Admin\Message;
 
 
-use Britannia\Domain\Entity\Message\Message\Sms;
 use PlanB\DDDBundle\Sonata\Admin\AdminFilter;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Symfony\Component\Form\ChoiceList\Loader\CallbackChoiceLoader;
@@ -42,11 +41,9 @@ final class MessageFilter extends AdminFilter
                 $queryBuilder
                     ->andwhere($where)
                     ->setParameter('type', $value['value']);
-//
                 return true;
             }
         ], ChoiceType::class, [
-
             'choice_loader' => new CallbackChoiceLoader(function () {
                 return [
                     'SMS' => 'sms',

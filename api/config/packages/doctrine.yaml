@@ -52,7 +52,8 @@ doctrine:
                     FamilyDiscountList: FamilyDiscountList
                     PassId: PassId
                     PassHours: PassHours
-
+                    PassPriceList: PassPriceList
+                    
                     #Assessment
                     TermName: TermName
                     SetOfSkills: SetOfSkills
@@ -73,7 +74,6 @@ doctrine:
                     #SchoolCourse
                     SchoolCourseId: SchoolCourseId
                     SchoolLevel: SchoolLevel
-
 
                     #Student                    
                     StudentId: StudentId
@@ -104,11 +104,16 @@ doctrine:
                     IssueId: IssueId
                     IssueRecipientId: IssueRecipientId
 
+                    #Invoice
+                    InvoiceId: InvoiceId
+                    InvoiceDetailId: InvoiceDetailId
+
                     #Message
                     MessageId: MessageId
                     ShipmentId: ShipmentId
                     TemplateId: TemplateId
                     MessageMailer: MessageMailer
+                    EmailPurpose: EmailPurpose
 
         types:
             #Academy
@@ -133,6 +138,8 @@ doctrine:
             PassId: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\PassId
             LevelId: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\LevelId
             PassHours: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\PassHoursType
+            PassPriceList: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\PassPriceListType
+            
             JobStatusDiscountList: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\JobStatusDiscountListType
             FamilyDiscountList: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\FamilyDiscountListType
 
@@ -187,11 +194,16 @@ doctrine:
             IssueId: Britannia\Infraestructure\Doctrine\DBAL\Type\Issue\IssueIdType
             IssueRecipientId: Britannia\Infraestructure\Doctrine\DBAL\Type\Issue\IssueRecipientIdType
 
+            #Invoice
+            InvoiceId: Britannia\Infraestructure\Doctrine\DBAL\Type\Invoice\InvoiceIdType
+            InvoiceDetailId: Britannia\Infraestructure\Doctrine\DBAL\Type\Invoice\InvoiceDetailIdType
+
             #Message
             MessageId: Britannia\Infraestructure\Doctrine\DBAL\Type\Message\MessageIdType
             ShipmentId: Britannia\Infraestructure\Doctrine\DBAL\Type\Message\ShipmentIdType
             TemplateId: Britannia\Infraestructure\Doctrine\DBAL\Type\Message\TemplateIdType
             MessageMailer: Britannia\Infraestructure\Doctrine\DBAL\Type\Message\MessageMailerType
+            EmailPurpose: Britannia\Infraestructure\Doctrine\DBAL\Type\Message\EmailPurposeType
     orm:
         auto_generate_proxy_classes: true
         naming_strategy: doctrine.orm.naming_strategy.underscore

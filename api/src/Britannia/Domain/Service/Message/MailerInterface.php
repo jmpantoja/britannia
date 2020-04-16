@@ -19,5 +19,7 @@ use PlanB\DDD\Domain\VO\Email;
 
 interface MailerInterface extends DeliveryInterface
 {
+    public function send(Student $student, string $message, string $subject, array $attachments = []): bool;
+
     public function emailByStudent(Student $student): ?Email;
 }

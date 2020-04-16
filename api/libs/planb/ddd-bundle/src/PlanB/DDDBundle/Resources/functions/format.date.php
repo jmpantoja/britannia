@@ -10,6 +10,7 @@
  */
 declare(strict_types=1);
 
+use Britannia\Domain\VO\Course\Locked\Locked;
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 
@@ -32,7 +33,8 @@ if (!function_exists('date_to_string')) {
     ): string
     {
         $date = Carbon::make($date);
-        $formatter = \IntlDateFormatter::create(null, $dateType, $timeType, null, null, $format);
+
+        $formatter = \IntlDateFormatter::create(Locale::getDefault(), $dateType, $timeType, null, null, $format);
 
         return $formatter->format($date);
     }
@@ -47,7 +49,7 @@ if (!function_exists('string_to_date')) {
     ): CarbonImmutable
     {
 
-        $formatter = \IntlDateFormatter::create(null, $dateType, $timeType, null, null, $format);
+        $formatter = \IntlDateFormatter::create(Locale::getDefault(), $dateType, $timeType, null, null, $format);
         $timeStamp = $formatter->parse($value);
 
         return CarbonImmutable::parse($timeStamp);

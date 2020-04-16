@@ -44,7 +44,7 @@ final class NotificationTools extends AdminTools
         return null;
     }
 
-    public function filters(DatagridMapper $filterMapper): NotificationFilter
+    public function filters(DatagridMapper $filterMapper): ?NotificationFilter
     {
         return NotificationFilter::make($filterMapper);
     }

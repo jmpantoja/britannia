@@ -65,6 +65,8 @@ class Pass implements Comparable
     {
         $this->lessons = new ArrayCollection();
         $this->id = new PassId();
+
+        $this->update($dto);
     }
 
     public function update(PassDto $dto): self
@@ -100,6 +102,7 @@ class Pass implements Comparable
             $start,
             $start->lastOfMonth()
         ]);
+
         return $this;
     }
 

@@ -5,12 +5,19 @@
 
 
     <entity name="Britannia\Domain\Entity\Message\Template" table="message_templates"
+            inheritance-type="JOINED"
             repository-class="Britannia\Infraestructure\Doctrine\Repository\TemplateRepository">
 
         <id name="id" type="TemplateId" column="id">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
         </id>
+
+        <discriminator-column name="type" type="string"/>
+        <discriminator-map>
+            <discriminator-mapping value="sms" class="Britannia\Domain\Entity\Message\Template\SmsTemplate"/>
+            <discriminator-mapping value="email" class="Britannia\Domain\Entity\Message\Template\EmailTemplate"/>
+        </discriminator-map>
 
 
         <field name="name"/>

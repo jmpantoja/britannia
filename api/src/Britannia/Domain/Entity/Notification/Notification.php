@@ -28,7 +28,7 @@ class Notification
     private $student;
     private $course;
 
-    private $created_at;
+    private $createdAt;
 
     public static function make(NotificationDto $dto): self
     {
@@ -40,7 +40,7 @@ class Notification
     {
         $this->id = new NotificationId();
         $this->update($dto);
-        $this->created_at = CarbonImmutable::now();
+        $this->createdAt = CarbonImmutable::now();
     }
 
     public function update(NotificationDto $dto): self
@@ -116,9 +116,7 @@ class Notification
      */
     public function createdAt(): CarbonImmutable
     {
-        return $this->created_at;
+        return $this->createdAt;
     }
-
-
 
 }

@@ -74,7 +74,7 @@ final class TemplateAdmin extends AbstractAdmin implements AdminFilterableInterf
     {
         $this->adminTools()
             ->form($formMapper)
-            ->configure();
+            ->configure($this->getSubject());
     }
 
 }

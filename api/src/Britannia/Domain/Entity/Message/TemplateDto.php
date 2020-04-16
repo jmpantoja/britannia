@@ -16,7 +16,7 @@ namespace Britannia\Domain\Entity\Message;
 
 use PlanB\DDD\Domain\Model\Dto;
 
-final class TemplateDto extends Dto
+abstract class TemplateDto extends Dto
 {
     public ?string $name;
     public ?string $template;

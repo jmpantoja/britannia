@@ -1,0 +1,28 @@
+{% set download = admin.generateObjectUrl('download_pdf', object) %}
+{% set email = admin.generateObjectUrl('send_email', object ) %}
+
+<div class="btn-group">
+    <button type="button" class="btn btn-success">
+        Recibo
+    </button>
+    <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="false">
+        <span class="caret"></span>
+        <span class="sr-only">Toggle Dropdown</span>
+    </button>
+    <ul class="dropdown-menu">
+        <li>
+            <a href="{{ download }}">
+                <i class="fa fa-download"></i>
+                Descargar
+            </a>
+        </li>
+        <li>
+            <a class="send-invoice-by-email" href="{{ email }}">
+                <i class="fa fa-envelope"></i>
+                Email
+            </a>
+        </li>
+    </ul>
+</div>
+

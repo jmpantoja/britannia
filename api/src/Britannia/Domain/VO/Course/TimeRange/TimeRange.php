@@ -104,5 +104,8 @@ final class TimeRange
         return TimeRange::make($start, $end);
     }
 
-
+    public function contains(CarbonImmutable $date, bool $equal = true): bool
+    {
+        return $date->isBetween($this->start(), $this->end(), $equal);
+    }
 }

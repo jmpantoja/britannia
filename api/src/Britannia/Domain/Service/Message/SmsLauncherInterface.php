@@ -19,5 +19,7 @@ use PlanB\DDD\Domain\VO\PhoneNumber;
 
 interface SmsLauncherInterface extends DeliveryInterface
 {
+    public function send(Student $student, string $message): bool;
+
     public function mobilePhoneNumberByStudent(Student $student): ?PhoneNumber;
 }

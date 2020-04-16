@@ -21,8 +21,11 @@ use Britannia\Domain\Entity\Course\Pass\Pass;
 use Britannia\Domain\Entity\Course\Pass\PassList;
 use Britannia\Domain\Entity\Course\Traits\LessonTrait;
 use Britannia\Domain\Entity\Course\Traits\PaymentTrait;
+use Britannia\Domain\VO\Course\Pass\PassPriceList;
 use Britannia\Domain\VO\Course\TimeRange\TimeRange;
+use Carbon\CarbonImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
+use PlanB\DDD\Domain\VO\Price;
 
 class OneToOne extends Course implements CoursePaymentInterface
 {
@@ -85,5 +88,24 @@ class OneToOne extends Course implements CoursePaymentInterface
     private function passList(): PassList
     {
         return PassList::collect($this->passes);
+    }
+
+
+    public function priceOfTheMonth(PassPriceList $priceList, CarbonImmutable $date = null): Price
+    {
+        $date = $date ?? CarbonImmutable::today();
+
+        return $this->passesInMonth($date)
+            ->totalPrice($priceList);
+    }
+
+    /**
+     * @param CarbonImmutable $date
+     * @return PassList
+     */
+    public function passesInMonth(CarbonImmutable $date): PassList
+    {
+        return $this->passList()
+            ->byDate($date);
     }
 }

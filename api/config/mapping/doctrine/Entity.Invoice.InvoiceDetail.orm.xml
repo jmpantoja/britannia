@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+
+    <entity name="Britannia\Domain\Entity\Invoice\InvoiceDetail" table="invoice_details">
+
+        <id name="id" type="InvoiceDetailId" column="id">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
+        </id>
+
+
+        <field name="subject"/>
+        <field name="numOfUnits" type="positive_integer"/>
+        <field name="price" type="refund_price"/>
+        <field name="discount" column="discount_percent" type="percent"/>
+        <field name="discountTotal" type="refund_price"/>
+        <field name="total" type="refund_price"/>
+        <field name="position" type="integer"/>
+
+        <many-to-one field="invoice" target-entity="Britannia\Domain\Entity\Invoice\Invoice">
+            <join-column on-delete="CASCADE"/>
+        </many-to-one>
+
+    </entity>
+</doctrine-mapping>

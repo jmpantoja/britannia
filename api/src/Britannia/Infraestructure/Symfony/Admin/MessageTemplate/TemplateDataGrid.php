@@ -20,8 +20,22 @@ final class TemplateDataGrid extends AdminDataGrid
 {
     public function configure()
     {
+        $this->add('type', null, [
+            'label' => false,
+            'template' => 'admin/template/template_type_column.html.twig',
+            'header_style' => 'width:75px',
+            'row_align' => 'center'
+
+        ]);
+
         $this->addIdentifier('name', null, [
-            'label' => 'Plantilla SMS',
+            'label' => 'Plantilla',
+        ]);
+
+        $this->add('purpose', null, [
+            'label' => 'Función',
+            'template' => 'admin/template/template_purpose_column.html.twig',
+            'header_style' => 'width:150px',
         ]);
     }
 }

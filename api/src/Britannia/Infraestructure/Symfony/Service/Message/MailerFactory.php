@@ -17,6 +17,7 @@ namespace Britannia\Infraestructure\Symfony\Service\Message;
 use Britannia\Domain\Service\Message\MailerFactoryInterface;
 use Britannia\Domain\Service\Message\MailerInterface;
 use Britannia\Domain\VO\Message\MessageMailer;
+use Exception;
 use Swift_Mailer;
 
 
@@ -34,11 +35,9 @@ final class MailerFactory implements MailerFactoryInterface
     public function fromMessageMailer(MessageMailer $messageMailer): MailerInterface
     {
         $name = $messageMailer->getName();
-
         if (isset($this->mailers[$name])) {
             return $this->mailers[$name];
         }
-
         $message = sprintf('No existe el mailer "%s"', $name);
         throw new Exception($message);
 

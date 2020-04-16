@@ -1,0 +1,55 @@
+---
+resetted:
+    expected: 50
+    query:
+        filters: reset
+
+all:
+    expected: 50
+    query: []
+
+
+actives by name:
+    expected: 1
+    query:
+        filter:
+            fullName:
+                value: pantoja
+
+unactives by name:
+    expected: 7
+    query:
+        filter:
+            fullName:
+                value: garrido
+            active:
+                value: 2
+
+all by name:
+    expected: 2
+    query:
+        filter:
+            fullName:
+                value: pantoja
+            active:
+                value: ''
+
+
+by birthday:
+    expected: 50
+    query:
+        filter:
+            Cumple:
+                value: 4
+            active:
+                value: 1
+
+by birthday page 2:
+    expected: 2
+    query:
+        filter:
+            Cumple:
+                value: 4
+            active:
+                value: 1
+            _page: 2                

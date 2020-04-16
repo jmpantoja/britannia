@@ -17,8 +17,9 @@ namespace Britannia\Infraestructure\Symfony\Admin\Message;
 use Britannia\Domain\Entity\Message\Message;
 use Britannia\Domain\VO\Course\CourseStatus;
 use Britannia\Infraestructure\Doctrine\Repository\CourseRepository;
+use Britannia\Infraestructure\Symfony\Form\Type\Message\MessageEmailType;
 use Britannia\Infraestructure\Symfony\Form\Type\Message\MessageMailerType;
-use Britannia\Infraestructure\Symfony\Form\Type\Message\SmsType;
+use Britannia\Infraestructure\Symfony\Form\Type\Message\MessageSmsType;
 use Carbon\CarbonImmutable;
 use Doctrine\ORM\EntityRepository;
 use PlanB\DDDBundle\Sonata\Admin\AdminForm;
@@ -79,18 +80,27 @@ final class MessageForm extends AdminForm
                 'label' => 'Enviar desde:'
             ]);
 
-            $this->add('message', WYSIWYGType::class, [
+            $this->add('message', MessageEmailType::class, [
                 'disabled' => $disabled,
-                'label' => 'Mensaje',
-                'format_options' => [
-                    'attr' => [
-                        'rows' => 40,
-                    ],
-                ],
+                'label' => 'SMS',
+                'constraints' => [
+                    new NotBlank()
+                ]
             ]);
+
+
+//            $this->add('message', WYSIWYGType::class, [
+//                'disabled' => $disabled,
+//                'label' => 'Mensaje',
+//                'format_options' => [
+//                    'attr' => [
+//                        'rows' => 40,
+//                    ],
+//                ],
+//            ]);
         } else {
 
-            $this->add('message', SmsType::class, [
+            $this->add('message', MessageSmsType::class, [
                 'disabled' => $disabled,
                 'label' => 'SMS',
                 'constraints' => [

@@ -13,6 +13,7 @@
 
         <field name="enrollmentPayment" type="price" nullable="true"/>
         <field name="monthlyPayment" type="price" nullable="true"/>
+        <field name="passPriceList" type="PassPriceList" nullable="true"/>
 
         <field name="jobStatusDiscount" type="JobStatusDiscountList" nullable="true"/>
         <field name="familyDiscount" type="FamilyDiscountList" nullable="true"/>

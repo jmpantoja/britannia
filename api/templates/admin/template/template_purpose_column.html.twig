@@ -1,0 +1,11 @@
+{% extends get_admin_template('base_list_field', admin.code) %}
+
+{% block field %}
+    {% if object.sms %}
+
+    {% else %}
+        {{ object.purpose.value | default(null) }}
+    {% endif %}
+{% endblock %}
+
+

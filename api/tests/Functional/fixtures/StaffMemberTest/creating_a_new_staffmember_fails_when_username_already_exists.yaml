@@ -1,0 +1,10 @@
+---
+only required:
+    values:
+        fullName:
+            firstName: pepe
+            lastName: gonzalez
+        userName: RUBEN
+        password:
+            first: 1234
+            second: 1234

@@ -36,6 +36,13 @@ sonata_admin:
                     - admin.attendance
                     - admin.report
 
+            admin.group.invoices:
+                label: Pagos
+                label_catalogue: App
+                icon: "<i class=\"fa fa-euro\"></i>"
+                items:
+                    - admin.invoice
+
             admin.group.tools:
                 label: Herramientas
                 label_catalogue: App
@@ -44,36 +51,37 @@ sonata_admin:
                     -   route:        planning
                         label:        Planning
                         roles: ['ROLE_MANAGER']
-                    
+
                     - admin.notification
                     - admin.issue
                     - admin.message
 
 
-            admin.group.extra:
-                label: Datos auxiliares
-                label_catalogue: App
-                icon: "<i class=\"fa fa-info\"></i>"
-                items:
-                    - admin.academy
-                    - admin.school
-                    - admin.classroom
-                    - admin.book
-                    - admin.level
-                    - admin.school_course
+            #            admin.group.extra:
+            #                label: Datos auxiliares
+            #                label_catalogue: App
+            #                icon: "<i class=\"fa fa-info\"></i>"
+            #                items:
+
 
             admin.group.config:
                 label: Configuración
                 label_catalogue: App
                 icon: "<i class=\"fa fa-cog\"></i>"
                 items:
-                    - admin.calendar                    
-                    -   route:        admin_britannia_domain_setting_setting_edit
+                    -   route: admin_britannia_domain_setting_setting_edit
                         route_params: { id: "__main__" }
-                        label:        Parámetros
+                        label:        Settings
                         roles: ['ROLE_MANAGER']
-                        
+
                     - admin.message.template
+                    - admin.calendar
+                    - admin.academy
+                    - admin.school
+                    - admin.classroom
+                    - admin.book
+                    - admin.level
+                    - admin.school_course
 
         blocks:
             -   class:    col-lg-3 col-xs-6
@@ -135,9 +143,9 @@ sonata_admin:
             - css/admin/attendance.css
             - css/admin/students.css
             - css/admin/widgets.css
-             
-            - css/widgets/counter.css 
-                
+
+            - css/widgets/counter.css
+
             - css/toggle/bootstrap-toggle.min.css
 
             - css/fullcalendar/core.min.css
@@ -156,6 +164,7 @@ sonata_admin:
         extra_javascripts:
             - js/admin/multi.js
             - js/admin/forms.js
+            
             - js/toggle/bootstrap-toggle.min.js
 
             - js/fullcalendar/core.min.js

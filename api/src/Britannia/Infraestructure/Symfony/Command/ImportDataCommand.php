@@ -9,6 +9,7 @@ use Britannia\Infraestructure\Symfony\Importer\Report\ConsoleReport;
 use Britannia\Infraestructure\Symfony\Importer\Report\PlainTextErrorReport;
 use Britannia\Infraestructure\Symfony\Importer\Report\PlainTextReport;
 use Britannia\Infraestructure\Symfony\Importer\Report\PlainTextWarningsReport;
+use Locale;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -76,6 +77,7 @@ class ImportDataCommand extends Command implements ContainerAwareInterface
         $console = ConsoleReport::make($input, $output);
         $plainText = PlainTextReport::make($this->pathToReportDir);
 
+        Locale::setDefault('es');
         $this->importer
             ->addReport($console)
             ->addReport($plainText)

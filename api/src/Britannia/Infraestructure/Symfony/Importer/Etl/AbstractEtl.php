@@ -81,10 +81,11 @@ abstract class AbstractEtl implements EtlInterface
 
         } catch (Throwable $exception) {
 
-            $id = sprintf('ID: %s', $input['id']);
+            $id = sprintf('ID: %s', $input['id'] ?? null);
             dump($exception->getMessage(), $id);
             $trace = sprintf('%s::%s', $exception->getFile(), $exception->getLine());
-            dump($trace);
+
+            dump($trace, $exception->getTraceAsString());
             die;
         }
 

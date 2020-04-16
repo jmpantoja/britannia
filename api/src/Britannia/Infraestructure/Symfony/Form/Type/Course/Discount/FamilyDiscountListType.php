@@ -26,8 +26,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class FamilyDiscountListType extends AbstractCompoundType
 {
-
-
     public function customForm(FormBuilderInterface $builder, array $options)
     {
         //El hermano de mayor precio siempre paga la mensualidad completa

@@ -16,7 +16,7 @@
         <field name="message" type="text"/>
 
         <field name="type" type="TypeOfNotification"/>
-        <field name="created_at" type="datetime_immutable"/>
+        <field name="createdAt" type="datetime_immutable"/>
 
 
         <many-to-one field="author" target-entity="Britannia\Domain\Entity\Staff\StaffMember"/>

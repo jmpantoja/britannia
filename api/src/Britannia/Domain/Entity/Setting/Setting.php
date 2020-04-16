@@ -14,8 +14,11 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Setting;
 
 
+use Britannia\Domain\VO\Course\Pass\PassHours;
+use Britannia\Domain\VO\Course\Pass\PassPriceList;
 use Britannia\Domain\VO\Discount\FamilyDiscountList;
 use Britannia\Domain\VO\Discount\JobStatusDiscountList;
+use PlanB\DDD\Domain\VO\Price;
 
 class Setting
 {
@@ -25,13 +28,16 @@ class Setting
     private $id;
 
     /**
-     * @var \PlanB\DDD\Domain\VO\Price|null
+     * @var Price|null
      */
     private $enrollmentPayment;
     /**
-     * @var \PlanB\DDD\Domain\VO\Price|null
+     * @var Price|null
      */
     private $monthlyPayment;
+
+    /** @var PassPriceList|null */
+    private $passPriceList;
 
     /**
      * @var JobStatusDiscountList
@@ -84,6 +90,7 @@ class Setting
     {
         $this->enrollmentPayment = $dto->enrollmentPayment;
         $this->monthlyPayment = $dto->monthlyPayment;
+        $this->passPriceList = $dto->passPriceList;
 
         $this->familyDiscount = $dto->familyDiscount;
         $this->jobStatusDiscount = $dto->jobStatusDiscount;
@@ -108,19 +115,27 @@ class Setting
     }
 
     /**
-     * @return \PlanB\DDD\Domain\VO\Price|null
+     * @return Price|null
      */
-    public function enrollmentPayment(): ?\PlanB\DDD\Domain\VO\Price
+    public function enrollmentPayment(): ?Price
     {
         return $this->enrollmentPayment;
     }
 
     /**
-     * @return \PlanB\DDD\Domain\VO\Price|null
+     * @return Price|null
      */
-    public function monthlyPayment(): ?\PlanB\DDD\Domain\VO\Price
+    public function monthlyPayment(): ?Price
     {
         return $this->monthlyPayment;
+    }
+
+    /**
+     * @return PassPriceList|null
+     */
+    public function passPriceList(): ?PassPriceList
+    {
+        return $this->passPriceList;
     }
 
     public function jobStatusDiscount(): ?JobStatusDiscountList

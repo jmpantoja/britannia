@@ -48,38 +48,41 @@ class JobStatusDiscountList
     }
 
     /**
-     * @return CourseDiscount|mixed
+     * @return CourseDiscount|null
      */
-    public function student()
+    public function student(): ?CourseDiscount
     {
         return $this->getByJobStatus(JobStatus::STUDENT());
     }
 
     /**
-     * @return CourseDiscount|mixed
+     * @return CourseDiscount|null
      */
-    public function unemployed()
+    public function unemployed(): ?CourseDiscount
     {
         return $this->getByJobStatus(JobStatus::UNEMPLOYED());
     }
 
     /**
-     * @return CourseDiscount|mixed
+     * @return CourseDiscount|null
      */
-    public function retired()
+    public function retired(): ?CourseDiscount
     {
         return $this->getByJobStatus(JobStatus::RETIRED());
     }
 
     /**
-     * @return CourseDiscount|mixed
+     * @return CourseDiscount|null
      */
-    public function disabled()
+    public function disabled(): ?CourseDiscount
     {
         return $this->getByJobStatus(JobStatus::DISABLED());
     }
 
 
+    /**
+     * @return CourseDiscount[]
+     */
     public function toArray()
     {
         return $this->data;

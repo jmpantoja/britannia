@@ -212,7 +212,6 @@ abstract class AbstractCompoundType extends AbstractType implements DataMapperIn
             return $form->getData();
         }, $forms);
 
-
         $form = $this->getParentForm($forms);
         $original = $form->getData();
 
@@ -221,7 +220,6 @@ abstract class AbstractCompoundType extends AbstractType implements DataMapperIn
         $constraint = $this->buildConstraint($options);
 
         if (!($constraint instanceof Constraint)) {
-
             $data = $this->customMapping($values, $original);
             return;
         }

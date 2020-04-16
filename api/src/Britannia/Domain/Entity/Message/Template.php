@@ -14,7 +14,10 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Message;
 
 
-class Template
+use Britannia\Domain\Entity\Message\Template\EmailTemplate;
+use Britannia\Domain\Entity\Message\Template\SmsTemplate;
+
+abstract class Template
 {
     /** @var TemplateId */
     private $id;
@@ -25,12 +28,8 @@ class Template
     /** @var string */
     private $template;
 
-    public static function make(TemplateDto $dto): self
-    {
-        return new self($dto);
-    }
 
-    private function __construct(TemplateDto $dto)
+    protected function __construct(TemplateDto $dto)
     {
         $this->id = new TemplateId();
         $this->update($dto);
@@ -68,4 +67,13 @@ class Template
         return $this->template;
     }
 
+    public function isSms(): bool
+    {
+        return $this instanceof SmsTemplate;
+    }
+
+    public function isEmail(): bool
+    {
+        return $this instanceof EmailTemplate;
+    }
 }

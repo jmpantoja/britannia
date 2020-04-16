@@ -79,21 +79,31 @@ final class FileDownload
 
     public function createResponse(ReportList $reportList): Response
     {
-        foreach ($reportList as $report) {
-            $files[] = $this->generateTempPdfFile($report);
-        }
+        $files = $this->generateTempFiles($reportList);
 
         if (empty($files)) {
             return new Response('No hay nada que generar', 404);
         }
 
         $pathToFile = $files[0];
-
         if (count($files) > 1) {
             $pathToFile = $this->packFilesIntoZip($reportList->name(), $files);
         }
 
         return $this->createResponseFromFilePath($pathToFile);
+    }
+
+    /**
+     * @param ReportList $reportList
+     * @return array
+     */
+    public function generateTempFiles(ReportList $reportList): array
+    {
+        $files = [];
+        foreach ($reportList as $report) {
+            $files[] = $this->generateTempPdfFile($report);
+        }
+        return $files;
     }
 
     private function generateTempPdfFile(ReportInterface $report): string
@@ -128,4 +138,6 @@ final class FileDownload
         return (new BinaryFileResponse($pathToFile))
             ->setContentDisposition('attachment');
     }
+
+
 }

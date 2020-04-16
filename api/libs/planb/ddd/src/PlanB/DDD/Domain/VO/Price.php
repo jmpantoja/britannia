@@ -24,9 +24,9 @@ class Price
 
     public static function make(float $price): self
     {
-        $price = self::assert($price);
+        $price = static::assert($price);
 
-        return new self($price);
+        return new static($price);
     }
 
     private function __construct(float $price)

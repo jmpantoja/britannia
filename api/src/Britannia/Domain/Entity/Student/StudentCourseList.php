@@ -123,4 +123,13 @@ final class StudentCourseList extends EntityList
 
         return $this;
     }
+
+    public function withActiveCourse(Course $course): ?StudentCourse
+    {
+        return $this->values()
+            ->filter(function (StudentCourse $studentCourse) use ($course) {
+                return $studentCourse->course()->equals($course) && $studentCourse->isActive();
+            })
+            ->first();
+    }
 }

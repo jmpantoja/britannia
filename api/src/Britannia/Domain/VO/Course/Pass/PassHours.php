@@ -46,6 +46,4 @@ final class PassHours extends Enum
         }
 
     }
-
-
 }

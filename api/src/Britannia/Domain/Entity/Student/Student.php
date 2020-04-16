@@ -192,8 +192,6 @@ abstract class Student implements Comparable
         $this->createdAt = CarbonImmutable::now();
 
         static::update($dto);
-
-        $this->notify(StudentHasBeenCreated::make($this));
     }
 
 
@@ -270,7 +268,6 @@ abstract class Student implements Comparable
             });
 
         return $this;
-
     }
 
     public function setAttachments(AttachmentList $attachments): self
@@ -587,7 +584,7 @@ abstract class Student implements Comparable
     /**
      * @return string
      */
-    public function firstContact(): string
+    public function firstContact(): ?string
     {
         return $this->firstContact;
     }
@@ -662,5 +659,17 @@ abstract class Student implements Comparable
     public function __toString()
     {
         return $this->name();
+    }
+
+    public function firstDayInCourse(Course $course): ?CarbonImmutable
+    {
+        $studentHasCourse = $this->studentHasCoursesList()
+            ->withActiveCourse($course);
+
+        if (!($studentHasCourse instanceof StudentCourse)) {
+            return null;
+        }
+
+        return $studentHasCourse->timeRange()->start();
     }
 }

@@ -88,9 +88,7 @@ abstract class EntityList implements Countable, IteratorAggregate
     {
         $callback ??= [$this, 'add'];
         $list->values()->diffUsing($this->values(), function (Comparable $left, Comparable $right) {
-
             return $left->compareTo($right);
-
         })->each(function (Comparable $element) use ($callback) {
             $callback($element);
         });
@@ -114,8 +112,6 @@ abstract class EntityList implements Countable, IteratorAggregate
 
         $this->data->removeElement($element);
         $this->values()->forget($key);
-
-
 
         if (is_callable($callback)) {
             $callback($element);

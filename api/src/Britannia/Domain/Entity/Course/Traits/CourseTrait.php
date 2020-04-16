@@ -54,6 +54,8 @@ trait CourseTrait
     {
         $this->name = $dto->name;
         $this->description = $dto->description;
+        $this->setColor($dto->color);
+
         if (isset($dto->oldId)) {
             $this->oldId = $dto->oldId;
         }

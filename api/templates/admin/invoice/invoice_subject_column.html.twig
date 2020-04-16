@@ -1,0 +1,9 @@
+{% extends get_admin_template('base_list_field', admin.code) %}
+
+{% block field %}
+    <div class="row">
+        <div class="col-md-12">
+            {{ object.subject }}
+        </div>
+    </div>
+{% endblock %}

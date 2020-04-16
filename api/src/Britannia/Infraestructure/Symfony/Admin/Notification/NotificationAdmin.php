@@ -90,5 +90,4 @@ final class NotificationAdmin extends AbstractAdmin implements AdminFilterableIn
             ->build();
 
     }
-
 }

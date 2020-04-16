@@ -15,6 +15,7 @@
         "impulze/intervention-image-bundle": "^1.2",
         "knplabs/knp-snappy-bundle": "^1.6",
         "laminas/laminas-filter": "^2.9",
+        "lavary/crunz": "^2.1",
         "league/tactician": "^1.0",
         "league/tactician-bundle": "^1.1",
         "league/tactician-doctrine": "^1.1",

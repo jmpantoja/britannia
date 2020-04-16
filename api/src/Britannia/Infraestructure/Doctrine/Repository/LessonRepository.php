@@ -91,7 +91,7 @@ class LessonRepository extends ServiceEntityRepository implements LessonReposito
      * @param CarbonImmutable $day
      * @return Lesson[]
      */
-    public function findByDay(CarbonImmutable $day): array
+        public function findByDay(CarbonImmutable $day): array
     {
         return $this->findBy([
             'day' => $day

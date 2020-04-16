@@ -343,7 +343,8 @@
                         {{ student.otherAcademy.academy }}
                     </td>
                     <td colspan="2">
-                        {{ student.otherAcademy.numOfYears.value }}
+                        {% set numOfYears = student.otherAcademy.numOfYears.value | default(null) %}
+                        {{ numOfYears }}
                     </td>
                 </tr>
             {% endif %}
@@ -424,19 +425,23 @@
             <tr>
                 <td class="quarter-col horizontal label-to-right">
                     <span class="label">Enviar e-mail:</span>
-                    {{ _self.checkbox(assets_base, student.preferredContactMode.email) }}
+                    {% set email = student.preferredContactMode.email | default(null) %}
+                    {{ _self.checkbox(assets_base, email) }}
                 </td>
                 <td class="quarter-col horizontal label-to-right">
                     <span class="label">Enviar Whatsapp:</span>
-                    {{ _self.checkbox(assets_base, student.preferredContactMode.whatsapp) }}
+                    {% set whatsapp = student.preferredContactMode.whatsapp | default(null) %}
+                    {{ _self.checkbox(assets_base, whatsapp) }}
                 </td>
                 <td class="quarter-col horizontal label-to-right">
                     <span class="label">Realizar llamadas:</span>
-                    {{ _self.checkbox(assets_base, student.preferredContactMode.telephone) }}
+                    {% set telephone = student.preferredContactMode.telephone | default(null) %}
+                    {{ _self.checkbox(assets_base, telephone) }}
                 </td>
                 <td class="quarter-col horizontal label-to-right">
                     <span class="label">Correo ord.:</span>
-                    {{ _self.checkbox(assets_base, student.preferredContactMode.postMail) }}
+                    {% set postMail = student.preferredContactMode.postMail | default(null) %}
+                    {{ _self.checkbox(assets_base, postMail) }}
                 </td>
             </tr>
         </table>
@@ -619,17 +624,20 @@
     <tr>
         <td colspan="2">
             <span class="label">Primer Apellido</span>
-            {{ _self.field(tutor.fullName.lastName) }}
+            {% set lastName = tutor.fullName.lastName | default(null) %}
+            {{ _self.field(lastName) }}
         </td>
         <td colspan="2">
             <span class="label">Nombre</span>
-            {{ _self.field(tutor.fullName.firstName) }}
+            {% set firstName = tutor.fullName.firstName | default(null) %}
+            {{ _self.field(firstName) }}
         </td>
     </tr>
     <tr>
         <td class="quarter-col">
             <span class="label">Número de documento (DNI)</span>
-            {{ _self.field(tutor.dni) }}
+            {% set dni = tutor.dni | default(null) %}
+            {{ _self.field(dni) }}
         </td>
         <td class="quarter-col">
             <span class="label">Telf. Contacto 1</span>
@@ -656,17 +664,20 @@
         </td>
         <td>
             <span class="label">Profesión</span>
-            {{ _self.field(tutor.job.name ) }}
+            {% set name = tutor.job.name | default(null) %}
+            {{ _self.field(name ) }}
         </td>
     </tr>
     <tr>
         <td colspan="3">
             <span class="label">Domicilio</span>
-            {{ _self.field(tutor.address ) }}
+            {% set address = tutor.address | default(null) %}
+            {{ _self.field(address ) }}
         </td>
         <td>
             <span class="label">Código Postal</span>
-            {{ _self.field(tutor.address.postalCode ) }}
+            {% set postalCode = tutor.address.postalCode | default(null) %}
+            {{ _self.field(postalCode ) }}
         </td>
     </tr>
 {% endblock %}

@@ -8,6 +8,8 @@ ARG VER_PDFTK=2.02
 
 FROM php:${PHP_VERSION}-fpm-buster AS api_platform_php
 
+RUN useradd -m -o -u 1000 docker;
+
 ENV PANTHER_NO_SANDBOX 1
 
 ENV TZ=Europe/Madrid
@@ -21,19 +23,19 @@ RUN apt -y --fix-missing install \
 #		gettext \
 		apt-utils \
 		git \
+		libssl-dev \
 	;
 
 RUN mkdir -p /usr/share/man/man1
 
 #paquetes para generear pdfs
 RUN apt update \
-	#pdfs
-#	&& apt install -y wget unzip wkhtmltopdf pdftk \
 	&& apt install -y wget unzip pdftk \
 	#imagemgick
 	&& apt-get install -y libmagickwand-dev --no-install-recommends \
-    && pecl install imagick \
-	&& docker-php-ext-enable imagick \
+    && pecl install imagick && docker-php-ext-enable imagick \
+    && printf "\n" | pecl install raphf propro && docker-php-ext-enable raphf propro \
+#    && printf "\n" | pecl install pecl_http && docker-php-ext-enable pecl_http \
 	&& apt clean ;
 
 COPY docker/php/wkhtmltox_0.12.5-1.buster_amd64.deb ./wkhtmltox_0.12.5-1.buster_amd64.deb
@@ -44,20 +46,17 @@ RUN apt install -y ./wkhtmltox_0.12.5-1.buster_amd64.deb \
 #	&& apt install -y ./wkhtmltox_0.12.5-1.buster_amd64.deb \
 #	&& rm ./wkhtmltox_0.12.5-1.buster_amd64.deb
 
-
-
 ARG WITH_XDEBUG=false
 RUN if [ $WITH_XDEBUG = "true" ] ; then \
 	    pecl install xdebug; \
 	    docker-php-ext-enable xdebug; \
 	    echo "xdebug.remote_enable=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
-
 	    echo "xdebug.remote_port=9001" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
 	    echo "xdebug.idekey=PHPSTORM" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
 	    echo "xdebug.remote_autostart=0" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
 	    echo "error_reporting=E_ALL" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
 	    echo "display_startup_err=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
-	fi ;
+	fi;
 
 RUN apt update \
 && apt-get install -y cron;
@@ -74,8 +73,6 @@ RUN set -eux; \
 		libicu-dev \
 		libzip-dev  \
 		zlib1g-dev  \
-#		icu-dev \
-#		zlib-dev \
 	;
 
 RUN	docker-php-ext-install -j$(nproc) \
@@ -124,6 +121,7 @@ RUN set -eux; \
 ENV PATH="${PATH}:/root/.composer/vendor/bin"
 
 WORKDIR /srv/api
+#USER www-data
 
 # build for production
 ARG APP_ENV=prod

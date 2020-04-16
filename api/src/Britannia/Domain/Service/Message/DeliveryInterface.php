@@ -19,8 +19,6 @@ use Carbon\CarbonImmutable;
 
 interface DeliveryInterface
 {
-    public function send(Student $student, string $message, string $subject): bool;
-
     public function recipient(Student $student): ?string;
 
     public function date(): ?CarbonImmutable;

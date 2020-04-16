@@ -61,8 +61,9 @@ abstract class CourseDto extends Dto
 
     protected function defaults(): array
     {
+        $color = $this->randomColor();
         return [
-            'color' => $this->randomColor()
+            'color' => $color
         ];
     }
 
@@ -80,7 +81,7 @@ abstract class CourseDto extends Dto
             RGBA::make(215, 208, 192),
             RGBA::make(212, 188, 176),
         ])
-            ->shuffle(time())
+            ->shuffle()
             ->first();
 
 

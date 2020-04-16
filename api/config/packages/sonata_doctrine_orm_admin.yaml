@@ -5,6 +5,7 @@ sonata_doctrine_orm_admin:
             - '@PlanBDDD/Form/form_admin.html.twig'
             - '@PlanBDDD/Form/widgets.html.twig'
             - 'form/attachment.html.twig'
+            - 'form/invoices.html.twig'
             - 'form/course.html.twig'
             - 'form/locked.html.twig'
             - 'form/mark.html.twig'

@@ -28,7 +28,6 @@ class FamilyDiscountListType extends Type
         if (!($value instanceof FamilyDiscountList)) {
             return null;
         }
-
         return serialize([
             'upper' => $value->getUpper(),
             'lower' => $value->getLower(),

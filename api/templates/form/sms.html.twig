@@ -7,7 +7,7 @@
 {% endblock %}
 
 
-{% block sms_widget %}
+{% block message_email_widget %}
     {{ form_row(form.template) }}
     {{ form_row(form.message) }}
 
@@ -28,9 +28,37 @@
                 $id = $(this).children("option:selected").val();
                 $text = $('#templates-{{ id }}').find('#template-' + $id)
 
-                $message.text('ssss')
+                CKEDITOR.instances['{{ form.message.vars.id }}'].setData($text.text());
+                $message.trigger('input')
+            })
+        });
+    </script>
 
-//                $message.text($text.text())
+{% endblock %}
+
+{% block message_sms_widget %}
+    {{ form_row(form.template) }}
+    {{ form_row(form.message) }}
+
+    <ul id="templates-{{ id }}" style="visibility: hidden; position: absolute; top: 0">
+        {%- for template in templates -%}
+            <li id="template-{{ template.id }}">
+                {{- template.template -}}
+            </li>
+        {%- endfor -%}
+    </ul>
+
+
+    <script type="application/javascript">
+        $(function () {
+            $template = $('#{{ form.template.vars.id }}');
+            $message = $('#{{ form.message.vars.id }}');
+
+            $template.on('change', function () {
+                $id = $(this).children("option:selected").val();
+                $text = $('#templates-{{ id }}').find('#template-' + $id)
+
+                $message.text('ssss')
                 $message.val($text.text())
 
                 $message.trigger('input')

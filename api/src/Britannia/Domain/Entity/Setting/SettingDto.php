@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Setting;
 
 
+use Britannia\Domain\VO\Course\Pass\PassPriceList;
 use Britannia\Domain\VO\Discount\FamilyDiscountList;
 use Britannia\Domain\VO\Discount\JobStatusDiscountList;
 use PlanB\DDD\Domain\Model\Dto;
@@ -23,6 +24,7 @@ final class SettingDto extends Dto
 {
     public ?Price $enrollmentPayment = null;
     public ?Price $monthlyPayment = null;
+    public ?PassPriceList $passPriceList = null;
 
     public ?FamilyDiscountList $familyDiscount = null;
     public ?JobStatusDiscountList $jobStatusDiscount = null;

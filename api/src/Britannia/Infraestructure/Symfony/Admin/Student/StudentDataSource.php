@@ -47,8 +47,9 @@ final class StudentDataSource extends AdminDataSource
         $data['Tiempo en otra academia'] = $this->parse($student->academyNumOfYears());
 
         $data['Primer Contacto'] = $this->parse($student->firstContact());
-        $data['Observaciones 1'] = $this->parse($student->firstComment());
-        $data['Observaciones 2'] = $this->parse($student->secondComment());
+
+        $data['Observaciones'] = $this->parse($student->comment());
+//        $data['Observaciones 2'] = $this->parse($student->secondComment());
         $data['Acepta tárminos academia'] = $this->parse($student->isTermsOfUseAcademy());
         $data['Acepta tárminos estudiante'] = $this->parse($student->isTermsOfUseStudent());
         $data['Derechos de imagen'] = $this->parse($student->isTermsOfUseImageRigths());

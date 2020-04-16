@@ -80,7 +80,7 @@ class CourseEtl extends AbstractEtl
 
         if (is_int($id)) {
             $builder
-                ->andWhere('id > ?')
+                ->andWhere('id = ?')
                 ->setParameter(0, $id);
         }
     }

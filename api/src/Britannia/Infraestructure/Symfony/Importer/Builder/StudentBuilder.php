@@ -222,6 +222,7 @@ class StudentBuilder extends BuilderAbstract
         $this->termsOfUseAcademy = (bool)$academia;
         $this->termsOfUseStudent = (bool)$alumno;
         $this->termsOfUseImage = (bool)$imagen;
+
         return $this;
     }
 
@@ -299,7 +300,7 @@ class StudentBuilder extends BuilderAbstract
             'firstContact' => $this->firstContact,
             'termsOfUseStudent' => $this->termsOfUseStudent,
             'termsOfUseAcademy' => $this->termsOfUseAcademy,
-            'termsOfUseImage' => $this->termsOfUseImage,
+            'termsOfUseImageRigths' => $this->termsOfUseImage,
             'job' => $this->job,
             'school' => $this->school,
             'schoolCourse' => $this->schoolCourse,

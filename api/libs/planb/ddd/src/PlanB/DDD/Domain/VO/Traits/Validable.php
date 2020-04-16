@@ -28,11 +28,11 @@ trait Validable
     public static function assert($value, array $options = [])
     {
         $constraint = static::buildConstraint($options);
-        $violationList = self::validateWithConstraint($value, $constraint);
+        $violationList = static::validateWithConstraint($value, $constraint);
 
         $value = $constraint->sanitize($value);
         if (count($violationList) > 0) {
-            $message = self::prepareViolationsMessage($violationList);
+            $message = static::prepareViolationsMessage($violationList);
             throw new \UnexpectedValueException($message);
         }
 
@@ -61,7 +61,7 @@ trait Validable
     {
         $constraint = static::buildConstraint($options);
 
-        return self::validateWithConstraint($value, $constraint);
+        return static::validateWithConstraint($value, $constraint);
     }
 
     /**
@@ -78,7 +78,7 @@ trait Validable
 
     public static function isValid($value, array $options = []): bool
     {
-        $violationList = self::validate($value);
+        $violationList = static::validate($value);
         return count($violationList) === 0;
     }
 

@@ -61,7 +61,7 @@ class PassListType extends AbstractCompoundType
 
     public function customMapping(array $data)
     {
-        $passes = $data['passes'];
+        $passes = array_filter($data['passes']) ;
 
         return PassList::collect($passes);
     }

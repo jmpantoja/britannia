@@ -1,0 +1,157 @@
+{% extends 'base_pdf.html.twig' %}
+
+{% block stylesheets %}
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css">
+
+{% endblock %}
+
+{% block style %}
+    <style>
+
+        html, body {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+
+        .wrapper {
+            margin: auto;
+            height: 850px;
+            /*height: 425px;*/
+
+            padding-top: 1em;
+        }
+
+        table {
+            border-collapse: separate;
+            overflow: hidden;
+        }
+
+        td {
+            padding: 1px;
+        }
+
+        .tabla th,
+        .tabla td.title {
+            background: #094A7E;
+            color: white;
+        }
+
+        .tabla th, .tabla td {
+            border: 1px solid #094A7E;
+            font-size: 10px;
+        }
+
+        p {
+            font-size: 8px;
+        }
+
+        .cabecera {
+            font-size: 11px;
+        }
+
+        hr.separator {
+            height: 2px;
+            width: 100%;
+            background: black;
+            margin: 0;
+        }
+
+        hr.separator_1 {
+            margin-top: 30px;
+            margin-bottom: 40px;
+        }
+
+        hr.separator_2 {
+            margin-top: 25px;
+            margin-bottom: 35px;
+        }
+
+        hr.separator_3 {
+            margin-top: 17px;
+            margin-bottom: 27px;
+        }
+
+        hr.separator_4 {
+            margin-top: 12px;
+            margin-bottom: 22px;
+        }
+
+    </style>
+{% endblock %}
+
+
+{% block body %}
+    {% with {label: 'ejemplar para el alumno'} %}
+        {{ block('invoice') }}
+    {% endwith %}
+
+    {% if includeCopyForTheAcademy %}
+        {% with {label: 'ejemplar para la academia'} %}
+            {{ block('invoice') }}
+        {% endwith %}
+    {% endif %}
+{% endblock %}
+
+{% block invoice %}
+    <div class="wrapper">
+
+        <div style="text-align:center;">
+            <img src="{{ assets_base }}/images/admin/invoice_header.png" style="width:100%;"/>
+        </div>
+
+
+        <table class="cabecera" style="width:100%;">
+            <thead>
+            <tr>
+                <th align="center">Fecha: {{ date | date('d/m/Y') }}</th>
+                <th align="center">{{ invoice.student.fullName.reversedMode }}</th>
+                <th align="center">{{ invoice.subject }}</th>
+            </tr>
+            </thead>
+        </table>
+
+        <table style="width:100%;" class="tabla">
+            <thead>
+            <tr>
+                <th>Concepto</th>
+                <th>UD</th>
+                <th>% Desc</th>
+                <th>Importe</th>
+                <th>Total</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for detail in invoice.details %}
+                <tr>
+                    <td>{{ detail.subject }}</td>
+                    <td>{{ detail.numOfUnits }}</td>
+                    <td>{{ detail.discount }}</td>
+                    <td>{{ detail.price }} &euro;</td>
+                    <td>{{ detail.total }} &euro;</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <table class="tabla" style="width:25%;">
+            <tbody>
+            <tr>
+                <td class="title">Importe</td>
+                <td>{{ invoice.priceTotal }} &euro;</td>
+            </tr>
+            <tr>
+                <td class="title">Descuento</td>
+                <td>{{ invoice.discountTotal }} &euro;</td>
+            </tr>
+            <tr>
+                <td class="title">Total</td>
+                <td>{{ invoice.total }} &euro;</td>
+            </tr>
+            </tbody>
+        </table>
+        <p style="text-align: right;">{{ label }}</p>
+    </div>
+{% endblock %}

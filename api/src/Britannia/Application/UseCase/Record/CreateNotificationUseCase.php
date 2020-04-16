@@ -16,6 +16,7 @@ namespace Britannia\Application\UseCase\Record;
 
 use ApiPlatform\Core\DataPersister\DataPersisterInterface;
 use Britannia\Domain\Entity\Notification\Notification;
+use Britannia\Domain\Entity\Staff\StaffMember;
 use Doctrine\ORM\EntityManagerInterface;
 use PlanB\DDD\Application\UseCase\UseCaseInterface;
 use Symfony\Component\Security\Core\Security;
@@ -48,18 +49,22 @@ class CreateNotificationUseCase implements UseCaseInterface
 
     public function handle(CreateNotification $command)
     {
-        $author = $this->ensureEntityIsManaged($this->security->getUser());
+        $user = $this->security->getUser();
+        if (!($user instanceof StaffMember)) {
+            return;
+        }
+
+        $author = $this->ensureEntityIsManaged($user);
 
         $dto = $command->dto();
         $dto->author = $author;
 
         $record = Notification::make($dto);
-
         $this->persister->persist($record);
     }
 
 
-    protected function ensureEntityIsManaged(object $entity)
+    protected function ensureEntityIsManaged(StaffMember $entity)
     {
         if ($this->entityManager->contains($entity)) {
             return $entity;

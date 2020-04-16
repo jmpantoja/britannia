@@ -73,15 +73,13 @@ class MonthlyDiscount
         return $this->regularMonthDiscount->calcule($course, $discount);
     }
 
-    private function isFirstMonth(Course $course, StudentDiscount $discount, CarbonImmutable $date): bool
+    public function isFirstMonth(Course $course, StudentDiscount $discount, CarbonImmutable $date): bool
     {
-        $start = $this->boundariesCalculator->startDay($course, $discount);
-        return $start->isSameMonth($date);
+        return $this->boundariesCalculator->isFirstMonth($course, $discount, $date);
     }
-
 
     private function isLastMonth(Course $course, CarbonImmutable $date): bool
     {
-        return $course->end()->isSameMonth($date);
+        return $this->boundariesCalculator->isLastMonth($course, $date);
     }
 }

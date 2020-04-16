@@ -1,0 +1,25 @@
+{% extends 'base_pdf.html.twig' %}
+
+{% block stylesheets %}
+    {#    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">#}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css">
+{% endblock %}
+
+{% block style %}
+    <style>
+        .clause {
+            height: 6em;
+        }
+        .clause .text {
+            font-size: 0.4em;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="clause">
+        <div class="text">
+            {{ setting.cashPaymentsClause | raw }}
+        </div>
+    </div>
+{% endblock %}

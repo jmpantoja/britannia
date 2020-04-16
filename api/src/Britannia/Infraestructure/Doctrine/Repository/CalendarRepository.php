@@ -59,7 +59,7 @@ class CalendarRepository extends ServiceEntityRepository implements CalendarRepo
 
     public function hasDay(DateTimeInterface $dateTime): bool
     {
-        $dateTime = $dateTime->setTime(0, 0);
+        $dateTime = $dateTime->setTime(0, 0, 0);
         $days = $this->getYear($dateTime);
         $key = $dateTime->format('U');
 

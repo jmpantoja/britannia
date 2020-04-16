@@ -19,7 +19,6 @@
 
         <one-to-many field="studentHasCourses" target-entity="Britannia\Domain\Entity\Student\StudentCourse"
                      mapped-by="student" orphan-removal="true">
-
             <cascade>
                 <cascade-persist/>
             </cascade>

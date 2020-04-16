@@ -43,4 +43,16 @@ class StudentRepository extends ServiceEntityRepository implements StudentReposi
             'month' => $day->get('month'),
         ]);
     }
+
+    public function findActives(): array
+    {
+        $query = $this->createQueryBuilder('A')
+            ->where('A.active = :active')
+            ->getQuery();
+
+        return $query->execute([
+            'active' => true,
+        ]);
+    }
+
 }

@@ -7,11 +7,19 @@
                 <div class="box box-primary tab-content">
                     <div class="box-header">
                         <h4 class="box-title">
-                            Plantilla SMS
+                            {% if admin.subject.sms %}
+                                Plantilla SMS
+                            {% else %}
+                                Plantilla Email
+                            {% endif %}
                         </h4>
                     </div>
                     <div class="box-body message-edit">
-                        {{ block('template') }}
+                        {% if admin.subject.sms %}
+                            {{ block('sms') }}
+                        {% else %}
+                            {{ block('email') }}
+                        {% endif %}
 
                     </div>
                 </div>
@@ -20,11 +28,35 @@
     </div>
 {% endblock %}
 
-{% block template %}
+{% block sms %}
     <div class="row">
         <div class="col-md-3 col-md-offset-4">
             {{ form_row(form.name) }}
             {{ form_row(form.template) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block email %}
+    <div class="row">
+
+        <div class="col-md-8 col-md-offset-2">
+            <div class="col-md-6">
+                {{ form_row(form.name) }}
+            </div>
+            <div class="col-md-3">
+                {{ form_row(form.purpose) }}
+            </div>
+            <div class="col-md-3">
+                {{ form_row(form.mailer) }}
+            </div>
+
+            <div class="col-md-12">
+                {{ form_row(form.subject) }}
+                {{ form_row(form.template) }}
+            </div>
+
+
         </div>
     </div>
 {% endblock %}

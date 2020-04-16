@@ -20,6 +20,7 @@ use Britannia\Domain\Service\Payment\Discount\EnrollmentDiscount;
 use Britannia\Domain\Service\Payment\Discount\MaterialDiscount;
 use Britannia\Domain\Service\Payment\Discount\MonthlyDiscount;
 use Britannia\Domain\VO\Discount\StudentDiscount;
+use Carbon\CarbonImmutable;
 use Tightenco\Collect\Support\Collection;
 
 class PaymentBreakdownService
@@ -83,6 +84,17 @@ class PaymentBreakdownService
     /**
      * @param Course $course
      * @param StudentDiscount $discount
+     * @param CarbonImmutable|null $date
+     * @return Concept
+     */
+    public function calculeMonthly(Course $course, StudentDiscount $discount, CarbonImmutable $date)
+    {
+        return $this->monthly->calcule($course, $discount, $date);
+    }
+
+    /**
+     * @param Course $course
+     * @param StudentDiscount $discount
      * @return Concept[]
      */
     public function calculeMonthlyPayments(Course $course, StudentDiscount $discount): Collection
@@ -95,7 +107,7 @@ class PaymentBreakdownService
 
         while ($date->lessThan($endDate)) {
             $key = $date->format('M-Y');
-            $monthlyPayments[$key] = $this->monthly->calcule($course, $discount, $date);
+            $monthlyPayments[$key] = $this->calculeMonthly($course, $discount, $date);
             $date = $date->modify('first day of next month');
         }
 
