@@ -3,34 +3,6 @@
 {% block field %}
     {% set admin_staff = admin.configurationPool.adminByAdminCode('admin.staff_member') %}
 
-    <div class="row">
-        <div class="col-md-3">
-            <a href="{{ admin.generateObjectUrl('edit', object) }}">{{ object.name }}</a>
-        </div>
-
-        <div class="col-md-2">
-            {% if object.mainTeacher is  not null %}
-                <a href="{{ admin_staff.generateObjectUrl('edit', object.mainTeacher) }}">
-                    {{ object.mainTeacher.fullName }}
-                </a>
-            {% endif %}
-        </div>
-
-        {% if object.schedule is defined %}
-            <div class="col-md-3">
-                {% set items = schedule.resume(object.schedule) %}
-                {% for day, hour in items %}
-                    {{ day }} &nbsp; ({{ hour }})
-                    {% if loop.last == false %} <br/> {% endif %}
-
-                {% endfor %}
-            </div>
-        {% endif %}
-    </div>
-
-{% endblock %}
-
-
-{% block header %}
-    <a href="{{ admin.generateUrl('edit', {id:object.id}) }}"><strong>{{ object.name }}</strong></a>
+    <a href="{{ admin.generateObjectUrl('edit', object) }}">{{ object.name }}</a>
+    <p style="font-style: italic;">{{ object.description }} &nbsp;</p>
 {% endblock %}

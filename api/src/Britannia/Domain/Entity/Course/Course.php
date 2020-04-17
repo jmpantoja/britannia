@@ -68,7 +68,6 @@ abstract class Course implements Comparable, CoursePaymentInterface
         $this->teachers = new ArrayCollection();
         $this->courseHasStudents = new ArrayCollection();
 
-
         $this->createdAt = CarbonImmutable::now();
 
         $this->update($dto);

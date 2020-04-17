@@ -1,0 +1,14 @@
+{% extends get_admin_template('base_list_field', admin.code) %}
+
+{% block field %}
+    <p>
+        {% if object.isSchool %}
+            {% for schoolCourse in object.schoolCourses %}
+                <span>{{ schoolCourse }}</span>
+                {% if loop.last == false %}
+                    <span>/</span>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </p>
+{% endblock %}

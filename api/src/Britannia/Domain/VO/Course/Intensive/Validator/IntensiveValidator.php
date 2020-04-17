@@ -27,7 +27,7 @@ class IntensiveValidator extends ConstraintValidator
      */
     public function getConstraintType(): string
     {
-        return PassHours::class;
+        return Intensive::class;
     }
 
     public function handle($value, Constraint $constraint)

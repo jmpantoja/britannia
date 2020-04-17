@@ -1,0 +1,13 @@
+{% extends get_admin_template('base_list_field', admin.code) %}
+
+{% block field %}
+    {% if object.schedule is defined %}
+        <p>
+            {% set items = schedule.resume(object.schedule) %}
+            {% for day, hour in items %}
+                {{ day }} &nbsp; ({{ hour }})
+                {% if loop.last == false %} <br/> {% endif %}
+            {% endfor %}
+        </p>
+    {% endif %}
+{% endblock %}

@@ -66,6 +66,7 @@ security:
             #- ROLE_ADMIN_STAFF_MEMBER_EDIT
             #        - ROLE_ADMIN_STAFF_MEMBER_PROFILE
             - ROLE_ADMIN_ATTENDANCE_ALL
+            - ROLE_ADMIN_COURSE_LIST
 
             - ROLE_ADMIN_ISSUE_LIST
             - ROLE_ADMIN_ISSUE_CREATE

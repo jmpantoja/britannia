@@ -53,7 +53,7 @@ class IntensiveType extends AbstractSingleType
      */
     public function buildConstraint(array $options): ?Constraint
     {
-        return new \Britannia\Domain\VO\Course\Pass\Validator\PassHours([
+        return new \Britannia\Domain\VO\Course\Intensive\Validator\Intensive([
             'required' => $options['required']
         ]);
     }
