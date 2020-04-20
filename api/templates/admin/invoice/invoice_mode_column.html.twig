@@ -6,12 +6,12 @@
             <i class="fa fa-euro"></i>
         </span>
     {% elseif object.mode.isDayFirst %}
-        <span class="label label-info label-big">
-            D-1
+        <span class="label label-primary label-big">
+            <i class="fa fa-calendar"></i> / 1
         </span>
     {% else %}
-        <span class="label label-warning label-big">
-            D-10
+        <span class="label label-primary label-big">
+            <i class="fa fa-calendar"></i> / 10
         </span>
     {% endif %}
 {% endblock %}

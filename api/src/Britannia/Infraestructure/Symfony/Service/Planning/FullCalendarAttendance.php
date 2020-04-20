@@ -90,6 +90,7 @@ final class FullCalendarAttendance
 
         if (!$this->isMissed()) {
             $this->student = $fullName;
+            return $this;
         }
 
         $this->student = sprintf('%s (%s)', ...[

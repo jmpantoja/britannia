@@ -2,31 +2,27 @@
 
 {% block field %}
     {% if object.alert.isAlert %}
-        <span id="alert-{{ object.id }}" class="alert-msg fa fa-exclamation-triangle"></span>
+        <span data-toggle="popover"
+              title="Cuidado"
+              data-content="{{ object.alert.description | raw }}"
+              data-trigger="hover"
+              data-html="true"
+              data-placement="bottom"
+              class="alert-msg fa fa-exclamation-triangle">
+        </span>
+
     {% endif %}
 
     {% if object.termsOfUseImageRigths == false %}
-        <span id="no-image-{{ object.id }}" class="alert-msg fa fa-user-secret"></span>
+        <span data-toggle="popover"
+              title="Cuidado"
+              data-content="No ha aceptado los derechos de imagen"
+              data-trigger="hover"
+              data-placement="bottom"
+              class="alert-msg fa fa-user-secret">
+        </span>
     {% endif %}
 
-    <script type="application/javascript">
-        $(function () {
-            $('#alert-{{ object.id }}').popover({
-                container: 'body',
-                html: true,
-                title: '<b>!Cuidado!</b>',
-                content: "{{ object.alert.description | raw }}",
-                trigger: 'hover'
-            })
-
-            $('#no-image-{{ object.id }}').popover({
-                container: 'body',
-                html: true,
-                title: '<b>!Cuidado!</b>',
-                content: "No ha aceptado los derechos de imagen",
-                trigger: 'hover'
-            })
-        })
-    </script>
+</script>
 
 {% endblock %}

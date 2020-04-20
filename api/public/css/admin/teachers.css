@@ -38,24 +38,24 @@
 }
 
 .student-cell.attended {
-    border-color: green;
+    border-color: #008d4c;
     cursor: pointer;
 }
 
 .student-cell.attended .cell-title,
 .student-cell.attended .cell-footer {
-    background-color: #256427;
+    background-color: #008d4c;
     color: white;
 }
 
 .student-cell.no-attended {
-    border-color: red;
+    border-color: #d73925;
     cursor: pointer;
 }
 
 .student-cell.no-attended .cell-title,
 .student-cell.no-attended .cell-footer {
-    background-color: #db4855;
+    background-color: #d73925;
     color: white;
 }
 

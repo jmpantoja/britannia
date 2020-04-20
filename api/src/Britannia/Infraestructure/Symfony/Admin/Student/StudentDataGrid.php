@@ -28,17 +28,17 @@ final class StudentDataGrid extends AdminDataGrid
             'row_align' => 'center'
         ]);
 
-        $this->add('alert', 'string', [
-            'label' => false,
-            'header_style' => 'width:80px',
-            'template' => 'admin/student/student_alert_column.html.twig',
-            'row_align' => 'left'
-        ]);
-
         $this->addIdentifier('fullName.lastName', 'string', [
             'template' => 'admin/student/student_name_column.html.twig',
             'label' => 'Nombre',
-            'header_style' => 'width:220px',
+            'header_style' => 'width:200px',
+        ]);
+
+        $this->add('alert', 'string', [
+            'label' => false,
+            'header_style' => 'width:65px',
+            'template' => 'admin/student/student_alert_column.html.twig',
+            'row_align' => 'left'
         ]);
 
         $this->add('activeCourses', 'string', [
@@ -48,7 +48,7 @@ final class StudentDataGrid extends AdminDataGrid
         ]);
 
         $this->add('birthDate', null, [
-            'header_style' => 'width:150px; line-height: 100%',
+            'header_style' => 'width:140px; line-height: 100%',
             'template' => 'admin/student/student_age_column.html.twig',
             'label' => 'Fecha Nac.',
             'row_align' => 'center'
@@ -57,7 +57,7 @@ final class StudentDataGrid extends AdminDataGrid
 
         $this->add('createdAt', 'date', [
             'label' => 'Fec. Alta',
-            'header_style' => 'width:140px',
+            'header_style' => 'width:100px',
         ]);
 
         $this->add('_collapsed', null, [

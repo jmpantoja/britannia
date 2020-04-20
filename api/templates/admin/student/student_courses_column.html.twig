@@ -3,7 +3,7 @@
 {% use 'admin/attendance/attendance.html.twig' %}
 
 {% block field %}
-    {% with {limit: 20, separator: '<br />'} %}
+    {% with {limit: 20, separator: ' '} %}
         {{ block('list_of_courses') }}
     {% endwith %}
 {% endblock %}
@@ -13,22 +13,22 @@
     {% set admin_staff = admin.configurationPool.adminByAdminCode('admin.staff_member') %}
 
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-2">
             <a href="{{ admin_course.generateObjectUrl('edit', course) }}">{{ course.name }}</a>
         </div>
 
         {% if course.oneToOne == false %}
-        <div class="col-md-3">
-            {% set items = schedule.resume(course.schedule) %}
-            {% for day, hour in items %}
-                {{ day }} &nbsp; ({{ hour }})
-                {% if loop.last == false %} <br/> {% endif %}
+            <div class="col-md-3">
+                {% set items = schedule.resume(course.schedule) %}
+                {% for day, hour in items %}
+                    {{ day }} &nbsp; ({{ hour }})
+                    {% if loop.last == false %} <br/> {% endif %}
 
-            {% endfor %}
-        </div>
+                {% endfor %}
+            </div>
         {% endif %}
 
-        <div class="col-md-2">
+        <div class="col-md-3">
             {% if course.mainTeacher is  not null %}
                 <a href="{{ admin_staff.generateObjectUrl('edit', course.mainTeacher) }}">
                     {{ course.mainTeacher.fullName }}
@@ -36,13 +36,11 @@
             {% endif %}
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-3">
             {% with {'student': object, 'course':course, 'limit': 5} %}
                 {{ block('attendance_sumary') }}
             {% endwith %}
         </div>
-
-
     </div>
 {% endblock %}
 

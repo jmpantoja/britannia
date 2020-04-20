@@ -2,7 +2,9 @@
 
 {% block content %}
 
-    <div id="calendar"/>
+    <div id="calendar" style="width: 1000px; margin: auto; border: solid 1px silver">
+
+    </div>
     <script>
         $(function () {
 
@@ -16,7 +18,7 @@
                 header: {
                     rigt: 'prev,next today',
                     left: 'title',
-                    //    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                  //  right: 'dayGridMonth,timeGridWeek,timeGridDay'
                 },
                 events: '{{ path(calendar_endpoint) }}',
                 eventRender: function (info) {
@@ -39,16 +41,12 @@
 
                 },
                 select: function (info) {
-
-//                    $('.modal .modal-title').text(info.startStr)
-
                     var start = moment(info.start).format('YYYY-MM-DD');
                     var end = moment(info.end).format('YYYY-MM-DD');
 
                     $('input[name="holiday"]').bootstrapToggle('off')
                     $('input[name="start"]').val(start)
                     $('input[name="end"]').val(end)
-
 
                     $('.modal').modal({
                         keyboard: false,

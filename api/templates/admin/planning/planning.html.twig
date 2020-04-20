@@ -33,7 +33,6 @@
                     var attendances = $('<div class="attendance_sumary"><br/></div>');
 
                     $.each(data.attendances, (index, attendance)=>{
-                        console.log(attendance);
                         attendances.append(`<span class=${attendance.status} title="${attendance.student}"></span>`);
                     });
 

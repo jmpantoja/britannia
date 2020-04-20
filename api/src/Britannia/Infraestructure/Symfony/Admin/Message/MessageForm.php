@@ -82,22 +82,12 @@ final class MessageForm extends AdminForm
 
             $this->add('message', MessageEmailType::class, [
                 'disabled' => $disabled,
-                'label' => 'SMS',
+                'label' => 'Email',
                 'constraints' => [
                     new NotBlank()
                 ]
             ]);
 
-
-//            $this->add('message', WYSIWYGType::class, [
-//                'disabled' => $disabled,
-//                'label' => 'Mensaje',
-//                'format_options' => [
-//                    'attr' => [
-//                        'rows' => 40,
-//                    ],
-//                ],
-//            ]);
         } else {
 
             $this->add('message', MessageSmsType::class, [

@@ -2,6 +2,13 @@
 
 {% block field %}
     {{ object.fullName }}
+{#    {% if object.alert.isAlert %}#}
+{#        <span id="alert-{{ object.id }}" class="alert-msg fa fa-exclamation-triangle"></span>#}
+{#    {% endif %}#}
+
+{#    {% if object.termsOfUseImageRigths == false %}#}
+{#        <span id="no-image-{{ object.id }}" class="alert-msg fa fa-user-secret"></span>#}
+{#    {% endif %}#}
 {% endblock %}
 
 

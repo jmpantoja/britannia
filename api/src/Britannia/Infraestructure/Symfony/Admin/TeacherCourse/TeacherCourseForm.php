@@ -69,8 +69,9 @@ final class TeacherCourseForm extends AdminForm
     {
         $this->tab($name);
 
+        $label = $this->getLabel($lesson);
         $this->group('grid', [
-            'label' => date_to_string($this->date, \IntlDateFormatter::FULL)
+            'label' => $label
         ])
             ->add('attendances', AttendanceListType::class, [
                 'mapped' => false,
@@ -81,6 +82,25 @@ final class TeacherCourseForm extends AdminForm
             ]);
 
         return $this;
+    }
+
+    /**
+     * @param Lesson|null $lesson
+     * @return string
+     */
+    private function getLabel(?Lesson $lesson): string
+    {
+        $desc = '(No hay clase)';
+        if ($lesson instanceof Lesson) {
+            $desc = sprintf('(de %s a %s)', ...[
+                $lesson->startTime()->format('H:i'),
+                $lesson->endTime()->format('H:i')
+            ]);
+        }
+
+        $today = date_to_string($this->date, \IntlDateFormatter::FULL);
+        $label = sprintf('%s %s', $today, $desc);
+        return $label;
     }
 
 }

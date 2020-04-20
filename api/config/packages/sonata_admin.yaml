@@ -33,17 +33,8 @@ sonata_admin:
                 items:
                     - admin.course
                     - admin.teacher_course
-                    - admin.attendance
-                    
-                    - admin.mark
-                    - admin.report
-
-#            admin.group.teacher_courses:
-#                label: Mis Cursos
-#                label_catalogue: App
-#                icon: "<i class=\"fa fa-book\"></i>"
-#                items:
-
+#                    - admin.mark
+#                    - admin.report
 
             admin.group.invoices:
                 label: Pagos
@@ -84,33 +75,10 @@ sonata_admin:
                     - admin.book
                     - admin.level
                     - admin.school_course
-                                      
+
         blocks:
-            -   class:    col-lg-3 col-xs-6
-                position: top
-                type:     sonata.admin.block.stats
-                roles: ['ROLE_RECEPTION', 'ROLE_MANAGER']
-                settings:
-                    code:  admin.student
-                    icon:  fa-graduation-cap
-                    text:  Alumnos
-                    color: bg-green
-                    filters:
-                        active: { value: 1 }
 
-            -   class:    col-lg-3 col-xs-6
-                position: top
-                type:     sonata.admin.block.stats
-                roles: ['ROLE_RECEPTION', 'ROLE_MANAGER']
-                settings:
-                    code:  admin.course
-                    icon:  fa-book
-                    text:  Cursos
-                    color: bg-blue
-                    filters:
-                        status: { value: ACTIVE }
-
-            -   class:    col-lg-3 col-xs-6
+            -   class:    col-md-2
                 position: top
                 type:     sonata.admin.block.stats
                 roles: ['ROLE_RECEPTION', 'ROLE_MANAGER']
@@ -121,6 +89,79 @@ sonata_admin:
                     color: bg-aqua
                     filters:
                         teacher: { value: 1 }
+
+            -   class:    col-md-2
+                position: top
+                type:     sonata.admin.block.stats
+                roles: ['ROLE_RECEPTION', 'ROLE_MANAGER']
+                settings:
+                    code:  admin.student
+                    icon:  fa-graduation-cap
+                    text:  Alumnos Activos
+                    color: bg-green
+                    filters:
+                        active: { value: 1 }
+
+            -   class:    col-md-2
+                position: top
+                type:     sonata.admin.block.stats
+                roles: ['ROLE_RECEPTION', 'ROLE_MANAGER']
+                settings:
+                    code:  admin.course
+                    icon:  fa-book
+                    text:  Cursos Activos
+                    color: bg-blue
+                    filters:
+                        status: { value: ACTIVE }
+
+            -   class:    col-md-2
+                position: top
+                type:     sonata.admin.block.stats
+                roles: ['ROLE_RECEPTION', 'ROLE_MANAGER']
+                settings:
+                    code:  admin.invoice
+                    icon:  fa-book
+                    text:  Pagos
+                    color: bg-olive
+                    filters:
+                        paid: { value: 2 }
+                        
+            -   class:    col-md-2
+                position: top
+                type:     sonata.admin.block.stats
+                roles: ['ROLE_RECEPTION', 'ROLE_MANAGER']
+                settings:
+                    code:  admin.message
+                    icon:  fa-involve
+                    text:  Mensajeria
+                    color: bg-maroon
+                    filters:
+                        processed: { value: 2 }     
+                        
+            -   class:    col-md-2
+                position: top
+                type:     sonata.admin.block.stats
+                #roles: ['ROLE_TEACHER']
+                settings:
+                    code:  admin.issue
+                    icon:  fa-comments
+                    text:  Observaciones
+                    color: bg-purple
+                    filters:
+                        status: { value: {status: 1, recipient: 2} }
+                        
+                        
+            -   class:    col-md-2
+                position: top
+                type:     sonata.admin.block.stats
+                roles: ['ROLE_TEACHER']
+                settings:
+                    code:  admin.teacher_course
+                    icon:  fa-book
+                    text:  Mis Cursos
+                    color: bg-orange
+                    filters:
+                        status: { value: ACTIVE }                        
 
     templates:
         user_block: admin/core/user_block.html.twig
@@ -167,7 +208,7 @@ sonata_admin:
         extra_javascripts:
             - js/admin/multi.js
             - js/admin/forms.js
-            
+
             - js/toggle/bootstrap-toggle.min.js
 
             - js/fullcalendar/core.min.js
@@ -180,8 +221,8 @@ sonata_admin:
             - js/fullcalendar/resource-timegrid.min.js
 
             - js/toast/jquery.toast.min.js
-               
-            - js/uri/URI.min.js    
+
+            - js/uri/URI.min.js
 
             - js/admin/issues.js
             - js/admin/teachers.js

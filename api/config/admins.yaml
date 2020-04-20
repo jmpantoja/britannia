@@ -70,16 +70,6 @@ services:
             - { name: sonata.admin, manager_type: orm, label: Informes }
         public: true
 
-
-    admin.attendance:
-        class: Britannia\Infraestructure\Symfony\Admin\Attendance\AttendanceAdmin
-        arguments: [~, Britannia\Domain\Entity\Lesson\Lesson, ~]
-        tags:
-            - { name: sonata.admin, manager_type: orm, label: Asistencia }
-        calls:
-            - [setTemplate, ['outer_list_rows_mosaic', 'admin/lesson/list_outer_rows_mosaic.html.twig']]
-        public: true
-
     admin.academy:
         class: Britannia\Infraestructure\Symfony\Admin\Academy\AcademyAdmin
         arguments: [~, Britannia\Domain\Entity\Academy\Academy, ~]
