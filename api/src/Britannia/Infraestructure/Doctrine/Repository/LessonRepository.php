@@ -91,10 +91,18 @@ class LessonRepository extends ServiceEntityRepository implements LessonReposito
      * @param CarbonImmutable $day
      * @return Lesson[]
      */
-        public function findByDay(CarbonImmutable $day): array
+    public function findByDay(CarbonImmutable $day): array
     {
         return $this->findBy([
             'day' => $day
+        ]);
+    }
+
+    public function findByCourseAndDay(Course $course, CarbonImmutable $date): ?Lesson
+    {
+        return $this->findOneBy([
+            'day' => $date,
+            'course' => $course
         ]);
     }
 
@@ -159,5 +167,6 @@ class LessonRepository extends ServiceEntityRepository implements LessonReposito
             ->timeRangeList()
             ->limitToRange($course->timeRange());
     }
+
 
 }

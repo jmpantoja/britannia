@@ -105,7 +105,6 @@ class CourseHasStudentsType extends AbstractSingleType
      */
     public function transform($value)
     {
-
         return StudentCourseList::collect($value)
             ->onlyActives()
             ->toStudentList()

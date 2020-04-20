@@ -29,7 +29,7 @@ class NotificationRepository extends ServiceEntityRepository implements RecordRe
             ->delete()
             ->where('A.student = :student')
             ->andWhere('A.course = :course')
-            ->andWhere('A.day = :day')
+            ->andWhere('A.date = :day')
             ->andWhere('A.type = :type')
             ->getQuery();
 

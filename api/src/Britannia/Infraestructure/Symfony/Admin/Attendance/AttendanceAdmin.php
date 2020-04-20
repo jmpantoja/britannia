@@ -51,7 +51,7 @@ final class AttendanceAdmin extends AbstractAdmin implements AdminFilterableInte
 
         return $this->datagridValues;
     }
-    
+
     public function createQuery($context = 'list')
     {
         $query = parent::createQuery($context);

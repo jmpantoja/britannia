@@ -119,7 +119,7 @@ abstract class NotificationEvent extends DomainEvent implements NotificationEven
     public function dto(): NotificationDto
     {
         return NotificationDto::fromArray([
-//            'author' => $this->author,
+            //'author' => $this->author,
             'student' => $this->student,
             'course' => $this->course,
             'date' => $this->date ?? CarbonImmutable::today(),

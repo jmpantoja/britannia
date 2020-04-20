@@ -12,6 +12,7 @@ sonata_doctrine_orm_admin:
             - 'form/sms.html.twig'
             - 'form/reports.html.twig'
             - 'form/students.html.twig'            
+            - 'form/teachers.html.twig'            
             - 'form/widgets.html.twig'
 
         filter: 

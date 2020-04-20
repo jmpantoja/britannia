@@ -11,3 +11,8 @@
 
   $('#filter_status_value_recipient').trigger('change');
 });
+
+
+$(function () {
+  $('[data-toggle="popover"]').popover()
+});

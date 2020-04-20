@@ -183,3 +183,14 @@ services:
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: Recibos }
         public: true
+
+
+    admin.teacher_course:
+        class: Britannia\Infraestructure\Symfony\Admin\TeacherCourse\TeacherCourseAdmin
+        arguments: [~, Britannia\Domain\Entity\Course\Course, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Mis Cursos }
+#
+#        calls:
+#            - [setTemplate, ['edit', 'admin/teacher/teacher_edit_template.html.twig']]            
+        public: true

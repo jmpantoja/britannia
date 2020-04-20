@@ -94,4 +94,3 @@ services:
         class: PlanB\DDD\Domain\Event\EventDispatcher
         factory: ['PlanB\DDD\Domain\Event\EventDispatcher', 'getInstance']
         public: true
-

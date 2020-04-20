@@ -1,8 +1,8 @@
 {% extends get_admin_template('base_list_field', admin.code) %}
 
 {% block field %}
-    {% set admin_staff = admin.configurationPool.adminByAdminCode('admin.staff_member') %}
-
-    <a href="{{ admin.generateObjectUrl('edit', object) }}">{{ object.name }}</a>
+    <strong>
+        <a href="{{ admin.generateObjectUrl('edit', object) }}">{{ object.name }}</a>
+    </strong>
     <p style="font-style: italic;">{{ object.description }} &nbsp;</p>
 {% endblock %}

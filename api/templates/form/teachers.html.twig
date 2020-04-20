@@ -1,0 +1,131 @@
+{% block attendance_list_widget %}
+    {{ block('date') }}
+    {{ block('grid') }}
+{% endblock %}
+
+{% block date %}
+    <div class="row">
+        <div class="col-md-2 no-margin">
+            {{ form_row(form.date) }}
+            <input name="date" type="hidden" value="{{ app.request.get('date') }}"/>
+        </div>
+        <div class="col-md-1 no-padding">
+            <label id="change-date" class="btn btn-primary">Ir</label>
+            <label id="today" class="btn btn-success">Hoy</label>
+
+            <script type="application/javascript">
+                $(function () {
+                    let form = $('form[role=form]');
+                    let action = $(form).attr('action');
+                    let uri = URI(action);
+
+                    if (URI().hasQuery('date')) {
+                        let query = URI().search(true);
+                        let date = query.date;
+
+                        uri.search(function (query) {
+                            query.date = date;
+                        })
+                    }
+
+                    $('form[role=form]').attr('action', uri.toString());
+
+                    $('#change-date').on('click', function () {
+                        let date = $('#{{ form.date.vars.id }}');
+
+                        let format = date.data('date-format');
+                        let value = date.val();
+                        let formatted = moment(value, format).format('Y-MM-DD');
+
+                        let uri = URI();
+                        uri.search(function (data) {
+                            data.date = formatted;
+                        });
+
+                        window.location = uri.toString()
+                    })
+                    $('#today').on('click', function () {
+                        let uri = URI();
+                        uri.removeQuery('date');
+                        window.location = uri.toString()
+                    })
+                });
+            </script>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block grid %}
+    {% for student in form %}
+        {{ form_widget(student) }}
+    {% endfor %}
+{% endblock %}
+
+{% block attendance_widget %}
+    {% set path =  student.photo.path | default('shape.jpg') %}
+    {% set src = photo_uploader.downloadUrl(path) %}
+
+    <div class="cell-wrapper">
+        {% set status = 'default' %}
+        {% if  form.missed is defined %}
+            {% set status = 'attended' %}
+            {% if form.missed.vars.value == 1 %}
+                {% set status = 'no-attended' %}
+            {% endif %}
+        {% endif %}
+
+        <div title="{{ student.name }}" class="cell student-cell {{ status }}">
+            <p class="cell-title">
+                {{ student.fullName.reversedMode | truncate(23) }}
+            </p>
+
+            <img class="cell-image" src="{{ src }}"/>
+
+            <div class="cell-alert">
+                {% if student.alert.isAlert %}
+                    <span data-toggle="popover"
+                          title="Cuidado"
+                          data-content="{{ student.alert.description | raw }}"
+                          data-trigger="hover"
+                          data-html="true"
+                          data-placement="bottom"
+                          class="alert-msg fa fa-exclamation-triangle">
+                    </span>
+
+                {% endif %}
+
+                {% if student.termsOfUseImageRigths == false %}
+                    <span data-toggle="popover"
+                          title="Cuidado"
+                          data-content="No ha aceptado los derechos de imagen"
+                          data-trigger="hover"
+                          data-placement="bottom"
+                          class="alert-msg fa fa-user-secret">
+                    </span>
+
+                {% endif %}
+            </div>
+
+            {% if status != 'default' %}
+                <p class="cell-footer">
+                    {% if status == 'no-attended' %}
+                        Falta a clase
+                    {% else %}
+                        Asiste a clase
+                    {% endif %}
+                </p>
+                {{ form_widget(form.missed, {'attr': {'class': 'missed'}}) }}
+                {% if status == 'no-attended' %}
+                    {{ form_widget(form.reason, {'attr': {'class': 'reason'}}) }}
+                {% else %}
+                    {{ form_widget(form.reason, {'attr': {'class': 'reason hidden'}}) }}
+                {% endif %}
+
+
+            {% endif %}
+        </div>
+
+
+    </div>
+{% endblock %}

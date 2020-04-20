@@ -32,9 +32,18 @@ sonata_admin:
                 icon: "<i class=\"fa fa-book\"></i>"
                 items:
                     - admin.course
-                    - admin.mark
+                    - admin.teacher_course
                     - admin.attendance
+                    
+                    - admin.mark
                     - admin.report
+
+#            admin.group.teacher_courses:
+#                label: Mis Cursos
+#                label_catalogue: App
+#                icon: "<i class=\"fa fa-book\"></i>"
+#                items:
+
 
             admin.group.invoices:
                 label: Pagos
@@ -57,13 +66,6 @@ sonata_admin:
                     - admin.message
 
 
-            #            admin.group.extra:
-            #                label: Datos auxiliares
-            #                label_catalogue: App
-            #                icon: "<i class=\"fa fa-info\"></i>"
-            #                items:
-
-
             admin.group.config:
                 label: Configuración
                 label_catalogue: App
@@ -82,7 +84,7 @@ sonata_admin:
                     - admin.book
                     - admin.level
                     - admin.school_course
-
+                                      
         blocks:
             -   class:    col-lg-3 col-xs-6
                 position: top
@@ -142,6 +144,7 @@ sonata_admin:
             - css/admin/show.css
             - css/admin/attendance.css
             - css/admin/students.css
+            - css/admin/teachers.css
             - css/admin/widgets.css
 
             - css/widgets/counter.css
@@ -177,8 +180,11 @@ sonata_admin:
             - js/fullcalendar/resource-timegrid.min.js
 
             - js/toast/jquery.toast.min.js
+               
+            - js/uri/URI.min.js    
 
             - js/admin/issues.js
+            - js/admin/teachers.js
             - js/widgets/counter.js
 
             - bundles/fosckeditor/ckeditor.js

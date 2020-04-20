@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Britannia\Infraestructure\Symfony\Admin\Invoice;
 
+use Britannia\Domain\Repository\LessonRepositoryInterface;
 use Britannia\Infraestructure\Symfony\Admin\AdminFilterableInterface;
-use PlanB\DDDBundle\Sonata\Admin\AdminRoutes;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -27,10 +27,19 @@ final class InvoiceAdmin extends AbstractAdmin implements AdminFilterableInterfa
 
     protected $maxPerPage = 50;
     protected $maxPageLinks = 10;
+    /**
+     * @var LessonRepositoryInterface
+     */
+    private LessonRepositoryInterface $lessonRepository;
 
-    public function __construct($code, $class, $baseControllerName, InvoiceTools $adminTools)
+    public function __construct($code,
+                                $class,
+                                $baseControllerName,
+                                LessonRepositoryInterface $lessonRepository,
+                                InvoiceTools $adminTools)
     {
         parent::__construct($code, $class, $baseControllerName);
+        $this->lessonRepository = $lessonRepository;
         $this->adminTools = $adminTools;
     }
 
@@ -53,7 +62,6 @@ final class InvoiceAdmin extends AbstractAdmin implements AdminFilterableInterfa
             ->routes($collection, $this->getRouterIdParameter())
             ->build();
     }
-
 
     public function dataGridValues(): array
     {

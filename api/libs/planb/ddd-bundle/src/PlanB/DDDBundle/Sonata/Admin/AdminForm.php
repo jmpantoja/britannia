@@ -44,8 +44,6 @@ abstract class AdminForm
     {
         $this->mapper->getFormBuilder()->setDataMapper($dataMapper);
 
-
-
         return $this;
     }
 

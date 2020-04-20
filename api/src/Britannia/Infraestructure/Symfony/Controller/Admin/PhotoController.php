@@ -46,7 +46,7 @@ class PhotoController extends AbstractController
 
     public function download(Request $request)
     {
-        $this->denyAccessUnlessGranted(['ROLE_MANAGER', 'ROLE_RECEPTION']);
+        $this->denyAccessUnlessGranted(['ROLE_SONATA_ADMIN']);
 
         $pathToFile = $request->get('path_to_file');
         $path = $this->uploader->makePathAbsolute($pathToFile);

@@ -43,8 +43,10 @@ interface LessonRepositoryInterface
      */
     public function findByDay(CarbonImmutable $day): array;
 
-    public function countByTerm(Term $term): int ;
+    public function countByTerm(Term $term): int;
 
-    public function countByCourseAndStudent(Course $course, Student $student): int ;
+    public function countByCourseAndStudent(Course $course, Student $student): int;
+
+    public function findByCourseAndDay(Course $course, CarbonImmutable $date): ?Lesson;
 
 }

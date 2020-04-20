@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Britannia\Infraestructure\Symfony\Admin\Course;
+namespace Britannia\Infraestructure\Symfony\Admin\TeacherCourse;
 
 
 use PlanB\DDDBundle\Sonata\Admin\AdminDataGrid;
 
-final class CourseDatagrid extends AdminDataGrid
+final class TeacherCourseDatagrid extends AdminDataGrid
 {
     public function configure(): self
     {
@@ -30,14 +30,8 @@ final class CourseDatagrid extends AdminDataGrid
         $this->addIdentifier('name', 'string', [
             'template' => 'admin/course/course_name_column.html.twig',
             'label' => 'Nombre',
-            'header_style' => 'width:200px'
         ]);
 
-        $this->add('mainTeacher', null, [
-            'template' => 'admin/course/course_teacher_column.html.twig',
-            'label' => 'Teacher',
-          //  'header_style' => 'width:200px'
-        ]);
 
         $this->add('schedule', null, [
             'label' => 'Horario',
@@ -60,16 +54,17 @@ final class CourseDatagrid extends AdminDataGrid
             'row_align' => 'left'
         ]);
 
-        $this->add('_action', null, [
-            'label' => false,
-            'header_style' => 'width:160px;',
-            'row_align' => 'right',
-            'actions' => [
-                'report-info' => [
-                    'template' => 'admin/course/course_info_report_action.html.twig'
-                ]
-            ]
-        ]);
+
+//        $this->add('_action', null, [
+//            'label' => false,
+//            'header_style' => 'width:160px;',
+//            'row_align' => 'right',
+//            'actions' => [
+//                'report-info' => [
+//                    'template' => 'admin/course/course_info_report_action.html.twig'
+//                ]
+//            ]
+//        ]);
 
         return $this;
     }

@@ -8,6 +8,7 @@ twig:
         schedule: '@Britannia\Infraestructure\Symfony\Service\Schedule\ScheduleService'
         skill_marks: '@Britannia\Infraestructure\Symfony\Service\Assessment\SkillMarkService'
         issue_repository: '@Britannia\Domain\Repository\IssueRepositoryInterface'
+        photo_uploader: '@Britannia\Infraestructure\Symfony\Service\FileUpload\PhotoUploader'
         
         #        paymentInfo: '@Britannia\Domain\Service\Payment\PaymentInfoService'
         #courseInfo: '@Britannia\Infraestructure\Symfony\Service\Course\CourseInformationReportService'

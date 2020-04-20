@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Britannia\Infraestructure\Symfony\Form\Type\Lesson;
+namespace Britannia\Infraestructure\Symfony\Form\Type\Attendance;
 
 
 use Britannia\Domain\Entity\Attendance\Attendance;
@@ -20,6 +20,8 @@ use Britannia\Domain\Entity\Student\Student;
 use Britannia\Infraestructure\Symfony\Validator\FullName;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractCompoundType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -32,12 +34,17 @@ class AttendanceType extends AbstractCompoundType
     {
         $student = $options['student'];
         $lesson = $options['lesson'];
-        $builder
-            ->add('missed', AttendanceToggleType::class, [
-                'label' => false,
-                'student' => $student,
-                'lesson' => $lesson
 
+        if (!($lesson instanceof Lesson)) {
+            return;
+        }
+
+        $missed = $lesson->hasBeenMissing($student);
+
+        $builder
+            ->add('missed', HiddenType::class, [
+                'label' => false,
+                'data' => (int)$missed
             ])
             ->add('reason', null, [
                 'label' => 'Motivo',
@@ -58,7 +65,7 @@ class AttendanceType extends AbstractCompoundType
             'student'
         ]);
 
-        $resolver->setAllowedTypes('lesson', Lesson::class);
+        $resolver->setAllowedTypes('lesson', [Lesson::class, 'null']);
         $resolver->setAllowedTypes('student', Student::class);
 
         $resolver->setDefaults([
@@ -80,24 +87,11 @@ class AttendanceType extends AbstractCompoundType
             return null;
         }
 
+        $lesson = $this->getOption('lesson');
+        $student = $this->getOption('student');
         $reason = $data['reason'] ?? null;
 
-        return Attendance::make($this->getLesson(), $this->getStudent(), $reason);
+        return Attendance::make($lesson, $student, $reason);
     }
 
-    /**
-     * @return Lesson
-     */
-    public function getLesson(): Lesson
-    {
-        return $this->getOption('lesson');
-    }
-
-    /**
-     * @return Student
-     */
-    public function getStudent(): Student
-    {
-        return $this->getOption('student');
-    }
 }
