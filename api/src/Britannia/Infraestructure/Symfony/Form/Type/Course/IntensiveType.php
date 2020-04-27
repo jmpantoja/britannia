@@ -19,8 +19,7 @@ use Britannia\Domain\VO\Validator;
 use Britannia\Infraestructure\Symfony\Validator\FullName;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
-use Symfony\Component\Form\ChoiceList\Loader\CallbackChoiceLoader;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use PlanB\DDDBundle\Symfony\Form\Type\ToggleType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class IntensiveType extends AbstractSingleType
@@ -30,22 +29,33 @@ class IntensiveType extends AbstractSingleType
      */
     public function getParent()
     {
-        return ChoiceType::class;
+        return ToggleType::class;
     }
-
 
     public function customOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'required' => false,
-            'choice_loader' => new CallbackChoiceLoader(function () {
-                $values = array_flip(Intensive::getConstants());
-                return array_merge(['' => ''], $values);
-            }),
-            'attr' => [
-                'style' => 'width:200px'
-            ]
+            'on_text' => 'SI',
+            'off_text' => 'NO',
+
+//            'choice_loader' => new CallbackChoiceLoader(function () {
+//                $values = array_flip(Intensive::getConstants());
+//                return array_merge(['' => ''], $values);
+//            }),
+//            'attr' => [
+//                'style' => 'width:200px'
+//            ]
         ]);
+    }
+
+    public function transform($value)
+    {
+        if($value instanceof Intensive){
+            return $value->isIntensive();
+        }
+
+        return parent::transform($value);
     }
 
     /**
@@ -60,6 +70,10 @@ class IntensiveType extends AbstractSingleType
 
     public function customMapping($data)
     {
-        return Intensive::byName($data);
+        if ($data === true) {
+            return Intensive::INTENSIVE();
+        }
+
+        return Intensive::NOT_INTENSIVE();
     }
 }

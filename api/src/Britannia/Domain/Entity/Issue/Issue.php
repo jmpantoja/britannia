@@ -25,6 +25,8 @@ class Issue
     /** @var ?IssueId */
     private $id;
 
+    private $main = false;
+
     /** @var ?string */
     private $subject;
 
@@ -36,7 +38,6 @@ class Issue
 
     /** @var ?Student */
     private $student;
-
 
     /** @var Collection */
     private $issueHasRecipients;
@@ -54,6 +55,7 @@ class Issue
     {
         $this->id = new IssueId();
 
+        $this->main = $dto->main;
         $this->createdAt = $dto->createdAt ?? CarbonImmutable::now();
         $this->issueHasRecipients = new ArrayCollection();
 
@@ -68,7 +70,6 @@ class Issue
         $this->message = $dto->message;
 
         $this->setRecipients($dto->issueHasRecipients);
-
 
         return $this;
     }
@@ -137,6 +138,14 @@ class Issue
     public function subject()
     {
         return $this->subject;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isMain(): bool
+    {
+        return $this->main;
     }
 
     /**

@@ -34,7 +34,7 @@ final class NotificationDataGrid extends AdminDataGrid
             'template' => 'admin/notification/notification_subject_column.html.twig',
         ]);
 
-        $this->add('createdAt', 'date', [
+        $this->add('date', null, [
             'header_style' => 'width:120px',
             'row_align' => 'left',
             'label' => 'Fecha'

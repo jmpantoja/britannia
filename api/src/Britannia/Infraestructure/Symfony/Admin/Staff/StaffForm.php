@@ -18,6 +18,7 @@ use Britannia\Domain\Entity\Staff\Photo;
 use Britannia\Domain\Entity\Staff\StaffMember;
 use Britannia\Infraestructure\Symfony\Form\Type\Photo\PhotoType;
 use Britannia\Infraestructure\Symfony\Form\Type\Staff\RoleType;
+use Britannia\Infraestructure\Symfony\Form\Type\Staff\StatusType;
 use Britannia\Infraestructure\Symfony\Form\Type\Staff\TeacherHasCoursesType;
 use PlanB\DDDBundle\Sonata\Admin\AdminForm;
 use PlanB\DDDBundle\Symfony\Form\Type\DNIType;
@@ -25,6 +26,7 @@ use PlanB\DDDBundle\Symfony\Form\Type\EmailListType;
 use PlanB\DDDBundle\Symfony\Form\Type\FullNameType;
 use PlanB\DDDBundle\Symfony\Form\Type\PhoneNumberListType;
 use PlanB\DDDBundle\Symfony\Form\Type\PostalAddressType;
+use PlanB\DDDBundle\Symfony\Form\Type\WYSIWYGType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -68,6 +70,10 @@ final class StaffForm extends AdminForm
 
     private function accessTab(string $name, StaffMember $staffMember, bool $hasRootPrivileges)
     {
+        if (!$hasRootPrivileges) {
+            return;
+        }
+
         $this->tab($name);
 
         $constraints = [];
@@ -77,12 +83,14 @@ final class StaffForm extends AdminForm
             $constraints = [new NotBlank()];
         }
 
-        $group = $this->group('Acceso', ['class' => 'col-md-4'])
-            ->add('userName', null, [
-                'attr' => [
-                    'style' => 'width:450px'
-                ]
-            ])
+        $this->group('Roles', ['class' => 'col-md-2'])
+            ->add('roles', RoleType::class, [
+                'label' => 'Roles',
+                'required' => false
+            ]);
+
+        $this->group('Acceso', ['class' => 'col-md-3'])
+            ->add('userName', null)
             ->add('password', RepeatedType::class, [
                 'mapped' => true,
                 'type' => PasswordType::class,
@@ -104,13 +112,16 @@ final class StaffForm extends AdminForm
                 ],
             ]);
 
-        if ($hasRootPrivileges) {
-            $this->group('Roles', ['class' => 'col-md-4'])
-                ->add('roles', RoleType::class, [
-                    'label' => false,
-                    'required' => false
-                ]);
-        }
+        $this->group('Estado', ['class' => 'col-md-7'])
+            ->add('status', StatusType::class, [
+                'label' => 'Estado',
+                'required' => true
+            ])
+            ->add('comment', WYSIWYGType::class, [
+                'label' => 'Observaciones',
+                'required' => false
+            ]);
+
 
     }
 

@@ -25,20 +25,28 @@ final class BookForm extends AdminForm
 
     public function configure()
     {
-        $this->tab('Curso');
+        $this->tab('Libro');
 
         $this->group('Nombre', ['class' => 'col-md-4'])
             ->add('name', TextType::class, [
+                'label' => 'Nombre',
                 'constraints' => [
                     new NotBlank()
                 ],
                 'attr' => [
-                    'style' => 'width: 300px'
+                    'style' => 'width: 350px'
                 ]
             ])
-            ->add('category', BookCategoryType::class);
+            ->add('category', BookCategoryType::class, [
+                'label' => 'Tipo'
+            ]);
 
         $this->group('Precio', ['class' => 'col-md-4'])
-            ->add('price', PriceType::class);
+            ->add('price', PriceType::class, [
+                'label' => 'Precio Compra'
+            ])
+            ->add('pvp', PriceType::class, [
+                'label' => 'PVP'
+            ]);
     }
 }

@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Britannia\Infraestructure\Symfony\Admin\Student;
 
-use Britannia\Domain\VO\SchoolCourse;
+use Britannia\Domain\Entity\Student\StudentHasBeenCreated;
 use Britannia\Infraestructure\Symfony\Admin\AdminFilterableInterface;
-use PlanB\DDDBundle\Sonata\Admin\AdminRoutes;
+use PlanB\DDD\Domain\Event\DomainEvent;
+use PlanB\DDD\Domain\Event\EventDispatcher;
 use PlanB\DDDBundle\Symfony\Form\Type\DateType;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -107,6 +108,4 @@ final class  StudentAdmin extends AbstractAdmin implements AdminFilterableInterf
             ->build();
 
     }
-
-
 }

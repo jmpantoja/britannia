@@ -5,6 +5,7 @@ namespace Britannia\Infraestructure\Doctrine\Repository;
 use Britannia\Domain\Entity\Assessment\Term;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Lesson\Lesson;
+use Britannia\Domain\Entity\Staff\StaffMember;
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Entity\Student\StudentCourseList;
 use Britannia\Domain\Repository\LessonRepositoryInterface;
@@ -91,11 +92,24 @@ class LessonRepository extends ServiceEntityRepository implements LessonReposito
      * @param CarbonImmutable $day
      * @return Lesson[]
      */
-    public function findByDay(CarbonImmutable $day): array
+    public function findByDay(CarbonImmutable $day, ?StaffMember $member = null): array
     {
-        return $this->findBy([
-            'day' => $day
+        if (!($member instanceof StaffMember)) {
+            return $this->findBy([
+                'day' => $day
+            ]);
+        }
+
+        $query = $this->createQueryBuilder('A')
+            ->where('A.day = :day')
+            ->andWhere('A.course IN (:courses)')
+            ->getQuery();
+
+        return $query->execute([
+            'day' => $day,
+            'courses' => $member->activeCourses()
         ]);
+
     }
 
     public function findByCourseAndDay(Course $course, CarbonImmutable $date): ?Lesson

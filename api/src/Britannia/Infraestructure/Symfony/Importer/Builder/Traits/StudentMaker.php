@@ -41,6 +41,9 @@ use Symfony\Component\Validator\Validation;
 
 trait StudentMaker
 {
+    private $defaultName = 'NOMBRE DESCONOCIDO';
+    private $defaultLastName = 'APELLIDOS DESCONOCIDOS';
+
     public function toPayment(array $input): ?Payment
     {
         $mode = $this->toPaymentMode($input['mode'] * 1);
@@ -229,19 +232,25 @@ trait StudentMaker
         ]);
     }
 
-    protected function toTutor(array $data): ?Tutor
+    protected function toTutor(array $data, string $name): ?Tutor
     {
         $data['firstName'] = $this->cleanName((string)$data['firstName']);
         $data['lastName'] = $this->cleanName((string)$data['lastName']);
 
-        $fullName = $this->toFullName([
-            'firstName' => (string)$data['firstName'],
-            'lastName' => (string)$data['lastName']
-        ]);
+        $cleanFullName = $this->cleanFullName($data['firstName'], $data['lastName']);
 
-        if (is_null($fullName)) {
-            return null;
+        if ($cleanFullName['firstName'] == $this->defaultName) {
+            $cleanFullName['firstName'] = sprintf('tutor-name (%s)', trim($name));
         }
+
+        if ($cleanFullName['lastName'] == $this->defaultLastName) {
+            $cleanFullName['lastName'] = sprintf('tutor-lastname (%s)', trim($name));
+        }
+
+        $fullName = $this->toFullName([
+            'firstName' => (string)$cleanFullName['firstName'],
+            'lastName' => (string)$cleanFullName['lastName']
+        ]);
 
         $dni = $this->toDni((string)$data['dni']);
 
@@ -280,7 +289,7 @@ trait StudentMaker
         $tutor = Tutor::make($dto);
 
         return $this->findOneOrCreate($tutor, [
-
+            'fullName.fullName' => $fullName->getFullName()
         ]);
 
     }
@@ -291,7 +300,7 @@ trait StudentMaker
         return trim($name);
     }
 
-    public function toFullName(array $input): ?FullName
+    private function toFullName(array $input): ?FullName
     {
         $input = $this->cleanFullName((string)$input['firstName'], (string)$input['lastName']);
 
@@ -311,7 +320,7 @@ trait StudentMaker
         ]);
     }
 
-    public function cleanFullName(string $firstName, string $lastName): array
+    private function cleanFullName(string $firstName, string $lastName): array
     {
 
         $firstName = trim($firstName);
@@ -323,7 +332,6 @@ trait StudentMaker
         }
 
         if (empty($lastName)) {
-
             $pieces = preg_split('/( |,)/', $firstName);
             $pieces = array_filter($pieces);
 
@@ -335,8 +343,8 @@ trait StudentMaker
         $lastName = str_replace([','], '', $lastName);
 
 
-        $firstName = empty($firstName) ? 'NOMBRE DESCONOCIDO' : $firstName;
-        $lastName = empty($lastName) ? 'APELLIDOS DESCONOCIDOS' : $lastName;
+        $firstName = empty($firstName) ? $this->defaultName : $firstName;
+        $lastName = empty($lastName) ? $this->defaultLastName : $lastName;
 
         return [
             'firstName' => $firstName,

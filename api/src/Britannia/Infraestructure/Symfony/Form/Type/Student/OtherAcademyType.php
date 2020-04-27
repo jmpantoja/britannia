@@ -42,21 +42,21 @@ class OtherAcademyType extends AbstractCompoundType
         $this->modelManager = $modelManager;
     }
 
-
     public function customForm(FormBuilderInterface $builder, array $options)
     {
-
         $builder
             ->add('academy', ModelType::class, [
                 'label' => 'Academia',
                 'btn_add' => 'Crear Academia',
                 'expanded' => false,
                 'placeholder' => 'En ninguna otra',
-
-//                'choice_loader' => $modelChoiceLoader,
                 'model_manager' => $this->modelManager,
                 'class' => Academy::class,
-//                'sonata_field_description' => $fieldDescription
+                'sonata_field_description' => [
+                    'name' => 'academy',
+                    'type' => ModelType::class,
+                    'mappingType' => 2
+                ]
             ])
             ->add('numOfYears', NumOfYearsType::class, [
                 'label' => 'Duración estudios'
@@ -87,6 +87,5 @@ class OtherAcademyType extends AbstractCompoundType
 
         return OtherAcademy::make($data['academy'], $data['numOfYears']);
     }
-
 
 }

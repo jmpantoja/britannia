@@ -16,6 +16,11 @@ namespace Britannia\Domain\VO\SchoolCourse;
 
 use MabeEnum\Enum;
 
+/**
+ * @method static self EPO()
+ * @method static self ESO()
+ * @method static self BACHILLERATO()
+ */
 final class SchoolLevel extends Enum
 {
     public const EPO = 'EPO';

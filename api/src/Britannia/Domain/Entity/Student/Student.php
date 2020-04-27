@@ -3,6 +3,7 @@
 namespace Britannia\Domain\Entity\Student;
 
 
+
 use Britannia\Domain\Entity\Academy\Academy;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Course\CourseList;
@@ -17,6 +18,7 @@ use Carbon\CarbonImmutable;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Persistence\Event\LifecycleEventArgs;
 use PlanB\DDD\Domain\Behaviour\Comparable;
 use PlanB\DDD\Domain\Behaviour\Traits\ComparableTrait;
 use PlanB\DDD\Domain\Model\Traits\AggregateRootTrait;
@@ -25,7 +27,6 @@ use PlanB\DDD\Domain\VO\FullName;
 use PlanB\DDD\Domain\VO\PhoneNumber;
 use PlanB\DDD\Domain\VO\PositiveInteger;
 use PlanB\DDD\Domain\VO\PostalAddress;
-
 
 abstract class Student implements Comparable
 {
@@ -160,11 +161,6 @@ abstract class Student implements Comparable
     private $attachments;
 
     private $notifications;
-
-//    /**
-//     * @var Collection
-//     */
-//    private $records;
 
     /**
      * @var CarbonImmutable
@@ -601,9 +597,9 @@ abstract class Student implements Comparable
     /**
      * @return Alert
      */
-    public function alert(): ?Alert
+    public function alert(): Alert
     {
-        return $this->alert;
+        return $this->alert ?? Alert::default();
     }
 
     /**
@@ -671,5 +667,18 @@ abstract class Student implements Comparable
         }
 
         return $studentHasCourse->timeRange()->start();
+    }
+
+    public function postPersist(LifecycleEventArgs $eventArgs)
+    {
+        $student = $eventArgs->getObject();
+        $this->notify(StudentHasBeenCreated::make($student));
+        $this->notify(StudentHasBeenUpdated::make($student));
+    }
+
+    public function postUpdate(LifecycleEventArgs $eventArgs)
+    {
+        $student = $eventArgs->getObject();
+        $this->notify(StudentHasBeenUpdated::make($student));
     }
 }

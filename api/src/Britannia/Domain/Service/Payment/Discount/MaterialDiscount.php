@@ -40,7 +40,7 @@ class MaterialDiscount
         $price = Price::make(0);
 
         return $books->reduce(function (Price $total, Book $book) {
-            $bookPrice = $book->price();
+            $bookPrice = $book->pvp();
 
             return $total->add($bookPrice);
         }, $price);

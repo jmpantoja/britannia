@@ -245,17 +245,17 @@ class StudentBuilder extends BuilderAbstract
         return $this;
     }
 
-    public function withFirstTutor(array $data): self
+    public function withFirstTutor(array $data, string $name): self
     {
         $this->firstTutorDescription = $data['texto'];
-        $this->firstTutor = $this->toTutor($data);
+        $this->firstTutor = $this->toTutor($data, $name);
         return $this;
     }
 
-    public function withSecondTutor(array $data): self
+    public function withSecondTutor(array $data, string $name): self
     {
         $this->secondTutorDescription = $data['texto'];
-        $this->secondTutor = $this->toTutor($data);
+        $this->secondTutor = $this->toTutor($data, $name);
         return $this;
     }
 

@@ -47,13 +47,14 @@ doctrine:
                     CourseStatus: CourseStatus
                     DayOfWeek: DayOfWeek
                     Examiner: Examiner
+                    Level: Level
                     Intensive: Intensive
                     JobStatusDiscountList: JobStatusDiscountList
                     FamilyDiscountList: FamilyDiscountList
                     PassId: PassId
                     PassHours: PassHours
                     PassPriceList: PassPriceList
-                    
+
                     #Assessment
                     TermName: TermName
                     SetOfSkills: SetOfSkills
@@ -70,6 +71,7 @@ doctrine:
 
                     #School
                     SchoolId: SchoolId
+                    TeacherStatus: TeacherStatus
 
                     #SchoolCourse
                     SchoolCourseId: SchoolCourseId
@@ -132,6 +134,7 @@ doctrine:
             #Courses
             DayOfWeek: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\DayOfWeekType
             Examiner: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\ExaminerType
+            Level: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\LevelType
             Intensive: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\IntensiveType
             CourseStatus: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\CourseStatusType
             CourseId: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\CourseId
@@ -139,7 +142,7 @@ doctrine:
             LevelId: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\LevelId
             PassHours: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\PassHoursType
             PassPriceList: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\PassPriceListType
-            
+
             JobStatusDiscountList: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\JobStatusDiscountListType
             FamilyDiscountList: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\FamilyDiscountListType
 
@@ -170,6 +173,7 @@ doctrine:
 
             #Staff
             StaffMemberId:  Britannia\Infraestructure\Doctrine\DBAL\Type\Staff\StaffMemberIdType
+            TeacherStatus:  Britannia\Infraestructure\Doctrine\DBAL\Type\Staff\StatusType
 
             #Student
             StudentId: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\StudentIdType

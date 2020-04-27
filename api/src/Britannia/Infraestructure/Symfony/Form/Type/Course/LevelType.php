@@ -14,82 +14,49 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Form\Type\Course;
 
 
-use Britannia\Domain\Entity\Level\Level;
-use Britannia\Domain\Entity\Level\LevelDto;
+use Britannia\Domain\VO\Course\Level\Level;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
-use PlanB\DDDBundle\Sonata\ModelManager;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
-use Sonata\AdminBundle\Form\Type\ModelType;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\ChoiceList\Loader\CallbackChoiceLoader;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 class LevelType extends AbstractSingleType
 {
-//    /**
-//     * @var ModelManager
-//     */
-//    private $modelManager;
-//
-//    public function __construct(PropertyAccessorInterface $propertyAccessor, ModelManager $modelManager)
-//    {
-//        $this->modelManager = $modelManager;
-//        parent::__construct($propertyAccessor);
-//
-//    }
-
-//    public function configureOptions(OptionsResolver $resolver)
-//    {
-//        parent::configureOptions($resolver);
-//
-
-
-//        $resolver->setNormalizer('query', function (OptionsResolver $resolver) {
-//            return $this->getQuery();
-//        });
-//    }
-
-
-//    /**
-//     * @return mixed
-//     */
-//    private function getQuery()
-//    {
-//        $query = $this->modelManager->createQuery(Level::class)
-//            ->getQueryBuilder()
-//            ->orderBy('o.name')
-//            ->getQuery();
-//
-//        return $query;
-//    }
+    /**
+     * {@inheritdoc}
+     */
     public function getParent()
     {
-        return EntityType::class;
+        return ChoiceType::class;
     }
 
 
     public function customOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'multiple' => false,
-            'expanded' => false,
-            'btn_add' => false,
+            'required' => false,
+            'choice_loader' => new CallbackChoiceLoader(function () {
+                $values = array_flip(Level::getConstants());
+                asort($values);
+                return array_merge(['' => ''], $values);
+            }),
             'attr' => [
-                'style' => 'width:200px'
+                'style' => 'width:170px'
             ]
+
         ]);
     }
 
-    /**
-     * @inheritDoc
-     */
     public function buildConstraint(array $options): ?Constraint
     {
-        return null;
+        return new \Britannia\Domain\VO\Course\Level\Validator\Level([
+            'required' => $options['required']
+        ]);
     }
 
     public function customMapping($data)
     {
-        return $data;
+        return Level::byName($data);
     }
 }

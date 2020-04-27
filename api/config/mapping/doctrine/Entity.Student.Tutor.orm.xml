@@ -4,7 +4,9 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
 
-    <entity name="Britannia\Domain\Entity\Student\Tutor" table="tutors">
+    <entity name="Britannia\Domain\Entity\Student\Tutor"
+            table="tutors"
+            repository-class="Britannia\Infraestructure\Doctrine\Repository\TutorRepository">
 
         <id name="id" type="TutorId" column="id">
             <generator strategy="CUSTOM"/>

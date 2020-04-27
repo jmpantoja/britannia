@@ -6,11 +6,11 @@
     {% if object.adult %}
         {% set label = '+18' %}
     {% elseif object.school %}
-        {% set label = 'Reg' %}
+        {% set label = 'Regular' %}
     {% elseif object.preschool %}
-        {% set label = 'Pre' %}
+        {% set label = 'Preescolar' %}
     {% elseif object.support %}
-        {% set label = 'Apo' %}
+        {% set label = 'Apoyo' %}
     {% elseif object.onetoone %}
         {% set label = '1to1' %}
     {% endif %}

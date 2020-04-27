@@ -70,7 +70,7 @@ final class StudentDiscountGenerator
      */
     private function getStartDate(Student $student, Course $course): CarbonImmutable
     {
-        return $student->firstDayInCourse($course);
+        return $student->firstDayInCourse($course) ?? $course->start();
     }
 
     /**

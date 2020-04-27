@@ -3,7 +3,6 @@
 namespace Britannia\Infraestructure\Symfony\Command;
 
 
-use Britannia\Domain\Repository\StaffMemberRepositoryInterface;
 use Britannia\Infraestructure\Symfony\Importer\ImporterManager;
 use Britannia\Infraestructure\Symfony\Importer\Report\ConsoleReport;
 use Britannia\Infraestructure\Symfony\Importer\Report\PlainTextErrorReport;
@@ -15,11 +14,9 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
-class ImportDataCommand extends Command implements ContainerAwareInterface
+class ImportDataCommand extends Command
 {
     protected static $defaultName = 'britannia:import:data';
 
@@ -29,37 +26,33 @@ class ImportDataCommand extends Command implements ContainerAwareInterface
      * @var string
      */
     private $pathToReportDir;
-    /**
-     * @var StaffMemberRepositoryInterface
-     */
-    private $userRepository;
 
     /**
-     * @var ContainerInterface
+     * @var CronLoginService
      */
-    private $container;
+    private CronLoginService $loginService;
 
     public function __construct(?string $name = null,
                                 ImporterManager $import,
-                                StaffMemberRepositoryInterface $userRepository)
+                                ParameterBagInterface $parameterBag,
+                                CronLoginService $loginService)
     {
         parent::__construct($name);
 
         $this->importer = $import;
-        $this->userRepository = $userRepository;
+        $this->loginService = $loginService;
+        $this->initParams($parameterBag);
     }
 
     /**
      * Sets the container.
      */
-    public function setContainer(ContainerInterface $container = null)
+    public function initParams(ParameterBagInterface $parameterBag)
     {
-        $pathToLogsDir = $container->getParameter('kernel.logs_dir');
+        $pathToLogsDir = $parameterBag->get('kernel.logs_dir');
         $this->pathToReportDir = sprintf('%s/import', dirname($pathToLogsDir));
 
         @chmod($this->pathToReportDir, 0777);
-
-        $this->container = $container;
     }
 
     protected function configure()
@@ -72,7 +65,7 @@ class ImportDataCommand extends Command implements ContainerAwareInterface
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->login();
+        $this->loginService->login();
 
         $console = ConsoleReport::make($input, $output);
         $plainText = PlainTextReport::make($this->pathToReportDir);
@@ -82,25 +75,5 @@ class ImportDataCommand extends Command implements ContainerAwareInterface
             ->addReport($console)
             ->addReport($plainText)
             ->execute();
-    }
-
-    protected function login()
-    {
-        $user = $this->userRepository->findOneBy([
-            'userName' => 'administrador'
-        ]);
-
-        if (empty($user)) {
-            return;
-        }
-
-        $token = new UsernamePasswordToken(
-            $user,
-            null,
-            'main',
-            $user->getRoles());
-
-        $this->container->get('security.token_storage')->setToken($token);
-
     }
 }

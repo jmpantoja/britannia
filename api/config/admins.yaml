@@ -16,7 +16,7 @@ services:
 
     admin.student:
         class: Britannia\Infraestructure\Symfony\Admin\Student\StudentAdmin
-        arguments: [~, Britannia\Domain\Entity\Student\Student, ~]
+        arguments: [~, Britannia\Domain\Entity\Student\Student, Britannia\Infraestructure\Symfony\Controller\Admin\StudentController]
         public: true
         tags:
             - { name: sonata.admin, manager_type: orm, label: Alumnos }
@@ -29,14 +29,14 @@ services:
         tags:
             - { name: sonata.admin, manager_type: orm, label: Historial }
         public: true
-
-    admin.tutor:
-        class: Britannia\Infraestructure\Symfony\Admin\Tutor\TutorAdmin
-        arguments: [~, Britannia\Domain\Entity\Student\Tutor, ~]
-        tags:
-            - { name: sonata.admin, manager_type: orm, label: Tutores }
-
-        public: true
+#
+#    admin.tutor:
+#        class: Britannia\Infraestructure\Symfony\Admin\Tutor\TutorAdmin
+#        arguments: [~, Britannia\Domain\Entity\Student\Tutor, ~]
+#        tags:
+#            - { name: sonata.admin, manager_type: orm, label: Tutores }
+#
+#        public: true
 
     admin.course:
         class: Britannia\Infraestructure\Symfony\Admin\Course\CourseAdmin
@@ -112,13 +112,6 @@ services:
             - { name: sonata.admin, manager_type: orm, label: Libros }
         public: true
 
-    admin.level:
-        class: Britannia\Infraestructure\Symfony\Admin\Level\LevelAdmin
-        arguments: [~, Britannia\Domain\Entity\Course\Level, ~]
-        tags:
-            - { name: sonata.admin, manager_type: orm, label: Niveles}
-        public: true
-
     admin.school_course:
         class: Britannia\Infraestructure\Symfony\Admin\SchoolCourse\SchoolCourseAdmin
         arguments: [~, Britannia\Domain\Entity\SchoolCourse\SchoolCourse, ~]
@@ -148,7 +141,7 @@ services:
         class: Britannia\Infraestructure\Symfony\Admin\Message\MessageAdmin
         arguments: [~, Britannia\Domain\Entity\Message\Message, Britannia\Infraestructure\Symfony\Controller\Admin\MessageController]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Mensajería }
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Mensajes }
         calls:
             - [setSubClasses, [{email: Britannia\Domain\Entity\Message\Message\Email, sms: Britannia\Domain\Entity\Message\Message\Sms }]]
             - [setTemplate, ['edit', 'admin/message/message_edit_template.html.twig']]
@@ -180,7 +173,7 @@ services:
         arguments: [~, Britannia\Domain\Entity\Course\Course, ~]
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: Mis Cursos }
-#
-#        calls:
-#            - [setTemplate, ['edit', 'admin/teacher/teacher_edit_template.html.twig']]            
+        #
+        #        calls:
+        #            - [setTemplate, ['edit', 'admin/teacher/teacher_edit_template.html.twig']]            
         public: true

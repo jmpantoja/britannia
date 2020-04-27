@@ -41,7 +41,6 @@ final class ClassRoomAdmin extends AbstractAdmin implements AdminFilterableInter
         return $this->adminTools;
     }
 
-
     public function getBatchActions()
     {
         return [];
@@ -55,6 +54,7 @@ final class ClassRoomAdmin extends AbstractAdmin implements AdminFilterableInter
     protected function configureRoutes(RouteCollection $collection)
     {
         $collection->clearExcept(AdminRoutes::ROUTE_LIST);
+       $collection->remove('delete');
         return $collection;
     }
 
@@ -85,7 +85,5 @@ final class ClassRoomAdmin extends AbstractAdmin implements AdminFilterableInter
         return $this->adminTools()
             ->dataSource($this->getDatagrid())
             ->build();
-
     }
-
 }

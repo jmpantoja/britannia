@@ -1,0 +1,23 @@
+{% extends get_admin_template('base_list_field', admin.code) %}
+
+{% import 'admin/core/status_column.html.twig' as status %}
+
+{% block field %}
+    {% if object.status.candidate %}
+        {{ status.pending('Candidato') }}
+    {% elseif object.status.rejected %}
+        {{ status.finalized('Rechazado') }}
+    {% else %}
+        {% for rol in object.roles %}
+            {% if rol != 'ROLE_SONATA_ADMIN' %}
+                {{ block('rol_tag') }}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+{% endblock %}
+
+
+{% block rol_tag %}
+    {% set label = rol | slice(5,1) %}
+    <span class="label label-success label-square">{{ label }}</span>
+{% endblock %}

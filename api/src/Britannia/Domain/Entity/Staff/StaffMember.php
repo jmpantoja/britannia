@@ -5,6 +5,7 @@ namespace Britannia\Domain\Entity\Staff;
 
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Course\CourseList;
+use Britannia\Domain\VO\StaffMember\Status;
 use Carbon\CarbonImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -84,6 +85,12 @@ class StaffMember implements UserInterface, Serializable, Comparable
      */
     private $photo;
 
+    /** @var Status */
+    private $status;
+
+    /** @var string */
+    private $comment;
+
     /**
      * @var array
      */
@@ -130,6 +137,8 @@ class StaffMember implements UserInterface, Serializable, Comparable
         $this->emails = $dto->emails;
         $this->phoneNumbers = $dto->phoneNumbers;
         $this->photo = $dto->photo;
+        $this->status = $dto->status;
+        $this->comment = $dto->comment;
 
         $this->setCourses($dto->courses);
 
@@ -287,7 +296,6 @@ class StaffMember implements UserInterface, Serializable, Comparable
     }
 
 
-
     /**
      * Returns the salt that was originally used to encode the password.
      *
@@ -340,6 +348,22 @@ class StaffMember implements UserInterface, Serializable, Comparable
     public function photo(): ?Photo
     {
         return $this->photo;
+    }
+
+    /**
+     * @return Status
+     */
+    public function status(): ?Status
+    {
+        return $this->status;
+    }
+
+    /**
+     * @return string
+     */
+    public function comment(): string
+    {
+        return $this->comment ?? '';
     }
 
     public function name(): string

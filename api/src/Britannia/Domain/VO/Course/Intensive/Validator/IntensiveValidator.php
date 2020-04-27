@@ -36,6 +36,10 @@ class IntensiveValidator extends ConstraintValidator
             return;
         }
 
+        if(is_bool($value)){
+            return;
+        }
+
         if (VO\Course\Intensive\Intensive::hasName($value)) {
             return;
         }

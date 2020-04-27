@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Admin\Staff;
 
 
+use Britannia\Infraestructure\Symfony\Service\Security\RoleService;
 use PlanB\DDDBundle\Sonata\Admin\AdminDataSource;
 use PlanB\DDDBundle\Sonata\Admin\AdminQuery;
 use PlanB\DDDBundle\Sonata\Admin\AdminRoutes;
@@ -36,11 +37,16 @@ final class StaffTools extends AdminTools
      * @var StaffMapper
      */
     private StaffMapper $mapper;
+    /**
+     * @var RoleService
+     */
+    private RoleService $roleService;
 
-    public function __construct(Security $security, StaffMapper $mapper)
+    public function __construct(Security $security, StaffMapper $mapper, RoleService $roleService)
     {
         $this->security = $security;
         $this->mapper = $mapper;
+        $this->roleService = $roleService;
     }
 
     public function dataGrid(ListMapper $listMapper): StaffDatagrid
@@ -62,7 +68,8 @@ final class StaffTools extends AdminTools
 
     public function filters(DatagridMapper $filterMapper): ?StaffFilters
     {
-        return StaffFilters::make($filterMapper);
+        return StaffFilters::make($filterMapper)
+            ->setRolService($this->roleService);
     }
 
     public function routes(RouteCollection $collection, string $idParameter): ?AdminRoutes

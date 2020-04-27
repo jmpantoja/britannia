@@ -18,11 +18,12 @@ use Britannia\Domain\Entity\Student\Adult;
 use Britannia\Domain\Entity\Student\Child;
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Entity\Student\StudentDto;
+use Britannia\Domain\Entity\Student\Tutor;
+use Britannia\Domain\VO\Student\Tutor\ChoicedTutor;
 use PlanB\DDDBundle\Sonata\Admin\AdminMapper;
 
 final class StudentMapper extends AdminMapper
 {
-
     /**
      * @var bool
      */
@@ -67,8 +68,32 @@ final class StudentMapper extends AdminMapper
      */
     protected function makeDto(array $values): StudentDto
     {
+        $firstTutor = $values['firstTutor'] ?? null;
+        $values['firstTutor'] = $this->getTutor($firstTutor);
+        $values['firstTutorDescription'] = $this->getTutorDescription($firstTutor);
+
+        $secondTutor = $values['secondTutor'] ?? null;
+        $values['secondTutor'] = $this->getTutor($secondTutor);
+        $values['secondTutorDescription'] = $this->getTutorDescription($secondTutor);
 
         $dto = StudentDto::fromArray($values);
         return $dto;
+    }
+
+    private function getTutor(?ChoicedTutor $choicedTutor): ?Tutor
+    {
+        if (!($choicedTutor instanceof ChoicedTutor)) {
+            return null;
+        }
+
+        return $choicedTutor->tutor();
+    }
+
+    private function getTutorDescription(?ChoicedTutor $choicedTutor): ?string
+    {
+        if (!($choicedTutor instanceof ChoicedTutor)) {
+            return null;
+        }
+        return $choicedTutor->description();
     }
 }

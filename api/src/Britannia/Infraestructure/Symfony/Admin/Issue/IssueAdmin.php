@@ -123,7 +123,7 @@ final class IssueAdmin extends AbstractAdmin implements AdminFilterableInterface
     {
         if ('edit' === $action and $object instanceof Issue) {
             $user = $this->getUser();
-            return $object->equalAuthor($user) ? true : false;
+            return !$object->isMain() && $object->equalAuthor($user) ? true : false;
         }
 
         if ('read' === $action and $object instanceof Issue) {

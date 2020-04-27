@@ -21,4 +21,8 @@ class Intensive extends Enum
     public const INTENSIVE = 'Intensivo';
     public const NOT_INTENSIVE = 'No Intensivo';
 
+    public function isIntensive(): bool
+    {
+        return $this->is(static::INTENSIVE());
+    }
 }

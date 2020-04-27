@@ -20,7 +20,6 @@ use Britannia\Domain\VO\CourseInfoData;
 use Britannia\Infraestructure\Symfony\Validator\FullName;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractCompoundType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -34,18 +33,25 @@ class ChooseStudentListType extends AbstractCompoundType
 
         foreach ($course->students() as $student) {
             $key = (string)$student->id();
-            $builder->add($key, CheckboxType::class, [
-                'label' => (string)$student->fullName(),
+
+            $builder->add($key, ChooseStudentType::class, [
                 'mapped' => false,
+                'student' => $student,
                 'data' => true
             ]);
+
+//            $builder->add($key, null, [
+//                'label' => (string)$student->fullName(),
+//                'mapped' => false,
+//                'data' => $student
+//            ]);
         }
     }
 
     public function customOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Course::class,
+            // 'data_class' => Course::class,
             'mapped' => false,
             'attr' => [
                 'novalidate' => 'true'
@@ -65,6 +71,7 @@ class ChooseStudentListType extends AbstractCompoundType
 
     public function customMapping(array $data)
     {
+
         /** @var Course $course */
         $course = $this->getOption('data');
         $students = $course->students();

@@ -68,8 +68,6 @@ class RoleService
 
     public function getList(): array
     {
-
-
         return $this->roles;
     }
 

@@ -1,29 +1,12 @@
 {% extends get_admin_template('base_list_field', admin.code) %}
 
 {% block field %}
-    {{ object.fullName }}
+    <p>
+        <strong><a href="{{ admin.generateObjectUrl('edit', object) }}">{{ object.fullName }}</a></strong>
+    </p>
+    <span style="font-style: italic; color: darkslategray">
+        <i class="fa fa-user"></i>
+        {{ object.userName }}
+    </span>
 {% endblock %}
-
-
-{% block body %}
-    <div class="col-md-12">
-        {% for phoneNumber in object.phoneNumbers %}
-            <p class="phone">
-                <i class="fa fa-phone" aria-hidden="true"></i>
-                <span> {{ phoneNumber }} </span>
-                {% if phoneNumber.description %}
-                    <span> ({{ phoneNumber.description }})</span>
-                {% endif %}
-            </p>
-        {% endfor %}
-        {% for email in object.emails %}
-            <p class="mail">
-                <i class="fa fa-envelope" aria-hidden="true"></i>
-                <span> {{ email }} </span>
-            </p>
-        {% endfor %}
-    </div>
-
-{% endblock %}
-
 

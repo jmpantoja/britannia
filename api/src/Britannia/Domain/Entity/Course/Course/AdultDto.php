@@ -16,12 +16,13 @@ namespace Britannia\Domain\Entity\Course\Course;
 
 use Britannia\Domain\Entity\Course\CourseDto;
 use Britannia\Domain\Entity\Lesson\UpdateCalendarOrder;
-use Britannia\Domain\Entity\Level\Level;
+
 use Britannia\Domain\Service\Assessment\AssessmentGenerator;
 use Britannia\Domain\VO\Course\Age\Age;
 use Britannia\Domain\VO\Course\Assessment\Assessment;
 use Britannia\Domain\VO\Course\Examiner\Examiner;
 use Britannia\Domain\VO\Course\Intensive\Intensive;
+use Britannia\Domain\VO\Course\Level\Level;
 use Britannia\Domain\VO\Course\Periodicity\Periodicity;
 
 class AdultDto extends CourseDto implements AssessmentDtoInterface

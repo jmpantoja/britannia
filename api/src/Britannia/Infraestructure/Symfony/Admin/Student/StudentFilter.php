@@ -14,9 +14,8 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Admin\Student;
 
 
-use Britannia\Domain\VO\Student\PartOfDay\PartOfDay;
-use Britannia\Infraestructure\Symfony\Form\Type\Assessment\SetOfSkillsType;
-use Britannia\Infraestructure\Symfony\Form\Type\Student\PartOfDayType;
+use Britannia\Domain\Entity\Student\Adult;
+use Britannia\Domain\Entity\Student\Child;
 use PlanB\DDDBundle\Sonata\Admin\AdminFilter;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Symfony\Component\Form\ChoiceList\Loader\CallbackChoiceLoader;
@@ -35,7 +34,7 @@ final class StudentFilter extends AdminFilter
                     return;
                 }
 
-                $where = sprintf('%s.fullName.firstName like :name OR %s.fullName.lastName like :name', $alias, $alias);
+                $where = sprintf('%s.fullName.fullName like :name', $alias, $alias);
                 $queryBuilder
                     ->andwhere($where)
                     ->setParameter('name', sprintf('%%%s%%', $value['value']));
@@ -47,6 +46,30 @@ final class StudentFilter extends AdminFilter
         $this->add('active', null, [
             'label' => 'Activo',
             'show_filter' => true
+        ]);
+
+        $this->add('type', 'doctrine_orm_callback', [
+            'label' => 'Tipo',
+            'callback' => function (ProxyQuery $queryBuilder, $alias, $field, $value) {
+                if (!$value['value']) {
+                    return;
+                }
+
+                $where = sprintf('%s INSTANCE OF :type', $alias);
+                $queryBuilder
+                    ->andwhere($where)
+                    ->setParameter('type', $value['value']);
+                return true;
+            }
+        ], ChoiceType::class, [
+
+            'choice_loader' => new CallbackChoiceLoader(function () {
+                return [
+//                    '' => '',
+                    'Menor de edad' => 'child',
+                    'Adulto' => 'adult',
+                ];
+            }),
         ]);
 
         $this->add('Cumple', 'doctrine_orm_callback', [
@@ -65,7 +88,7 @@ final class StudentFilter extends AdminFilter
 
             'choice_loader' => new CallbackChoiceLoader(function () {
                 return [
-                    ''=>'',
+                    '' => '',
                     'Enero' => 1,
                     'Febrero' => 2,
                     'Marzo' => 3,

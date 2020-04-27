@@ -12,6 +12,7 @@
             <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
         </id>
 
+        <field name="main" type="boolean"/>
         <field name="subject"/>
         <field name="message" type="text"/>
         <!--        <field name="priority" type="Priority"/>-->
@@ -21,6 +22,9 @@
         <many-to-one field="author" target-entity="Britannia\Domain\Entity\Staff\StaffMember"/>
         <many-to-one field="student" target-entity="Britannia\Domain\Entity\Student\Student">
             <join-column on-delete="CASCADE"/>
+            <cascade>
+                <cascade-persist/>
+            </cascade>
         </many-to-one>
 
         <one-to-many field="issueHasRecipients" target-entity="Britannia\Domain\Entity\Issue\IssueRecipient"

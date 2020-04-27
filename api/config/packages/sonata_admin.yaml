@@ -11,6 +11,16 @@ sonata_admin:
 
     dashboard:
         groups:
+            admin.group.teacher: 
+                label: Teacher's Menu
+                label_catalogue: App
+                icon: "<i class=\"fa fa-tags\"></i>"
+                roles: ['ROLE_TEACHER']
+                items:
+                    - admin.teacher_course
+                    - admin.issue
+                    -   route:        my_planning
+                        label:        Mi Planning
             admin.group.staff:
                 label: Usuarios
                 label_catalogue: App
@@ -22,9 +32,13 @@ sonata_admin:
                 label: Alumnos
                 label_catalogue: App
                 icon: "<i class=\"fa fa-graduation-cap\"></i>"
+                roles: ['ROLE_MANAGER']
                 items:
                     - admin.student
-                    - admin.tutor
+                    - admin.issue
+                    - admin.academy
+                    - admin.school
+                    - admin.notification
 
             admin.group.courses:
                 label: Cursos
@@ -32,9 +46,12 @@ sonata_admin:
                 icon: "<i class=\"fa fa-book\"></i>"
                 items:
                     - admin.course
-                    - admin.teacher_course
-#                    - admin.mark
-#                    - admin.report
+                    -   route:        planning
+                        label:        Planning
+                        roles: ['ROLE_MANAGER']
+                    - admin.classroom
+                    - admin.book
+                    - admin.school_course
 
             admin.group.invoices:
                 label: Pagos
@@ -43,19 +60,13 @@ sonata_admin:
                 items:
                     - admin.invoice
 
-            admin.group.tools:
-                label: Herramientas
+            admin.group.message:
+                label: Mensajería
                 label_catalogue: App
-                icon: "<i class=\"fa fa-wrench\"></i>"
+                icon: "<i class=\"fa fa-envelope\"></i>"
                 items:
-                    -   route:        planning
-                        label:        Planning
-                        roles: ['ROLE_MANAGER']
-
-                    - admin.notification
-                    - admin.issue
                     - admin.message
-
+                    - admin.message.template
 
             admin.group.config:
                 label: Configuración
@@ -67,17 +78,9 @@ sonata_admin:
                         label:        Settings
                         roles: ['ROLE_MANAGER']
 
-                    - admin.message.template
                     - admin.calendar
-                    - admin.academy
-                    - admin.school
-                    - admin.classroom
-                    - admin.book
-                    - admin.level
-                    - admin.school_course
 
         blocks:
-
             -   class:    col-md-2
                 position: top
                 type:     sonata.admin.block.stats
@@ -88,7 +91,7 @@ sonata_admin:
                     text:  Profesores
                     color: bg-aqua
                     filters:
-                        teacher: { value: 1 }
+                        rol: { value: 'ROLE_TEACHER' }
 
             -   class:    col-md-2
                 position: top
@@ -125,7 +128,7 @@ sonata_admin:
                     color: bg-olive
                     filters:
                         paid: { value: 2 }
-                        
+
             -   class:    col-md-2
                 position: top
                 type:     sonata.admin.block.stats
@@ -136,8 +139,8 @@ sonata_admin:
                     text:  Mensajeria
                     color: bg-maroon
                     filters:
-                        processed: { value: 2 }     
-                        
+                        processed: { value: 2 }
+
             -   class:    col-md-2
                 position: top
                 type:     sonata.admin.block.stats
@@ -149,8 +152,8 @@ sonata_admin:
                     color: bg-purple
                     filters:
                         status: { value: {status: 1, recipient: 2} }
-                        
-                        
+
+
             -   class:    col-md-2
                 position: top
                 type:     sonata.admin.block.stats
@@ -161,7 +164,7 @@ sonata_admin:
                     text:  Mis Cursos
                     color: bg-orange
                     filters:
-                        status: { value: ACTIVE }                        
+                        status: { value: ACTIVE }
 
     templates:
         user_block: admin/core/user_block.html.twig

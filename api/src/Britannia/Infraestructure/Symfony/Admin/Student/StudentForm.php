@@ -15,6 +15,7 @@ namespace Britannia\Infraestructure\Symfony\Admin\Student;
 
 
 use Britannia\Domain\Entity\Student\Adult;
+use Britannia\Domain\Entity\Student\Child;
 use Britannia\Domain\Entity\Student\Photo;
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Infraestructure\Symfony\Form\Type\Photo\PhotoType;
@@ -28,7 +29,7 @@ use Britannia\Infraestructure\Symfony\Form\Type\Student\PartOfDayType;
 use Britannia\Infraestructure\Symfony\Form\Type\Student\PaymentType;
 use Britannia\Infraestructure\Symfony\Form\Type\Student\RelativesType;
 use Britannia\Infraestructure\Symfony\Form\Type\Student\StudentHasCoursesType;
-use Britannia\Infraestructure\Symfony\Form\Type\Student\TutorType;
+use Britannia\Infraestructure\Symfony\Form\Type\Tutor\ChoiceTutorType;
 use PlanB\DDDBundle\Sonata\Admin\AdminForm;
 use PlanB\DDDBundle\Symfony\Form\Type\DNIType;
 use PlanB\DDDBundle\Symfony\Form\Type\EmailListType;
@@ -55,7 +56,12 @@ final class StudentForm extends AdminForm
         $this->personalTab('Personal', $student);
         $this->coursesTab('Cursos', $student);
         $this->paymentTab('Pago', $student);
-        $this->tutorsTab('Tutores', $isAdult);
+
+        if ($student instanceof Child) {
+            $this->firstTutorTab('Tutor 1', $student);
+            $this->secondTutorTab('Tutor 2', $student);
+        }
+
         $this->attachedTab('Documentos', $student);
         $this->extraTab('Información Extra');
     }
@@ -139,7 +145,6 @@ final class StudentForm extends AdminForm
                 ]);
         }
 
-
         $this->group('Condiciones', ['class' => 'col-md-4'])
             ->add('termsOfUseAcademy', null, [
                 'label' => 'Acepta las condiciones de uso de la academia'
@@ -203,34 +208,30 @@ final class StudentForm extends AdminForm
     /**
      * @param bool $isAdult
      */
-    protected function tutorsTab(string $name, bool $isAdult): void
+    protected function firstTutorTab(string $name, Child $student): void
     {
+        $this->tab($name);
+        $this
+            ->group($name)
+            ->add('firstTutor', ChoiceTutorType::class, [
+                'label' => false,
+                'tutor' => $student->firstTutor(),
+                'description' => $student->firstTutorDescription(),
+                'required' => true
+            ]);
+    }
 
-        if (!$isAdult) {
-            $this->tab($name);
-
-            $this->group('Tutores')
-                ->add('firstTutorDescription', TextType::class, [
-                    'label' => 'Tipo',
-                    'sonata_help' => 'padre/madre/abuelo/hermano/...',
-                    'required' => false
-                ])
-                ->add('firstTutor', TutorType::class, [
-                    'label' => 'Tutor A',
-                    'sonata_help' => 'seleccione un tutor',
-                    'required' => true
-                ])
-                ->add('secondTutorDescription', TextType::class, [
-                    'label' => 'Tipo',
-                    'sonata_help' => 'padre/madre/abuelo/hermano/...',
-                    'required' => false
-                ])
-                ->add('secondTutor', TutorType::class, [
-                    'label' => 'Tutor B',
-                    'sonata_help' => 'seleccione un tutor',
-                    'required' => false
-                ]);
-        }
+    protected function secondTutorTab(string $tabName, Child $student)
+    {
+        $this->tab($tabName);
+        $this
+            ->group($tabName)
+            ->add('secondTutor', ChoiceTutorType::class, [
+                'label' => false,
+                'tutor' => $student->secondTutor(),
+                'description' => $student->secondTutorDescription(),
+                'required' => false
+            ]);
     }
 
     private function attachedTab(string $name, Student $student): void

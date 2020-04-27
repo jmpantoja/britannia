@@ -1,12 +1,17 @@
 {% macro pending(label = '') %}
-    <span class="label label-warning label-square">{{ label }}</span>
+    <span title="{{ label }}" class="label label-warning label-square">{{ label | truncate(4, '','') }}</span>
 {% endmacro %}
 
 {% macro active(label = '') %}
-    <span class="label label-success label-square">{{ label }}</span>
+    <span title="{{ label }}" class="label label-success label-square">{{ label | truncate(4, '','') }}</span>
 
 {% endmacro %}
 
 {% macro finalized(label = '') %}
-    <span class="label label-danger label-square">{{ label }}</span>
+    <span title="{{ label }}"  class=" label label-danger label-square">{{ label | truncate(4, '','') }}</span>
+{% endmacro %}
+
+
+{% macro primary(label = '') %}
+    <span title="{{ label }}"  class=" label label-primary label-square">{{ label | truncate(4, '','') }}</span>
 {% endmacro %}

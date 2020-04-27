@@ -62,7 +62,7 @@ class CourseMarksType extends AbstractCompoundType
         ]);
 
         $builder->add('students', ChooseStudentListType::class, [
-            'label' => 'Alumnos',
+            'label' => false,
             'mapped' => false,
             'data' => $course
         ]);

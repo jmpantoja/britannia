@@ -113,7 +113,6 @@
             font-size: 0.8em;
         }
 
-
         .payment table tbody td {
             padding: 8px 0;
             border-bottom: solid 1px #BBB;
@@ -212,7 +211,7 @@
         </header>
 
         <section class="info">
-            <h2 class="title">{{ course.name }}</h2>
+            <h2 class="title">{{ course.name | truncate (35) }}</h2>
 
             <article class="timetable">
                 <div class="box calendar">

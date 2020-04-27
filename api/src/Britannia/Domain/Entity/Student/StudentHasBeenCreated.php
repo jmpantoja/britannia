@@ -22,6 +22,7 @@ class StudentHasBeenCreated extends NotificationEvent
 
     public static function make(Student $student): self
     {
+
         $date = $student->createdAt();
         return self::builder($student)
             ->withDate($date);
@@ -34,7 +35,7 @@ class StudentHasBeenCreated extends NotificationEvent
 
     protected function makeSubject(): string
     {
-        return sprintf('Nuevo alumno (%s)', $this->student);
+        return sprintf('Nuevo alumno (%s)', $this->student->name());
     }
 
 

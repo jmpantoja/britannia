@@ -15,6 +15,7 @@ namespace Britannia\Infraestructure\Symfony\Service\Planning;
 
 
 use Britannia\Domain\Entity\ClassRoom\ClassRoom;
+use Britannia\Domain\Entity\Staff\StaffMember;
 use Britannia\Domain\Repository\ClassRoomRepositoryInterface;
 use Britannia\Domain\Repository\LessonRepositoryInterface;
 use Carbon\CarbonImmutable;
@@ -56,9 +57,9 @@ class PlanningService
         return $data;
     }
 
-    public function getEvents(CarbonImmutable $date): array
+    public function getEvents(CarbonImmutable $date, ?StaffMember $member = null): array
     {
-        $lessons = $this->lessonRepository->findByDay($date);
+        $lessons = $this->lessonRepository->findByDay($date, $member);
 
         $data = [];
 

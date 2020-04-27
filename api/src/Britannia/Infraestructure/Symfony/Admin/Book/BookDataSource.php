@@ -23,7 +23,7 @@ final class BookDataSource extends AdminDataSource
     {
         $data['Nombre'] = $this->parse($book->name());
         $data['Tipo'] = $this->parse($book->category());
-        $data['Precio'] = $this->parse($book->price());
+        $data['Precio'] = $this->parse($book->pvp());
 
         return $data;
     }

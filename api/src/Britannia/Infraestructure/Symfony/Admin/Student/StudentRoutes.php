@@ -20,10 +20,6 @@ final class StudentRoutes extends AdminRoutes
 {
     protected function configure(): void
     {
-//        $this->add('attachment_upload', 'attachment/upload');
-//        $this->add('attachment_download', 'attachment/download/{path_to_file}', ['path_to_file' => ''], ['path_to_file' => '.+']);
-//
-//        $this->add('photo_upload', 'photo/upload');
-//        $this->add('photo_view', 'photo/view/{path_to_file}', ['path_to_file' => ''], ['path_to_file' => '.+']);
+        $this->add('tutor_form', 'tutor/form');
     }
 }

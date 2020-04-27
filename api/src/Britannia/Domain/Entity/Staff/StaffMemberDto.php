@@ -15,6 +15,7 @@ namespace Britannia\Domain\Entity\Staff;
 
 
 use Britannia\Domain\Entity\Course\CourseList;
+use Britannia\Domain\VO\StaffMember\Status;
 use PlanB\DDD\Domain\Model\Dto;
 use PlanB\DDD\Domain\VO\DNI;
 use PlanB\DDD\Domain\VO\FullName;
@@ -35,6 +36,8 @@ final class StaffMemberDto extends Dto
     public array $phoneNumbers = [];
     public CourseList $courses;
     public ?Photo $photo = null;
+    public ?Status $status = null;
+    public ?string $comment = null;
     public ?array $roles;
     public EncoderFactory $encoder;
 

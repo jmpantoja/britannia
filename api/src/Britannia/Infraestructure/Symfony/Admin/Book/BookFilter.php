@@ -40,8 +40,8 @@ final class BookFilter extends AdminFilter
             ],
         ]);
 
-        $this->add('price', null, [
-            'label' => 'Precio',
+        $this->add('pvp', null, [
+            'label' => 'PVP',
         ]);
     }
 }

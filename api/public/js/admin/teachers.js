@@ -28,6 +28,22 @@ $(function () {
     }
   })
 
+  $('.cell.student-cell.active, .cell.student-cell.inactive').on('click', function () {
+    let _input = $(this).find('input');
+
+    let isActive = $(this).hasClass('active');
+
+    if (isActive) {
+      $(_input).val(0);
+      $(this).removeClass('active');
+      $(this).addClass('inactive');
+    } else {
+      $(_input).val(1);
+      $(this).removeClass('inactive');
+      $(this).addClass('active');
+    }
+  })
+
 
   $('[data-toggle="popover"]').popover()
 });

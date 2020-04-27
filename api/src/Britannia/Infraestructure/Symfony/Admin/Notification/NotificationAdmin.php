@@ -49,6 +49,7 @@ final class NotificationAdmin extends AbstractAdmin implements AdminFilterableIn
     protected function configureRoutes(RouteCollection $collection)
     {
         $collection->clearExcept(AdminRoutes::ROUTE_LIST);
+        $collection->remove('create');
         return $collection;
     }
 

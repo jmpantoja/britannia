@@ -22,6 +22,9 @@ use PlanB\DDD\Domain\Model\Dto;
 
 final class IssueDto extends Dto
 {
+    public ?IssueId $id = null;
+
+    public bool $main = false;
 
     public ?string $subject;
 
@@ -35,10 +38,11 @@ final class IssueDto extends Dto
 
     public ?CarbonImmutable $createdAt;
 
+
     protected function defaults(): array
     {
         return [
-            'issueHasRecipients' => IssueRecipientList::collect(),
+            'issueHasRecipients' => StaffList::collect(),
             'createdAt' => CarbonImmutable::now(),
         ];
     }

@@ -13,7 +13,10 @@ declare(strict_types=1);
 
 namespace Britannia\Domain\Repository;
 
+use Britannia\Domain\Entity\Issue\Issue;
 use Britannia\Domain\Entity\Staff\StaffMember;
+use Britannia\Domain\Entity\Student\Student;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  *
@@ -25,5 +28,7 @@ interface IssueRepositoryInterface
 {
 
     public function numOfUnread(StaffMember $staffMember): int;
+
+    public function getMainIssue(Student $student, ?UserInterface $author): ?Issue;
 
 }

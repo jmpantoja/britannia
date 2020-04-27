@@ -29,7 +29,6 @@ final class IssueForm extends AdminForm
         $this
             ->add('subject', null, [
                 'label' => 'Asunto',
-
                 'constraints' => [
                     new NotBlank()
                 ]

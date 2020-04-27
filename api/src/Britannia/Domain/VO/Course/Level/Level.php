@@ -11,12 +11,17 @@
 
 declare(strict_types=1);
 
-namespace Britannia\Domain\Entity\Level;
+namespace Britannia\Domain\VO\Course\Level;
 
 
-use PlanB\DDD\Domain\Model\EntityId;
+use MabeEnum\Enum;
 
-class LevelId extends EntityId
+class Level extends Enum
 {
-
+    public const A1 = 'A1';
+    public const A2 = 'A2';
+    public const B1 = 'B1';
+    public const B2 = 'B2';
+    public const C1 = 'C1';
+    public const C2 = 'C2';
 }

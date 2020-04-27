@@ -71,6 +71,7 @@ final class PhotoType extends AbstractCompoundType
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
 
+        $view->vars['person'] = $options['owner'];
         $view->vars['uploadUrl'] = $this->uploader->uploadUrl();
         $view->vars['downloadUrl'] = $this->uploader->downloadUrl();
 

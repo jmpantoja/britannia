@@ -81,7 +81,7 @@ final class StudentDto extends Dto
 
     public ?string $schoolCourse;
 
-    public ?string $firstTutorDescription;
+    public ?string $firstTutorDescription ;
 
     public ?Tutor $firstTutor;
 
@@ -91,6 +91,7 @@ final class StudentDto extends Dto
 
     //Adult
     public ?Job $job;
+
     public ?DNI $dni;
 
 

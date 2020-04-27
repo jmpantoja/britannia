@@ -15,7 +15,6 @@ namespace Britannia\Domain\Entity\Notification;
 
 
 use Britannia\Domain\Entity\Course\Course;
-use Britannia\Domain\Entity\Staff\StaffMember;
 use Britannia\Domain\Entity\Student\Student;
 use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\Event\DomainEvent;
@@ -30,7 +29,7 @@ abstract class NotificationEvent extends DomainEvent implements NotificationEven
     protected ?string $message = '';
 
 
-    private function __construct(Student $student, Course $course)
+    private function __construct(Student $student, ?Course $course)
     {
         $this->withStudent($student)
             ->withCourse($course)
@@ -38,7 +37,7 @@ abstract class NotificationEvent extends DomainEvent implements NotificationEven
             ->withType($this->type());
     }
 
-    protected static function builder(Student $student, Course $course): self
+    protected static function builder(Student $student, ?Course $course = null): self
     {
         return new static($student, $course);
     }

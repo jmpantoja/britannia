@@ -1,7 +1,30 @@
-{% extends 'admin/course/list_of_courses.html.twig' %}
+{% extends get_admin_template('base_list_field', admin.code) %}
 
 {% block field %}
-    {% with {limit: 20} %}
-        {{ block('list_of_courses') }}
-    {% endwith %}
+    {% set columns = staff_member_courses.distributeByGroups(object, 6) %}
+    <div class="row">
+        {% for column in columns %}
+            {{ block('column') }}
+        {% endfor %}
+    </div>
 {% endblock %}
+
+{% block column %}
+    <div class="col-md-2">
+        {% for course in column %}
+            {{ block('course') }}
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block course %}
+    <p title="{{ course.name }}">
+        {% set course_admin = admin.configurationPool.adminByAdminCode('admin.course') %}
+        <a style="color: {{ course.color.toHtml }}; font-weight: bolder"
+           href="{{ course_admin.generateObjectUrl('edit', course) }}">
+            {{ course.name  | truncate (12) }}
+        </a>
+    </p>
+{% endblock %}
+
+

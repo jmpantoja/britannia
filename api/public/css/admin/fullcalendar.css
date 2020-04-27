@@ -1,5 +1,3 @@
-
-
 /*<div class="popover fade right in" role="tooltip" id="popover990543" style="top: 156.3px; left: 188.983px; display: block;">*/
 /*<div class="arrow" style="top: 67.8481%;">*/
 /*</div>*/
@@ -28,6 +26,10 @@
     border-bottom: solid 1px whitesmoke;
 }
 
+.fc-scroller {
+    height: max-content !important;
+}
+
 span.fc-day-number {
     font-weight: 400;
 }
@@ -36,7 +38,12 @@ span.fc-day-number {
     background-color: rgba(205, 92, 92, 0.30);
 }
 
-
-.holiday span.fc-day-number{
+.holiday span.fc-day-number {
     color: red;
+}
+
+#calendar {
+    width: 1000px;
+    margin: auto;
+    border: solid 1px silver;
 }

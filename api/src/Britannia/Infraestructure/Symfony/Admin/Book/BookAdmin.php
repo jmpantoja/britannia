@@ -58,6 +58,7 @@ final class BookAdmin extends AbstractAdmin implements AdminFilterableInterface
     protected function configureRoutes(RouteCollection $collection)
     {
         $collection->clearExcept(AdminRoutes::ROUTE_LIST);
+        $collection->remove('delete');
         return $collection;
     }
 

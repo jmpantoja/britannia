@@ -38,6 +38,11 @@ class Book
     /**
      * @var Price
      */
+    private $pvp;
+
+    /**
+     * @var Price
+     */
     private $price;
 
     /**
@@ -67,6 +72,7 @@ class Book
     public function update(BookDto $dto): self
     {
         $this->name = $dto->name;
+        $this->pvp = $dto->pvp;
         $this->price = $dto->price;
         $this->category = $dto->category;
 
@@ -93,9 +99,9 @@ class Book
     /**
      * @return Price
      */
-    public function price(): Price
+    public function pvp(): Price
     {
-        return $this->price;
+        return $this->pvp;
     }
 
     /**

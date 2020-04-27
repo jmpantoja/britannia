@@ -41,7 +41,7 @@ class Notification
     {
         $this->id = new NotificationId();
         $this->update($dto);
-        $this->createdAt = CarbonImmutable::now();
+        $this->createdAt = $dto->date ?? CarbonImmutable::now();
         $this->date = $dto->date;
     }
 
@@ -120,5 +120,14 @@ class Notification
     {
         return $this->createdAt;
     }
+
+    /**
+     * @return CarbonImmutable|null
+     */
+    public function date(): ?CarbonImmutable
+    {
+        return $this->date;
+    }
+
 
 }

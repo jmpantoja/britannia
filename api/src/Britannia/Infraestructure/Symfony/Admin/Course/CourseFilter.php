@@ -18,6 +18,7 @@ use Britannia\Domain\VO\Course\CourseStatus;
 use Carbon\CarbonImmutable;
 use PlanB\DDDBundle\Sonata\Admin\AdminFilter;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
+use Symfony\Component\Form\ChoiceList\Loader\CallbackChoiceLoader;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 final class CourseFilter extends AdminFilter
@@ -51,6 +52,32 @@ final class CourseFilter extends AdminFilter
 
                 return true;
             }
+        ]);
+
+        $this->add('type', 'doctrine_orm_callback', [
+            'label' => 'Tipo',
+            'callback' => function (ProxyQuery $queryBuilder, $alias, $field, $value) {
+                if (!$value['value']) {
+                    return;
+                }
+
+                $where = sprintf('%s INSTANCE OF :type', $alias);
+                $queryBuilder
+                    ->andwhere($where)
+                    ->setParameter('type', $value['value']);
+                return true;
+            }
+        ], ChoiceType::class, [
+
+            'choice_loader' => new CallbackChoiceLoader(function () {
+                return [
+                    "Adultos" => "adult",
+                    "Escolar" => "school",
+                    "Pre-Escolar" => "pre_school",
+                    "Apoyo" => "support",
+                    "One to One" => "one_to_one",
+                ];
+            }),
         ]);
 
         $this->add('course', 'doctrine_orm_callback', [

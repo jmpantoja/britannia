@@ -74,7 +74,7 @@ final class CourseForm extends AdminForm
         $this->priceTab('Precio', $course);
         $this->passTab('Bonos', $course);
         $this->studentsTab('Alumnos y profesores');
-        $this->assessmentTab('Evaluación', $course);
+        //   $this->assessmentTab('Evaluación', $course);
 
         return $this;
     }
@@ -87,10 +87,13 @@ final class CourseForm extends AdminForm
     {
         $this->tab($name);
 
-        $this->group('Curso', ['class' => 'col-md-12 horizontal'])
+        $this->group('Nombre', ['class' => 'col-md-3 '])
             ->add('name', TextType::class, [
                 'required' => true,
                 'label' => 'Nombre',
+                'attr' => [
+                    'style' => 'width:250px'
+                ],
                 'constraints' => [
                     new NotBlank()
                 ]
@@ -98,19 +101,18 @@ final class CourseForm extends AdminForm
             ->add('description', TextType::class, [
                 'required' => false,
                 'label' => 'Descripción',
-                'attr' => [
-                    'style' => 'width:350px'
-                ]
-            ])
+            ]);
+
+        $this->group('Curso', ['class' => 'col-md-3'])
             ->add('numOfPlaces', PositiveIntegerType::class, [
                 'label' => 'Plazas',
                 'required' => true
             ]);
 
-
         if ($course->isSchool()) {
-            $this->group('Descripción', ['class' => 'col-md-12 horizontal'])
+            $this->group('Curso', ['class' => 'col-md-3'])
                 ->add('schoolCourses', EntityType::class, [
+                    'label' => 'Curso Escolar',
                     'class' => SchoolCourse::class,
                     'multiple' => true,
                     'query_builder' => function (EntityRepository $er) {
@@ -121,22 +123,30 @@ final class CourseForm extends AdminForm
         }
 
         if ($course->isAdult()) {
-
-            $this->group('Descripción', ['class' => 'col-md-12 horizontal'])
+            $this->group('Curso', ['class' => 'col-md-3'])
                 ->add('intensive', IntensiveType::class, [
-                    'label' => '¿Es intensivo?'
-                ]);
-
-            $this->group('Titulación', ['class' => 'col-md-12 horizontal'])
+                    'label' => 'Intensivo'
+                ])
                 ->add('examiner', ExaminerType::class, [
                     'label' => 'Examinador'
                 ])
                 ->add('level', LevelType::class, [
                     'required' => false,
                     'label' => 'Nivel',
-                    'class' => Level::class
                 ]);
         }
+
+        if (!($course instanceof CourseAssessmentInterface)) {
+            return $this;
+        }
+
+        $this->tab($name);
+
+        $this->group('Evaluación', ['class' => 'col-md-6'])
+            ->add('assessment', AssessmentType::class, [
+                'label' => false,
+                'data' => $course->assessment()
+            ]);
 
         return $this;
     }
@@ -197,7 +207,7 @@ final class CourseForm extends AdminForm
 
     private function priceTab(string $name, Course $course): self
     {
-        if (!($course instanceof CoursePaymentInterface) OR $course instanceof OneToOne) {
+        if (!($course instanceof CoursePaymentInterface) or $course instanceof OneToOne) {
             return $this;
         }
 
@@ -213,7 +223,11 @@ final class CourseForm extends AdminForm
 
             ])
             ->add('books', null, [
-                'label' => 'Material'
+                'label' => 'Material',
+                'block_prefix' => 'books',
+                'attr' => [
+                    'data-sonata-select2' => 'false'
+                ]
             ]);
 
         $this->group('Descuentos', ['class' => 'col-md-6'])

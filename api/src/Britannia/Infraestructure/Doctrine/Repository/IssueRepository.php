@@ -3,12 +3,13 @@
 namespace Britannia\Infraestructure\Doctrine\Repository;
 
 use Britannia\Domain\Entity\Issue\Issue;
+use Britannia\Domain\Entity\Issue\IssueDto;
 use Britannia\Domain\Entity\Staff\StaffMember;
+use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Repository\IssueRepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
-use Doctrine\ORM\Query\Expr;
-use Doctrine\ORM\Query\Expr\Join;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @method Issue|null find($id, $lockMode = null, $lockVersion = null)
@@ -31,9 +32,16 @@ class IssueRepository extends ServiceEntityRepository implements IssueRepository
             ->where('P.recipient = :user AND P.readAt is null')
             ->setParameter('user', $staffMember)
             ->getQuery()
-            ->useQueryCache(true)
-        ;
+            ->useQueryCache(true);
 
-        return  $query->getSingleScalarResult();
+        return $query->getSingleScalarResult();
+    }
+
+    public function getMainIssue(Student $student, ?UserInterface $author): ?Issue
+    {
+        return $this->findOneBy([
+            'student' => $student,
+            'main' => true
+        ]);
     }
 }

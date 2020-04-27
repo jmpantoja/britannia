@@ -175,7 +175,7 @@ abstract class AbstractSingleType extends AbstractType implements DataTransforme
      *
      * @throws \ReflectionException
      */
-    final public function reverseTransform($value)
+    public function reverseTransform($value)
     {
         $this->options = $this->builder->getOptions();
 

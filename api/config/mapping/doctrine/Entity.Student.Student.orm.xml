@@ -50,7 +50,6 @@
             </cascade>
         </many-to-many>
 
-
         <embedded name="payment" class="Britannia\Domain\VO\Payment\Payment"/>
 
         <field name="preferredPartOfDay" column="preferredPartOfDay" type="PartOfDay"/>
@@ -58,18 +57,8 @@
         <field name="preferredContactMode" column="preferredContactMode" type="ContactMode"/>
 
         <many-to-one field="academy" target-entity="Britannia\Domain\Entity\Academy\Academy">
-            <join-column name="other_academy_id"></join-column>
+            <join-column name="other_academy_id" on-delete="SET NULL"/>
         </many-to-one>
-
-
-<!--        <one-to-many field="notifications"-->
-<!--                     target-entity="Britannia\Domain\Entity\Notification\Notification"-->
-<!--                     mapped-by="student"-->
-<!--                     orphan-removal="true">-->
-<!--            <cascade>-->
-<!--                <cascade-all/>-->
-<!--            </cascade>-->
-<!--        </one-to-many>-->
 
         <one-to-many field="attachments" target-entity="Britannia\Domain\Entity\Student\Attachment\Attachment"
                      mapped-by="student"
@@ -83,9 +72,9 @@
             </cascade>
         </one-to-many>
 
-        <one-to-one field="photo" target-entity="Britannia\Domain\Entity\Student\Photo" mapped-by="student"
+        <one-to-one field="photo" target-entity="Britannia\Domain\Entity\Student\Photo"
+                    mapped-by="student"
                     orphan-removal="true">
-
             <cascade>
                 <cascade-persist/>
             </cascade>
@@ -107,6 +96,11 @@
         <field name="createdAt" type="datetime_immutable"/>
 
         <field name="updatedAt" type="datetime_immutable"/>
+
+        <lifecycle-callbacks>
+            <lifecycle-callback type="postPersist" method="postPersist"/>
+            <lifecycle-callback type="postUpdate" method="postUpdate"/>
+        </lifecycle-callbacks>
 
     </entity>
 

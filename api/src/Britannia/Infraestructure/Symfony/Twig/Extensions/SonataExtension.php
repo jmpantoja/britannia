@@ -16,6 +16,7 @@ namespace Britannia\Infraestructure\Symfony\Twig\Extensions;
 
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Course\CourseAssessmentInterface;
+use Britannia\Domain\VO\Course\TimeTable\DayOfWeek;
 use Britannia\Infraestructure\Symfony\Admin\AdminFilterableInterface;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Twig\Extension\AbstractExtension;
@@ -36,7 +37,10 @@ final class SonataExtension extends AbstractExtension
     public function getFunctions()
     {
         return [
-            new TwigFunction('sonata_has_filters', [$this, 'hasFilters'])
+            new TwigFunction('sonata_has_filters', [$this, 'hasFilters']),
+            new TwigFunction('day_of_week', function (string $dayName): DayOfWeek {
+                return DayOfWeek::byName($dayName);
+            }),
         ];
     }
 

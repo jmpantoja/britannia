@@ -21,6 +21,7 @@ use PlanB\DDD\Domain\VO\Price;
 final class BookDto extends Dto
 {
     public ?string $name;
+    public ?Price $pvp;
     public ?Price $price;
     public ?BookCategory $category;
 }

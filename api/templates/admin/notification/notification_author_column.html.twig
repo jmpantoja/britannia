@@ -4,7 +4,7 @@
     {% set adminStaff = admin.configurationPool.adminByAdminCode('admin.staff_member') %}
 
     <a href="{{ adminStaff.generateUrl('edit', {id:object.author.id}) }}">
-        <strong>{{ object.author.fullName }}</strong>
+        {{ object.author.fullName }}
     </a>
 {% endblock %}
 

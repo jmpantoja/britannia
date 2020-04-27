@@ -78,13 +78,11 @@ abstract class CourseDto extends Dto
             RGBA::make(101, 48, 64),
             RGBA::make(40, 175, 169),
             RGBA::make(136, 149, 70),
-            RGBA::make(215, 208, 192),
-            RGBA::make(212, 188, 176),
+            RGBA::make(64, 128, 191),
+            RGBA::make(191, 128, 64),
         ])
             ->shuffle()
             ->first();
-
-
     }
 
 
