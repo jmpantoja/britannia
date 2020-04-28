@@ -17,7 +17,7 @@ if [ "$1" = 'php-fpm' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 	chmod -R 777 var
 
 	if [ "$APP_ENV" != 'prod' ]; then
-		composer install --prefer-dist --no-progress --no-suggest --no-interaction
+		composer install --prefer-dist --no-progress --no-suggest --no-interaction --no-scripts
 	fi
 
 	echo "Waiting for db to be ready..."
@@ -25,13 +25,13 @@ if [ "$1" = 'php-fpm' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 		sleep 1
 	done
 
-	if [ "$APP_ENV" != 'prod' ]; then
-		bin/console doctrine:schema:update --force --no-interaction
-
-		if [ -f dumps/britannia ]; then
-			bin/console doctrine:database:import dumps/britannia.sql
-		fi
-	fi
+#	if [ "$APP_ENV" != 'prod' ]; then
+#		bin/console doctrine:schema:update --force --no-interaction
+#
+#		if [ -f dumps/britannia ]; then
+#			bin/console doctrine:database:import dumps/britannia.sql
+#		fi
+#	fi
 fi
 
 service cron restart
