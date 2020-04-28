@@ -17,7 +17,7 @@ namespace Britannia\Domain\Entity\Message\Template;
 use Britannia\Domain\Entity\Message\Template;
 use Britannia\Domain\Entity\Message\TemplateDto;
 
-final class SmsTemplate extends Template
+class SmsTemplate extends Template
 {
     public static function make(TemplateDto $dto): self
     {

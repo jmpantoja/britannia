@@ -19,7 +19,7 @@ use Britannia\Domain\Entity\Message\TemplateDto;
 use Britannia\Domain\VO\Message\EmailPurpose;
 use Britannia\Domain\VO\Message\MessageMailer;
 
-final class EmailTemplate extends Template
+class EmailTemplate extends Template
 {
     private $subject;
     private $mailer;

@@ -16,6 +16,7 @@ namespace Britannia\Domain\Entity\Book;
 
 use Britannia\Domain\VO\Course\Book\BookCategory;
 use Carbon\CarbonImmutable;
+use Exception;
 use PlanB\DDD\Domain\VO\Price;
 
 class Book

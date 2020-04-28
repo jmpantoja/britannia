@@ -87,7 +87,6 @@ final class MarkAdmin extends AbstractAdmin
     {
         $original = $this->getConfigurationPool()->getAdminByAdminCode('admin.course');
 
-
         return $this->adminTools()
             ->routes($collection, $this->getRouterIdParameter())
             ->build();

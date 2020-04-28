@@ -22,12 +22,10 @@ use Britannia\Domain\Entity\Course\CoursePaymentInterface;
 use Britannia\Domain\Entity\Course\Traits\AssessmentTrait;
 use Britannia\Domain\Entity\Course\Traits\CalendarTrait;
 use Britannia\Domain\Entity\Course\Traits\PaymentTrait;
-use Britannia\Domain\Entity\Level\Level;
-use Britannia\Domain\Entity\Student\Student;
-use Britannia\Domain\VO\Assessment\MarkReport;
 use Britannia\Domain\VO\Course\Assessment\Assessment;
 use Britannia\Domain\VO\Course\Examiner\Examiner;
 use Britannia\Domain\VO\Course\Intensive\Intensive;
+use Britannia\Domain\VO\Course\Level\Level;
 use Doctrine\Common\Collections\ArrayCollection;
 
 class Adult extends Course implements CourseAssessmentInterface,  CourseCalendarInterface, CoursePaymentInterface

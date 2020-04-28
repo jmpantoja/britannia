@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Admin\Course;
 
 
+use PHPUnit\Util\Exception;
 use PlanB\DDDBundle\Sonata\Admin\AdminDataGrid;
 
 final class CourseDatagrid extends AdminDataGrid

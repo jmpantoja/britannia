@@ -36,7 +36,9 @@ resource "digitalocean_droplet" "web" {
 
   provisioner "remote-exec" {
     inline = [
-      "mkdir /root/dumps/"
+      "mkdir /root/dumps/",
+      "mkdir -p /root/uploads/attachments",
+      "mkdir -p /root/uploads/photos",
     ]
   }
 
@@ -44,4 +46,14 @@ resource "digitalocean_droplet" "web" {
     source      = "../api/dumps/"
     destination = "/root/dumps/"
   }
+
+  provisioner "file" {
+    source      = "../api/uploads/attachments/"
+    destination = "/root/uploads/attachments/"
+  }
+
+   provisioner "file" {
+     source      = "../api/uploads/photos/"
+     destination = "/root/uploads/photos/"
+   }
 }
