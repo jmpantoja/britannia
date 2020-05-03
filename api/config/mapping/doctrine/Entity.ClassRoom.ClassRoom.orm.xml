@@ -7,6 +7,8 @@
 
     <entity name="Britannia\Domain\Entity\ClassRoom\ClassRoom" table="classrooms">
 
+        <cache usage="NONSTRICT_READ_WRITE" region="day"/>
+
         <id name="id" type="ClassRoomId" column="id">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
@@ -14,7 +16,6 @@
 
         <field name="name"/>
         <field name="capacity" type="positive_integer"/>
-
 
         <field name="createdAt" type="datetime_immutable" nullable="true"/>
         <field name="updatedAt" type="datetime_immutable" nullable="true"/>

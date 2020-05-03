@@ -5,6 +5,7 @@
 
 
     <entity name="Britannia\Domain\Entity\Student\Attachment\Attachment" table="student_attachment">
+        <cache usage="NONSTRICT_READ_WRITE" region="day"/>
 
         <id name="id" type="AttachmentId" column="id">
             <generator strategy="CUSTOM"/>
@@ -27,9 +28,7 @@
 
         <field name="updatedAt" type="datetime_immutable"/>
 
-        <many-to-one field="student" target-entity="Britannia\Domain\Entity\Student\Student">
-            <!--            <join-column nullable="false" on-delete="CASCADE"/>-->
-        </many-to-one>
+        <many-to-one field="student" inversed-by="attachments" target-entity="Britannia\Domain\Entity\Student\Student"/>
 
     </entity>
 

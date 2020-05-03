@@ -14,15 +14,19 @@ declare(strict_types=1);
 namespace Britannia\Domain\VO\Payment;
 
 
-use MabeEnum\Enum;
+use PlanB\DDD\Domain\Enum\Enum;
 
+/**
+ * @method static self CASH()
+ * @method static self DAY_1()
+ * @method static self DAY_10()
+ */
 class PaymentMode extends Enum
 {
-    public const CASH = 'Al contado';
-    public const DAY_1 = 'Domiciliado Día 1';
-    public const DAY_10 = 'Domiciliado Día 10';
-
-
+    private const CASH = 'Al contado';
+    private const DAY_1 = 'Domiciliado Día 1';
+    private const DAY_10 = 'Domiciliado Día 10';
+    
     public function isCash(): bool
     {
         return $this->is(PaymentMode::CASH());

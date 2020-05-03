@@ -6,8 +6,8 @@
 
 
     <entity name="Britannia\Domain\Entity\Student\Photo" table="student_photo">
-
-        <one-to-one field="student" target-entity="Britannia\Domain\Entity\Student\Student" inversed-by="photo"/>
+        <cache usage="NONSTRICT_READ_WRITE" region="day"/>
+<!--        <one-to-one field="student" target-entity="Britannia\Domain\Entity\Student\Student" inversed-by="photo"/>-->
 
     </entity>
 

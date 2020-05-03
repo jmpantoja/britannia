@@ -28,6 +28,7 @@ use Britannia\Infraestructure\Symfony\Form\Type\Student\OtherAcademyType;
 use Britannia\Infraestructure\Symfony\Form\Type\Student\PartOfDayType;
 use Britannia\Infraestructure\Symfony\Form\Type\Student\PaymentType;
 use Britannia\Infraestructure\Symfony\Form\Type\Student\RelativesType;
+use Britannia\Infraestructure\Symfony\Form\Type\Student\SchoolType;
 use Britannia\Infraestructure\Symfony\Form\Type\Student\StudentHasCoursesType;
 use Britannia\Infraestructure\Symfony\Form\Type\Tutor\ChoiceTutorType;
 use PlanB\DDDBundle\Sonata\Admin\AdminForm;
@@ -37,7 +38,6 @@ use PlanB\DDDBundle\Symfony\Form\Type\FullNameType;
 use PlanB\DDDBundle\Symfony\Form\Type\PhoneNumberListType;
 use PlanB\DDDBundle\Symfony\Form\Type\PostalAddressType;
 use PlanB\DDDBundle\Symfony\Form\Type\WYSIWYGType;
-use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\Form\Type\BooleanType;
 use Sonata\Form\Type\DatePickerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -77,7 +77,6 @@ final class StudentForm extends AdminForm
                 'owner' => $student,
                 'data_class' => Photo::class
             ]);
-
 
         $group = $this->group('Datos personales', ['class' => 'col-md-4'])
             ->add('fullName', FullNameType::class, [
@@ -133,12 +132,9 @@ final class StudentForm extends AdminForm
         }
 
         if (!$isAdult) {
+
             $group
-                ->add('school', ModelType::class, [
-                    'label' => 'Colegio',
-                    'btn_add' => 'Nuevo colegio',
-                    'placeholder' => ''
-                ])
+                ->add('school', SchoolType::class)
                 ->add('schoolCourse', TextType::class, [
                     'label' => 'Próximo curso escolar',
                     'required' => false
@@ -173,7 +169,7 @@ final class StudentForm extends AdminForm
 
         $this->group('Cursos en Activo ', ['class' => 'col-md-12'])
             ->add('studentHasCourses', StudentHasCoursesType::class, [
-                'student' => $student,
+//                'student' => $student,
                 'label' => false
             ]);
     }

@@ -20,6 +20,7 @@ use Britannia\Domain\Entity\Issue\IssueDto;
 use Britannia\Domain\Entity\Staff\StaffMember;
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Repository\IssueRepositoryInterface;
+use Doctrine\ORM\EntityManagerInterface;
 use PlanB\DDD\Application\UseCase\UseCaseInterface;
 use PlanB\DDDBundle\ApiPlattform\DataPersister;
 use Symfony\Component\Security\Core\Security;
@@ -39,6 +40,10 @@ final class StudentUpdatedUseCase implements UseCaseInterface
      * @var IssueRepositoryInterface
      */
     private IssueRepositoryInterface $issueRepository;
+    /**
+     * @var EntityManagerInterface
+     */
+    private EntityManagerInterface $entityManager;
 
 
     /**
@@ -46,18 +51,22 @@ final class StudentUpdatedUseCase implements UseCaseInterface
      */
     public function __construct(Security $security,
                                 IssueRepositoryInterface $issueRepository,
-                                DataPersisterInterface $dataPersister)
+                                DataPersisterInterface $dataPersister,
+                                EntityManagerInterface $entityManager)
     {
         $this->security = $security;
         $this->issueRepository = $issueRepository;
 
         $this->dataPersister = $dataPersister;
+        $this->entityManager = $entityManager;
     }
 
     public function handle(StudentUpdated $command)
     {
         $student = $command->student();
-        $author = $this->security->getUser();
+        $user = $this->security->getUser();
+        $author = $this->ensureEntityIsManaged($user);
+
 
         $issue = $this->getIssue($student, $author);
         $this->dataPersister->persist($issue);
@@ -114,5 +123,21 @@ final class StudentUpdatedUseCase implements UseCaseInterface
             ]);
         }
         return $student->comment();
+    }
+
+    protected function ensureEntityIsManaged(StaffMember $entity)
+    {
+        if ($this->entityManager->contains($entity)) {
+            return $entity;
+        }
+
+        $managed = $this->entityManager->find(get_class($entity), $entity->id());
+
+        if (!is_null($managed)) {
+            return $managed;
+        }
+
+        $this->persister->persist($entity);
+        return $entity;
     }
 }

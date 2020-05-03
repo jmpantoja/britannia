@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Domain\VO\SchoolCourse;
 
 
-use MabeEnum\Enum;
+use PlanB\DDD\Domain\Enum\Enum;
 
 /**
  * @method static self EPO()
@@ -23,9 +23,9 @@ use MabeEnum\Enum;
  */
 final class SchoolLevel extends Enum
 {
-    public const EPO = 'EPO';
-    public const ESO = 'ESO';
-    public const BACHILLERATO = 'Bach.';
+    private const EPO = 'EPO';
+    private const ESO = 'ESO';
+    private const BACHILLERATO = 'Bach.';
 
     public function order(): int
     {

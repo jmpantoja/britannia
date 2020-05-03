@@ -14,14 +14,22 @@ declare(strict_types=1);
 namespace Britannia\Domain\VO\Course\Level;
 
 
-use MabeEnum\Enum;
+use PlanB\DDD\Domain\Enum\Enum;
 
+/**
+ * @method static self A1()
+ * @method static self A2()
+ * @method static self B1()
+ * @method static self B2()
+ * @method static self C1()
+ * @method static self C2()
+ */
 class Level extends Enum
 {
-    public const A1 = 'A1';
-    public const A2 = 'A2';
-    public const B1 = 'B1';
-    public const B2 = 'B2';
-    public const C1 = 'C1';
-    public const C2 = 'C2';
+    private const A1 = 'A1';
+    private const A2 = 'A2';
+    private const B1 = 'B1';
+    private const B2 = 'B2';
+    private const C1 = 'C1';
+    private const C2 = 'C2';
 }

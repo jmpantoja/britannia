@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Notification;
 
 
-use MabeEnum\Enum;
+use PlanB\DDD\Domain\Enum\Enum;
 
 /**
  * @method static self NEW_STUDENT()

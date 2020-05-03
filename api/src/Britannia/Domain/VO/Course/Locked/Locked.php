@@ -14,13 +14,18 @@ declare(strict_types=1);
 namespace Britannia\Domain\VO\Course\Locked;
 
 
-use MabeEnum\Enum;
+use PlanB\DDD\Domain\Enum\Enum;
 
+/**
+ * @method static self LOCKED()
+ * @method static self UPDATE()
+ * @method static self RESET()
+ */
 class Locked extends Enum
 {
-    public const LOCKED = 'Bloqueado';
-    public const UPDATE = 'Mantener info. del pasado';
-    public const RESET = 'Borrar todo';
+    private const LOCKED = 'Bloqueado';
+    private const UPDATE = 'Mantener info. del pasado';
+    private const RESET = 'Borrar todo';
 
     public function isLocked(): bool
     {
@@ -31,7 +36,6 @@ class Locked extends Enum
     {
         return $this->is(static::RESET());
     }
-
 
     public function isUpdate(): bool
     {

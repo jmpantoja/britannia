@@ -29,7 +29,7 @@ final class TeacherCourseAdmin extends AbstractAdmin implements AdminFilterableI
      */
     private TeacherCourseTools $adminTools;
 
-    protected $maxPerPage = 50;
+    protected $maxPerPage = 30;
     protected $maxPageLinks = 10;
 
     public function __construct(

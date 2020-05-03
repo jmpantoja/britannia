@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Domain\VO\Message;
 
 
-use MabeEnum\Enum;
+use PlanB\DDD\Domain\Enum\Enum;
 
 /**
  * @method static self MANAGERS()
@@ -23,8 +23,7 @@ use MabeEnum\Enum;
  */
 final class MessageMailer extends Enum
 {
-    public const MANAGERS = 'gestión';
-    public const TEACHERS = 'teachers';
-    public const RECEPTION = 'recepción';
-
+    private const MANAGERS = 'gestión';
+    private const TEACHERS = 'teachers';
+    private const RECEPTION = 'recepción';
 }

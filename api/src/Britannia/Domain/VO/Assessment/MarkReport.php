@@ -160,7 +160,7 @@ final class MarkReport
 
     public function average(SetOfSkills $skills): Mark
     {
-        $average = collect($skills)
+        $average = collect($skills->toList())
             ->map(fn(string $skill) => $this->toFloat($skill))
             ->average();
 
@@ -169,7 +169,8 @@ final class MarkReport
 
     public function someMissedSkils(SetOfSkills $skills): bool
     {
-        return collect($skills)
+
+        return collect($skills->toList())
             ->filter(fn(string $skill) => $this->isMissingSkill($skill))
             ->isNotEmpty();
 

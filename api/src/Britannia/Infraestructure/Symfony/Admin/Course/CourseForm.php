@@ -24,6 +24,7 @@ use Britannia\Domain\Entity\SchoolCourse\SchoolCourse;
 use Britannia\Domain\Entity\Setting\Setting;
 use Britannia\Infraestructure\Symfony\Form\Type\Assessment\AssessmentType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\AgeType;
+use Britannia\Infraestructure\Symfony\Form\Type\Course\CourseHasBooksType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\CourseHasStudentsType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\Discount\JobStatusDiscountListType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\EnrollmentPaymentType;
@@ -32,6 +33,7 @@ use Britannia\Infraestructure\Symfony\Form\Type\Course\IntensiveType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\LevelType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\OneToOne\PassListType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\PeriodicityType;
+use Britannia\Infraestructure\Symfony\Form\Type\Course\SchoolCourseListType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\SupportType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\TeachersType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\TimeTable\TimeTableType;
@@ -111,14 +113,8 @@ final class CourseForm extends AdminForm
 
         if ($course->isSchool()) {
             $this->group('Curso', ['class' => 'col-md-3'])
-                ->add('schoolCourses', EntityType::class, [
-                    'label' => 'Curso Escolar',
-                    'class' => SchoolCourse::class,
-                    'multiple' => true,
-                    'query_builder' => function (EntityRepository $er) {
-                        return $er->createQueryBuilder('u')
-                            ->orderBy('u.weight', 'ASC');
-                    },
+                ->add('schoolCourses', SchoolCourseListType::class, [
+                    'label' => 'Curso Escolar'
                 ]);
         }
 
@@ -222,13 +218,16 @@ final class CourseForm extends AdminForm
                 'empty_data' => $this->setting->monthlyPayment()
 
             ])
-            ->add('books', null, [
+            ->add('books', CourseHasBooksType::class, [
                 'label' => 'Material',
-                'block_prefix' => 'books',
-                'attr' => [
-                    'data-sonata-select2' => 'false'
-                ]
             ]);
+//            ->add('books', null, [
+//                'label' => 'Material',
+//                'block_prefix' => 'books',
+//                'attr' => [
+//                    'data-sonata-select2' => 'false'
+//                ]
+//            ]);
 
         $this->group('Descuentos', ['class' => 'col-md-6'])
             ->add('discount', JobStatusDiscountListType::class, [

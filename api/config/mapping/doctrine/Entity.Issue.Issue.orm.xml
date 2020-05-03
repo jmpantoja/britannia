@@ -7,6 +7,7 @@
     <entity name="Britannia\Domain\Entity\Issue\Issue" table="issues"
             repository-class="Britannia\Infraestructure\Doctrine\Repository\IssueRepository">
 
+        <cache usage="NONSTRICT_READ_WRITE" region="day"/>
         <id name="id" type="IssueId" column="id">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
@@ -20,7 +21,9 @@
         <field name="createdAt" type="datetime_immutable"/>
 
         <many-to-one field="author" target-entity="Britannia\Domain\Entity\Staff\StaffMember"/>
+
         <many-to-one field="student" target-entity="Britannia\Domain\Entity\Student\Student">
+            <cache usage="NONSTRICT_READ_WRITE" region="day"/>
             <join-column on-delete="CASCADE"/>
             <cascade>
                 <cascade-persist/>

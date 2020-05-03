@@ -16,69 +16,27 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Student;
 
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Course\CourseList;
-use Britannia\Domain\Entity\Student\Student;
-use Britannia\Domain\Entity\Student\StudentCourse;
 use Britannia\Domain\Entity\Student\StudentCourseList;
 use Britannia\Domain\VO\Course\CourseStatus;
 use Britannia\Infraestructure\Symfony\Validator\FullName;
-use PlanB\DDD\Domain\VO\Validator\Constraint;
-use PlanB\DDDBundle\Sonata\ModelManager;
-use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
-use Sonata\AdminBundle\Form\Type\ModelType;
+use Doctrine\ORM\QueryBuilder;
+use PlanB\DDDBundle\Symfony\Form\Type\ModelType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class StudentHasCoursesType extends AbstractSingleType
+class StudentHasCoursesType extends ModelType
 {
-
-    /**
-     * @var Student
-     */
-    private $student;
-    /**
-     * @var ModelManager
-     */
-    private $modelManager;
-
-    public function __construct(ModelManager $modelManager)
+    public function getBlockPrefix()
     {
-        $this->modelManager = $modelManager;
-    }
-
-    public function getParent()
-    {
-        return ModelType::class;
+        return self::MULTISELECT;
     }
 
     public function customOptions(OptionsResolver $resolver)
     {
-
         $resolver->setDefaults([
             'class' => Course::class,
             'property' => 'name',
-            'multiple' => true,
-            'by_reference' => false,
-            'model_manager' => $this->modelManager,
-            'attr' => [
-                'data-sonata-select2' => 'false'
-            ]
         ]);
 
-        $resolver->setRequired([
-            'student'
-        ]);
-
-        $resolver->setAllowedTypes('student', [Student::class]);
-        $resolver->setNormalizer('student', function (OptionsResolver $resolver, $value) {
-            return $this->student = $value;
-        });
-
-        $resolver->setNormalizer('query', function (OptionsResolver $resolver, $value) {
-            $builder = $this->modelManager->createQuery(Course::class, 'A');
-
-            return $builder
-                ->where('A.timeRange.status != :finalized')
-                ->setParameter('finalized', CourseStatus::FINALIZED());
-        });
     }
 
     /**
@@ -93,17 +51,16 @@ class StudentHasCoursesType extends AbstractSingleType
             ->toArray();
     }
 
-
-    /**
-     * @return FullName
-     */
-    public function buildConstraint(array $options): ?Constraint
-    {
-        return null;
-    }
-
     public function customMapping($courses)
     {
         return CourseList::collect($courses);
+    }
+
+    public function configureQuery(QueryBuilder $builder, OptionsResolver $resolver, string $alias = 'A')
+    {
+        $builder->where('A.timeRange.status != :finalized')
+            ->setParameter('finalized', CourseStatus::FINALIZED())
+            ->setCacheable(true);
+
     }
 }

@@ -16,14 +16,13 @@ namespace Britannia\Infraestructure\Symfony\Service\Setting;
 
 use Britannia\Domain\Entity\Setting\Setting;
 use Britannia\Domain\Entity\Setting\SettingDto;
-use Britannia\Domain\Entity\Setting\SettingId;
-use Doctrine\ORM\EntityManagerInterface;
+use Britannia\Domain\Repository\SettingRepositoryInterface;
 
 final class SettingFactory
 {
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(SettingRepositoryInterface $settingRepository)
     {
-        $this->setting = $entityManager->find(Setting::class, SettingId::ID);
+        $this->setting = $settingRepository->getMain();
     }
 
     public function __invoke(): Setting

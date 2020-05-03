@@ -44,7 +44,8 @@ final class StaffMemberDto extends Dto
     protected function defaults(): array
     {
         return [
-            'courses' => CourseList::collect()
+            'courses' => CourseList::collect(),
+            'status'=>Status::NON_PERMANENT()
         ];
     }
 }

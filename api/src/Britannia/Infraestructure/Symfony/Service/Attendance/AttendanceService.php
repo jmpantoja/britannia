@@ -81,7 +81,6 @@ class AttendanceService
         $today = CarbonImmutable::now();
         $lessons = $this->lessons->getLastLessonsByCourse($course, $today, $limit);
 
-
         foreach ($lessons as $lesson) {
             $value = [
                 'title' => $this->title($lesson, $student),
@@ -102,7 +101,6 @@ class AttendanceService
         $date = $lesson->day()->format('d/m/Y');
 
         $reason = $lesson->whyHasItBeenMissing($student);
-
         if (is_null($reason)) {
             return $date;
         }

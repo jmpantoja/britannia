@@ -15,21 +15,29 @@ namespace Britannia\Domain\VO\Course\TimeTable;
 
 
 use DateTimeInterface;
-use MabeEnum\Enum;
+use PlanB\DDD\Domain\Enum\Enum;
 
+/**
+ * @method static self MONDAY()
+ * @method static self TUESDAY()
+ * @method static self WEDNESDAY()
+ * @method static self THURSDAY()
+ * @method static self FRIDAY()
+ * @method static self SATURDAY()
+ * @method static self SUNDAY()
+ */
 class DayOfWeek extends Enum
 {
-    public const MONDAY = 'Lunes';
-    public const TUESDAY = 'Martes';
-    public const WEDNESDAY = 'Miércoles';
-    public const THURSDAY = 'Jueves';
-    public const FRIDAY = 'Viernes';
-    public const SATURDAY = 'Sábado';
-    public const SUNDAY = 'Domingo';
+    private const MONDAY = 'Lunes';
+    private const TUESDAY = 'Martes';
+    private const WEDNESDAY = 'Miércoles';
+    private const THURSDAY = 'Jueves';
+    private const FRIDAY = 'Viernes';
+    private const SATURDAY = 'Sábado';
+    private const SUNDAY = 'Domingo';
 
     public static function fromDate(DateTimeInterface $dateTime): self
     {
-
         $day = $dateTime->format('l');
         $day = strtoupper($day);
 
@@ -38,7 +46,6 @@ class DayOfWeek extends Enum
 
     public function getShortName(): string
     {
-
         if ($this->is(self::WEDNESDAY())) {
             return 'X';
         }
@@ -51,7 +58,6 @@ class DayOfWeek extends Enum
 
     public function isWeekEnd(): bool
     {
-
         return $this->is(static::SATURDAY) || $this->is(static::SUNDAY);
     }
 }

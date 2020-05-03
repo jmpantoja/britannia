@@ -247,9 +247,6 @@
     "league/tactician-logger": {
         "version": "v0.10.0"
     },
-    "marc-mabe/php-enum": {
-        "version": "v4.2.0"
-    },
     "michelf/php-markdown": {
         "version": "1.9.0"
     },
@@ -267,6 +264,9 @@
     },
     "myclabs/deep-copy": {
         "version": "1.9.5"
+    },
+    "myclabs/php-enum": {
+        "version": "1.7.6"
     },
     "nelmio/cors-bundle": {
         "version": "1.5",
@@ -341,6 +341,9 @@
             "phpunit.xml.dist",
             "tests/bootstrap.php"
         ]
+    },
+    "predis/predis": {
+        "version": "v1.1.1"
     },
     "psr/cache": {
         "version": "1.0.1"
@@ -417,6 +420,18 @@
     "sebastian/version": {
         "version": "3.0.0"
     },
+    "snc/redis-bundle": {
+        "version": "2.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "2.0",
+            "ref": "85bbdb3d2db531e20874de29bab0587f93604fa8"
+        },
+        "files": [
+            "config/packages/snc_redis.yaml"
+        ]
+    },
     "sonata-project/admin-bundle": {
         "version": "3.31",
         "recipe": {
@@ -478,6 +493,9 @@
         "files": [
             "config/packages/sonata_translation.yaml"
         ]
+    },
+    "stevegrunwell/time-constants": {
+        "version": "v1.1.1"
     },
     "stof/doctrine-extensions-bundle": {
         "version": "1.2",
@@ -675,6 +693,9 @@
     "symfony/process": {
         "version": "v5.0.6"
     },
+    "symfony/profiler-pack": {
+        "version": "v1.0.4"
+    },
     "symfony/property-access": {
         "version": "v4.4.6"
     },
@@ -806,6 +827,20 @@
     },
     "symfony/web-link": {
         "version": "v4.4.6"
+    },
+    "symfony/web-profiler-bundle": {
+        "version": "3.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.3",
+            "ref": "6bdfa1a95f6b2e677ab985cd1af2eae35d62e0f6"
+        },
+        "files": [
+            "config/packages/dev/web_profiler.yaml",
+            "config/packages/test/web_profiler.yaml",
+            "config/routes/dev/web_profiler.yaml"
+        ]
     },
     "symfony/yaml": {
         "version": "v4.3.11"

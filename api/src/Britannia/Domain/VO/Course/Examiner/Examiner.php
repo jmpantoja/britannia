@@ -14,12 +14,17 @@ declare(strict_types=1);
 namespace Britannia\Domain\VO\Course\Examiner;
 
 
-use MabeEnum\Enum;
+use PlanB\DDD\Domain\Enum\Enum;
 
+/**
+ * @method static self CAMBRIDGE()
+ * @method static self APTIS()
+ * @method static self TRINITY()
+ */
 class Examiner extends Enum
 {
-    public const CAMBRIDGE = 'Cambridge';
-    public const APTIS = 'Aptis';
-    public const TRINITY = 'Trinity';
+    private const CAMBRIDGE = 'Cambridge';
+    private const APTIS = 'Aptis';
+    private const TRINITY = 'Trinity';
 
 }

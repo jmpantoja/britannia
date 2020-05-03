@@ -23,7 +23,6 @@ use Britannia\Infraestructure\Symfony\Form\Type\Message\MessageSmsType;
 use Carbon\CarbonImmutable;
 use Doctrine\ORM\EntityRepository;
 use PlanB\DDDBundle\Sonata\Admin\AdminForm;
-use PlanB\DDDBundle\Symfony\Form\Type\WYSIWYGType;
 use Sonata\Form\Type\DateTimePickerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -77,7 +76,7 @@ final class MessageForm extends AdminForm
         if ($message instanceof Message\Email) {
             $this->add('mailer', MessageMailerType::class, [
                 'disabled' => $disabled,
-                'label' => 'Enviar desde:'
+                'label' => 'Enviar desde:',
             ]);
 
             $this->add('message', MessageEmailType::class, [

@@ -32,7 +32,7 @@ class UnitType extends AbstractCompoundType
         $skills = $unit->term()->setOfSkills();
         $markReport = $unit->marks();
 
-        foreach ($skills as $skill) {
+        foreach ($skills->toList() as $skill) {
 
 
             $builder->add($skill, MarkType::class, [

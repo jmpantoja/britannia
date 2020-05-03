@@ -35,7 +35,7 @@ class CourseCertificateType extends AbstractCompoundType
 
         $builder->add('selected', HiddenType::class);
 
-        $builder->add('false', ChooseStudentListType::class, [
+        $builder->add('students', ChooseStudentListType::class, [
             'label' => false,
             'mapped' => false,
             'data' => $course

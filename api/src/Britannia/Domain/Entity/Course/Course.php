@@ -78,6 +78,7 @@ abstract class Course implements Comparable, CoursePaymentInterface
         $this->updateCourse($dto);
         $this->updateTeachers($dto);
         $this->updateStudents($dto);
+        $this->updateBooks($dto);
 
         $this->updatedAt = CarbonImmutable::now();
 
@@ -91,4 +92,5 @@ abstract class Course implements Comparable, CoursePaymentInterface
     {
         return $this->id;
     }
+
 }

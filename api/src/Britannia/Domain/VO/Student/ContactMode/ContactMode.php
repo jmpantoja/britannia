@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Domain\VO\Student\ContactMode;
 
 
-use MabeEnum\Enum;
+use PlanB\DDD\Domain\Enum\Enum;
 
 /**
  * @method static self TELEPHONE()
@@ -24,10 +24,10 @@ use MabeEnum\Enum;
  */
 class ContactMode extends Enum
 {
-    public const TELEPHONE = 'Llamada de teléfono';
-    public const WHATSAPP = 'Enviar Whatsapp';
-    public const EMAIL = 'Enviar correo electrónico';
-    public const POSTMAIL = 'Enviar correo ordinario';
+    private const TELEPHONE = 'Llamada de teléfono';
+    private const WHATSAPP = 'Enviar Whatsapp';
+    private const EMAIL = 'Enviar correo electrónico';
+    private const POSTMAIL = 'Enviar correo ordinario';
 
     public function isTelephone()
     {

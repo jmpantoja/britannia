@@ -15,6 +15,7 @@
 
         <many-to-many field="schoolCourses" target-entity="Britannia\Domain\Entity\SchoolCourse\SchoolCourse"
                       inversed-by="courses">
+            <cache usage="NONSTRICT_READ_WRITE" region="day"/>
             <order-by>
                 <order-by-field name="weight"/>
             </order-by>

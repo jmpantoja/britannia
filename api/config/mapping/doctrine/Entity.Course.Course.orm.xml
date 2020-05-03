@@ -8,6 +8,7 @@
             inheritance-type="JOINED"
             repository-class="Britannia\Infraestructure\Doctrine\Repository\CourseRepository">
 
+        <cache usage="NONSTRICT_READ_WRITE" region="day"/>
         <discriminator-column name="type" type="string"/>
         <discriminator-map>
             <discriminator-mapping value="adult" class="Britannia\Domain\Entity\Course\Course\Adult"/>
@@ -40,7 +41,8 @@
 
         <embedded name="timeRange" class="Britannia\Domain\VO\Course\TimeRange\TimeRange" use-column-prefix="false"/>
 
-        <many-to-many field="books" target-entity="Britannia\Domain\Entity\Book\Book" inversed-by="courses">
+        <many-to-many field="books" target-entity="Britannia\Domain\Entity\Book\Book">
+            <cache usage="NONSTRICT_READ_WRITE" region="day"/>
             <join-table name="courses_books">
                 <join-columns>
                     <join-column name="course_id"/>
@@ -53,12 +55,14 @@
 
         <one-to-many field="courseHasStudents" target-entity="Britannia\Domain\Entity\Student\StudentCourse"
                      mapped-by="course" orphan-removal="true">
+            <cache usage="NONSTRICT_READ_WRITE" region="day"/>
             <cascade>
                 <cascade-persist/>
             </cascade>
         </one-to-many>
 
         <many-to-many field="teachers" target-entity="Britannia\Domain\Entity\Staff\StaffMember" mapped-by="courses">
+            <cache usage="NONSTRICT_READ_WRITE" region="day"/>
             <cascade>
                 <cascade-persist/>
             </cascade>

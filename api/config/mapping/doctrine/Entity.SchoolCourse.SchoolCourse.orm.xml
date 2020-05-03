@@ -6,6 +6,7 @@
 
     <entity name="Britannia\Domain\Entity\SchoolCourse\SchoolCourse" table="school_courses">
 
+        <cache usage="NONSTRICT_READ_WRITE" region="day"/>
         <id name="id" type="SchoolCourseId" column="id">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>

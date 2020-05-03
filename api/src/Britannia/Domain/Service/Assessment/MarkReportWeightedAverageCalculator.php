@@ -56,7 +56,7 @@ final class MarkReportWeightedAverageCalculator
     {
 
         $data = [];
-        foreach ($skills as $skill) {
+        foreach ($skills->toList() as $skill) {
             $data[$skill] = $this->weightedAverage($skill);
         }
 

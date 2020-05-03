@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Britannia\Domain\VO\Student\Job;
 
 
-use MabeEnum\Enum;
+use PlanB\DDD\Domain\Enum\Enum;
 
-/***
+/**
  * @method  static self NOTHING()
  * @method  static self STUDENT()
  * @method  static self EMPLOYED()
@@ -26,12 +26,12 @@ use MabeEnum\Enum;
  */
 class JobStatus extends Enum
 {
-    public const NOTHING = 'No hace nada';
-    public const STUDENT = 'Estudiante';
-    public const EMPLOYED = 'En Activo';
-    public const UNEMPLOYED = 'En Paro';
-    public const RETIRED = 'Pensionista';
-    public const DISABLED = 'Minusvalía';
+    private const NOTHING = 'No hace nada';
+    private const STUDENT = 'Estudiante';
+    private const EMPLOYED = 'En Activo';
+    private const UNEMPLOYED = 'En Paro';
+    private const RETIRED = 'Pensionista';
+    private const DISABLED = 'Minusvalía';
 
     public static function getDiscountables()
     {

@@ -22,7 +22,7 @@
 
         <field name="recipient" nullable="true"/>
 
-        <many-to-one field="message" target-entity="Britannia\Domain\Entity\Message\Message"/>
+        <many-to-one field="message" inversed-by="shipments" target-entity="Britannia\Domain\Entity\Message\Message"/>
         <many-to-one field="student" target-entity="Britannia\Domain\Entity\Student\Student"/>
 
     </entity>

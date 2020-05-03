@@ -6,7 +6,7 @@
 
 
     <entity name="Britannia\Domain\Entity\Staff\Photo" table="staff_member_photo">
-        <one-to-one field="staffMember" target-entity="Britannia\Domain\Entity\Staff\StaffMember" inversed-by="photo"/>
+<!--        <one-to-one field="staffMember" target-entity="Britannia\Domain\Entity\Staff\StaffMember" inversed-by="photo"/>-->
     </entity>
 
 </doctrine-mapping>

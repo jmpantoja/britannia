@@ -11,34 +11,28 @@
 
 declare(strict_types=1);
 
-namespace Britannia\Domain\VO\Student\ContactMode\Validator;
+namespace PlanB\DDD\Domain\VO\Validator;
 
 
-use Britannia\Domain\VO;
-use PlanB\DDD\Domain\VO\Validator\Constraint;
-use PlanB\DDD\Domain\VO\Validator\ConstraintValidator;
-
-class ContactModeValidator extends ConstraintValidator
+class EnumValidator extends ConstraintValidator
 {
-    /**
-     * @return string
-     */
     public function getConstraintType(): string
     {
-        return ContactMode::class;
+        return Enum::class;
     }
 
     public function handle($value, Constraint $constraint)
     {
-        if ($value instanceof VO\Student\ContactMode\ContactMode) {
+        if (is_a($value, $constraint->enumClass)) {
             return;
         }
 
-        if (VO\Student\ContactMode\ContactMode::hasName($value)) {
+
+        if (forward_static_call([$constraint->enumClass, 'hasName'], $value)) {
+
             return;
         }
 
         $this->addViolation($constraint->message);
     }
-
 }

@@ -18,7 +18,7 @@ final class CalendarAdmin extends AbstractAdmin //implements AdminFilterableInte
      */
     private CalendarTools $adminTools;
 
-    protected $maxPerPage = 50;
+    protected $maxPerPage = 30;
     protected $maxPageLinks = 10;
 
     public function __construct(string $code,

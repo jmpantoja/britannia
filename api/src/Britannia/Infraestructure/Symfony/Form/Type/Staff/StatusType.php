@@ -17,48 +17,23 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Staff;
 use Britannia\Domain\VO\StaffMember\Status;
 use Britannia\Domain\VO\Validator;
 use Britannia\Infraestructure\Symfony\Validator\FullName;
-use PlanB\DDD\Domain\VO\Validator\Constraint;
-use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
-use Symfony\Component\Form\ChoiceList\Loader\CallbackChoiceLoader;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use PlanB\DDDBundle\Symfony\Form\Type\EnumType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class StatusType extends AbstractSingleType
+class StatusType extends EnumType
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getParent()
-    {
-        return ChoiceType::class;
-    }
-
-
     public function customOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'required' => true,
-            'choice_loader' => new CallbackChoiceLoader(function () {
-                return array_flip(Status::getConstants());
-            }),
             'attr' => [
                 'style' => 'width:170px'
             ]
         ]);
     }
 
-    /**
-     * @return FullName
-     */
-    public function buildConstraint(array $options): ?Constraint
+    public function getEnumClass(): string
     {
-        return new \Britannia\Domain\VO\StaffMember\Validator\Status([
-            'required' => $options['required']
-        ]);
-    }
-
-    public function customMapping($data)
-    {
-        return Status::byName($data);
+        return Status::class;
     }
 }

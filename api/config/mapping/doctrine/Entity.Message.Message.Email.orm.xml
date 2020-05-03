@@ -5,6 +5,7 @@
 
 
     <entity name="Britannia\Domain\Entity\Message\Message\Email" table="message_email">
+        <cache usage="NONSTRICT_READ_WRITE" region="day"/>
         <field name="mailer" type="MessageMailer"/>
     </entity>
 

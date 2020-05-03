@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Domain\VO\Message;
 
 
-use MabeEnum\Enum;
+use PlanB\DDD\Domain\Enum\Enum;
 
 /**
  * @method static self SEND_INVOICE()
@@ -22,6 +22,6 @@ use MabeEnum\Enum;
  */
 final class EmailPurpose extends Enum
 {
-    public const SEND_INVOICE = 'Envio Recibos';
-    public const SEND_TERM_MARKS = 'Envio Boletin';
+    private const SEND_INVOICE = 'Envio Recibos';
+    private const SEND_TERM_MARKS = 'Envio Boletin';
 }

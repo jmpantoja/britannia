@@ -39,7 +39,7 @@ class DiagnosticExamType extends AbstractCompoundType
         $skills = $studentCourse->course()->skills();
         $markReport = $studentCourse->diagnostic();
 
-        foreach ($skills as $skill) {
+        foreach ($skills->toList() as $skill) {
             $builder->add($skill, MarkType::class, [
                 'label' => false,
                 'required' => false,

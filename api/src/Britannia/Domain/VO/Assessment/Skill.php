@@ -14,11 +14,16 @@ declare(strict_types=1);
 namespace Britannia\Domain\VO\Assessment;
 
 
-use MabeEnum\Enum;
+use PlanB\DDD\Domain\Enum\Enum;
 
+/**
+ * @method static self IRREGULAR_VERBS()
+ * @method static self ALPHABET()
+ * @method static self DAYS_OF_THE_WEEK()
+ */
 class Skill extends Enum
 {
-    public const IRREGULAR_VERBS = 'Verbos Irregulares';
-    public const ALPHABET = 'Alfabeto';
-    public const DAYS_OF_THE_WEEK = 'Dias de la semana';
+    private const IRREGULAR_VERBS = 'Verbos Irregulares';
+    private const ALPHABET = 'Alfabeto';
+    private const DAYS_OF_THE_WEEK = 'Dias de la semana';
 }

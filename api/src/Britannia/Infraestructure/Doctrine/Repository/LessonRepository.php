@@ -30,8 +30,7 @@ class LessonRepository extends ServiceEntityRepository implements LessonReposito
 
     public function getLastLessonsByCourse(Course $course, CarbonImmutable $day, int $limit = 5): array
     {
-        $day->setTime(0, 0);
-
+        $day = $day->setTime(0, 0);
         $atPastLessons = $this->atPastLessons($course, $day, $limit);
 
         $atFutureLessons = $this->atFutureLessons($course, $day, $limit - count($atPastLessons));
@@ -59,12 +58,14 @@ class LessonRepository extends ServiceEntityRepository implements LessonReposito
             ->andWhere('A.day <= :day')
             ->setMaxResults($limit)
             ->orderBy('A.day', 'DESC')
+            ->setParameters([
+                'course' => $course,
+                'day' => $day
+            ])
+            ->setCacheable(true)
             ->getQuery();
 
-        return $query->execute([
-            'course' => $course,
-            'day' => $day
-        ]);
+        return $query->execute();
     }
 
     /**
@@ -80,6 +81,7 @@ class LessonRepository extends ServiceEntityRepository implements LessonReposito
             ->andWhere('A.day > :day')
             ->setMaxResults($limit)
             ->orderBy('A.day', 'ASC')
+            ->setCacheable(true)
             ->getQuery();
 
         return $query->execute([

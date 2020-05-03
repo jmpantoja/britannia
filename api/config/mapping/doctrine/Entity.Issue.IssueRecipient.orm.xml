@@ -14,7 +14,7 @@
         <field name="readAt" type="date_immutable" nullable="true"/>
 
         <many-to-one field="issue" target-entity="Britannia\Domain\Entity\Issue\Issue"
-                     inversed-by="recipients">
+                     inversed-by="issueHasRecipients">
             <join-column nullable="false" on-delete="CASCADE"/>
         </many-to-one>
 

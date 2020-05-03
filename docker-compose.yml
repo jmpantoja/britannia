@@ -7,17 +7,17 @@ services:
       context: ./api
       target: api_platform_php
       cache_from:
-      - quay.io/api-platform/php
-      - quay.io/api-platform/nginx
-      - quay.io/api-platform/varnish
+        - quay.io/api-platform/php
+        - quay.io/api-platform/nginx
+        - quay.io/api-platform/varnish
     environment:
       - APP_ENV=prod
     depends_on:
-    - db
+      - db
     # Comment out these volumes in production
     volumes:
-    - ./api:/srv/api:rw
-    - ./api/var:/srv/api/var:rw
+      - ./api:/srv/api:rw
+      - ./api/var:/srv/api/var:rw
 
   api:
     image: quay.io/api-platform/nginx
@@ -25,14 +25,14 @@ services:
       context: ./api
       target: api_platform_nginx
       cache_from:
-      - quay.io/api-platform/php
-      - quay.io/api-platform/nginx
-      - quay.io/api-platform/varnish
+        - quay.io/api-platform/php
+        - quay.io/api-platform/nginx
+        - quay.io/api-platform/varnish
     depends_on:
-    - php
+      - php
     # Comment out this volume in production
     volumes:
-    - ./api/public:/srv/api/public:ro
+      - ./api/public:/srv/api/public:ro
 
   cache-proxy:
     image: quay.io/api-platform/varnish
@@ -40,15 +40,22 @@ services:
       context: ./api
       target: api_platform_varnish
       cache_from:
-      - quay.io/api-platform/php
-      - quay.io/api-platform/nginx
-      - quay.io/api-platform/varnish
+        - quay.io/api-platform/php
+        - quay.io/api-platform/nginx
+        - quay.io/api-platform/varnish
     depends_on:
-    - api
+      - api
     volumes:
-    - ./api/docker/varnish/conf:/usr/local/etc/varnish:ro
+      - ./api/docker/varnish/conf:/usr/local/etc/varnish:ro
     tmpfs:
-    - /usr/local/var/varnish:exec
+      - /usr/local/var/varnish:exec
+
+  redis:
+    image: redis
+    volumes:
+      - ./data/redis:/data
+    entrypoint: redis-server --appendonly yes
+    restart: always
 
   db:
     image: mysql:5.7
@@ -59,20 +66,20 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
     volumes:
-    - "./data/mysql:/var/lib/mysql"      
+      - "./data/mysql:/var/lib/mysql"
 
 
   proxy:
     image: steveltn/https-portal:1
     depends_on:
-    - api
-    - cache-proxy
+      - api
+      - cache-proxy
     ports:
-    - 80:80
-    - 443:443
+      - 80:80
+      - 443:443
     restart: always
     volumes:
-    - ./proxy/ssl_certs:/var/lib/https-portal
+      - ./proxy/ssl_certs:/var/lib/https-portal
     #    - ./proxy/conf/default.conf.erb:/var/lib/nginx-conf/default.conf.erb:ro
     #    - ./proxy/conf/default.ssl.conf.erb:/var/lib/nginx-conf/default.ssl.conf.erb:ro
 

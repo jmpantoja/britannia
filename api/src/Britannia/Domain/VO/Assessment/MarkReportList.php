@@ -35,7 +35,7 @@ final class MarkReportList
     public function average(SetOfSkills $skills): MarkReport
     {
         $data = [];
-        foreach ($skills as $skill) {
+        foreach ($skills->toList() as $skill) {
             $data[$skill] = $this->averageBySkill($skill);
         }
 

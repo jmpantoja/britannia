@@ -24,7 +24,7 @@ final class NotificationAdmin extends AbstractAdmin implements AdminFilterableIn
      */
     private NotificationTools $adminTools;
 
-    protected $maxPerPage = 50;
+    protected $maxPerPage = 30;
     protected $maxPageLinks = 10;
 
     public function __construct($code, $class, $baseControllerName, NotificationTools $adminTools)

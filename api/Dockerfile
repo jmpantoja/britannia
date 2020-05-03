@@ -42,28 +42,28 @@ RUN apt update \
 #RUN apt install -y ./wkhtmltox_0.12.5-1.buster_amd64.deb \
 #	&& rm ./wkhtmltox_0.12.5-1.buster_amd64.deb
 
-RUN wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz \
-&& tar -xvf wkhtmltox-0.12.4_linux-generic-amd64.tar.xz \
-&& cp ./wkhtmltox/bin/wkhtmltoimage /usr/bin/ \
-&& cp ./wkhtmltox/bin/wkhtmltopdf /usr/bin/ \
-&& apt-get install zlib1g fontconfig libxrender1 libfreetype6 libxext6 libx11-6 \
-&& rm -rf ./wkhtmltox-0.12.4_linux-generic-amd64.tar.xz ./wkhtmltox;
+#RUN wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz \
+#&& tar -xvf wkhtmltox-0.12.4_linux-generic-amd64.tar.xz \
+#&& cp ./wkhtmltox/bin/wkhtmltoimage /usr/bin/ \
+#&& cp ./wkhtmltox/bin/wkhtmltopdf /usr/bin/ \
+#&& apt-get install zlib1g fontconfig libxrender1 libfreetype6 libxext6 libx11-6 \
+#&& rm -rf ./wkhtmltox-0.12.4_linux-generic-amd64.tar.xz ./wkhtmltox;
 
-#RUN wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.buster_amd64.deb \
-#	&& apt install -y ./wkhtmltox_0.12.5-1.buster_amd64.deb \
-#	&& rm ./wkhtmltox_0.12.5-1.buster_amd64.deb
+RUN wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.buster_amd64.deb \
+	&& apt install -y ./wkhtmltox_0.12.5-1.buster_amd64.deb \
+	&& rm ./wkhtmltox_0.12.5-1.buster_amd64.deb
 
-ARG WITH_XDEBUG=false
-RUN if [ $WITH_XDEBUG = "true" ] ; then \
-	    pecl install xdebug; \
-	    docker-php-ext-enable xdebug; \
-	    echo "xdebug.remote_enable=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
-	    echo "xdebug.remote_port=9001" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
-	    echo "xdebug.idekey=PHPSTORM" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
-	    echo "xdebug.remote_autostart=0" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
-	    echo "error_reporting=E_ALL" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
-	    echo "display_startup_err=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
-	fi;
+#ARG WITH_XDEBUG=false
+#RUN if [ $WITH_XDEBUG = "true" ] ; then \
+#	    pecl install xdebug; \
+#	    docker-php-ext-enable xdebug; \
+#	    echo "xdebug.remote_enable=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
+#	    echo "xdebug.remote_port=9001" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
+#	    echo "xdebug.idekey=PHPSTORM" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
+#	    echo "xdebug.remote_autostart=0" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
+#	    echo "error_reporting=E_ALL" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
+#	    echo "display_startup_err=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
+#	fi;
 
 RUN apt update \
 && apt-get install -y cron;

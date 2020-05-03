@@ -20,7 +20,7 @@
         <field name="total" type="refund_price"/>
         <field name="position" type="integer"/>
 
-        <many-to-one field="invoice" target-entity="Britannia\Domain\Entity\Invoice\Invoice">
+        <many-to-one field="invoice" inversed-by="details" target-entity="Britannia\Domain\Entity\Invoice\Invoice">
             <join-column on-delete="CASCADE"/>
         </many-to-one>
 

@@ -13,9 +13,7 @@ declare(strict_types=1);
 
 namespace Britannia\Domain\VO\Attendance;
 
-
-use MabeEnum\Enum;
-
+use PlanB\DDD\Domain\Enum\Enum;
 
 /**
  * @method static self ATTENDED()
@@ -24,9 +22,9 @@ use MabeEnum\Enum;
  */
 final class AttendanceStatus extends Enum
 {
-    public const ATTENDED = 'attended';
-    public const MISSED = 'missed';
-    public const DISABLED = 'disabled';
+    private const ATTENDED = 'attended';
+    private const MISSED = 'missed';
+    private const DISABLED = 'disabled';
 
     public function isMissed(): bool
     {

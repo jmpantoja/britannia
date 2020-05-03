@@ -7,6 +7,9 @@
     <entity name="Britannia\Domain\Entity\Staff\StaffMember" table="staff_members"
             repository-class="Britannia\Infraestructure\Doctrine\Repository\StaffMemberRepository">
 
+        <cache usage="NONSTRICT_READ_WRITE" region="day"/>
+        <cache usage="NONSTRICT_READ_WRITE" region="day"/>
+
         <id name="id" type="StaffMemberId" column="id">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
@@ -43,6 +46,7 @@
 
 
         <many-to-many field="courses" target-entity="Britannia\Domain\Entity\Course\Course" inversed-by="teachers">
+            <cache usage="NONSTRICT_READ_WRITE" region="day"/>
             <join-table name="courses_teachers">
                 <join-columns>
                     <join-column name="teacher_id"/>
@@ -56,7 +60,8 @@
             </cascade>
         </many-to-many>
 
-        <one-to-one field="photo" target-entity="Britannia\Domain\Entity\Staff\Photo" mapped-by="staffMember"
+        <one-to-one field="photo"
+                    target-entity="Britannia\Domain\Entity\Staff\Photo"
                     orphan-removal="true">
 
             <cascade>

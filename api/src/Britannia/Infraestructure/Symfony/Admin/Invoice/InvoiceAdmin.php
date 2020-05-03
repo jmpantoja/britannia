@@ -25,7 +25,7 @@ final class InvoiceAdmin extends AbstractAdmin implements AdminFilterableInterfa
      */
     private InvoiceTools $adminTools;
 
-    protected $maxPerPage = 50;
+    protected $maxPerPage = 30;
     protected $maxPageLinks = 10;
     /**
      * @var LessonRepositoryInterface

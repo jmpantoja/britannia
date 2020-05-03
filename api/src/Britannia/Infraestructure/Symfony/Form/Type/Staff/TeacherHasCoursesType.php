@@ -17,63 +17,33 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Staff;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Course\CourseList;
 use Britannia\Domain\VO\Course\CourseStatus;
-use Britannia\Infraestructure\Symfony\Validator\FullName;
-use PlanB\DDD\Domain\VO\Validator\Constraint;
-use PlanB\DDDBundle\Sonata\ModelManager;
-use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
-use Sonata\AdminBundle\Form\Type\ModelType;
+use Doctrine\ORM\QueryBuilder;
+use PlanB\DDDBundle\Symfony\Form\Type\ModelType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class TeacherHasCoursesType extends AbstractSingleType
+class TeacherHasCoursesType extends ModelType
 {
-    /**
-     * @var ModelManager
-     */
-    private $modelManager;
 
-    public function __construct(ModelManager $modelManager)
+    public function getBlockPrefix()
     {
-        $this->modelManager = $modelManager;
-    }
-
-
-    public function getParent()
-    {
-        return ModelType::class;
+        return self::MULTISELECT;
     }
 
     public function customOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'by_reference' => false,
-            'multiple' => true,
-            'expanded' => false,
-            'model_manager' => $this->modelManager,
             'class' => Course::class,
             'property' => 'name',
             'sonata_help' => 'Seleccione otros alumnos de la misma familia',
-            'attr' => [
-                'data-sonata-select2' => 'false'
-            ]
         ]);
-
-        $resolver->setNormalizer('query', function (OptionsResolver $resolver, $value) {
-            $builder = $this->modelManager->createQuery(Course::class, 'A');
-            return $builder
-                ->where('A.timeRange.status= :param')
-                ->setParameter('param', CourseStatus::ACTIVE());
-        });
-
     }
 
-    public function transform($value)
+    public function configureQuery(QueryBuilder $builder, OptionsResolver $resolver, string $alias = 'A')
     {
-        return $value;
-    }
-
-    public function buildConstraint(array $options): ?Constraint
-    {
-        return null;
+        $builder
+            ->where('A.timeRange.status= :param')
+            ->setParameter('param', CourseStatus::ACTIVE())
+            ->setCacheable(true);
     }
 
     public function customMapping($data)

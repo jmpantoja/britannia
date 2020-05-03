@@ -37,7 +37,7 @@ class TotalType extends AbstractCompoundType
         $skills = $term->setOfSkills();
         $markReport = $term->total();
 
-        foreach ($skills as $skill) {
+        foreach ($skills->toList() as $skill) {
 
             $builder->add($skill, MarkType::class, [
                 'label' => false,

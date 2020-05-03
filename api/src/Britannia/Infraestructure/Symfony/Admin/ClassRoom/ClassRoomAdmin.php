@@ -23,7 +23,7 @@ final class ClassRoomAdmin extends AbstractAdmin implements AdminFilterableInter
      */
     private ClassRoomTools $adminTools;
 
-    protected $maxPerPage = 50;
+    protected $maxPerPage = 30;
     protected $maxPageLinks = 10;
 
 

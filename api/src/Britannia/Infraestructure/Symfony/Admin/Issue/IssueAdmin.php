@@ -30,7 +30,7 @@ final class IssueAdmin extends AbstractAdmin implements AdminFilterableInterface
      */
     private IssueTools $adminTools;
 
-    protected $maxPerPage = 50;
+    protected $maxPerPage = 30;
     protected $maxPageLinks = 10;
     /**
      * @var Security

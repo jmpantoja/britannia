@@ -53,6 +53,7 @@ class CalendarService
         while ((int)$date->format('Y') === $year) {
             $this->createDay($date);
             $date = $date->add('P1D');
+            dump($date->format('Y-M-d'));
         }
     }
 

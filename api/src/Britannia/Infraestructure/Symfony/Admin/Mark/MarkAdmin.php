@@ -23,7 +23,7 @@ final class MarkAdmin extends AbstractAdmin
      */
     private MarkTools $adminTools;
 
-    protected $maxPerPage = 50;
+    protected $maxPerPage = 30;
     protected $maxPageLinks = 10;
 
     public function __construct(string $code,

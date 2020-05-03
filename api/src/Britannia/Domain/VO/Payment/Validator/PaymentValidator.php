@@ -35,7 +35,7 @@ class PaymentValidator extends ConstraintValidator
         /** @var PaymentMode $mode */
         $mode = $value['mode'];
 
-        if ($mode->is(PaymentMode::CASH)) {
+        if ($mode->is(PaymentMode::CASH())) {
             return;
         }
 

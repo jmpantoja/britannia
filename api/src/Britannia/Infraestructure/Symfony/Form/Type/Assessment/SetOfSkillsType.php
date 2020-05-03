@@ -16,28 +16,16 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Assessment;
 
 use Britannia\Domain\VO\Assessment\SetOfSkills;
 use Britannia\Infraestructure\Symfony\Validator\FullName;
-use PlanB\DDD\Domain\VO\Validator\Constraint;
-use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
-use Symfony\Component\Form\ChoiceList\Loader\CallbackChoiceLoader;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use PlanB\DDDBundle\Symfony\Form\Type\EnumType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class SetOfSkillsType extends AbstractSingleType
+class SetOfSkillsType extends EnumType
 {
-    public function getParent()
-    {
-        return ChoiceType::class;
-    }
-
 
     public function customOptions(OptionsResolver $resolver)
+
     {
         $resolver->setDefaults([
-            'expanded' => false,
-            'choice_loader' => new CallbackChoiceLoader(function () {
-                return array_flip(SetOfSkills::getConstants());
-            }),
-            'empty_data' => (string)SetOfSkills::SET_OF_SIX(),
             'required' => true,
             'label' => 'Habilidades',
             'attr' => [
@@ -46,18 +34,9 @@ class SetOfSkillsType extends AbstractSingleType
         ]);
     }
 
-    /**
-     * @return FullName
-     */
-    public function buildConstraint(array $options): ?Constraint
-    {
-        return new \Britannia\Domain\VO\Assessment\Validator\SetOfSkills([
-            'required' => $options['required']
-        ]);
-    }
 
-    public function customMapping($data)
+    public function getEnumClass(): string
     {
-        return SetOfSkills::byName($data);
+        return SetOfSkills::class;
     }
 }

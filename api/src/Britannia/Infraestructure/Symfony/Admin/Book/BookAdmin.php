@@ -26,7 +26,7 @@ final class BookAdmin extends AbstractAdmin implements AdminFilterableInterface
      */
     private BookTools $adminTools;
 
-    protected $maxPerPage = 50;
+    protected $maxPerPage = 30;
     protected $maxPageLinks = 10;
 
 

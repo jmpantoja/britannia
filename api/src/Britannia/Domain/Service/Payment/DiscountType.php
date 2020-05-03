@@ -14,13 +14,18 @@ declare(strict_types=1);
 namespace Britannia\Domain\Service\Payment;
 
 
-use MabeEnum\Enum;
+use PlanB\DDD\Domain\Enum\Enum;
 
+/**
+ * @method static self NONE()
+ * @method static self FAMILY()
+ * @method static self JOB_STATUS()
+ */
 class DiscountType extends Enum
 {
-    public const NONE = 'none';
-    public const FAMILY = 'familiar';
-    public const JOB_STATUS = 'laboral';
+    private const NONE = 'none';
+    private const FAMILY = 'familiar';
+    private const JOB_STATUS = 'laboral';
 
     public function isNormal(): bool
     {

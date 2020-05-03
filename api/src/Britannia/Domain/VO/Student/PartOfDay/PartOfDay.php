@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Domain\VO\Student\PartOfDay;
 
 
-use MabeEnum\Enum;
+use PlanB\DDD\Domain\Enum\Enum;
 
 /**
  * @method static self MORNING
@@ -22,8 +22,8 @@ use MabeEnum\Enum;
  */
 class PartOfDay extends Enum
 {
-    public const MORNING = 'Mañanas';
-    public const AFTERNOON = 'Tardes';
+    private const MORNING = 'Mañanas';
+    private const AFTERNOON = 'Tardes';
 
     public function isMorning()
     {

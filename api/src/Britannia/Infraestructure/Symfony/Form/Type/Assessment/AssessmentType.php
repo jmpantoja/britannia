@@ -59,7 +59,7 @@ class AssessmentType extends AbstractCompoundType
         $builder
             ->add('skills', SetOfSkillsType::class, [
                 'label' => false,
-                'required' => false,
+                'required' => true,
                 'data' => $assessment->skills()
             ]);
 
@@ -67,7 +67,6 @@ class AssessmentType extends AbstractCompoundType
         $builder
             ->add('extraSkills', ExtraSkillListType::class, [
                 'mapped' => false,
-                'required' => false,
                 'label' => false,
                 'data' => $assessment->otherSkills()->toNamesList()
             ]);

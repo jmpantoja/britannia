@@ -14,49 +14,29 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Doctrine\DBAL\Type\Message;
 
 
-use Britannia\Domain\VO\Course\Pass\PassHours;
 use Britannia\Domain\VO\Message\MessageMailer;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Types\Type;
+use PlanB\DDDBundle\Doctrine\DBAL\Types\EnumType;
 
-final class MessageMailerType extends Type
+final class MessageMailerType extends EnumType
 {
-    public function convertToDatabaseValue($value, AbstractPlatform $platform)
-    {
-        return (string)$value;
-    }
-
-    public function convertToPHPValue($value, AbstractPlatform $platform)
-    {
-        if (empty($value)) {
-            return null;
-        }
-        return MessageMailer::byName($value);
-    }
-
-
-    /**
-     * Gets the SQL declaration snippet for a field of this type.
-     *
-     * @param mixed[] $fieldDeclaration The field declaration.
-     * @param AbstractPlatform $platform The currently used database platform.
-     *
-     * @return string
-     */
-    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
-    {
-        return self::TEXT;
-    }
-
     /**
      * Gets the name of this type.
      *
      * @return string
-     *
-     * @todo Needed?
      */
     public function getName()
     {
         return 'MessageMailer';
+    }
+
+    /**
+     * @param string $value
+     * @param AbstractPlatform $platform
+     * @return MessageMailer
+     */
+    function byName(string $value, AbstractPlatform $platform): MessageMailer
+    {
+        return MessageMailer::byName($value);
     }
 }

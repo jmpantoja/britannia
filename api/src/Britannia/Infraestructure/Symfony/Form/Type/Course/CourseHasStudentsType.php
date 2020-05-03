@@ -16,51 +16,25 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Course;
 
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Student\Student;
-use Britannia\Domain\Entity\Student\StudentCourse;
 use Britannia\Domain\Entity\Student\StudentCourseList;
 use Britannia\Domain\Entity\Student\StudentList;
-use Britannia\Infraestructure\Symfony\Validator\FullName;
 use Doctrine\ORM\QueryBuilder;
-use PlanB\DDD\Domain\VO\Validator\Constraint;
-use PlanB\DDDBundle\Sonata\ModelManager;
-use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
-use Sonata\AdminBundle\Form\Type\ModelType;
+use PlanB\DDDBundle\Symfony\Form\Type\ModelType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class CourseHasStudentsType extends AbstractSingleType
+class CourseHasStudentsType extends ModelType
 {
 
-    /**
-     * @var Student
-     */
-    private $course;
-    /**
-     * @var ModelManager
-     */
-    private $modelManager;
-
-    public function __construct(ModelManager $modelManager)
+    public function getBlockPrefix()
     {
-        $this->modelManager = $modelManager;
-    }
-
-    public function getParent()
-    {
-        return ModelType::class;
+        return self::MULTISELECT;
     }
 
     public function customOptions(OptionsResolver $resolver)
     {
-
         $resolver->setDefaults([
             'class' => Student::class,
             'property' => 'fullName.reversedMode',
-            'model_manager' => $this->modelManager,
-            'multiple' => true,
-            'by_reference' => false,
-            'attr' => [
-                'data-sonata-select2' => 'false'
-            ]
         ]);
 
         $resolver->setRequired([
@@ -68,35 +42,28 @@ class CourseHasStudentsType extends AbstractSingleType
         ]);
 
         $resolver->setAllowedTypes('course', [Course::class]);
-        $resolver->setNormalizer('course', function (OptionsResolver $resolver, $value) {
-            return $this->course = $value;
-        });
-
-        $resolver->setNormalizer('query', function (OptionsResolver $resolver) {
-            return $this->createQuery($resolver['course']);
-        });
     }
 
-    private function createQuery(Course $course): QueryBuilder
+    public function configureQuery(QueryBuilder $builder, OptionsResolver $resolver, string $alias = 'A')
     {
-        $query = $this->modelManager->getEntityManager(Student::class)
-            ->createQueryBuilder('o')
-            ->select('o')
-            ->from(Student::class, 'o');
+
+        $course = $resolver['course'];
 
         if ($course->isAdult()) {
-            $query->where('o.age >= 17');
+            $builder->where('A.age >= 17');
         }
 
         if ($course->isSchool() or $course->isSupport()) {
-            $query->where('o.age >= 6 AND o.age <= 20');
+            $builder->where('A.age >= 6 AND A.age <= 20');
         }
 
         if ($course->isPreSchool()) {
-            $query->where('o.age <= 6');
+            $builder->where('A.age <= 6');
         }
 
-        return $query;
+        $builder->setCacheable(true);
+
+        return $builder;
     }
 
     /**
@@ -109,14 +76,6 @@ class CourseHasStudentsType extends AbstractSingleType
             ->onlyActives()
             ->toStudentList()
             ->toArray();
-    }
-
-    /**
-     * @return FullName
-     */
-    public function buildConstraint(array $options): ?Constraint
-    {
-        return null;
     }
 
     public function customMapping($students)

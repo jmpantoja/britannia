@@ -65,10 +65,6 @@ final class MessageEmailType extends AbstractCompoundType
         $builder->add('message', WYSIWYGType::class, [
             'label' => false,
             'empty_data' => '',
-//            'attr' => [
-//                'maxlength' => 160,
-//                'rows' => 8,
-//            ]
         ]);
 
     }

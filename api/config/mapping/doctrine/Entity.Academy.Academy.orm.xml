@@ -5,6 +5,7 @@
 
 
     <entity name="Britannia\Domain\Entity\Academy\Academy" table="other_academies">
+        <cache usage="NONSTRICT_READ_WRITE" region="day"/>
 
         <id name="id" type="AcademyId" column="id">
             <generator strategy="CUSTOM"/>

@@ -16,6 +16,10 @@
     >
 {% endblock %}
 
+{% block multiselect_widget %}
+    {{ block('multiselect') }}
+{% endblock %}
+
 {% block multiselect %}
     {{ form_widget(form) }}
     <script type="text/javascript">

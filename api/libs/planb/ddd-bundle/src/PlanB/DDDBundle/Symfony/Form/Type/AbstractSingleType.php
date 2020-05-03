@@ -13,10 +13,7 @@ declare(strict_types=1);
 
 namespace PlanB\DDDBundle\Symfony\Form\Type;
 
-use Britannia\Domain\Entity\Invoice\InvoiceDetailList;
 use Britannia\Infraestructure\Symfony\Form\TimeSheetListType;
-use Britannia\Infraestructure\Symfony\Form\Type\Invoice\InvoiceDetailListType;
-use Britannia\Infraestructure\Symfony\Form\Type\Student\AttachmentListType;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\DataTransformerInterface;
@@ -40,15 +37,15 @@ abstract class AbstractSingleType extends AbstractType implements DataTransforme
 
     private $empty_data;
 
-    final public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
 
         $this->builder = $builder;
         $this->options = $this->builder->getOptions();
 
         $builder->addModelTransformer($this);
-        $this->customForm($builder, $options);
 
+        $this->customForm($builder, $options);
     }
 
     public function customForm(FormBuilderInterface $builder, array $options)
@@ -113,7 +110,7 @@ abstract class AbstractSingleType extends AbstractType implements DataTransforme
     /**
      * {@inheritdoc}
      */
-    final public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired([
             'data_class',

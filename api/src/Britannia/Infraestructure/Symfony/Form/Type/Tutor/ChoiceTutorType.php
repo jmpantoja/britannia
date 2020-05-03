@@ -21,7 +21,6 @@ use Britannia\Infraestructure\Symfony\Validator\FullName;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Sonata\ModelManager;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractCompoundType;
-use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Model\ModelManagerInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -48,14 +47,18 @@ class ChoiceTutorType extends AbstractCompoundType
     public function customForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('__search', ModelType::class, [
-                'mapped' => false,
-                'model_manager' => $this->modelManager,
-                'class' => Tutor::class,
-                'label' => false,
-                'data' => $options['tutor'],
-                'sonata_help' => 'seleccione un tutor, si ya existe',
-                'placeholder' => '-- Nuevo Tutor --'
+//            ->add('__search', ModelType::class, [
+//                'mapped' => false,
+//                'model_manager' => $this->modelManager,
+//                'class' => Tutor::class,
+//                'label' => false,
+//                'data' => $options['tutor'],
+//                'sonata_help' => 'seleccione un tutor, si ya existe',
+//                'placeholder' => '-- Nuevo Tutor --'
+//            ])
+
+            ->add('__search', SelectTutorType::class, [
+                'data' => $options['tutor']
             ])
             ->add('description', TextType::class, [
                 'label' => false,
@@ -88,7 +91,6 @@ class ChoiceTutorType extends AbstractCompoundType
 
         parent::finishView($view, $form, $options);
     }
-
 
     /**
      * @inheritDoc

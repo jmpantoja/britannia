@@ -38,7 +38,7 @@ class ExamType extends AbstractCompoundType
         $skills = $term->setOfSkills();
         $markReport = $term->exam();
 
-        foreach ($skills as $skill) {
+        foreach ($skills->toList() as $skill) {
             $builder->add($skill, MarkType::class, [
                 'label' => false,
                 'required' => false,

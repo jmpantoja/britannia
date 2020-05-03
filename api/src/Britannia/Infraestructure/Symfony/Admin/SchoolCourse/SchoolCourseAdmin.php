@@ -17,9 +17,9 @@ final class SchoolCourseAdmin extends AbstractAdmin implements AdminFilterableIn
         '_sort_by' => 'weight',
     ];
 
-    protected $maxPerPage = 50;
+    protected $maxPerPage = 30;
     protected $maxPageLinks = 10;
-    
+
     /**
      * @var SchoolCourseTools
      */

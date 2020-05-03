@@ -4,7 +4,11 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
 
-    <entity name="Britannia\Domain\Entity\Setting\Setting" table="settings">
+    <entity name="Britannia\Domain\Entity\Setting\Setting"
+            table="settings"
+            repository-class="Britannia\Infraestructure\Doctrine\Repository\SettingRepository">
+
+        <cache usage="NONSTRICT_READ_WRITE" region="month"/>
 
         <id name="id" type="SettingId" column="id">
             <generator strategy="CUSTOM"/>

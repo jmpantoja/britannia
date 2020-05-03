@@ -21,7 +21,7 @@ final class  StudentAdmin extends AbstractAdmin implements AdminFilterableInterf
         'active' => ['value' => true],
     ];
 
-    protected $maxPerPage = 50;
+    protected $maxPerPage = 30;
     protected $maxPageLinks = 10;
     /**
      * @var StudentTools

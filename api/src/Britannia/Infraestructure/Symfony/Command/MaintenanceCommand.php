@@ -62,7 +62,7 @@ class MaintenanceCommand extends Command implements ContainerAwareInterface
         $this->commandBus->handle(UpdateCalendar::make());
         $this->commandBus->handle(UpdateStudentAge::make());
         $this->commandBus->handle(UpdateCourseStatus::make());
-        $this->commandBus->handle(UpdateInvoices::make());
+     //   $this->commandBus->handle(UpdateInvoices::make());
 
 
         return 0;

@@ -130,7 +130,7 @@
         </thead>
         <tbody>
         <tr>
-            {% for key,skill in skills %}
+            {% for key,skill in skills.toList %}
                 <td class="{{ skill | lower }}">{{ key }}</td>
             {% endfor %}
             {% if total is defined and total %}

@@ -38,14 +38,6 @@ class IntensiveType extends AbstractSingleType
             'required' => false,
             'on_text' => 'SI',
             'off_text' => 'NO',
-
-//            'choice_loader' => new CallbackChoiceLoader(function () {
-//                $values = array_flip(Intensive::getConstants());
-//                return array_merge(['' => ''], $values);
-//            }),
-//            'attr' => [
-//                'style' => 'width:200px'
-//            ]
         ]);
     }
 
@@ -63,9 +55,7 @@ class IntensiveType extends AbstractSingleType
      */
     public function buildConstraint(array $options): ?Constraint
     {
-        return new \Britannia\Domain\VO\Course\Intensive\Validator\Intensive([
-            'required' => $options['required']
-        ]);
+        return null;
     }
 
     public function customMapping($data)

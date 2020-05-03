@@ -14,22 +14,23 @@ declare(strict_types=1);
 namespace Britannia\Domain\VO\Assessment;
 
 
-use ArrayIterator;
 use Countable;
-use IteratorAggregate;
-use MabeEnum\Enum;
+use PlanB\DDD\Domain\Enum\Enum;
 
-class SetOfSkills extends Enum implements IteratorAggregate, Countable
+/**
+ * @method static self SET_OF_FOUR()
+ * @method static self SET_OF_SIX()
+ */
+class SetOfSkills extends Enum implements Countable
 {
 
-    public const SET_OF_FOUR = 'Reading, Writing, Listening, Speaking';
-    public const SET_OF_SIX = 'Reading, Writing, Listening, Speaking, Grammar, Vocabulary';
-
+    private const SET_OF_FOUR = 'Reading, Writing, Listening, Speaking';
+    private const SET_OF_SIX = 'Reading, Writing, Listening, Speaking, Grammar, Vocabulary';
 
     /**
      * @inheritDoc
      */
-    public function getIterator()
+    public function toList()
     {
         $skills = [
             'R' => 'reading',
@@ -38,12 +39,12 @@ class SetOfSkills extends Enum implements IteratorAggregate, Countable
             'S' => 'speaking',
         ];
 
-        if ($this->is(self::SET_OF_SIX)) {
+        if ($this->is(self::SET_OF_SIX())) {
             $skills['G'] = 'grammar';
             $skills['V'] = 'vocabulary';
         }
 
-        return new ArrayIterator($skills);
+        return $skills;
     }
 
     /**
@@ -51,6 +52,9 @@ class SetOfSkills extends Enum implements IteratorAggregate, Countable
      */
     public function count()
     {
-        return $this->getIterator()->count();
+        if ($this->is(self::SET_OF_SIX())) {
+            return 6;
+        }
+        return 4;
     }
 }

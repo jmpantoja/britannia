@@ -3,7 +3,6 @@
 namespace Britannia\Infraestructure\Doctrine\Repository;
 
 use Britannia\Domain\Entity\Issue\Issue;
-use Britannia\Domain\Entity\Issue\IssueDto;
 use Britannia\Domain\Entity\Staff\StaffMember;
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Repository\IssueRepositoryInterface;
@@ -32,7 +31,7 @@ class IssueRepository extends ServiceEntityRepository implements IssueRepository
             ->where('P.recipient = :user AND P.readAt is null')
             ->setParameter('user', $staffMember)
             ->getQuery()
-            ->useQueryCache(true);
+            ->enableResultCache(MINUTE_IN_SECONDS * 5);
 
         return $query->getSingleScalarResult();
     }

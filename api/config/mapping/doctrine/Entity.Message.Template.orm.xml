@@ -19,7 +19,6 @@
             <discriminator-mapping value="email" class="Britannia\Domain\Entity\Message\Template\EmailTemplate"/>
         </discriminator-map>
 
-
         <field name="name"/>
         <field name="template" type="text"/>
 

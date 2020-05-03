@@ -20,7 +20,7 @@ final class TemplateAdmin extends AbstractAdmin implements AdminFilterableInterf
      */
     private TemplateTools $adminTools;
 
-    protected $maxPerPage = 50;
+    protected $maxPerPage = 30;
     protected $maxPageLinks = 10;
 
     public function __construct($code, $class, $baseControllerName, TemplateTools $adminTools)

@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Domain\VO\Course\Pass;
 
 
-use MabeEnum\Enum;
+use PlanB\DDD\Domain\Enum\Enum;
 
 /**
  * Class PassHours
@@ -27,9 +27,9 @@ use MabeEnum\Enum;
 final class PassHours extends Enum
 {
 
-    public const TEN_HOURS = '10 horas';
-    public const FIVE_HOURS = '5 horas';
-    public const ONE_HOUR = '1 hora';
+    private const TEN_HOURS = '10 horas';
+    private const FIVE_HOURS = '5 horas';
+    private const ONE_HOUR = '1 hora';
 
     public function toMinutes(): int
     {
@@ -44,6 +44,5 @@ final class PassHours extends Enum
         if ($this->is(PassHours::ONE_HOUR())) {
             return 1 * 60;
         }
-
     }
 }
