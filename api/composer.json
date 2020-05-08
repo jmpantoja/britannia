@@ -29,7 +29,6 @@
         "snc/redis-bundle": "^3.2",
         "sonata-project/admin-bundle": "^3.53",
         "sonata-project/doctrine-orm-admin-bundle": "^3.10",
-        "sonata-project/formatter-bundle": "^4.1",
         "sonata-project/intl-bundle": "^2.7",
         "sonata-project/translation-bundle": "^2.4",
         "stevegrunwell/time-constants": "^1.1",
@@ -42,6 +41,7 @@
         "symfony/maker-bundle": "^1.13",
         "symfony/monolog-bundle": "^3.4",
         "symfony/swiftmailer-bundle": "^3.4",
+        "symfony/webpack-encore-bundle": "^1.7",
         "symfony/yaml": "4.3.*",
         "tightenco/collect": "^6.5"
     },
@@ -90,7 +90,6 @@
     "scripts": {
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
-            "ckeditor:install --clear=drop": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd"
         },
         "post-install-cmd": [
@@ -105,7 +104,7 @@
     },
     "extra": {
         "symfony": {
-            "allow-contrib": false
+            "allow-contrib": true
         }
     }
 }

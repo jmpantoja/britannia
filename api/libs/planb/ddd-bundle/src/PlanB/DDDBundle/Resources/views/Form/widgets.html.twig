@@ -45,3 +45,8 @@
     </div>
 
 {% endblock %}
+
+
+{% block wysiwyg_widget %}
+    {{ form_widget(form, {attr: {class: 'jodit'}}) }}
+{% endblock %}

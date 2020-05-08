@@ -3,6 +3,20 @@
 {% block sonata_sidebar_search %}
 {% endblock sonata_sidebar_search %}
 
+{% block stylesheets %}
+    {{ encore_entry_link_tags('app') }}
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+{#    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>#}
+{#    <script>#}
+{#        tinymce.init({#}
+{#            selector: 'textarea.jodit'#}
+{#        });#}
+{#    </script>#}
+{% endblock %}
 
 {% block sonata_top_nav_menu %}
     {% if app.user and is_granted(sonata_admin.adminPool.getOption('role_admin')) %}

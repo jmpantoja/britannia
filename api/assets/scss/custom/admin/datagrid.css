@@ -1,0 +1,82 @@
+.sonata-ba-list-field-header-batch {
+    width: 40px;
+}
+
+.planb_row {
+
+}
+
+.planb_row .caret-col {
+    min-width: 3em;
+    min-height: 2em;
+    line-height: 2em;
+    float: left;
+
+}
+
+.planb_row .btn-arrow {
+    margin: 0 1em;
+    float: left;
+    transform: rotate(180deg);
+}
+
+.planb_row .btn-arrow .collapsed {
+    transform: rotate(90deg);
+}
+
+.planb_row .resume {
+    margin: 1em 1em 1em 2em;
+}
+
+.planb_row .resume .header {
+
+}
+
+.planb_row .resume .body {
+    margin-top: 1em;
+}
+
+.table-responsive {
+    min-height: 20em;
+}
+
+.btn-disable {
+    cursor: default;
+}
+
+.course a, .course .attendance_sumary {
+    float: left;
+}
+
+.attendance_sumary {
+    margin-left: 1em;
+}
+
+.attendance_sumary span {
+    background-color: gainsboro;
+    display: inline-block;
+    margin: 0.1em 0.2em;
+    width: 1.5em;
+    height: 1.5em;
+}
+
+.attendance_sumary span.missed {
+    background-color: #bf2405;
+}
+
+
+.attendance_sumary span.attended {
+    background-color: green;
+}
+
+.cms-block-element .small-box .inner a{
+    color: #FFF;
+}
+
+.show_filters {
+    cursor: pointer;
+}
+.show_filters span{
+    display: inline-block;
+    margin-left: 0.8em;
+}

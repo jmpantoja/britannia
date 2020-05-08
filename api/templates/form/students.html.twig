@@ -27,27 +27,27 @@
 
 {% block payment_widget %}
 
-    <script>
-        {% autoescape 'js' %}
+{#    <script>#}
+{#        {% autoescape 'js' %}#}
 
-        jQuery(function ($) {
-            $('#sonata-ba-field-container-{{ id }}')
-                .toggle_field({
-                    hide_values: ['CASH'],
-                    children: '.bank_account'
-                })
-        })
-        {% endautoescape %}
-    </script>
+{#        jQuery(function ($) {#}
+{#            $('#sonata-ba-field-container-{{ id }}')#}
+{#                .toggle_field({#}
+{#                    hide_values: ['CASH'],#}
+{#                    children: '.bank_account'#}
+{#                })#}
+{#        })#}
+{#        {% endautoescape %}#}
+{#    </script>#}
 
     <div class="row">
         <div class="col-md-3">
-            {{ form_row(form.mode, {legend: true}) }}
+            {{ form_row(form.mode, {'legend': true, 'attr': {'data-toggle': 'field', 'data-hide-values': '["CASH"]', 'data-target': '.bank_account' } }) }}
         </div>
     </div>
 
     <div class="row col-md-12 bank_account">
-        {{ form_row(form.account, {legend: true}) }}
+        {{ form_row(form.account, {'legend': true}) }}
     </div>
 
 
@@ -82,23 +82,23 @@
 
 {% block other_academy_widget %}
 
-    <script>
-        {% autoescape 'js' %}
+{#    <script>#}
+{#        {% autoescape 'js' %}#}
 
-        jQuery(function ($) {
-            $('#sonata-ba-field-container-{{ id }}')
-                .toggle_field({
-                    hide_values: [''],
-                    children: '.numOfYears'
-                })
-        })
-        {% endautoescape %}
-    </script>
+{#        jQuery(function ($) {#}
+{#            $('#sonata-ba-field-container-{{ id }}')#}
+{#                .toggle_field({#}
+{#                    hide_values: [''],#}
+{#                    children: '.numOfYears'#}
+{#                })#}
+{#        })#}
+{#        {% endautoescape %}#}
+{#    </script>#}
 
 
     <div class="row">
         <div class="col-md-6">
-            {{ form_row(form.academy) }}
+            {{ form_row(form.academy, {'attr': {'data-toggle': 'field', 'data-target': '.numOfYears' } }) }}
         </div>
 
         <div class="col-md-6 numOfYears">

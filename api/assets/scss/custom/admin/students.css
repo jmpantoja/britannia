@@ -1,0 +1,44 @@
+.contact {
+    margin-bottom: 0.8em;
+}
+
+.contact .contact-name {
+
+}
+
+.contact .contact-info {
+
+}
+
+.contact .contact-info span {
+    display: inline-block;
+    margin-right: 1em;
+    padding-left: 0.5em;
+}
+
+.alert-msg {
+    color: #d44000;
+    font-size: 1.8em;
+    cursor: pointer;
+}
+
+.thumb {
+    text-align: center;
+}
+
+.thumb-upload {
+    cursor: pointer;
+}
+
+.thumb-upload img{
+    width: 200px;
+    height: 266px;
+
+    border-radius: 5%;
+    border: solid 1px silver;
+    padding: 1em;
+    box-sizing: content-box;
+    margin-bottom: 0.8em;
+}
+
+

@@ -21,15 +21,7 @@
 {% endblock %}
 
 {% block multiselect %}
-    {{ form_widget(form) }}
-    <script type="text/javascript">
-        var select = document.getElementById("{{ id }}");
-
-        multi(select, {
-            non_selected_header: "Todos",
-            selected_header: "Seleccionados"
-        });
-    </script>
+    {{ form_widget(form, {'attr': {'data-multiselect': 'multiselect'}}) }}
 {% endblock %}
 
 {% block counter_widget %}

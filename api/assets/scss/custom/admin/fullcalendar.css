@@ -1,0 +1,49 @@
+/*<div class="popover fade right in" role="tooltip" id="popover990543" style="top: 156.3px; left: 188.983px; display: block;">*/
+/*<div class="arrow" style="top: 67.8481%;">*/
+/*</div>*/
+/*<h3 class="popover-title">*/
+/*<strong>CURSO NUEVO</strong></h3>*/
+/*<div class="popover-content">*/
+/*<div>*/
+/*<span>de 09:30 a 10:30</span>*/
+
+/*</div></div></div>*/
+
+.popover {
+    min-width: max-content;
+}
+
+.fc-event-container .fc-time {
+    font-size: 1.2em;
+    padding: 0.5em 0.5em 0 0.5em;
+
+}
+
+.fc-event-container .fc-title p {
+    text-align: center;
+    font-size: 1.5em;
+    padding: 0.5em;
+    border-bottom: solid 1px whitesmoke;
+}
+
+.fc-scroller {
+    height: max-content !important;
+}
+
+span.fc-day-number {
+    font-weight: 400;
+}
+
+.holiday {
+    background-color: rgba(205, 92, 92, 0.30);
+}
+
+.holiday span.fc-day-number {
+    color: red;
+}
+
+#calendar {
+    width: 1000px;
+    margin: auto;
+    border: solid 1px silver;
+}

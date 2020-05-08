@@ -30,8 +30,7 @@ class IssueRepository extends ServiceEntityRepository implements IssueRepository
             ->innerJoin('A.issueHasRecipients', 'P')
             ->where('P.recipient = :user AND P.readAt is null')
             ->setParameter('user', $staffMember)
-            ->getQuery()
-            ->enableResultCache(MINUTE_IN_SECONDS * 5);
+            ->getQuery();
 
         return $query->getSingleScalarResult();
     }

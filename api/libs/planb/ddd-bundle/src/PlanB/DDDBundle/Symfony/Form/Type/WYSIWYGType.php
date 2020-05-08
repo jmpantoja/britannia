@@ -14,8 +14,10 @@ declare(strict_types=1);
 namespace PlanB\DDDBundle\Symfony\Form\Type;
 
 
+use KMS\FroalaEditorBundle\Form\Type\FroalaEditorType;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use Sonata\FormatterBundle\Form\Type\SimpleFormatterType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class WYSIWYGType extends AbstractSingleType
@@ -23,14 +25,14 @@ class WYSIWYGType extends AbstractSingleType
 
     public function getParent()
     {
-        return SimpleFormatterType::class;
+        return TextareaType::class;
     }
 
     public function customOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'format' => 'richhtml',
-            'ckeditor_toolbar_icons' => $this->getToolbar()
+//            'format' => 'richhtml',
+//            'ckeditor_toolbar_icons' => $this->getToolbar()
         ]);
     }
 

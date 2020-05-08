@@ -14,7 +14,7 @@ twig:
         #        paymentInfo: '@Britannia\Domain\Service\Payment\PaymentInfoService'
         #courseInfo: '@Britannia\Infraestructure\Symfony\Service\Course\CourseInformationReportService'
     form_themes:
-        - '@SonataFormatter/Form/formatter.html.twig'
+    #    - '@SonataFormatter/Form/formatter.html.twig'
         - '@SonataCore/Form/datepicker.html.twig'
     #    - '@SonataCore/Form/color.html.twig'
 
