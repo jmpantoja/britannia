@@ -34,9 +34,10 @@ import(`select2/select2_locale_${languageSelect2}.js`).then(() => {
 }).catch('failed to import select2 locale')
 
 // Configure momentJS locale
-import("moment").then(moment => {
-  moment.locale(languageMoment)
-}).catch('failed to configure momentJS locale')
+import moment from "moment"
+moment.locale(languageMoment)
+
+global.moment = moment;
 
 // Load momentJS locale component
 import("moment/locale/" + languageMoment + '.js')
@@ -49,6 +50,9 @@ import "eonasdan-bootstrap-datetimepicker"
 import "trumbowyg";
 
 import "jquery-toast-plugin";
+import URI from  "urijs";
+
+global.URI = URI;
 
 // Custom
 import "./admin/Admin"
@@ -59,6 +63,10 @@ import "./admin/treeview"
 import "./widgets/multiselect";
 import "./widgets/toggle_field";
 import "./widgets/toast";
+import "./widgets/locked";
+import "./widgets/form_date";
+import "./widgets/student_check";
+import "./widgets/term_date";
 
 
 // Styles

@@ -152,10 +152,18 @@ final class CourseTerm
 
     public function end(): ?CarbonImmutable
     {
+
         $dates = $this->termList->values()
             ->map(fn(Term $term) => $term->end())
             ->filter()
             ->unique();
+
+//        foreach ($this->termList->values() as $term){
+//            dump($term->termName(), $term->end());
+//        }
+//
+//        dump($this->termList->values());
+//        die();
 
         if ($dates->isEmpty()) {
             return null;

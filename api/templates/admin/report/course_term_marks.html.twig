@@ -268,7 +268,7 @@
             {% set final = term.course.marksByStudent(term.student) %}
         {% endif %}
 
-        {% for skill in term.setOfSkills %}
+        {% for skill in term.setOfSkills.toList %}
             {% set range = term.total.get(skill).range %}
             {% set mark = term.total.get(skill).format %}
             {% set params = {'%mark%': mark} %}

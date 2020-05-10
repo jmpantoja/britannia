@@ -40,17 +40,17 @@ class CourseMarksType extends AbstractCompoundType
         $course = $options['data'];
 
         $builder->add('selected', HiddenType::class);
-
         $builder->add('termName', TermNameType::class, [
             'mapped' => false,
             'attr' => [
-                'style' => 'width: 190px'
+                'style' => 'width: 235px'
             ]
         ]);
 
         $builder->add('start', DatePickerType::class, [
             'mapped' => false,
             'format' => \IntlDateFormatter::LONG,
+            'label' => 'Desde',
             'attr' => [
                 'readonly' => true
             ]
@@ -58,6 +58,7 @@ class CourseMarksType extends AbstractCompoundType
 
         $builder->add('end', DatePickerType::class, [
             'mapped' => false,
+            'label' => 'Hasta',
             'format' => \IntlDateFormatter::LONG
         ]);
 

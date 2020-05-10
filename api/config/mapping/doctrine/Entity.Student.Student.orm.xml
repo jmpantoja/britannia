@@ -25,7 +25,6 @@
 
         <one-to-many field="studentHasCourses" target-entity="Britannia\Domain\Entity\Student\StudentCourse"
                      mapped-by="student" orphan-removal="true">
-            <cache usage="NONSTRICT_READ_WRITE" region="day"/>
             <cascade>
                 <cascade-persist/>
             </cascade>

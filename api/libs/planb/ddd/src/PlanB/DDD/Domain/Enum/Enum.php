@@ -29,6 +29,20 @@ abstract class Enum extends \MyCLabs\Enum\Enum
         return null;
     }
 
+    public static function byOrdinal(int $num)
+    {
+        $keys = array_keys(static::getConstants());
+
+        if (!isset($keys[$num])) {
+            $msg = sprintf('No existe el ordinal %s para %s', $num, static::class);
+            throw new \Exception($msg);
+        }
+
+        $name = $keys[$num];
+        return static::byName($name);
+    }
+
+
     public static function byName(string $value): Enum
     {
         return static::__callStatic($value, []);

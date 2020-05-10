@@ -25,6 +25,7 @@ use PlanB\DDD\Domain\Model\EntityList;
 final class StudentCourseList extends EntityList
 {
 
+
     protected function typeName(): string
     {
         return StudentCourse::class;
@@ -62,6 +63,12 @@ final class StudentCourseList extends EntityList
             ->map(fn(StudentCourse $studentCourse) => $studentCourse->timeRange());
 
         return TimeRangeList::collect($input);
+    }
+
+    public function hasActive(StudentCourse $joined): bool
+    {
+        return $this->onlyActives()
+            ->has($joined);
     }
 
     public function onlyActives(): self

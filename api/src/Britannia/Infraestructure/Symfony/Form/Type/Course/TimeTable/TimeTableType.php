@@ -43,7 +43,7 @@ class TimeTableType extends AbstractCompoundType
 
         $builder
             ->add('start', DatePickerType::class, [
-                'format' => IntlDateFormatter::MEDIUM,
+                'format' => \IntlDateFormatter::LONG,
                 'label' => 'Inicio',
                 'data' => $start,
                 'attr' => [
@@ -51,7 +51,7 @@ class TimeTableType extends AbstractCompoundType
                 ]
             ])
             ->add('end', DatePickerType::class, [
-                'format' => IntlDateFormatter::MEDIUM,
+                'format' => \IntlDateFormatter::LONG,
                 'data' => $end,
                 'label' => 'Fin'
             ])
@@ -86,9 +86,6 @@ class TimeTableType extends AbstractCompoundType
         $resolver->addAllowedTypes('course', [Course::class]);
     }
 
-    /**
-     * @return FullName
-     */
     public function buildConstraint(array $options): ?Constraint
     {
         return TimeTable::buildConstraint($options);

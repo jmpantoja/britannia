@@ -257,11 +257,17 @@ abstract class Student implements Comparable
 
         $joined = StudentCourse::make($this, $course);
 
+        if($this->studentHasCoursesList()->hasActive($joined)){
+            return $this;
+        }
+
         $this->studentHasCoursesList()
             ->add($joined, function (StudentCourse $joined) {
                 $event = StudentHasJoinedToCourse::make($joined);
                 $joined->notify($event);
             });
+
+        $course->addStudent($this);
 
         return $this;
     }

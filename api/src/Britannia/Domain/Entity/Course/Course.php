@@ -17,14 +17,12 @@ namespace Britannia\Domain\Entity\Course;
 use Britannia\Domain\Entity\Course\Traits\BookTrait;
 use Britannia\Domain\Entity\Course\Traits\CourseTrait;
 use Britannia\Domain\Entity\Course\Traits\LessonTrait;
-use Britannia\Domain\Entity\Course\Traits\PaymentTrait;
-use Britannia\Domain\Entity\Course\Traits\RecordTrait;
 use Britannia\Domain\Entity\Course\Traits\StudentTrait;
 use Britannia\Domain\Entity\Course\Traits\TeacherTrait;
 use Britannia\Domain\Entity\Course\Traits\TimeRangeTrait;
-use Britannia\Domain\VO\Course\TimeRange\TimeRange;
 use Carbon\CarbonImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Persistence\Event\LifecycleEventArgs;
 use PlanB\DDD\Domain\Behaviour\Comparable;
 use PlanB\DDD\Domain\Behaviour\Traits\ComparableTrait;
 use PlanB\DDD\Domain\Model\Traits\AggregateRootTrait;
@@ -41,7 +39,8 @@ abstract class Course implements Comparable, CoursePaymentInterface
     use TimeRangeTrait;
     use LessonTrait;
     use BookTrait;
-  //  use RecordTrait;
+
+    //  use RecordTrait;
 
     /**
      * @var CarbonImmutable
@@ -91,6 +90,11 @@ abstract class Course implements Comparable, CoursePaymentInterface
     public function id(): ?CourseId
     {
         return $this->id;
+    }
+
+    public function preUpdate(LifecycleEventArgs $eventArgs)
+    {
+    //    $eventArgs->getObject()->updateNumOfStudents();
     }
 
 }

@@ -63,6 +63,13 @@ class TermName extends Enum
         return null;
     }
 
+    public static function toList(): array
+    {
+        return collect(static::keys())
+            ->map(fn(string $key) => static::byName($key))
+            ->toArray();
+    }
+
     public function isFirst(): bool
     {
         return $this->is(TermName::FIRST_TERM());

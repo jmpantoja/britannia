@@ -148,7 +148,7 @@ class Attendance implements Comparable
 
     public function hash(): string
     {
-        return sprintf('%s-%s', $this->lesson->id(), $this->student->id());
+        return sprintf('%s-%s-%s', $this->lesson->id(), $this->student->id(), $this->reason());
     }
 
 

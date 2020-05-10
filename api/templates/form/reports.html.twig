@@ -76,102 +76,34 @@
 
 {% block  course_marks_widget %}
     <div id="tab2" class="row course_mark">
-        <div class="col-md-4">
-            <div id="term" class="col-md-12">
+        <div class="col-md-12">
+            <div class="col-md-2">
                 {{ form_row(form.selected) }}
-                {{ form_row(form.termName) }}
+
+                {% set attr = {
+                    'data-term': 'date',
+                    'data-url': url,
+                    'data-start': '#%s' | format(form.start.vars.id),
+                    'data-end': '#%s' | format(form.end.vars.id)
+                }
+                %}
+
+                {{ form_row(form.termName, {'attr': attr}) }}
             </div>
 
-            <div id="range" class="col-md-12 no-padding">
-
-                <div id="range-start" class="col-md-6">
+            <div class="col-md-4">
+                <div class="col-md-6 no-padding">
                     {{ form_row(form.start) }}
                 </div>
-                <div id="range-end" class="col-md-6">
+                <div class="col-md-6 no-padding">
                     {{ form_row(form.end) }}
                 </div>
             </div>
         </div>
-
-        <div class="col-md-8">
+        <p>&nbsp;</p>
+        <div class="col-md-12">
             {{ form_row(form.students) }}
         </div>
-
-
-        <script type="application/javascript">
-            $(function () {
-                let start = $('#range-start input');
-                let end = $('#range-end input');
-
-                let update = function () {
-                    $.ajax({
-                        type: 'POST',
-                        url: '{{ url }}',
-                        data: {
-                            'term': $(this).val()
-                        },
-                        dataType: "json",
-                        success: function (data) {
-                            start.val(data.start)
-                            end.val(data.end)
-                        }
-                    });
-                }
-
-                $('#term select').on('change', update)
-                $('#term select').trigger('change')
-            })
-
-        </script>
     </div>
 {% endblock %}
 
-{#{% block choose_student_list_widget %}#}
-{#    {% for item in form %}#}
-
-{#    {% endfor %}#}
-{#{% endblock %}#}
-
-
-
-{% block choose_student_row %}
-
-    {% set path =  student.photo.path | default('shape.jpg') %}
-    {% set src = photo_uploader.downloadUrl(path) %}
-
-    <div class="cell-wrapper cell-wrapper-mini">
-        <div title="{{ student.name }}" class="cell student-cell active">
-            <p class="cell-title">
-                {{ student.fullName.reversedMode | truncate(23) }}
-            </p>
-
-            <img class="cell-image" src="{{ src }}"/>
-
-            <div class="cell-alert">
-                {% if student.alert.isAlert %}
-                    <span data-toggle="popover"
-                          title="Cuidado"
-                          data-content="{{ student.alert.description | raw }}"
-                          data-trigger="hover"
-                          data-html="true"
-                          data-placement="bottom"
-                          class="alert-msg fa fa-exclamation-triangle">
-                    </span>
-
-                {% endif %}
-
-                {% if student.termsOfUseImageRigths == false %}
-                    <span data-toggle="popover"
-                          title="Cuidado"
-                          data-content="No ha aceptado los derechos de imagen"
-                          data-trigger="hover"
-                          data-placement="bottom"
-                          class="alert-msg fa fa-user-secret">
-                    </span>
-                {% endif %}
-            </div>
-            {{ form_widget(form) }}
-        </div>
-
-    </div>
-{% endblock %}

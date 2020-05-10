@@ -10,17 +10,13 @@
             <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
         </id>
 
-        <cache usage="NONSTRICT_READ_WRITE" region="day"/>
-
         <many-to-one field="student" target-entity="Britannia\Domain\Entity\Student\Student"
                      inversed-by="studentHasCourses">
-            <cache usage="NONSTRICT_READ_WRITE" region="day"/>
             <join-column nullable="false" on-delete="CASCADE"/>
         </many-to-one>
 
         <many-to-one field="course" target-entity="Britannia\Domain\Entity\Course\Course"
                      inversed-by="courseHasStudents">
-            <cache usage="NONSTRICT_READ_WRITE" region="day"/>
             <join-column nullable="false" on-delete="CASCADE"/>
         </many-to-one>
 

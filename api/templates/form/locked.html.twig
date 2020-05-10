@@ -1,115 +1,12 @@
 {% block locked_widget %}
 
     <div class="row">
-        <div class="col-md-8 col-md-offset-4" id="{{ id }}-wrapper">
+        <div class="col-md-8 col-md-offset-4 locked-wrapper">
             <div class="pull-right">
-                {{ form_widget(form) }}
+                {% set alerts = {RESET: reset, UPDATE: update} %}
+
+                {{ form_widget(form, {'attr': {'data-locked': widget, 'data-alerts': alerts | json_encode  }}) }}
             </div>
         </div>
     </div>
-
-    <script>
-
-        $(function () {
-            var toggle = function (el) {
-                var value = $(el).prop('value')
-                var parent = $('#{{ widget }}');
-                var inputs = $(parent).find('input');
-                var select = $(parent).find('select');
-                var btn_add = $(parent).find('.sonata-collection-add');
-                var btn_delete = $(parent).find('.sonata-collection-delete');
-
-                if (value === 'LOCKED') {
-                    $(inputs).prop("readonly", true);
-                    $(select).select2("readonly", true);
-                    $(btn_delete).addClass('disabled');
-                    $(btn_add).addClass('disabled');
-                    return;
-                }
-
-                if (value === 'RESET') {
-                    $(inputs).prop("readonly", false);
-                    $(select).select2("readonly", false);
-                    $(btn_delete).removeClass('disabled');
-                    $(btn_add).removeClass('disabled');
-                    return;
-                }
-
-                if (value === 'UPDATE') {
-                    $(inputs).each(function () {
-                        var locked = $(this).data('disabled') === 'data-disabled';
-                        $(this).prop('readonly', locked)
-                    })
-
-                    $(select).each(function () {
-                        var locked = $(this).data('disabled') === 'data-disabled';
-                        $(this).select2('readonly', locked)
-                    })
-
-                    $(btn_add).removeClass('disabled');
-
-                    $(btn_delete).each(function () {
-                        var locked = $(this).data('disabled') === 'data-disabled';
-                        $(this).removeClass('disabled');
-                        if (locked) {
-                            $(this).addClass('disabled');
-                        }
-                    })
-
-                }
-                $(el).prop('disabled', false)
-            }
-
-
-            var contents = {
-                LOCKED: '{{ locked | raw }}',
-                UPDATE: '{{ update | raw }}',
-                RESET: '{{ reset | raw }}',
-            }
-
-            var backgrounds = {
-                LOCKED: 'gray',
-                UPDATE: '#008d4c',
-                RESET: 'red',
-            }
-
-            var wrapper = $("#{{ id }}-wrapper");
-            var el = $('#{{ id }}')
-
-            var popover = $(wrapper).popover({
-                'title': 'Cuidado!',
-                'html': true,
-                'content': function () {
-                    var key = $(el).val();
-                    return contents[key];
-                }
-            });
-
-            $(el).on('change', function () {
-                toggle($(this))
-
-                if ($(this).val() == 'LOCKED') {
-                    $(popover).popover('hide')
-                } else {
-                    var key = $(el).val();
-                    var background = backgrounds[key];
-
-
-                    $(popover).popover('show');
-
-                    var wrapper = $(popover).siblings('.popover')
-                    var arrow = $(popover).siblings('.popover').find('.arrow')
-
-                    wrapper.css('top', -15);
-                    wrapper.css('min-height', 140);
-                    arrow.css('top', '38%');
-
-                    var title = $(popover).siblings('.popover').find('h3.popover-title')
-                    $(title).css({'background-color': background, 'color': 'white', 'font-size': '1.4em'})
-                }
-            })
-
-            $(el).trigger('change')
-        })
-    </script>
 {% endblock %}

@@ -18,8 +18,6 @@ use Britannia\Domain\Entity\Course\CourseDto;
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Entity\Student\StudentCourse;
 use Britannia\Domain\Entity\Student\StudentCourseList;
-use Britannia\Domain\Entity\Student\StudentHasJoinedToCourse;
-use Britannia\Domain\Entity\Student\StudentHasLeavedCourse;
 use Britannia\Domain\Entity\Student\StudentList;
 use Doctrine\Common\Collections\Collection;
 use PlanB\DDD\Domain\VO\PositiveInteger;
@@ -40,7 +38,7 @@ trait StudentTrait
     /**
      * @var Collection
      */
-    private $courseHasStudents;
+    protected $courseHasStudents;
 
 
     protected function updateStudents(CourseDto $dto)
@@ -69,18 +67,28 @@ trait StudentTrait
     {
         $student->removeCourse($this);
 
+
         return $this;
     }
 
     public function addStudent(Student $student): self
     {
+        $joined = StudentCourse::make($student, $this);
+        if($this->courseHasStudentList()->hasActive($joined)){
+            return $this;
+        }
+
+        $this->courseHasStudentList()->add($joined);
+
         $student->addCourse($this);
+
         return $this;
     }
 
     public function updateNumOfStudents(): self
     {
-        $this->numOfStudents = $this->courseHasStudentList()->count();
+        $this->numOfStudents = $this->courseHasStudentList()->onlyActives()->count();
+
         return $this;
     }
 

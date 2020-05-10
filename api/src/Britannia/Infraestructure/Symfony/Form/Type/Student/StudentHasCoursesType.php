@@ -60,7 +60,7 @@ class StudentHasCoursesType extends ModelType
     {
         $builder->where('A.timeRange.status != :finalized')
             ->setParameter('finalized', CourseStatus::FINALIZED())
-            ->setCacheable(true);
+            ->setCacheable(false);
 
     }
 }

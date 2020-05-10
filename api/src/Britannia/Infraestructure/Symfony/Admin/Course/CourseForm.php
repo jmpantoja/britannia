@@ -76,7 +76,6 @@ final class CourseForm extends AdminForm
         $this->priceTab('Precio', $course);
         $this->passTab('Bonos', $course);
         $this->studentsTab('Alumnos y profesores');
-        //   $this->assessmentTab('Evaluación', $course);
 
         return $this;
     }
@@ -179,23 +178,6 @@ final class CourseForm extends AdminForm
                 'mapped' => false,
                 'label' => false,
                 'course' => $this->course
-            ]);
-
-        return $this;
-    }
-
-    private function assessmentTab(string $name, Course $course): self
-    {
-        if (!($course instanceof CourseAssessmentInterface)) {
-            return $this;
-        }
-
-        $this->tab($name);
-
-        $this->group('Evaluación', ['class' => 'col-md-6'])
-            ->add('assessment', AssessmentType::class, [
-                'label' => false,
-                'data' => $course->assessment()
             ]);
 
         return $this;

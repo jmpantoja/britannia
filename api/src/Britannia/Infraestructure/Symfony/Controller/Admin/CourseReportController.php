@@ -68,7 +68,26 @@ final class CourseReportController extends CRUDController
         return $this->renderJson([
             'start' => $start,
             'end' => $end,
+            'disabled' => $this->getDisabledTerms($course)
         ]);
+    }
+
+    private function getDisabledTerms(Course $course)
+    {
+        $enabled = true;
+        $data = [];
+
+        foreach (TermName::toList() as $termName) {
+            $name = $termName->getName();
+            $data[$name] = $enabled;
+            $courseTerm = CourseTerm::make($course, $termName);
+            $enabled = $enabled && !is_null($courseTerm->end());
+        }
+
+        return collect($data)
+            ->filter(fn($value) => $value === false)
+            ->keys()
+            ->toArray();
     }
 
     protected function redirectTo($object)

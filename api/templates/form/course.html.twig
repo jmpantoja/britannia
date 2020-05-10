@@ -109,7 +109,7 @@
 
 {% block time_table_widget %}
     {% if form.locked is defined %}
-        {{ form_row(form.locked, {widget: id ~ '-wrapper'}) }}
+        {{ form_row(form.locked, {widget: '#' ~ id ~ '-wrapper'}) }}
     {% endif %}
 
     <div id="{{ id }}-wrapper">

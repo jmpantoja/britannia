@@ -37,14 +37,8 @@ class ChooseStudentListType extends AbstractCompoundType
             $builder->add($key, ChooseStudentType::class, [
                 'mapped' => false,
                 'student' => $student,
-                'data' => true
+                'data' => false
             ]);
-
-//            $builder->add($key, null, [
-//                'label' => (string)$student->fullName(),
-//                'mapped' => false,
-//                'data' => $student
-//            ]);
         }
     }
 
@@ -68,23 +62,20 @@ class ChooseStudentListType extends AbstractCompoundType
         return null;
     }
 
-
     public function customMapping(array $data)
     {
-
         /** @var Course $course */
         $course = $this->getOption('data');
         $students = $course->students();
 
         $keys = collect($data)
-            ->filter()
+            ->filter(fn($value) => $value === false)
             ->keys()
             ->toArray();
 
         $filtered = collect($students)
             ->filter(function (Student $student) use ($keys) {
                 $key = (string)$student->id();
-
                 return in_array($key, $keys);
             })
             ->toArray();

@@ -38,10 +38,6 @@
 
     var isHideValue = $.inArray(value, this.options.values) >= 0
     return !isHideValue;
-    var hasErrors = this.$target.find('.sonata-ba-field-error').length > 0;
-
-
-    return hasErrors || !isHideValue;
   }
 
 

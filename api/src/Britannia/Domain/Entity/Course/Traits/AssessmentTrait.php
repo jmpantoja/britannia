@@ -45,6 +45,8 @@ trait AssessmentTrait
         $this->assessment = $assessment;
 
         $termList = $generator->generateTerms($this->courseHasStudentList(), $assessment);
+
+
         $this->setTerms($termList);
 
         $this->termList()->updateSkills($assessment->skills());

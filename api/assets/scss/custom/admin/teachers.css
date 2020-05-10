@@ -6,12 +6,6 @@
     text-align: center;
 }
 
-.cell-wrapper-mini {
-    height: 260px;
-    width: 205px;
-}
-
-
 .cell {
     border-radius: 5px;
     box-sizing: content-box;
@@ -43,51 +37,46 @@
     width: 150px;
 }
 
-.student-cell.attended,
-.student-cell.active {
+
+.cell.on {
     border-color: #008d4c;
     cursor: pointer;
 }
 
-.student-cell.attended .cell-title,
-.student-cell.active .cell-title,
-.student-cell.attended .cell-footer,
-.student-cell.active .cell-footer {
+.cell.on .cell-title,
+.cell.on .cell-footer {
     background-color: #008d4c;
     color: white;
 }
 
-.student-cell.no-attended,
-.student-cell.inactive {
+.cell.off {
     border-color: #d73925;
     cursor: pointer;
 }
 
-.student-cell.no-attended .cell-title,
-.student-cell.inactive .cell-title,
-.student-cell.no-attended .cell-footer,
-.student-cell.inactive .cell-footer {
+.cell.off .cell-title,
+.cell.off .cell-footer {
     background-color: #d73925;
     color: white;
 }
 
-.student-cell .cell-alert {
+.cell .cell-alert {
     position: absolute;
     bottom: 0;
     right: 0;
     word-spacing: -5px;
 }
 
-.student-cell.attended .cell-alert {
+
+.cell.on .cell-alert {
     bottom: 37px;
 }
 
-.student-cell.no-attended .cell-alert {
+.cell.off .cell-alert {
     bottom: 72px;
 }
 
-
-.student-cell .cell-alert span {
+.cell .cell-alert span {
     border-radius: 0;
     border: solid 1px silver;
     padding: 0.5em;
@@ -96,12 +85,32 @@
     opacity: 100%;
 }
 
-.student-cell .cell-alert span:first-of-type {
+.cell .cell-alert span:first-of-type {
     border-top-left-radius: 20%;
     border-right: none;
 }
 
+.cell-wrapper-mini {
+    height: 260px;
+    width: 205px;
+}
 
-.cell-wrapper-mini  {
-    /*width: 150px;*/
+
+.cell-wrapper-mini .cell .cell-alert {
+    bottom: 0;
+}
+
+.cell-wrapper-mini .cell .cell-alert span:last-of-type {
+    border-bottom-right-radius: 20%;
+}
+
+.cell-wrapper-mini .cell.off {
+    border-color: #999;
+    cursor: pointer;
+}
+
+.cell-wrapper-mini .cell.off .cell-title,
+.cell-wrapper-mini .cell.off .cell-footer {
+    background-color: #999;
+    color: white;
 }

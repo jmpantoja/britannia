@@ -124,8 +124,12 @@ class Term implements Comparable
         $this->student = $studentCourse->student();
         $this->course = $studentCourse->course();
 
-        $this->start = $this->course->start();
-        $this->end = $this->course->end();
+        $this->start = null;
+        $this->end = null;
+
+        if ($termName->isFirst()) {
+            $this->start = $this->course->start();
+        }
 
         $this->termName = $termName;
         $this->units = new ArrayCollection();

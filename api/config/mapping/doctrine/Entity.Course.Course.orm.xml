@@ -55,7 +55,6 @@
 
         <one-to-many field="courseHasStudents" target-entity="Britannia\Domain\Entity\Student\StudentCourse"
                      mapped-by="course" orphan-removal="true">
-            <cache usage="NONSTRICT_READ_WRITE" region="day"/>
             <cascade>
                 <cascade-persist/>
             </cascade>
@@ -74,6 +73,10 @@
                 <cascade-persist/>
             </cascade>
         </one-to-many>
+
+        <lifecycle-callbacks>
+            <lifecycle-callback type="preUpdate" method="preUpdate"/>
+        </lifecycle-callbacks>
 
     </entity>
 

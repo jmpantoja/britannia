@@ -61,7 +61,7 @@ class CourseHasStudentsType extends ModelType
             $builder->where('A.age <= 6');
         }
 
-        $builder->setCacheable(true);
+        $builder->setCacheable(false);
 
         return $builder;
     }

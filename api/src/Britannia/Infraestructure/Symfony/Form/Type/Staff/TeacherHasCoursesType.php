@@ -43,7 +43,7 @@ class TeacherHasCoursesType extends ModelType
         $builder
             ->where('A.timeRange.status= :param')
             ->setParameter('param', CourseStatus::ACTIVE())
-            ->setCacheable(true);
+            ->setCacheable(false);
     }
 
     public function customMapping($data)

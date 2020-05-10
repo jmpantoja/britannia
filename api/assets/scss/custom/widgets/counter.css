@@ -31,7 +31,8 @@
     background-color: firebrick;
 }
 
-/*.sms-template {*/
-/*    !*width: 200px;*!*/
-/*    border: solid 1px red;*/
-/*}*/
+
+ul li.select2-disabled {
+    background-color: #EEE;
+    color: #999
+}
