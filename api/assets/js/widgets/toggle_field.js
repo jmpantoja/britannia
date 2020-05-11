@@ -18,13 +18,20 @@
   }
 
   ToggleField.prototype.run = function () {
-    this.toggle(this.$element.val());
+    this.toggle(this.value());
 
     this.$element.on('change', function () {
-      this.toggle(this.$element.val())
+      this.toggle(this.value())
     }.bind(this))
   }
 
+  ToggleField.prototype.value = function () {
+    if(this.$element.is('input[type=checkbox]')){
+      return this.$element.is(':checked') ? "1" : "0";
+    }
+
+    return this.$element.val();
+  }
 
   ToggleField.prototype.toggle = function (value) {
     if (this.shouldBeVisible(value)) {
@@ -35,21 +42,17 @@
   }
 
   ToggleField.prototype.shouldBeVisible = function (value) {
-
     var isHideValue = $.inArray(value, this.options.values) >= 0
     return !isHideValue;
   }
-
-
-  // TOGGLE PLUGIN DEFINITION
-  // ========================
 
   function Plugin(option) {
     return this.each(function () {
       var $this = $(this)
       var options = typeof option == 'object' && option
 
-      new ToggleField(this, options)
+      var data    = $this.data('br.toggle_field')
+      if (!data) $this.data('br.toggle_field', (data = new ToggleField(this, options) ))
     })
   }
 

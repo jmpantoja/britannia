@@ -13,6 +13,11 @@
 
 @import "~trumbowyg/dist/ui/trumbowyg.min.css";
 
+@import "~@fullcalendar/core/main.css";
+@import "~@fullcalendar/daygrid/main.css";
+@import "~@fullcalendar/timegrid/main.css";
+//@import "~@fullcalendar/list/main.css";
+
 @import "./admin/styles";
 @import "./admin/layout";
 @import "./admin/tree";
@@ -31,8 +36,8 @@
 @import "./custom/admin/widgets";
 @import "./custom/widgets/counter";
 @import "./custom/toggle/bootstrap-toggle.min";
-@import "./custom/fullcalendar/core.min";
-@import "./custom/fullcalendar/daygrid.min";
-@import "./custom/fullcalendar/timegrid.min";
+//@import "./custom/fullcalendar/core.min";
+//@import "./custom/fullcalendar/daygrid.min";
+//@import "./custom/fullcalendar/timegrid.min";
 @import "./custom/admin/fullcalendar";
 @import "./custom/toast/jquery.toast.min";

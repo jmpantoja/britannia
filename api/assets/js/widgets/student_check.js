@@ -84,15 +84,14 @@
     this.$note.removeClass('hidden');
   }
 
-
-  // TOGGLE PLUGIN DEFINITION
-  // ========================
   function Plugin(option) {
     return this.each(function () {
       var $this = $(this)
       var options = typeof option == 'object' && option
 
-      new AttendanceList(this, options)
+      var data    = $this.data('br.student_check')
+      if (!data) $this.data('br.student_check', (data = new AttendanceList(this, options) ))
+
     })
   }
 

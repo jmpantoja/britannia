@@ -79,30 +79,18 @@
 {% endblock %}
 
 {% block alert_widget %}
+    {% set attr = {
+        'data-toggle': 'field',
+        'data-hide-values': '["0"]',
+        'data-target': '#description-' ~ id
+    } %}
 
-    {{ form_row(form.alert) }}
-    {{ form_row(form.description) }}
+    {{ form_widget(form.alert, {'attr': attr }) }}
 
-    <script>
-        $(function () {
-            var alert = $('#{{ form.alert.vars.id }}')
-            var description = $('#{{ form.description.vars.id }}')
-            var wysiwyg = $(description).parents('.form-group').first();
-
-            $(alert).on('change', function () {
-                var checked = $(this).is(':checked');
-
-                if (checked) {
-                    $(wysiwyg).show();
-                } else {
-                    $(wysiwyg).hide();
-                }
-            });
-
-            $(alert).trigger('change');
-
-        });
-    </script>
+    {#    {{ form_widget(form.alert) }}#}
+    <div id="description-{{ id }}">
+        {{ form_row(form.description) }}
+    </div>
 {% endblock %}
 
 {% block photo_widget %}
@@ -113,61 +101,24 @@
                 <label class="thumb-upload">
                     {% set path =  form.path.vars.value | default(shape) %}
                     {% set src =  downloadUrl ~ '/' ~ path %}
-                    <img id="{{ id }}-thumb" src="{{ src }}"/>
 
-                    {{ form_widget(form.upload, {attr: {'class': 'hidden' }}) }}
+                    <img src="{{ src }}" data-upload-listener="thumb"
+                         data-source="#{{ form.upload.vars.id }}"
+                         data-download-url="{{ downloadUrl }}"/>
+
+                    {% set attr = {
+                        'class': 'hidden',
+                        'data-upload': 'image',
+                        'data-path': '#' ~ form.path.vars.id,
+                        'data-upload-url': uploadUrl
+                    } %}
+                    {{ form_widget(form.upload, {'attr': attr}) }}
+
                     <span class="help-block">click en la foto para cambiar</span>
                 </label>
             </div>
-
             {{ form_widget(form.path) }}
         </div>
-
-        <script type="application/javascript">
-            $(function () {
-                $('#{{ form.upload.vars.id }}').on('change', function () {
-
-                    var fd = new FormData();
-                    var files = $(this)[0].files[0];
-                    fd.append('file', files);
-
-                    if (files.size > 2048000) {
-                        alert('este archivo es demasiado grande (2Mb máximo)');
-                        return;
-                    }
-
-                    if (files.type !== 'image/jpeg') {
-                        alert('Tipo incorrecto (solo JPG)');
-                        return;
-                    }
-
-                    $.ajax({
-                        url: '{{ uploadUrl }}',
-                        type: 'post',
-                        data: fd,
-                        contentType: false,
-                        processData: false,
-                        success: function (response) {
-                            if (response.success) {
-                                $('#{{ form.upload.vars.id }}').val('');
-
-
-                                $('#{{ form.path.vars.id }}').val(response.path);
-                                var ext = String(response.ext).toUpperCase();
-                                $('#{{ id }}-thumb').attr('src', '{{ downloadUrl }}/' + response.path)
-
-                            } else {
-                                alert("Error al subir el archivo: " + response.message);
-                            }
-                        },
-                        error: function (a, b, c) {
-                            alert('error al subir el archivo');
-                        }
-                    });
-                });
-            });
-        </script>
-
     </div>
 
 {% endblock %}

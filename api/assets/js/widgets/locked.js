@@ -124,14 +124,13 @@
     return this.options.alerts[value] || '(Texto sin definir)';
   }
 
-  // TOGGLE PLUGIN DEFINITION
-  // ========================
-
   function Plugin(option) {
     return this.each(function () {
       var $this = $(this)
       var options = typeof option == 'object' && option
-      new Locked(this, options)
+
+      var data    = $this.data('br.locked')
+      if (!data) $this.data('br.locked', (data = new Locked(this, options) ))
     })
   }
 

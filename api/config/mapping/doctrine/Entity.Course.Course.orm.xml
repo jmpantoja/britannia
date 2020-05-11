@@ -73,11 +73,6 @@
                 <cascade-persist/>
             </cascade>
         </one-to-many>
-
-        <lifecycle-callbacks>
-            <lifecycle-callback type="preUpdate" method="preUpdate"/>
-        </lifecycle-callbacks>
-
     </entity>
 
 </doctrine-mapping>

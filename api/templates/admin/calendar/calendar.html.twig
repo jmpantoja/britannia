@@ -1,131 +1,142 @@
 {% extends get_global_template('layout') %}
 
 {% block content %}
+    <div data-calendar="calendar"
+         data-endpoint="{{ path(calendar_endpoint) }}"
+         data-change-status-endpoint="{{ path(change_status_action) }}"
+         data-modal-dialog=".calendar-modal"
+         data-prev-button=".fc-prev-button span"
+         data-next-button=".fc-next-button span"
+         data-today-button=".fc-today-button"
+    >
+    </div>
+    {#    <script>#}
+    {#        $(function () {#}
 
-    <div id="calendar"></div>
-    <script>
-        $(function () {
+    {#            var hash = new URI().fragment();#}
+    {#            var date = moment(hash, 'Y-MM-DD', true);#}
 
-            var hash = new URI().fragment();
-            var date = moment(hash, 'Y-MM-DD', true);
+    {#            var current = null;#}
+    {#            if (date.isValid()) {#}
+    {#                current = date.format('Y-MM-DD')#}
+    {#            }#}
+    {#            var calendarEl = document.getElementById('calendar');#}
 
-            var current = null;
-            if (date.isValid()) {
-                current = date.format('Y-MM-DD')
-            }
-            var calendarEl = document.getElementById('calendar');
+    {#            var calendar = new FullCalendar.Calendar(calendarEl, {#}
+    {#                plugins: ['interaction', 'dayGrid', 'resourceTimeGrid'],#}
+    {#                selectable: true,#}
+    {#                locale: 'es',#}
+    {#                firstDay: 1,#}
+    {#                nowIndicator: false,#}
+    {#                now: current,#}
+    {#                header: {#}
+    {#                    rigt: 'prev,next today',#}
+    {#                    left: 'title',#}
+    {#                    //  right: 'dayGridMonth,timeGridWeek,timeGridDay'#}
+    {#                },#}
+    {#                events: '{{ path(calendar_endpoint) }}',#}
+    {#                eventRender: function (info) {#}
+    {#                    var data = info.event.extendedProps;#}
+    {#                    var date = info.event.start;#}
+    {#                    var end = info.event.end;#}
 
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-                plugins: ['interaction', 'dayGrid', 'resourceTimeGrid'],
-                selectable: true,
-                locale: 'es',
-                firstDay: 1,
-                nowIndicator: false,
-                now: current,
-                header: {
-                    rigt: 'prev,next today',
-                    left: 'title',
-                    //  right: 'dayGridMonth,timeGridWeek,timeGridDay'
-                },
-                events: '{{ path(calendar_endpoint) }}',
-                eventRender: function (info) {
-                    var data = info.event.extendedProps;
-                    var date = info.event.start;
-                    var end = info.event.end;
+    {#                    while (date < end) {#}
+    {#                        const options = {year: 'numeric', month: 'numeric', day: 'numeric'};#}
+    {#                        var formatted = moment(date).format('YYYY-MM-DD');#}
+    {#                        var td = $('[data-date="' + formatted + '"]');#}
 
-                    while (date < end) {
-                        const options = {year: 'numeric', month: 'numeric', day: 'numeric'};
-                        var formatted = moment(date).format('YYYY-MM-DD');
-                        var td = $('[data-date="' + formatted + '"]');
+    {#                        date.setDate(date.getDate() + 1)#}
 
-                        date.setDate(date.getDate() + 1)
+    {#                        td.removeClass('holiday')#}
+    {#                        if (data.holiday) {#}
+    {#                            td.addClass('holiday')#}
+    {#                        }#}
+    {#                    }#}
 
-                        td.removeClass('holiday')
-                        if (data.holiday) {
-                            td.addClass('holiday')
-                        }
-                    }
+    {#                },#}
+    {#                select: function (info) {#}
+    {#                    var start = moment(info.start).format('YYYY-MM-DD');#}
+    {#                    var end = moment(info.end).format('YYYY-MM-DD');#}
 
-                },
-                select: function (info) {
-                    var start = moment(info.start).format('YYYY-MM-DD');
-                    var end = moment(info.end).format('YYYY-MM-DD');
+    {#                    $('input[name="holiday"]').bootstrapToggle('off')#}
+    {#                    $('input[name="start"]').val(start)#}
+    {#                    $('input[name="end"]').val(end)#}
 
-                    $('input[name="holiday"]').bootstrapToggle('off')
-                    $('input[name="start"]').val(start)
-                    $('input[name="end"]').val(end)
+    {#                    $('.modal').modal({#}
+    {#                        keyboard: false,#}
+    {#                    })#}
+    {#                }#}
+    {#            });#}
 
-                    $('.modal').modal({
-                        keyboard: false,
-                    })
-                }
-            });
-
-            calendar.render();
-            $('.fc-prev-button span').click(function () {
-                var date = calendar.getDate();
-                var hash = moment(date).subtract(1, 'months').format('Y-MM-DD');
-                window.location.hash = hash;
-
-            });
-
-            $('.fc-next-button span').click(function () {
-                var date = calendar.getDate();
-                var hash = moment(date).add(1, 'months').format('Y-MM-DD');
-                window.location.hash = hash;
-            });
-
-            $('.fc-today-button').click(function () {
-                var today = moment().format('Y-MM-DD');
-                window.location.hash = today;
-                calendar.goToDate(today);
-                return false;
-            });
+    {#            calendar.render();#}
 
 
+    {#            $('.fc-prev-button span').click(function () {#}
+{#                    var date = calendar.getDate();#}
+{#                    var hash = moment(date).subtract(1, 'months').format('Y-MM-DD');#}
+{#                    window.location.hash = hash;#}
 
-            $('.modal button.submit').on('click', function () {
+    {#            });#}
 
-                var holiday = $('input[name="holiday"]').prop('checked');
+    {#            $('.fc-next-button span').click(function () {#}
+{#                    var date = calendar.getDate();#}
+{#                    var hash = moment(date).add(1, 'months').format('Y-MM-DD');#}
+{#                    window.location.hash = hash;#}
+    {#            });#}
 
-                var start = $('.modal input[name="start"]').val()
-                var end = $('.modal input[name="end"]').val()
-
-                $.ajax({
-                    type: 'POST',
-                    url: '{{ path(change_status_action) }}',
-                    data: {
-                        'start': start,
-                        'end': end,
-                        'holiday': holiday
-                    },
-                    dataType: "json",
-                    success: function (data) {
-                        calendar.refetchEvents()
-                    }
-                });
-            })
-        });
+    {#            $('.fc-today-button').click(function () {#}
+{#                    var today = moment().format('Y-MM-DD');#}
+{#                    window.location.hash = today;#}
+{#                    calendar.goToDate(today);#}
+{#                    return false;#}
+    {#            });#}
 
 
-    </script>
+
+    {#            $('.modal button.submit').on('click', function () {#}
+
+    {#                var holiday = $('input[name="holiday"]').prop('checked');#}
+
+    {#                var start = $('.modal input[name="start"]').val()#}
+    {#                var end = $('.modal input[name="end"]').val()#}
+
+    {#                $.ajax({#}
+    {#                    type: 'POST',#}
+    {#                    url: '{{ path(change_status_action) }}',#}
+    {#                    data: {#}
+    {#                        'start': start,#}
+    {#                        'end': end,#}
+    {#                        'holiday': holiday#}
+    {#                    },#}
+    {#                    dataType: "json",#}
+    {#                    success: function (data) {#}
+    {#                        calendar.refetchEvents()#}
+    {#                    }#}
+    {#                });#}
+    {#            })#}
+    {#        });#}
 
 
-    <div class="modal fade" tabindex="-1" role="dialog">
+    {#    </script>#}
+
+    <div class="calendar-modal modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-md ">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Modal title</h4>
+                    <h4 class="modal-title">Dias festivos </h4>
                 </div>
                 <div class="modal-body">
 
-                    <input name="holiday" type="checkbox" data-toggle="toggle"
+                    <p>Marcar los dias seleccionados como:</p>
+
+                    <input name="holiday" type="checkbox"
+                           data-toggle="toggle"
                            value="yes"
                            data-width="150px"
-                           data-on="Festivo"
-                           data-off="Laborable"
+                           data-on="Festivos"
+                           data-off="Laborables"
                            data-onstyle="danger"
                            data-offstyle="success"
                     />
@@ -135,8 +146,9 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary submit" data-dismiss="modal">Save Changes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary submit" data-dismiss="modal">Guardar los cambios
+                    </button>
                 </div>
             </div>
         </div>

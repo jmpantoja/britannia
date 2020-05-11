@@ -73,15 +73,13 @@
     return moment(value, format)
   }
 
-
-  // TOGGLE PLUGIN DEFINITION
-  // ========================
   function Plugin(option) {
     return this.each(function () {
       var $this = $(this)
       var options = typeof option == 'object' && option
 
-      new FormDate(this, options)
+      var data    = $this.data('br.form_date')
+      if (!data) $this.data('br.form_date', (data = new FormDate(this, options) ))
     })
   }
 

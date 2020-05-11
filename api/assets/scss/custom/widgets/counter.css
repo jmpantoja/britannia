@@ -36,3 +36,8 @@ ul li.select2-disabled {
     background-color: #EEE;
     color: #999
 }
+
+.sonata-ba-field-error .trumbowyg-box {
+
+    border: solid 1px firebrick;
+}

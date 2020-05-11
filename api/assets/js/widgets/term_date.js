@@ -53,14 +53,14 @@
 
   }
 
-  // TOGGLE PLUGIN DEFINITION
-  // ========================
   function Plugin(option) {
     return this.each(function () {
       var $this = $(this)
       var options = typeof option == 'object' && option
 
-      new TermDate(this, options)
+      var data    = $this.data('br.term_date')
+      if (!data) $this.data('br.term_date', (data = new TermDate(this, options) ))
+
     })
   }
 

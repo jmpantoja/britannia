@@ -64,6 +64,8 @@ abstract class FileUploader
         try {
             return $callback();
         } catch (Exception $exception) {
+            dump($exception->getMessage());
+            die();
             return FileUploadResponse::error($exception->getMessage());
         }
     }

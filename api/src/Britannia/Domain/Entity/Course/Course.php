@@ -91,10 +91,4 @@ abstract class Course implements Comparable, CoursePaymentInterface
     {
         return $this->id;
     }
-
-    public function preUpdate(LifecycleEventArgs $eventArgs)
-    {
-    //    $eventArgs->getObject()->updateNumOfStudents();
-    }
-
 }

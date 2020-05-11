@@ -7,7 +7,14 @@
         <div class="col-md-2">
             <label class="btn btn-primary">
                 <i class="fa fa-upload"></i>
-                Upload {{ form_widget(form.upload, {attr: {'class': 'hidden' }}) }}
+                {% set attr = {
+                    'class': 'hidden',
+                    'data-upload': 'pdf',
+                    'data-path': '#' ~ form.path.vars.id,
+                    'data-upload-url': path('attachment_upload')
+                } %}
+
+                Upload {{ form_widget(form.upload, {'attr': attr}) }}
             </label>
         </div>
 
@@ -20,61 +27,16 @@
                 {% set hidden = '' %}
             {% endif %}
 
-            <a id="{{ id }}-download-link" href="{{ href }}" target="_blank"
-               class="btn btn-success download {{ hidden }}">
+            <a href="{{ href }}"
+               target="_blank"
+               class="btn btn-success download {{ hidden }}"
+               data-upload-listener="link"
+               data-source="#{{ form.upload.vars.id }}"
+               data-download-url="{{ path('attachment_download') }}"
+            >
                 <i class="fa fa-download"></i>
                 {{ anchor }}
             </a>
         </div>
-
-        <script type="application/javascript">
-            $(function () {
-                $('#{{ form.upload.vars.id }}').on('change', function () {
-
-                    var fd = new FormData();
-                    var files = $(this)[0].files[0];
-                    fd.append('file', files);
-
-                    if (files.size > 2048000) {
-                        alert('este archivo es demasiado grande (2Mb máximo)');
-                        return;
-                    }
-
-                    if (files.type !== 'application/pdf') {
-                        alert('Tipo incorrecto (solo pdf)');
-                        return;
-                    }
-
-                    $.ajax({
-                        url: '{{ path('attachment_upload') }}',
-                        type: 'post',
-                        data: fd,
-                        contentType: false,
-                        processData: false,
-                        success: function (response) {
-                            if (response.success) {
-                                $('#{{ form.path.vars.id }}').val(response.path);
-                                var ext = String(response.ext).toUpperCase();
-                                var text = `Download (${response.size})`
-
-                                $('#{{ form.upload.vars.id }}').val('');
-
-                                $('#{{ id }}-download-link').text(text)
-                                $('#{{ id }}-download-link').removeClass('hidden')
-                                $('#{{ id }}-download-link').attr('href', '{{ path('attachment_download') }}/' + response.path)
-
-                            } else {
-                                alert("Error al subir el archivo: " + response.message);
-                            }
-                        },
-                        error: function (a, b, c) {
-                            alert('error al subir el archivo');
-                        }
-                    });
-                });
-            });
-        </script>
-
     </div>
-
 {% endblock %}

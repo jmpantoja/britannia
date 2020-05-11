@@ -1,14 +1,3 @@
-/*<div class="popover fade right in" role="tooltip" id="popover990543" style="top: 156.3px; left: 188.983px; display: block;">*/
-/*<div class="arrow" style="top: 67.8481%;">*/
-/*</div>*/
-/*<h3 class="popover-title">*/
-/*<strong>CURSO NUEVO</strong></h3>*/
-/*<div class="popover-content">*/
-/*<div>*/
-/*<span>de 09:30 a 10:30</span>*/
-
-/*</div></div></div>*/
-
 .popover {
     min-width: max-content;
 }
@@ -42,7 +31,7 @@ span.fc-day-number {
     color: red;
 }
 
-#calendar {
+div[data-calendar=calendar] {
     width: 1000px;
     margin: auto;
     border: solid 1px silver;

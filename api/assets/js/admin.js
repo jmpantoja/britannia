@@ -50,9 +50,30 @@ import "eonasdan-bootstrap-datetimepicker"
 import "trumbowyg";
 
 import "jquery-toast-plugin";
-import URI from  "urijs";
+import  "bootstrap-toggle";
 
+
+import URI from  "urijs";
 global.URI = URI;
+
+import { Calendar } from "@fullcalendar/core";
+global.Calendar = Calendar;
+
+import interaction from "@fullcalendar/interaction";
+global.interaction = interaction;
+
+import timeGrid from "@fullcalendar/timegrid";
+global.timeGrid = timeGrid;
+
+import  resourceTimeGrid from "@fullcalendar/resource-timegrid";
+global.resourceTimeGrid = resourceTimeGrid;
+
+import dayGrid from "@fullcalendar/daygrid";
+global.dayGrid = dayGrid;
+
+import  resourceDayGrid from "@fullcalendar/resource-daygrid";
+global.resourceDayGrid = resourceDayGrid;
+
 
 // Custom
 import "./admin/Admin"
@@ -67,6 +88,11 @@ import "./widgets/locked";
 import "./widgets/form_date";
 import "./widgets/student_check";
 import "./widgets/term_date";
+import "./widgets/calendar";
+
+import "./widgets/upload";
+import "./widgets/upload_listener_thumb";
+import "./widgets/upload_listener_link";
 
 
 // Styles

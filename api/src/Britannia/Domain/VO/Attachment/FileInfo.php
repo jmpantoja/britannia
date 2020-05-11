@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Domain\VO\Attachment;
 
 
-use FOS\CKEditorBundle\Exception\Exception;
+use Exception;
 use SplFileInfo;
 
 final class FileInfo

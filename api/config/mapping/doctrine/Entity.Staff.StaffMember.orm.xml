@@ -71,7 +71,6 @@
 
         <one-to-many field="issues" target-entity="Britannia\Domain\Entity\Issue\IssueRecipient"
                      mapped-by="recipient" orphan-removal="true">
-
             <cascade>
                 <cascade-persist/>
             </cascade>
