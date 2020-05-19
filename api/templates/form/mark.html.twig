@@ -1,50 +1,62 @@
 {% block term_list_widget %}
+    <div data-mark="unit"
+         data-wrapper=".marks-wrapper"
+         data-definition=".definition-wrapper"
+         data-course-id="{{ "#%s" | format(form.definition.courseId.vars.id) }}" ,
+         data-uniq-id="{{ "#%s" | format(form.definition.uniqId.vars.id) }}" ,
+         data-num-of-units="{{ "#%s" | format(form.definition.numOfUnits.vars.id) }}" ,
+         data-term-name="{{ "#%s" | format(form.definition.termName.vars.id) }}" ,
+         data-units-weight="{{ "#%s" | format(form.definition.unitsWeight.vars.id) }}" ,
+         data-endpoint="{{ admin.generateUrl('marks') | default(null) }}"
+    >
 
-    <div class="definition-wrapper">
-        {{ form_row(form.definition) }}
-    </div>
-    <div class="marks-wrapper">
-        <table class="term term-marks">
-            <thead>
-            <tr>
-                <th class="student">Alumno</th>
-                {% for unit in units %}
+        <div class="definition-wrapper">
+            {{ form_row(form.definition) }}
+        </div>
+        <div class="marks-wrapper">
+            <table class="term term-marks">
+                <thead>
+                <tr>
+                    <th class="student">Alumno</th>
+                    {% for unit in units %}
+                        <th>
+                            {% set title = 'Unidad %s' | format(unit) %}
+                            {% with {title: title } %}
+                                {{ block('unit_header') }}
+                            {% endwith %}
+                        </th>
+                    {% endfor %}
                     <th>
-                        {% set title = 'Unidad %s' | format(unit) %}
+                        {% set title = 'Examen' %}
                         {% with {title: title } %}
                             {{ block('unit_header') }}
                         {% endwith %}
                     </th>
-                {% endfor %}
-                <th>
-                    {% set title = 'Examen' %}
-                    {% with {title: title } %}
-                        {{ block('unit_header') }}
-                    {% endwith %}
-                </th>
-                <th>
-                    {% set title = 'Total' %}
-                    {% with {title: title, total: true, extra: 1 } %}
-                        {{ block('unit_header') }}
-                    {% endwith %}
-                </th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for term in form %}
-                <tr>
-                    <td class="student">
-                        {{ term.vars.label }}
-                    </td>
-                    {% for unit in term %}
-                        <td>
-                            {{ form_widget(unit) }}
-                        </td>
-                    {% endfor %}
+                    <th>
+                        {% set title = 'Total' %}
+                        {% with {title: title, total: true, extra: 1 } %}
+                            {{ block('unit_header') }}
+                        {% endwith %}
+                    </th>
                 </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                {% for term in form %}
+                    <tr>
+                        <td class="student">
+                            {{ term.vars.label }}
+                        </td>
+                        {% for unit in term %}
+                            <td>
+                                {{ form_widget(unit) }}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
     </div>
 {% endblock %}
 
@@ -58,65 +70,16 @@
             {{ form_row(form.numOfUnits) }}
         </div>
         <div class="col-md-1">
-            {{ form_row(form.unitsWeight) }}
+            {% set attr = {
+                'data-mark': 'weight',
+                'data-exam': '#' ~ form.examWeight.vars.id,
+            } %}
+            {{ form_row(form.unitsWeight, {'attr': attr}) }}
         </div>
         <div class="col-md-1">
             {{ form_row(form.examWeight) }}
         </div>
     </div>
-
-    {% if admin is not null %}
-        <script>
-            $(function () {
-                var units = $('#{{ form.unitsWeight.vars.id }}');
-                var exam = $('#{{ form.examWeight.vars.id }}');
-
-                $(units).on('keyup', function () {
-                    var value = $(this).val();
-
-                    if ($.isNumeric(value) && value >= 0 && value <= 100) {
-                        $(exam).val(100 - value);
-                        return;
-                    }
-
-                    $(exam).val('-');
-                })
-
-                $(units).trigger('keyup');
-
-                var update = function () {
-                    var wrapper = $(this).parents('.form-group').find('.marks-wrapper');
-                    var definition = $(this).parents('.form-group').find('.definition-wrapper');
-
-                    var courseId = definition.find('[name$="[courseId]"]');
-                    var uniqId = definition.find('[name$="[uniqId]"]');
-                    var numOfUnits = definition.find('[name$="[numOfUnits]"]');
-                    var termName = definition.find('[name$="[termName]"]');
-                    var unitsWeight = definition.find('[name$="[unitsWeight]"]');
-
-                    $.ajax({
-                        type: 'POST',
-                        url: '{{ admin.generateUrl('marks') }}',
-                        data: {
-                            'courseId': $(courseId).val(),
-                            'uniqId': $(uniqId).val(),
-                            'numOfUnits': $(numOfUnits).val(),
-                            'termName': $(termName).val(),
-                            'unitsWeight': $(unitsWeight).val()
-                        },
-                        dataType: "html",
-
-                        success: function (data) {
-                            var html = $(data).find('.marks-wrapper').html()
-                            $(wrapper).html(html)
-                        }
-                    });
-                };
-                $('#{{ form.numOfUnits.vars.id }}').on('change', update);
-                $('#{{ form.unitsWeight.vars.id }}').on('change', update);
-            })
-        </script>
-    {% endif %}
 {% endblock %}
 
 
@@ -188,150 +151,162 @@
 
 {% block other_skill_exam_widget %}
 
-    <div class="definition-wrapper">
-        {{ form_widget(form.definition) }}
-    </div>
 
-    <div class="skill-wrapper">
-        <table class="term term-skill">
+    <div data-mark="skill"
+         data-wrapper=".skill-wrapper"
+         data-definition=".definition-wrapper"
+         data-date="{{ "#%s" | format(form.definition.date.vars.id) }}"
+         data-course-id="{{ "#%s" | format(form.definition.courseId.vars.id) }}"
+         data-uniq-id="{{ "#%s" | format(form.definition.uniqId.vars.id) }}"
+         data-term-name="{{ "#%s" | format(form.definition.termName.vars.id) }}"
+         data-skill="{{ "#%s" | format(form.definition.skill.vars.id) }}"
+         data-add-btn="{{ "#%s" | format(form.definition.add.vars.id) }}"
+         data-delete-btn="{{ "#%s" | format(form.definition.delete.vars.id) }}"
+    >
+        <div class="definition-wrapper">
+            {{ form_widget(form.definition) }}
+        </div>
+
+        <div class="skill-wrapper">
+            <table class="term term-skill">
+                <thead>
+                <tr>
+                    <th class="student">Alumno</th>
+                    {% for date in dates %}
+                        <th class="rotate">
+                            <span>{{ date | localizeddate('medium', 'none') }}</span>
+                        </th>
+                    {% endfor %}
+                    <th class="rotate">
+                        <span>Media</span>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for term in form %}
+                    {% if term.vars.name is not same as ('definition') %}
+                        <tr>
+                            <td class="student">
+                                {{ term.vars.label }}
+                            </td>
+                            {% for mark in term %}
+                                {% set hasErrors = mark.vars.errors is not empty %}
+                                {% set tdClass = 'class='~name %}
+
+                                {% if hasErrors %}
+                                    {% set tdClass = 'class=error ' ~ name %}
+                                {% endif %}
+
+                                <td {{ tdClass }}>
+                                    {{ form_widget(mark) }}
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
+    {% block other_skill_definition_widget %}
+        <div class="row">
+            <div class="col-md-4" style="padding-left: 0;">
+                <div class="col-md-6">
+                    {{ form_widget(form.date) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_widget(form.add) }}
+                </div>
+                <div class="col-md-12" style="padding-left: 2px;">
+                    {{ form_widget(form.delete) }}
+                </div>
+                {{ form_widget(form.courseId) }}
+                {{ form_widget(form.uniqId) }}
+                {{ form_widget(form.termName) }}
+                {{ form_widget(form.skill) }}
+            </div>
+        </div>
+
+        {#        {% if admin is not null %}#}
+
+        {#            <script>#}
+        {#                $(function () {#}
+
+        {#                    let update = function () {#}
+        {#                        var wrapper = $(this).parents('.form-group').find('.skill-wrapper');#}
+        {#                        var definition = $(this).parents('.form-group').find('.definition-wrapper');#}
+
+        {#                        var date = definition.find('[name$="[date]"]');#}
+        {#                        var courseId = definition.find('[name$="[courseId]"]');#}
+        {#                        var uniqId = definition.find('[name$="[uniqId]"]');#}
+        {#                        var termName = definition.find('[name$="[termName]"]');#}
+        {#                        var skill = definition.find('[name$="[skill]"]');#}
+
+        {#                        var url = $(this).val();#}
+        {#                        #}
+        {#                        $.ajax({#}
+        {#                            type: 'POST',#}
+        {#                            url: url,#}
+        {#                            data: {#}
+        {#                                'date': $(date).val(),#}
+        {#                                'courseId': $(courseId).val(),#}
+        {#                                'uniqId': $(uniqId).val(),#}
+        {#                                'termName': $(termName).val(),#}
+        {#                                'skill': $(skill).val(),#}
+        {#                            },#}
+        {#                            dataType: "html",#}
+        {#                            success: function (data) {#}
+        {#                                var html = $(data).find('.skill-wrapper').html()#}
+        {#                                $(wrapper).html(html)#}
+        {#                            }#}
+        {#                        });#}
+        {#                    };#}
+
+        {#                    $('#{{ form.add.vars.id }}').on('click', update);#}
+        {#                    $('#{{ form.delete.vars.id }}').on('click', function () {#}
+        {#                        var definition = $(this).parents('.form-group').find('.definition-wrapper');#}
+        {#                        var date = definition.find('[name$="[date]"]');#}
+        {#                        var value = $(date).val();#}
+
+{#                                var question = `¿Realmente quiere borrar el examen del día ${value}?`#}
+{#                                var response = confirm(question);#}
+
+{#                                return response && update.apply(this)#}
+
+        {#                    });#}
+        {#                })#}
+        {#            </script>#}
+        {#        {% endif %}#}
+    {% endblock %}
+
+
+    {% block single_exam_widget %}
+        <table class="term term-single">
             <thead>
             <tr>
                 <th class="student">Alumno</th>
-                {% for date in dates %}
-                    <th class="rotate">
-                        <span>{{ date | localizeddate('medium', 'none') }}</span>
-                    </th>
-                {% endfor %}
-                <th class="rotate">
-                    <span>Media</span>
+                <th>
+                    {% set title = 'Examen' %}
+                    {% with {title: title, total: true, extra: 1 } %}
+                        {{ block('unit_header') }}
+                    {% endwith %}
                 </th>
             </tr>
             </thead>
             <tbody>
             {% for term in form %}
-                {% if term.vars.name is not same as ('definition') %}
-                    <tr>
-                        <td class="student">
-                            {{ term.vars.label }}
-                        </td>
-                        {% for mark in term %}
-                            {% set hasErrors = mark.vars.errors is not empty %}
-                            {% set tdClass = 'class='~name %}
-
-                            {% if hasErrors %}
-                                {% set tdClass = 'class=error ' ~ name %}
-                            {% endif %}
-
-                            <td {{ tdClass }}>
-                                {{ form_widget(mark) }}
-                            </td>
-                        {% endfor %}
-                    </tr>
-                {% endif %}
+                <tr>
+                    <td class="student">
+                        {{ term.vars.label }}
+                    </td>
+                    <td>
+                        {{ form_widget(term) }}
+                    </td>
+                </tr>
             {% endfor %}
             </tbody>
         </table>
-    </div>
-{% endblock %}
 
-
-{% block other_skill_definition_widget %}
-    <div class="row">
-        <div class="col-md-4" style="padding-left: 0;">
-            <div class="col-md-6">
-                {{ form_widget(form.date) }}
-            </div>
-            <div class="col-md-6">
-                {{ form_widget(form.add) }}
-            </div>
-            <div class="col-md-12" style="padding-left: 2px;">
-                {{ form_widget(form.delete) }}
-            </div>
-            {{ form_widget(form.courseId) }}
-            {{ form_widget(form.uniqId) }}
-            {{ form_widget(form.termName) }}
-            {{ form_widget(form.skill) }}
-        </div>
-    </div>
-
-    {% if admin is not null %}
-
-        <script>
-            $(function () {
-
-                let update = function () {
-                    var wrapper = $(this).parents('.form-group').find('.skill-wrapper');
-                    var definition = $(this).parents('.form-group').find('.definition-wrapper');
-
-                    var date = definition.find('[name$="[date]"]');
-                    var courseId = definition.find('[name$="[courseId]"]');
-                    var uniqId = definition.find('[name$="[uniqId]"]');
-                    var termName = definition.find('[name$="[termName]"]');
-                    var skill = definition.find('[name$="[skill]"]');
-
-                    var url = $(this).val();
-
-                    $.ajax({
-                        type: 'POST',
-                        url: url,
-                        data: {
-                            'date': $(date).val(),
-                            'courseId': $(courseId).val(),
-                            'uniqId': $(uniqId).val(),
-                            'termName': $(termName).val(),
-                            'skill': $(skill).val(),
-                        },
-                        dataType: "html",
-                        success: function (data) {
-                            var html = $(data).find('.skill-wrapper').html()
-                            $(wrapper).html(html)
-                        }
-                    });
-                };
-
-                $('#{{ form.add.vars.id }}').on('click', update);
-                $('#{{ form.delete.vars.id }}').on('click', function () {
-                    var definition = $(this).parents('.form-group').find('.definition-wrapper');
-                    var date = definition.find('[name$="[date]"]');
-                    var value = $(date).val();
-
-                    var question = `¿Realmente quiere borrar el examen del día ${value}?`
-                    var response = confirm(question);
-
-                    return response && update.apply(this)
-
-                });
-            })
-        </script>
-    {% endif %}
-{% endblock %}
-
-
-{% block single_exam_widget %}
-    <table class="term term-single">
-        <thead>
-        <tr>
-            <th class="student">Alumno</th>
-            <th>
-                {% set title = 'Examen' %}
-                {% with {title: title, total: true, extra: 1 } %}
-                    {{ block('unit_header') }}
-                {% endwith %}
-            </th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for term in form %}
-            <tr>
-                <td class="student">
-                    {{ term.vars.label }}
-                </td>
-                <td>
-                    {{ form_widget(term) }}
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-{% endblock %}
+    {% endblock %}

@@ -50,7 +50,7 @@ abstract class CourseDto extends Dto
 
     public StudentList $courseHasStudents;
 
-    public ?Collection $books;
+    public ?Collection $books = null;
 
     public ?TimeTable $timeTable;
 

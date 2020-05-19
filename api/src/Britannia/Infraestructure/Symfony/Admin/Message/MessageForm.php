@@ -67,6 +67,7 @@ final class MessageForm extends AdminForm
         $this->add('schedule', DateTimePickerType::class, [
             'disabled' => $disabled,
             'label' => 'Fecha de envio',
+            'format'=>\IntlDateFormatter::LONG,
             'dp_minute_stepping' => 20,
             'dp_use_seconds' => false,
             'data' => $message->schedule() ?? CarbonImmutable::now()->addMinutes(15)->roundMinute(20)

@@ -76,9 +76,8 @@ class InvoiceDetail implements Comparable
         $this->discount = $discount;
         $this->price = $price;
 
-        $priceTotal = $price->toFloat() * $numOfUnits->toInt();
+        $priceTotal = $this->priceTotal()->toFloat();
         $priceWithDiscount = $priceTotal - ($priceTotal * $discount->toFloat());
-
 
         $this->total = RefundPrice::make($priceWithDiscount);
         $this->discountTotal = RefundPrice::make($priceWithDiscount - $priceTotal);
@@ -133,6 +132,15 @@ class InvoiceDetail implements Comparable
     public function price(): RefundPrice
     {
         return $this->price;
+    }
+
+    /**
+     * @return Price
+     */
+    public function priceTotal(): Price
+    {
+        $value = $this->price->toFloat() * $this->numOfUnits->toInt();
+        return Price::make($value);
     }
 
     /**

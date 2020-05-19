@@ -44,8 +44,6 @@ final class CreateInvoiceUseCase implements UseCaseInterface
 
     public function handle(CreateInvoice $command)
     {
-
-
         /*
          * Cuando un alumno se une a un curso,
          * pueden pasar varias cosas:

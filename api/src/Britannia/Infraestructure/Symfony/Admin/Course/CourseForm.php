@@ -18,9 +18,9 @@ use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Course\Course\OneToOne;
 use Britannia\Domain\Entity\Course\CourseAssessmentInterface;
 use Britannia\Domain\Entity\Course\CourseCalendarInterface;
+use Britannia\Domain\Entity\Course\CourseId;
 use Britannia\Domain\Entity\Course\CoursePaymentInterface;
 use Britannia\Domain\Entity\Level\Level;
-use Britannia\Domain\Entity\SchoolCourse\SchoolCourse;
 use Britannia\Domain\Entity\Setting\Setting;
 use Britannia\Infraestructure\Symfony\Form\Type\Assessment\AssessmentType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\AgeType;
@@ -37,11 +37,9 @@ use Britannia\Infraestructure\Symfony\Form\Type\Course\SchoolCourseListType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\SupportType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\TeachersType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\TimeTable\TimeTableType;
-use Doctrine\ORM\EntityRepository;
 use PlanB\DDDBundle\Sonata\Admin\AdminForm;
 use PlanB\DDDBundle\Symfony\Form\Type\PositiveIntegerType;
 use PlanB\DDDBundle\Symfony\Form\Type\PriceType;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -75,7 +73,7 @@ final class CourseForm extends AdminForm
         $this->calendarTab('Calendario', $course);
         $this->priceTab('Precio', $course);
         $this->passTab('Bonos', $course);
-        $this->studentsTab('Alumnos y profesores');
+        $this->studentsTab('Alumnos y profesores', $course);
 
         return $this;
     }
@@ -109,6 +107,17 @@ final class CourseForm extends AdminForm
                 'label' => 'Plazas',
                 'required' => true
             ]);
+
+        if ($course->isOnetoOne()) {
+            $this->group('Coste', ['class' => 'col-md-3'])
+                ->add('enrollmentPayment', EnrollmentPaymentType::class, [
+                    'label' => 'Matrícula'
+                ]);
+//            ->add('discount', JobStatusDiscountListType::class, [
+//                'label' => 'Descuentos'
+//            ]);
+        }
+
 
         if ($course->isSchool()) {
             $this->group('Curso', ['class' => 'col-md-3'])
@@ -146,8 +155,12 @@ final class CourseForm extends AdminForm
         return $this;
     }
 
-    private function studentsTab(string $name): self
+    private function studentsTab(string $name, Course $course): self
     {
+        if(!($course->id() instanceof CourseId)){
+            return $this;
+        }
+
         $this->tab($name);
 
         $this->group('Profesores', ['class' => 'col-md-5'])
@@ -203,13 +216,6 @@ final class CourseForm extends AdminForm
             ->add('books', CourseHasBooksType::class, [
                 'label' => 'Material',
             ]);
-//            ->add('books', null, [
-//                'label' => 'Material',
-//                'block_prefix' => 'books',
-//                'attr' => [
-//                    'data-sonata-select2' => 'false'
-//                ]
-//            ]);
 
         $this->group('Descuentos', ['class' => 'col-md-6'])
             ->add('discount', JobStatusDiscountListType::class, [
@@ -227,22 +233,12 @@ final class CourseForm extends AdminForm
         }
 
         $this->tab($name);
-        $this->group('Bonos', ['class' => 'col-md-7'])
+        $this->group('Bonos', ['class' => 'col-md-8'])
             ->add('passes', PassListType::class, [
                 'label' => false,
                 'course' => $course
             ]);
 
-        $this->group('Coste', ['class' => 'col-md-5'])
-            ->add('enrollmentPayment', EnrollmentPaymentType::class, [
-                'label' => 'Matrícula'
-            ])
-            ->add('discount', JobStatusDiscountListType::class, [
-                'label' => 'Descuentos'
-            ]);
-
         return $this;
     }
-
 }
-

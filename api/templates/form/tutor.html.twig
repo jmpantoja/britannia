@@ -11,8 +11,18 @@
         </div>
 
         <div class="col-md-3 col-md-offset-6">
+            {{ admin.uniqId }}
+
             <div class="col-md-10">
-                {{ form_row(form.__search) }}
+                {% set attr = {
+                    'data-tutor': 'tutor',
+                    'data-create-btn': '#create-' ~ form.__search.vars.id,
+                    'data-endpoint': admin.generateUrl('tutor_form'),
+                    'data-uniq-id': admin.uniqId,
+                    'data-field-name': field_name
+                } %}
+
+                {{ form_row(form.__search, {'attr': attr} ) }}
             </div>
             <div class="col-md-1" style="padding-top: 33px">
                 <span id="create-{{ form.__search.vars.id }}" class="btn btn-success">Nuevo</span>
@@ -24,42 +34,6 @@
     <div id="{{ name }}-wrapper">
         {{ form_widget(form.tutor) }}
     </div>
-
-
-    <script type="application/javascript">
-        $(function () {
-
-            var search = $("#{{ form.__search.vars.id }}");
-            var create = $("#create-{{ form.__search.vars.id }}")
-
-            $(create).on('click', function (event) {
-
-                console.log(event);
-                $(search).val('');
-                $(search).trigger('change');
-                return false;
-            })
-
-            $(search).on('change', function () {
-                var data = search.find(':selected').val();
-                var url = "{{ admin.generateUrl('tutor_form') }}"
-
-                $.ajax({
-                    url: url,
-                    type: 'POST',
-                    data: {
-                        id: data,
-                        uniqId: '{{ admin.uniqId }}',
-                        name: '{{ field_name }}'
-                    },
-                    success: function (result) {
-                        var content = $(result).find("#{{ name }}-content");
-                        $('#{{ name }}-wrapper').html(content)
-                    }
-                });
-            });
-        });
-    </script>
 
 {% endblock %}
 

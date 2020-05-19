@@ -100,6 +100,7 @@ final class InvoiceGenerator
     private function createInvoice(Student $student, CarbonImmutable $date, ?Course $course = null): Invoice
     {
         $dto = $this->makeDto($student, $date, $course);
+
         return Invoice::make($dto);
     }
 
@@ -121,6 +122,7 @@ final class InvoiceGenerator
             'mode' => $paymentMode,
             'details' => $this->getDetails($student, $date, $course),
         ]);
+
         return $dto;
     }
 
@@ -131,6 +133,7 @@ final class InvoiceGenerator
         if (!($invoice instanceof Invoice)) {
             return $this->createInvoice($student, $date, $course);
         }
+
         $dto = $this->makeDto($student, $date);
         return $invoice->update($dto);
 
@@ -175,7 +178,8 @@ final class InvoiceGenerator
             $temp[] = $this->getDetailsFromCourse($student, $onlyThisCourse, $date);
         }
 
-        $details = array_merge(...$temp);
+         $details = array_merge(...$temp);
+
         return InvoiceDetailList::collect($details);
     }
 
@@ -236,7 +240,7 @@ final class InvoiceGenerator
     public function enrollment(Course $course, StudentDiscount $discount): InvoiceDetail
     {
         $concept = $this->breakdownService->calculeEnrollment($course, $discount);
-        $subject = sprintf('Matrícula %s', $course->name());
+        $subject = sprintf('%s. Matrícula', $course->name());
 
         return $this->detailByConcept($concept, $subject);
     }
@@ -244,7 +248,7 @@ final class InvoiceGenerator
     public function material(Course $course, StudentDiscount $discount): InvoiceDetail
     {
         $concept = $this->breakdownService->calculeMaterial($course, $discount);
-        $subject = sprintf('Material curso %s', $course->name());
+        $subject = sprintf('%s. Material curso', $course->name());
 
         return $this->detailByConcept($concept, $subject);
     }

@@ -48,5 +48,9 @@ final class AttachmentUploader extends FileUploader
         ]);
     }
 
-
+    public function isAvailable(string $relative)
+    {
+        $absolutePath = sprintf('%s/%s', $this->targetDir, $relative);
+        return file_exists($absolutePath);
+    }
 }

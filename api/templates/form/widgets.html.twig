@@ -26,7 +26,13 @@
 
 {% block counter_widget %}
     <div class="counter counter-wrapper">
-        {{ form_widget(form, {'attr': {'class':'counter-area'}}) }}
-        <p class="counter-info">asd</p>
+        {% set attr = {
+            'class': 'counter-area',
+            'data-template':'counter',
+            'data-label':'.counter-info'
+        } %}
+
+        {{ form_widget(form, {'attr': attr}) }}
+        <p class="counter-info"></p>
     </div>
 {% endblock %}

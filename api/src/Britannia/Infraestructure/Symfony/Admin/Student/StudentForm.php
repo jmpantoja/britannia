@@ -18,6 +18,7 @@ use Britannia\Domain\Entity\Student\Adult;
 use Britannia\Domain\Entity\Student\Child;
 use Britannia\Domain\Entity\Student\Photo;
 use Britannia\Domain\Entity\Student\Student;
+use Britannia\Domain\Entity\Student\StudentId;
 use Britannia\Infraestructure\Symfony\Form\Type\Photo\PhotoType;
 use Britannia\Infraestructure\Symfony\Form\Type\Student\AlertType;
 use Britannia\Infraestructure\Symfony\Form\Type\Student\AttachmentListType;
@@ -54,6 +55,7 @@ final class StudentForm extends AdminForm
 
         $this->contactTab('Contacto', $student);
         $this->personalTab('Personal', $student);
+
         $this->coursesTab('Cursos', $student);
         $this->paymentTab('Pago', $student);
 
@@ -165,12 +167,16 @@ final class StudentForm extends AdminForm
      */
     protected function coursesTab(string $name, Student $student): void
     {
+        if (!($student->id() instanceof StudentId)) {
+            return;
+        }
+
         $this->tab($name);
 
         $this->group('Cursos en Activo ', ['class' => 'col-md-12'])
             ->add('studentHasCourses', StudentHasCoursesType::class, [
-//                'student' => $student,
-                'label' => false
+                'label' => false,
+                'student' => $student
             ]);
     }
 

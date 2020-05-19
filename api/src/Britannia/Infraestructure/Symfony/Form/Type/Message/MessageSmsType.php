@@ -40,8 +40,7 @@ final class MessageSmsType extends AbstractCompoundType
         $templates = $templateRepository->findAllSms();
 
         foreach ($templates as $template) {
-            $id = (string)$template->id();
-            $choices[$id] = $template;
+            $choices[] = $template;
         }
 
         $this->templates = $choices;
@@ -57,7 +56,6 @@ final class MessageSmsType extends AbstractCompoundType
                 return $this->templates;
             }),
             'choice_label' => 'name',
-            'choice_value' => 'id',
             'placeholder' => 'Elije un mensaje'
         ]);
 

@@ -41,8 +41,9 @@ final class MessageEmailType extends AbstractCompoundType
         $templates = $templateRepository->findAllEmail();
 
         foreach ($templates as $template) {
-            $id = (string)$template->id();
-            $choices[$id] = $template;
+//            $id = (string)$template->id();
+//            $id = str_replace('-', '_', $id);
+            $choices[] = $template;
         }
 
         $this->templates = $choices;
@@ -58,7 +59,7 @@ final class MessageEmailType extends AbstractCompoundType
                 return $this->templates;
             }),
             'choice_label' => 'name',
-            'choice_value' => 'id',
+       //     'choice_value' => 'id',
             'placeholder' => 'Elije un mensaje'
         ]);
 

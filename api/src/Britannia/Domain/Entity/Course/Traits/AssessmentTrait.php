@@ -37,6 +37,7 @@ trait AssessmentTrait
 
     private function updateAssessment(AssessmentDtoInterface $dto): self
     {
+
         return $this->changeAssessmentDefinition($dto->assessment(), $dto->assessmentGenerator());
     }
 
@@ -45,7 +46,6 @@ trait AssessmentTrait
         $this->assessment = $assessment;
 
         $termList = $generator->generateTerms($this->courseHasStudentList(), $assessment);
-
 
         $this->setTerms($termList);
 

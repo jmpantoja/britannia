@@ -53,7 +53,6 @@ trait StudentTrait
 
     public function setStudents(StudentList $students): self
     {
-
         $this->courseHasStudentList()
             ->onlyActives()
             ->toStudentList()
@@ -66,32 +65,20 @@ trait StudentTrait
     public function removeStudent(Student $student): self
     {
         $student->removeCourse($this);
-
-
         return $this;
     }
 
     public function addStudent(Student $student): self
     {
-        $joined = StudentCourse::make($student, $this);
-        if($this->courseHasStudentList()->hasActive($joined)){
-            return $this;
-        }
-
-        $this->courseHasStudentList()->add($joined);
-
         $student->addCourse($this);
-
         return $this;
     }
 
     public function updateNumOfStudents(): self
     {
         $this->numOfStudents = $this->courseHasStudentList()->onlyActives()->count();
-
         return $this;
     }
-
 
     /**
      * @return StudentCourse[]
@@ -99,6 +86,16 @@ trait StudentTrait
     public function courseHasStudents(): array
     {
         return $this->courseHasStudentList()->toArray();
+    }
+
+    /**
+     * @return StudentCourse[]
+     */
+    public function activeCourseHasStudents(): array
+    {
+        return $this->courseHasStudentList()
+            ->onlyActives()
+            ->toArray();
     }
 
     /**
@@ -115,6 +112,7 @@ trait StudentTrait
             ->toStudentList()
             ->toArray();
     }
+
 
     /**
      * @return PositiveInteger

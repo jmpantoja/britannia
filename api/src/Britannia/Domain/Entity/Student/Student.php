@@ -3,7 +3,6 @@
 namespace Britannia\Domain\Entity\Student;
 
 
-
 use Britannia\Domain\Entity\Academy\Academy;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Course\CourseList;
@@ -186,6 +185,7 @@ abstract class Student implements Comparable
         $this->records = new ArrayCollection();
         $this->notifications = new ArrayCollection();
         $this->createdAt = CarbonImmutable::now();
+        $this->updatedAt = CarbonImmutable::now();
 
         static::update($dto);
     }
@@ -234,7 +234,6 @@ abstract class Student implements Comparable
 
     public function setCourses(CourseList $courses): self
     {
-
         $this->studentHasCoursesList()
             ->onlyActives()
             ->toCourseList()
@@ -254,10 +253,9 @@ abstract class Student implements Comparable
 
     public function addCourse(Course $course): self
     {
-
         $joined = StudentCourse::make($this, $course);
 
-        if($this->studentHasCoursesList()->hasActive($joined)){
+        if ($this->studentHasCoursesList()->hasActive($joined)) {
             return $this;
         }
 
@@ -266,8 +264,6 @@ abstract class Student implements Comparable
                 $event = StudentHasJoinedToCourse::make($joined);
                 $joined->notify($event);
             });
-
-        $course->addStudent($this);
 
         return $this;
     }

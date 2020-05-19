@@ -22,7 +22,7 @@
             {% set href = href | default('') %}
             {% set anchor = '' %}
             {% set hidden = 'hidden' %}
-            {% if info is defined %}
+            {% if info is defined and info is not null %}
                 {% set anchor = 'Download (%s)' | format(info.humanReadableSize) %}
                 {% set hidden = '' %}
             {% endif %}

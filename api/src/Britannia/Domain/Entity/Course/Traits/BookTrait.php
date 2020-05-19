@@ -36,7 +36,7 @@ trait BookTrait
     /**
      * @return Collection
      */
-    public function books(): Collection
+    public function books(): ?Collection
     {
         return $this->books;
     }

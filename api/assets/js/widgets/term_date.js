@@ -64,11 +64,11 @@
     })
   }
 
-  $.fn.formDate = Plugin
-  $.fn.formDate.Constructor = TermDate
+  $.fn.termDate = Plugin
+  $.fn.termDate.Constructor = TermDate
 
   $(function () {
-    $('[data-term=date]').formDate()
+    $('[data-term=date]').termDate()
   })
 
 }(jQuery)

@@ -41,56 +41,6 @@
     </div>
 {% endblock %}
 
-{% block attendance_widget %}
-    <div class="row">
-        <div class="col-md-3">
-            <p class="fullName">{{ student.fullName }}</p>
-        </div>
-        <div class="col-md-1 missed">
-            {{ form_row(form.missed) }}
-        </div>
-
-        <div class="col-md-3 reason">
-            {{ form_row(form.reason) }}
-        </div>
-
-        <script>
-            $(function () {
-                var reason = $('#{{ form.reason.vars.id }}').parents('.form-group:first');
-
-                $('#{{ form.missed.vars.id }}').change(function () {
-                    if ($(this).prop('checked')) {
-                        reason.show()
-                    } else {
-                        reason.hide()
-                    }
-                })
-
-                if ($('#{{ form.missed.vars.id }}').prop('checked')) {
-                    reason.show()
-                } else {
-                    reason.hide()
-                }
-            })
-        </script>
-
-    </div>
-{% endblock %}
-
-
-{% block attendance_toggle_widget %}
-    {% set checked = '' %}
-
-    {% if value == "1" %}
-        {% set checked = 'checked' %}
-    {% endif %}
-
-    <input id="{{ id }}" name="{{ full_name }}" {{ checked }} type="checkbox" data-toggle="toggle" data-on="Falta"
-           data-off="Asiste"
-           data-onstyle="danger" data-offstyle="success">
-
-{% endblock %}
-
 {% block job_discount_widget %}
     <div class="row discount">
         <div class="col-md-3">
@@ -166,24 +116,39 @@
 {% endblock %}
 
 {% block pass_list_widget %}
-    {#    {% if form.locked is defined %}#}
-    {#        {{ form_row(form.locked, {widget: id ~ '-wrapper'}) }}#}
-    {#    {% endif %}#}
-
-    {#    style="margin-top: 5em" data-locked-id="{{ form.locked.vars.id }}"#}
     <div id="{{ id }}-wrapper">
         {{ form_row(form.passes) }}
     </div>
 {% endblock %}
 
 {% block pass_widget %}
+    {% set attr = {
+        'data-pass': 'hours',
+        'data-lessons': '.pass_lesson',
+        'data-target': '.left_time p.left',
+        'data-start-time': '.start_time input',
+        'data-end-time': '.end_time input',
+    } %}
 
-    <div id="{{ id }}" class="row pass_widget">
+    <div id="{{ id }}"
+         class="row pass_widget"
+         data-pass="hours"
+         data-hours="#{{ form.hours.vars.id }}"
+         data-lessons=".pass_lesson"
+         data-target=".left_time p.left"
+         data-start-time=".start_time input"
+         data-end-time=".end_time input">
+
         <div class="col-md-3">
             {{ form_row(form.hours) }}
         </div>
         <div class="col-md-3">
-            {{ form_row(form.start) }}
+            {% set attr = {
+                'data-pass': 'date',
+                'data-target': '#'~form.end.vars.id,
+            } %}
+
+            {{ form_row(form.start, {'attr': attr}) }}
         </div>
         <div class="col-md-3">
             {{ form_row(form.end) }}
@@ -201,56 +166,7 @@
             {{ form_widget(form.lessons) }}
         </div>
     </div>
-
-    <script type="application/javascript">
-        $(function () {
-            var update = function () {
-                var total = $('#{{ form.hours.vars.id }} :selected').text();
-                var total = parseInt(total) * 60;
-
-                var lessons = $('#{{ id }}').find('.pass_lesson');
-                var label = $('#{{ id }}').find('.left_time p.left');
-
-                var consumed = 0;
-                lessons.each2(function () {
-                    var start = $(this).find('.start_time input');
-                    var end = $(this).find('.end_time input');
-
-                    var startTime = moment(start.val(), 'HH:mm');
-                    var endTime = moment(end.val(), 'HH:mm');
-
-                    consumed += moment.duration(endTime.diff(startTime)).asMinutes();
-                })
-
-                var left = total - consumed;
-                var hours = parseInt(left / 60);
-                var minutes = parseInt(left % 60);
-                var formattedLeft = moment(hours + ':' + minutes, 'HH:mm').format('HH:mm');
-
-
-                if (left > 0 && left <= 60) {
-                    label.addClass('warning')
-                }
-                if (left < 0) {
-                    label.addClass('danger')
-                    formattedLeft = '-' + formattedLeft
-                }
-
-                label.text(formattedLeft);
-            }
-
-            update();
-
-            var locked_id = $('#{{ id }}').parents('[data-locked-id]').data('locked-id');
-            var locked = $('#' + locked_id);
-            locked.trigger('change');
-        })
-
-    </script>
-
-
 {% endblock %}
-
 
 {% block pass_lesson_widget %}
 
@@ -284,26 +200,11 @@
         </div>
         {% if show_unlock %}
             <div style="float: left; padding-left: 0.5em">
-                <span class="btn btn-link">Desbloquear</span>
+                <span class="btn btn-link"
+                      data-locked-enrollment="#{{ form.vars.id }}">
+                    Desbloquear
+                </span>
             </div>
         {% endif %}
     </div>
-    <script type="application/javascript">
-        $(function () {
-            var el = $('#{{ id }}');
-
-            var update = function () {
-
-                if ($(el).attr('readonly') === 'readonly') {
-                    $(el).attr('readonly', false);
-                    $(this).text('Bloquear')
-                } else {
-                    $(el).attr('readonly', 'readonly');
-                    $(this).text('Desbloquear')
-                }
-            };
-
-            $('.enrollment_payment .btn').on('click', update);
-        })
-    </script>
 {% endblock %}

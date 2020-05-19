@@ -52,7 +52,10 @@ final class InvoiceDetailListType extends AbstractSingleType
 
     public function customMapping($data)
     {
-        $input = array_filter($data);
+        $input = $data;
+        if(is_array($data)){
+            $input = array_filter($data);
+        }
         return InvoiceDetailList::collect($input);
     }
 }

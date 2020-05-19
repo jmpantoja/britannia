@@ -1,5 +1,6 @@
 var Encore = require('@symfony/webpack-encore');
 var path = require('path');
+var GoogleFontsPlugin = require('google-fonts-webpack-plugin')
 
 // Manually configure the runtime environment if not already configured yet by the "encore" command.
 // It's useful when you use tools that rely on webpack.config.js file.
@@ -13,7 +14,7 @@ Encore
   // public path used by the web server to access the output path
   .setPublicPath('/build')
   // only needed for CDN's or sub-directory deploy
-  //.setManifestKeyPrefix('build/')
+  .setManifestKeyPrefix('build/')
 
   /*
    * ENTRY CONFIG
@@ -25,6 +26,9 @@ Encore
    * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
    */
   .addEntry('app', './assets/js/admin.js')
+  .addEntry('error', './assets/js/error.js')
+  .addStyleEntry('error-style', './assets/scss/error.scss')
+
   //.addEntry('page1', './assets/js/page1.js')
   //.addEntry('page2', './assets/js/page2.js')
 

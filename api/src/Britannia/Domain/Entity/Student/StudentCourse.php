@@ -20,6 +20,7 @@ use Britannia\Domain\VO\Assessment\Mark;
 use Britannia\Domain\VO\Assessment\MarkReport;
 use Britannia\Domain\VO\Course\TimeRange\TimeRange;
 use Carbon\CarbonImmutable;
+use Doctrine\Persistence\Event\LifecycleEventArgs;
 use PlanB\DDD\Domain\Behaviour\Comparable;
 use PlanB\DDD\Domain\Behaviour\Traits\ComparableTrait;
 use PlanB\DDD\Domain\Model\Traits\AggregateRootTrait;
@@ -159,19 +160,28 @@ class StudentCourse implements Comparable
         return sprintf('%s-%s-%s-%s', ...[
             $this->course->id(),
             $this->student->id(),
-            $this->joinedAt,
-            $this->leavedAt
+            $this->formatDate($this->joinedAt),
+            $this->formatDate($this->leavedAt)
         ]);
+    }
+
+    private function formatDate(?CarbonImmutable $date): string {
+        if(is_null($date)){
+            return '';
+        }
+
+        return $date->format('Y-m-d');
     }
 
     public function isActive(): bool
     {
+
         $course = $this->course();
         if ($course->isPending()) {
             return true;
         }
 
-        if($course->isFinalized()){
+        if ($course->isFinalized()) {
             return false;
         }
 
@@ -205,8 +215,5 @@ class StudentCourse implements Comparable
         }
 
         return $date->isAfter($this->joinedAt);
-
     }
-
-
 }

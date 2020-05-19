@@ -25,7 +25,16 @@
             </div>
 
             <div class="col-md-2">
-                {{ form_row(form.startDate) }}
+                {% set attr = {
+                    'data-course-information': 'date',
+                    'data-endpoint': url,
+                    'data-first-month': '#'~form.firstMonth.vars.id,
+                    'data-first-month-desc': '.start_price .info',
+                    'data-last-month': '#'~form.lastMonth.vars.id,
+                    'data-last-month-desc': '.end_price .info'
+                } %}
+
+                {{ form_row(form.startDate, {'attr': attr}) }}
             </div>
             <div class="col-md-2 price start_price">
                 {{ form_row(form.firstMonth) }}
@@ -37,40 +46,6 @@
             </div>
         </div>
     </div>
-
-    <script type="application/javascript">
-        $(function () {
-            let date = $('#dp_{{ form.startDate.vars.id }}');
-            let update = function () {
-
-                let first_month = $('#{{ form.firstMonth.vars.id }}');
-                let first_month_desc = $('.start_price .info');
-
-                let last_month = $('#{{ form.lastMonth.vars.id }}');
-                let last_month_desc = $('.end_price .info');
-
-                $.ajax({
-                    type: 'POST',
-                    url: '{{ url }}',
-                    data: {
-                        'startDate': $(this).find('input').val()
-                    },
-                    dataType: "json",
-                    success: function (data) {
-                        $(first_month).val(data.first_month_price)
-                        $(first_month_desc).text(data.first_month_description)
-
-                        $(last_month).val(data.last_month_price)
-                        $(last_month_desc).text(data.last_month_description)
-                    }
-                });
-            }
-
-            $(date).change(update);
-        })
-
-
-    </script>
 
 {% endblock %}
 
@@ -85,8 +60,7 @@
                     'data-url': url,
                     'data-start': '#%s' | format(form.start.vars.id),
                     'data-end': '#%s' | format(form.end.vars.id)
-                }
-                %}
+                } %}
 
                 {{ form_row(form.termName, {'attr': attr}) }}
             </div>

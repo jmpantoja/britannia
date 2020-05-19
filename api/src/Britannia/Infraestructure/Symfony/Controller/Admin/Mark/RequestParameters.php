@@ -92,7 +92,8 @@ final class RequestParameters
     public function date(): CarbonImmutable
     {
         $date = $this->request->get('date');
-        return string_to_date($date, -1,-1,'d m Y');
+
+        return CarbonImmutable::make($date);
     }
 
     /**

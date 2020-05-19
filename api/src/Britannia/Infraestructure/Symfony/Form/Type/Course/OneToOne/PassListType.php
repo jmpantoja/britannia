@@ -37,6 +37,7 @@ class PassListType extends AbstractCompoundType
             'allow_delete' => true,
             'prototype' => true,
             'error_bubbling' => false,
+            'label' => false,
             'data' => $course->passes(),
             'entry_type' => PassType::class,
             'entry_options' => [
@@ -61,7 +62,7 @@ class PassListType extends AbstractCompoundType
 
     public function customMapping(array $data)
     {
-        $passes = array_filter($data['passes']) ;
+        $passes = array_filter($data['passes']);
 
         return PassList::collect($passes);
     }

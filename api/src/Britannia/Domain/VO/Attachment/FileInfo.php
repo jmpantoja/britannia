@@ -42,11 +42,14 @@ final class FileInfo
     private string $humanReadableSize;
 
 
-    public static function make(string $dirname, string $relative): self
+    public static function make(string $dirname, string $relative): ?self
     {
         $filename = sprintf('%s/%s', $dirname, $relative);
-        $fileInfo = new SplFileInfo($filename);
+        if (!file_exists($filename)) {
+            return null;
+        }
 
+        $fileInfo = new SplFileInfo($filename);
         return new self($fileInfo, $relative);
     }
 

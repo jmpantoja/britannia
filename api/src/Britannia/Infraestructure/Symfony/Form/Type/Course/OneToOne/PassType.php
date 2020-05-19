@@ -34,7 +34,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class PassType extends AbstractCompoundType
 {
-
     public function customForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('hours', PassHoursType::class, [
@@ -42,20 +41,20 @@ class PassType extends AbstractCompoundType
         ]);
 
         $today = CarbonImmutable::tomorrow();
-        $defaultStart = date_to_string($today, \IntlDateFormatter::MEDIUM);
-        $defaultEnd = date_to_string($today->lastOfMonth(), \IntlDateFormatter::MEDIUM);
+        $defaultStart = date_to_string($today, \IntlDateFormatter::LONG);
+        $defaultEnd = date_to_string($today->lastOfMonth(), \IntlDateFormatter::LONG);
 
         $builder->add('start', DatePickerType::class, [
             'label' => 'Valido desde',
+            'format' => \IntlDateFormatter::LONG,
             'dp_default_date' => $defaultStart
         ]);
 
         $builder->add('end', DatePickerType::class, [
             'label' => 'Valido hasta',
+            'format' => \IntlDateFormatter::LONG,
             'dp_default_date' => $defaultEnd,
-            'attr' => [
-                'readonly' => true
-            ]
+            'disabled' => true
         ]);
 
         $builder->add('lessons', CollectionType::class, [
@@ -107,7 +106,7 @@ class PassType extends AbstractCompoundType
             'hours' => $data['hours'],
             'start' => CarbonImmutable::make($data['start']),
         ]);
-        
+
         if ($pass instanceof Pass) {
             return $pass->update($dto);
         }

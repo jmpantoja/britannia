@@ -53,7 +53,7 @@ abstract class FileUploader
         return sprintf('%s/%s', $this->targetDir(), $relative);
     }
 
-    public function fileInfo($relative)
+    public function fileInfo($relative): ?FileInfo
     {
         return FileInfo::make($this->targetDir(), $relative);
     }

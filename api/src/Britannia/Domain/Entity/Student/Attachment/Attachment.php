@@ -191,6 +191,4 @@ class Attachment implements Comparable
 
         return $this;
     }
-
-
 }

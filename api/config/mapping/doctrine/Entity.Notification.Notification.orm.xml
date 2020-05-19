@@ -28,7 +28,9 @@
             </cascade>
         </many-to-one>
 
-        <many-to-one field="course" target-entity="Britannia\Domain\Entity\Course\Course"/>
+        <many-to-one field="course" target-entity="Britannia\Domain\Entity\Course\Course">
+            <join-column on-delete="CASCADE"/>
+        </many-to-one>
     </entity>
 
 </doctrine-mapping>

@@ -52,7 +52,7 @@ final class StudentDto extends Dto
 
     public bool $freeEnrollment = false;
 
-    public Payment $payment;
+    public ?Payment $payment = null;
 
     public ?PartOfDay $preferredPartOfDay;
 

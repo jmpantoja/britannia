@@ -53,9 +53,7 @@ final class CourseReportAdmin extends AbstractAdmin implements AdminFilterableIn
 
     public function configureActionButtons($action, $object = null)
     {
-
         $actions = parent::configureActionButtons($action, $object);
-
         $actions['list_courses'] = [
             'template' => 'admin/course/list_courses_button.html.twig'
         ];

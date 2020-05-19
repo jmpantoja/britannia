@@ -16,6 +16,7 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Student;
 
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Course\CourseList;
+use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Entity\Student\StudentCourseList;
 use Britannia\Domain\VO\Course\CourseStatus;
 use Britannia\Infraestructure\Symfony\Validator\FullName;
@@ -36,6 +37,12 @@ class StudentHasCoursesType extends ModelType
             'class' => Course::class,
             'property' => 'name',
         ]);
+
+        $resolver->setRequired([
+            'student'
+        ]);
+
+        $resolver->setAllowedTypes('student', [Student::class]);
 
     }
 
@@ -58,9 +65,31 @@ class StudentHasCoursesType extends ModelType
 
     public function configureQuery(QueryBuilder $builder, OptionsResolver $resolver, string $alias = 'A')
     {
+
+        /** @var Student $student */
+        $student = $resolver['student'];
+        $age = $student->age()->toInt();
+
         $builder->where('A.timeRange.status != :finalized')
             ->setParameter('finalized', CourseStatus::FINALIZED())
             ->setCacheable(false);
+
+        $types = [];
+        if ($age >= 17) {
+            $types[] = 'adult';
+        }
+
+        if ($age >= 6 and $age <= 20) {
+            $types[] = 'school';
+            $types[] = 'support';
+        }
+
+        if ($age <= 6) {
+            $types[] = 'pre_school';
+        }
+
+        $builder->andWhere('A INSTANCE OF :type')
+            ->setParameter('type', $types);
 
     }
 }

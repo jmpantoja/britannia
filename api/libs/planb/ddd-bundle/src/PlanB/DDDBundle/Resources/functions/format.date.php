@@ -48,7 +48,6 @@ if (!function_exists('string_to_date')) {
                             string $format = ''
     ): CarbonImmutable
     {
-
         $formatter = \IntlDateFormatter::create(Locale::getDefault(), $dateType, $timeType, null, null, $format);
         $timeStamp = $formatter->parse($value);
 

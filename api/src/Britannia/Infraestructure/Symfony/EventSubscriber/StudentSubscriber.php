@@ -56,6 +56,9 @@ class StudentSubscriber extends DomainEventSubscriber
     {
         $command = StudentUpdatedStatus::make($event->student(), $event->course());
         $this->handle($command);
+
+        $command = CreateInvoice::update($event->student(), $event->course(), CarbonImmutable::now());
+        $this->handle($command);
     }
 
     public function onStudentMissedLesson(StudentHasMissedLesson $event)

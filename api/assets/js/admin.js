@@ -81,14 +81,37 @@ import "./admin/sidebar"
 import "./admin/jquery.confirmExit"
 import "./admin/treeview"
 
+
 import "./widgets/multiselect";
 import "./widgets/toggle_field";
+import "./widgets/changer_tab";
+import "./widgets/course_information_dates";
+
+import "./widgets/show_filters";
+
 import "./widgets/toast";
 import "./widgets/locked";
-import "./widgets/form_date";
+import "./widgets/locked_enrollment";
+
+import "./widgets/mark_weight";
+import "./widgets/mark_unit";
+import "./widgets/mark_skill";
+
+import "./widgets/attendance_date";
+
+import "./widgets/pass_hours";
+import "./widgets/pass_date";
+
 import "./widgets/student_check";
 import "./widgets/term_date";
+import "./widgets/template_selector";
+import "./widgets/template_counter";
+
+import "./widgets/invoice_total";
+
 import "./widgets/calendar";
+import "./widgets/planning";
+import "./widgets/tutor";
 
 import "./widgets/upload";
 import "./widgets/upload_listener_thumb";

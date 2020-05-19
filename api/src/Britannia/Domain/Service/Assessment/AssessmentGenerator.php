@@ -28,7 +28,7 @@ final class AssessmentGenerator
         $definition->skills();
 
         $data = [];
-        foreach ($courseHasStudentList as $studentCourse) {
+        foreach ($courseHasStudentList->onlyActives() as $studentCourse) {
             $data[] = $this->generateTermsForStudent($studentCourse, $definition);
         }
 

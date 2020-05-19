@@ -57,6 +57,4 @@ final class StudentUpdatedStatus
     {
         return $this->course;
     }
-
-
 }

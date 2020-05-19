@@ -1,79 +1,12 @@
 {% extends get_global_template('layout') %}
 
 {% block content %}
-
-    <div id="planning"/>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-
-            var hash = new URI().fragment();
-            var date = moment(hash, 'Y-MM-DD', true);
-
-            var current = null;
-            if (date.isValid()) {
-                current = date.format('Y-MM-DD')
-            }
-
-            var calendarEl = document.getElementById('planning');
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-                plugins: ['resourceTimeGrid'],
-                locale: 'es',
-                timeZone: 'local',
-                titleFormat: {year: 'numeric', month: 'long', day: 'numeric', weekday: 'long'},
-                nowIndicator: true,
-                now: current,
-                defaultView: 'resourceTimeGridDay',
-                minTime: '09:00:00',
-                maxTime: '23:00:00',
-                allDaySlot: false,
-                slotDuration: '00:05:00',
-                slotLabelFormat: {
-                    hour: 'numeric',
-                    minute: '2-digit',
-                    omitZeroMinute: false,
-                    meridiem: 'short'
-
-                },
-                resources: {{ classRooms | raw }},
-                events: '{{ path(events_route) }}',
-                eventRender: function (info) {
-
-                    var data = info.event.extendedProps;
-                    var attendances = $('<div class="attendance_sumary"><br/></div>');
-
-                    $.each(data.attendances, (index, attendance) => {
-                        attendances.append(`<span class=${attendance.status} title="${attendance.student}"></span>`);
-                    });
-
-                    $(info.el).find('.fc-time').html(data.schedule);
-                    $(info.el).find('.fc-title').html(`<p>${info.event.title}</p>`);
-                    $(info.el).find('.fc-title').append(attendances);
-
-                }
-
-            });
-
-            calendar.render();
-
-            $('.fc-prev-button span').click(function () {
-                var date = calendar.getDate();
-                var hash = moment(date).subtract(1, 'days').startOf('month').format('Y-MM-DD');
-                window.location.hash = hash;
-
-            });
-
-            $('.fc-next-button span').click(function () {
-                var date = calendar.getDate();
-                var hash = moment(date).add(1, 'days').format('Y-MM-DD');
-                window.location.hash = hash;
-            });
-
-            $('.fc-today-button').click(function () {
-                window.location.hash = moment().format('Y-MM-DD');
-            });
-
-
-        });
-
-    </script>
+    <div data-calendar="planning"
+         data-endpoint="{{ path(events_route) }}"
+         data-resources="{{ classRooms }}"
+         data-prev-button=".fc-prev-button span"
+         data-next-button=".fc-next-button span"
+         data-today-button=".fc-today-button"
+    >
+    </div>
 {% endblock %}

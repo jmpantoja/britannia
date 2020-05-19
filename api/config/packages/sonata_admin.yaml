@@ -32,7 +32,7 @@ sonata_admin:
                 label: Alumnos
                 label_catalogue: App
                 icon: "<i class=\"fa fa-graduation-cap\"></i>"
-                roles: ['ROLE_MANAGER']
+                roles: ['ROLE_MANAGER', 'ROLE_RECEPTION']
                 items:
                     - admin.student
                     - admin.issue
@@ -84,7 +84,7 @@ sonata_admin:
             -   class:    col-md-2
                 position: top
                 type:     sonata.admin.block.stats
-                roles: ['ROLE_RECEPTION', 'ROLE_MANAGER']
+                roles: ['ROLE_MANAGER']
                 settings:
                     code:  admin.staff_member
                     icon:  fa-user

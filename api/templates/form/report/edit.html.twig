@@ -4,26 +4,11 @@
 
     {% if objectId|default(admin.id(object)) is not null %}
         {% if admin.hasRoute('pdf') %}
-            <script type="application/javascript">
-                $(function () {
-                    $('.changer-tab').on('click', function () {
-                        var href = $(this).attr('href');
-                        var pieces = href.split('_');
-                        var tab = pieces[pieces.length - 1];
-                        $('#{{ admin.form.name }}_tab').val(tab);
-
-                        var others = $('[name$="[selected]"]');
-                        var selected = $(href).find('[name$="[selected]"]');
-
-                        $(others).val(null)
-                        $(selected).val('selected')
-                    })
-
-                    $('li.active .changer-tab').trigger('click');
-                })
-            </script>
-
-            <input type="submit" class="btn btn-primary" name="btn_generate_pdf"
+            <input type="submit"
+                   class="btn btn-primary"
+                   name="btn_generate_pdf"
+                   data-changer="tab"
+                   data-tab="#{{ admin.form.name }}_tab"
                    value="{{ 'link_pdf'|trans({}, 'messages') }}"/>
         {% endif %}
     {% endif %}

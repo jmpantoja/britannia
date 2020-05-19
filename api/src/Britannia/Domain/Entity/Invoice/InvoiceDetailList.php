@@ -44,7 +44,7 @@ final class InvoiceDetailList extends EntityList
     public function priceTotal(): RefundPrice
     {
         $total = $this->values()
-            ->sum(fn(InvoiceDetail $detail) => $detail->price()->toFloat());
+            ->sum(fn(InvoiceDetail $detail) => $detail->priceTotal()->toFloat());
 
         return RefundPrice::make($total);
     }
