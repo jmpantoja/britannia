@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Service\FileUpload;
 
 
+use Britannia\Domain\Entity\Image\Image;
+use Britannia\Domain\Entity\Staff\Photo;
 use Britannia\Domain\VO\Attachment\FileInfo;
 use Impulze\Bundle\InterventionImageBundle\ImageManager;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -65,4 +67,11 @@ final class PhotoUploader extends FileUploader
         ]);
     }
 
+    public function photoUrl(?Image $image): ?string {
+        if(is_null($image)){
+            return $this->downloadUrl('shape.jpg');
+        }
+
+        return $this->downloadUrl($image->path());
+    }
 }

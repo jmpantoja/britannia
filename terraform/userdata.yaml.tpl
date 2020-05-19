@@ -21,9 +21,22 @@ write_files:
     content: |
         version: '3.4'
         services:
+            php:
+                environment:
+                - APP_ENV=${app_env}
+
             proxy:
                 environment:
                     DOMAINS: 'www.${app_url} -> http://cache-proxy:80 #production'
+
+            encore:
+                image: node:10-alpine
+                volumes:
+                    - ./api:/app
+                ports:
+                    - "${DEV_SERVER_PORT:-8080}:8080"
+                working_dir: /app
+
 
   - path: /root/api.env.local.tmp
     content: |
@@ -54,4 +67,7 @@ runcmd:
   - mv /root/uploads/attachments /deploy/britannia/api/uploads/attachments
   - mv /root/uploads/photos /deploy/britannia/api/uploads/photos
   - cd /deploy/britannia
+  - docker-compose exec php composer install
+  - docker-compose run encore yarn install
+  - docker-compose run encore yarn build
   - docker-compose up -d

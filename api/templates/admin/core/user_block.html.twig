@@ -16,19 +16,17 @@ file that was distributed with this source code.
         {% set _logout_text       = 'user_block_logout'|trans({}, 'SonataUserBundle') %}
         {% set _profile_uri       = url('admin_britannia_domain_staff_staffmember_edit', {id:app.user.id}) %}
         {% set _profile_text      = 'user_block_profile'|trans({}, 'SonataUserBundle') %}
-        {% set _user_image  = asset('images/users/default.jpg') %}
+        {% set _user_image  = photo_uploader.photoUrl(app.user.photo) %}
 
         <li class="user-header {{ _bg_class }}">
-            {% if _user_image %}
-                <img src="{{ _user_image }}" class="img-circle" alt="Avatar"/>
-            {% endif %}
+            <img src="{{ _user_image }}" class="avatar" alt="Avatar"/>
             <p>{{ app.user.fullName }}</p>
+
         </li>
         <li class="user-footer">
             {#            <div class="pull-left">#}
             {#                <a href="{{ _profile_uri }}" class="btn btn-default btn-flat"><i class="fa fa-user"></i> {{ _profile_text }}</a>#}
             {#            </div>#}
-
             <div class="text-center">
                 <a href="{{ _logout_uri }}" class="btn btn-default btn-flat"><i
                         class="fa fa-sign-out fa-fw"></i> {{ _logout_text }}</a>

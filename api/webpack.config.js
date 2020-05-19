@@ -28,6 +28,7 @@ Encore
   .addEntry('app', './assets/js/admin.js')
   .addEntry('error', './assets/js/error.js')
   .addStyleEntry('error-style', './assets/scss/error.scss')
+  .addStyleEntry('login', './assets/scss/login.scss')
 
   //.addEntry('page1', './assets/js/page1.js')
   //.addEntry('page2', './assets/js/page2.js')
