@@ -16,9 +16,9 @@ if [ "$1" = 'php-fpm' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 	mkdir -p var/cache var/log
 	chmod -R 777 var
 
-	if [ "$APP_ENV" != 'prod' ]; then
-		composer install --prefer-dist --no-progress --no-suggest --no-interaction --no-scripts
-	fi
+#	if [ "$APP_ENV" != 'prod' ]; then
+#		composer install --prefer-dist --no-progress --no-suggest --no-interaction --no-scripts
+#	fi
 
 	echo "Waiting for db to be ready..."
 	until bin/console doctrine:query:sql "SELECT 1" > /dev/null 2>&1; do

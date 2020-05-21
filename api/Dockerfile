@@ -38,16 +38,14 @@ RUN apt update \
 #    && printf "\n" | pecl install pecl_http && docker-php-ext-enable pecl_http \
 	&& apt clean ;
 
-#COPY api/docker/php/wkhtmltox_0.12.5-1.buster_amd64.deb ./wkhtmltox_0.12.5-1.buster_amd64.deb
+#rclonw
+RUN apt install -y rclone;
+COPY docker/php/rclone.conf /root/.config/rclone/rclone.conf
+
+#COPY docker/php/wkhtmltox_0.12.5-1.buster_amd64.deb ./wkhtmltox_0.12.5-1.buster_amd64.deb
 #RUN apt install -y ./wkhtmltox_0.12.5-1.buster_amd64.deb \
 #	&& rm ./wkhtmltox_0.12.5-1.buster_amd64.deb
 
-#RUN wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz \
-#&& tar -xvf wkhtmltox-0.12.4_linux-generic-amd64.tar.xz \
-#&& cp ./wkhtmltox/bin/wkhtmltoimage /usr/bin/ \
-#&& cp ./wkhtmltox/bin/wkhtmltopdf /usr/bin/ \
-#&& apt-get install zlib1g fontconfig libxrender1 libfreetype6 libxext6 libx11-6 \
-#&& rm -rf ./wkhtmltox-0.12.4_linux-generic-amd64.tar.xz ./wkhtmltox;
 
 RUN wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.buster_amd64.deb \
 	&& apt install -y ./wkhtmltox_0.12.5-1.buster_amd64.deb \
