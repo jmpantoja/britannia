@@ -63,7 +63,7 @@
         <one-to-one field="photo"
                     target-entity="Britannia\Domain\Entity\Staff\Photo"
                     orphan-removal="true">
-
+            <join-column on-delete="SET NULL"/>
             <cascade>
                 <cascade-persist/>
             </cascade>

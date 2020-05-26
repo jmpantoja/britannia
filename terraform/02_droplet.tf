@@ -7,10 +7,18 @@ variable "github_repository_url" {}
 variable "github_branch" {}
 variable "app_url" {}
 variable "app_secret" {}
+variable "app_env" {}
 variable "mysql_root_password" {}
 variable "mysql_database" {}
 variable "mysql_user" {}
 variable "mysql_password" {}
+
+variable "app_descom_user" {}
+variable "app_descom_password" {}
+
+variable "app_mailer_managers" {}
+variable "app_mailer_reception" {}
+variable "app_mailer_teachers" {}
 
 data "template_file" "init" {
 template = "${file("userdata.yaml.tpl")}"

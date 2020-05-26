@@ -38,8 +38,8 @@ RUN apt update \
 #    && printf "\n" | pecl install pecl_http && docker-php-ext-enable pecl_http \
 	&& apt clean ;
 
-#rclonw
-RUN apt install -y rclone;
+#backups rclone
+RUN apt install -y rclone default-mysql-client;
 COPY docker/php/rclone.conf /root/.config/rclone/rclone.conf
 
 #COPY docker/php/wkhtmltox_0.12.5-1.buster_amd64.deb ./wkhtmltox_0.12.5-1.buster_amd64.deb

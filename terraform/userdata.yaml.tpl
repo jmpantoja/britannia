@@ -82,7 +82,7 @@ runcmd:
   - mv /root/tmp/docker-compose.override.yml.tmp /deploy/britannia/docker-compose.override.yml
   - mv /root/tmp/api.env.local.tmp /deploy/britannia/api/.env.local
   - mv /root/tmp/rclone.conf /deploy/britannia/api/docker/php/rclone.conf
-  - mv /root/tmp/dumps /deploy/britannia/api/dumps
+  - mv /root/tmp/dumps/britannia.sql /deploy/britannia/api/dumps
   - mv /root/tmp/uploads/attachments /deploy/britannia/api/uploads/attachments
   - mv /root/tmp/uploads/photos /deploy/britannia/api/uploads/photos
   - rm -rf /root/tmp/

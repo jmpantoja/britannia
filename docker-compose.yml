@@ -14,6 +14,7 @@ services:
       - APP_ENV=prod
     depends_on:
       - db
+      - redis
     # Comment out these volumes in production
     volumes:
       - ./api:/srv/api:rw

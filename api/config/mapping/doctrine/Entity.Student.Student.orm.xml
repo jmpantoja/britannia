@@ -84,6 +84,7 @@
         <one-to-one field="photo" target-entity="Britannia\Domain\Entity\Student\Photo"
                     orphan-removal="true">
             <cache usage="NONSTRICT_READ_WRITE" region="day"/>
+            <join-column on-delete="SET NULL"/>
             <cascade>
                 <cascade-persist/>
             </cascade>
