@@ -17,11 +17,16 @@ class SendMessagesCommand extends Command
      * @var CommandBus
      */
     private CommandBus $commandBus;
+    /**
+     * @var CronLoginService
+     */
+    private CronLoginService $cronLoginService;
 
-    public function __construct(?string $name = null, CommandBus $commandBus)
+    public function __construct(?string $name = null, CommandBus $commandBus, CronLoginService $cronLoginService)
     {
         parent::__construct($name);
         $this->commandBus = $commandBus;
+        $this->cronLoginService = $cronLoginService;
     }
 
 
@@ -35,9 +40,9 @@ class SendMessagesCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
+        $this->cronLoginService->login();
         $this->commandBus->handle(SendMessages::make());
 
-        $output->write('log output');
         return 0;
     }
 }

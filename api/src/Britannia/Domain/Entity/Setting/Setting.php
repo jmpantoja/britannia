@@ -14,10 +14,11 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Setting;
 
 
-use Britannia\Domain\VO\Course\Pass\PassHours;
 use Britannia\Domain\VO\Course\Pass\PassPriceList;
 use Britannia\Domain\VO\Discount\FamilyDiscountList;
 use Britannia\Domain\VO\Discount\JobStatusDiscountList;
+use PlanB\DDD\Domain\VO\Email;
+use PlanB\DDD\Domain\VO\PhoneNumber;
 use PlanB\DDD\Domain\VO\Price;
 
 class Setting
@@ -26,6 +27,36 @@ class Setting
      * @var SettingId
      */
     private $id;
+
+    /** @var PhoneNumber|null */
+    private $phone;
+
+    /** @var PhoneNumber|null */
+    private $mobile;
+
+    /** @var string */
+    private $facebook;
+
+    /** @var string */
+    private $twitter;
+
+    /** @var Email */
+    private $mail;
+
+    /** @var string */
+    private $web;
+
+    private $morning;
+
+    private $afternoon;
+
+    private $sepa_presenter_id;
+    private $sepa_presenter_name;
+    private $sepa_bbva_office;
+
+    private $sepa_creditor_id;
+    private $sepa_creditor_name;
+    private $sepa_creditor_iban;
 
     /**
      * @var Price|null
@@ -88,6 +119,26 @@ class Setting
 
     public function update(SettingDto $dto): self
     {
+
+        $this->phone = $dto->phone;
+        $this->mobile = $dto->mobile;
+
+        $this->facebook = $dto->facebook;
+        $this->twitter = $dto->twitter;
+        $this->mail = $dto->mail;
+        $this->web = $dto->web;
+
+        $this->morning = $dto->morning;
+        $this->afternoon = $dto->afternoon;
+
+        $this->sepa_presenter_id = $dto->sepa_presenter_id;
+        $this->sepa_presenter_name = $dto->sepa_presenter_name;
+        $this->sepa_bbva_office = $dto->sepa_bbva_office;
+
+        $this->sepa_creditor_id = $dto->sepa_creditor_id;
+        $this->sepa_creditor_name = $dto->sepa_creditor_name;
+        $this->sepa_creditor_iban = $dto->sepa_creditor_iban;
+
         $this->enrollmentPayment = $dto->enrollmentPayment;
         $this->monthlyPayment = $dto->monthlyPayment;
         $this->passPriceList = $dto->passPriceList;
@@ -112,6 +163,118 @@ class Setting
     public function id(): SettingId
     {
         return $this->id;
+    }
+
+    /**
+     * @return PhoneNumber|null
+     */
+    public function phone(): ?PhoneNumber
+    {
+        return $this->phone;
+    }
+
+    /**
+     * @return PhoneNumber|null
+     */
+    public function mobile(): ?PhoneNumber
+    {
+        return $this->mobile;
+    }
+
+    /**
+     * @return string
+     */
+    public function facebook(): string
+    {
+        return $this->facebook;
+    }
+
+    /**
+     * @return string
+     */
+    public function twitter(): string
+    {
+        return $this->twitter;
+    }
+
+    /**
+     * @return Email
+     */
+    public function mail(): string
+    {
+        return $this->mail;
+    }
+
+    /**
+     * @return string
+     */
+    public function web(): string
+    {
+        return $this->web;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function morning()
+    {
+        return $this->morning;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function afternoon()
+    {
+        return $this->afternoon;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function sepaPresenterId(): ?string
+    {
+        return $this->sepa_presenter_id;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function sepaPresenterName(): ?string
+    {
+        return $this->sepa_presenter_name;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function sepaBbvaOffice(): ?string
+    {
+        return $this->sepa_bbva_office;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function sepaCreditorId(): ?string
+    {
+        return $this->sepa_creditor_id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function sepaCreditorName(): ?string
+    {
+        return $this->sepa_creditor_name;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function sepaCreditorIban(): ?string
+    {
+        return $this->sepa_creditor_iban;
     }
 
     /**

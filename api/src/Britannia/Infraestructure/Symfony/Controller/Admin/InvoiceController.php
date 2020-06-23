@@ -14,11 +14,13 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Controller\Admin;
 
 
+use Britannia\Application\UseCase\Invoice\GenerateSepaXlsx;
 use Britannia\Application\UseCase\Invoice\GenerateInvoicePdf;
 use Britannia\Domain\Entity\Invoice\Invoice;
 use Britannia\Domain\Service\Report\ReportEmailSender;
 use Britannia\Domain\VO\Message\EmailPurpose;
 use Britannia\Infraestructure\Symfony\Controller\Admin\Report\DownloadFactory;
+use Carbon\CarbonImmutable;
 use League\Tactician\CommandBus;
 use Sonata\AdminBundle\Controller\CRUDController;
 
@@ -46,6 +48,18 @@ class InvoiceController extends CRUDController
         $this->commandBus = $commandBus;
         $this->downloadFactory = $downloadFactory;
         $this->emailSender = $emailSender;
+    }
+
+    public function downloadSepaAction()
+    {
+        $month = CarbonImmutable::createFromDate(2020, 4, 1);
+
+        $command = GenerateSepaXlsx::byMonth($month);
+        $reportList = $this->commandBus->handle($command);
+
+        return $this->downloadFactory
+            ->create($reportList, self::DEBUG_MODE);
+
     }
 
     public function downloadPdfAction()

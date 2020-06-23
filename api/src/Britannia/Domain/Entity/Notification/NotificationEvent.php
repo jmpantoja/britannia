@@ -33,7 +33,7 @@ abstract class NotificationEvent extends DomainEvent implements NotificationEven
     {
         $this->withStudent($student)
             ->withCourse($course)
-            ->withDate(CarbonImmutable::today())
+            ->withDate(CarbonImmutable::now())
             ->withType($this->type());
     }
 

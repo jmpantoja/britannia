@@ -14,15 +14,15 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Controller\Admin\Report;
 
 
-use Britannia\Domain\Service\Report\FormBasedPdfInteface;
+use Britannia\Domain\Service\Report\TemplateBasedPdfReport;
 use Cocur\Slugify\Slugify;
 use mikehaertl\pdftk\Pdf;
 use Symfony\Component\Filesystem\Filesystem;
 
-final class PdfFormFiller
+final class PdfFormFiller extends AbstractTemplateFillerOut
 {
 
-    public function create(FormBasedPdfInteface $report, string $pathToTemplatesDir, string $pathToTempDir): string
+    public function create(TemplateBasedPdfReport $report, string $pathToTemplatesDir, string $pathToTempDir): string
     {
         $target = $this->getTarget($report, $pathToTempDir);
         $pathToTemplate = $this->getPathToTemplate($report, $pathToTemplatesDir);
@@ -35,32 +35,5 @@ final class PdfFormFiller
         return $target;
     }
 
-    /**
-     * @param FormBasedPdfInteface $report
-     * @param string $pathToTempDir
-     * @return string
-     */
-    private function getTarget(FormBasedPdfInteface $report, string $pathToTempDir): string
-    {
-        $fileName = Slugify::create()->slugify($report->title());
-        $target = sprintf('%s/%s.pdf', $pathToTempDir, $fileName);
 
-        $fileSystem = new Filesystem();
-        $fileSystem->mkdir(dirname($target));
-
-        return $target;
-    }
-
-    /**
-     * @param FormBasedPdfInteface $report
-     * @param string $pathToTemplatesDir
-     * @return string
-     */
-    private function getPathToTemplate(FormBasedPdfInteface $report, string $pathToTemplatesDir): string
-    {
-        $template = ClassnameToTemplate::make($report)
-            ->main();
-
-        return sprintf('%s/%s', $pathToTemplatesDir, $template);
-    }
 }

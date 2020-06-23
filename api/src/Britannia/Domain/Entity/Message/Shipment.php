@@ -19,10 +19,13 @@ use Britannia\Domain\Service\Message\DeliveryInterface;
 use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\Behaviour\Comparable;
 use PlanB\DDD\Domain\Behaviour\Traits\ComparableTrait;
+use PlanB\DDD\Domain\Model\AggregateRoot;
+use PlanB\DDD\Domain\Model\Traits\AggregateRootTrait;
 
 class Shipment implements Comparable
 {
     use ComparableTrait;
+    use AggregateRootTrait;
 
     private ?ShipmentId $id;
 
@@ -127,16 +130,19 @@ class Shipment implements Comparable
             return true;
         }
 
-
         $message = $this->message()->message();
         $subject = $this->message()->subject();
 
         $this->successful = $delivery->send($this->student(), $message, $subject);
+
         $this->sentAt = $delivery->date() ?? CarbonImmutable::now();
         $this->recipient = $delivery->recipient($this->student());
 
         $this->numOfTries++;
 
+        if($this->successful){
+            $this->notify(MessageHasBeenSent::make($this, $delivery));
+        }
 
         return $this->successful;
     }

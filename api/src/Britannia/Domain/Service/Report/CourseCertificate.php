@@ -19,7 +19,7 @@ use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Entity\Student\StudentCourse;
 use Carbon\CarbonImmutable;
 
-final class CourseCertificate implements FormBasedPdfInteface
+final class CourseCertificate extends TemplateBasedPdfReport
 {
     /**
      * @var string
@@ -131,7 +131,7 @@ final class CourseCertificate implements FormBasedPdfInteface
 
         return ucwords(strtolower($range));
     }
-    
+
     /**
      * @param string $name
      * @return mixed
@@ -143,4 +143,5 @@ final class CourseCertificate implements FormBasedPdfInteface
             ->isNotEmpty();
 
     }
+
 }

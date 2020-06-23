@@ -195,6 +195,7 @@ abstract class AbstractCompoundType extends AbstractType implements DataMapperIn
         if (is_array($data)) {
             return $data[$name] ?? null;
         }
+        
         return $this->getPropertyAccessor()->getValue($data, $name);
     }
 

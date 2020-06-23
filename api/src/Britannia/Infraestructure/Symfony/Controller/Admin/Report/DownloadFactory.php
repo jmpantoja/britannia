@@ -32,7 +32,6 @@ final class DownloadFactory
 
     public function __construct(DebugDownload $debug, FileDownload $download)
     {
-
         $this->debug = $debug;
         $this->download = $download;
     }
@@ -45,5 +44,4 @@ final class DownloadFactory
 
         return $this->download->createResponse($reportList);
     }
-
 }

@@ -24,6 +24,7 @@
         "mikehaertl/php-pdftk": "^0.8.0",
         "myclabs/php-enum": "^1.7",
         "nesbot/carbon": "^2.26",
+        "phpoffice/phpspreadsheet": "^1.13",
         "predis/predis": "^1.1",
         "ramsey/uuid-doctrine": "^1.5",
         "snc/redis-bundle": "^3.2",

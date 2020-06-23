@@ -61,7 +61,6 @@ class CreateNotificationUseCase implements UseCaseInterface
 
         $record = Notification::make($dto);
 
-//        $this->entityManager->persist($record);
         $this->persister->persist($record);
     }
 

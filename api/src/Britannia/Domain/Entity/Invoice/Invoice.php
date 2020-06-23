@@ -203,6 +203,8 @@ class Invoice
 
         $this->paid = true;
         $this->paymentDate = CarbonImmutable::now();
+
+        $this->notify(InvoiceHasBeenPaid::make($this));
         return $this;
     }
 }

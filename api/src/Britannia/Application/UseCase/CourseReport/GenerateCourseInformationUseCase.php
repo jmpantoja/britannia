@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Application\UseCase\CourseReport;
 
 
+use Britannia\Domain\Entity\Setting\Setting;
 use Britannia\Domain\Service\Report\CourseInformation;
 use Britannia\Domain\Service\Report\CourseInformationParamsGenerator;
 use Britannia\Domain\Service\Report\ReportList;
@@ -25,10 +26,15 @@ class GenerateCourseInformationUseCase implements UseCaseInterface
      * @var CourseInformationParamsGenerator
      */
     private CourseInformationParamsGenerator $generator;
+    /**
+     * @var Setting
+     */
+    private Setting $setting;
 
-    public function __construct(CourseInformationParamsGenerator $paramsGenerator)
+    public function __construct(CourseInformationParamsGenerator $paramsGenerator, Setting $setting)
     {
         $this->generator = $paramsGenerator;
+        $this->setting = $setting;
     }
 
     public function handle(GenerateCourseInformation $command)
@@ -37,7 +43,7 @@ class GenerateCourseInformationUseCase implements UseCaseInterface
         $discount = $command->discount();
 
         return ReportList::make($course->name(), [
-            CourseInformation::make($course, $discount, $this->generator)
+            CourseInformation::make($course, $discount, $this->generator, $this->setting)
         ]);
 
     }

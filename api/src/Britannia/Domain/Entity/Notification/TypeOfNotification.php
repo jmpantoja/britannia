@@ -21,6 +21,8 @@ use PlanB\DDD\Domain\Enum\Enum;
  * @method static self STUDENT_BEGINS_COURSE()
  * @method static self STUDENT_LEAVE_COURSE()
  * @method static self ATTENDANCE()
+ * @method static self MESSAGE_SENT()
+ * @method static self INVOICE_PAID()
  */
 class TypeOfNotification extends Enum
 {
@@ -28,5 +30,8 @@ class TypeOfNotification extends Enum
     public const STUDENT_BEGINS_COURSE = 'Incorporación a curso';
     public const STUDENT_LEAVE_COURSE = 'Abandono de curso';
     public const ATTENDANCE = 'Falta de asistencia';
+    public const MESSAGE_SENT = 'Mensaje enviado';
+    public const INVOICE_PAID = 'Recibo pagado';
+    public const ISSUE = 'Observación';
 
 }

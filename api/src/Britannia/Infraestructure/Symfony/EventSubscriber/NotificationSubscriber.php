@@ -16,8 +16,10 @@ namespace Britannia\Infraestructure\Symfony\EventSubscriber;
 
 use Britannia\Application\UseCase\Record\CreateNotification;
 use Britannia\Application\UseCase\Student\StudentJoinToCourse;
+use Britannia\Domain\Entity\Invoice\InvoiceHasBeenPaid;
+use Britannia\Domain\Entity\Issue\IssueHasBeenCreated;
+use Britannia\Domain\Entity\Message\MessageHasBeenSent;
 use Britannia\Domain\Entity\Notification\NotificationEventInterface;
-use Britannia\Domain\Entity\Record\BorrameEvent;
 use Britannia\Domain\Entity\Student\StudentHasBeenCreated;
 use Britannia\Domain\Entity\Student\StudentHasJoinedToCourse;
 use Britannia\Domain\Entity\Student\StudentHasLeavedCourse;
@@ -36,7 +38,10 @@ class NotificationSubscriber extends DomainEventSubscriber
             StudentHasJoinedToCourse::class => 'onCreateNotification',
             StudentHasLeavedCourse  ::class => 'onCreateNotification',
             StudentHasBeenCreated::class => 'onCreateNotification',
-            StudentHasMissedLesson::class => 'onCreateNotification'
+            StudentHasMissedLesson::class => 'onCreateNotification',
+            MessageHasBeenSent::class => 'onCreateNotification',
+            InvoiceHasBeenPaid::class => 'onCreateNotification',
+            IssueHasBeenCreated::class => 'onCreateNotification',
         ];
     }
 

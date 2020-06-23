@@ -3,8 +3,10 @@
 namespace Britannia\Infraestructure\Doctrine\Repository;
 
 use Britannia\Domain\Entity\Invoice\Invoice;
+use Britannia\Domain\Entity\Invoice\InvoiceList;
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Repository\InvoiceRepositoryInterface;
+use Britannia\Domain\VO\Payment\PaymentMode;
 use Carbon\CarbonImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -41,4 +43,19 @@ class InvoiceRepository extends ServiceEntityRepository implements InvoiceReposi
         ]);
     }
 
+
+    public function findByBank(CarbonImmutable $month): InvoiceList
+    {
+        $query = $this->createQueryBuilder('A')
+            ->where('A.month = :month')
+            ->andWhere('A.mode <> :cash')
+            ->setParameters([
+                'month' => date_to_string($month, -1, -1, 'YMM'),
+                'cash' => PaymentMode::CASH()
+            ])
+            ->getQuery();
+
+        $invoices = $query->execute();
+        return InvoiceList::collect($invoices);
+    }
 }

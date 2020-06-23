@@ -100,4 +100,15 @@ final class InvoiceAdmin extends AbstractAdmin implements AdminFilterableInterfa
 
     }
 
+    public function configureActionButtons($action, $object = null)
+    {
+        $list = [];
+
+        $list['sepa']['template'] = 'admin/invoice/invoice_create_sepa_action.html.twig';
+        $list = array_merge($list, parent::configureActionButtons($action, $object));
+
+        return $list;
+    }
+
+
 }

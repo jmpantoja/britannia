@@ -260,23 +260,23 @@
 
 {% block notes %}
     <div class="notes-wrapper">
-    {% if startDate != null %}
-        <p class="notes">Precios válidos para la incorporación al curso el {{ startDate | date('d/m/Y') }}</p>
-    {% endif %}
-
-    {% if reserve.enrollment.ofJobStatusType %}
-        <p class="notes">Matrícula gratis</p>
-    {% endif %}
-
-    {% if monthly != null %}
-        {% if monthly.ofJobStatusType %}
-            <p class="notes">Descuento en mensualidades por situación laboral</p>
+        {% if startDate != null %}
+            <p class="notes">Precios válidos para la incorporación al curso el {{ startDate | date('d/m/Y') }}</p>
         {% endif %}
 
-        {% if monthly.ofFamilyType %}
-            <p class="notes">Descuento familiar en mensualidades</p>
+        {% if reserve.enrollment.ofJobStatusType %}
+            <p class="notes">Matrícula gratis</p>
         {% endif %}
-    {% endif %}
+
+        {% if monthly != null %}
+            {% if monthly.ofJobStatusType %}
+                <p class="notes">Descuento en mensualidades por situación laboral</p>
+            {% endif %}
+
+            {% if monthly.ofFamilyType %}
+                <p class="notes">Descuento familiar en mensualidades</p>
+            {% endif %}
+        {% endif %}
     </div>
 {% endblock %}
 
@@ -363,20 +363,20 @@
         <h3 class="title">Teléfonos</h3>
         <div class="content">
             <p>
-                <i class="fa fa-phone"></i> 956 05 93 44
+                <i class="fa fa-phone"></i> {{ setting.phone }}
             </p>
             <p>
-                <i class="fa fa-mobile"></i> 601 03 50 27
+                <i class="fa fa-mobile"></i> {{ setting.mobile }}
             </p>
         </div>
     </div>
 
     <div class="box">
         <div class="content">
-            <p class="facebook"><i class="fa fa-facebook-f"></i> AcademiabritanniaElpuerto</p>
-            <p class="twitter"><i class="fa fa-twitter"></i> @AcademiaBritann</p>
-            <p class="email"><i class="fa fa-envelope"></i> britannia.elpuerto.recepcion@gmail.com</p>
-            <p class="web"><i class="fa fa-info"></i> https://www.academiabritannia.es</p>
+            <p class="facebook"><i class="fa fa-facebook-f"></i> {{ setting.facebook }} </p>
+            <p class="twitter"><i class="fa fa-twitter"></i> {{ setting.twitter }} </p>
+            <p class="email"><i class="fa fa-envelope"></i> {{ setting.mail }}</p>
+            <p class="web"><i class="fa fa-info"></i> {{ setting.web }} </p>
         </div>
     </div>
 
@@ -384,8 +384,15 @@
     <div class="box">
         <h3 class="title">Atención al público</h3>
         <div class="content">
-            <p><i>&nbsp;</i> 9:30 a 11:30</p>
-            <p><i>&nbsp;</i>16:00 a 21:00</p>
+            <p>
+                <b>Mañanas: </b><br />
+                {{ setting.morning.start | localizeddate('none', 'short')  }} a
+                {{ setting.morning.end | localizeddate('none', 'short')  }}
+            </p>
+            <p>
+                <b>Tardes: </b><br />
+                {{ setting.afternoon.start | localizeddate('none', 'short')  }} a
+                {{ setting.afternoon.end | localizeddate('none', 'short')  }}
         </div>
     </div>
 

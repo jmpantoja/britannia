@@ -14,7 +14,10 @@ declare(strict_types=1);
 namespace Britannia\Domain\Service\Report;
 
 
-interface FormBasedPdfInteface extends ReportInterface
+abstract class TemplateBasedPdfReport implements TemplateBasedInteface
 {
-
+    final public function extension(): string
+    {
+        return 'pdf';
+    }
 }

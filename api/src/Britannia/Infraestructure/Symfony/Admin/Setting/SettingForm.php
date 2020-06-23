@@ -18,15 +18,116 @@ use Britannia\Infraestructure\Symfony\Form\Type\Course\Discount\FamilyDiscountLi
 use Britannia\Infraestructure\Symfony\Form\Type\Course\Discount\JobStatusDiscountListType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\PassPriceListType;
 use PlanB\DDDBundle\Sonata\Admin\AdminForm;
+use PlanB\DDDBundle\Symfony\Form\Type\EmailType;
+use PlanB\DDDBundle\Symfony\Form\Type\IbanType;
+use PlanB\DDDBundle\Symfony\Form\Type\PhoneNumberType;
 use PlanB\DDDBundle\Symfony\Form\Type\PriceType;
 use PlanB\DDDBundle\Symfony\Form\Type\WYSIWYGType;
+use Sonata\Form\Type\DateTimeRangePickerType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 final class SettingForm extends AdminForm
 {
     public function configure()
     {
+        $this->tabAcademy('Academia');
+        $this->tabSepa('Sepa');
         $this->tabPrice('Precios');
         $this->tabLopd('Cláusulas');
+    }
+
+    private function tabAcademy(string $tabName)
+    {
+        $this->tab($tabName);
+
+        $this->group('Contacto', ['class' => 'col-md-4'])
+            ->add('phone', PhoneNumberType::class, [
+                'label' => 'Fijo'
+            ])
+            ->add('mobile', PhoneNumberType::class, [
+                'label' => 'Movil'
+            ])
+            ->add('mail', EmailType::class, [
+                'label' => 'Email'
+            ])
+            ->add('web', TextType::class, [
+                'label' => 'Web'
+            ]);
+
+        $this->group('Horario', ['class' => 'col-md-4'])
+            ->add('morning', DateTimeRangePickerType::class, [
+                'label' => 'Mañana',
+                'block_prefix' => 'time_range',
+                'field_options' => [
+                    'dp_pick_time' => true,
+                    'dp_pick_date' => false,
+                    'dp_use_seconds' => false,
+                    'dp_use_strict' => true,
+                    'format' => 'H:mm'
+                ],
+                'field_options_start' => [
+                    'label' => 'Desde'
+                ],
+                'field_options_end' => [
+                    'label' => 'Hasta'
+                ]
+            ])
+            ->add('afternoon', DateTimeRangePickerType::class, [
+                'label' => 'Mañana',
+                'block_prefix' => 'time_range',
+                'field_options' => [
+                    'dp_pick_time' => true,
+                    'dp_pick_date' => false,
+                    'dp_use_seconds' => false,
+                    'dp_use_strict' => true,
+                    'format' => 'H:mm'
+                ],
+                'field_options_start' => [
+                    'label' => 'Desde'
+                ],
+                'field_options_end' => [
+                    'label' => 'Hasta'
+                ]
+            ]);
+
+
+        $this->group('Redes', ['class' => 'col-md-4'])
+            ->add('facebook', TextType::class, [
+                'label' => 'Facebook'
+            ])
+            ->add('twitter', TextType::class, [
+                'label' => 'Twitter'
+            ]);
+
+    }
+
+    private function tabSepa(string $tabname)
+    {
+        $this->tab($tabname);
+        $this->group('Presentador', ['class' => 'col-md-6'])
+            ->add('sepa_presenter_id', TextType::class, [
+                'label' => 'Identificador',
+                'attr'=>[
+                    'style'=>'width:200px'
+                ]
+            ])
+            ->add('sepa_presenter_name', TextType::class, [
+                'label' => 'Nombre'
+            ])
+            ->add('sepa_bbva_office', TextType::class, [
+                'label' => 'Oficina Receptora'
+            ]);
+
+        $this->group('Acreedor', ['class' => 'col-md-6'])
+            ->add('sepa_creditor_id', TextType::class, [
+                'label' => 'Identificador'
+            ])
+            ->add('sepa_creditor_name', TextType::class, [
+                'label' => 'Nombre'
+            ])
+            ->add('sepa_creditor_iban', IbanType::class, [
+                'label' => 'Cuenta'
+            ]);
     }
 
     private function tabPrice(string $tabName)
@@ -60,8 +161,6 @@ final class SettingForm extends AdminForm
                 'label' => false,
                 'enable_default_data' => false
             ]);
-
-
     }
 
     private function tabLopd(string $tabName): void

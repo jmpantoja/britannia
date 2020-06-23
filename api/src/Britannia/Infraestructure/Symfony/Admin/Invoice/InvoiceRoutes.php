@@ -23,5 +23,7 @@ final class InvoiceRoutes extends AdminRoutes
     {
         $this->add('download_pdf', $this->path('download/pdf'));
         $this->add('send_email', $this->path('send/email'));
+
+        $this->add('download_sepa', 'download/sepa');
     }
 }

@@ -17,6 +17,7 @@ namespace Britannia\Infraestructure\Symfony\Controller\Admin\Report;
 use Britannia\Domain\Service\Report\HtmlBasedPdfReport;
 use Britannia\Domain\Service\Report\ReportInterface;
 use Britannia\Domain\Service\Report\ReportList;
+use Britannia\Domain\Service\Report\TemplateBasedXlsxReport;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,7 +28,7 @@ final class FileDownload
     /**
      * @var PdfGenerator
      */
-    private PdfGenerator $generator;
+    private PdfGenerator $pdfGenerator;
 
     /**
      * @var PdfFormFiller
@@ -40,17 +41,24 @@ final class FileDownload
      */
     private string $pathToTempDir;
     private string  $pathToTemplatesDir;
+    /**
+     * @var XlsxGenerator
+     */
+    private XlsxGenerator $xlsxGenerator;
 
-    public function __construct(PdfGenerator $generator, PdfFormFiller $formFiller, ParameterBagInterface $parameterBag)
+    public function __construct(XlsxGenerator $xlsxGenerator,
+                                PdfGenerator $pdfGenerator,
+                                PdfFormFiller $formFiller,
+                                ParameterBagInterface $parameterBag)
     {
-        $this->generator = $generator;
+        $this->xlsxGenerator = $xlsxGenerator;
+        $this->pdfGenerator = $pdfGenerator;
         $this->formFiller = $formFiller;
 
         $this->pathToTemplatesDir = $parameterBag->get('twig.default_path');
 
         $pathToLogDir = $parameterBag->get('kernel.logs_dir');
         $this->setTempDir($pathToLogDir);
-
 
     }
 
@@ -108,8 +116,12 @@ final class FileDownload
 
     private function generateTempPdfFile(ReportInterface $report): string
     {
+        if ($report instanceof TemplateBasedXlsxReport) {
+            return $this->xlsxGenerator->create($report, $this->pathToTemplatesDir(), $this->pathToTempDir());
+        }
+
         if ($report instanceof HtmlBasedPdfReport) {
-            return $this->generator->create($report, $this->pathToTempDir());
+            return $this->pdfGenerator->create($report, $this->pathToTempDir());
         }
 
         return $this->formFiller->create($report, $this->pathToTemplatesDir(), $this->pathToTempDir());

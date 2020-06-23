@@ -19,9 +19,12 @@ use Britannia\Domain\Entity\Staff\StaffMember;
 use Carbon\CarbonImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use PlanB\DDD\Domain\Model\Traits\AggregateRootTrait;
 
 class Issue
 {
+    use AggregateRootTrait;
+
     /** @var ?IssueId */
     private $id;
 
@@ -71,6 +74,7 @@ class Issue
 
         $this->setRecipients($dto->issueHasRecipients);
 
+        $this->notify(IssueHasBeenCreated::make($this));
         return $this;
     }
 

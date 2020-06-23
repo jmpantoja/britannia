@@ -29,4 +29,6 @@ interface InvoiceRepositoryInterface
     public function existsByStudentAndMonth(Student $student, CarbonImmutable $date): bool ;
 
     public function findUnPaidByStudentAndMonth(Student $student, CarbonImmutable $date): ?Invoice;
+
+    public function findByBank(CarbonImmutable $month);
 }

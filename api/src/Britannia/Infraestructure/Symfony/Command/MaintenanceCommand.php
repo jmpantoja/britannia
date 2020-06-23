@@ -4,9 +4,7 @@ namespace Britannia\Infraestructure\Symfony\Command;
 
 use Britannia\Application\UseCase\Cron\UpdateCalendar;
 use Britannia\Application\UseCase\Cron\UpdateCourseStatus;
-use Britannia\Application\UseCase\Cron\UpdateInvoices;
 use Britannia\Application\UseCase\Cron\UpdateStudentAge;
-use Britannia\Domain\Repository\StaffMemberRepositoryInterface;
 use League\Tactician\CommandBus;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -14,7 +12,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class MaintenanceCommand extends Command implements ContainerAwareInterface
 {
@@ -23,21 +20,22 @@ class MaintenanceCommand extends Command implements ContainerAwareInterface
      * @var CommandBus
      */
     private $commandBus;
-    /**
-     * @var StaffMemberRepositoryInterface
-     */
-    private $userRepository;
+
     /**
      * @var ContainerInterface
      */
     private $container;
+    /**
+     * @var CronLoginService
+     */
+    private CronLoginService $cronLoginService;
 
-    public function __construct(?string $name = null, CommandBus $commandBus, StaffMemberRepositoryInterface $userRepository)
+    public function __construct(?string $name = null, CommandBus $commandBus, CronLoginService $cronLoginService)
     {
         parent::__construct($name);
 
         $this->commandBus = $commandBus;
-        $this->userRepository = $userRepository;
+        $this->cronLoginService = $cronLoginService;
     }
 
     protected function configure()
@@ -57,33 +55,12 @@ class MaintenanceCommand extends Command implements ContainerAwareInterface
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
-        $this->login();
+        $this->cronLoginService->login();
 
         $this->commandBus->handle(UpdateCalendar::make());
         $this->commandBus->handle(UpdateStudentAge::make());
         $this->commandBus->handle(UpdateCourseStatus::make());
-     //   $this->commandBus->handle(UpdateInvoices::make());
-
 
         return 0;
-    }
-
-    protected function login()
-    {
-        $user = $this->userRepository->findOneBy([
-            'userName' => 'administrador'
-        ]);
-
-        if (empty($user)) {
-            return;
-        }
-
-        $token = new UsernamePasswordToken(
-            $user,
-            null,
-            'main',
-            $user->getRoles());
-
-        $this->container->get('security.token_storage')->setToken($token);
     }
 }

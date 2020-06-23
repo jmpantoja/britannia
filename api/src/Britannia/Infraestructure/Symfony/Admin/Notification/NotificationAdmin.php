@@ -16,7 +16,7 @@ final class NotificationAdmin extends AbstractAdmin implements AdminFilterableIn
 {
 
     protected $datagridValues = [
-        '_sort_by' => 'date',
+        '_sort_by' => 'createdAt',
         '_sort_order' => 'DESC',
     ];
     /**

@@ -36,3 +36,27 @@
         <p class="counter-info"></p>
     </div>
 {% endblock %}
+
+{% block time_range_widget %}
+    <div class="row">
+        <div class="col-md-6">
+            {{ form_row(form.start) }}
+        </div>
+        <div class="col-md-6">
+            {{ form_row(form.end) }}
+        </div>
+    </div>
+
+    {#    <div class="counter counter-wrapper">#}
+    {#        {% set attr = {#}
+    {#            'class': 'counter-area',#}
+    {#            'data-template':'counter',#}
+    {#            'data-label':'.counter-info'#}
+    {#        } %}#}
+
+    {#        {{ form_widget(form, {'attr': attr}) }}#}
+    {#        <p class="counter-info"></p>#}
+    {#    </div>#}
+{% endblock %}
+
+

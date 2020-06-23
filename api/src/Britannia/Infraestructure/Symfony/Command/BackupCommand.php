@@ -37,9 +37,6 @@ class BackupCommand extends Command
     public function __construct(string $name = null, BackupManager $backupManager)
     {
         parent::__construct($name);
-//        $this->entityManager = $entityManager;
-//        $this->parameterBag = $parameterBag;
-
         $this->backupManager = $backupManager;
     }
 
@@ -52,16 +49,6 @@ class BackupCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->backupManager->create();
-
-//        $this->commandBus->handle(MakeBackup::make());
-
-//        $this->backupSql();
-//
-//        shell_exec('rclone copy uploads/attachments backup:attachments');
-//        shell_exec('rclone copy uploads/photos backup:photos');
-
         return 0;
     }
-
-
 }

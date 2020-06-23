@@ -15,6 +15,25 @@
             <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
         </id>
 
+        <field name="phone" type="phone_number" nullable="true"/>
+        <field name="mobile" type="phone_number" nullable="true"/>
+
+        <field name="facebook" nullable="true"/>
+        <field name="twitter" nullable="true"/>
+        <field name="mail" type="email" nullable="true"/>
+        <field name="web" nullable="true"/>
+
+        <field name="morning" type="json" nullable="true"/>
+        <field name="afternoon" type="json" nullable="true"/>
+
+        <field name="sepa_presenter_id" nullable="true"/>
+        <field name="sepa_presenter_name" nullable="true"/>
+        <field name="sepa_bbva_office" nullable="true"/>
+
+        <field name="sepa_creditor_id" nullable="true"/>
+        <field name="sepa_creditor_name" nullable="true"/>
+        <field name="sepa_creditor_iban" nullable="true"/>
+
         <field name="enrollmentPayment" type="price" nullable="true"/>
         <field name="monthlyPayment" type="price" nullable="true"/>
         <field name="passPriceList" type="PassPriceList" nullable="true"/>

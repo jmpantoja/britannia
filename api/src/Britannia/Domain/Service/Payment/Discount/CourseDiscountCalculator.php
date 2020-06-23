@@ -32,6 +32,7 @@ final class CourseDiscountCalculator
         }
 
         $discount = $course->discount();
+
         return $discount->getByJobStatus($jobStatus) ?? CourseDiscount::byDefault();
     }
 }
