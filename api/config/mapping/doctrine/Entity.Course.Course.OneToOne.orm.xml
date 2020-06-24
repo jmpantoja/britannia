@@ -8,6 +8,7 @@
         <cache usage="NONSTRICT_READ_WRITE" region="day"/>
 
         <field name="enrollmentPayment" type="price" nullable="true"/>
+
         <field name="discount" type="JobStatusDiscountList" nullable="true"></field>
         <one-to-many field="passes" target-entity="\Britannia\Domain\Entity\Course\Pass\Pass" mapped-by="course"
                      orphan-removal="true">
@@ -18,7 +19,6 @@
             <cascade>
                 <cascade-persist/>
             </cascade>
-
         </one-to-many>
     </entity>
 

@@ -47,6 +47,7 @@ class OneToOne extends Course implements CoursePaymentInterface
 
     public function update(CourseDto $dto): OneToOne
     {
+
         if (isset($dto->timeRange)) {
             $this->timeRange = $dto->timeRange;
         }

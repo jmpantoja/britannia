@@ -67,6 +67,7 @@ trait CourseTrait
      */
     public function name(): string
     {
+
         return $this->name ?? (string)$this->id();
     }
 

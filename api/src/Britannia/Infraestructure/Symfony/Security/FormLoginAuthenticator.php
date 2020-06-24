@@ -73,7 +73,7 @@ class FormLoginAuthenticator extends AbstractFormLoginAuthenticator
 
         $user = $this->entityManager->getRepository(StaffMember::class)
             ->loadUserByUsername($credentials['userNameOrEmail']);
-
+        
         if (!$user) {
             throw new CustomUserMessageAuthenticationException('Username or Email could not be found.');
         }

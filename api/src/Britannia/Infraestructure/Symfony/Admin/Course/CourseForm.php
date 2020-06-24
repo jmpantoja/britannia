@@ -113,9 +113,6 @@ final class CourseForm extends AdminForm
                 ->add('enrollmentPayment', EnrollmentPaymentType::class, [
                     'label' => 'Matrícula'
                 ]);
-//            ->add('discount', JobStatusDiscountListType::class, [
-//                'label' => 'Descuentos'
-//            ]);
         }
 
 
@@ -227,10 +224,14 @@ final class CourseForm extends AdminForm
 
     private function passTab(string $name, Course $course): self
     {
-
         if (!($course instanceof OneToOne)) {
             return $this;
         }
+
+        if(!($course->id() instanceof CourseId)){
+            return $this;
+        }
+
 
         $this->tab($name);
         $this->group('Bonos', ['class' => 'col-md-8'])

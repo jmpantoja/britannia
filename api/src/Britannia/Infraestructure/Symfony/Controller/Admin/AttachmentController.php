@@ -41,7 +41,6 @@ class AttachmentController extends AbstractController
 
         $upload = $this->uploader->uploadFile($file);
 
-
         return $this->json($upload->toArray());
     }
 

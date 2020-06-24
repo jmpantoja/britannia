@@ -75,7 +75,7 @@ final class TimeRange
      */
     public function status(): CourseStatus
     {
-        return $this->status ?? CourseStatus::PENDING;
+        return $this->status ?? CourseStatus::PENDING();
     }
 
     public function hasBeenUpdated(): bool

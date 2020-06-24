@@ -6,8 +6,8 @@
 
     <embeddable name="Britannia\Domain\VO\Course\TimeRange\TimeRange">
 
-        <field name="start" type="date_immutable" />
-        <field name="end" type="date_immutable" />
+        <field name="start" type="date_immutable" nullable="true" />
+        <field name="end" type="date_immutable"  nullable="true" />
         <field name="status" type="CourseStatus" />
 
 
