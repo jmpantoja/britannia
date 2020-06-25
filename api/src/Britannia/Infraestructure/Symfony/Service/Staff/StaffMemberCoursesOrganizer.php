@@ -14,22 +14,56 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Service\Staff;
 
 
+use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Staff\StaffMember;
 
 final class StaffMemberCoursesOrganizer
 {
 
-    public function distributeByGroups(StaffMember $member, int $numOfGroups = 6): array
+    public function distributeByGroups(StaffMember $member): array
     {
         $courses = $member->activeCourses();
 
-        $list = [];
-        foreach ($courses as $index => $course) {
-            $key = $index % $numOfGroups;
+        $list = [
+            '+18' => [],
+            'Regular' => [],
+            'Preescolar' => [],
+            'Apoyo' => [],
+            '1to1' => [],
+        ];
+
+        /**
+         * @var Course $course
+         */
+        foreach ($courses as $course) {
+            $key = $this->typeOfCourse($course);
             $list[$key][] = $course;
         }
 
         return $list;
+    }
+
+    private function typeOfCourse(Course $course): string
+    {
+        if ($course instanceof Course\Adult) {
+            return '+18';
+        }
+
+        if ($course instanceof Course\School) {
+            return 'Regular';
+        }
+
+        if ($course instanceof Course\PreSchool) {
+            return 'Preescolar';
+        }
+
+        if ($course instanceof Course\Support) {
+            return 'Apoyo';
+        }
+
+        if ($course instanceof Course\OneToOne) {
+            return '1to1';
+        }
     }
 
 }

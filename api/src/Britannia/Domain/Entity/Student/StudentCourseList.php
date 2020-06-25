@@ -31,6 +31,15 @@ final class StudentCourseList extends EntityList
         return StudentCourse::class;
     }
 
+    public static function collect(?iterable $input = []): EntityList
+    {
+        $input = collect($input)
+            ->sortBy(fn(StudentCourse $studentCourse)=> $studentCourse->student()->name());
+
+       return parent::collect($input);
+    }
+
+
     public static function fromStudent(Student $student): self
     {
         return static::collect($student->studentHasCourses());

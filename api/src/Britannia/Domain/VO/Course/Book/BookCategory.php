@@ -23,7 +23,7 @@ use PlanB\DDD\Domain\Enum\Enum;
  */
 class BookCategory extends Enum
 {
-    private const STUDENT_BOOK = 'Estudiante';
-    private const WORK_BOOK = 'Ejercicios';
-    private const TEACHER_BOOK = 'Profesor';
+    private const STUDENT_BOOK = 'Student Book';
+    private const WORK_BOOK = 'Workbook';
+    private const TEACHER_BOOK = 'Teacher Book';
 }

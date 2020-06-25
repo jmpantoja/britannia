@@ -36,13 +36,12 @@ final class CourseDatagrid extends AdminDataGrid
 
         $this->add('mainTeacher', null, [
             'template' => 'admin/course/course_teacher_column.html.twig',
-            'label' => 'Teacher',
-          //  'header_style' => 'width:200px'
+            'label' => 'Teacher'
         ]);
 
         $this->add('schedule', null, [
             'label' => 'Horario',
-            'header_style' => 'width:170px',
+            'header_style' => 'width:230px',
             'template' => 'admin/course/course_schedule_column.html.twig',
             'row_align' => 'left'
         ]);

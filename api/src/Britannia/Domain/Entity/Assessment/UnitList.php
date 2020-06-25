@@ -58,6 +58,7 @@ final class UnitList extends EntityList
         $markReports = $this->values()
             ->map(fn(Unit $unit) => $unit->marks());
 
+
         return MarkReportList::collect($markReports)
             ->average($skills);
 

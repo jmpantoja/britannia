@@ -13,11 +13,13 @@ declare(strict_types=1);
 
 namespace PlanB\DDDBundle\Sonata\Admin;
 
+use Exception;
 use PlanB\DDD\Domain\Model\Exception\InvalidTypeException;
 use Symfony\Component\Form\DataMapperInterface;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
+use Throwable;
 
 
 abstract class AdminMapper implements DataMapperInterface

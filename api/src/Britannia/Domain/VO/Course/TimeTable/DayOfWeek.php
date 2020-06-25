@@ -16,6 +16,7 @@ namespace Britannia\Domain\VO\Course\TimeTable;
 
 use DateTimeInterface;
 use PlanB\DDD\Domain\Enum\Enum;
+use Tightenco\Collect\Support\Collection;
 
 /**
  * @method static self MONDAY()
@@ -44,7 +45,33 @@ class DayOfWeek extends Enum
         return static::byName($day);
     }
 
-    public function getShortName(): string
+    public static function byShortName(string $shortName): ?self
+    {
+        $allDays = self::allDays();
+
+        return collect($allDays)
+            ->first(fn(DayOfWeek $dayOfWeek) => $dayOfWeek->hasShortName($shortName));
+    }
+
+    /**
+     * @return Collection
+     */
+    public static function allDays(): array
+    {
+        return collect(static::keys())
+            ->map(function (string $day) {
+                return static::byName($day);
+            })
+            ->toArray();
+    }
+
+    public function hasShortName(string $shortName)
+    {
+        return 0 === strcasecmp($shortName, $this->getShortName());
+    }
+
+    public
+    function getShortName(): string
     {
         if ($this->is(self::WEDNESDAY())) {
             return 'X';
@@ -56,7 +83,8 @@ class DayOfWeek extends Enum
         return strtoupper($initial);
     }
 
-    public function isWeekEnd(): bool
+    public
+    function isWeekEnd(): bool
     {
         return $this->is(static::SATURDAY) || $this->is(static::SUNDAY);
     }

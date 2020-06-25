@@ -75,7 +75,7 @@ class AttendanceService
         return round($percent, 1);
     }
 
-    public function summary(Student $student, Course $course, int $limit = 5): array
+    public function summary(Student $student, Course $course, int $limit = 3): array
     {
         $values = [];
         $today = CarbonImmutable::now();

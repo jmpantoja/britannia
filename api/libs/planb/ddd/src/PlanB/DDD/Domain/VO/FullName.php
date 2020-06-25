@@ -126,6 +126,6 @@ class FullName
 
     public function __toString()
     {
-        return $this->getRegular();
+        return $this->getReversedMode();
     }
 }

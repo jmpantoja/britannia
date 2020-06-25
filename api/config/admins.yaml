@@ -133,8 +133,10 @@ services:
         calls:
             - [setTemplate, ['edit', 'admin/issue/issue_edit_template.html.twig']]
             - [setTemplate, ['show', 'admin/issue/issue_show_template.html.twig']]
+            - [setTemplate, ['list', 'admin/issue/issue_list_template.html.twig']]
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: Observaciones }
+        
         public: true
 
     admin.message:
