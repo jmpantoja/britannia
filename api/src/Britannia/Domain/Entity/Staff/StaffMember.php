@@ -3,8 +3,10 @@
 namespace Britannia\Domain\Entity\Staff;
 
 
+use Britannia\Domain\Entity\Attachment\AttachmentList;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Course\CourseList;
+use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\VO\StaffMember\Status;
 use Carbon\CarbonImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -102,6 +104,11 @@ class StaffMember implements UserInterface, Serializable, Comparable
     private $issues;
 
     /**
+     * @var Collection
+     */
+    private $attachments;
+
+    /**
      * @var CarbonImmutable
      */
     private $createdAt;
@@ -121,8 +128,8 @@ class StaffMember implements UserInterface, Serializable, Comparable
         $this->teacher = true;
         $this->roles = [self::DEFAULT_ROLE];
         $this->courses = new ArrayCollection();
+        $this->attachments = new ArrayCollection();
         $this->issues = new ArrayCollection();
-
         $this->createdAt = CarbonImmutable::now();
 
         $this->update($dto);
@@ -139,6 +146,7 @@ class StaffMember implements UserInterface, Serializable, Comparable
         $this->photo = $dto->photo;
         $this->status = $dto->status;
         $this->comment = $dto->comment;
+        $this->setAttachments($dto->attachments);
 
         $this->setCourses($dto->courses);
 
@@ -238,6 +246,16 @@ class StaffMember implements UserInterface, Serializable, Comparable
         return $this->phoneNumbers;
     }
 
+    public function setAttachments(AttachmentList $attachments): self
+    {
+        $this->attachmentList()
+            ->forRemovedItems($attachments)
+            ->forAddedItems($attachments);
+
+        return $this;
+    }
+
+
     /**
      * @return Course[]
      */
@@ -286,6 +304,20 @@ class StaffMember implements UserInterface, Serializable, Comparable
             return $current->equals($course);
         });
     }
+
+    /**
+     * @return Student[]
+     */
+    public function attachments(): array
+    {
+        return $this->attachmentList()->toArray();
+    }
+
+    private function attachmentList(): AttachmentList
+    {
+        return AttachmentList::collect($this->attachments);
+    }
+
 
     /**
      * @return Collection

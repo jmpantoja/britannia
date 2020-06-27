@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Staff;
 
 
+use Britannia\Domain\Entity\Attachment\AttachmentList;
 use Britannia\Domain\Entity\Course\CourseList;
 use Britannia\Domain\VO\StaffMember\Status;
 use PlanB\DDD\Domain\Model\Dto;
@@ -35,6 +36,7 @@ final class StaffMemberDto extends Dto
     public array $emails = [];
     public array $phoneNumbers = [];
     public CourseList $courses;
+    public AttachmentList $attachments;
     public ?Photo $photo = null;
     public ?Status $status = null;
     public ?string $comment = null;

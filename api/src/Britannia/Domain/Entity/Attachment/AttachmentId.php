@@ -11,16 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Britannia\Domain\Entity\Student\Attachment;
+namespace Britannia\Domain\Entity\Attachment;
 
 
-use PlanB\DDD\Domain\Model\EntityList;
+use PlanB\DDD\Domain\Model\EntityId;
 
-final class AttachmentList extends EntityList
+class AttachmentId extends EntityId
 {
 
-    protected function typeName(): string
-    {
-        return Attachment::class;
-    }
 }

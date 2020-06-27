@@ -136,7 +136,9 @@ final class StudentForm extends AdminForm
         if (!$isAdult) {
 
             $group
-                ->add('school', SchoolType::class)
+                ->add('school', SchoolType::class, [
+                    'label' => 'Escuela'
+                ])
                 ->add('schoolCourse', TextType::class, [
                     'label' => 'Próximo curso escolar',
                     'required' => false

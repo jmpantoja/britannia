@@ -1,0 +1,36 @@
+{% extends base_template %}
+
+{%- block actions -%}
+    {#    {% include '@SonataAdmin/CRUD/action_buttons.html.twig' %}#}
+{%- endblock -%}
+
+{%- block tab_menu -%}
+    {#    {{ knp_menu_render(admin.sidemenu(action), {#}
+    {#        'currentClass': 'active',#}
+    {#        'template': get_global_template('tab_menu_template')#}
+    {#    } 'twig') }}#}
+{%- endblock -%}
+
+{% block content %}
+    <div class="sonata-ba-delete">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">{{ 'Selecciona un mes'|trans({}, 'SonataAdminBundle') }}</h3>
+            </div>
+            {{ form_start(form) }}
+            <div class="box-body">
+                <div class="row col-md-3">
+                    <div class="col-md-6">{{ form_widget(form.month) }}</div>
+                    <div class="col-md-6">{{ form_widget(form.year) }}</div>
+                </div>
+
+            </div>
+            <div class="box-footer clearfix">
+                <div class="row col-md-3">
+                    <div class="col-md-2 col-md-push-8">{{ form_widget(form.submit) }}</div>
+                </div>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

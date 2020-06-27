@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace Britannia\Infraestructure\Symfony\Form\Type\Student;
+namespace Britannia\Infraestructure\Symfony\Form\Type\Staff;
 
-use Britannia\Domain\Entity\Student\Attachment;
-use Britannia\Domain\Entity\Student\Student;
+use Britannia\Domain\Entity\Staff\Attachment;
+use Britannia\Domain\Entity\Staff\StaffMember;
 use Britannia\Infraestructure\Symfony\Service\FileUpload\AttachmentUploader;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractCompoundType;
@@ -73,8 +73,8 @@ final class AttachmentType extends AbstractCompoundType
             'data_class' => Attachment::class
         ]);
 
-        $resolver->setRequired('student');
-        $resolver->setAllowedTypes('student', [Student::class]);
+        $resolver->setRequired('staff');
+        $resolver->setAllowedTypes('staff', [StaffMember::class]);
     }
 
     /**
@@ -109,7 +109,7 @@ final class AttachmentType extends AbstractCompoundType
             return null;
         }
 
-        $student = $this->getOption('student');
+        $student = $this->getOption('staff');
         $info = $this->uploader->fileInfo($pathToFile);
         $description = $data['description'];
 

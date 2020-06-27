@@ -4,8 +4,15 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
 
-    <entity name="Britannia\Domain\Entity\Student\Attachment\Attachment" table="student_attachment">
+    <entity name="Britannia\Domain\Entity\Attachment\Attachment" table="attachment"
+            inheritance-type="JOINED">
+
         <cache usage="NONSTRICT_READ_WRITE" region="day"/>
+        <discriminator-column name="type" type="string"/>
+        <discriminator-map>
+            <discriminator-mapping value="student" class="Britannia\Domain\Entity\Student\Attachment"/>
+            <discriminator-mapping value="staff" class="Britannia\Domain\Entity\Staff\Attachment"/>
+        </discriminator-map>
 
         <id name="id" type="AttachmentId" column="id">
             <generator strategy="CUSTOM"/>
@@ -27,9 +34,5 @@
         <field name="createdAt" type="datetime_immutable"/>
 
         <field name="updatedAt" type="datetime_immutable"/>
-
-        <many-to-one field="student" inversed-by="attachments" target-entity="Britannia\Domain\Entity\Student\Student"/>
-
     </entity>
-
 </doctrine-mapping>

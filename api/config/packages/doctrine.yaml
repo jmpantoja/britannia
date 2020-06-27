@@ -40,6 +40,9 @@ doctrine:
                     #ClassRoom
                     ClassRoomId: ClassRoomId
 
+                    #Attachment
+                    AttachmentId: AttachmentId
+
                     #Course
                     AttendanceId: AttendanceId
                     LevelId: LevelId
@@ -78,8 +81,7 @@ doctrine:
                     SchoolLevel: SchoolLevel
 
                     #Student                    
-                    StudentId: StudentId
-                    AttachmentId: AttachmentId
+                    StudentId: StudentId                    
                     TutorId: TutorId
                     JobStatus: JobStatus
                     PartOfDay: PartOfDay
@@ -131,6 +133,9 @@ doctrine:
             #Attendance
             AttendanceId: Britannia\Infraestructure\Doctrine\DBAL\Type\Attendance\AttendanceId
 
+            #Attachment
+            AttachmentId: Britannia\Infraestructure\Doctrine\DBAL\Type\Attachment\AttachmentIdType
+
             #Courses
             DayOfWeek: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\DayOfWeekType
             Examiner: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\ExaminerType
@@ -176,8 +181,7 @@ doctrine:
             TeacherStatus:  Britannia\Infraestructure\Doctrine\DBAL\Type\Staff\StatusType
 
             #Student
-            StudentId: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\StudentIdType
-            AttachmentId: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\AttachmentIdType
+            StudentId: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\StudentIdType        
             StudentCourseId: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\StudentCourseIdType
             TutorId: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\TutorIdType
             JobStatus: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\JobStatusType

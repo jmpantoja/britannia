@@ -17,6 +17,7 @@ namespace Britannia\Infraestructure\Symfony\Admin\Staff;
 use Britannia\Domain\Entity\Staff\Photo;
 use Britannia\Domain\Entity\Staff\StaffMember;
 use Britannia\Infraestructure\Symfony\Form\Type\Photo\PhotoType;
+use Britannia\Infraestructure\Symfony\Form\Type\Staff\AttachmentListType;
 use Britannia\Infraestructure\Symfony\Form\Type\Staff\RoleType;
 use Britannia\Infraestructure\Symfony\Form\Type\Staff\StatusType;
 use Britannia\Infraestructure\Symfony\Form\Type\Staff\TeacherHasCoursesType;
@@ -38,6 +39,7 @@ final class StaffForm extends AdminForm
     {
         $this->contactTab('Contacto', $staffMember);
         $this->accessTab('Acceso', $staffMember, $hasRootPrivileges);
+        $this->statusTab('Estado', $staffMember, $hasRootPrivileges);
         $this->coursesTab('Cursos', $staffMember, $hasRootPrivileges);
     }
 
@@ -83,14 +85,12 @@ final class StaffForm extends AdminForm
             $constraints = [new NotBlank()];
         }
 
-        $this->group('Roles', ['class' => 'col-md-2'])
-            ->add('roles', RoleType::class, [
-                'label' => 'Roles',
-                'required' => false
-            ]);
-
-        $this->group('Acceso', ['class' => 'col-md-3'])
-            ->add('userName', null)
+        $this->group('Acceso', ['class' => 'col-md-6'])
+            ->add('userName', null, [
+                'attr' => [
+                    'style' => 'width:400px'
+                ]
+            ])
             ->add('password', RepeatedType::class, [
                 'mapped' => true,
                 'type' => PasswordType::class,
@@ -112,7 +112,18 @@ final class StaffForm extends AdminForm
                 ],
             ]);
 
-        $this->group('Estado', ['class' => 'col-md-7'])
+        $this->group('Roles', ['class' => 'col-md-3'])
+            ->add('roles', RoleType::class, [
+                'label' => 'Roles',
+                'required' => false
+            ]);
+    }
+
+    private function statusTab(string $name, StaffMember $staffMember): void
+    {
+        $this->tab($name);
+
+        $this->group('Estado', ['class' => 'col-md-6'])
             ->add('status', StatusType::class, [
                 'label' => 'Estado',
                 'required' => true
@@ -122,7 +133,15 @@ final class StaffForm extends AdminForm
                 'required' => false
             ]);
 
+        if ($staffMember->id() == null) {
+            return;
+        }
 
+        $this->group('Documentos', ['class' => 'col-md-6'])
+            ->add('attachments', AttachmentListType::class, [
+                'staff' => $staffMember,
+                'label' => false
+            ]);
     }
 
     private function coursesTab(string $name, StaffMember $staffMember, $hasRootPrivileges)

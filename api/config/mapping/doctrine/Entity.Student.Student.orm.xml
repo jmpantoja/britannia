@@ -68,7 +68,7 @@
             <join-column name="other_academy_id" on-delete="SET NULL"/>
         </many-to-one>
 
-        <one-to-many field="attachments" target-entity="Britannia\Domain\Entity\Student\Attachment\Attachment"
+        <one-to-many field="attachments" target-entity="Britannia\Domain\Entity\Student\Attachment"
                      mapped-by="student"
                      orphan-removal="true">
             <cache usage="NONSTRICT_READ_WRITE" region="day"/>

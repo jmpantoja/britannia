@@ -14,15 +14,21 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Controller\Admin;
 
 
-use Britannia\Application\UseCase\Invoice\GenerateSepaXlsx;
 use Britannia\Application\UseCase\Invoice\GenerateInvoicePdf;
+use Britannia\Application\UseCase\Invoice\GenerateSepaXlsx;
 use Britannia\Domain\Entity\Invoice\Invoice;
 use Britannia\Domain\Service\Report\ReportEmailSender;
 use Britannia\Domain\VO\Message\EmailPurpose;
 use Britannia\Infraestructure\Symfony\Controller\Admin\Report\DownloadFactory;
+use Britannia\Infraestructure\Symfony\Form\Type\Invoice\MonthType;
+use Britannia\Infraestructure\Symfony\Form\Type\Invoice\YearType;
 use Carbon\CarbonImmutable;
 use League\Tactician\CommandBus;
 use Sonata\AdminBundle\Controller\CRUDController;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\FormRenderer;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\HttpFoundation\Request;
 
 class InvoiceController extends CRUDController
 {
@@ -50,15 +56,29 @@ class InvoiceController extends CRUDController
         $this->emailSender = $emailSender;
     }
 
-    public function downloadSepaAction()
+    public function downloadSepaAction(Request $request)
     {
-        $month = CarbonImmutable::createFromDate(2020, 4, 1);
+        $form = $this->createForm(MonthType::class);
+        $form->handleRequest($request);
 
-        $command = GenerateSepaXlsx::byMonth($month);
-        $reportList = $this->commandBus->handle($command);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $month = CarbonImmutable::createFromDate($data['year'], $data['month'], 1);
 
-        return $this->downloadFactory
-            ->create($reportList, self::DEBUG_MODE);
+            $command = GenerateSepaXlsx::byMonth($month);
+            $reportList = $this->commandBus->handle($command);
+
+            return $this->downloadFactory
+                ->create($reportList, self::DEBUG_MODE);
+        }
+
+        $formView = $form->createView();
+        $this->setFormTheme($formView, $this->admin->getFormTheme());
+        return $this->renderWithExtraParams('admin/invoice/invoice_controller_sepa_action.html.twig', [
+            'form' => $formView,
+        ]);
+
+
 
     }
 
@@ -93,5 +113,15 @@ class InvoiceController extends CRUDController
             ->find($id);
     }
 
+
+    /**
+     * Sets the admin form theme to form view. Used for compatibility between Symfony versions.
+     */
+    private function setFormTheme(FormView $formView, ?array $theme = null): void
+    {
+        $twig = $this->get('twig');
+
+        $twig->getRuntime(FormRenderer::class)->setTheme($formView, $theme);
+    }
 
 }

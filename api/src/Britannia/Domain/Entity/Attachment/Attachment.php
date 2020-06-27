@@ -11,16 +11,15 @@
 
 declare(strict_types=1);
 
-namespace Britannia\Domain\Entity\Student\Attachment;
+namespace Britannia\Domain\Entity\Attachment;
 
-use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\VO\Attachment\FileInfo;
 use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\Behaviour\Comparable;
 use PlanB\DDD\Domain\Behaviour\Traits\ComparableTrait;
 use PlanB\DDD\Domain\Model\Traits\AggregateRootTrait;
 
-class Attachment implements Comparable
+abstract class Attachment implements Comparable
 {
     use ComparableTrait;
     use AggregateRootTrait;
@@ -29,11 +28,6 @@ class Attachment implements Comparable
      * @var AttachmentId
      */
     private $id;
-
-    /**
-     * @var Student
-     */
-    private $student;
 
     /**
      * @var string
@@ -68,20 +62,15 @@ class Attachment implements Comparable
      */
     private $updatedAt;
 
-
-    public static function make(Student $student, FileInfo $info, ?string $description = null): self
-    {
-        return new self($student, $info, $description);
-    }
-
-    private function __construct(Student $student, FileInfo $info, ?string $description)
+    protected function __construct(FileInfo $info, ?string $description)
     {
         $this->id = new AttachmentId();
-        $this->student = $student;
+
         $this->createdAt = CarbonImmutable::now();
 
         $this->update($info, $description);
     }
+
 
     public function update(FileInfo $info, ?string $description): self
     {
@@ -105,6 +94,7 @@ class Attachment implements Comparable
         return $this->id;
     }
 
+
     /**
      * @return mixed
      */
@@ -121,14 +111,6 @@ class Attachment implements Comparable
         return $this->path;
     }
 
-
-    /**
-     * @return mixed
-     */
-    public function student()
-    {
-        return $this->student;
-    }
 
     /**
      * @return string

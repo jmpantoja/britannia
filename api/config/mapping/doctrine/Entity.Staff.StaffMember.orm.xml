@@ -60,6 +60,20 @@
             </cascade>
         </many-to-many>
 
+
+        <one-to-many field="attachments" target-entity="Britannia\Domain\Entity\Staff\Attachment"
+                     mapped-by="staff"
+                     orphan-removal="true">
+            <cache usage="NONSTRICT_READ_WRITE" region="day"/>
+            <order-by>
+                <order-by-field name="createdAt"/>
+
+            </order-by>
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </one-to-many>
+
         <one-to-one field="photo"
                     target-entity="Britannia\Domain\Entity\Staff\Photo"
                     orphan-removal="true">

@@ -11,11 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Britannia\Infraestructure\Symfony\Form\Type\Student;
+namespace Britannia\Infraestructure\Symfony\Form\Type\Staff;
 
 
 use Britannia\Domain\Entity\Attachment\AttachmentList;
-use Britannia\Domain\Entity\Student\Student;
+use Britannia\Domain\Entity\Staff\StaffMember;
 use Britannia\Infraestructure\Symfony\Service\FileUpload\AttachmentUploader;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
@@ -52,12 +52,12 @@ final class AttachmentListType extends AbstractSingleType
             'error_bubbling' => false
         ]);
 
-        $resolver->setRequired('student');
-        $resolver->setAllowedTypes('student', [Student::class]);
+        $resolver->setRequired('staff');
+        $resolver->setAllowedTypes('staff', [StaffMember::class]);
 
         $resolver->setNormalizer('entry_options', function (OptionsResolver $resolver) {
             return [
-                'student' => $resolver['student']
+                'staff' => $resolver['staff']
             ];
         });
     }

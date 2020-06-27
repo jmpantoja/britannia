@@ -13,13 +13,11 @@ declare(strict_types=1);
 
 namespace Britannia\Infraestructure\Symfony\Importer\Builder;
 
-
-use Britannia\Domain\Entity\Student\Attachment\Attachment;
+use Britannia\Domain\Entity\Student\Attachment;
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\VO\Attachment\FileInfo;
 use Britannia\Infraestructure\Symfony\Importer\Resume;
 use Britannia\Infraestructure\Symfony\Service\FileUpload\AttachmentUploader;
-use Britannia\Infraestructure\Symfony\Service\FileUpload\FileUploader;
 use Carbon\CarbonImmutable;
 use Laminas\Filter\FilterChain;
 use Laminas\Filter\Word\CamelCaseToSeparator;

@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Student;
 
 
+use Britannia\Domain\Entity\Attachment\AttachmentList;
 use Britannia\Domain\Entity\Course\CourseList;
 use Britannia\Domain\Entity\School\School;
-use Britannia\Domain\Entity\Student\Attachment\AttachmentList;
 use Britannia\Domain\VO\Payment\Payment;
 use Britannia\Domain\VO\Student\Alert\Alert;
 use Britannia\Domain\VO\Student\ContactMode\ContactMode;

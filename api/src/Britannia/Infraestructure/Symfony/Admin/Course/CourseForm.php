@@ -37,6 +37,7 @@ use Britannia\Infraestructure\Symfony\Form\Type\Course\SchoolCourseListType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\SupportType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\TeachersType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\TimeTable\TimeTableType;
+use Carbon\CarbonImmutable;
 use PlanB\DDDBundle\Sonata\Admin\AdminForm;
 use PlanB\DDDBundle\Symfony\Form\Type\PositiveIntegerType;
 use PlanB\DDDBundle\Symfony\Form\Type\PriceType;
@@ -58,6 +59,7 @@ final class CourseForm extends AdminForm
 
     public function setSettings(Setting $setting): self
     {
+
         $this->setting = $setting;
         return $this;
 

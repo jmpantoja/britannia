@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Britannia\Infraestructure\Doctrine\DBAL\Type\Student;
+namespace Britannia\Infraestructure\Doctrine\DBAL\Type\Attachment;
 
 use PlanB\DDDBundle\Doctrine\DBAL\Type\EntityIdType;
 
@@ -24,6 +24,6 @@ class AttachmentIdType extends EntityIdType
 
     protected function getNamespace()
     {
-        return 'Britannia\Domain\Entity\Student\Attachment';
+        return 'Britannia\Domain\Entity\Attachment';
     }
 }

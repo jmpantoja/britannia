@@ -2,27 +2,27 @@
 
 {% block field %}
     {% set groups = staff_member_courses.distributeByGroups(object) %}
-        {% for type, courses in groups %}
-            {% if courses is not empty %}
-                {{ block('group') }}
-            {% endif %}
-        {% endfor %}
+    {% for type, courses in groups %}
+        {% if courses is not empty %}
+            {{ block('group') }}
+        {% endif %}
+    {% endfor %}
 {% endblock %}
 
 {% block group %}
-        <div class="btn-group">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false">
-                {{ type }} ({{ courses | length  }}) <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-                {% for course in courses %}
-                    <li>
-                        <div style="margin: 3px; border-radius: 5px; background-color: {{ course.color.toHtml }}; ">
-                            <p style="margin:3px; text-align: center; color: white; font-weight: bold">{{ course.name }}</p>
-                        </div>
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
+    <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="false">
+            {{ type }} ({{ courses | length }}) <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            {% for course in courses %}
+                <li>
+                    <div style="margin: 3px; border-radius: 5px; background-color: {{ course.color.toHtml }}; ">
+                        <p style="margin:3px; text-align: center; color: white; font-weight: bold">{{ course.name }}</p>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
 {% endblock %}

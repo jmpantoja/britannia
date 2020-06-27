@@ -4,9 +4,9 @@ namespace Britannia\Domain\Entity\Student;
 
 
 use Britannia\Domain\Entity\Academy\Academy;
+use Britannia\Domain\Entity\Attachment\AttachmentList;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Course\CourseList;
-use Britannia\Domain\Entity\Student\Attachment\AttachmentList;
 use Britannia\Domain\VO\Payment\Payment;
 use Britannia\Domain\VO\Student\Alert\Alert;
 use Britannia\Domain\VO\Student\ContactMode\ContactMode;
@@ -183,6 +183,7 @@ abstract class Student implements Comparable
         $this->relatives = new ArrayCollection();
         $this->studentHasCourses = new ArrayCollection();
         $this->records = new ArrayCollection();
+        $this->attachments = new ArrayCollection();
         $this->notifications = new ArrayCollection();
         $this->createdAt = CarbonImmutable::now();
         $this->updatedAt = CarbonImmutable::now();

@@ -53,7 +53,6 @@ class CalendarService
         while ((int)$date->format('Y') === $year) {
             $this->createDay($date);
             $date = $date->add('P1D');
-            dump($date->format('Y-M-d'));
         }
     }
 
@@ -62,9 +61,9 @@ class CalendarService
         if ($this->repository->hasDay($dateTime)) {
             return;
         }
+        
         $this->persister->persist(Calendar::fromDate($dateTime));
     }
-
 
     public function holidaysInRange(CarbonImmutable $start, CarbonImmutable $end)
     {
