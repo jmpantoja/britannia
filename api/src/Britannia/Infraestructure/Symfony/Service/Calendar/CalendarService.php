@@ -61,7 +61,7 @@ class CalendarService
         if ($this->repository->hasDay($dateTime)) {
             return;
         }
-        
+
         $this->persister->persist(Calendar::fromDate($dateTime));
     }
 
