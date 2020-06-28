@@ -136,27 +136,6 @@ abstract class EntityList implements Countable, IteratorAggregate
         }
         return $this;
     }
-    public function add1(Comparable $entity, ?callable $callback = null): self
-    {
-        foreach ($this->values() as $value){
-            dump($value->hash(), $entity->hash());
-        }
-
-        $key = $this->indexOf($entity);
-
-        if (false !== $key) {
-            return $this;
-        }
-
-        $this->data->add($entity);
-        $this->values()->add($entity);
-
-        if (is_callable($callback)) {
-            $callback($entity);
-        }
-        return $this;
-    }
-
 
     /**
      * {@inheritDoc}

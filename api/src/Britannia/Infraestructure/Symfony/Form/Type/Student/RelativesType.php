@@ -44,11 +44,18 @@ class RelativesType extends ModelType
 
     public function configureQuery(QueryBuilder $builder, OptionsResolver $resolver, string $alias = 'A')
     {
-        $studentId = $resolver['studentId'];
         return $builder
-            ->where('A.id != :id')
-            ->setCacheable(true)
-            ->setParameter('id', $studentId);
+            ->setCacheable(true);
+    }
+
+    protected function sanitizeChoices(array $choices, OptionsResolver $resolver): array
+    {
+        $studentId = $resolver['studentId'];
+
+        return collect($choices)
+            ->filter(fn(Student $student) => !$student->id()->equals($studentId))
+            ->toArray();
+
     }
 
     public function customMapping($data)

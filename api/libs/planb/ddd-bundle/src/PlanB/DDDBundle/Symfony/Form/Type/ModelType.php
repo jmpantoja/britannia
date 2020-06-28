@@ -70,12 +70,10 @@ abstract class ModelType extends AbstractSingleType
                 ->from($resolver['class'], $alias)
                 ->select($alias);
 
-//            $builder = $this->entityManager->createQuery($resolver['class'], $alias);
-
             $this->configureQuery($builder, $resolver, $alias);
-     //       $builder->setCacheable(false);
 
-            return $builder->getQuery()->execute();
+            $choices = $builder->getQuery()->execute();
+            return $this->sanitizeChoices($choices, $resolver);
         });
 
         $resolver->setNormalizer('attr', function (OptionsResolver $resolver, $value) {
@@ -105,6 +103,11 @@ abstract class ModelType extends AbstractSingleType
     public function customMapping($data)
     {
         return $data;
+    }
+
+    protected function sanitizeChoices(array $choices, OptionsResolver $resolver): array
+    {
+        return $choices;
     }
 
 }

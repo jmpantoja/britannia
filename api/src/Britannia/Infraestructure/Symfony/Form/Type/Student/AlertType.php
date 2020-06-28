@@ -30,11 +30,14 @@ class AlertType extends AbstractCompoundType
     public function customForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('description', WYSIWYGType::class, [
+                'label' => false,
+                'attr' => [
+                    'style' => "height:100px"
+                ]
+            ])
             ->add('alert', CheckboxType::class, [
                 'label' => 'El alumno tiene alergias, enfermedades u otra circunstancia especial',
-            ])
-            ->add('description', WYSIWYGType::class, [
-                'label' => false
             ]);
     }
 

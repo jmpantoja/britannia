@@ -221,7 +221,6 @@ abstract class Student implements Comparable
         $this->setAttachments($dto->attachments);
         $this->setBirthDate($dto->birthDate);
 
-
         $this->updatedAt = CarbonImmutable::now();
 
         if (isset($dto->oldId)) {
@@ -262,6 +261,7 @@ abstract class Student implements Comparable
 
         $this->studentHasCoursesList()
             ->add($joined, function (StudentCourse $joined) {
+                $this->studentHasCourses->add($joined);
                 $event = StudentHasJoinedToCourse::make($joined);
                 $joined->notify($event);
             });

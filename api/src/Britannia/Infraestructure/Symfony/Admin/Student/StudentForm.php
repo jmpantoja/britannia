@@ -65,7 +65,8 @@ final class StudentForm extends AdminForm
         }
 
         $this->attachedTab('Documentos', $student);
-        $this->extraTab('Información Extra');
+       // $this->extraTab('Información Extra');
+        $this->issuesTab('Observaciones');
     }
 
     protected function contactTab(string $name, Student $student): void
@@ -123,6 +124,25 @@ final class StudentForm extends AdminForm
 
         $this->tab($name);
 
+        $this->group('Preferencias', ['class' => 'col-md-2'])
+            ->add('preferredPartOfDay', PartOfDayType::class, [
+                'label' => 'Horario'
+            ])
+            ->add('preferredContactMode', ContactModeType::class, [
+                'label' => 'Contacto'
+            ]);
+
+        $this->group('Estadísticas', ['class' => 'col-md-3'])
+            ->add('otherAcademy', OtherAcademyType::class, [
+                'required' => false,
+                'label' => 'Ha estudiado antes en...',
+                'sonata_admin' => $this
+            ])
+            ->add('firstContact', TextType::class, [
+                'required' => false,
+                'label' => '¿Como nos conociste?.'
+            ]);
+
         $group = $this->group($isAdult ? 'Profesión' : 'Colegio', ['class' => 'col-md-4']);
 
         if ($isAdult) {
@@ -134,7 +154,6 @@ final class StudentForm extends AdminForm
         }
 
         if (!$isAdult) {
-
             $group
                 ->add('school', SchoolType::class, [
                     'label' => 'Escuela'
@@ -144,24 +163,6 @@ final class StudentForm extends AdminForm
                     'required' => false
                 ]);
         }
-
-        $this->group('Condiciones', ['class' => 'col-md-4'])
-            ->add('termsOfUseAcademy', null, [
-                'label' => 'Acepta las condiciones de uso de la academia'
-            ])
-            ->add('termsOfUseStudent', null, [
-                'label' => 'Acepta las condiciones de uso de la academia'
-            ])
-            ->add('termsOfUseImageRigths', null, [
-                'label' => 'Consentimiento de Imagen'
-            ]);
-
-
-        $this->group('¡Cuidado!', ['class' => 'col-md-8'])
-            ->add('alert', AlertType::class, [
-                'label' => false,
-                'required' => false
-            ]);
     }
 
     /**
@@ -258,36 +259,33 @@ final class StudentForm extends AdminForm
             ]);
     }
 
-    protected function extraTab($name): void
+
+    private function issuesTab(string $name)
     {
         $this->tab($name);
 
-        $this->group('Preferencias', ['class' => 'col-md-4'])
-            ->add('preferredPartOfDay', PartOfDayType::class, [
-                'label' => 'Horario'
-            ])
-            ->add('preferredContactMode', ContactModeType::class, [
-                'label' => 'Contacto'
+
+        $this->group('¡Cuidado!', ['class' => 'col-md-4'])
+            ->add('alert', AlertType::class, [
+                'label' => false,
+                'required' => false
             ]);
 
-        $this->group('Estadísticas', ['class' => 'col-md-4'])
-            ->add('otherAcademy', OtherAcademyType::class, [
-                'required' => false,
-                'label' => 'Ha estudiado antes en...',
-                'sonata_admin' => $this
-            ])
-            ->add('firstContact', TextType::class, [
-                'required' => false,
-                'label' => '¿Como nos conociste?.'
-            ]);
-
-
-        $this->group('Otros datos de Interes', ['class' => 'col-md-8'])
+        $this->group('Otros datos de Interes', ['class' => 'col-md-5'])
             ->add('comment', WYSIWYGType::class, [
                 'label' => false
             ]);
 
-
+        $this->group('Condiciones', ['class' => 'col-md-3'])
+            ->add('termsOfUseAcademy', null, [
+                'label' => 'Acepta las condiciones de uso de la academia'
+            ])
+            ->add('termsOfUseStudent', null, [
+                'label' => 'Acepta las condiciones de uso de la academia'
+            ])
+            ->add('termsOfUseImageRigths', null, [
+                'label' => 'Consentimiento de Imagen'
+            ]);
     }
 
 

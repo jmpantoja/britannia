@@ -79,6 +79,10 @@
 {% endblock %}
 
 {% block alert_widget %}
+    <div id="description-{{ id }}">
+        {{ form_row(form.description) }}
+    </div>
+
     {% set attr = {
         'data-toggle': 'field',
         'data-hide-values': '["0"]',
@@ -86,11 +90,6 @@
     } %}
 
     {{ form_widget(form.alert, {'attr': attr }) }}
-
-    {#    {{ form_widget(form.alert) }}#}
-    <div id="description-{{ id }}">
-        {{ form_row(form.description) }}
-    </div>
 {% endblock %}
 
 {% block photo_widget %}
