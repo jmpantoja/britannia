@@ -53,8 +53,10 @@ final class LessonGenerator
         $schedule = $timeTable->schedule();
 
         if ($timeTable->shouldBeResetted()) {
+
             return $this->generateCompleteList($timeRange, $schedule);
         }
+
         return $this->generateFutureList($timeRange, $schedule);
     }
 

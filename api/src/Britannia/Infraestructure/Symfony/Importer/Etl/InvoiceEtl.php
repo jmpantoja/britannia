@@ -78,7 +78,6 @@ eof;
         return $query->fetchAll();
     }
 
-
     public function createBuilder(array $input, EntityManagerInterface $entityManager): BuilderInterface
     {
         $builder = InvoiceBuilder::make($input, $entityManager);
@@ -118,7 +117,6 @@ eof;
             $date = CarbonImmutable::make($input['expired_at']);
             $candidates[] = sprintf('Mensualidad %s', date_to_string($date, -1, -1, "MMMM 'de' YYYY"));
         }
-
 
         $subject = (string)collect($candidates)
             ->filter()

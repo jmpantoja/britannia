@@ -60,11 +60,6 @@ class CourseEtl extends AbstractEtl
     public function clean(): void
     {
         $this->truncate('courses', 'course_lessons', 'classrooms');
-
-//        $this->loadSql(...[
-//            sprintf('%s/../../DataFixtures/dumps/britannia_calendar.sql', __DIR__),
-//            sprintf('%s/../../DataFixtures/dumps/britannia_classrooms.sql', __DIR__)
-//        ]);
     }
 
     public function configureDataLoader(QueryBuilder $builder): void

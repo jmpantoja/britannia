@@ -13,13 +13,7 @@
         <field name="discount" type="JobStatusDiscountList" nullable="true"></field>
         <embedded name="assessment" class="Britannia\Domain\VO\Course\Assessment\Assessment" use-column-prefix="false"/>
 
-        <many-to-many field="schoolCourses" target-entity="Britannia\Domain\Entity\SchoolCourse\SchoolCourse"
-                      inversed-by="courses">
-            <cache usage="NONSTRICT_READ_WRITE" region="day"/>
-            <order-by>
-                <order-by-field name="weight"/>
-            </order-by>
-        </many-to-many>
+        <field name="schoolCourses" type="simple_array" nullable="true" />
 
         <one-to-many field="terms" target-entity="Britannia\Domain\Entity\Assessment\Term" mapped-by="course"
                      orphan-removal="true">

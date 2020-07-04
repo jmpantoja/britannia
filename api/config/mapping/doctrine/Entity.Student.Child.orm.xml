@@ -9,7 +9,8 @@
         <many-to-one field="school" target-entity="Britannia\Domain\Entity\School\School">
             <join-column name="school_id" on-delete="SET NULL"/>
         </many-to-one>
-        <field name="schoolCourse" nullable="true"/>
+
+        <field name="schoolHistory" type="SchoolHistory" nullable="true"/>
 
         <field name="firstTutorDescription" column="first_tutor_description" nullable="true"></field>
         <many-to-one field="firstTutor" target-entity="Britannia\Domain\Entity\Student\Tutor">

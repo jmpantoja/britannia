@@ -20,7 +20,7 @@ use Doctrine\Common\Collections\Collection;
 
 class SchoolDto extends CourseDto implements AssessmentDtoInterface
 {
-    public ?Collection $schoolCourses = null;
+    public array $schoolCourses = [];
 
     public Assessment $assessment;
 

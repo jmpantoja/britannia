@@ -112,13 +112,6 @@ services:
             - { name: sonata.admin, manager_type: orm, label: Libros }
         public: true
 
-    admin.school_course:
-        class: Britannia\Infraestructure\Symfony\Admin\SchoolCourse\SchoolCourseAdmin
-        arguments: [~, Britannia\Domain\Entity\SchoolCourse\SchoolCourse, ~]
-        tags:
-            - { name: sonata.admin, manager_type: orm,  label: Curso Escolar }
-        public: true
-
     admin.setting:
         class: Britannia\Infraestructure\Symfony\Admin\Setting\SettingAdmin
         arguments: [~, Britannia\Domain\Entity\Setting\Setting, ~]

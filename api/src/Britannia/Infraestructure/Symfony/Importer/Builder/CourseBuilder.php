@@ -61,7 +61,7 @@ class CourseBuilder extends BuilderAbstract
 
     private $hoursPerWeek;
 
-    private $schoolCourse;
+    private $schoolCourses = [];
 
     private $periodicity;
 
@@ -102,6 +102,21 @@ class CourseBuilder extends BuilderAbstract
 
     public function withDescription(string $schoolCourse): self
     {
+        $patterns = [
+            'EPO' => range(1, 6),
+            'ESO' => range(1, 4),
+            'BACH' => range(1, 2)
+        ];
+
+        foreach ($patterns as $level => $courses) {
+            foreach ($courses as $course) {
+                $pattern = sprintf('/(%sº).*%s/', $course, $level);
+                if (preg_match($pattern, $schoolCourse)) {
+                    $this->schoolCourses[] = sprintf('%s_%s', $level, $course);
+                }
+            }
+        }
+
         $this->description = $schoolCourse;
         return $this;
     }
@@ -111,7 +126,6 @@ class CourseBuilder extends BuilderAbstract
         $this->enrolmentPayment = Price::make($price);
         return $this;
     }
-
 
     public function withMonthlyPayment(float $price): self
     {
@@ -145,6 +159,7 @@ class CourseBuilder extends BuilderAbstract
 
     public function withTimeTable(string $startDate, string $endDate, string $field1, string $field2, string $classRoomNumber): self
     {
+
         $classRoomId = $this->getClassRoomId($classRoomNumber);
 
         $start = CarbonImmutable::make($startDate);
@@ -209,6 +224,7 @@ class CourseBuilder extends BuilderAbstract
             'timeTable' => $this->timeTable,
             'lessonCreator' => $this->lessonGenerator,
             'assessmentGenerator' => $this->assessmentGenerator,
+            'schoolCourses' => $this->schoolCourses,
         ];
 
         $name = strtoupper($this->name);
@@ -233,9 +249,7 @@ class CourseBuilder extends BuilderAbstract
         }
 
         return $this->buildSchool($input);
-
     }
-
 
     private function buildPreSchool(array $input)
     {
@@ -247,6 +261,7 @@ class CourseBuilder extends BuilderAbstract
     private function buildSchool(array $input)
     {
         $input['assessment'] = Assessment::defaultForShool();
+
         $dto = SchoolDto::fromArray($input);
 
         return School::make($dto);

@@ -40,6 +40,11 @@ interface StudentRepositoryInterface
      */
     public function findActives(): array;
 
+    /**
+     * @return Student[]
+     */
+    public function disableStudentsWithoutActiveCourses();
+
 
 }
 

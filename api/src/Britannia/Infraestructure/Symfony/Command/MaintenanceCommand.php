@@ -5,6 +5,7 @@ namespace Britannia\Infraestructure\Symfony\Command;
 use Britannia\Application\UseCase\Cron\UpdateCalendar;
 use Britannia\Application\UseCase\Cron\UpdateCourseStatus;
 use Britannia\Application\UseCase\Cron\UpdateStudentAge;
+use Britannia\Application\UseCase\Cron\UpdateStudentStatus;
 use League\Tactician\CommandBus;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -57,9 +58,10 @@ class MaintenanceCommand extends Command implements ContainerAwareInterface
         $io = new SymfonyStyle($input, $output);
         $this->cronLoginService->login();
 
-        $this->commandBus->handle(UpdateCalendar::make());
-        $this->commandBus->handle(UpdateStudentAge::make());
-        $this->commandBus->handle(UpdateCourseStatus::make());
+//        $this->commandBus->handle(UpdateCalendar::make());
+//        $this->commandBus->handle(UpdateStudentAge::make());
+//        $this->commandBus->handle(UpdateCourseStatus::make());
+        $this->commandBus->handle(UpdateStudentStatus::make());
 
         return 0;
     }

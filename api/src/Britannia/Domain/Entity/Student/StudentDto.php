@@ -18,6 +18,7 @@ use Britannia\Domain\Entity\Attachment\AttachmentList;
 use Britannia\Domain\Entity\Course\CourseList;
 use Britannia\Domain\Entity\School\School;
 use Britannia\Domain\VO\Payment\Payment;
+use Britannia\Domain\VO\SchoolCourse\SchoolHistory;
 use Britannia\Domain\VO\Student\Alert\Alert;
 use Britannia\Domain\VO\Student\ContactMode\ContactMode;
 use Britannia\Domain\VO\Student\Job\Job;
@@ -79,9 +80,9 @@ final class StudentDto extends Dto
     //Child
     public ?School $school;
 
-    public ?string $schoolCourse;
+    public ?SchoolHistory $schoolHistory = null;
 
-    public ?string $firstTutorDescription ;
+    public ?string $firstTutorDescription;
 
     public ?Tutor $firstTutor;
 

@@ -51,7 +51,6 @@ sonata_admin:
                         roles: ['ROLE_MANAGER']
                     - admin.classroom
                     - admin.book
-                    - admin.school_course
 
             admin.group.invoices:
                 label: Pagos

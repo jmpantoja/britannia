@@ -39,6 +39,10 @@ class Invoice
     private $paid = false;
     private $paymentDate;
     private $details = [];
+    /**
+     * @var CarbonImmutable|null
+     */
+    private ?CarbonImmutable $paidAt;
 
     public static function make(InvoiceDto $dto): self
     {
@@ -63,6 +67,10 @@ class Invoice
     {
         $this->subject = $dto->subject;
         $this->expiredAt = $dto->expiredAt;
+
+        if($dto->paid){
+            $this->markAsPaid();
+        }
 
         $this->paid = $dto->paid;
         $this->paidAt = $dto->paidAt;

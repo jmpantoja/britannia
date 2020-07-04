@@ -29,6 +29,7 @@ use Britannia\Infraestructure\Symfony\Form\Type\Student\OtherAcademyType;
 use Britannia\Infraestructure\Symfony\Form\Type\Student\PartOfDayType;
 use Britannia\Infraestructure\Symfony\Form\Type\Student\PaymentType;
 use Britannia\Infraestructure\Symfony\Form\Type\Student\RelativesType;
+use Britannia\Infraestructure\Symfony\Form\Type\Student\SchoolCourseType;
 use Britannia\Infraestructure\Symfony\Form\Type\Student\SchoolType;
 use Britannia\Infraestructure\Symfony\Form\Type\Student\StudentHasCoursesType;
 use Britannia\Infraestructure\Symfony\Form\Type\Tutor\ChoiceTutorType;
@@ -65,7 +66,6 @@ final class StudentForm extends AdminForm
         }
 
         $this->attachedTab('Documentos', $student);
-       // $this->extraTab('Información Extra');
         $this->issuesTab('Observaciones');
     }
 
@@ -156,12 +156,16 @@ final class StudentForm extends AdminForm
         if (!$isAdult) {
             $group
                 ->add('school', SchoolType::class, [
-                    'label' => 'Escuela'
+                    'label' => 'Escuela',
+                    'btn_add' => false
                 ])
-                ->add('schoolCourse', TextType::class, [
-                    'label' => 'Próximo curso escolar',
-                    'required' => false
-                ]);
+                ->add('schoolHistory', SchoolCourseType::class, [
+                    'label' => 'Curso escolar',
+                    'required' => true,
+                    'data' => $student->schoolHistory(),
+                    'birthDay' => $student->birthDate()
+                ])
+            ;
         }
     }
 

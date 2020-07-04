@@ -15,29 +15,35 @@ namespace Britannia\Domain\VO\SchoolCourse;
 
 
 use PlanB\DDD\Domain\Enum\Enum;
+use PlanB\DDD\Domain\VO\PositiveInteger;
 
 /**
+ * @method static self PRE()
  * @method static self EPO()
  * @method static self ESO()
- * @method static self BACHILLERATO()
+ * @method static self BACH()
+ * @method static self FP()
  */
 final class SchoolLevel extends Enum
 {
-    private const EPO = 'EPO';
-    private const ESO = 'ESO';
-    private const BACHILLERATO = 'Bach.';
+    private const PRE = ['name' => 'PreSchool', 'age' => 3];
+    private const EPO = ['name' => 'EPO', 'age' => 6];
+    private const ESO = ['name' => 'ESO', 'age' => 12];
+    private const BACH = ['name' => 'Bachillerato.', 'age' => 16];
+    private const FP = ['name' => 'FP', 'age' => 16];
 
-    public function order(): int
+    public function name(): string
     {
-        if ($this->is(self::EPO())) {
-            return 1;
-        }
-        if ($this->is(self::ESO())) {
-            return 2;
-        }
-        if ($this->is(self::BACHILLERATO())) {
-            return 3;
-        }
+        $value = $this->getValue();
+        return $value['name'];
     }
+
+    public function age(): PositiveInteger
+    {
+        $value = $this->getValue();
+        return PositiveInteger::make($value['age']);
+    }
+
+
 
 }

@@ -70,8 +70,7 @@ class DayOfWeek extends Enum
         return 0 === strcasecmp($shortName, $this->getShortName());
     }
 
-    public
-    function getShortName(): string
+    public function getShortName(): string
     {
         if ($this->is(self::WEDNESDAY())) {
             return 'X';
@@ -83,9 +82,8 @@ class DayOfWeek extends Enum
         return strtoupper($initial);
     }
 
-    public
-    function isWeekEnd(): bool
+    public function isWeekEnd(): bool
     {
-        return $this->is(static::SATURDAY) || $this->is(static::SUNDAY);
+        return $this->is(static::SATURDAY()) || $this->is(static::SUNDAY());
     }
 }

@@ -25,7 +25,8 @@ final class InvoiceHasBeenPaid extends NotificationEvent
     public static function make(Invoice $invoice): self
     {
         return self::builder($invoice->student())
-            ->withInvoiceSubject($invoice->subject());
+            ->withInvoiceSubject($invoice->subject())
+            ->withDate($invoice->paymentDate());
     }
 
     public function type(): TypeOfNotification

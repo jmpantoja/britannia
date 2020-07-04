@@ -26,7 +26,7 @@ final class FixturesEtl extends AbstractEtl
             'message_template_email',
             'message_template_sms',
             'message_templates',
-            'school_courses',
+            'calendar',
             'settings'
         ]);
     }

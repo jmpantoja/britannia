@@ -11,16 +11,15 @@
 
 declare(strict_types=1);
 
-namespace PlanB\DDDBundle\Doctrine\DBAL\Type;
+namespace Britannia\Infraestructure\Doctrine\DBAL\Type\SchoolCourse;
 
 
+use Britannia\Domain\VO\SchoolCourse\SchoolHistory;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
-use PlanB\DDD\Domain\VO\PhoneNumber;
 
-class PhoneNumberListType extends Type
+final class SchoolHistoryType extends Type
 {
-
     /**
      * Gets the SQL declaration snippet for a field of this type.
      *
@@ -36,33 +35,19 @@ class PhoneNumberListType extends Type
 
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
-
-        $data = json_decode($value, true);
-
-        if (is_null($data)) {
-            return [];
+        if (is_null($value)) {
+            return null;
         }
-
-
-        return array_map(function ($item) {
-            return PhoneNumber::make(...[
-                $item['phoneNumber'],
-                $item['description']
-            ]);
-        }, array_values($data));
+        $input = json_decode($value, true);
+        return SchoolHistory::fromArray($input);
     }
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
-
-        $value = array_map(function (PhoneNumber $phoneNumber) {
-            return [
-                'phoneNumber' => $phoneNumber->getPhoneNumber(),
-                'description' => $phoneNumber->getDescription()
-            ];
-        }, (array)$value);
-
-        return json_encode(array_values($value));
+        if (!($value instanceof SchoolHistory)) {
+            return null;
+        }
+        return json_encode($value->toArray());
     }
 
 
@@ -75,6 +60,6 @@ class PhoneNumberListType extends Type
      */
     public function getName()
     {
-        return 'phone_number_list';
+        return 'SchoolHistory';
     }
 }

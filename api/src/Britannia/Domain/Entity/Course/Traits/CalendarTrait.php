@@ -34,6 +34,7 @@ trait CalendarTrait
         if (is_null($timeTable) || $timeTable->isLocked()) {
             return $this;
         }
+
         $this->setTimeTable($timeTable, $generator);
 
         return $this;

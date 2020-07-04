@@ -29,7 +29,8 @@ final class MessageHasBeenSent extends NotificationEvent
     public static function make(Shipment $shipment, DeliveryInterface $delivery): self
     {
         return self::builder($shipment->student())
-            ->witDelivery($delivery)
+            ->withDelivery($delivery)
+            ->withDate($shipment->message()->createdAt())
             ->withMessageSubject($shipment->message()->subject());
     }
 
@@ -47,7 +48,7 @@ final class MessageHasBeenSent extends NotificationEvent
         ]);
     }
 
-    private function witDelivery(DeliveryInterface $delivery): self
+    private function withDelivery(DeliveryInterface $delivery): self
     {
         if ($delivery instanceof MailerInterface) {
             $this->messageType = 'email';

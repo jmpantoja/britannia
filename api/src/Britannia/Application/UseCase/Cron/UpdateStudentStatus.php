@@ -11,11 +11,13 @@
 
 declare(strict_types=1);
 
-namespace Britannia\Domain\Entity\SchoolCourse;
+namespace Britannia\Application\UseCase\Cron;
 
-use PlanB\DDD\Domain\Model\EntityId;
 
-class SchoolCourseId extends EntityId
+final class UpdateStudentStatus
 {
-
+    public static function make(): self
+    {
+        return new self();
+    }
 }

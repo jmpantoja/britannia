@@ -13,33 +13,43 @@ declare(strict_types=1);
 
 namespace Britannia\Infraestructure\Symfony\Form\Type\Course;
 
-
-use Britannia\Domain\Entity\SchoolCourse\SchoolCourse;
-use Doctrine\ORM\QueryBuilder;
-use PlanB\DDDBundle\Symfony\Form\Type\ModelType;
+use Britannia\Domain\VO\SchoolCourse\SchoolCourse;
+use Britannia\Domain\VO\SchoolCourse\SchoolItinerary;
+use PlanB\DDD\Domain\VO\Validator\Constraint;
+use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class SchoolCourseListType extends ModelType
+class SchoolCourseListType extends AbstractSingleType
 {
-
-//    public function getBlockPrefix()
-//    {
-//        return self::MULTISELECT;
-//    }
+    public function getParent()
+    {
+        return ChoiceType::class;
+    }
 
     public function customOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'class' => SchoolCourse::class,
-            'label' => 'Curso Escolar',
-            'property' => 'name',
-            'btn_add' => false
+            'choices' => $this->choices(),
+            'multiple' => true
         ]);
-
     }
 
-    public function configureQuery(QueryBuilder $builder, OptionsResolver $resolver, string $alias = 'A')
+    private function choices(): array
     {
-        $builder->setCacheable(true);
+        return SchoolItinerary::courses()
+            ->map(fn(SchoolCourse $course) => $course->name())
+            ->flip()
+            ->toArray();
+    }
+
+    public function buildConstraint(array $options): ?Constraint
+    {
+        return null;
+    }
+
+    public function customMapping($data, $value = null)
+    {
+        return $data;
     }
 }

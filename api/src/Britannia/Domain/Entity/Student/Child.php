@@ -3,7 +3,7 @@
 namespace Britannia\Domain\Entity\Student;
 
 use Britannia\Domain\Entity\School\School;
-use Britannia\Domain\VO\SchoolCourse;
+use Britannia\Domain\VO\SchoolCourse\SchoolHistory;
 use Doctrine\Common\Collections\ArrayCollection;
 
 class Child extends Student
@@ -13,10 +13,7 @@ class Child extends Student
      */
     private $school;
 
-    /**
-     * @var null|SchoolCourse
-     */
-    private $schoolCourse;
+    private ?SchoolHistory  $schoolHistory;
 
     /**
      * @var string
@@ -44,7 +41,6 @@ class Child extends Student
     private ArrayCollection $tutors;
 
 
-
     protected function __construct(StudentDto $dto)
     {
         $this->tutors = new ArrayCollection();
@@ -57,7 +53,7 @@ class Child extends Student
         parent::update($dto);
 
         $this->school = $dto->school;
-        $this->schoolCourse = $dto->schoolCourse;
+        $this->schoolHistory = $dto->schoolHistory;
 
         $this->firstTutor = $dto->firstTutor;
         $this->firstTutorDescription = $dto->firstTutorDescription;
@@ -80,9 +76,9 @@ class Child extends Student
     /**
      * @return string|null
      */
-    public function schoolCourse(): ?string
+    public function schoolHistory(): SchoolHistory
     {
-        return $this->schoolCourse;
+        return $this->schoolHistory ?? SchoolHistory::fromArray([]);
     }
 
 

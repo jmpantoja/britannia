@@ -77,11 +77,10 @@ doctrine:
                     TeacherStatus: TeacherStatus
 
                     #SchoolCourse
-                    SchoolCourseId: SchoolCourseId
-                    SchoolLevel: SchoolLevel
+                    SchoolHistory: SchoolHistory
 
                     #Student                    
-                    StudentId: StudentId                    
+                    StudentId: StudentId
                     TutorId: TutorId
                     JobStatus: JobStatus
                     PartOfDay: PartOfDay
@@ -173,15 +172,14 @@ doctrine:
             SchoolId:  Britannia\Infraestructure\Doctrine\DBAL\Type\School\SchoolIdType
 
             #SchoolCourse
-            SchoolCourseId:  Britannia\Infraestructure\Doctrine\DBAL\Type\SchoolCourse\SchoolCourseIdType
-            SchoolLevel:  Britannia\Infraestructure\Doctrine\DBAL\Type\SchoolCourse\SchoolLevelType
+            SchoolHistory:  Britannia\Infraestructure\Doctrine\DBAL\Type\SchoolCourse\SchoolHistoryType
 
             #Staff
             StaffMemberId:  Britannia\Infraestructure\Doctrine\DBAL\Type\Staff\StaffMemberIdType
             TeacherStatus:  Britannia\Infraestructure\Doctrine\DBAL\Type\Staff\StatusType
 
             #Student
-            StudentId: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\StudentIdType        
+            StudentId: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\StudentIdType
             StudentCourseId: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\StudentCourseIdType
             TutorId: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\TutorIdType
             JobStatus: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\JobStatusType
@@ -231,7 +229,7 @@ doctrine:
 
         second_level_cache:
             enabled: true
-           # region_lifetime: 86400  #1 dia
+            # region_lifetime: 86400  #1 dia
             region_cache_driver:
                 type: service
                 id: snc_second_level_cache
@@ -241,8 +239,8 @@ doctrine:
                     cache_driver:
                         type: service
                         id: snc_second_level_cache
-                    lifetime: 86400                
-                
+                    lifetime: 86400
+
                 week:
                     cache_driver:
                         type: service

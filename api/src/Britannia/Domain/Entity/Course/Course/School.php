@@ -65,18 +65,15 @@ class School extends Course implements CourseAssessmentInterface, CourseCalendar
      */
     public function schoolCourses(): array
     {
-        return $this->schoolCourses->toArray();
+        return $this->schoolCourses;
     }
 
     /**
-     * @param string|null $schoolCourses
+     * @param array $schoolCourses
      * @return School
      */
-    private function setSchoolCourses(?Collection $schoolCourses): School
+    private function setSchoolCourses(array $schoolCourses): School
     {
-        if (!($schoolCourses instanceof Collection)) {
-            return $this;
-        }
         $this->schoolCourses = $schoolCourses;
         return $this;
     }
