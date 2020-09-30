@@ -154,6 +154,10 @@
             font-weight: bold;
         }
 
+        .consentClause {
+            font-size: 10px;
+        }
+
     </style>
 {% endblock %}
 
@@ -310,7 +314,8 @@
                 <tr>
                     <td colspan="2">
                         <span class="label">Próximo curso escolar que realizarás</span>
-                        {{ _self.field(student.schoolCourse) }}
+                        {% set schoolCourse = student.schoolHistory.current | default(null) %}
+                        {{ _self.field(schoolCourse) }}
                     </td>
                     <td colspan="2">
                         <span class="label">¿En que colegio?</span>
@@ -581,7 +586,7 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="4">
+                <td colspan="4" class="consentClause">
                     {{ setting.consentClause | raw }}
                 </td>
             </tr>
@@ -688,6 +693,7 @@
 {% endmacro %}
 
 {% macro field(value) %}
+{#    <span class="field">{{ null | default("&nbsp;") | raw }}</span>#}
     <span class="field">{{ value | default("&nbsp;") | raw }}</span>
 {% endmacro %}
 

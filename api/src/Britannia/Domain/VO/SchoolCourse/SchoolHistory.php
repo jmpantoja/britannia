@@ -34,7 +34,8 @@ final class SchoolHistory
 
     public function numOfFailedCourses(): int
     {
-        $data = array_count_values($this->history);
+
+        $data = array_count_values(array_filter($this->history));
         return collect($data)
             ->map(fn(int $value) => $value - 1)
             ->sum();

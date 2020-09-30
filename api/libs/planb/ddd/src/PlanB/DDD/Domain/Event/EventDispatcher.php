@@ -33,5 +33,4 @@ class EventDispatcher extends BaseEventDispatcher
 
         return self::$instance;
     }
-
 }

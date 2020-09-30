@@ -52,6 +52,10 @@ class RelativesType extends ModelType
     {
         $studentId = $resolver['studentId'];
 
+        if (!($studentId instanceof StudentId)) {
+            return [];
+        }
+
         return collect($choices)
             ->filter(fn(Student $student) => !$student->id()->equals($studentId))
             ->toArray();
