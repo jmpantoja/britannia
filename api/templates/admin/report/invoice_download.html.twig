@@ -18,11 +18,14 @@
 
         .wrapper {
             margin: auto;
-            height: 850px;
-            /*height: 425px;*/
-
             padding-top: 1em;
+            height: 425px;
         }
+
+        .double {
+            height: 850px;
+        }
+
 
         table {
             border-collapse: separate;
@@ -84,74 +87,79 @@
 
 
 {% block body %}
-    {% with {label: 'ejemplar para el alumno'} %}
-        {{ block('invoice') }}
-    {% endwith %}
-
     {% if includeCopyForTheAcademy %}
         {% with {label: 'ejemplar para la academia'} %}
             {{ block('invoice') }}
         {% endwith %}
     {% endif %}
+
+    {% with {label: 'ejemplar para el alumno'} %}
+        {{ block('invoice') }}
+    {% endwith %}
+
 {% endblock %}
 
 {% block invoice %}
-    <div class="wrapper">
+    {% if (invoice.details | length) <= 7 %}
+        <div class="wrapper">
+    {% else %}
+            <div class="wrapper double">
+    {% endif %}
 
-        <div style="text-align:center;">
-            <img src="{{ assets_base }}/images/admin/invoice_header.png" style="width:100%;"/>
-        </div>
+    <div style="text-align:center;">
+        <img src="{{ assets_base }}/images/admin/invoice_header.png" style="width:100%;"/>
+    </div>
 
 
-        <table class="cabecera" style="width:100%;">
-            <thead>
-            <tr>
-                <th align="center">Fecha: {{ date | date('d/m/Y') }}</th>
-                <th align="center">{{ invoice.student.fullName.reversedMode }}</th>
-                <th align="center">{{ invoice.subject }}</th>
-            </tr>
-            </thead>
-        </table>
+    <table class="cabecera" style="width:100%;">
+        <thead>
+        <tr>
+            <th align="center">Fecha: {{ date | date('d/m/Y') }}</th>
+            <th align="center">{{ invoice.student.fullName.reversedMode }}</th>
+            <th align="center">{{ invoice.subject }}</th>
+        </tr>
+        </thead>
+    </table>
 
-        <table style="width:100%;" class="tabla">
-            <thead>
+    <table style="width:100%;" class="tabla">
+        <thead>
+        <tr>
+            <th>Concepto</th>
+            <th>UD</th>
+            <th>% Desc</th>
+            <th>Importe</th>
+            <th>Total</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for detail in invoice.details %}
             <tr>
-                <th>Concepto</th>
-                <th>UD</th>
-                <th>% Desc</th>
-                <th>Importe</th>
-                <th>Total</th>
+                <td>{{ detail.subject }}</td>
+                <td>{{ detail.numOfUnits }}</td>
+                <td>{{ detail.discount }}</td>
+                <td>{{ detail.price }} &euro;</td>
+                <td>{{ detail.total }} &euro;</td>
             </tr>
-            </thead>
-            <tbody>
-            {% for detail in invoice.details %}
-                <tr>
-                    <td>{{ detail.subject }}</td>
-                    <td>{{ detail.numOfUnits }}</td>
-                    <td>{{ detail.discount }}</td>
-                    <td>{{ detail.price }} &euro;</td>
-                    <td>{{ detail.total }} &euro;</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+        {% endfor %}
+        </tbody>
+    </table>
 
-        <table class="tabla" style="width:25%;">
-            <tbody>
-            <tr>
-                <td class="title">Importe</td>
-                <td>{{ invoice.priceTotal }} &euro;</td>
-            </tr>
-            <tr>
-                <td class="title">Descuento</td>
-                <td>{{ invoice.discountTotal }} &euro;</td>
-            </tr>
-            <tr>
-                <td class="title">Total</td>
-                <td>{{ invoice.total }} &euro;</td>
-            </tr>
-            </tbody>
-        </table>
-        <p style="text-align: right;">{{ label }}</p>
+    <table class="tabla" style="width:25%;">
+        <tbody>
+        <tr>
+            <td class="title">Importe</td>
+            <td>{{ invoice.priceTotal }} &euro;</td>
+        </tr>
+        <tr>
+            <td class="title">Descuento</td>
+            <td>{{ invoice.discountTotal }} &euro;</td>
+        </tr>
+        <tr>
+            <td class="title">Total</td>
+            <td>{{ invoice.total }} &euro;</td>
+        </tr>
+        </tbody>
+    </table>
+    <p style="text-align: right;">{{ label }}</p>
     </div>
 {% endblock %}
