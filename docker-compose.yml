@@ -82,7 +82,7 @@ services:
     image: steveltn/https-portal:1
     depends_on:
       - api
-      - cache-proxy
+#      - cache-proxy
     ports:
       - 80:80
       - 443:443

@@ -16,6 +16,8 @@ namespace Britannia\Infraestructure\Symfony\Admin\Setting;
 
 use Britannia\Domain\Entity\Setting\Setting;
 use Britannia\Domain\Entity\Setting\SettingDto;
+use Carbon\CarbonImmutable;
+use DateTimeInterface;
 use PlanB\DDDBundle\Sonata\Admin\AdminMapper;
 
 final class SettingMapper extends AdminMapper
@@ -40,12 +42,41 @@ final class SettingMapper extends AdminMapper
     protected function update($object, array $values): Setting
     {
         $dto = $this->makeDto($values);
-
         return $object->update($dto);
     }
 
     private function makeDto(array $values): SettingDto
     {
         return SettingDto::fromArray($values);
+    }
+
+    protected function obj2array($object)
+    {
+        $data = parent::obj2array($object);
+        if (empty($data)) {
+            return $data;
+        }
+
+        $data['morning'] = $this->toRange($data['morning'] ?? null);
+        $data['afternoon'] = $this->toRange($data['afternoon'] ?? null);
+
+        return $data;
+    }
+
+    private function toRange($value)
+    {
+        return [
+            'start' => $this->toDate($value['start']),
+            'end' => $this->toDate($value['end']),
+        ];
+    }
+
+    private function toDate($date): DateTimeInterface
+    {
+        if (is_array($date)) {
+            return CarbonImmutable::make($date['date']);
+        }
+        return $date;
+
     }
 }

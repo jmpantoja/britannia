@@ -107,8 +107,8 @@ final class SettingForm extends AdminForm
         $this->group('Presentador', ['class' => 'col-md-6'])
             ->add('sepa_presenter_id', TextType::class, [
                 'label' => 'Identificador',
-                'attr'=>[
-                    'style'=>'width:200px'
+                'attr' => [
+                    'style' => 'width:200px'
                 ]
             ])
             ->add('sepa_presenter_name', TextType::class, [

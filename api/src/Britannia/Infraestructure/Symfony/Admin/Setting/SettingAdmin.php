@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Britannia\Infraestructure\Symfony\Admin\Setting;
 
+use Britannia\Domain\Entity\Setting\Setting;
 use PlanB\DDDBundle\Symfony\Form\Type\WYSIWYGType;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Form\FormMapper;

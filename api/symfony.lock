@@ -109,6 +109,19 @@
             "src/DataFixtures/AppFixtures.php"
         ]
     },
+    "doctrine/doctrine-migrations-bundle": {
+        "version": "2.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "2.2",
+            "ref": "baaa439e3e3179e69e3da84b671f0a3e4a2f56ad"
+        },
+        "files": [
+            "config/packages/doctrine_migrations.yaml",
+            "migrations/.gitignore"
+        ]
+    },
     "doctrine/event-manager": {
         "version": "1.1.0"
     },
@@ -121,6 +134,9 @@
     "doctrine/lexer": {
         "version": "1.2.0"
     },
+    "doctrine/migrations": {
+        "version": "3.0.1"
+    },
     "doctrine/orm": {
         "version": "v2.7.2"
     },
@@ -129,6 +145,9 @@
     },
     "doctrine/reflection": {
         "version": "1.2.1"
+    },
+    "doctrine/sql-formatter": {
+        "version": "1.1.1"
     },
     "dragonmantank/cron-expression": {
         "version": "v2.3.0"
@@ -184,6 +203,12 @@
     "jeremeamia/superclosure": {
         "version": "2.4.0"
     },
+    "jms/metadata": {
+        "version": "2.3.0"
+    },
+    "jms/serializer": {
+        "version": "3.10.0"
+    },
     "knplabs/knp-markdown-bundle": {
         "version": "1.8.1"
     },
@@ -207,6 +232,12 @@
         "files": [
             "config/packages/knp_snappy.yaml"
         ]
+    },
+    "laminas/laminas-code": {
+        "version": "3.5.0"
+    },
+    "laminas/laminas-eventmanager": {
+        "version": "3.3.0"
     },
     "laminas/laminas-filter": {
         "version": "2.9.3"
@@ -295,6 +326,12 @@
     "nikic/php-parser": {
         "version": "v4.3.0"
     },
+    "ocramius/proxy-manager": {
+        "version": "2.10.0"
+    },
+    "opis/closure": {
+        "version": "3.6.1"
+    },
     "phar-io/manifest": {
         "version": "1.0.3"
     },
@@ -362,6 +399,12 @@
     },
     "psr/container": {
         "version": "1.0.0"
+    },
+    "psr/http-client": {
+        "version": "1.0.1"
+    },
+    "psr/http-factory": {
+        "version": "1.0.1"
     },
     "psr/http-message": {
         "version": "1.0.1"
@@ -491,6 +534,9 @@
     "sonata-project/exporter": {
         "version": "2.2.0"
     },
+    "sonata-project/form-extensions": {
+        "version": "0.1.2"
+    },
     "sonata-project/formatter-bundle": {
         "version": "4.1.3"
     },
@@ -508,6 +554,9 @@
         "files": [
             "config/packages/sonata_translation.yaml"
         ]
+    },
+    "sonata-project/twig-extensions": {
+        "version": "0.1.1"
     },
     "stevegrunwell/time-constants": {
         "version": "v1.1.1"
@@ -563,6 +612,9 @@
     },
     "symfony/dependency-injection": {
         "version": "v4.4.6"
+    },
+    "symfony/deprecation-contracts": {
+        "version": "v2.2.0"
     },
     "symfony/doctrine-bridge": {
         "version": "v4.3.11"
@@ -669,6 +721,9 @@
     "symfony/options-resolver": {
         "version": "v4.4.6"
     },
+    "symfony/orm-pack": {
+        "version": "v2.0.0"
+    },
     "symfony/phpunit-bridge": {
         "version": "4.3",
         "recipe": {
@@ -704,6 +759,9 @@
     },
     "symfony/polyfill-php73": {
         "version": "v1.15.0"
+    },
+    "symfony/polyfill-php80": {
+        "version": "v1.20.0"
     },
     "symfony/process": {
         "version": "v5.0.6"
@@ -760,6 +818,9 @@
     },
     "symfony/serializer": {
         "version": "v4.4.6"
+    },
+    "symfony/serializer-pack": {
+        "version": "v1.0.4"
     },
     "symfony/service-contracts": {
         "version": "v1.1.8"
@@ -905,6 +966,9 @@
     },
     "twig/twig": {
         "version": "v2.12.5"
+    },
+    "webimpress/safe-writer": {
+        "version": "2.1.0"
     },
     "webmozart/assert": {
         "version": "1.7.0"
