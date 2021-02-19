@@ -20,6 +20,8 @@ use Britannia\Domain\Repository\SettingRepositoryInterface;
 
 final class SettingFactory
 {
+    private Setting $setting;
+
     public function __construct(SettingRepositoryInterface $settingRepository)
     {
         $this->setting = $settingRepository->getMain();

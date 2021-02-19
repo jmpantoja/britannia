@@ -57,8 +57,8 @@ final class CourseInformationParamsGenerator
         $enrollment = $this->breakdown->calculeEnrollment($course, $discount);
         $material = $this->breakdown->calculeMaterial($course, $discount);
 
-        $firstMonth = $monthlyPayments->first();
-        $lastMonth = $monthlyPayments->last();
+        $firstMonth = $monthlyPayments->first() ?? Concept::zero();
+        $lastMonth = $monthlyPayments->last() ?? Concept::zero();
 
         $total = $this->getTotal($enrollment, $material, $firstMonth, $lastMonth);
 
@@ -71,9 +71,10 @@ final class CourseInformationParamsGenerator
         ];
     }
 
-    private function getTotal(Concept ...$concepts)
+    private function getTotal(?Concept ...$concepts)
     {
-        $conceptList = collect($concepts);
+
+        $conceptList = collect($concepts)->filter();
         $total = Price::make(0);
 
         return $conceptList->reduce(function (Price $total, Concept $concept) {

@@ -44,11 +44,10 @@ trait AssessmentTrait
     public function changeAssessmentDefinition(Assessment $assessment, AssessmentGenerator $generator): self
     {
         $this->assessment = $assessment;
-
         $termList = $generator->generateTerms($this->courseHasStudentList(), $assessment);
 
-        $this->setTerms($termList);
 
+        $this->setTerms($termList);
         $this->termList()->updateSkills($assessment->skills());
 
         return $this;
@@ -76,7 +75,6 @@ trait AssessmentTrait
      */
     private function termList(): TermList
     {
-
         return TermList::collect($this->terms);
     }
 

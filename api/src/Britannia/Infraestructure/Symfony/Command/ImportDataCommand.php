@@ -3,6 +3,7 @@
 namespace Britannia\Infraestructure\Symfony\Command;
 
 
+use Britannia\Infraestructure\Symfony\Importer\Etl\StaffEtl;
 use Britannia\Infraestructure\Symfony\Importer\ImporterManager;
 use Britannia\Infraestructure\Symfony\Importer\Report\ConsoleReport;
 use Britannia\Infraestructure\Symfony\Importer\Report\PlainTextErrorReport;
@@ -69,6 +70,7 @@ class ImportDataCommand extends Command
 
         $console = ConsoleReport::make($input, $output);
         $plainText = PlainTextReport::make($this->pathToReportDir);
+
 
         Locale::setDefault('es');
         $this->importer

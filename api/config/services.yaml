@@ -21,9 +21,9 @@ services:
         public: true
         arguments:
             - '@sonata.admin.pool'
-            - []
+            - [ ]
             - ~
-        tags: ['console.command']
+        tags: [ 'console.command' ]
 
 
     Sonata\Form\Date\MomentFormatConverter:
@@ -51,9 +51,9 @@ services:
         class: Britannia\Infraestructure\Symfony\Service\Message\MailerFactory
         public: true
         calls:
-            - [addMailer, ['MANAGERS', '@swiftmailer.mailer.managers', 'britannia.elpuerto.gestion@gmail.com', 'Gestión Academia Britannia']]
-            - [addMailer, ['RECEPTION', '@swiftmailer.mailer.reception', 'britannia.elpuerto.recepcion@gmail.com', 'Recepción Academia Britannia']]
-            - [addMailer, ['TEACHERS', '@swiftmailer.mailer.teachers', 'britannia.elpuerto.teachers@gmail.com', 'Teachers  Academia Britannia']]
+            - [ addMailer, [ 'MANAGERS', '@swiftmailer.mailer.managers', 'britannia.elpuerto.gestion@gmail.com', 'Gestión Academia Britannia' ] ]
+            - [ addMailer, [ 'RECEPTION', '@swiftmailer.mailer.reception', 'britannia.elpuerto.recepcion@gmail.com', 'Recepción Academia Britannia' ] ]
+            - [ addMailer, [ 'TEACHERS', '@swiftmailer.mailer.teachers', 'britannia.elpuerto.teachers@gmail.com', 'Teachers  Academia Britannia' ] ]
 
 
     #    Britannia\Domain\Service\Message\SmsLauncherInterface:
@@ -66,7 +66,7 @@ services:
     # as action arguments even if you don't extend any base controller class
     Britannia\Infraestructure\Symfony\Controller\:
         resource: '../src/Britannia/Infraestructure/Symfony/Controller/*'
-        tags: ['controller.service_arguments']
+        tags: [ 'controller.service_arguments' ]
 
     Britannia\Infraestructure\Symfony\Importer\Etl\:
         resource: '../src/Britannia/Infraestructure/Symfony/Importer/Etl/*'
@@ -76,22 +76,22 @@ services:
 
     Britannia\Infraestructure\Symfony\Importer\ImporterManager:
         calls:
-        # - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\FixturesEtl']]
-        # - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\StaffEtl']]
-        # - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\StudentEtl']]
-        # - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\AttachmentEtl']]
-        # - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\RelativesEtl']]
-        # - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\CourseEtl']]
-        # - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\TeacherCoursesEtl']]
-        # - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\InvoiceEtl']] #Va aquí porque StudentCoursesEtl tambien genera los recibos si no existen  
-        # - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\StudentCoursesEtl']]
-        # - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\IssueEtl']]
-        # - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\MessageEtl']]
-        # - [addEtl, ['@Britannia\Infraestructure\Symfony\Importer\Etl\AttendanceControlEtl']]
+#            - [ addEtl, [ '@Britannia\Infraestructure\Symfony\Importer\Etl\FixturesEtl' ] ]
+#            - [ addEtl, [ '@Britannia\Infraestructure\Symfony\Importer\Etl\StaffEtl' ] ]
+#            - [ addEtl, [ '@Britannia\Infraestructure\Symfony\Importer\Etl\StudentEtl' ] ]
+#            - [ addEtl, [ '@Britannia\Infraestructure\Symfony\Importer\Etl\AttachmentEtl' ] ]
+#            - [ addEtl, [ '@Britannia\Infraestructure\Symfony\Importer\Etl\RelativesEtl' ] ]
+#            - [ addEtl, [ '@Britannia\Infraestructure\Symfony\Importer\Etl\CourseEtl' ] ]
+#            - [ addEtl, [ '@Britannia\Infraestructure\Symfony\Importer\Etl\TeacherCoursesEtl' ] ]
+#            - [ addEtl, [ '@Britannia\Infraestructure\Symfony\Importer\Etl\InvoiceEtl' ] ] #Va aquí porque StudentCoursesEtl tambien genera los recibos si no existen  
+#            - [ addEtl, [ '@Britannia\Infraestructure\Symfony\Importer\Etl\StudentCoursesEtl' ] ]
+            - [ addEtl, [ '@Britannia\Infraestructure\Symfony\Importer\Etl\IssueEtl' ] ]
+            - [ addEtl, [ '@Britannia\Infraestructure\Symfony\Importer\Etl\MessageEtl' ] ]
+            - [ addEtl, [ '@Britannia\Infraestructure\Symfony\Importer\Etl\AttendanceControlEtl' ] ]
 
     event_dispatcher:
         class: PlanB\DDD\Domain\Event\EventDispatcher
-        factory: ['PlanB\DDD\Domain\Event\EventDispatcher', 'getInstance']
+        factory: [ 'PlanB\DDD\Domain\Event\EventDispatcher', 'getInstance' ]
         public: true
 
     snc_second_level_cache:

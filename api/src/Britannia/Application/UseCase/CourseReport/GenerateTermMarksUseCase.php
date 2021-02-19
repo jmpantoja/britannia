@@ -16,7 +16,6 @@ namespace Britannia\Application\UseCase\CourseReport;
 
 use Britannia\Domain\Entity\Assessment\Term;
 use Britannia\Domain\Entity\Course\Course;
-use Britannia\Domain\Entity\Lesson\Lesson;
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Repository\TermsParametersInterface;
 use Britannia\Domain\Service\Report\CourseTermMarks;

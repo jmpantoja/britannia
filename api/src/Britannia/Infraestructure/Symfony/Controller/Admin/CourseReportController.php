@@ -92,6 +92,7 @@ final class CourseReportController extends CRUDController
 
     protected function redirectTo($object)
     {
+
         $report = $this->commandBus->handle($object);
         return $this->buildResponse($report);
     }

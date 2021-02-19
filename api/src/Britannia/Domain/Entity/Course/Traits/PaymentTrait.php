@@ -16,7 +16,6 @@ namespace Britannia\Domain\Entity\Course\Traits;
 
 use Britannia\Domain\Entity\Course\CourseDto;
 use Britannia\Domain\VO\Discount\JobStatusDiscountList;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use PlanB\DDD\Domain\VO\Price;
 

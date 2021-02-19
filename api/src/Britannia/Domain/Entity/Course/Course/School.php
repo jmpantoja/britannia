@@ -47,7 +47,6 @@ class School extends Course implements CourseAssessmentInterface, CourseCalendar
         parent::__construct($dto);
     }
 
-
     public function update(CourseDto $dto): School
     {
         $this->setSchoolCourses($dto->schoolCourses);
