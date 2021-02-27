@@ -91,7 +91,7 @@ class AttendanceControlBuilder extends BuilderAbstract
 
     public function build(): ?object
     {
-        if (empty($this->lesson)) {
+        if (empty($this->lesson) OR empty($this->student)) {
             return null;
         }
 

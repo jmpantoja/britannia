@@ -73,7 +73,7 @@ class IssueBuilder extends BuilderAbstract
 
     public function build(): ?object
     {
-        if(empty($this->message)){
+        if (empty($this->message)) {
             return null;
         }
 
@@ -98,7 +98,11 @@ class IssueBuilder extends BuilderAbstract
         }
 
 
-        return substr($text, 0, strrpos(substr($text, 0, self::MAX_SUBJECT_LENGTH), ' ')) . '...';
+        $length = strrpos(substr($text, 0, self::MAX_SUBJECT_LENGTH), ' ');
+        if ($length === false) {
+            $length = self::MAX_SUBJECT_LENGTH;
+        }
+        return substr($text, 0, $length) . '...';
 
     }
 

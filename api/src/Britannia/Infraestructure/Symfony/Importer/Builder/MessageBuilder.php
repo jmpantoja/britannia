@@ -68,8 +68,13 @@ final class MessageBuilder extends BuilderAbstract
         return $this;
     }
 
-    public function withStudents(string $keys): self
+    public function withStudents(?string $keys): self
     {
+        if (is_null($keys)) {
+            $this->students = StudentList::collect([]);
+            return $this;
+        }
+
         $students = collect(explode(',', $keys))
             ->map(fn(string $key) => (int)$key)
             ->map(fn(int $oldId) => $this->findOneOrNull(Student::class, ['oldId' => $oldId]))

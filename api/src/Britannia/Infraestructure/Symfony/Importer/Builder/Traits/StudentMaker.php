@@ -252,6 +252,10 @@ trait StudentMaker
             'lastName' => (string)$cleanFullName['lastName']
         ]);
 
+        if (is_null($fullName)) {
+            return null;
+        }
+
         $dni = $this->toDni((string)$data['dni']);
 
         $address = $this->toPostalAddress(...[
