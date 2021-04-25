@@ -1,9 +1,4 @@
 /.env
-/docker-compose.override.yaml
-/docker-compose.override.yml
-/proxy/conf.d
-/proxy/ssl_certs
-/data
-/data.backup
+/docker
 .idea/
 
