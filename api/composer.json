@@ -10,35 +10,50 @@
         "api-platform/api-pack": "^1.1",
         "beberlei/doctrineextensions": "^1.2",
         "cocur/slugify": "^3.2",
+        "doctrine/doctrine-bundle": "^2.0",
         "doctrine/doctrine-fixtures-bundle": "^3.2",
+        "doctrine/orm": "^2.7",
         "guzzlehttp/guzzle": "^6.3",
+        "impulze/intervention-image-bundle": "^1.2",
         "knplabs/knp-snappy-bundle": "^1.6",
+        "laminas/laminas-filter": "^2.9",
+        "lavary/crunz": "^2.1",
         "league/tactician": "^1.0",
         "league/tactician-bundle": "^1.1",
         "league/tactician-doctrine": "^1.1",
-        "nesbot/carbon": "^2.26",
-        "marc-mabe/php-enum": "^4.1",
         "mikehaertl/php-pdftk": "^0.8.0",
+        "myclabs/php-enum": "^1.7",
+        "nesbot/carbon": "^2.26",
+        "phpoffice/phpspreadsheet": "^1.13",
+        "predis/predis": "^1.1",
         "ramsey/uuid-doctrine": "^1.5",
+        "snc/redis-bundle": "^3.2",
         "sonata-project/admin-bundle": "^3.53",
         "sonata-project/doctrine-orm-admin-bundle": "^3.10",
-        "sonata-project/formatter-bundle": "^4.1",
         "sonata-project/intl-bundle": "^2.7",
         "sonata-project/translation-bundle": "^2.4",
+        "stevegrunwell/time-constants": "^1.1",
         "stof/doctrine-extensions-bundle": "^1.3",
+        "symfony/cache": "4.3.*",
         "symfony/console": "4.3.*",
         "symfony/dotenv": "4.3.*",
-        "symfony/flex": "^1.1",
+        "symfony/flex": "^1.6",
         "symfony/framework-bundle": "4.3.*",
         "symfony/maker-bundle": "^1.13",
         "symfony/monolog-bundle": "^3.4",
+        "symfony/swiftmailer-bundle": "^3.4",
+        "symfony/webpack-encore-bundle": "^1.7",
         "symfony/yaml": "4.3.*",
-        "tightenco/collect": "^6.5",
-        "zendframework/zend-filter": "^2.9"
+        "tightenco/collect": "^6.5"
     },
     "require-dev": {
         "api-platform/schema-generator": "^2.1",
+        "dama/doctrine-test-bundle": "^6.3",
         "fzaninotto/faker": "^1.8",
+        "symfony/browser-kit": "4.3.*",
+        "symfony/css-selector": "4.3.*",
+        "symfony/phpunit-bridge": "^5.0",
+        "symfony/profiler-pack": "^1.0",
         "symfony/var-dumper": "4.3.*"
     },
     "config": {
@@ -48,7 +63,9 @@
         "sort-packages": true
     },
     "autoload": {
-        "files": ["libs/planb/ddd-bundle/src/PlanB/DDDBundle/Resources/functions/date.php"],
+        "files": [
+            "libs/planb/ddd-bundle/src/PlanB/DDDBundle/Resources/functions/format.date.php"
+        ],
         "psr-4": {
             "Britannia\\": "src/Britannia",
             "PlanB\\DDDBundle\\": "libs/planb/ddd-bundle/src/PlanB/DDDBundle",
@@ -57,7 +74,9 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Britannia\\Tests\\": "tests/Britannia"
+            "Britannia\\Tests\\": "tests",
+            "Britannia\\Tests\\Unit\\": "tests/Unit",
+            "Britannia\\Tests\\Integration\\": "tests/Integration"
         }
     },
     "replace": {
@@ -86,20 +105,7 @@
     },
     "extra": {
         "symfony": {
-            "allow-contrib": false,
-            "require": "5.0.*"
+            "allow-contrib": true
         }
-    },
-    "repositories": [
-        {
-            "type": "path",
-            "url": "./libs/planb/ddd-bundle",
-            "symlink": true
-        },
-        {
-            "type": "path",
-            "url": "./libs/planb/ddd",
-            "symlink": true
-        }
-    ]
+    }
 }

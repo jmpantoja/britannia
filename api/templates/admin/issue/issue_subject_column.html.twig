@@ -1,0 +1,31 @@
+{% extends get_admin_template('base_list_field', admin.code) %}
+
+{% block field %}
+    {% if object.main and object.student.alert.isAlert %}
+        <span data-toggle="popover"
+              title=""
+              data-content="{{ object.student.alert.description }}"
+              data-trigger="hover"
+              data-html="true"
+              data-placement="right"
+              class="alert-msg fa fa-exclamation-triangle"
+              data-original-title="Cuidado">
+        </span>
+    {% endif %}
+
+    {% if admin.hasAccess('edit', object) %}
+        <a href="{{ admin.generateObjectUrl('edit', object) }}">
+            {{ block('subject') }}
+        </a>
+    {% elseif admin.hasAccess('show', object) %}
+        <a href="{{ admin.generateObjectUrl('show', object) }}">
+            {{ block('subject') }}
+        </a>
+    {% else %}
+        {{ block('subject') }}
+    {% endif %}
+{% endblock %}
+
+{% block subject %}
+    <strong>{{ object.subject }}</strong>
+{% endblock %}

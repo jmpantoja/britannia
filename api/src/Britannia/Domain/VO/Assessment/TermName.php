@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Domain\VO\Assessment;
 
 
-use MabeEnum\Enum;
+use PlanB\DDD\Domain\Enum\Enum;
 
 /**
  * @method static self FIRST_TERM()
@@ -23,9 +23,9 @@ use MabeEnum\Enum;
  */
 class TermName extends Enum
 {
-    public const FIRST_TERM = '1er Trimestre';
-    public const SECOND_TERM = '2do Trimestre';
-    public const THIRD_TERM = '3er Trimestre';
+    private const FIRST_TERM = '1er Trimestre';
+    private const SECOND_TERM = '2do Trimestre';
+    private const THIRD_TERM = '3er Trimestre';
 
     /**
      * @return TermName[]
@@ -61,6 +61,13 @@ class TermName extends Enum
         }
 
         return null;
+    }
+
+    public static function toList(): array
+    {
+        return collect(static::keys())
+            ->map(fn(string $key) => static::byName($key))
+            ->toArray();
     }
 
     public function isFirst(): bool

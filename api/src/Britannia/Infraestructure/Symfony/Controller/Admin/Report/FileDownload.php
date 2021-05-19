@@ -14,11 +14,12 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Controller\Admin\Report;
 
 
-use Britannia\Domain\Service\Report\HtmlBasedPdfInterface;
+use Britannia\Domain\Service\Report\HtmlBasedPdfReport;
 use Britannia\Domain\Service\Report\ReportInterface;
 use Britannia\Domain\Service\Report\ReportList;
+use Britannia\Domain\Service\Report\TemplateBasedXlsxReport;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Response;
 use ZipArchive;
 
@@ -27,7 +28,7 @@ final class FileDownload
     /**
      * @var PdfGenerator
      */
-    private PdfGenerator $generator;
+    private PdfGenerator $pdfGenerator;
 
     /**
      * @var PdfFormFiller
@@ -40,17 +41,24 @@ final class FileDownload
      */
     private string $pathToTempDir;
     private string  $pathToTemplatesDir;
+    /**
+     * @var XlsxGenerator
+     */
+    private XlsxGenerator $xlsxGenerator;
 
-    public function __construct(PdfGenerator $generator, PdfFormFiller $formFiller, ParameterBagInterface $parameterBag)
+    public function __construct(XlsxGenerator $xlsxGenerator,
+                                PdfGenerator $pdfGenerator,
+                                PdfFormFiller $formFiller,
+                                ParameterBagInterface $parameterBag)
     {
-        $this->generator = $generator;
+        $this->xlsxGenerator = $xlsxGenerator;
+        $this->pdfGenerator = $pdfGenerator;
         $this->formFiller = $formFiller;
 
         $this->pathToTemplatesDir = $parameterBag->get('twig.default_path');
 
         $pathToLogDir = $parameterBag->get('kernel.logs_dir');
         $this->setTempDir($pathToLogDir);
-
 
     }
 
@@ -79,16 +87,13 @@ final class FileDownload
 
     public function createResponse(ReportList $reportList): Response
     {
-        foreach ($reportList as $report) {
-            $files[] = $this->generateTempPdfFile($report);
-        }
+        $files = $this->generateTempFiles($reportList);
 
         if (empty($files)) {
             return new Response('No hay nada que generar', 404);
         }
 
         $pathToFile = $files[0];
-
         if (count($files) > 1) {
             $pathToFile = $this->packFilesIntoZip($reportList->name(), $files);
         }
@@ -96,10 +101,27 @@ final class FileDownload
         return $this->createResponseFromFilePath($pathToFile);
     }
 
+    /**
+     * @param ReportList $reportList
+     * @return array
+     */
+    public function generateTempFiles(ReportList $reportList): array
+    {
+        $files = [];
+        foreach ($reportList as $report) {
+            $files[] = $this->generateTempPdfFile($report);
+        }
+        return $files;
+    }
+
     private function generateTempPdfFile(ReportInterface $report): string
     {
-        if ($report instanceof HtmlBasedPdfInterface) {
-            return $this->generator->create($report, $this->pathToTempDir());
+        if ($report instanceof TemplateBasedXlsxReport) {
+            return $this->xlsxGenerator->create($report, $this->pathToTemplatesDir(), $this->pathToTempDir());
+        }
+
+        if ($report instanceof HtmlBasedPdfReport) {
+            return $this->pdfGenerator->create($report, $this->pathToTempDir());
         }
 
         return $this->formFiller->create($report, $this->pathToTemplatesDir(), $this->pathToTempDir());
@@ -125,17 +147,9 @@ final class FileDownload
 
     private function createResponseFromFilePath(string $pathToFile)
     {
-        $extension = pathinfo($pathToFile, PATHINFO_EXTENSION);
-        $contentType = sprintf('application/%s', $extension);
-
-        $headers = [
-            'Content-Type' => $contentType,
-            'Content-Disposition' => sprintf('attachment; filename="%s"', basename($pathToFile)),
-        ];
-
-        $content = file_get_contents($pathToFile);
-        (new Filesystem())->remove(dirname($pathToFile));
-
-        return new Response($content, 200, $headers);
+        return (new BinaryFileResponse($pathToFile))
+            ->setContentDisposition('attachment');
     }
+
+
 }

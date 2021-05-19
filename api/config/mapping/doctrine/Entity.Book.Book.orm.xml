@@ -5,7 +5,7 @@
 
 
     <entity name="Britannia\Domain\Entity\Book\Book" table="books">
-
+        <cache usage="NONSTRICT_READ_WRITE" region="day"/>
         <id name="id" type="BookId" column="id">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
@@ -13,6 +13,7 @@
 
         <field name="name"/>
         <field name="category" type="BookCategory"/>
+        <field name="pvp" type="price"/>
         <field name="price" type="price"/>
 
         <field name="createdAt" type="datetime_immutable" nullable="true"/>

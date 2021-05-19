@@ -41,7 +41,6 @@ abstract class AbstractCompoundType extends AbstractType implements DataMapperIn
         if (is_null($this->propertyAccessor)) {
             $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
         }
-
         return $this->propertyAccessor;
     }
 
@@ -154,7 +153,6 @@ abstract class AbstractCompoundType extends AbstractType implements DataMapperIn
         $className = $options['data_class'];
 
         if (is_null($className)) {
-
             $this->dataToForms($data, $forms);
             return;
         }
@@ -197,6 +195,7 @@ abstract class AbstractCompoundType extends AbstractType implements DataMapperIn
         if (is_array($data)) {
             return $data[$name] ?? null;
         }
+        
         return $this->getPropertyAccessor()->getValue($data, $name);
     }
 
@@ -214,13 +213,15 @@ abstract class AbstractCompoundType extends AbstractType implements DataMapperIn
             return $form->getData();
         }, $forms);
 
+        $form = $this->getParentForm($forms);
+        $original = $form->getData();
+
         $options = $this->parseOptions($forms);
 
         $constraint = $this->buildConstraint($options);
 
-
         if (!($constraint instanceof Constraint)) {
-            $data = $this->customMapping($values);
+            $data = $this->customMapping($values, $original);
             return;
         }
 
@@ -230,7 +231,7 @@ abstract class AbstractCompoundType extends AbstractType implements DataMapperIn
         }
 
         if ($this->validate($values, $forms, $constraint)) {
-            $data = $this->customMapping($values);
+            $data = $this->customMapping($values, $original);
             return;
         }
     }

@@ -1,0 +1,19 @@
+{% if admin.hasAccess('read', object) and admin.hasRoute('issue.read') %}
+    <li>
+        <div class="btn-group">
+            {% if object.hasBeenReadByUser(app.user) %}
+                <a class="btn btn-danger" href="{{ admin.generateObjectUrl('issue.read', object) }}">
+                    {{ 'link_action_mark_as_unread'|trans({}, 'messages') }}
+                </a>
+            {% else %}
+                <a class="btn btn-success" href="{{ admin.generateObjectUrl('issue.read', object) }}">
+                    {{ 'link_action_mark_as_read'|trans({}, 'messages') }}
+                </a>
+            {% endif %}
+
+
+        </div>
+    </li>
+{% endif %}
+
+

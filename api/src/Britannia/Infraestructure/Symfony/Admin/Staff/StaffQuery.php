@@ -22,6 +22,8 @@ final class StaffQuery extends AdminQuery
 
     protected function configure(QueryBuilder $builder, string $alias = 'o'): void
     {
-        $builder->orderBy('o.fullName.lastName', 'ASC');
+        $builder
+            ->orderBy('o.teacher')
+            ->addOrderBy('o.fullName.lastName', 'ASC');
     }
 }

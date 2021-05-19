@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+
+    <entity name="Britannia\Domain\Entity\Course\Course\OneToOne" table="course_one_to_one">
+        <cache usage="NONSTRICT_READ_WRITE" region="day"/>
+
+        <field name="enrollmentPayment" type="price" nullable="true"/>
+
+        <field name="discount" type="JobStatusDiscountList" nullable="true"></field>
+        <one-to-many field="passes" target-entity="\Britannia\Domain\Entity\Course\Pass\Pass" mapped-by="course"
+                     orphan-removal="true">
+            <order-by>
+                <order-by-field name="timeRange.start"/>
+            </order-by>
+
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </one-to-many>
+    </entity>
+
+</doctrine-mapping>

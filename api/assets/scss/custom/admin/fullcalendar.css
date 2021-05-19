@@ -1,0 +1,38 @@
+.popover {
+    min-width: max-content;
+}
+
+.fc-event-container .fc-time {
+    font-size: 1.2em;
+    padding: 0.5em 0.5em 0 0.5em;
+
+}
+
+.fc-event-container .fc-title p {
+    text-align: center;
+    font-size: 1.5em;
+    padding: 0.5em;
+    border-bottom: solid 1px whitesmoke;
+}
+
+.fc-scroller {
+    height: max-content !important;
+}
+
+span.fc-day-number {
+    font-weight: 400;
+}
+
+.holiday {
+    background-color: rgba(205, 92, 92, 0.30);
+}
+
+.holiday span.fc-day-number {
+    color: red;
+}
+
+div[data-calendar=calendar] {
+    width: 1000px;
+    margin: auto;
+    border: solid 1px silver;
+}

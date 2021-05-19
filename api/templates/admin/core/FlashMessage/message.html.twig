@@ -3,23 +3,8 @@
     {% set messages = sonata_flashmessages_get(type, domain) %}
     {% if messages|length >= 1 %}
         {% set message = messages|join('<br />') %}
-
-        <script type="application/javascript">
-            $(function () {
-                var skins = {
-                    'danger': {'bg_color': '#d73925', 'icon': 'error'},
-                    'success': {'bg_color': '#008d4c', 'icon': 'success'},
-                }
-
-                $.toast({
-                    text: '{{ messages|first|raw }}',
-                    position: 'top-right',
-                    // hideAfter: 2000,
-                    // hideAfter: false,
-                    bgColor: skins['{{ type }}'].bg_color,
-                    icon: skins['{{ type }}'].icon,
-                })
-            })
-        </script>
+        <p data-toast="{{ type }}">
+            {{ messages|first|raw }}
+        </p>
     {% endif %}
 {% endfor %}

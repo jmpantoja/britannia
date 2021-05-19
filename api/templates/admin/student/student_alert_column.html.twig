@@ -1,0 +1,28 @@
+{% extends get_admin_template('base_list_field', admin.code) %}
+
+{% block field %}
+    {% if object.alert.isAlert %}
+        <span data-toggle="popover"
+              title="Cuidado"
+              data-content="{{ object.alert.description | raw }}"
+              data-trigger="hover"
+              data-html="true"
+              data-placement="bottom"
+              class="alert-msg fa fa-exclamation-triangle">
+        </span>
+
+    {% endif %}
+
+    {% if object.termsOfUseImageRigths == false %}
+        <span data-toggle="popover"
+              title="Cuidado"
+              data-content="No ha aceptado los derechos de imagen"
+              data-trigger="hover"
+              data-placement="bottom"
+              class="alert-msg fa fa-user-secret">
+        </span>
+    {% endif %}
+
+</script>
+
+{% endblock %}

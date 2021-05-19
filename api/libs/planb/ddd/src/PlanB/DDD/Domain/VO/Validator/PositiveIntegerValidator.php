@@ -29,6 +29,7 @@ class PositiveIntegerValidator extends ConstraintValidator
 
     public function handle($value, Constraint $constraint)
     {
+
         if ($value instanceof VO\PositiveInteger) {
             return;
         }
@@ -38,7 +39,6 @@ class PositiveIntegerValidator extends ConstraintValidator
                 ->addViolation();
             return;
         }
-
 
         if ($value < 0) {
             $this->context->buildViolation($constraint->message)

@@ -17,13 +17,12 @@ namespace Britannia\Domain\Entity\Course;
 use Britannia\Domain\Entity\Lesson\UpdateCalendarOrder;
 use Britannia\Domain\Entity\Staff\StaffList;
 use Britannia\Domain\Entity\Student\StudentList;
-use Britannia\Domain\Service\Assessment\AssessmentGenerator;
 use Britannia\Domain\Service\Course\LessonGenerator;
-use Britannia\Domain\VO\Assessment\AssessmentDefinition;
 use Britannia\Domain\VO\Course\Age\Age;
 use Britannia\Domain\VO\Course\Periodicity\Periodicity;
 use Britannia\Domain\VO\Course\Support\Support;
 use Britannia\Domain\VO\Course\TimeTable\TimeTable;
+use Britannia\Domain\VO\Discount\JobStatusDiscountList;
 use Doctrine\Common\Collections\Collection;
 use PlanB\DDD\Domain\Model\Dto;
 use PlanB\DDD\Domain\VO\PositiveInteger;
@@ -37,13 +36,11 @@ abstract class CourseDto extends Dto
 
     public ?string $name;
 
-    public ?string  $schoolCourse;
+    public ?string $description;
 
     public RGBA $color;
 
     public ?PositiveInteger $numOfPlaces;
-
-    public Support $support;
 
     public ?Price $monthlyPayment;
 
@@ -53,31 +50,26 @@ abstract class CourseDto extends Dto
 
     public StudentList $courseHasStudents;
 
-    public ?Collection $books;
+    public ?Collection $books = null;
 
     public ?TimeTable $timeTable;
 
     public LessonGenerator $lessonCreator;
 
-    public ?Collection $discount = null;
+    public ?JobStatusDiscountList $discount = null;
 
-    public AssessmentDefinition $assessmentDefinition;
-
-    public AssessmentGenerator $assessmentGenerator;
 
     protected function defaults(): array
     {
+        $color = $this->randomColor();
         return [
-            'support' => Support::REGULAR(),
-            'color' => $this->randomColor()
+            'color' => $color
         ];
     }
 
     private function randomColor(): RGBA
     {
 
-        #e8e598
-//        die('xxx');
         return collect([
             RGBA::make(232, 229, 152),
             RGBA::make(237, 177, 45),
@@ -86,13 +78,11 @@ abstract class CourseDto extends Dto
             RGBA::make(101, 48, 64),
             RGBA::make(40, 175, 169),
             RGBA::make(136, 149, 70),
-            RGBA::make(215, 208, 192),
-            RGBA::make(212, 188, 176),
+            RGBA::make(64, 128, 191),
+            RGBA::make(191, 128, 64),
         ])
-            ->shuffle(time())
+            ->shuffle()
             ->first();
-
-
     }
 
 

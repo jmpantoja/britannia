@@ -85,6 +85,7 @@ class Tutor
     {
         $this->fullName = $dto->fullName;
         $this->dni = $dto->dni;
+        $this->address = $dto->address;
         $this->emails = $dto->emails;
         $this->phoneNumbers = $dto->phoneNumbers;
         $this->job = $dto->job;

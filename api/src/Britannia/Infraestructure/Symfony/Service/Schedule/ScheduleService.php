@@ -14,10 +14,24 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Service\Schedule;
 
 
+use Britannia\Domain\Entity\ClassRoom\ClassRoom;
+use Britannia\Domain\Repository\ClassRoomRepositoryInterface;
+use Britannia\Domain\VO\Course\TimeTable\DayOfWeek;
 use Britannia\Domain\VO\Course\TimeTable\Schedule;
+use Britannia\Infraestructure\Doctrine\Repository\ClassRoomRepository;
 
 final class ScheduleService
 {
+    /**
+     * @var ClassRoomRepositoryInterface
+     */
+    private ClassRoomRepositoryInterface $classRoomRepository;
+
+    public function __construct(ClassRoomRepositoryInterface $classRoomRepository)
+    {
+        $this->classRoomRepository = $classRoomRepository;
+    }
+
     public function resume(Schedule $schedule): array
     {
         $values = [];
@@ -26,9 +40,15 @@ final class ScheduleService
          * @var  TimeSheet $timeSheet
          */
         foreach ($schedule->toArray() as $day => $timeSheet) {
-            $hours = sprintf('de %s a %s', ...[
+            $dayOfWeek = DayOfWeek::byShortName($day);
+            $classRoomId = $schedule->classRoomIdByDay($dayOfWeek);
+            $classRoom = $this->classRoomRepository->find($classRoomId);
+
+
+            $hours = sprintf('de %s a %s / %s', ...[
                 $timeSheet->start()->format('H:i'),
-                $timeSheet->end()->format('H:i')
+                $timeSheet->end()->format('H:i'),
+                $classRoom
             ]);
 
             $values[$hours] ??= [];

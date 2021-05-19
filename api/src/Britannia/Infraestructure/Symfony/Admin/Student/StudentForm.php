@@ -15,15 +15,24 @@ namespace Britannia\Infraestructure\Symfony\Admin\Student;
 
 
 use Britannia\Domain\Entity\Student\Adult;
+use Britannia\Domain\Entity\Student\Child;
+use Britannia\Domain\Entity\Student\Photo;
 use Britannia\Domain\Entity\Student\Student;
+use Britannia\Domain\Entity\Student\StudentId;
+use Britannia\Infraestructure\Symfony\Form\Type\Photo\PhotoType;
+use Britannia\Infraestructure\Symfony\Form\Type\Student\AlertType;
+use Britannia\Infraestructure\Symfony\Form\Type\Student\AttachmentListType;
 use Britannia\Infraestructure\Symfony\Form\Type\Student\ContactModeType;
+use Britannia\Infraestructure\Symfony\Form\Type\Student\DocumentListType;
 use Britannia\Infraestructure\Symfony\Form\Type\Student\JobType;
 use Britannia\Infraestructure\Symfony\Form\Type\Student\OtherAcademyType;
 use Britannia\Infraestructure\Symfony\Form\Type\Student\PartOfDayType;
 use Britannia\Infraestructure\Symfony\Form\Type\Student\PaymentType;
 use Britannia\Infraestructure\Symfony\Form\Type\Student\RelativesType;
+use Britannia\Infraestructure\Symfony\Form\Type\Student\SchoolCourseType;
+use Britannia\Infraestructure\Symfony\Form\Type\Student\SchoolType;
 use Britannia\Infraestructure\Symfony\Form\Type\Student\StudentHasCoursesType;
-use Britannia\Infraestructure\Symfony\Form\Type\Student\TutorType;
+use Britannia\Infraestructure\Symfony\Form\Type\Tutor\ChoiceTutorType;
 use PlanB\DDDBundle\Sonata\Admin\AdminForm;
 use PlanB\DDDBundle\Symfony\Form\Type\DNIType;
 use PlanB\DDDBundle\Symfony\Form\Type\EmailListType;
@@ -31,7 +40,6 @@ use PlanB\DDDBundle\Symfony\Form\Type\FullNameType;
 use PlanB\DDDBundle\Symfony\Form\Type\PhoneNumberListType;
 use PlanB\DDDBundle\Symfony\Form\Type\PostalAddressType;
 use PlanB\DDDBundle\Symfony\Form\Type\WYSIWYGType;
-use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\Form\Type\BooleanType;
 use Sonata\Form\Type\DatePickerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -46,20 +54,32 @@ final class StudentForm extends AdminForm
             $this->dataMapper()->setAdult($isAdult);
         }
 
-        $this->fistTab('Personal', $isAdult);
-        $this->secondTab('Cursos', $student);
-        $this->thirdTab('Pago', $student);
-        $this->fourthTab('Tutores', $isAdult);
-        $this->fifthTab('Observaciones');
-        $this->sixthTab('Información Extra');
+        $this->contactTab('Contacto', $student);
+        $this->personalTab('Personal', $student);
+
+        $this->coursesTab('Cursos', $student);
+        $this->paymentTab('Pago', $student);
+
+        if ($student instanceof Child) {
+            $this->firstTutorTab('Tutor 1', $student);
+            $this->secondTutorTab('Tutor 2', $student);
+        }
+
+        $this->attachedTab('Documentos', $student);
+        $this->issuesTab('Observaciones');
     }
 
-    /**
-     * @param bool $isAdult
-     */
-    protected function fistTab(string $name, bool $isAdult): void
+    protected function contactTab(string $name, Student $student): void
     {
         $this->tab($name);
+        $isAdult = $student instanceof Adult;
+
+        $this->group('Foto', ['class' => 'col-md-3'])
+            ->add('photo', PhotoType::class, [
+                'label' => false,
+                'owner' => $student,
+                'data_class' => Photo::class
+            ]);
 
         $group = $this->group('Datos personales', ['class' => 'col-md-4'])
             ->add('fullName', FullNameType::class, [
@@ -96,6 +116,33 @@ final class StudentForm extends AdminForm
             ]);
 
 
+    }
+
+    protected function personalTab(string $name, Student $student): void
+    {
+        $isAdult = $student instanceof Adult;
+
+        $this->tab($name);
+
+        $this->group('Preferencias', ['class' => 'col-md-2'])
+            ->add('preferredPartOfDay', PartOfDayType::class, [
+                'label' => 'Horario'
+            ])
+            ->add('preferredContactMode', ContactModeType::class, [
+                'label' => 'Contacto'
+            ]);
+
+        $this->group('Estadísticas', ['class' => 'col-md-3'])
+            ->add('otherAcademy', OtherAcademyType::class, [
+                'required' => false,
+                'label' => 'Ha estudiado antes en...',
+                'sonata_admin' => $this
+            ])
+            ->add('firstContact', TextType::class, [
+                'required' => false,
+                'label' => '¿Como nos conociste?.'
+            ]);
+
         $group = $this->group($isAdult ? 'Profesión' : 'Colegio', ['class' => 'col-md-4']);
 
         if ($isAdult) {
@@ -108,36 +155,42 @@ final class StudentForm extends AdminForm
 
         if (!$isAdult) {
             $group
-                ->add('school', ModelType::class, [
-                    'label' => 'Colegio',
-                    'btn_add' => 'Nuevo colegio',
-                    'placeholder' => ''
+                ->add('school', SchoolType::class, [
+                    'label' => 'Escuela',
+                    'btn_add' => false
                 ])
-                ->add('schoolCourse', TextType::class, [
-                    'label' => 'Próximo curso escolar',
-                    'required' => false
-                ]);
+                ->add('schoolHistory', SchoolCourseType::class, [
+                    'label' => 'Curso escolar',
+                    'required' => true,
+                    'data' => $student->schoolHistory(),
+                    'birthDay' => $student->birthDate()
+                ])
+            ;
         }
     }
 
     /**
      * @param Student $student
      */
-    protected function secondTab(string $name, Student $student): void
+    protected function coursesTab(string $name, Student $student): void
     {
+        if (!($student->id() instanceof StudentId)) {
+            return;
+        }
+
         $this->tab($name);
 
         $this->group('Cursos en Activo ', ['class' => 'col-md-12'])
             ->add('studentHasCourses', StudentHasCoursesType::class, [
-                'student' => $student,
-                'label' => false
+                'label' => false,
+                'student' => $student
             ]);
     }
 
     /**
      * @param Student $student
      */
-    protected function thirdTab(string $name, Student $student): void
+    protected function paymentTab(string $name, Student $student): void
     {
         $this->tab($name);
         $this->group('Descuento', ['class' => 'col-md-6'])
@@ -164,73 +217,70 @@ final class StudentForm extends AdminForm
     /**
      * @param bool $isAdult
      */
-    protected function fourthTab(string $name, bool $isAdult): void
+    protected function firstTutorTab(string $name, Child $student): void
     {
-        if (!$isAdult) {
-            $this->tab($name);
+        $this->tab($name);
+        $this
+            ->group($name)
+            ->add('firstTutor', ChoiceTutorType::class, [
+                'label' => false,
+                'tutor' => $student->firstTutor(),
+                'description' => $student->firstTutorDescription(),
+                'required' => true
+            ]);
+    }
 
-            $this->group('Tutores')
-                ->add('firstTutorDescription', TextType::class, [
-                    'label' => 'Tipo',
-                    'sonata_help' => 'padre/madre/abuelo/hermano/...',
-                    'required' => false
-                ])
-                ->add('firstTutor', TutorType::class, [
-                    'label' => 'Tutor A',
-                    'sonata_help' => 'seleccione un tutor',
-                    'required' => true
-                ])
-                ->add('secondTutorDescription', TextType::class, [
-                    'label' => 'Tipo',
-                    'sonata_help' => 'padre/madre/abuelo/hermano/...',
-                    'required' => false
-                ])
-                ->add('secondTutor', TutorType::class, [
-                    'label' => 'Tutor B',
-                    'sonata_help' => 'seleccione un tutor',
-                    'required' => false
-                ]);
+    protected function secondTutorTab(string $tabName, Child $student)
+    {
+        $this->tab($tabName);
+        $this
+            ->group($tabName)
+            ->add('secondTutor', ChoiceTutorType::class, [
+                'label' => false,
+                'tutor' => $student->secondTutor(),
+                'description' => $student->secondTutorDescription(),
+                'required' => false
+            ]);
+    }
+
+    private function attachedTab(string $name, Student $student): void
+    {
+        if ($student->id() == null) {
+            return;
         }
+        $this->tab($name);
+
+        $this->group('Adjuntos', ['class' => 'col-md-7'])
+            ->add('attachments', AttachmentListType::class, [
+                'student' => $student,
+                'label' => false
+            ]);
+
+        $this->group('Documentos', ['class' => 'col-md-3 col-md-push-1'])
+            ->add('documents', DocumentListType::class, [
+                'student' => $student,
+                'label' => false
+            ]);
     }
 
-    protected function fifthTab($name): void
+
+    private function issuesTab(string $name)
     {
         $this->tab($name);
 
-        $this->group('Observaciones A', ['class' => 'col-md-6'])
-            ->add('firstComment', WYSIWYGType::class, [
+
+        $this->group('¡Cuidado!', ['class' => 'col-md-4'])
+            ->add('alert', AlertType::class, [
+                'label' => false,
+                'required' => false
+            ]);
+
+        $this->group('Otros datos de Interes', ['class' => 'col-md-5'])
+            ->add('comment', WYSIWYGType::class, [
                 'label' => false
             ]);
-        $this->group('Observaciones B', ['class' => 'col-md-6'])
-            ->add('secondComment', WYSIWYGType::class, [
-                'label' => false
-            ]);
-    }
 
-    protected function sixthTab($name): void
-    {
-        $this->tab($name);
-
-        $this->group('Preferencias', ['class' => 'col-md-4'])
-            ->add('preferredPartOfDay', PartOfDayType::class, [
-                'label' => 'Horario'
-            ])
-            ->add('preferredContactMode', ContactModeType::class, [
-                'label' => 'Contacto'
-            ]);
-
-        $this->group('Estadísticas', ['class' => 'col-md-4'])
-            ->add('otherAcademy', OtherAcademyType::class, [
-                'required' => false,
-                'label' => 'Ha estudiado antes en...',
-                'sonata_admin' => $this
-            ])
-            ->add('firstContact', TextType::class, [
-                'required' => false,
-                'label' => '¿Como nos conociste?.'
-            ]);
-
-        $this->group('Condiciones', ['class' => 'col-md-4'])
+        $this->group('Condiciones', ['class' => 'col-md-3'])
             ->add('termsOfUseAcademy', null, [
                 'label' => 'Acepta las condiciones de uso de la academia'
             ])
@@ -241,4 +291,6 @@ final class StudentForm extends AdminForm
                 'label' => 'Consentimiento de Imagen'
             ]);
     }
+
+
 }

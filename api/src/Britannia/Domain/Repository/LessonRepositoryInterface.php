@@ -17,6 +17,8 @@ namespace Britannia\Domain\Repository;
 use Britannia\Domain\Entity\Assessment\Term;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Lesson\Lesson;
+use Britannia\Domain\Entity\Staff\StaffMember;
+use Britannia\Domain\Entity\Student\Student;
 use Carbon\CarbonImmutable;
 
 /**
@@ -40,10 +42,12 @@ interface LessonRepositoryInterface
      * @param CarbonImmutable $day
      * @return Lesson[]
      */
-    public function findByDay(CarbonImmutable $day): array;
+    public function findByDay(CarbonImmutable $day, ?StaffMember $member = null): array;
 
-    public function countByTerm(Term $term): int ;
+    public function countByTerm(Term $term): int;
 
-    public function countByCourse(Course $course): int ;
+    public function countByCourseAndStudent(Course $course, Student $student): int;
+
+    public function findByCourseAndDay(Course $course, CarbonImmutable $date): ?Lesson;
 
 }

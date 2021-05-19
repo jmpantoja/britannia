@@ -74,15 +74,6 @@ class AttendanceControlBuilder extends BuilderAbstract
         $date = CarbonImmutable::createFromFormat('Y-m-d', $fecha)
             ->setTime(0, 0);
 
-
-
-//        /**
-//         *
-//         * Esta linea solo es necesaria si ya se han camibado las fechas para sumarles un año
-//         *
-//         */
-//       $date = $date->subDay()->addYear();
-
         $lessons = $course->lessons();
         $this->lesson = null;
 
@@ -100,8 +91,7 @@ class AttendanceControlBuilder extends BuilderAbstract
 
     public function build(): ?object
     {
-        if (empty($this->lesson)) {
-
+        if (empty($this->lesson) OR empty($this->student)) {
             return null;
         }
 

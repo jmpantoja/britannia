@@ -24,6 +24,7 @@ use Britannia\Domain\VO\Assessment\SetOfSkills;
 use Britannia\Domain\VO\Assessment\Skill;
 use Britannia\Domain\VO\Assessment\TermDefinition;
 use Britannia\Domain\VO\Assessment\TermName;
+use Britannia\Domain\VO\Course\TimeRange\TimeRange;
 use Carbon\CarbonImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use PlanB\DDD\Domain\Behaviour\Comparable;
@@ -31,7 +32,7 @@ use PlanB\DDD\Domain\Behaviour\Traits\ComparableTrait;
 use PlanB\DDD\Domain\Model\Traits\AggregateRootTrait;
 use PlanB\DDD\Domain\VO\Percent;
 
-final class Term implements Comparable
+class Term implements Comparable
 {
     use ComparableTrait;
     use AggregateRootTrait;
@@ -123,8 +124,12 @@ final class Term implements Comparable
         $this->student = $studentCourse->student();
         $this->course = $studentCourse->course();
 
-        $this->start = $this->course->start();
-        $this->end = $this->course->end();
+        $this->start = null;
+        $this->end = null;
+
+        if ($termName->isFirst()) {
+            $this->start = $this->course->start();
+        }
 
         $this->termName = $termName;
         $this->units = new ArrayCollection();
@@ -393,6 +398,11 @@ final class Term implements Comparable
             $this->course()->id(),
             $this->termName()
         ]);
+    }
+
+    public function timeRange(): TimeRange
+    {
+        return TimeRange::make($this->start, $this->end);
     }
 
 }

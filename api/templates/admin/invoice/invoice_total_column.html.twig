@@ -1,0 +1,16 @@
+{% extends get_admin_template('base_list_field', admin.code) %}
+{% use "form/widgets.html.twig" %}
+
+{% block field %}
+
+    {% if object.paid %}
+        <span class="label label-big label-success">
+        {{ object.total }} <i class="fa fa-euro"></i>
+    </span>
+    {% else %}
+        <span class="label label-big label-danger">
+        {{ object.total }} <i class="fa fa-euro"></i>
+    </span>
+    {% endif %}
+
+{% endblock %}

@@ -77,6 +77,11 @@ class TeacherCoursesBuilder extends BuilderAbstract
             return $this->teacher;
         }
 
+//        collect($this->courses)
+//            ->each(function (Course $course){
+//               dump($course->name()) ;
+//            });
+
         $this->teacher->setCourses($this->courses);
         return $this->teacher;
     }

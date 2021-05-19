@@ -1,0 +1,28 @@
+{% extends get_admin_template('base_list_field', admin.code) %}
+
+{% import 'admin/core/status_column.html.twig' as status %}
+
+{% block field %}
+    {% if object.adult %}
+        {% set label = '+18' %}
+    {% elseif object.school %}
+        {% set label = 'Regular' %}
+    {% elseif object.preschool %}
+        {% set label = 'Preescolar' %}
+    {% elseif object.support %}
+        {% set label = 'Apoyo' %}
+    {% elseif object.onetoone %}
+        {% set label = '1to1' %}
+    {% endif %}
+
+    {% if object.status.pending %}
+        {{ status.pending(label) }}
+    {% elseif object.status.active %}
+        {{ status.active(label) }}
+    {% else %}
+        {{ status.finalized(label) }}
+    {% endif %}
+{% endblock %}
+
+
+

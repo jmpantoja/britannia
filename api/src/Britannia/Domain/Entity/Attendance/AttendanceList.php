@@ -27,11 +27,11 @@ final class AttendanceList extends EntityList
 
     public function findByStudent(Student $student)
     {
-        return $this->values()->
-        filter(function (Attendance $attendance) use ($student) {
-            return $attendance->isOfStudent($student);
-
-        })->first();
+        return $this->values()
+            ->filter(function (Attendance $attendance) use ($student) {
+                return $attendance->isOfStudent($student);
+            })
+            ->first();
     }
 
 }

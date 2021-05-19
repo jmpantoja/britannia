@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Importer\Builder;
 
 
+use Britannia\Domain\Entity\Attachment\AttachmentList;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Staff\StaffMember;
 use Britannia\Domain\Entity\Staff\StaffMemberDto;
@@ -197,6 +198,7 @@ class StaffBuilder extends BuilderAbstract
             'fullName' => $this->fullName,
             'emails' => $this->emails,
             'phoneNumbers' => (array)$this->phoneNumbers,
+            'attachments' => AttachmentList::collect(),
             'dni' => $this->dni,
             'roles' => $this->roles,
         ]);

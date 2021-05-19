@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Britannia\Domain\VO\Assessment;
 
 
-use Britannia\Domain\VO\MarkRange;
 use PlanB\DDD\Domain\VO\Traits\Validable;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 

@@ -28,7 +28,8 @@ abstract class AdminSecurity
         $this->security = $security;
     }
 
-    public function currentUser(){
+    public function currentUser()
+    {
         return $this->security->getUser();
     }
 }

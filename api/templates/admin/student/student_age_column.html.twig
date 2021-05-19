@@ -1,0 +1,20 @@
+{% extends get_admin_template('base_list_field', admin.code) %}
+
+{% block field %}
+    {% if object.birthDate is not null %}
+        <span class="date">
+            {{ object.birthDate | localizeddate('medium', 'none') }}
+            &nbsp;
+        </span>
+
+        {% if object.adult %}
+            <span class="label label-primary label-square">
+            {{ object.age }}
+        </span>
+        {% else %}
+            <span class="label label-warning label-square">
+            {{ object.age }}
+        </span>
+        {% endif %}
+    {% endif %}
+{% endblock %}

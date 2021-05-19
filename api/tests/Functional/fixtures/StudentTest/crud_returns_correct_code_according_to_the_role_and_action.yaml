@@ -1,0 +1,49 @@
+---
+list:
+    url: /admin/britannia/domain/student-student/list
+    data:
+        ROLE_MANAGER: 200
+        ROLE_RECEPTION: 200
+        ROLE_TEACHER: 403
+        ROLE_SONATA_ADMIN: 403
+        ROLE_SUPER_ADMIN: 200
+        ROLE_ADMIN: 403
+create:
+    url: /admin/britannia/domain/student-student/create
+    data:
+        ROLE_MANAGER: 200
+        ROLE_RECEPTION: 200
+        ROLE_TEACHER: 403
+        ROLE_SONATA_ADMIN: 403
+        ROLE_SUPER_ADMIN: 200
+        ROLE_ADMIN: 403
+
+edit:
+    url: /admin/britannia/domain/student-student/fb73cb58-01fe-4b30-beb4-4a9fef37d1c8/edit
+    data:
+        ROLE_MANAGER: 200
+        ROLE_RECEPTION: 200
+        ROLE_TEACHER: 403
+        ROLE_SONATA_ADMIN: 403
+        ROLE_SUPER_ADMIN: 200
+        ROLE_ADMIN: 403
+
+delete:
+    url: /admin/britannia/domain/student-student/fb73cb58-01fe-4b30-beb4-4a9fef37d1c8/delete
+    data:
+        ROLE_MANAGER: 200
+        ROLE_RECEPTION: 403
+        ROLE_TEACHER: 403
+        ROLE_SONATA_ADMIN: 403
+        ROLE_SUPER_ADMIN: 200
+        ROLE_ADMIN: 403            
+
+export:
+    url: /admin/britannia/domain/student-student/export?format=xml
+    data:
+        ROLE_MANAGER: 200
+        ROLE_RECEPTION: 403
+        ROLE_TEACHER: 403
+        ROLE_SONATA_ADMIN: 403
+        ROLE_SUPER_ADMIN: 200
+        ROLE_ADMIN: 403            

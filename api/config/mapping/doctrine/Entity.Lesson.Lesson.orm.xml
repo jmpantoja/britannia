@@ -8,12 +8,21 @@
             table="course_lessons"
             repository-class="Britannia\Infraestructure\Doctrine\Repository\LessonRepository">
 
+        <cache usage="NONSTRICT_READ_WRITE" />
         <id name="id" type="LessonId" column="id">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
         </id>
 
         <many-to-one field="course" target-entity="Britannia\Domain\Entity\Course\Course" inversed-by="lessons"
+                     fetch="EAGER">
+            <cache usage="NONSTRICT_READ_WRITE" />
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </many-to-one>
+
+        <many-to-one field="pass" target-entity="Britannia\Domain\Entity\Course\Pass\Pass" inversed-by="lessons"
                      fetch="EAGER">
             <cascade>
                 <cascade-persist/>
@@ -24,6 +33,7 @@
 
         <one-to-many field="attendances" target-entity="Britannia\Domain\Entity\Attendance\Attendance" mapped-by="lesson"
                      orphan-removal="true">
+            <cache usage="NONSTRICT_READ_WRITE" />
             <cascade>
                 <cascade-persist/>
             </cascade>

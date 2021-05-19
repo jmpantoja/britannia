@@ -1,0 +1,34 @@
+version: '3.4'
+
+services:
+    php:
+        image: docker.io/jmpantoja/britannia-php:7.4
+        build:
+            context: ../api
+            target: api_platform_php
+            
+            cache_from:
+                - quay.io/api-platform/php
+                - quay.io/api-platform/nginx
+                - quay.io/api-platform/varnish
+
+    api:
+        image: quay.io/api-platform/nginx
+        build:
+            context: ../api
+            target: api_platform_nginx
+            cache_from:
+                - quay.io/api-platform/php
+                - quay.io/api-platform/nginx
+                - quay.io/api-platform/varnish
+
+    cache-proxy:
+        image: quay.io/api-platform/varnish
+        build:
+            context: ../api
+            target: api_platform_varnish
+            cache_from:
+                - quay.io/api-platform/php
+                - quay.io/api-platform/nginx
+                - quay.io/api-platform/varnish
+

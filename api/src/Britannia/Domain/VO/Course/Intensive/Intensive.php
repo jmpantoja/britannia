@@ -13,12 +13,19 @@ declare(strict_types=1);
 
 namespace Britannia\Domain\VO\Course\Intensive;
 
+use PlanB\DDD\Domain\Enum\Enum;
 
-use MabeEnum\Enum;
-
+/**
+ * @method static self INTENSIVE()
+ * @method static self NOT_INTENSIVE()
+ */
 class Intensive extends Enum
 {
-    public const INTENSIVE = 'Intensivo';
-    public const NOT_INTENSIVE = 'No Intensivo';
+    private const INTENSIVE = 'Intensivo';
+    private const NOT_INTENSIVE = 'No Intensivo';
 
+    public function isIntensive(): bool
+    {
+        return $this->is(static::INTENSIVE());
+    }
 }

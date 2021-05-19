@@ -17,16 +17,18 @@ namespace Britannia\Domain\Entity\Lesson;
 use Britannia\Domain\Entity\Attendance\Attendance;
 use Britannia\Domain\Entity\Attendance\AttendanceList;
 use Britannia\Domain\Entity\ClassRoom\ClassRoom;
+use Britannia\Domain\Entity\ClassRoom\ClassRoomId;
 use Britannia\Domain\Entity\Course\Course;
+use Britannia\Domain\Entity\Course\Pass\Pass;
 use Britannia\Domain\Entity\Student\Student;
+use Britannia\Domain\Entity\Student\StudentCourseList;
 use Britannia\Domain\Entity\Student\StudentHasAttendedLesson;
 use Britannia\Domain\Entity\Student\StudentHasMissedLesson;
-use Britannia\Domain\VO\Course\TimeTable\TimeSheet;
+use Britannia\Domain\VO\Attendance\AttendanceStatus;
 use Carbon\CarbonImmutable;
 use Doctrine\Common\Collections\Collection;
 use PlanB\DDD\Domain\Behaviour\Comparable;
 use PlanB\DDD\Domain\Behaviour\Traits\ComparableTrait;
-use PlanB\DDD\Domain\Model\AggregateRoot;
 use PlanB\DDD\Domain\Model\Traits\AggregateRootTrait;
 use PlanB\DDD\Domain\VO\PositiveInteger;
 
@@ -50,11 +52,16 @@ class Lesson implements Comparable
      */
     private $course;
 
+
+    /**
+     * @var null|Pass
+     */
+    private $pass;
+
     /**
      * @var ClassRoom
      */
     private $classRoom;
-
 
     /**
      * @var Collection
@@ -96,17 +103,22 @@ class Lesson implements Comparable
         $this->update($dto);
     }
 
-    public function update(LessonDto $dto)
+    public function update(LessonDto $dto): self
     {
         $this->classRoom = $dto->classRoom;
         $this->setDay($dto->date);
-        $this->setStartTime($dto->timeSheet);
-        $this->setEndTime($dto->timeSheet);
+        $this->setStartTime($dto->start);
+        $this->setEndTime($dto->end);
         $this->updateAttendances($dto->attendances);
+        return $this;
     }
 
-    public function updateAttendances(AttendanceList $attendances): self
+    public function updateAttendances(?AttendanceList $attendances): self
     {
+        if (!($attendances instanceof AttendanceList)) {
+            return $this;
+        }
+
         $this->attendanceList()
             ->forRemovedItems($attendances, [$this, 'removeAttendance'])
             ->forAddedItems($attendances, [$this, 'addAttendance']);
@@ -139,22 +151,28 @@ class Lesson implements Comparable
         return $this;
     }
 
-    private function setStartTime(TimeSheet $timeSheet): self
+    private function setStartTime(CarbonImmutable $start): self
     {
-        $this->startTime = $timeSheet->start();
+        $this->startTime = $start;
         return $this;
     }
 
-    private function setEndTime(TimeSheet $timeSheet): self
+    private function setEndTime(CarbonImmutable $end): self
     {
-        $this->endTime = $timeSheet->end();
+        $this->endTime = $end;
         return $this;
     }
 
-    public function attach(Course $course, PositiveInteger $number): self
+    public function attachCourse(PositiveInteger $number, Course $course, ?Pass $pass = null): self
     {
+        if ($pass instanceof Pass) {
+            $course = $pass->course();
+        }
+
+        $this->pass = $pass;
         $this->course = $course;
         $this->number = $number;
+
         return $this;
     }
 
@@ -183,11 +201,28 @@ class Lesson implements Comparable
     }
 
     /**
+     * @return Pass|null
+     */
+    public function pass(): ?Pass
+    {
+        return $this->pass;
+    }
+
+
+    /**
      * @return ClassRoom
      */
     public function classRoom(): ClassRoom
     {
         return $this->classRoom;
+    }
+
+    /**
+     * @return ClassRoom
+     */
+    public function classRoomId(): ClassRoomId
+    {
+        return $this->classRoom->id();
     }
 
     /**
@@ -201,8 +236,32 @@ class Lesson implements Comparable
 
     private function attendanceList(): AttendanceList
     {
-
         return AttendanceList::collect($this->attendances);
+    }
+
+    public function attendanceStatusByStudent(Student $student): AttendanceStatus
+    {
+
+        $lessonIsAvaiable = StudentCourseList::fromStudent($student)
+            ->hasAvaiableLesson($this);
+
+        if (!$lessonIsAvaiable) {
+            return AttendanceStatus::DISABLED();
+        }
+
+        if ($this->hasBeenMissing($student)) {
+            return AttendanceStatus::MISSED();
+        }
+
+        return AttendanceStatus::ATTENDED();
+    }
+
+    public function students(): array
+    {
+        return StudentCourseList::fromCourse($this->course())
+            ->onlyActivesOnDate($this->day())
+            ->toStudentList()
+            ->toArray();
     }
 
     public function hasBeenMissing(Student $student): bool

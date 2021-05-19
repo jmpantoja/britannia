@@ -1,0 +1,68 @@
+{% extends 'admin/report/student_registration_form.html.twig' %}
+
+{% block style %}
+    {{ parent() }}
+    <style>
+        .page {
+            margin: auto;
+            width: 997.033px;
+            height: 1561px;
+        }
+
+        .double_page {
+            height: 3122px;
+        }
+    </style>
+
+{% endblock %}
+
+{% block body %}
+
+    {% with {page:1, total: 2} %} {{ block('general_considerations') }} {% endwith %}
+    {% with {page:2, total: 2} %} {{ block('faqs') }} {% endwith %}
+
+{% endblock %}
+
+
+
+{% block faqs %}
+    <div class="page">
+        <table>
+            <tr>
+                <td colspan="4">
+                    {{ block('printed_date') }}
+                    <div class="num-of-page">
+                        {{ _self.title(student, page, total) }}
+                    </div>
+                </td>
+            </tr>
+            <tr class="header">
+                <td colspan="1" class="quarter-col">
+                    {{ block('logo') }}
+                </td>
+                <td colspan="3">
+                    <div class="title-box">
+                        <span class="name">PREGUNTAS FRECUENTES</span>
+                        <span class="type">Ejemplar para la Academia</span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" class="lopd">
+                    <div class="field">
+                        {{ setting.faqs | raw }}
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="4" class="label-to-right">
+                    &nbsp;
+                </td>
+
+            </tr>
+
+        </table>
+    </div>
+{% endblock %}
+

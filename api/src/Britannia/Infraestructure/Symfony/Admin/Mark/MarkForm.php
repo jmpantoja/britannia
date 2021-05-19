@@ -15,6 +15,7 @@ namespace Britannia\Infraestructure\Symfony\Admin\Mark;
 
 
 use Britannia\Domain\Entity\Course\Course;
+use Britannia\Domain\Entity\Course\CourseAssessmentInterface;
 use Britannia\Domain\VO\Assessment\CourseTerm;
 use Britannia\Domain\VO\Assessment\TermName;
 use Britannia\Infraestructure\Symfony\Form\Type\Assessment\CommentListType;
@@ -27,7 +28,7 @@ use PlanB\DDDBundle\Sonata\Admin\AdminForm;
 final class MarkForm extends AdminForm
 {
 
-    public function configure(Course $course)
+    public function configure(CourseAssessmentInterface $course)
     {
         $this->diagnosticTab($course);
 
@@ -40,9 +41,9 @@ final class MarkForm extends AdminForm
     /**
      * @param Course $course
      */
-    private function diagnosticTab(Course $course): void
+    private function diagnosticTab(CourseAssessmentInterface $course): void
     {
-        if(!$course->hasDiagnosticTest()){
+        if(!$course->assessment()->hasDiagnosticTest()){
             return;
         }
 
@@ -58,7 +59,7 @@ final class MarkForm extends AdminForm
     /**
      * @param Course $course
      */
-    private function termsTabs(Course $course): void
+    private function termsTabs(CourseAssessmentInterface $course): void
     {
         $data = $this->organizeByTermName($course);
         $otherSkills = $course->otherSkills();
@@ -115,7 +116,7 @@ final class MarkForm extends AdminForm
      * @param Course $course
      * @return CourseTerm []
      */
-    private function organizeByTermName(Course $course): array
+    private function organizeByTermName(CourseAssessmentInterface $course): array
     {
         $list = [];
         $total = $course->numOfTerms();

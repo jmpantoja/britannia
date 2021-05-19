@@ -21,29 +21,28 @@ final class StaffDatagrid extends AdminDataGrid
     public function configure()
     {
 
-        $this->addIdentifier('id', 'string', [
-            'template' => 'admin/staff/staff_resume_column.html.twig',
+        $this->add('status', null, [
+            'label' => false,
+            'header_style' => 'width:76px',
+            'template' => 'admin/staff/staff_status_column.html.twig',
+            'row_align' => 'left'
+        ]);
+
+        $this->add('fullName.lastName', 'string', [
+            'template' => 'admin/staff/staff_name_column.html.twig',
             'label' => 'Nombre',
-            'header_style' => 'width:400px',
+            'header_style' => 'width:200px',
         ]);
 
         $this->add('courses', 'string', [
-            'template' => 'admin/staff/staff_courses.html.twig',
-            'label' => 'Cursos',
+            'template' => 'admin/staff/staff_courses_column.html.twig',
+            'label' => 'cursos',
             'row_align' => 'left',
             'admin_code' => 'admin.course'
         ]);
-
-//        $this->add('courses', null, [
-//            'admin_code' => 'admin.course'
-//           // 'header_style' => 'width:150px',
-//            //'row_align' => 'left'
-//        ]);
-
-        $this->add('userName', null, [
-            'label' => 'Usuario',
-            'header_style' => 'width:150px',
-            'row_align' => 'left'
+        
+        $this->add('_collapsed', null, [
+            'template' => 'admin/staff/staff_collapsed_column.html.twig',
         ]);
     }
 }

@@ -17,6 +17,7 @@ namespace Britannia\Domain\VO\Student\Job\Validator;
 use Britannia\Domain\VO;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDD\Domain\VO\Validator\ConstraintValidator;
+use PlanB\DDD\Domain\VO\Validator\Enum;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 class JobValidator extends ConstraintValidator
@@ -42,9 +43,8 @@ class JobValidator extends ConstraintValidator
             ])
         ]);
 
-
         $this->validateField('status', $value['status'], [
-            new JobStatus()
+            new Enum(VO\Student\Job\JobStatus::class)
         ]);
     }
 }

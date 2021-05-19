@@ -4,11 +4,17 @@ sonata_doctrine_orm_admin:
             - '@SonataDoctrineORMAdmin/Form/form_admin_fields.html.twig'
             - '@PlanBDDD/Form/form_admin.html.twig'
             - '@PlanBDDD/Form/widgets.html.twig'
+            - 'form/attachment.html.twig'
+            - 'form/invoices.html.twig'
             - 'form/course.html.twig'
             - 'form/locked.html.twig'
             - 'form/mark.html.twig'
+            - 'form/sms.html.twig'
             - 'form/reports.html.twig'
-            - 'form/students.html.twig'
+            - 'form/students.html.twig'            
+            - 'form/tutor.html.twig'            
+            - 'form/students_list.html.twig'            
             - 'form/widgets.html.twig'
 
-        filter: [ '@SonataDoctrineORMAdmin/Form/filter_admin_fields.html.twig' ]
+        filter: 
+            - '@SonataDoctrineORMAdmin/Form/filter_admin_fields.html.twig'

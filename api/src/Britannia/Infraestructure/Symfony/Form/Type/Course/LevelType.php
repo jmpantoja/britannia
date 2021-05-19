@@ -14,56 +14,25 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Form\Type\Course;
 
 
-use Britannia\Domain\Entity\Course\Level;
-use PlanB\DDDBundle\Sonata\ModelManager;
-use Sonata\AdminBundle\Form\Type\ModelType;
+use Britannia\Domain\VO\Course\Level\Level;
+use PlanB\DDDBundle\Symfony\Form\Type\EnumType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
-class LevelType extends ModelType
+class LevelType extends EnumType
 {
-    /**
-     * @var ModelManager
-     */
-    private $modelManager;
 
-    public function __construct(PropertyAccessorInterface $propertyAccessor, ModelManager $modelManager)
+    public function customOptions(OptionsResolver $resolver)
     {
-        $this->modelManager = $modelManager;
-        parent::__construct($propertyAccessor);
-
-    }
-
-    public function configureOptions(OptionsResolver $resolver)
-    {
-        parent::configureOptions($resolver);
-
         $resolver->setDefaults([
-            'multiple' => false,
-            'expanded' => false,
-            'btn_add' => false,
+            'required' => false,
             'attr' => [
-                'style' => 'width:200px'
+                'style' => 'width:170px'
             ]
         ]);
-
-        $resolver->setNormalizer('query', function (OptionsResolver $resolver) {
-            return $this->getQuery();
-        });
     }
 
-
-    /**
-     * @return mixed
-     */
-    private function getQuery()
+    public function getEnumClass(): string
     {
-        $query = $this->modelManager->createQuery(Level::class)
-            ->getQueryBuilder()
-            ->orderBy('o.name')
-            ->getQuery();
-
-        return $query;
+        return Level::class;
     }
-
 }

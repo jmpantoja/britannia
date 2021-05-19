@@ -1,0 +1,18 @@
+{% extends get_admin_template('base_list_field', admin.code) %}
+
+{% block field %}
+    <div style="padding-right: 1em">
+        {% if object.processed %}
+            {% if object.failed > 0 %}
+                <span title="errores" class="label label-big label-danger">{{ object.failed }}</span>
+            {% endif %}
+
+            <span title="enviados" class="label label-big label-success">{{ object.completed }}</span>
+        {% else %}
+            <span title="enviados" class="label label-big label-warning">{{ object.total }}</span>
+        {% endif %}
+
+    </div>
+{% endblock %}
+
+

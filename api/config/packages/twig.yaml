@@ -7,11 +7,14 @@ twig:
         attendances: '@Britannia\Infraestructure\Symfony\Service\Attendance\AttendanceService'
         schedule: '@Britannia\Infraestructure\Symfony\Service\Schedule\ScheduleService'
         skill_marks: '@Britannia\Infraestructure\Symfony\Service\Assessment\SkillMarkService'
+        issue_repository: '@Britannia\Domain\Repository\IssueRepositoryInterface'
+        photo_uploader: '@Britannia\Infraestructure\Symfony\Service\FileUpload\PhotoUploader'
+        staff_member_courses: '@Britannia\Infraestructure\Symfony\Service\Staff\StaffMemberCoursesOrganizer'
         
         #        paymentInfo: '@Britannia\Domain\Service\Payment\PaymentInfoService'
         #courseInfo: '@Britannia\Infraestructure\Symfony\Service\Course\CourseInformationReportService'
     form_themes:
-        - '@SonataFormatter/Form/formatter.html.twig'
+    #    - '@SonataFormatter/Form/formatter.html.twig'
         - '@SonataCore/Form/datepicker.html.twig'
     #    - '@SonataCore/Form/color.html.twig'
 

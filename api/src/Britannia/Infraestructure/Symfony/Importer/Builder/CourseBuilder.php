@@ -16,16 +16,21 @@ namespace Britannia\Infraestructure\Symfony\Importer\Builder;
 
 use Britannia\Domain\Entity\ClassRoom\ClassRoom;
 use Britannia\Domain\Entity\ClassRoom\ClassRoomDto;
-use Britannia\Domain\Entity\Course\Adult;
-use Britannia\Domain\Entity\Course\AdultDto;
-use Britannia\Domain\Entity\Course\PreSchool;
-use Britannia\Domain\Entity\Course\PreSchoolDto;
-use Britannia\Domain\Entity\Course\School;
-use Britannia\Domain\Entity\Course\SchoolDto;
+use Britannia\Domain\Entity\Course\Course\Adult;
+use Britannia\Domain\Entity\Course\Course\AdultDto;
+use Britannia\Domain\Entity\Course\Course\OneToOne;
+use Britannia\Domain\Entity\Course\Course\OneToOneDto;
+use Britannia\Domain\Entity\Course\Course\PreSchool;
+use Britannia\Domain\Entity\Course\Course\PreSchoolDto;
+use Britannia\Domain\Entity\Course\Course\School;
+use Britannia\Domain\Entity\Course\Course\SchoolDto;
+use Britannia\Domain\Entity\Course\Course\Support;
+use Britannia\Domain\Entity\Course\Course\SupportDto;
 use Britannia\Domain\Service\Assessment\AssessmentGenerator;
 use Britannia\Domain\Service\Course\LessonGenerator;
-use Britannia\Domain\VO\Assessment\AssessmentDefinition;
+use Britannia\Domain\VO\Course\Assessment\Assessment;
 use Britannia\Domain\VO\Course\Intensive\Intensive;
+use Britannia\Domain\VO\Course\TimeRange\TimeRange;
 use Britannia\Domain\VO\Course\TimeTable\Schedule;
 use Britannia\Domain\VO\Course\TimeTable\TimeTable;
 use Britannia\Infraestructure\Symfony\Importer\Builder\Traits\CourseMaker;
@@ -46,6 +51,8 @@ class CourseBuilder extends BuilderAbstract
 
     private $name;
 
+    private $description;
+
     private $enrolmentPayment;
 
     private $monthlyPayment;
@@ -54,7 +61,7 @@ class CourseBuilder extends BuilderAbstract
 
     private $hoursPerWeek;
 
-    private $schoolCourse;
+    private $schoolCourses = [];
 
     private $periodicity;
 
@@ -75,6 +82,7 @@ class CourseBuilder extends BuilderAbstract
      */
     private bool $isAdult;
 
+
     public function initResume(array $input): Resume
     {
         return Resume::make((int)$input['id'], self::TYPE, $input['nombre']);
@@ -92,9 +100,24 @@ class CourseBuilder extends BuilderAbstract
         return $this;
     }
 
-    public function withSchoolCourse(string $schoolCourse): self
+    public function withDescription(string $schoolCourse): self
     {
-        $this->schoolCourse = $schoolCourse;
+        $patterns = [
+            'EPO' => range(1, 6),
+            'ESO' => range(1, 4),
+            'BACH' => range(1, 2)
+        ];
+
+        foreach ($patterns as $level => $courses) {
+            foreach ($courses as $course) {
+                $pattern = sprintf('/(%sº).*%s/', $course, $level);
+                if (preg_match($pattern, $schoolCourse)) {
+                    $this->schoolCourses[] = sprintf('%s_%s', $level, $course);
+                }
+            }
+        }
+
+        $this->description = $schoolCourse;
         return $this;
     }
 
@@ -103,7 +126,6 @@ class CourseBuilder extends BuilderAbstract
         $this->enrolmentPayment = Price::make($price);
         return $this;
     }
-
 
     public function withMonthlyPayment(float $price): self
     {
@@ -137,10 +159,13 @@ class CourseBuilder extends BuilderAbstract
 
     public function withTimeTable(string $startDate, string $endDate, string $field1, string $field2, string $classRoomNumber): self
     {
+
         $classRoomId = $this->getClassRoomId($classRoomNumber);
 
         $start = CarbonImmutable::make($startDate);
         $end = CarbonImmutable::make($endDate);
+
+        $timeRange = TimeRange::make($start, $end);
 
 
         $schedule = $this->toLessons($field1, $classRoomId);
@@ -150,7 +175,7 @@ class CourseBuilder extends BuilderAbstract
 
         $schedule = Schedule::fromArray($schedule);
 
-        $this->timeTable = TimeTable::make($start, $end, $schedule);
+        $this->timeTable = TimeTable::make($timeRange, $schedule);
 
         return $this;
     }
@@ -191,7 +216,7 @@ class CourseBuilder extends BuilderAbstract
         $input = [
             'oldId' => $this->id,
             'name' => $this->name,
-            'schoolCourse' => $this->schoolCourse,
+            'description' => $this->description,
             'enrollmentPayment' => $this->enrolmentPayment,
             'monthlyPayment' => $this->monthlyPayment,
             'numOfPlaces' => $this->numOfPlaces,
@@ -199,23 +224,61 @@ class CourseBuilder extends BuilderAbstract
             'timeTable' => $this->timeTable,
             'lessonCreator' => $this->lessonGenerator,
             'assessmentGenerator' => $this->assessmentGenerator,
-
+            'schoolCourses' => $this->schoolCourses,
         ];
 
+        $name = strtoupper($this->name);
+
+        if (strpos($name, 'KIDS') !== false) {
+
+            return $this->buildPreSchool($input);
+        }
+
+        if (strpos($name, 'ONE TO ONE') !== false) {
+            return $this->buildOneToOne($input);
+        }
+
+        if (strpos($name, 'APOYO') !== false) {
+
+            return $this->buildSupport($input);
+        }
+
         if ($this->isAdult === true) {
-            $input['assessmentDefinition'] = AssessmentDefinition::defaultForAdults();
 
             return $this->buildAdult($input);
         }
 
-        if (strpos($this->name, 'KIDS') !== false) {
-            $input['assessmentDefinition'] = AssessmentDefinition::defaultForShool();
-            return $this->buildPreSchool($input);
-        }
-
-        $input['assessmentDefinition'] = AssessmentDefinition::defaultForShool();
         return $this->buildSchool($input);
+    }
 
+    private function buildPreSchool(array $input)
+    {
+        $input['assessment'] = Assessment::defaultForShool();
+        $dto = PreSchoolDto::fromArray($input);
+        return PreSchool::make($dto);
+    }
+
+    private function buildSchool(array $input)
+    {
+        $input['assessment'] = Assessment::defaultForShool();
+
+        $dto = SchoolDto::fromArray($input);
+
+        return School::make($dto);
+    }
+
+    private function buildOneToOne(array $input)
+    {
+        $dto = OneToOneDto::fromArray($input);
+        $dto->timeRange = $dto->timeTable->range();
+
+        return OneToOne::make($dto);
+    }
+
+    private function buildSupport(array $input)
+    {
+        $dto = SupportDto::fromArray($input);
+        return Support::make($dto);
     }
 
     /**
@@ -224,20 +287,9 @@ class CourseBuilder extends BuilderAbstract
      */
     private function buildAdult(array $input): Adult
     {
+        $input['assessment'] = Assessment::defaultForAdults();
         $dto = AdultDto::fromArray($input);
         return Adult::make($dto);
-    }
-
-    private function buildPreSchool(array $input)
-    {
-        $dto = PreSchoolDto::fromArray($input);
-        return PreSchool::make($dto);
-    }
-
-    private function buildSchool(array $input)
-    {
-        $dto = SchoolDto::fromArray($input);
-        return School::make($dto);
     }
 }
 

@@ -14,17 +14,41 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Twig\Extensions;
 
 
+use Britannia\Domain\Entity\Course\Course;
+use Britannia\Domain\Entity\Course\CourseAssessmentInterface;
+use Britannia\Domain\VO\Course\TimeTable\DayOfWeek;
 use Britannia\Infraestructure\Symfony\Admin\AdminFilterableInterface;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
 use Twig\TwigFunction;
+use Twig\TwigTest;
 
 final class SonataExtension extends AbstractExtension
 {
+    public function getTests()
+    {
+        return [
+            new TwigTest('evaluable', [$this, 'is_evaluable']),
+        ];
+    }
+
+
     public function getFunctions()
     {
         return [
             new TwigFunction('sonata_has_filters', [$this, 'hasFilters']),
+            new TwigFunction('day_of_week', function (string $dayName): DayOfWeek {
+                return DayOfWeek::byName($dayName);
+            }),
+        ];
+    }
+
+    public function getFilters()
+    {
+        return [
+            // the logic of this filter is now implemented in a different class
+            new TwigFilter('unset', [$this, 'unset']),
         ];
     }
 
@@ -55,7 +79,20 @@ final class SonataExtension extends AbstractExtension
             $data[$name] = $value['value'] ?? null;
         }
 
+
         return array_filter($data);
     }
+
+    public function unset(array $value, string $key)
+    {
+        unset($value[$key]);
+        return $value;
+    }
+
+    public function is_evaluable(Course $course)
+    {
+        return $course instanceof CourseAssessmentInterface;
+    }
+
 }
 

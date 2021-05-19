@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Britannia\Infraestructure\Symfony\Admin\Student;
 
-use Britannia\Domain\VO\SchoolCourse;
+use Britannia\Domain\Entity\Student\StudentHasBeenCreated;
 use Britannia\Infraestructure\Symfony\Admin\AdminFilterableInterface;
-use PlanB\DDDBundle\Sonata\Admin\AdminRoutes;
+use PlanB\DDD\Domain\Event\DomainEvent;
+use PlanB\DDD\Domain\Event\EventDispatcher;
 use PlanB\DDDBundle\Symfony\Form\Type\DateType;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -14,13 +15,13 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 
-final class StudentAdmin extends AbstractAdmin implements AdminFilterableInterface
+final class  StudentAdmin extends AbstractAdmin implements AdminFilterableInterface
 {
     protected $datagridValues = [
         'active' => ['value' => true],
     ];
 
-    protected $maxPerPage = 50;
+    protected $maxPerPage = 30;
     protected $maxPageLinks = 10;
     /**
      * @var StudentTools
@@ -60,8 +61,9 @@ final class StudentAdmin extends AbstractAdmin implements AdminFilterableInterfa
 
     protected function configureRoutes(RouteCollection $collection)
     {
-        $collection->clearExcept(AdminRoutes::ROUTE_LIST);
-        return $collection;
+        return $this->adminTools()
+            ->routes($collection, $this->getRouterIdParameter())
+            ->build();
     }
 
     public function createQuery($context = 'list')
@@ -106,6 +108,4 @@ final class StudentAdmin extends AbstractAdmin implements AdminFilterableInterfa
             ->build();
 
     }
-
-
 }

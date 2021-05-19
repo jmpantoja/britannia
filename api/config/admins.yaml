@@ -3,8 +3,8 @@ services:
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
-    
-    
+
+
     admin.staff_member:
         class: Britannia\Infraestructure\Symfony\Admin\Staff\StaffAdmin
         arguments: [~, Britannia\Domain\Entity\Staff\StaffMember, ~]
@@ -16,27 +16,27 @@ services:
 
     admin.student:
         class: Britannia\Infraestructure\Symfony\Admin\Student\StudentAdmin
-        arguments: [~, Britannia\Domain\Entity\Student\Student, ~]
+        arguments: [~, Britannia\Domain\Entity\Student\Student, Britannia\Infraestructure\Symfony\Controller\Admin\StudentController]
         public: true
         tags:
             - { name: sonata.admin, manager_type: orm, label: Alumnos }
         calls:
             - [setSubClasses, [{child: Britannia\Domain\Entity\Student\Child, adult: Britannia\Domain\Entity\Student\Adult}]]
 
-    admin.record:
-        class: Britannia\Infraestructure\Symfony\Admin\Record\RecordAdmin
-        arguments: [~, Britannia\Domain\Entity\Record\Record, ~]
+    admin.notification:
+        class: Britannia\Infraestructure\Symfony\Admin\Notification\NotificationAdmin
+        arguments: [~, Britannia\Domain\Entity\Notification\Notification, ~]
         tags:
             - { name: sonata.admin, manager_type: orm, label: Historial }
         public: true
-
-    admin.tutor:
-        class: Britannia\Infraestructure\Symfony\Admin\Tutor\TutorAdmin
-        arguments: [~, Britannia\Domain\Entity\Student\Tutor, ~]
-        tags:
-            - { name: sonata.admin, manager_type: orm, label: Tutores }
-
-        public: true
+#
+#    admin.tutor:
+#        class: Britannia\Infraestructure\Symfony\Admin\Tutor\TutorAdmin
+#        arguments: [~, Britannia\Domain\Entity\Student\Tutor, ~]
+#        tags:
+#            - { name: sonata.admin, manager_type: orm, label: Tutores }
+#
+#        public: true
 
     admin.course:
         class: Britannia\Infraestructure\Symfony\Admin\Course\CourseAdmin
@@ -44,7 +44,12 @@ services:
         tags:
             - { name: sonata.admin, manager_type: orm, label: Cursos }
         calls:
-            - [setSubClasses, [{adult: Britannia\Domain\Entity\Course\Adult, school: Britannia\Domain\Entity\Course\School, pre_school: Britannia\Domain\Entity\Course\PreSchool}]] 
+            - [setSubClasses, [{adult: Britannia\Domain\Entity\Course\Course\Adult,
+                                school: Britannia\Domain\Entity\Course\Course\School,
+                                pre_school: Britannia\Domain\Entity\Course\Course\PreSchool,
+                                support: Britannia\Domain\Entity\Course\Course\Support,
+                                one_to_one: Britannia\Domain\Entity\Course\Course\OneToOne,
+                               }]]
         public: true
 
     admin.mark:
@@ -52,27 +57,17 @@ services:
         arguments: [~, Britannia\Domain\Entity\Course\Course, Britannia\Infraestructure\Symfony\Controller\Admin\MarkController]
         tags:
             - { name: sonata.admin, manager_type: orm, label: Calificaciones,  }
-        calls: 
-            - [setTemplate, ['edit', 'form/mark/edit.html.twig']] 
+        calls:
+            - [setTemplate, ['edit', 'form/mark/edit.html.twig']]
         public: true
 
     admin.report:
-        class: Britannia\Infraestructure\Symfony\Admin\Report\ReportAdmin
-        arguments: [~, Britannia\Domain\Entity\Course\Course, Britannia\Infraestructure\Symfony\Controller\Admin\ReportController]
+        class: Britannia\Infraestructure\Symfony\Admin\CourseReport\CourseReportAdmin
+        arguments: [~, Britannia\Domain\Entity\Course\Course, Britannia\Infraestructure\Symfony\Controller\Admin\CourseReportController]
         calls:
             - [setTemplate, ['edit', 'form/report/edit.html.twig']]
         tags:
             - { name: sonata.admin, manager_type: orm, label: Informes }
-        public: true
-
-
-    admin.attendance:
-        class: Britannia\Infraestructure\Symfony\Admin\Attendance\AttendanceAdmin
-        arguments: [~, Britannia\Domain\Entity\Lesson\Lesson, ~]
-        tags:
-            - { name: sonata.admin, manager_type: orm, label: Asistencia }
-        calls:
-            - [setTemplate, ['outer_list_rows_mosaic', 'admin/lesson/list_outer_rows_mosaic.html.twig']]
         public: true
 
     admin.academy:
@@ -96,7 +91,6 @@ services:
             - { name: sonata.admin, manager_type: orm, label: Aulas }
         public: true
 
-
     admin.calendar:
         class: Britannia\Infraestructure\Symfony\Admin\Calendar\CalendarAdmin
         arguments: [~, Britannia\Domain\Entity\Calendar\Calendar, Britannia\Infraestructure\Symfony\Controller\Admin\CalendarController]
@@ -118,12 +112,63 @@ services:
             - { name: sonata.admin, manager_type: orm, label: Libros }
         public: true
 
-    admin.level:
-        class: Britannia\Infraestructure\Symfony\Admin\Level\LevelAdmin
-        arguments: [~, Britannia\Domain\Entity\Course\Level, ~]
+    admin.setting:
+        class: Britannia\Infraestructure\Symfony\Admin\Setting\SettingAdmin
+        arguments: [~, Britannia\Domain\Entity\Setting\Setting, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, label: Niveles}
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Setting }
         public: true
-    
-    
-    
+
+
+    admin.issue:
+        class: Britannia\Infraestructure\Symfony\Admin\Issue\IssueAdmin
+        arguments: [~, Britannia\Domain\Entity\Issue\Issue, Britannia\Infraestructure\Symfony\Controller\Admin\IssueController]
+        calls:
+            - [setTemplate, ['edit', 'admin/issue/issue_edit_template.html.twig']]
+            - [setTemplate, ['show', 'admin/issue/issue_show_template.html.twig']]
+            - [setTemplate, ['list', 'admin/issue/issue_list_template.html.twig']]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Observaciones }
+        
+        public: true
+
+    admin.message:
+        class: Britannia\Infraestructure\Symfony\Admin\Message\MessageAdmin
+        arguments: [~, Britannia\Domain\Entity\Message\Message, Britannia\Infraestructure\Symfony\Controller\Admin\MessageController]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Mensajes }
+        calls:
+            - [setSubClasses, [{email: Britannia\Domain\Entity\Message\Message\Email, sms: Britannia\Domain\Entity\Message\Message\Sms }]]
+            - [setTemplate, ['edit', 'admin/message/message_edit_template.html.twig']]
+        public: true
+
+    admin.message.template:
+        class: Britannia\Infraestructure\Symfony\Admin\MessageTemplate\TemplateAdmin
+        arguments: [~, Britannia\Domain\Entity\Message\Template, ~]
+
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Plantillas }
+
+        calls:
+            - [setSubClasses, [{email: Britannia\Domain\Entity\Message\Template\EmailTemplate, sms: Britannia\Domain\Entity\Message\Template\SmsTemplate }]]
+            - [setTemplate, ['edit', 'admin/template/template_edit_template.html.twig']]
+        public: true
+
+
+    admin.invoice:
+        class: Britannia\Infraestructure\Symfony\Admin\Invoice\InvoiceAdmin
+        arguments: [~, Britannia\Domain\Entity\Invoice\Invoice, Britannia\Infraestructure\Symfony\Controller\Admin\InvoiceController]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Recibos }
+        public: true
+
+
+    admin.teacher_course:
+        class: Britannia\Infraestructure\Symfony\Admin\TeacherCourse\TeacherCourseAdmin
+        arguments: [~, Britannia\Domain\Entity\Course\Course, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Mis Cursos }
+        #
+        #        calls:
+        #            - [setTemplate, ['edit', 'admin/teacher/teacher_edit_template.html.twig']]            
+        public: true

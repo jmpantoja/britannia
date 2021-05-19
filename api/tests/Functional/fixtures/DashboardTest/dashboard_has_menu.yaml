@@ -1,0 +1,100 @@
+---
+Data:
+    Menu:
+        Usuarios:
+            index: 0
+            label: Usuarios
+            url: '#'
+        Plantilla:
+            index: 1
+            label: Plantilla
+            url: /admin/britannia/domain/staff-staffmember/list
+        Alumnos:
+            index: 2
+            label: Alumnos
+            url: '#'
+        '>Alumnos':
+            index: 3
+            label: Alumnos
+            url: /admin/britannia/domain/student-student/list
+        Tutores:
+            index: 4
+            label: Tutores
+            url: /admin/britannia/domain/student-tutor/list
+        Cursos:
+            index: 5
+            label: Cursos
+            url: '#'
+        '>Cursos':
+            index: 6
+            label: Cursos
+            url: /admin/britannia/domain/course-course/list
+        Asistencia:
+            index: 7
+            label: Asistencia
+            url: /admin/britannia/domain/lesson-lesson/list
+        Herramientas:
+            index: 8
+            label: Herramientas
+            url: '#'
+        Planning:
+            index: 9
+            label: Planning
+            url: /admin/britannia/planning
+        Historial:
+            index: 10
+            label: Historial
+            url: /admin/britannia/domain/notification-notification/list
+        Observaciones:
+            index: 11
+            label: Observaciones
+            url: /admin/britannia/domain/issue-issue/list
+        Mensajería:
+            index: 12
+            label: Mensajería
+            url: /admin/britannia/domain/message-message/list
+        'Datos auxiliares':
+            index: 13
+            label: 'Datos auxiliares'
+            url: '#'
+        'Otras academias':
+            index: 14
+            label: 'Otras academias'
+            url: /admin/britannia/domain/academy-academy/list
+        Escuelas:
+            index: 15
+            label: Escuelas
+            url: /admin/britannia/domain/school-school/list
+        Aulas:
+            index: 16
+            label: Aulas
+            url: /admin/britannia/domain/classroom-classroom/list
+        Libros:
+            index: 17
+            label: Libros
+            url: /admin/britannia/domain/book-book/list
+        Niveles:
+            index: 18
+            label: Niveles
+            url: /admin/britannia/domain/course-level/list
+        'Curso Escolar':
+            index: 19
+            label: 'Curso Escolar'
+            url: /admin/britannia/domain/schoolcourse-schoolcourse/list
+        Configuración:
+            index: 20
+            label: Configuración
+            url: '#'
+        Calendario:
+            index: 21
+            label: Calendario
+            url: /admin/britannia/domain/calendar-calendar/list
+        Parámetros:
+            index: 22
+            label: Parámetros
+            url: /admin/britannia/domain/setting-setting/__main__/edit
+        'Plantillas SMS':
+            index: 23
+            label: 'Plantillas SMS'
+            url: /admin/britannia/domain/message-template/list
+    

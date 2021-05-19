@@ -3,14 +3,16 @@
 namespace Britannia\Domain\Entity\Staff;
 
 
+use Britannia\Domain\Entity\Attachment\AttachmentList;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Course\CourseList;
+use Britannia\Domain\Entity\Student\Student;
+use Britannia\Domain\VO\StaffMember\Status;
 use Carbon\CarbonImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use PlanB\DDD\Domain\Behaviour\Comparable;
 use PlanB\DDD\Domain\Behaviour\Traits\ComparableTrait;
-use PlanB\DDD\Domain\Model\AggregateRoot;
 use PlanB\DDD\Domain\Model\Traits\AggregateRootTrait;
 use PlanB\DDD\Domain\VO\DNI;
 use PlanB\DDD\Domain\VO\Email;
@@ -81,9 +83,31 @@ class StaffMember implements UserInterface, Serializable, Comparable
     private $courses;
 
     /**
+     * @var Photo
+     */
+    private $photo;
+
+    /** @var Status */
+    private $status;
+
+    /** @var string */
+    private $comment;
+
+    /**
      * @var array
      */
     private $roles;
+
+    /**
+     * @var Collection
+     */
+    private $issues;
+
+    /**
+     * @var Collection
+     */
+    private $attachments;
+
     /**
      * @var CarbonImmutable
      */
@@ -104,6 +128,8 @@ class StaffMember implements UserInterface, Serializable, Comparable
         $this->teacher = true;
         $this->roles = [self::DEFAULT_ROLE];
         $this->courses = new ArrayCollection();
+        $this->attachments = new ArrayCollection();
+        $this->issues = new ArrayCollection();
         $this->createdAt = CarbonImmutable::now();
 
         $this->update($dto);
@@ -117,6 +143,10 @@ class StaffMember implements UserInterface, Serializable, Comparable
         $this->address = $dto->address;
         $this->emails = $dto->emails;
         $this->phoneNumbers = $dto->phoneNumbers;
+        $this->photo = $dto->photo;
+        $this->status = $dto->status;
+        $this->comment = $dto->comment;
+        $this->setAttachments($dto->attachments);
 
         $this->setCourses($dto->courses);
 
@@ -157,6 +187,11 @@ class StaffMember implements UserInterface, Serializable, Comparable
     public function isTeacher(): bool
     {
         return $this->teacher;
+    }
+
+    public function isManager(): bool
+    {
+        return in_array('ROLE_MANAGER', $this->roles);
     }
 
 
@@ -211,6 +246,16 @@ class StaffMember implements UserInterface, Serializable, Comparable
         return $this->phoneNumbers;
     }
 
+    public function setAttachments(AttachmentList $attachments): self
+    {
+        $this->attachmentList()
+            ->forRemovedItems($attachments)
+            ->forAddedItems($attachments);
+
+        return $this;
+    }
+
+
     /**
      * @return Course[]
      */
@@ -261,6 +306,29 @@ class StaffMember implements UserInterface, Serializable, Comparable
     }
 
     /**
+     * @return Student[]
+     */
+    public function attachments(): array
+    {
+        return $this->attachmentList()->toArray();
+    }
+
+    private function attachmentList(): AttachmentList
+    {
+        return AttachmentList::collect($this->attachments);
+    }
+
+
+    /**
+     * @return Collection
+     */
+    public function issues(): Collection
+    {
+        return $this->issues;
+    }
+
+
+    /**
      * Returns the salt that was originally used to encode the password.
      *
      * This can return null if the password was not encoded using a salt.
@@ -306,6 +374,44 @@ class StaffMember implements UserInterface, Serializable, Comparable
 
     }
 
+    /**
+     * @return Photo
+     */
+    public function photo(): ?Photo
+    {
+        return $this->photo;
+    }
+
+    /**
+     * @return Status
+     */
+    public function status(): ?Status
+    {
+        return $this->status;
+    }
+
+    /**
+     * @return string
+     */
+    public function comment(): string
+    {
+        return $this->comment ?? '';
+    }
+
+    public function name(): string
+    {
+        if (!is_null($this->fullName)) {
+            return (string)$this->fullName;
+        }
+
+        return (string)$this->id();
+    }
+
+    public function __toString()
+    {
+        return $this->name();
+    }
+
     public function serialize()
     {
         return serialize(array(
@@ -331,8 +437,6 @@ class StaffMember implements UserInterface, Serializable, Comparable
             $this->userName,
             $this->password,
             ) = unserialize($serialized, array('allowed_classes' => [StaffMemberId::class]));
-
     }
-
 
 }

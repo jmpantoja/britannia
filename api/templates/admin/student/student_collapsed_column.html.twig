@@ -1,0 +1,72 @@
+{% extends 'admin/core/CRUD/base_collapsed_field.html.twig' %}
+
+{% block field %}
+
+    {% if object.adult %}
+        {{ block('adult') }}
+    {% else %}
+        {{ block('child') }}
+    {% endif %}
+{% endblock %}
+
+{% block adult %}
+    <div class="col-md-12 contact">
+        <div class="contact-info">
+            {% with {person: object} %}
+                {{ block('info') }}
+            {% endwith %}
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block child %}
+
+    {% if  object.firstTutor %}
+        {% with {'tutor': object.firstTutor, 'description': object.firstTutorDescription} %}
+            {{ block('tutor') }}
+        {% endwith %}
+    {% endif %}
+
+    {% if  object.secondTutor %}
+        {% with {'tutor': object.secondTutor, 'description': object.secondTutorDescription} %}
+            {{ block('tutor') }}
+        {% endwith %}
+
+    {% endif %}
+
+{% endblock %}
+
+{% block tutor %}
+    <div class="col-md-12 contact">
+        <div class="col-md-2 contact-name">
+            {% if description %}
+                <strong>{{ description | upper }}: </strong>
+            {% endif %}
+            {{ tutor }}
+
+        </div>
+
+        <div class="col-md-10 contact-info">
+            {% with {person: tutor} %}
+                {{ block('info') }}
+            {% endwith %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block info %}
+    {% for phoneNumber in person.phoneNumbers %}
+        <span class="fa fa-phone" aria-hidden="true">
+                    {{ phoneNumber }}
+            {% if phoneNumber.description %}
+                ({{ phoneNumber.description }})
+            {% endif %}
+                </span>
+    {% endfor %}
+
+    {% for email in person.emails %}
+        <span class="fa fa-envelope" aria-hidden="true">&nbsp;{{ email | lower }}</span>
+    {% endfor %}
+
+{% endblock %}

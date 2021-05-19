@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Form\Type\Course\TimeTable;
 
 use Britannia\Domain\Entity\Course\Course;
+use Britannia\Domain\VO\Course\TimeRange\TimeRange;
 use Britannia\Domain\VO\Course\TimeTable\Schedule;
 use Britannia\Domain\VO\Course\TimeTable\TimeTable;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\LockedType;
@@ -32,20 +33,31 @@ class TimeTableType extends AbstractCompoundType
 {
     public function customForm(FormBuilderInterface $builder, array $options)
     {
+        /** @var Course $course */
+        $course = $options['course'];
+
+        $start = $course->start();
+        $end = $course->end();
+        $schedule = $course->schedule();
+
+
         $builder
             ->add('start', DatePickerType::class, [
-                'format' => IntlDateFormatter::LONG,
+                'format' => \IntlDateFormatter::LONG,
                 'label' => 'Inicio',
+                'data' => $start,
                 'attr' => [
                     'data-disabled' => $options['course']->isActive()
                 ]
             ])
             ->add('end', DatePickerType::class, [
-                'format' => IntlDateFormatter::LONG,
+                'format' => \IntlDateFormatter::LONG,
+                'data' => $end,
                 'label' => 'Fin'
             ])
             ->add('schedule', CollectionType::class, [
                 'label' => 'Horario',
+                'data' => $schedule->toArray(),
                 'entry_type' => TimeSheetType::class,
                 'prototype' => true,
                 'allow_add' => true,
@@ -74,9 +86,6 @@ class TimeTableType extends AbstractCompoundType
         $resolver->addAllowedTypes('course', [Course::class]);
     }
 
-    /**
-     * @return FullName
-     */
     public function buildConstraint(array $options): ?Constraint
     {
         return TimeTable::buildConstraint($options);
@@ -97,9 +106,13 @@ class TimeTableType extends AbstractCompoundType
     {
         $schedule = Schedule::fromArray($data['schedule']);
 
-        return TimeTable::make(...[
+        $timeRange = TimeRange::make(...[
             CarbonImmutable::make($data['start']),
-            CarbonImmutable::make($data['end']),
+            CarbonImmutable::make($data['end'])
+        ]);
+
+        return TimeTable::make(...[
+            $timeRange,
             $schedule,
             $data['locked'] ?? null
         ]);

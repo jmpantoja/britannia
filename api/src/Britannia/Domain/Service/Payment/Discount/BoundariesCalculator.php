@@ -22,6 +22,17 @@ use PlanB\DDD\Domain\VO\Percent;
 final class BoundariesCalculator
 {
 
+    public function isLastMonth(Course $course, CarbonImmutable $date): bool
+    {
+        return $course->end()->isSameMonth($date);
+    }
+
+    public function isFirstMonth(Course $course, StudentDiscount $discount, CarbonImmutable $date): bool
+    {
+        $start = $this->startDay($course, $discount);
+        return $start->isSameMonth($date);
+    }
+
     public function startDay(Course $course, StudentDiscount $discount)
     {
         $startDate = $discount->startDate();
@@ -86,4 +97,6 @@ final class BoundariesCalculator
 
         return Percent::make($percent[0]);
     }
+
+
 }

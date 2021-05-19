@@ -28,7 +28,8 @@ class PhoneNumberType extends AbstractCompoundType
     {
         $builder
             ->add('phoneNumber', InputType::class, [
-                'pre_icon' => 'fa fa-phone'
+                'pre_icon' => 'fa fa-phone',
+                'label'=>'Teléfono'
             ])
             ->add('description', InputType::class, [
                 'required' => false
@@ -39,6 +40,7 @@ class PhoneNumberType extends AbstractCompoundType
     {
         $resolver->setDefaults([
             'data_class' => PhoneNumber::class,
+            'label'=>'Descripción'
         ]);
     }
 

@@ -1,0 +1,22 @@
+{% extends get_admin_template('base_list_field', admin.code) %}
+
+{% block field %}
+    <div class="row">
+        <div class="col-md-5">
+            {% set start = object.start | date('Y') %}
+            {% set end = object.end | date('Y') %}
+
+            {% if start == end %}
+                <span class="label label-info label-square">{{ start }}</span>
+            {% else %}
+                <span class="label label-info label-square">{{ start }} / {{ end }}</span>
+            {% endif %}
+
+        </div>
+
+        <div class="col-md-7">
+            del {{ object.start | localizeddate('medium', 'none') }} <br/>
+            al {{ object.end | localizeddate('medium', 'none') }}
+        </div>
+    </div>
+{% endblock %}

@@ -33,9 +33,11 @@ class CommentType extends AbstractCompoundType
             'mapped' => false,
             'label' => false,
             'required' => false,
+            'block_prefix' => 'counter',
             'data' => $term->comment(),
             'attr' => [
-                'maxlength' => 430
+                'maxlength' => 430,
+                'class'=>'counter'
             ]
         ]);
     }

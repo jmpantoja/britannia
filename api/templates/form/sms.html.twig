@@ -1,0 +1,43 @@
+{% use 'form/widgets.html.twig' %}
+
+{% block template_widget %}
+    <div class="sms-template">
+        {{ block('counter_widget') }}
+    </div>
+{% endblock %}
+
+{% block message_email_widget %}
+
+    {% set values = [] %}
+    {%- for key, template in templates -%}
+        {% set values = values | merge ({ (key) : (template.template) } ) %}
+    {%- endfor -%}
+
+
+    {% set attr = {
+        'data-template': 'selector',
+        'data-target': '#' ~  form.message.vars.id ,
+        'data-values': values | json_encode
+    } %}
+
+    {{ form_row(form.template, {'attr': attr}) }}
+    {{ form_row(form.message) }}
+
+{% endblock %}
+
+{% block message_sms_widget %}
+    {% set values = [] %}
+    {%- for key, template in templates -%}
+        {% set values = values | merge ({ (key) : (template.template) } ) %}
+    {%- endfor -%}
+
+
+    {% set attr = {
+        'data-template': 'selector',
+        'data-target': '#' ~  form.message.vars.id ,
+        'data-values': values | json_encode
+    } %}
+
+    {{ form_row(form.template, {'attr': attr}) }}
+    {{ form_row(form.message) }}
+{% endblock %}

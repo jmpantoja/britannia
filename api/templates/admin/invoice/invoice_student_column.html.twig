@@ -1,0 +1,16 @@
+{% extends get_admin_template('base_list_field', admin.code) %}
+
+{% block field %}
+    {% set adminStudent = admin.configurationPool.adminByAdminCode('admin.student') %}
+
+    {% if adminStudent.hasAccess('edit', object.student) %}
+        <a href="{{ adminStudent.generateUrl('edit', {id:object.student.id}) }}">
+            {{ object.student.fullName }}
+        </a>
+    {% else %}
+        {{ object.student.fullName }}
+    {% endif %}
+
+{% endblock %}
+
+

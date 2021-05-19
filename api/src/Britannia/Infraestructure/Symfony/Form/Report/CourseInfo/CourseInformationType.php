@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Form\Report\CourseInfo;
 
 
-use Britannia\Application\UseCase\Report\GenerateCourseInformation;
+use Britannia\Application\UseCase\CourseReport\GenerateCourseInformation;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\VO\CourseInfoData;
 use Britannia\Domain\VO\Discount\StudentDiscount;
-use Britannia\Infraestructure\Symfony\Admin\Report\ReportAdmin;
+use Britannia\Infraestructure\Symfony\Admin\CourseReport\CourseReportAdmin;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\Discount\FamilyOrderType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\Discount\FreeEnrollmentType;
 use Britannia\Infraestructure\Symfony\Form\Type\Student\JobStatusType;
@@ -85,7 +85,7 @@ class CourseInformationType extends AbstractCompoundType
         ]);
 
         $resolver->setRequired('admin');
-        $resolver->setAllowedTypes('admin', [ReportAdmin::class]);
+        $resolver->setAllowedTypes('admin', [CourseReportAdmin::class]);
     }
 
     /**

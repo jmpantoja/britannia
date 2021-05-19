@@ -14,12 +14,16 @@ declare(strict_types=1);
 namespace Britannia\Domain\VO\Course\Book;
 
 
-use MabeEnum\Enum;
+use PlanB\DDD\Domain\Enum\Enum;
 
-
+/**
+ * @method static self STUDENT_BOOK()
+ * @method static self WORK_BOOK()
+ * @method static self TEACHER_BOOK()
+ */
 class BookCategory extends Enum
 {
-    public const STUDENT_BOOK = 'Estudiante';
-    public const WORK_BOOK = 'Ejercicios';
-    public const TEACHER_BOOK = 'Profesor';
+    private const STUDENT_BOOK = 'Student Book';
+    private const WORK_BOOK = 'Workbook';
+    private const TEACHER_BOOK = 'Teacher Book';
 }

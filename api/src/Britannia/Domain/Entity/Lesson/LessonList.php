@@ -15,6 +15,7 @@ namespace Britannia\Domain\Entity\Lesson;
 
 
 use Britannia\Domain\Entity\Course\Course;
+use Britannia\Domain\Entity\Course\Pass\Pass;
 use Britannia\Domain\VO\Course\Locked\Locked;
 use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\Model\EntityList;
@@ -35,25 +36,26 @@ class LessonList extends EntityList
         });
     }
 
-    public function update(LessonList $lessons, Locked $locked, Course $course): self
+    public function update(LessonList $lessons, Locked $locked, Course $course, ?Pass $pass = null): self
     {
         if ($locked->isLocked()) {
             return $this;
         }
 
         $this->clear($locked);
-        $lessons->reindex($course, $this->count());
+        $lessons->reindex($this->count(), $course, $pass);
+
         $this->forAddedItems($lessons);
 
         return $this;
     }
 
-    private function reindex(Course $course, int $offset)
+    private function reindex(int $offset, Course $course, ?Pass $pass)
     {
         $number = PositiveInteger::make($offset + 1);
-        $this->values()->each(function (Lesson $lesson, int $index) use ($course, $number) {
+        $this->values()->each(function (Lesson $lesson, int $index) use ($course, $pass, $number) {
             $number = $number->addInteger($index);
-            $lesson->attach($course, $number);
+            $lesson->attachCourse($number, $course, $pass);
         });
     }
 
@@ -94,5 +96,6 @@ class LessonList extends EntityList
     {
         return $this->values()->last()->day();
     }
+
 
 }

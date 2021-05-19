@@ -58,7 +58,7 @@ class Calendar
     {
         $date = $dateTime->setTime(0, 0, 0);
 
-        $this->id = $date->format('U');
+        $this->id = $date->format('Ymd');
         $this->date = $date;
         $this->year = $date->format('Y');
         $this->month = $date->format('m');

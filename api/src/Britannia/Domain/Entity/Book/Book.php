@@ -16,9 +16,10 @@ namespace Britannia\Domain\Entity\Book;
 
 use Britannia\Domain\VO\Course\Book\BookCategory;
 use Carbon\CarbonImmutable;
+use Exception;
 use PlanB\DDD\Domain\VO\Price;
 
-final class Book
+class Book
 {
     /**
      * @var TermId
@@ -34,6 +35,11 @@ final class Book
      * @var BookCategory
      */
     private $category;
+
+    /**
+     * @var Price
+     */
+    private $pvp;
 
     /**
      * @var Price
@@ -67,6 +73,7 @@ final class Book
     public function update(BookDto $dto): self
     {
         $this->name = $dto->name;
+        $this->pvp = $dto->pvp;
         $this->price = $dto->price;
         $this->category = $dto->category;
 
@@ -93,9 +100,9 @@ final class Book
     /**
      * @return Price
      */
-    public function price(): Price
+    public function pvp(): Price
     {
-        return $this->price;
+        return $this->pvp;
     }
 
     /**

@@ -1,0 +1,29 @@
+---
+update some values:
+    key: 30a39a43-ca02-4519-b361-e906f48bc263
+    values:
+        fullName:
+            firstName: pepe
+            lastName: dominguez
+        address:
+            address: calle   melancolia 13
+            postalCode: 11200
+
+        roles:
+            - ROLE_MANAGER
+            - false
+            - ROLE_TEACHER
+
+        courses:
+            - '803078d5-11bb-45c7-a3d3-7cc395a303f4'
+            - '8c77a095-9e6b-4f92-b6d0-70d0a2fb8d90'
+
+    expected:
+        fullName: Pepe Dominguez
+        address: Calle Melancolia 13. 11200
+        courses: 2
+        roles:
+            - ROLE_MANAGER
+            - ROLE_TEACHER
+            - ROLE_SONATA_ADMIN
+                    

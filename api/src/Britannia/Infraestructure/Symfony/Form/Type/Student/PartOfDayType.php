@@ -17,47 +17,21 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Student;
 use Britannia\Domain\VO\Student\PartOfDay\PartOfDay;
 use Britannia\Domain\VO\Validator;
 use Britannia\Infraestructure\Symfony\Validator\FullName;
-use PlanB\DDD\Domain\VO\Validator\Constraint;
-use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
-use Symfony\Component\Form\ChoiceList\Loader\CallbackChoiceLoader;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use PlanB\DDDBundle\Symfony\Form\Type\EnumType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class PartOfDayType extends AbstractSingleType
+class PartOfDayType extends EnumType
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getParent()
-    {
-        return ChoiceType::class;
-    }
-
-
     public function customOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'required' => false,
-            'choice_loader' => new CallbackChoiceLoader(function () {
-                $values = array_flip(PartOfDay::getConstants());
-                return array_merge(['' => ''], $values);
-            }),
             'attr' => array('style' => 'max-width: 150px')
         ]);
     }
 
-    /**
-     * @return FullName
-     */
-    public function buildConstraint(array $options): ?Constraint
+    public function getEnumClass(): string
     {
-        return new \Britannia\Domain\VO\Student\PartOfDay\Validator\PartOfDay([
-            'required' => $options['required']
-        ]);
-    }
-
-    public function customMapping($data)
-    {
-        return PartOfDay::byName($data);
+        return PartOfDay::class;
     }
 }

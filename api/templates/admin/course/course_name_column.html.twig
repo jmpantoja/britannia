@@ -1,0 +1,8 @@
+{% extends get_admin_template('base_list_field', admin.code) %}
+
+{% block field %}
+    <strong>
+        <a href="{{ admin.generateObjectUrl('edit', object) }}">{{ object.name }}</a>
+    </strong>
+    <p style="font-style: italic;">{{ object.description }} &nbsp;</p>
+{% endblock %}

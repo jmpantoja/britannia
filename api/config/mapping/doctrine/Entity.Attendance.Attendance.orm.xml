@@ -9,6 +9,7 @@
             table="attendance_control"
             repository-class="Britannia\Infraestructure\Doctrine\Repository\AttendanceRepository">
 
+        <cache usage="NONSTRICT_READ_WRITE" />
         <id name="id" type="AttendanceId" column="id">
             <generator strategy="CUSTOM"/>
             <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
@@ -24,7 +25,9 @@
             <join-column on-delete="CASCADE"></join-column>
         </many-to-one>
 
-        <many-to-one field="student" target-entity="Britannia\Domain\Entity\Student\Student"/>
+        <many-to-one field="student" target-entity="Britannia\Domain\Entity\Student\Student">
+            <join-column on-delete="CASCADE"></join-column>
+        </many-to-one>
         <many-to-one field="course" target-entity="Britannia\Domain\Entity\Course\Course"/>
     </entity>
 

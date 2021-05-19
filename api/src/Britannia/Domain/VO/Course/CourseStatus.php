@@ -14,14 +14,19 @@ declare(strict_types=1);
 namespace Britannia\Domain\VO\Course;
 
 
-use MabeEnum\Enum;
+use PlanB\DDD\Domain\Enum\Enum;
 
+/**
+ * @method static self PENDING()
+ * @method static self ACTIVE()
+ * @method static self FINALIZED()
+ */
 class CourseStatus extends Enum
 {
 
-    public const PENDING = 'Pendiente';
-    public const ACTIVE = 'En Curso';
-    public const FINALIZED = 'Finalizado';
+    private const PENDING = 'Pendiente';
+    private const ACTIVE = 'En Curso';
+    private const FINALIZED = 'Finalizado';
 
     public function isPending(): bool
     {

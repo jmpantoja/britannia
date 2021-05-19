@@ -14,30 +14,35 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Student;
 
 
-use Britannia\Domain\Entity\Record\AbstractRecordEvent;
-use Britannia\Domain\Entity\Record\TypeOfRecord;
+use Britannia\Domain\Entity\Course\Course;
+use Britannia\Domain\Entity\Notification\NotificationEvent;
+use Britannia\Domain\Entity\Notification\TypeOfNotification;
+use Carbon\CarbonImmutable;
 
-class StudentHasJoinedToCourse extends AbstractRecordEvent
+class StudentHasJoinedToCourse extends NotificationEvent
 {
 
     public static function make(StudentCourse $studentCourse): self
     {
         $student = $studentCourse->student();
         $course = $studentCourse->course();
-        $description = sprintf('Se une al curso %s', $course->name());
 
-        $date = null;
-        if ($course->isFinalized()) {
-            $date = $course->start();
-        }
+        $date = PHP_SAPI === 'cli' ? $date = $course->start() : CarbonImmutable::now();
 
-        return new self($student, $course, $description, $date);
+        return self::builder($student, $course)
+            ->withDate($date);
+
     }
 
 
-    public function getType(): TypeOfRecord
+    public function type(): TypeOfNotification
     {
-        return TypeOfRecord::COURSE();
+        return TypeOfNotification::STUDENT_BEGINS_COURSE();
+    }
+
+    protected function makeSubject(): string
+    {
+        return sprintf('%s se incorpora al curso %s', $this->student, $this->course);
     }
 
 }

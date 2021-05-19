@@ -54,7 +54,7 @@ final class MarkReportAverageCalculator
     private function carry()
     {
         return function (array $carry, array $report) {
-            foreach (SetOfSkills::SET_OF_SIX() as $skill) {
+            foreach (SetOfSkills::SET_OF_SIX()->toList() as $skill) {
                 $data[$skill] = ($carry[$skill] ?? 0) + ($report[$skill] ?? 0);
             }
             return $data;

@@ -4,9 +4,11 @@ namespace Britannia\Domain\Entity\Student;
 
 
 use Britannia\Domain\Entity\Academy\Academy;
+use Britannia\Domain\Entity\Attachment\AttachmentList;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Course\CourseList;
 use Britannia\Domain\VO\Payment\Payment;
+use Britannia\Domain\VO\Student\Alert\Alert;
 use Britannia\Domain\VO\Student\ContactMode\ContactMode;
 use Britannia\Domain\VO\Student\OtherAcademy\NumOfYears;
 use Britannia\Domain\VO\Student\OtherAcademy\OtherAcademy;
@@ -15,6 +17,7 @@ use Carbon\CarbonImmutable;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Persistence\Event\LifecycleEventArgs;
 use PlanB\DDD\Domain\Behaviour\Comparable;
 use PlanB\DDD\Domain\Behaviour\Traits\ComparableTrait;
 use PlanB\DDD\Domain\Model\Traits\AggregateRootTrait;
@@ -23,7 +26,6 @@ use PlanB\DDD\Domain\VO\FullName;
 use PlanB\DDD\Domain\VO\PhoneNumber;
 use PlanB\DDD\Domain\VO\PositiveInteger;
 use PlanB\DDD\Domain\VO\PostalAddress;
-
 
 abstract class Student implements Comparable
 {
@@ -124,13 +126,10 @@ abstract class Student implements Comparable
     /**
      * @var string
      */
-    private $firstComment;
+    private $comment;
 
-    /**
-     * @var string
-     */
-    private $secondComment;
-
+    /** @var Alert */
+    private $alert;
 
     /**
      * @var bool
@@ -152,10 +151,15 @@ abstract class Student implements Comparable
      */
     private $birthMonth;
 
+    /** @var Photo */
+    private $photo;
+
     /**
      * @var Collection
      */
-    private $records;
+    private $attachments;
+
+    private $notifications;
 
     /**
      * @var CarbonImmutable
@@ -166,6 +170,7 @@ abstract class Student implements Comparable
      * @var CarbonImmutable
      */
     private $updatedAt;
+
 
     public static function make(StudentDto $dto): self
     {
@@ -178,12 +183,14 @@ abstract class Student implements Comparable
         $this->relatives = new ArrayCollection();
         $this->studentHasCourses = new ArrayCollection();
         $this->records = new ArrayCollection();
+        $this->attachments = new ArrayCollection();
+        $this->notifications = new ArrayCollection();
         $this->createdAt = CarbonImmutable::now();
+        $this->updatedAt = CarbonImmutable::now();
 
         static::update($dto);
-
-        $this->notify(StudentHasBeenCreated::make($this));
     }
+
 
     public function update(StudentDto $dto): self
     {
@@ -195,8 +202,9 @@ abstract class Student implements Comparable
         $this->freeEnrollment = $dto->freeEnrollment;
         $this->payment = $dto->payment;
 
-        $this->firstComment = $dto->firstComment;
-        $this->secondComment = $dto->secondComment;
+        $this->comment = $dto->comment;
+
+        $this->alert = $dto->alert;
 
         $this->preferredPartOfDay = $dto->preferredPartOfDay;
         $this->preferredContactMode = $dto->preferredContactMode;
@@ -205,9 +213,12 @@ abstract class Student implements Comparable
         $this->termsOfUseStudent = $dto->termsOfUseStudent;
         $this->termsOfUseImageRigths = $dto->termsOfUseImageRigths;
 
+        $this->photo = $dto->photo;
+
         $this->setOtherAcademy($dto->otherAcademy);
         $this->setRelatives($dto->relatives);
         $this->setCourses($dto->studentHasCourses);
+        $this->setAttachments($dto->attachments);
         $this->setBirthDate($dto->birthDate);
 
         $this->updatedAt = CarbonImmutable::now();
@@ -224,6 +235,7 @@ abstract class Student implements Comparable
     public function setCourses(CourseList $courses): self
     {
         $this->studentHasCoursesList()
+            ->onlyActives()
             ->toCourseList()
             ->forRemovedItems($courses, [$this, 'removeCourse'])
             ->forAddedItems($courses, [$this, 'addCourse']);
@@ -233,13 +245,8 @@ abstract class Student implements Comparable
 
     public function removeCourse(Course $course): self
     {
-        $joined = StudentCourse::make($this, $course);
-
         $this->studentHasCoursesList()
-            ->remove($joined, function (StudentCourse $studentCourse) {
-                $event = StudentHasLeavedCourse::make($studentCourse);
-                $this->notify($event);
-            });
+            ->studentLeaveACourse($course);
 
         return $this;
     }
@@ -248,11 +255,25 @@ abstract class Student implements Comparable
     {
         $joined = StudentCourse::make($this, $course);
 
+        if ($this->studentHasCoursesList()->hasActive($joined)) {
+            return $this;
+        }
+
         $this->studentHasCoursesList()
-            ->add($joined, function (StudentCourse $student) {
-                $event = StudentHasJoinedToCourse::make($student, $this);
-                $this->notify($event);
+            ->add($joined, function (StudentCourse $joined) {
+                $this->studentHasCourses->add($joined);
+                $event = StudentHasJoinedToCourse::make($joined);
+                $joined->notify($event);
             });
+
+        return $this;
+    }
+
+    public function setAttachments(AttachmentList $attachments): self
+    {
+        $this->attachmentList()
+            ->forRemovedItems($attachments)
+            ->forAddedItems($attachments);
 
         return $this;
     }
@@ -324,7 +345,9 @@ abstract class Student implements Comparable
 
     public function updateStatus(): self
     {
+
         $total = $this->activeCourses()->count();
+
         $this->active = $total > 0;
         return $this;
     }
@@ -350,7 +373,7 @@ abstract class Student implements Comparable
      */
     public function isChild(): bool
     {
-        return static::class === Adult::class;
+        return static::class === Child::class;
     }
 
     /**
@@ -429,8 +452,8 @@ abstract class Student implements Comparable
     public function activeCourses(): CourseList
     {
         return $this->studentHasCoursesList()
-            ->toCourseList()
-            ->onlyActives();
+            ->onlyActives()
+            ->toCourseList();
     }
 
     public function studentHasCourses(): array
@@ -454,6 +477,37 @@ abstract class Student implements Comparable
     private function relativesList(): StudentList
     {
         return StudentList::collect($this->relatives);
+    }
+
+
+    /**
+     * @return Student[]
+     */
+    public function attachments(): array
+    {
+        return $this->attachmentList()->toArray();
+    }
+
+    private function attachmentList(): AttachmentList
+    {
+        return AttachmentList::collect($this->attachments);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function notifications(): array
+    {
+        return $this->notifications->toArray();
+    }
+
+
+    /**
+     * @return Photo
+     */
+    public function photo(): ?Photo
+    {
+        return $this->photo;
     }
 
     /**
@@ -529,7 +583,7 @@ abstract class Student implements Comparable
     /**
      * @return string
      */
-    public function firstContact(): string
+    public function firstContact(): ?string
     {
         return $this->firstContact;
     }
@@ -538,17 +592,17 @@ abstract class Student implements Comparable
     /**
      * @return string
      */
-    public function firstComment(): string
+    public function comment(): string
     {
-        return $this->firstComment;
+        return $this->comment;
     }
 
     /**
-     * @return string
+     * @return Alert
      */
-    public function secondComment(): string
+    public function alert(): Alert
     {
-        return $this->secondComment;
+        return $this->alert ?? Alert::default();
     }
 
     /**
@@ -601,9 +655,33 @@ abstract class Student implements Comparable
     }
 
 
-
     public function __toString()
     {
         return $this->name();
+    }
+
+    public function firstDayInCourse(Course $course): ?CarbonImmutable
+    {
+        $studentHasCourse = $this->studentHasCoursesList()
+            ->withActiveCourse($course);
+
+        if (!($studentHasCourse instanceof StudentCourse)) {
+            return null;
+        }
+
+        return $studentHasCourse->timeRange()->start();
+    }
+
+    public function postPersist(LifecycleEventArgs $eventArgs)
+    {
+        $student = $eventArgs->getObject();
+        $this->notify(StudentHasBeenCreated::make($student));
+        $this->notify(StudentHasBeenUpdated::make($student));
+    }
+
+    public function postUpdate(LifecycleEventArgs $eventArgs)
+    {
+        $student = $eventArgs->getObject();
+        $this->notify(StudentHasBeenUpdated::make($student));
     }
 }

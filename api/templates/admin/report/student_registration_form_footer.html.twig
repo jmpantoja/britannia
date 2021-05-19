@@ -1,0 +1,96 @@
+{% extends 'base_pdf.html.twig' %}
+
+{% block stylesheets %}
+    {#    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">#}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css">
+{% endblock %}
+
+{% block style %}
+    <style>
+        .signed .name,
+        .signed .signed-box,
+        .signed .date {
+            float: right;
+            clear: both;
+            width: 100%;
+            text-align: right;
+            font-style: italic;
+            margin-right: 0.5em;
+        }
+
+
+        .signed .signed-box {
+            width: 300px;
+            height: 100px;
+            text-align: center;
+            font-style: normal;
+        }
+
+        .warning,
+        .signed,
+        .clause .label {
+            width: 100%;
+            font-size: 0.7em;
+            margin-top: 1em;
+        }
+
+        .clause .text {
+            font-size: 0.5em;
+        }
+
+        .printed_date {
+            font-size: 0.5em;
+            font-weight: bold;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="warning">
+        <span>El abajo firmante declara estar informado de las normas de funcionamiento de la academia y por ello las acepta.</span>
+    </div>
+
+    <table class="signed">
+        <tr>
+            <td colspan="4">
+                <div class="name">
+                    {% if student.adult %}
+                        {% with {person: student} %}
+                            {{ block('signed_by') }}
+                        {% endwith %}
+                    {% else %}
+                        {% set tutor = student.firstTutor | default(student.secondTutor) %}
+                        {% with {person: tutor, child: student} %}
+                            {{ block('signed_by') }}
+                        {% endwith %}
+                    {% endif %}
+                </div>
+
+                <div class="signed-box">
+                    <span>Firma:</span>
+                </div>
+
+                <div class="date">
+                    <span>El Puerto de Santa María a {{ date() | localizeddate('long', 'none') }}</span><br/>
+                </div>
+            </td>
+    </table>
+
+    <div class="clause">
+        <span class="label">*Clausula Informativa</span>
+        <div class="text">
+            {{ setting.cashPaymentsClause | raw }}
+        </div>
+    </div>
+
+    <div class="printed_date">
+        Academia Britannia a {{ date() | localizeddate('medium', 'none') }}
+    </div>
+{% endblock %}
+
+{% block signed_by %}
+    {{ person.fullName }}{% if person.dni %}, con DNI {{ person.dni }}{% endif %}
+    {%- if child is defined -%}
+        , tutor legal de {{ child.fullName }}
+    {%- endif -%}
+{% endblock %}

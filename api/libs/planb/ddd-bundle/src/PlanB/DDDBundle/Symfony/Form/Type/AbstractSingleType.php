@@ -37,15 +37,15 @@ abstract class AbstractSingleType extends AbstractType implements DataTransforme
 
     private $empty_data;
 
-    final public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
 
         $this->builder = $builder;
         $this->options = $this->builder->getOptions();
 
         $builder->addModelTransformer($this);
-        $this->customForm($builder, $options);
 
+        $this->customForm($builder, $options);
     }
 
     public function customForm(FormBuilderInterface $builder, array $options)
@@ -110,7 +110,7 @@ abstract class AbstractSingleType extends AbstractType implements DataTransforme
     /**
      * {@inheritdoc}
      */
-    final public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired([
             'data_class',
@@ -172,7 +172,7 @@ abstract class AbstractSingleType extends AbstractType implements DataTransforme
      *
      * @throws \ReflectionException
      */
-    final public function reverseTransform($value)
+    public function reverseTransform($value)
     {
         $this->options = $this->builder->getOptions();
 

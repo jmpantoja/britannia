@@ -1,6 +1,7 @@
 {% set hasMarks = false %}
-{% if object.numOfStudents > 0 %}
-    {% set hasMarks = object.diagnosticTest or object.finalTest or object.numOfTerms > 0 %}
+
+{% if object.numOfStudents > 0 and object is evaluable %}
+    {% set hasMarks = object.assessment.hasAnyMarks %}
 {% endif %}
 
 
@@ -9,5 +10,7 @@
     <a class="btn btn-link" href="{{ marks }}">Notas</a>
 {% endif %}
 
-{% set reports = admin.configurationPool.adminByAdminCode('admin.report').generateObjectUrl('edit', object) %}
-<a class="btn btn-link" href="{{ reports }}">Informes</a>
+{% if object.isOnetoOne == false %}
+    {% set reports = admin.configurationPool.adminByAdminCode('admin.report').generateObjectUrl('edit', object) %}
+    <a class="btn btn-link" href="{{ reports }}">Informes</a>
+{% endif %}

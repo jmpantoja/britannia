@@ -1,4 +1,30 @@
 parameters:
+    courses:
+        PRE:
+            ageAtTheBeginning: 3
+            numOfCourses: 3
+        EPO:
+            ageAtTheBeginning: 6
+            numOfCourses: 6
+        ESO:
+            ageAtTheBeginning: 12
+            numOfCourses: 4
+
+        BACHILLERATO:
+            ageAtTheBeginning: 16
+            numOfCourses: 2
+        FP:
+            ageAtTheBeginning: 16
+            numOfCourses: 2
+
+    descom:
+        url: 'https://api.descomsms.com/api/sms/send'
+        user: '%env(DESCOM_USER)%'
+        password: '%env(DESCOM_PASSWORD)%'
+
+    attachments_dir: '%kernel.project_dir%/uploads/attachments'
+    photos_dir: '%kernel.project_dir%/uploads/photos'
+
     marks:
         unit_percent_weight: 30
 
@@ -15,3 +41,4 @@ parameters:
             unemployed: 5
             retired: 5
             disabled: 5
+            

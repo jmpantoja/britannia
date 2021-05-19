@@ -38,7 +38,7 @@ class DiagnosticExamListType extends AbstractCompoundType
         /** @var Course $course */
         $course = $options['data'];
 
-        $courseHasStudents = $course->courseHasStudents();
+        $courseHasStudents = $course->activeCourseHasStudents();
 
         foreach ($courseHasStudents as $courseHasStudent) {
             $field = $this->getFieldName($courseHasStudent);

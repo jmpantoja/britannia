@@ -25,7 +25,16 @@
             </div>
 
             <div class="col-md-2">
-                {{ form_row(form.startDate) }}
+                {% set attr = {
+                    'data-course-information': 'date',
+                    'data-endpoint': url,
+                    'data-first-month': '#'~form.firstMonth.vars.id,
+                    'data-first-month-desc': '.start_price .info',
+                    'data-last-month': '#'~form.lastMonth.vars.id,
+                    'data-last-month-desc': '.end_price .info'
+                } %}
+
+                {{ form_row(form.startDate, {'attr': attr}) }}
             </div>
             <div class="col-md-2 price start_price">
                 {{ form_row(form.firstMonth) }}
@@ -38,90 +47,37 @@
         </div>
     </div>
 
-    <script type="application/javascript">
-        $(function () {
-            let date = $('#dp_{{ form.startDate.vars.id }}');
-            let update = function () {
-
-                let first_month = $('#{{ form.firstMonth.vars.id }}');
-                let first_month_desc = $('.start_price .info');
-
-                let last_month = $('#{{ form.lastMonth.vars.id }}');
-                let last_month_desc = $('.end_price .info');
-
-                $.ajax({
-                    type: 'POST',
-                    url: '{{ url }}',
-                    data: {
-                        'startDate': $(this).find('input').val()
-                    },
-                    dataType: "json",
-                    success: function (data) {
-                        $(first_month).val(data.first_month_price)
-                        $(first_month_desc).text(data.first_month_description)
-
-                        $(last_month).val(data.last_month_price)
-                        $(last_month_desc).text(data.last_month_description)
-                    }
-                });
-            }
-
-            $(date).change(update);
-        })
-
-
-    </script>
-
 {% endblock %}
 
 {% block  course_marks_widget %}
     <div id="tab2" class="row course_mark">
-        <div class="col-md-6">
-            <div id="term" class="col-md-12">
+        <div class="col-md-12">
+            <div class="col-md-2">
                 {{ form_row(form.selected) }}
-                {{ form_row(form.termName) }}
+
+                {% set attr = {
+                    'data-term': 'date',
+                    'data-url': url,
+                    'data-start': '#%s' | format(form.start.vars.id),
+                    'data-end': '#%s' | format(form.end.vars.id)
+                } %}
+
+                {{ form_row(form.termName, {'attr': attr}) }}
             </div>
 
-            <div id="range" class="col-md-12 no-padding">
-
-                <div id="range-start" class="col-md-4">
+            <div class="col-md-4">
+                <div class="col-md-6 no-padding">
                     {{ form_row(form.start) }}
                 </div>
-                <div id="range-end" class="col-md-4">
+                <div class="col-md-6 no-padding">
                     {{ form_row(form.end) }}
                 </div>
             </div>
         </div>
-
-        <div class="col-md-6">
+        <p>&nbsp;</p>
+        <div class="col-md-12">
             {{ form_row(form.students) }}
         </div>
-
-
-        <script type="application/javascript">
-            $(function () {
-                let start = $('#range-start input');
-                let end = $('#range-end input');
-
-                let update = function () {
-                    $.ajax({
-                        type: 'POST',
-                        url: '{{ url }}',
-                        data: {
-                            'term': $(this).val()
-                        },
-                        dataType: "json",
-                        success: function (data) {
-                            start.val(data.start)
-                            end.val(data.end)
-                        }
-                    });
-                }
-
-                $('#term select').on('change', update)
-                $('#term select').trigger('change')
-            })
-
-        </script>
     </div>
 {% endblock %}
+

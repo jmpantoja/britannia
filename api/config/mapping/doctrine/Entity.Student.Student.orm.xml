@@ -6,6 +6,12 @@
 
     <entity name="Britannia\Domain\Entity\Student\Student" table="students" inheritance-type="JOINED">
 
+        <cache usage="NONSTRICT_READ_WRITE" region="day"/>
+
+        <indexes>
+            <index columns="full_name" flags="fulltext"/>
+        </indexes>
+
         <discriminator-column name="type" type="string"/>
         <discriminator-map>
             <discriminator-mapping value="child" class="Britannia\Domain\Entity\Student\Child"/>
@@ -19,13 +25,12 @@
 
         <one-to-many field="studentHasCourses" target-entity="Britannia\Domain\Entity\Student\StudentCourse"
                      mapped-by="student" orphan-removal="true">
-
             <cascade>
                 <cascade-persist/>
             </cascade>
         </one-to-many>
 
-        <field name="oldId" column="old_id" type="integer" nullable="true"></field>
+        <field name="oldId" column="old_id" type="integer" nullable="true"/>
 
         <field name="active" type="boolean" column="active"/>
 
@@ -46,11 +51,11 @@
         <field name="freeEnrollment" type="boolean"/>
 
         <many-to-many field="relatives" target-entity="Student">
+            <cache usage="NONSTRICT_READ_WRITE" region="day"/>
             <cascade>
                 <cascade-all/>
             </cascade>
         </many-to-many>
-
 
         <embedded name="payment" class="Britannia\Domain\VO\Payment\Payment"/>
 
@@ -59,19 +64,38 @@
         <field name="preferredContactMode" column="preferredContactMode" type="ContactMode"/>
 
         <many-to-one field="academy" target-entity="Britannia\Domain\Entity\Academy\Academy">
-            <join-column name="other_academy_id"></join-column>
+            <cache usage="NONSTRICT_READ_WRITE" region="day"/>
+            <join-column name="other_academy_id" on-delete="SET NULL"/>
         </many-to-one>
 
+        <one-to-many field="attachments" target-entity="Britannia\Domain\Entity\Student\Attachment"
+                     mapped-by="student"
+                     orphan-removal="true">
+            <cache usage="NONSTRICT_READ_WRITE" region="day"/>
+            <order-by>
+                <order-by-field name="createdAt"/>
 
-        <one-to-many field="records" target-entity="Britannia\Domain\Entity\Record\Record" mapped-by="student"
-                     orphan-removal="true"/>
+            </order-by>
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </one-to-many>
+
+        <one-to-one field="photo" target-entity="Britannia\Domain\Entity\Student\Photo"
+                    orphan-removal="true">
+            <cache usage="NONSTRICT_READ_WRITE" region="day"/>
+            <join-column on-delete="SET NULL"/>
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </one-to-one>
 
         <field name="academyNumOfYears" column="other_academy_time" type="NumOfYears"/>
         <field name="firstContact" nullable="true"/>
 
-        <field name="firstComment" column="first_comment" nullable="true" type="text"></field>
+        <field name="comment" column="comment" nullable="true" type="text"></field>
 
-        <field name="secondComment" column="second_comment" nullable="true" type="text"></field>
+        <field name="alert" column="alert" nullable="true" type="Alert"></field>
 
         <field name="termsOfUseAcademy" type="boolean"/>
 
@@ -82,6 +106,11 @@
         <field name="createdAt" type="datetime_immutable"/>
 
         <field name="updatedAt" type="datetime_immutable"/>
+
+        <lifecycle-callbacks>
+            <lifecycle-callback type="postPersist" method="postPersist"/>
+            <lifecycle-callback type="postUpdate" method="postUpdate"/>
+        </lifecycle-callbacks>
 
     </entity>
 

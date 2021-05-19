@@ -15,63 +15,22 @@ namespace Britannia\Domain\Service\Report;
 
 
 use Britannia\Domain\Entity\Course\Course;
+use Britannia\Domain\Entity\Setting\Setting;
 use Britannia\Domain\VO\Discount\StudentDiscount;
 
-final class CourseInformation implements HtmlBasedPdfInterface
+final class CourseInformation extends HtmlBasedPdfReport
 {
-    /**
-     * @var array
-     */
-    private array $params;
-
-    /**
-     * @var array
-     */
-    private array $options;
-
-    /**
-     * @var string
-     */
-    private string $title;
-
-
-    private function __construct(array $params, string $title)
-    {
-        $this->params = $params;
-        $this->title = $title;
-        $this->options = [
-            'page-size' => 'A5'
-        ];
-    }
-
-    public static function make(Course $course, StudentDiscount $discount, CourseInformationParamsGenerator $generator)
+    public static function make(Course $course,
+                                StudentDiscount $discount,
+                                CourseInformationParamsGenerator $generator,
+                                Setting $setting)
     {
         $params = $generator->generate($course, $discount);
-        return new self($params, $course->name());
-    }
+        $params['setting'] = $setting;
 
-    /**
-     * @return array
-     */
-    public function params(): array
-    {
-        return $this->params;
-    }
-
-    /**
-     * @return array
-     */
-    public function options(): array
-    {
-        return $this->options;
-    }
-
-    /**
-     * @return string
-     */
-    public function title(): string
-    {
-        return $this->title;
+        return new self($course->name(), $params, [
+            'page-size' => 'A5'
+        ]);
     }
 
 }

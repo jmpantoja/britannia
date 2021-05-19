@@ -5,7 +5,12 @@ namespace Britannia\Infraestructure\Doctrine\Repository;
 use Britannia\Domain\Entity\Assessment\Term;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Lesson\Lesson;
+use Britannia\Domain\Entity\Staff\StaffMember;
+use Britannia\Domain\Entity\Student\Student;
+use Britannia\Domain\Entity\Student\StudentCourseList;
 use Britannia\Domain\Repository\LessonRepositoryInterface;
+use Britannia\Domain\VO\Course\TimeRange\TimeRange;
+use Britannia\Domain\VO\Course\TimeRange\TimeRangeList;
 use Carbon\CarbonImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -25,8 +30,7 @@ class LessonRepository extends ServiceEntityRepository implements LessonReposito
 
     public function getLastLessonsByCourse(Course $course, CarbonImmutable $day, int $limit = 5): array
     {
-        $day->setTime(0, 0);
-
+        $day = $day->setTime(0, 0);
         $atPastLessons = $this->atPastLessons($course, $day, $limit);
 
         $atFutureLessons = $this->atFutureLessons($course, $day, $limit - count($atPastLessons));
@@ -54,12 +58,14 @@ class LessonRepository extends ServiceEntityRepository implements LessonReposito
             ->andWhere('A.day <= :day')
             ->setMaxResults($limit)
             ->orderBy('A.day', 'DESC')
+            ->setParameters([
+                'course' => $course,
+                'day' => $day
+            ])
+            ->setCacheable(true)
             ->getQuery();
 
-        return $query->execute([
-            'course' => $course,
-            'day' => $day
-        ]);
+        return $query->execute();
     }
 
     /**
@@ -75,6 +81,7 @@ class LessonRepository extends ServiceEntityRepository implements LessonReposito
             ->andWhere('A.day > :day')
             ->setMaxResults($limit)
             ->orderBy('A.day', 'ASC')
+            ->setCacheable(true)
             ->getQuery();
 
         return $query->execute([
@@ -87,32 +94,46 @@ class LessonRepository extends ServiceEntityRepository implements LessonReposito
      * @param CarbonImmutable $day
      * @return Lesson[]
      */
-    public function findByDay(CarbonImmutable $day): array
+    public function findByDay(CarbonImmutable $day, ?StaffMember $member = null): array
     {
-        return $this->findBy([
-            'day' => $day
+        if (!($member instanceof StaffMember)) {
+            return $this->findBy([
+                'day' => $day
+            ]);
+        }
+
+        $query = $this->createQueryBuilder('A')
+            ->where('A.day = :day')
+            ->andWhere('A.course IN (:courses)')
+            ->getQuery();
+
+        return $query->execute([
+            'day' => $day,
+            'courses' => $member->activeCourses()
+        ]);
+
+    }
+
+    public function findByCourseAndDay(Course $course, CarbonImmutable $date): ?Lesson
+    {
+        return $this->findOneBy([
+            'day' => $date,
+            'course' => $course
         ]);
     }
 
     public function countByTerm(Term $term): int
     {
-        $query = $this->createQueryBuilder('A')
-            ->select('count(A.id)')
-            ->where('A.course = :course')
-            ->andWhere('A.day >= :start')
-            ->andWhere('A.day <= :end')
-            ->getQuery();
+        $periods = $this->calculePeriodsByTerm($term);
+        $course = $term->course();
 
-        $query->setParameters([
-            'course' => $term->course(),
-            'start' => $term->start(),
-            'end' => $term->end(),
-        ]);
+        return $periods->reduce(function (int $carry, TimeRange $timeRange) use ($course) {
+            return $carry + $this->countByCourseAndTimeRange($course, $timeRange);
+        }, 0);
 
-        return $query->getSingleScalarResult();
     }
 
-    public function countByCourse(Course $course): int
+    public function countByCourseAndStudent(Course $course, Student $student): int
     {
         $query = $this->createQueryBuilder('A')
             ->select('count(A.id)')
@@ -129,4 +150,39 @@ class LessonRepository extends ServiceEntityRepository implements LessonReposito
 
         return $query->getSingleScalarResult();
     }
+
+    private function countByCourseAndTimeRange(Course $course, TimeRange $timeRange)
+    {
+        $query = $this->createQueryBuilder('A')
+            ->select('count(A.id)')
+            ->where('A.course = :course')
+            ->andWhere('A.day >= :start')
+            ->andWhere('A.day <= :end')
+            ->getQuery();
+
+        $query->setParameters([
+            'course' => $course,
+            'start' => $timeRange->start(),
+            'end' => $timeRange->end(),
+        ]);
+
+        return $query->getSingleScalarResult();
+    }
+
+    private function calculePeriodsByTerm(Term $term): TimeRangeList
+    {
+        return StudentCourseList::fromTerm($term)
+            ->timeRangeList()
+            ->limitToRange($term->timeRange());
+    }
+
+    private function calculePeriodsByCourseAndStudent(Course $course, Student $student): TimeRangeList
+    {
+
+        return StudentCourseList::fromCourseAndStudent($course, $student)
+            ->timeRangeList()
+            ->limitToRange($course->timeRange());
+    }
+
+
 }

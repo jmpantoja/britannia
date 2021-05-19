@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+
+    <entity name="Britannia\Domain\Entity\Message\Message" table="messages"
+            inheritance-type="JOINED">
+
+        <id name="id" type="MessageId" column="id">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
+        </id>
+
+        <discriminator-column name="type" type="string"/>
+        <discriminator-map>
+            <discriminator-mapping value="sms" class="Britannia\Domain\Entity\Message\Message\Sms"/>
+            <discriminator-mapping value="email" class="Britannia\Domain\Entity\Message\Message\Email"/>
+        </discriminator-map>
+
+
+        <indexes>
+            <index columns="type"/>
+            <index columns="schedule"/>
+        </indexes>
+
+        <field name="subject"/>
+
+        <field name="message" type="text"/>
+        <field name="createdAt" type="datetime_immutable"/>
+        <field name="schedule" type="datetime_immutable"/>
+
+        <field name="processed" type="boolean"/>
+
+        <field name="total" type="integer"/>
+        <field name="completed" type="integer"/>
+        <field name="failed" type="integer"/>
+
+        <many-to-one field="createdBy" target-entity="Britannia\Domain\Entity\Staff\StaffMember"/>
+
+        <many-to-many field="students" target-entity="Britannia\Domain\Entity\Student\Student"/>
+        <many-to-many field="courses" target-entity="Britannia\Domain\Entity\Course\Course"/>
+
+        <one-to-many field="shipments" target-entity="Britannia\Domain\Entity\Message\Shipment" mapped-by="message"
+                     orphan-removal="true">
+            <cascade>
+                <cascade-all/>
+            </cascade>
+        </one-to-many>
+    </entity>
+</doctrine-mapping>

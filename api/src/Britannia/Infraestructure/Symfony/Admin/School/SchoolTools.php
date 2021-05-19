@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Admin\School;
 
 
-use Britannia\Domain\Entity\Course\School;
 use PlanB\DDDBundle\Sonata\Admin\AdminDataSource;
 use PlanB\DDDBundle\Sonata\Admin\AdminQuery;
 use PlanB\DDDBundle\Sonata\Admin\AdminRoutes;

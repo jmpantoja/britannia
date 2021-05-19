@@ -23,6 +23,7 @@ class FullName
 
     private $firstName;
     private $lastName;
+    private $fullName;
 
     public static function buildConstraint(array $options = []): Constraint
     {
@@ -45,6 +46,7 @@ class FullName
     {
         $this->setFirstName($firstName);
         $this->setLastName($lastName);
+        $this->setFullName($firstName, $lastName);
     }
 
 
@@ -65,6 +67,22 @@ class FullName
         $this->firstName = $firstName;
         return $this;
     }
+
+    /**
+     * @param mixed $firstName
+     * @return FullName
+     */
+    private function setFullName(string $firstName, string $lastName): self
+    {
+        $fullName = sprintf('%s %s', ...[
+            $firstName,
+            $lastName
+        ]);
+
+        $this->fullName = strtolower($fullName);
+        return $this;
+    }
+
 
     /**
      * @return mixed
@@ -91,6 +109,11 @@ class FullName
             $this->getLastName(),
             $this->getFirstName()
         ]);
+    }
+
+    public function getFullName(): string
+    {
+        return $this->fullName;
     }
 
     public function getRegular(): string

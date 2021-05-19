@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Controller\Admin\Report;
 
 
-use Britannia\Domain\Service\Report\HtmlBasedPdfInterface;
+use Britannia\Domain\Service\Report\HtmlBasedPdfReport;
 use Britannia\Domain\Service\Report\ReportInterface;
 use Cocur\Slugify\Slugify;
 use Knp\Snappy\Pdf;
@@ -39,7 +39,7 @@ final class PdfGenerator
 
     }
 
-    public function create(HtmlBasedPdfInterface $report, string $pathToTempDir): string
+    public function create(HtmlBasedPdfReport $report, string $pathToTempDir): string
     {
         $output = $this->renderReport($report);
 
@@ -59,23 +59,39 @@ final class PdfGenerator
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
      */
-    public function renderReport(HtmlBasedPdfInterface $report, array $params = []): string
+    public function renderReport(HtmlBasedPdfReport $report, array $params = []): string
     {
+        $this->appendFooterToReport($report);
+
         $template = $this->templateByReport($report);
         $params = $this->paramsFromReport($report, $params);
 
-
         return $this->twig->render($template, $params);
+    }
+
+    private function appendFooterToReport(HtmlBasedPdfReport $report): self
+    {
+        $template = ClassnameToTemplate::make($report)
+            ->footer();
+
+        $exists = $this->twig->getLoader()->exists($template);
+
+        if ($exists) {
+            $footer = $this->twig->render($template, $report->params());
+            $report->addFooter($footer);
+        }
+
+        return $this;
     }
 
     /**
      * @param ReportInterface $report
      * @return string
      */
-    private function templateByReport(HtmlBasedPdfInterface $report): string
+    private function templateByReport(HtmlBasedPdfReport $report): string
     {
         return ClassnameToTemplate::make($report)
-            ->filter();
+            ->main();
     }
 
     /**
@@ -83,7 +99,7 @@ final class PdfGenerator
      * @param bool $debug
      * @return array
      */
-    private function paramsFromReport(HtmlBasedPdfInterface $report, array $params): array
+    private function paramsFromReport(HtmlBasedPdfReport $report, array $params): array
     {
         return array_merge([
             'title' => $report->title(),

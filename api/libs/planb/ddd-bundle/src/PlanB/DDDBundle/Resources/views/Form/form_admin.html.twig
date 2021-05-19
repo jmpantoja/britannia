@@ -22,7 +22,7 @@
             {% set div_class = div_class ~ ' sonata-collection-row-without-label' %}
         {% endif %}
 
-        {% if sonata_admin is defined and sonata_admin.options['form_type'] == 'horizontal' %}
+        {% if sonata_admin is defined and sonata_admin is not null and sonata_admin.options['form_type'] == 'horizontal' %}
             {# Add an offset if no label or is a checkbox/radio #}
             {% if label is same as(false) or form.vars.checked is defined %}
                 {% if 'collection' in form.parent.vars.block_prefixes %}
@@ -103,7 +103,7 @@
 {% block form_label %}
     {% apply spaceless %}
 
-        {% if label is not same as(false) and sonata_admin.options['form_type'] == 'horizontal' %}
+        {% if label is not same as(false) and sonata_admin is defined and sonata_admin is not null and sonata_admin.options['form_type'] == 'horizontal' %}
             {% set label_class = 'col-sm-3' %}
         {% endif %}
 
@@ -135,7 +135,7 @@
 
                 {% if translation_domain is same as(false) %}
                     {{- label -}}
-                {% elseif not sonata_admin.admin %}
+                {% elseif sonata_admin is not defined or sonata_admin is null or not sonata_admin.admin %}
                     {{- label|trans({}, translation_domain) -}}
                 {% else %}
                     {{ label|trans({}, sonata_admin.field_description.translationDomain ?: admin.translationDomain) }}

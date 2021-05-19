@@ -83,9 +83,14 @@
 
 {% block table_header %}
     <div class="datalist-header">
-        <table class="table table-bordered">
+        <table class="table table-header table-bordered">
             <thead>
             <tr class="sonata-ba-list-field-header">
+                {% if admin.list.elements['_collapsed'] is defined %}
+                    <th style="width:30px;">
+                        &nbsp;
+                    </th>
+                {% endif %}
                 {% for field_description in admin.list.elements %}
                     {% if admin.hasRoute('batch') and field_description.getOption('code') == '_batch' and batchactions|length > 0 %}
                         <th class="sonata-ba-list-field-header sonata-ba-list-field-header-batch">
@@ -94,9 +99,12 @@
                     {% elseif field_description.getOption('code') == '_select' %}
                         <th class="sonata-ba-list-field-header sonata-ba-list-field-header-select"></th>
                     {% elseif field_description.name == '_action' and app.request.isXmlHttpRequest %}
-                        Action buttons disabled in ajax view!
+                        {#                        Action buttons disabled in ajax view!#}
                     {% elseif field_description.getOption('ajax_hidden') == true and app.request.isXmlHttpRequest %}
-                        Disable fields with 'ajax_hidden' option set to true
+                        {#                        Disable fields with 'ajax_hidden' option set to true#}
+                    {% elseif field_description.name == '_collapsed' %}
+
+
                     {% else %}
                         {% set sortable = false %}
                         {% if field_description.options.sortable is defined and field_description.options.sortable %}
@@ -130,7 +138,7 @@
 
 {% block table_body %}
     <div class="datalist">
-        <table class="table table-bordered table-striped table-hover sonata-ba-list ">
+        <table class="table table-bordered table-hover sonata-ba-list ">
             <tbody>
             {% include get_admin_template('outer_list_rows_' ~ admin.getListMode(), admin.code) %}
             </tbody>
@@ -139,78 +147,17 @@
 {% endblock %}
 
 {% block list_footer %}
-
     {% if admin.datagrid.results|length > 0 %}
         <div class="box-footer">
             <div class="form-inline clearfix">
                 {% if not app.request.isXmlHttpRequest %}
-                    <div class="pull-left">
-                        {% if admin.hasRoute('batch') and batchactions|length > 0 %}
-                            {% block batch %}
-                                <script>
-                                    {% block batch_javascript %}
-                                    jQuery(document).ready(function ($) {
-                                        // Toggle individual checkboxes when the batch checkbox is changed
-                                        $('#list_batch_checkbox').on('ifChanged change', function () {
-                                            var checkboxes = $(this)
-                                                .closest('table')
-                                                .find('td.sonata-ba-list-field-batch input[type="checkbox"], div.sonata-ba-list-field-batch input[type="checkbox"]')
-                                            ;
-
-                                            if (Admin.get_config('USE_ICHECK')) {
-                                                checkboxes.iCheck($(this).is(':checked') ? 'check' : 'uncheck');
-                                            } else {
-                                                checkboxes.prop('checked', this.checked);
-                                            }
-                                        });
-
-                                        // Add a CSS class to rows when they are selected
-                                        $('td.sonata-ba-list-field-batch input[type="checkbox"], div.sonata-ba-list-field-batch input[type="checkbox"]')
-                                            .on('ifChanged change', function () {
-                                                $(this)
-                                                    .closest('tr, div.sonata-ba-list-field-batch')
-                                                    .toggleClass('sonata-ba-list-row-selected', $(this).is(':checked'))
-                                                ;
-                                            })
-                                            .trigger('ifChanged')
-                                        ;
-                                    });
-                                    {% endblock %}
-                                </script>
-
-                            {% block batch_actions %}
-                                <label class="checkbox" for="{{ admin.uniqid }}_all_elements">
-                                    <input type="checkbox" name="all_elements"
-                                           id="{{ admin.uniqid }}_all_elements">
-                                    {{ 'all_elements'|trans({}, 'SonataAdminBundle') }}
-                                    ({{ admin.datagrid.pager.nbresults }})
-                                </label>
-
-                                <select name="action" style="width: auto; height: auto"
-                                        class="form-control">
-                                    {% for action, options in batchactions %}
-                                        <option
-                                            value="{{ action }}">{{ options.label|trans({}, options.translation_domain|default(admin.translationDomain)) }}</option>
-                                    {% endfor %}
-                                </select>
-                            {% endblock %}
-
-                                <input type="submit" class="btn btn-small btn-primary"
-                                       value="{{ 'btn_batch'|trans({}, 'SonataAdminBundle') }}">
-                            {% endblock %}
-                        {% endif %}
-                    </div>
-
-
                     {% if admin.datagrid.pager.haveToPaginate() %}
                         <div class="pull-right">
                             {% include get_admin_template('pager_links', admin.code) %}
                         </div>
                     {% endif %}
-
                 {% endif %}
             </div>
-
         </div>
     {% endif %}
 {% endblock %}
@@ -221,61 +168,14 @@
     {% set has_filters = sonata_has_filters(admin) %}
 
     <label class="show_filters">
-        <input type="checkbox" checked="checked">
+        <input type="checkbox"
+               checked="checked"
+               data-toggle="filters"
+               data-has-filters="{{ has_filters }}"
+               data-filters-panel=".sonata-ba-list-filters"
+               data-table-panel=".sonata-ba-list-table">
         <span>Ver Filtros</span>
     </label>
-
-    <script type="application/javascript">
-        $(function () {
-
-            var has_filters = '{{ has_filters }}' !== '';
-            var filters = $('.sonata-ba-list-filters');
-            var table = $('.sonata-ba-list-table');
-
-            var width = $(filters).width();
-            var handler = $('.show_filters input');
-
-            if (!has_filters) {
-                $(handler).iCheck('uncheck');
-                close(true);
-            }
-
-            $(handler).on('ifChecked', function (event) {
-                open();
-            });
-
-            $(handler).on('ifUnchecked', function (event) {
-                close();
-            });
-
-
-            function open() {
-
-                $(filters).find('.card .card-body').show();
-                $(filters).find('.card .card-footer').show();
-                $(table).animate({"width": '-=' + width});
-                $(filters).animate({"width": '+=' + width});
-            }
-
-            function close(no_animate = false) {
-
-                $(filters).find('.card .card-body').hide();
-                $(filters).find('.card .card-footer').hide();
-
-                if (no_animate) {
-
-                    $(filters).css({"width": '-=' + width});
-                    $(table).css({"width": '+=' + width});
-                } else {
-                    $(filters).animate({"width": '-=' + width});
-                    $(table).animate({"width": '+=' + width});
-                }
-            }
-        });
-    </script>
-
-
-
 
     {{ parent() }}
 
@@ -323,16 +223,6 @@
                 trabajando
             </p>
 
-            {#            <form class="search-form">#}
-            {#                <div class="input-group">#}
-            {#                    <input type="text" name="search" class="form-control" placeholder="Search">#}
-
-            {#                    <div class="input-group-btn">#}
-            {#                        <button type="submit" name="submit" class="btn btn-warning btn-flat"><i class="fa fa-search"></i>#}
-            {#                        </button>#}
-            {#                    </div>#}
-            {#                </div>#}
-            {#            </form>#}
         </div>
     </div>
 

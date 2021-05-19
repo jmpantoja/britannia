@@ -19,46 +19,64 @@ security:
 
     role_hierarchy:
         ROLE_MANAGER:
-        - ROLE_SONATA_ADMIN
+            - ROLE_SONATA_ADMIN
 
-        - ROLE_ADMIN_STAFF_MEMBER_ALL
-        - ROLE_ADMIN_STUDENT_ALL
-        - ROLE_ADMIN_ACADEMY_ALL
-        - ROLE_ADMIN_SCHOOL_ALL
-        - ROLE_ADMIN_CLASSROOM_ALL
-        - ROLE_ADMIN_BOOK_ALL
-        - ROLE_ADMIN_TUTOR_ALL
-        - ROLE_ADMIN_COURSE_ALL
-        - ROLE_ADMIN_LEVEL_ALL
-        - ROLE_ADMIN_CALENDAR_ALL
-        - ROLE_ADMIN_ATTENDANCE_ALL
-        - ROLE_ADMIN_RECORD_ALL
-        - ROLE_ADMIN_MARK_ALL
-        - ROLE_ADMIN_REPORT_ALL
+            - ROLE_ADMIN_STAFF_MEMBER_ALL
+            - ROLE_ADMIN_STUDENT_ALL
+            - ROLE_ADMIN_ACADEMY_ALL
+            - ROLE_ADMIN_SCHOOL_ALL
+            - ROLE_ADMIN_CLASSROOM_ALL
+            - ROLE_ADMIN_BOOK_ALL
+            - ROLE_ADMIN_TUTOR_ALL
+            - ROLE_ADMIN_COURSE_ALL
+            - ROLE_ADMIN_LEVEL_ALL
+            - ROLE_ADMIN_CALENDAR_ALL
+            - ROLE_ADMIN_ATTENDANCE_ALL
+            - ROLE_ADMIN_NOTIFICATION_ALL
+            - ROLE_ADMIN_MARK_ALL
+            - ROLE_ADMIN_REPORT_ALL
+            - ROLE_ADMIN_ISSUE_ALL
+            - ROLE_ADMIN_SCHOOL_COURSE_ALL
+            - ROLE_ADMIN_SETTING_EDIT
+            - ROLE_ADMIN_INVOICE_ALL
+            - ROLE_ADMIN_MESSAGE_ALL
+            - ROLE_ADMIN_MESSAGE_TEMPLATE_ALL
+
 
         ROLE_RECEPTION:
-        - ROLE_SONATA_ADMIN
+            - ROLE_SONATA_ADMIN
 
-        - ROLE_ADMIN_STUDENT_LIST
-        - ROLE_ADMIN_STUDENT_CREATE
-        - ROLE_ADMIN_STUDENT_EDIT
+            - ROLE_ADMIN_STUDENT_LIST
+            - ROLE_ADMIN_STUDENT_CREATE
+            - ROLE_ADMIN_STUDENT_EDIT
 
-        - ROLE_ADMIN_TUTOR_LIST
-        - ROLE_ADMIN_TUTOR_CREATE
-        - ROLE_ADMIN_TUTOR_EDIT
+            - ROLE_ADMIN_TUTOR_LIST
+            - ROLE_ADMIN_TUTOR_CREATE
+            - ROLE_ADMIN_TUTOR_EDIT
 
-        - ROLE_ADMIN_ACADEMY_ALL
-        - ROLE_ADMIN_SCHOOL_ALL
+            - ROLE_ADMIN_ACADEMY_ALL
+            - ROLE_ADMIN_SCHOOL_LIST
+            - ROLE_ADMIN_SCHOOL_EDIT
 
+            - ROLE_ADMIN_ISSUE_LIST
+            - ROLE_ADMIN_ISSUE_CREATE
+            - ROLE_ADMIN_ISSUE_EDIT
+            
         ROLE_TEACHER:
-        - ROLE_SONATA_ADMIN
-        - ROLE_ADMIN_STAFF_MEMBER_EDIT
-#        - ROLE_ADMIN_STAFF_MEMBER_PROFILE
-        - ROLE_ADMIN_ATTENDANCE_ALL
+            - ROLE_SONATA_ADMIN
+            #- ROLE_ADMIN_STAFF_MEMBER_EDIT
+            #        - ROLE_ADMIN_STAFF_MEMBER_PROFILE
+            - ROLE_ADMIN_ATTENDANCE_ALL
+
+            - ROLE_ADMIN_ISSUE_LIST
+            - ROLE_ADMIN_ISSUE_CREATE
+            - ROLE_ADMIN_ISSUE_VIEW
+             
+            - ROLE_ADMIN_TEACHER_COURSE_ALL 
 
         ROLE_SUPER_ADMIN:
-        - ROLE_SONATA_ADMIN
-        - ROLE_ALLOWED_TO_SWITCH
+            - ROLE_SONATA_ADMIN
+            - ROLE_ALLOWED_TO_SWITCH
 
     encoders:
         Britannia\Domain\Entity\Staff\StaffMember:
@@ -94,6 +112,6 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-    - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-    - { path: ^/admin, roles: ROLE_SONATA_ADMIN }
-    - { path: ^/api , roles: ROLE_SONATA_ADMIN }
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin, roles: ROLE_SONATA_ADMIN }
+        - { path: ^/api , roles: ROLE_SONATA_ADMIN }

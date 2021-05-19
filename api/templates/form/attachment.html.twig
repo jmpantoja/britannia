@@ -1,0 +1,42 @@
+{% block attachment_widget %}
+    <div class="row">
+        {{ form_widget(form.path) }}
+        <div class="col-md-6">
+            {{ form_row(form.description) }}
+        </div>
+        <div class="col-md-2">
+            <label class="btn btn-primary">
+                <i class="fa fa-upload"></i>
+                {% set attr = {
+                    'class': 'hidden',
+                    'data-upload': 'pdf',
+                    'data-path': '#' ~ form.path.vars.id,
+                    'data-upload-url': path('attachment_upload')
+                } %}
+
+                Upload {{ form_widget(form.upload, {'attr': attr}) }}
+            </label>
+        </div>
+
+        <div class="col-md-3">
+            {% set href = href | default('') %}
+            {% set anchor = '' %}
+            {% set hidden = 'hidden' %}
+            {% if info is defined and info is not null %}
+                {% set anchor = 'Download (%s)' | format(info.humanReadableSize) %}
+                {% set hidden = '' %}
+            {% endif %}
+
+            <a href="{{ href }}"
+               target="_blank"
+               class="btn btn-success download {{ hidden }}"
+               data-upload-listener="link"
+               data-source="#{{ form.upload.vars.id }}"
+               data-download-url="{{ path('attachment_download') }}"
+            >
+                <i class="fa fa-download"></i>
+                {{ anchor }}
+            </a>
+        </div>
+    </div>
+{% endblock %}

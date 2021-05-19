@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Domain\Repository;
 
 
+use Britannia\Domain\Entity\Student\Student;
 use Carbon\CarbonImmutable;
 
 /**
@@ -24,9 +25,26 @@ use Carbon\CarbonImmutable;
  */
 interface StudentRepositoryInterface
 {
+    /**
+     * @return Student[]
+     */
     public function findByIdList(array $list): array;
 
-    public function findByBirthDay(CarbonImmutable $day): array ;
+    /**
+     * @return Student[]
+     */
+    public function findByBirthDay(CarbonImmutable $day): array;
+
+    /**
+     * @return Student[]
+     */
+    public function findActives(): array;
+
+    /**
+     * @return Student[]
+     */
+    public function disableStudentsWithoutActiveCourses();
+
 
 }
 

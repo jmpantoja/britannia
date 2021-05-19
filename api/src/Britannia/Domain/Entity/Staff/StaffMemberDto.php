@@ -14,7 +14,9 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Staff;
 
 
+use Britannia\Domain\Entity\Attachment\AttachmentList;
 use Britannia\Domain\Entity\Course\CourseList;
+use Britannia\Domain\VO\StaffMember\Status;
 use PlanB\DDD\Domain\Model\Dto;
 use PlanB\DDD\Domain\VO\DNI;
 use PlanB\DDD\Domain\VO\FullName;
@@ -34,13 +36,18 @@ final class StaffMemberDto extends Dto
     public array $emails = [];
     public array $phoneNumbers = [];
     public CourseList $courses;
+    public AttachmentList $attachments;
+    public ?Photo $photo = null;
+    public ?Status $status = null;
+    public ?string $comment = null;
     public ?array $roles;
     public EncoderFactory $encoder;
 
     protected function defaults(): array
     {
         return [
-            'courses' => CourseList::collect()
+            'courses' => CourseList::collect(),
+            'status'=>Status::NON_PERMANENT()
         ];
     }
 }

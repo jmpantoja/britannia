@@ -20,6 +20,7 @@ use Symfony\Component\Form\ChoiceList\Loader\IntlCallbackChoiceLoader;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Count;
 
 class RoleType extends AbstractType
 {
@@ -52,7 +53,13 @@ class RoleType extends AbstractType
             'choice_translation_domain' => false,
             'choice_translation_locale' => null,
             'multiple' => true,
-            'expanded' => true
+            'expanded' => true,
+            'constraints' => [
+                new Count([
+                    'min' => 1,
+                    'minMessage' => 'Se necesita al menos un rol'
+                ])
+            ]
         ]);
 
         $resolver->setAllowedTypes('choice_translation_locale', ['null', 'string']);

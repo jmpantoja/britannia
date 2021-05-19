@@ -1,0 +1,15 @@
+{% extends get_admin_template('base_list_field', admin.code) %}
+
+{% block field %}
+    {% if object.sms %}
+        <span title="email" class="label label-big label-primary">
+            <i class="fa fa-mobile"></i>
+        </span>
+    {% else %}
+        <span title="sms" class="label label-big label-info">
+            <i class="fa fa-envelope"></i>
+        </span>
+    {% endif %}
+{% endblock %}
+
+

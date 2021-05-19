@@ -21,7 +21,7 @@ trait AggregateRootTrait
 {
     abstract public function id(): EntityId;
 
-    final protected function notify(DomainEvent $domainEvent): void
+    final public function notify(DomainEvent $domainEvent): void
     {
         EventDispatcher::getInstance()
             ->dispatch($domainEvent);

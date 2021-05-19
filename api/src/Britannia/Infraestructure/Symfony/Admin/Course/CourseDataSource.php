@@ -14,9 +14,11 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Admin\Course;
 
 
-use Britannia\Domain\Entity\Course\Adult;
 use Britannia\Domain\Entity\Course\Course;
-use Britannia\Domain\Entity\Course\School;
+use Britannia\Domain\Entity\Course\Course\Adult;
+use Britannia\Domain\Entity\Course\Course\School;
+use Britannia\Domain\Entity\Course\CourseAssessmentInterface;
+use Britannia\Domain\Entity\Course\CourseCalendarInterface;
 use Britannia\Domain\Entity\Staff\StaffMember;
 use Britannia\Domain\Entity\Student\StudentCourse;
 use Britannia\Domain\VO\Course\TimeTable\Schedule;
@@ -42,7 +44,6 @@ final class CourseDataSource extends AdminDataSource
         $data['Nombre'] = $this->parse($course->name());
         $data['Estado'] = $this->parse($course->status());
         $data['Núm. de plazas'] = $this->parse($course->numOfPlaces());
-        $data['support'] = $this->parse($course->support());
         $data['Mensualidad'] = $this->parse($course->monthlyPayment());
         $data['Matrícula'] = $this->parse($course->enrollmentPayment());
         $data['Profesores'] = $this->parseTeachers($course);
@@ -50,13 +51,20 @@ final class CourseDataSource extends AdminDataSource
         $data['Material'] = $this->parse($course->books());
         $data['Inicio'] = $this->parse($course->start());
         $data['Fin'] = $this->parse($course->end());
-        $data['Horario'] = $this->parseSchedule($course->schedule());
         $data['Núm. de alumnos'] = $this->parse($course->numOfStudents());
-        $data['Destrezas'] = $this->parse($course->skills());
-        $data['Destrezas Extra'] = $this->parse($course->otherSkills());
-        $data['Num. Trimestres'] = $this->parse($course->numOfTerms());
-        $data['Prueba de diagnóstico'] = $this->parse($course->hasDiagnosticTest());
-        $data['Examen Final'] = $this->parse($course->hasFinalTest());
+
+
+        if ($course instanceof CourseCalendarInterface) {
+            $data['Horario'] = $this->parseSchedule($course->schedule());
+        }
+
+        if($course instanceof CourseAssessmentInterface){
+            $data['Destrezas'] = $this->parse($course->skills());
+            $data['Destrezas Extra'] = $this->parse($course->otherSkills());
+            $data['Num. Trimestres'] = $this->parse($course->numOfTerms());
+            $data['Prueba de diagnóstico'] = $this->parse($course->hasDiagnosticTest());
+            $data['Examen Final'] = $this->parse($course->hasFinalTest());
+        }
 
         if ($course instanceof School) {
             $data['schoolCourse'] = $this->parse($course->schoolCourse());

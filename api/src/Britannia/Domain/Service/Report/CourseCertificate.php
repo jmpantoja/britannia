@@ -19,10 +19,8 @@ use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Entity\Student\StudentCourse;
 use Carbon\CarbonImmutable;
 
-final class CourseCertificate implements FormBasedPdfInteface
+final class CourseCertificate extends TemplateBasedPdfReport
 {
-
-
     /**
      * @var string
      */
@@ -120,6 +118,7 @@ final class CourseCertificate implements FormBasedPdfInteface
         if (!$this->availableSkill($name)) {
             return null;
         }
+
         return $this->marks->get($name)->format();
     }
 
@@ -133,17 +132,16 @@ final class CourseCertificate implements FormBasedPdfInteface
         return ucwords(strtolower($range));
     }
 
-
     /**
      * @param string $name
      * @return mixed
      */
     private function availableSkill(string $name): bool
     {
-
-        return collect($this->course->skills())
+        return collect($this->course->skills()->toList())
             ->filter(fn(string $skill) => $skill === $name)
             ->isNotEmpty();
 
     }
+
 }

@@ -35,7 +35,7 @@ final class MarkReportList
     public function average(SetOfSkills $skills): MarkReport
     {
         $data = [];
-        foreach ($skills as $skill) {
+        foreach ($skills->toList() as $skill) {
             $data[$skill] = $this->averageBySkill($skill);
         }
 
@@ -44,10 +44,6 @@ final class MarkReportList
 
     private function averageBySkill(string $skill): ?Mark
     {
-        if ($this->isMissingSkill($skill)) {
-            return null;
-        }
-
         $average = collect($this->markReports)
             ->map(fn(MarkReport $markReport) => $markReport->toFloat($skill))
             ->average();

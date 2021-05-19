@@ -1,6 +1,9 @@
 /helm/api/charts
 
-/dumps
+#/dumps
+#/uploads/attachments
+#/uploads/older
+#/uploads/photos
 
 ###> symfony/framework-bundle ###
 /.env.local
@@ -15,3 +18,21 @@
 .php_cs.cache
 ###< friendsofphp/php-cs-fixer ###
 
+
+###> symfony/phpunit-bridge ###
+.phpunit
+.phpunit.result.cache
+/phpunit.xml
+###< symfony/phpunit-bridge ###
+
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###
+
+###> symfony/webpack-encore-bundle ###
+/node_modules/
+/public/build/
+npm-debug.log
+yarn-error.log
+###< symfony/webpack-encore-bundle ###

@@ -11,7 +11,7 @@ framework:
     # Enables session support. Note that the session will ONLY be started if you read or write from it.
     # Remove or comment this section to explicitly disable session support.
     session:
-        handler_id: ~
+        handler_id: snc_redis.session.handler
         cookie_secure: auto
         cookie_samesite: lax
 
@@ -21,7 +21,7 @@ framework:
         log: true
 
     assets:
-        version: 'v1.4'
-        version_format: '%%s?version=%%s'
+#        version: 'v1.5'
+#        version_format: '%%s?version=%%s'
         base_path: ~
         base_urls: ['%env(SITE_BASE_URL)%']

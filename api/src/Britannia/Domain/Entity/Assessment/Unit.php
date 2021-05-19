@@ -23,7 +23,7 @@ use PlanB\DDD\Domain\Behaviour\Traits\ComparableTrait;
 use PlanB\DDD\Domain\Model\Traits\AggregateRootTrait;
 use PlanB\DDD\Domain\VO\PositiveInteger;
 
-final class Unit implements Comparable
+class Unit implements Comparable
 {
     use ComparableTrait;
     use AggregateRootTrait;

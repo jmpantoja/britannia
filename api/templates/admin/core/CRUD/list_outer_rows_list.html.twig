@@ -1,0 +1,27 @@
+{% for object in admin.datagrid.results %}
+    {% set collapsed = '' %}
+    {% if admin.list.elements['_collapsed'] is defined %}
+        {% set collapsed = object|render_list_element(admin.list.elements['_collapsed'])|striptags|trim %}
+    {% endif %}
+
+    {% set hasCollapsed = (collapsed | length) > 0 %}
+
+    <tr>
+        {% if admin.list.elements['_collapsed'] is defined %}
+            <td style="width:30px; text-align: center; vertical-align: middle">
+                {% if hasCollapsed %}
+                    <a class="btn-arrow collapsed" data-toggle="collapse" href="#collapse-{{ object.id }}">
+                        <span class="fa fa-ellipsis-h"></span>
+                    </a>
+                {% endif %}
+            </td>
+        {% endif %}
+        {% include get_admin_template('inner_list_row', admin.code) %}
+    </tr>
+    {% if admin.list.elements['_collapsed'] is defined %}
+        <tr id="collapse-{{ object.id }}" class="collapse">
+            {{ object|render_list_element(admin.list.elements['_collapsed']) }}
+        </tr>
+    {% endif %}
+{% endfor %}
+

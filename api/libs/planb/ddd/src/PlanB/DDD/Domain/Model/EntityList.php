@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace PlanB\DDD\Domain\Model;
 
 
+use Britannia\Domain\Entity\Course\Course;
+use Britannia\Domain\Entity\Student\StudentCourse;
 use Countable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -87,7 +89,6 @@ abstract class EntityList implements Countable, IteratorAggregate
         $callback ??= [$this, 'add'];
         $list->values()->diffUsing($this->values(), function (Comparable $left, Comparable $right) {
             return $left->compareTo($right);
-
         })->each(function (Comparable $element) use ($callback) {
             $callback($element);
         });
@@ -103,6 +104,7 @@ abstract class EntityList implements Countable, IteratorAggregate
             return $this;
         }
         $element = $this->data->get($key);
+
 
         if (is_null($element)) {
             return $this;
@@ -170,7 +172,8 @@ abstract class EntityList implements Countable, IteratorAggregate
      */
     public function toArray(): array
     {
-        return $this->data->toArray();
+        return $this->data
+            ->toArray();
     }
 
     public function toCollection(): Collection

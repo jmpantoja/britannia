@@ -20,6 +20,7 @@ use Britannia\Domain\Entity\Lesson\Lesson;
 use Britannia\Domain\Entity\Lesson\LessonList;
 use Britannia\Domain\Repository\CalendarRepositoryInterface;
 use Britannia\Domain\Repository\ClassRoomRepositoryInterface;
+use Britannia\Domain\VO\Course\TimeRange\TimeRange;
 use Britannia\Domain\VO\Course\TimeTable\Schedule;
 use Britannia\Domain\VO\Course\TimeTable\TimeTable;
 use Carbon\CarbonImmutable;
@@ -48,31 +49,34 @@ final class LessonGenerator
 
     public function generateLessons(TimeTable $timeTable): LessonList
     {
+        $timeRange = $timeTable->range();
+        $schedule = $timeTable->schedule();
+
         if ($timeTable->shouldBeResetted()) {
-            return $this->generateCompleteList($timeTable);
+
+            return $this->generateCompleteList($timeRange, $schedule);
         }
-        return $this->generateFutureList($timeTable);
+
+        return $this->generateFutureList($timeRange, $schedule);
     }
 
 
     /**
-     * @param TimeTable $timeTable
+     * @param TimeTable $timeRange
      * @return LessonList
      */
-    private function generateCompleteList(TimeTable $timeTable): LessonList
+    private function generateCompleteList(TimeRange $timeRange, Schedule $schedule): LessonList
     {
-        $start = $timeTable->start();
-        $end = $timeTable->end();
-        $schedule = $timeTable->schedule();
+        $start = $timeRange->start();
+        $end = $timeRange->end();
 
         return $this->getLessonList($start, $end, $schedule);
     }
 
-    private function generateFutureList(TimeTable $timeTable): LessonList
+    private function generateFutureList(TimeRange $timeRange, Schedule $schedule): LessonList
     {
         $start = new CarbonImmutable();
-        $end = $timeTable->end();
-        $schedule = $timeTable->schedule();
+        $end = $timeRange->end();
 
         return $this->getLessonList($start, $end, $schedule);
     }
@@ -96,9 +100,12 @@ final class LessonGenerator
 
     private function makeLesson(Calendar $day, Schedule $schedule)
     {
+        $timeSheet = $schedule->timeSheetByDay($day->weekday());
+
         return Lesson::fromArray([
             'classRoom' => $this->getClassRoomByShedule($schedule, $day),
-            'timeSheet' => $schedule->timeSheetByDay($day->weekday()),
+            'start' => $timeSheet->start(),
+            'end' => $timeSheet->end(),
             'date' => $day->date()
         ]);
     }

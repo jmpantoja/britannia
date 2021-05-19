@@ -15,7 +15,6 @@ namespace Britannia\Infraestructure\Symfony\Admin\Student;
 
 
 use PlanB\DDDBundle\Sonata\Admin\AdminDataSource;
-use PlanB\DDDBundle\Sonata\Admin\AdminRoutes;
 use PlanB\DDDBundle\Sonata\Admin\AdminTools;
 use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -58,13 +57,16 @@ final class StudentTools extends AdminTools
         return StudentFilter::make($filterMapper);
     }
 
-    public function routes(RouteCollection $collection, string $idParameter): ?AdminRoutes
+
+    public function routes(RouteCollection $collection, string $idParameter): StudentRoutes
     {
-        return null;
+        return StudentRoutes::make($collection, $idParameter);
+
     }
 
     public function dataSource(DatagridInterface $dataGrid): ?AdminDataSource
     {
         return StudentDataSource::make($dataGrid);
     }
+
 }

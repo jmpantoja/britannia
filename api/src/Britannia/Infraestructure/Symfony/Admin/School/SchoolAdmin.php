@@ -15,14 +15,14 @@ use Sonata\AdminBundle\Route\RouteCollection;
 final class SchoolAdmin extends AbstractAdmin implements AdminFilterableInterface
 {
     protected $datagridValues = [
-        '_sort_by' => 'fullName.lastName',
+        '_sort_by' => 'name',
     ];
     /**
      * @var SchoolTools
      */
     private SchoolTools $adminTools;
 
-    protected $maxPerPage = 50;
+    protected $maxPerPage = 30;
     protected $maxPageLinks = 10;
 
     public function __construct($code, $class, $baseControllerName, SchoolTools $adminTools)

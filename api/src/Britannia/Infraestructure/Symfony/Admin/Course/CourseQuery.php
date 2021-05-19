@@ -22,6 +22,6 @@ final class CourseQuery extends AdminQuery
 {
     public function configure(QueryBuilder $builder, string $alias = 'o'): void
     {
-        $builder->orderBy('o.timeTable.end', 'DESC');
+      //  $builder->orderBy('o.timeRange.start', 'DESC');
     }
 }

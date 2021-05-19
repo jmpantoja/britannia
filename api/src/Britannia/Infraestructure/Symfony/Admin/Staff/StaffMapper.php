@@ -21,7 +21,6 @@ use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 
 final class StaffMapper extends AdminMapper
 {
-
     /**
      * @var EncoderFactoryInterface
      */
@@ -62,6 +61,7 @@ final class StaffMapper extends AdminMapper
      */
     protected function makeDto(array $values): StaffMemberDto
     {
+
         $values['encoder'] = $this->encoderFactory;
         return StaffMemberDto::fromArray($values);
     }

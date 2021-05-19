@@ -57,7 +57,7 @@ final class FullCalendarAttendance
      */
     private function initMissedStatus(Student $student, Lesson $lesson): void
     {
-        $this->hasBeenMissing = $lesson->hasBeenMissing($student);
+        $this->hasBeenMissing = $lesson->attendanceStatusByStudent($student)->isMissed();
     }
 
     private function initStatus(Student $student, Lesson $lesson): self
@@ -90,6 +90,7 @@ final class FullCalendarAttendance
 
         if (!$this->isMissed()) {
             $this->student = $fullName;
+            return $this;
         }
 
         $this->student = sprintf('%s (%s)', ...[

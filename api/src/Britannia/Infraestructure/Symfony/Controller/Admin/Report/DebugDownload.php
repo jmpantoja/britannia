@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Controller\Admin\Report;
 
 
-use Britannia\Domain\Service\Report\HtmlBasedPdfInterface;
+use Britannia\Domain\Service\Report\HtmlBasedPdfReport;
 use Britannia\Domain\Service\Report\ReportInterface;
 use Britannia\Domain\Service\Report\ReportList;
 use Symfony\Component\HttpFoundation\Response;
@@ -49,7 +49,7 @@ final class DebugDownload implements DownloadInterface
      */
     private function render(ReportInterface $report): string
     {
-        if ($report instanceof HtmlBasedPdfInterface) {
+        if ($report instanceof HtmlBasedPdfReport) {
             return $this->generator->renderReport($report, [
                 'assets_base' => ''
             ]);

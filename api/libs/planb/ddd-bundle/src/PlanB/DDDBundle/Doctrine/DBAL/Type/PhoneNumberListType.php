@@ -14,9 +14,8 @@ declare(strict_types=1);
 namespace PlanB\DDDBundle\Doctrine\DBAL\Type;
 
 
-use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use PlanB\DDD\Domain\VO\Email;
+use Doctrine\DBAL\Types\Type;
 use PlanB\DDD\Domain\VO\PhoneNumber;
 
 class PhoneNumberListType extends Type
@@ -40,7 +39,7 @@ class PhoneNumberListType extends Type
 
         $data = json_decode($value, true);
 
-        if(is_null($data)){
+        if (is_null($data)) {
             return [];
         }
 

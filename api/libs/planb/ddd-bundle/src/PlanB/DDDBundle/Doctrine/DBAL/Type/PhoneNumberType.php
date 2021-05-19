@@ -14,9 +14,8 @@ declare(strict_types=1);
 namespace PlanB\DDDBundle\Doctrine\DBAL\Type;
 
 
-use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use PlanB\DDD\Domain\VO\Email;
+use Doctrine\DBAL\Types\Type;
 use PlanB\DDD\Domain\VO\PhoneNumber;
 
 class PhoneNumberType extends Type
@@ -37,14 +36,24 @@ class PhoneNumberType extends Type
 
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
-        die(__METHOD__);
-        return PhoneNumber::make($value);
+        if (is_null($value)) {
+            return null;
+        }
+
+        $data = json_decode($value, true);
+        return PhoneNumber::make($data['phoneNumber'], $data['description']);
     }
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
-        die(__METHOD__);
-        return (string)$value;
+        if (!($value instanceof PhoneNumber)) {
+            return null;
+        }
+
+        return json_encode([
+            'phoneNumber' => $value->getPhoneNumber(),
+            'description' => $value->getDescription()
+        ]);
     }
 
 

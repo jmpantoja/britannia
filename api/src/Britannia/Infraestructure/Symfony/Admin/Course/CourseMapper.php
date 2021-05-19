@@ -14,14 +14,18 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Admin\Course;
 
 
-use Britannia\Domain\Entity\Course\Adult;
-use Britannia\Domain\Entity\Course\AdultDto;
 use Britannia\Domain\Entity\Course\Course;
+use Britannia\Domain\Entity\Course\Course\Adult;
+use Britannia\Domain\Entity\Course\Course\AdultDto;
+use Britannia\Domain\Entity\Course\Course\OneToOneDto;
+use Britannia\Domain\Entity\Course\Course\PreSchool;
+use Britannia\Domain\Entity\Course\Course\PreSchoolDto;
+use Britannia\Domain\Entity\Course\Course\School;
+use Britannia\Domain\Entity\Course\Course\SchoolDto;
+use Britannia\Domain\Entity\Course\Course\Support;
+use Britannia\Domain\Entity\Course\Course\SupportDto;
+use Britannia\Domain\Entity\Course\Course\OneToOne;
 use Britannia\Domain\Entity\Course\CourseDto;
-use Britannia\Domain\Entity\Course\PreSchool;
-use Britannia\Domain\Entity\Course\PreSchoolDto;
-use Britannia\Domain\Entity\Course\School;
-use Britannia\Domain\Entity\Course\SchoolDto;
 use Britannia\Domain\Service\Assessment\AssessmentGenerator;
 use Britannia\Domain\Service\Course\LessonGenerator;
 use PlanB\DDDBundle\Sonata\Admin\AdminMapper;
@@ -61,6 +65,7 @@ final class CourseMapper extends AdminMapper
 
     protected function create(array $values): Course
     {
+
         $dto = $this->makeDto($values);
 
         if ($dto instanceof PreSchoolDto) {
@@ -68,6 +73,14 @@ final class CourseMapper extends AdminMapper
         } elseif ($dto instanceof SchoolDto) {
             return School::make($dto);
         }
+        elseif ($dto instanceof SupportDto){
+            return Support::make($dto);
+        }
+        elseif ($dto instanceof OneToOneDto){
+            return  OneToOne::make($dto);
+        }
+
+
         return Adult::make($dto);
     }
 
@@ -79,6 +92,7 @@ final class CourseMapper extends AdminMapper
     protected function update($course, array $values): Course
     {
         $dto = $this->makeDto($values);
+
         return $course->update($dto);
     }
 
@@ -95,12 +109,20 @@ final class CourseMapper extends AdminMapper
             return AdultDto::fromArray($values);
         }
 
+        if ($this->subject instanceof School) {
+            return SchoolDto::fromArray($values);
+        }
+
         if ($this->subject instanceof PreSchool) {
             return PreSchoolDto::fromArray($values);
         }
 
-        if ($this->subject instanceof School) {
-            return SchoolDto::fromArray($values);
+        if ($this->subject instanceof Support) {
+            return SupportDto::fromArray($values);
+        }
+
+        if ($this->subject instanceof OneToOne) {
+            return OneToOneDto::fromArray($values);
         }
     }
 

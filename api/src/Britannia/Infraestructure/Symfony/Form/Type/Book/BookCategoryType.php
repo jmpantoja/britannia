@@ -16,48 +16,25 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Book;
 
 use Britannia\Domain\VO\Course\Book\BookCategory;
 use Britannia\Domain\VO\Validator;
-use PlanB\DDD\Domain\VO\Validator\Constraint;
-use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
+use PlanB\DDDBundle\Symfony\Form\Type\EnumType;
 use Symfony\Component\Form\ChoiceList\Loader\CallbackChoiceLoader;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class BookCategoryType extends AbstractSingleType
+class BookCategoryType extends EnumType
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getParent()
-    {
-        return ChoiceType::class;
-    }
 
 
     public function customOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'required' => true,
-            'choice_loader' => new CallbackChoiceLoader(function () {
-                return array_flip(BookCategory::getConstants());
-                return array_merge(['' => ''], $values);
-            }),
             'attr' => array('style' => 'max-width: 150px')
         ]);
     }
 
-    /**
-     * @param array $options
-     * @return null|Constraint
-     */
-    public function buildConstraint(array $options): ?Constraint
-    {
-        return new \Britannia\Domain\VO\Course\Book\Validator\BookCategory([
-            'required' => $options['required']
-        ]);
-    }
 
-    public function customMapping($data)
+    public function getEnumClass(): string
     {
-        return BookCategory::byName($data);
+        return BookCategory::class;
     }
 }

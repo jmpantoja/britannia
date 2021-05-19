@@ -1,0 +1,17 @@
+---
+adult with only required data:
+    type: adult
+    values:
+        fullName:
+            firstName: pepe
+            lastName: gonzalez
+
+child with only required data:
+    type: child
+    values:
+        fullName:
+            firstName: pepito
+            lastName: gonzalez
+            
+        firstTutor: "d9f1822d-42de-4452-b0e5-7eaf2d2be7da"
+            

@@ -24,7 +24,7 @@ abstract class BuilderAbstract implements BuilderInterface
     /**
      * @var EntityManagerInterface
      */
-    private $entityManager;
+    protected $entityManager;
     /**
      * @var Resume
      */

@@ -1,0 +1,26 @@
+{% extends 'admin/core/CRUD/base_collapsed_field.html.twig' %}
+
+{% block field %}
+    {% set admin_student = admin.configurationPool.adminByAdminCode('admin.student') %}
+    <div class="col-md-3">
+
+        {% for shipment in object.shipments %}
+            <p>
+                {% if shipment.successful %}
+                    <i class="fa fa-check text-success"></i>
+                {% else %}
+                    <i class="fa fa-times text-danger"></i>
+                {% endif %}
+                &nbsp;
+
+                <a href="{{ admin_student.generateObjectUrl('edit', shipment.student) }}">
+                    {{ shipment.student }}
+                </a>
+                ({{ shipment.recipient }})
+            </p>
+        {% endfor %}
+
+    </div>
+{% endblock %}
+
+

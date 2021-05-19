@@ -14,9 +14,12 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Student;
 
 
+use Britannia\Domain\Entity\Attachment\AttachmentList;
 use Britannia\Domain\Entity\Course\CourseList;
 use Britannia\Domain\Entity\School\School;
 use Britannia\Domain\VO\Payment\Payment;
+use Britannia\Domain\VO\SchoolCourse\SchoolHistory;
+use Britannia\Domain\VO\Student\Alert\Alert;
 use Britannia\Domain\VO\Student\ContactMode\ContactMode;
 use Britannia\Domain\VO\Student\Job\Job;
 use Britannia\Domain\VO\Student\OtherAcademy\OtherAcademy;
@@ -44,9 +47,13 @@ final class StudentDto extends Dto
 
     public StudentList  $relatives;
 
+    public AttachmentList $attachments;
+
+    public ?Photo $photo = null;
+
     public bool $freeEnrollment = false;
 
-    public Payment $payment;
+    public ?Payment $payment = null;
 
     public ?PartOfDay $preferredPartOfDay;
 
@@ -58,9 +65,9 @@ final class StudentDto extends Dto
 
     public ?string $firstContact;
 
-    public ?string $firstComment;
+    public ?string $comment = null;
 
-    public ?string $secondComment;
+    public ?Alert $alert = null;
 
     public bool $termsOfUseAcademy = false;
 
@@ -73,7 +80,7 @@ final class StudentDto extends Dto
     //Child
     public ?School $school;
 
-    public ?string $schoolCourse;
+    public ?SchoolHistory $schoolHistory = null;
 
     public ?string $firstTutorDescription;
 
@@ -85,15 +92,16 @@ final class StudentDto extends Dto
 
     //Adult
     public ?Job $job;
-    public ?DNI $dni;
 
+    public ?DNI $dni;
 
 
     protected function defaults(): array
     {
         return [
             'relatives' => StudentList::collect(),
-            'studentHasCourses' => CourseList::collect()
+            'studentHasCourses' => CourseList::collect(),
+            'attachments' => AttachmentList::collect()
         ];
     }
 

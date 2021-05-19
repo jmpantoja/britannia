@@ -34,5 +34,12 @@ class StudentHasAttendedLesson extends DomainEvent
         $this->attendance = $attendance;
     }
 
+    /**
+     * @return Attendance
+     */
+    public function attendance(): Attendance
+    {
+        return $this->attendance;
+    }
 
 }

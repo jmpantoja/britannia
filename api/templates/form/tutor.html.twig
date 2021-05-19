@@ -1,0 +1,92 @@
+{% block choice_tutor_row %}
+    {{ form_widget(form) }}
+{% endblock %}
+
+{% block choice_tutor_widget %}
+    <div class="row">
+
+        <div class="col-md-3">
+            {{ form_row(form.description) }}
+
+        </div>
+
+        <div class="col-md-3 col-md-offset-6">
+            {{ admin.uniqId }}
+
+            <div class="col-md-10">
+                {% set attr = {
+                    'data-tutor': 'tutor',
+                    'data-create-btn': '#create-' ~ form.__search.vars.id,
+                    'data-endpoint': admin.generateUrl('tutor_form'),
+                    'data-uniq-id': admin.uniqId,
+                    'data-field-name': field_name
+                } %}
+
+                {{ form_row(form.__search, {'attr': attr} ) }}
+            </div>
+            <div class="col-md-1" style="padding-top: 33px">
+                <span id="create-{{ form.__search.vars.id }}" class="btn btn-success">Nuevo</span>
+            </div>
+
+        </div>
+    </div>
+    <hr/>
+    <div id="{{ name }}-wrapper">
+        {{ form_widget(form.tutor) }}
+    </div>
+
+{% endblock %}
+
+{% block tutor_widget %}
+
+    <div id="{{ field }}-content" class="row">
+        <div class="col-md-3">
+            <div class="box box-primary">
+                <div class="box-header">
+                    <h4 class="box-title">
+                        Datos personales
+                    </h4>
+                </div>
+                <div class="box-body">
+                    <div class="sonata-ba-collapsed-fields">
+                        {{ form_row(form.fullName) }}
+                        {{ form_row(form.dni) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <div class="box box-primary">
+                <div class="box-header">
+                    <h4 class="box-title">
+                        Contacto
+                    </h4>
+                </div>
+                <div class="box-body">
+                    <div class="sonata-ba-collapsed-fields">
+                        {{ form_row(form.address) }}
+                        {{ form_row(form.emails) }}
+                        {{ form_row(form.phoneNumbers) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="box box-primary">
+                <div class="box-header">
+                    <h4 class="box-title">
+                        Profesión
+                    </h4>
+                </div>
+                <div class="box-body">
+                    <div class="sonata-ba-collapsed-fields">
+                        {{ form_row(form.job) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

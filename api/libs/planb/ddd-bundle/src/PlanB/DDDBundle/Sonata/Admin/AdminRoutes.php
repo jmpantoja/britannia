@@ -38,7 +38,7 @@ abstract class AdminRoutes
         $this->collection = $collection;
         $this->idParameter = $idParameter;
 
-        $this->clearExcept(self::ROUTE_LIST);
+        $this->clearExcept(static::ROUTE_LIST);
     }
 
     final public function add(

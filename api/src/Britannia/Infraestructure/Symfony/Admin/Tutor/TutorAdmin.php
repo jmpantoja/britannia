@@ -30,7 +30,7 @@ final class TutorAdmin extends AbstractAdmin implements AdminFilterableInterface
      */
     private TutorTools $adminTools;
 
-    protected $maxPerPage = 50;
+    protected $maxPerPage = 30;
     protected $maxPageLinks = 10;
 
     public function __construct($code, $class, $baseControllerName, TutorTools $adminTools)

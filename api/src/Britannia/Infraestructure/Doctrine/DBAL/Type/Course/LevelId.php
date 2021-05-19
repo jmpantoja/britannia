@@ -24,6 +24,6 @@ class LevelId extends EntityIdType
 
     protected function getNamespace()
     {
-        return 'Britannia\Domain\Entity\Course';
+        return 'Britannia\Domain\Entity\Level';
     }
 }

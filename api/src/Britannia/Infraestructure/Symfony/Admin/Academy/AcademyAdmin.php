@@ -23,7 +23,7 @@ final class AcademyAdmin extends AbstractAdmin implements AdminFilterableInterfa
         '_sort_by' => 'fullName.lastName',
     ];
 
-    protected $maxPerPage = 50;
+    protected $maxPerPage = 30;
     protected $maxPageLinks = 10;
 
     public function __construct($code, $class, $baseControllerName, AcademyTools $academyTools)

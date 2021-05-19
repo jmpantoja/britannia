@@ -1,0 +1,19 @@
+---
+update some values:
+    key: 04e8c093-73e7-49d7-827f-35db1af51d54
+    values:
+        fullName:
+            firstName: pepe
+            lastName: dominguez
+        address:
+            address: calle   melancolia 13
+            postalCode: 11200
+
+        studentHasCourses:
+            - '803078d5-11bb-45c7-a3d3-7cc395a303f4'
+            - '8c77a095-9e6b-4f92-b6d0-70d0a2fb8d90'
+
+    expected:
+        fullName: Pepe Dominguez
+        address: Calle Melancolia 13. 11200
+        courses: 2

@@ -16,76 +16,37 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Course;
 
 use Britannia\Domain\Entity\Staff\StaffList;
 use Britannia\Domain\Entity\Staff\StaffMember;
-use Britannia\Domain\Entity\Student\Student;
 use Britannia\Infraestructure\Symfony\Validator\FullName;
-use PlanB\DDD\Domain\VO\Validator\Constraint;
-use PlanB\DDDBundle\Sonata\ModelManager;
-use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
-use Sonata\AdminBundle\Form\Type\ModelType;
+use Doctrine\ORM\QueryBuilder;
+use PlanB\DDDBundle\Symfony\Form\Type\ModelType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class TeachersType extends AbstractSingleType
+class TeachersType extends ModelType
 {
 
-    /**
-     * @var Student
-     */
-    private $course;
-    /**
-     * @var ModelManager
-     */
-    private $modelManager;
-
-    public function __construct(ModelManager $modelManager)
+    public function getBlockPrefix()
     {
-        $this->modelManager = $modelManager;
-    }
-
-
-    public function getParent()
-    {
-        return ModelType::class;
+        return self::MULTISELECT;
     }
 
     public function customOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'class' => StaffMember::class,
-            'property' => 'fullName.reversedMode',
-            'model_manager' => $this->modelManager,
-            'multiple' => true,
-            'by_reference' => false,
-            'attr' => [
-                'data-sonata-select2' => 'false'
-            ]
+            'property' => 'fullName.reversedMode'
         ]);
 
-        $resolver->setNormalizer('query', function (OptionsResolver $resolver, $value) {
-            $builder = $this->modelManager->createQuery(StaffMember::class, 'A');
-            $builder->where('A.teacher = :yes')
-                ->setParameter('yes', true);
-
-            return $builder;
-        });
     }
 
-    public function transform($value)
+    public function configureQuery(QueryBuilder $builder, OptionsResolver $resolver, string $alias = 'A')
     {
-        return $value;
-    }
-
-
-    /**
-     * @return FullName
-     */
-    public function buildConstraint(array $options): ?Constraint
-    {
-        return null;
+        $builder->where('A.teacher = :yes')
+            ->setParameter('yes', true)
+            ->setCacheable(true);
     }
 
     public function customMapping($students)
     {
         return StaffList::collect($students);
     }
-
 }

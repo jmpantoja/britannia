@@ -60,11 +60,6 @@ class CourseEtl extends AbstractEtl
     public function clean(): void
     {
         $this->truncate('courses', 'course_lessons', 'classrooms');
-
-        $this->loadSql(...[
-            sprintf('%s/../../DataFixtures/dumps/britannia_calendar.sql', __DIR__),
-            sprintf('%s/../../DataFixtures/dumps/britannia_classrooms.sql', __DIR__)
-        ]);
     }
 
     public function configureDataLoader(QueryBuilder $builder): void
@@ -80,7 +75,7 @@ class CourseEtl extends AbstractEtl
 
         if (is_int($id)) {
             $builder
-                ->andWhere('id > ?')
+                ->andWhere('id = ?')
                 ->setParameter(0, $id);
         }
     }
@@ -102,7 +97,7 @@ class CourseEtl extends AbstractEtl
         $builder
             ->withId($input['id'])
             ->withName((string)$input['nombre'])
-            ->withSchoolCourse((string)$input['curso'])
+            ->withDescription((string)$input['curso'])
             ->withEnrolmentPayment((float)$input['matricula'])
             ->withMonthlyPayment((float)$input['precio'])
             ->withNumOfPlaces((int)$input['plazas'])

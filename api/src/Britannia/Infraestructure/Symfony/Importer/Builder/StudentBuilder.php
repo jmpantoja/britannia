@@ -53,8 +53,7 @@ class StudentBuilder extends BuilderAbstract
     private $schoolCourse;
     private $firstTutor;
     private $secondTutor;
-    private $firstComment;
-    private $secondComment;
+    private $comment;
     private $firstTutorDescription;
     private $secondTutorDescription;
 
@@ -213,8 +212,8 @@ class StudentBuilder extends BuilderAbstract
 
     public function withComments(string $firstComment, string $secondComment): self
     {
-        $this->firstComment = $firstComment;
-        $this->secondComment = $secondComment;
+        $this->comment = sprintf('%s<br/>%s', $firstComment, $secondComment);
+
         return $this;
     }
 
@@ -223,6 +222,7 @@ class StudentBuilder extends BuilderAbstract
         $this->termsOfUseAcademy = (bool)$academia;
         $this->termsOfUseStudent = (bool)$alumno;
         $this->termsOfUseImage = (bool)$imagen;
+
         return $this;
     }
 
@@ -245,17 +245,17 @@ class StudentBuilder extends BuilderAbstract
         return $this;
     }
 
-    public function withFirstTutor(array $data): self
+    public function withFirstTutor(array $data, string $name): self
     {
         $this->firstTutorDescription = $data['texto'];
-        $this->firstTutor = $this->toTutor($data);
+        $this->firstTutor = $this->toTutor($data, $name);
         return $this;
     }
 
-    public function withSecondTutor(array $data): self
+    public function withSecondTutor(array $data, string $name): self
     {
         $this->secondTutorDescription = $data['texto'];
-        $this->secondTutor = $this->toTutor($data);
+        $this->secondTutor = $this->toTutor($data, $name);
         return $this;
     }
 
@@ -284,6 +284,7 @@ class StudentBuilder extends BuilderAbstract
      */
     private function makeDto(): StudentDto
     {
+
         $dto = StudentDto::fromArray([
             'oldId' => $this->id,
             'fullName' => $this->fullName,
@@ -299,17 +300,16 @@ class StudentBuilder extends BuilderAbstract
             'firstContact' => $this->firstContact,
             'termsOfUseStudent' => $this->termsOfUseStudent,
             'termsOfUseAcademy' => $this->termsOfUseAcademy,
-            'termsOfUseImage' => $this->termsOfUseImage,
+            'termsOfUseImageRigths' => $this->termsOfUseImage,
             'job' => $this->job,
             'school' => $this->school,
             'schoolCourse' => $this->schoolCourse,
             'firstTutor' => $this->firstTutor,
             'secondTutor' => $this->secondTutor,
-            'firstComment' => $this->firstComment,
-            'secondComment' => $this->secondComment,
+            'comment' => $this->comment,
             'firstTutorDescription' => $this->firstTutorDescription,
             'secondTutorDescription' => $this->secondTutorDescription,
-            'createdAt'=>$this->createdAt
+            'createdAt' => $this->createdAt
         ]);
 
         return $dto;

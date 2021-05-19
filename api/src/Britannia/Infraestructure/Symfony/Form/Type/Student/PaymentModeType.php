@@ -16,51 +16,21 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Student;
 
 use Britannia\Domain\VO\Payment\PaymentMode;
 use Britannia\Infraestructure\Symfony\Validator\FullName;
-use PlanB\DDD\Domain\VO\Validator\Constraint;
-use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
-use Symfony\Component\Form\ChoiceList\Loader\CallbackChoiceLoader;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use PlanB\DDDBundle\Symfony\Form\Type\EnumType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class PaymentModeType extends AbstractSingleType
+class PaymentModeType extends EnumType
 {
-
-    public function getParent()
-    {
-        return ChoiceType::class;
-    }
 
     public function customOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'choice_loader' => new CallbackChoiceLoader(function () {
-                return array_flip(PaymentMode::getConstants());
-            }),
-            'choice_translation_domain' => false,
-            'choice_translation_locale' => null,
-            'multiple' => false,
-            'expanded' => false
+            'required'=>true
         ]);
     }
 
-//    public function transform($value)
-//    {
-//        if (is_null($value)) {
-//            return null;
-//        }
-//        return PaymentMode::get($value);
-//    }
-
-    /**
-     * @return FullName
-     */
-    public function buildConstraint(array $options): ?Constraint
+    public function getEnumClass(): string
     {
-        return null;
-    }
-
-    public function customMapping($data)
-    {
-        return PaymentMode::byName($data);
+        return PaymentMode::class;
     }
 }

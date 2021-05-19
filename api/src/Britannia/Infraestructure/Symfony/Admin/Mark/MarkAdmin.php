@@ -23,6 +23,9 @@ final class MarkAdmin extends AbstractAdmin
      */
     private MarkTools $adminTools;
 
+    protected $maxPerPage = 30;
+    protected $maxPageLinks = 10;
+
     public function __construct(string $code,
                                 string $class,
                                 string $baseControllerName,
@@ -83,7 +86,6 @@ final class MarkAdmin extends AbstractAdmin
     protected function configureRoutes(RouteCollection $collection)
     {
         $original = $this->getConfigurationPool()->getAdminByAdminCode('admin.course');
-
 
         return $this->adminTools()
             ->routes($collection, $this->getRouterIdParameter())

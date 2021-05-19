@@ -14,13 +14,20 @@ declare(strict_types=1);
 namespace Britannia\Domain\VO\Student\OtherAcademy;
 
 
-use MabeEnum\Enum;
+use PlanB\DDD\Domain\Enum\Enum;
 
+/**
+ * @method static self ONE_YEAR()
+ * @method static self TWO_YEARS()
+ * @method static self THREE_YEARS()
+ * @method static self FOUR_YEARS()
+ * @method static self FIVE_YEARS_OR_MORE()
+ */
 class NumOfYears extends Enum
 {
-    public const ONE_YEAR = 'Un año';
-    public const TWO_YEARS = 'Dos años';
-    public const THREE_YEARS = 'Tres años';
-    public const FOUR_YEARS = 'Cuatro años';
-    public const FIVE_YEARS_OR_MORE = 'Cinco años o más';
+    private const ONE_YEAR = 'Un año';
+    private const TWO_YEARS = 'Dos años';
+    private const THREE_YEARS = 'Tres años';
+    private const FOUR_YEARS = 'Cuatro años';
+    private const FIVE_YEARS_OR_MORE = 'Cinco años o más';
 }

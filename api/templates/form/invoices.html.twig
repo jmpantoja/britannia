@@ -1,0 +1,97 @@
+{% block invoice_detail_list_widget %}
+    <div class="col-md-12">
+        <div class="col-xs-1"></div>
+        <div class="col-xs-11">
+            <div class="col-md-12" style="padding:0 0 0 8px">
+                <div class="col-md-8">
+                    <label>concepto</label>
+                </div>
+                <div class="col-md-1">
+                    <label>unidades</label>
+                </div>
+                <div class="col-md-1">
+                    <label>precio / unid</label>
+                </div>
+                <div class="col-md-1">
+                    <label>descuento</label>
+                </div>
+                <div class="col-md-1">
+                    <label>subtotal</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        {% set attr = {
+            'data-invoice': 'invoice'
+        } %}
+
+        {{ form_widget(form, {'attr': attr}) }}
+    </div>
+
+    <div class="col-md-12">
+        <div class="col-xs-1"></div>
+        <div class="col-xs-11 resume">
+            <div class="col-md-12" style="padding:0 0 0 8px; text-align: right">
+                <div class="col-md-1 col-md-offset-10" style="text-align: right">
+                    <label>IMPORTE: </label>
+                </div>
+                <div class="col-md-1">
+                    <span class="price">
+                        <span class="num" style="font-size: 1.2em"></span>&nbsp;
+                        <span class="fa fa-euro"></span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="col-md-12" style="padding:0 0 0 8px; text-align: right">
+                <div class="col-md-1 col-md-offset-10">
+                    <label>DESCUENTO: </label>
+                </div>
+                <div class="col-md-1">
+                    <span class="discount">
+                        <span class="num" style="font-size: 1.2em"></span>&nbsp;
+                        <span class="fa fa-euro"></span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="col-md-12" style="padding:0 0 0 8px; text-align: right">
+                <div class="col-md-1 col-md-offset-10">
+                    <label>TOTAL: </label>
+                </div>
+                <div class="col-md-1">
+                    <span class="total">
+                        <span class="num" style="font-size: 1.2em"></span>&nbsp;
+                        <span class="fa fa-euro"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block invoice_detail_widget %}
+    <div class="col-md-12 detail">
+        <div class="col-md-8">
+            {{ form_row(form.subject) }}
+        </div>
+
+        <div class="col-md-1">
+            {{ form_row(form.numOfUnits) }}
+        </div>
+
+        <div class="col-md-1">
+            {{ form_row(form.price) }}
+        </div>
+
+        <div class="col-md-1">
+            {{ form_row(form.discount) }}
+        </div>
+
+        <div class="col-md-1">
+            {{ form_row(form.total) }}
+        </div>
+    </div>
+{% endblock %}

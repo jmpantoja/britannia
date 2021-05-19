@@ -18,81 +18,52 @@ use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Entity\Student\StudentId;
 use Britannia\Domain\Entity\Student\StudentList;
 use Britannia\Infraestructure\Symfony\Validator\FullName;
-use PlanB\DDD\Domain\VO\Validator\Constraint;
-use PlanB\DDDBundle\Sonata\ModelManager;
-use PlanB\DDDBundle\Symfony\Form\Type\AbstractSingleType;
-use Sonata\AdminBundle\Form\Type\ModelType;
+use Doctrine\ORM\QueryBuilder;
+use PlanB\DDDBundle\Symfony\Form\Type\ModelType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class RelativesType extends AbstractSingleType
+class RelativesType extends ModelType
 {
-    /**
-     * @var ModelManager
-     */
-    private $modelManager;
 
-    public function __construct(ModelManager $modelManager)
+    public function getBlockPrefix()
     {
-        $this->modelManager = $modelManager;
-    }
-
-
-    public function getParent()
-    {
-        return ModelType::class;
+        return self::MULTISELECT;
     }
 
     public function customOptions(OptionsResolver $resolver)
     {
-
         $resolver->setRequired(['studentId']);
         $resolver->setAllowedTypes('studentId', [StudentId::class, 'null']);
 
         $resolver->setDefaults([
-            'by_reference' => false,
-            'multiple' => true,
-            'expanded' => false,
-            'model_manager' => $this->modelManager,
             'class' => Student::class,
-            'property' => 'fullName.reversedMode',
             'sonata_help' => 'Seleccione otros alumnos de la misma familia',
-            'attr' => [
-                'data-sonata-select2' => 'false'
-            ]
         ]);
-
-        $resolver->setNormalizer('query', $this->normalizeQuery());
-
     }
 
-    /**
-     * @return \Closure
-     */
-    private function normalizeQuery(): \Closure
+
+    public function configureQuery(QueryBuilder $builder, OptionsResolver $resolver, string $alias = 'A')
     {
-        return function (OptionsResolver $resolver, $value) {
-            $builder = $this->modelManager->createQuery(Student::class, 'A');
-            $studentId = $resolver['studentId'];
-            return $builder
-                ->where('A.id != :id')
-                ->setParameter('id', $studentId);
-        };
+        return $builder
+            ->setCacheable(true);
     }
 
-    public function transform($value)
+    protected function sanitizeChoices(array $choices, OptionsResolver $resolver): array
     {
-        return $value;
-    }
+        $studentId = $resolver['studentId'];
 
-    public function buildConstraint(array $options): ?Constraint
-    {
-        return null;
+        if (!($studentId instanceof StudentId)) {
+            return [];
+        }
+
+        return collect($choices)
+            ->filter(fn(Student $student) => !$student->id()->equals($studentId))
+            ->toArray();
+
     }
 
     public function customMapping($data)
     {
         return StudentList::collect($data);
     }
-
-
 }

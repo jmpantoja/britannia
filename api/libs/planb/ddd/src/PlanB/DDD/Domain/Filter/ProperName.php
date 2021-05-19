@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace PlanB\DDD\Domain\Filter;
 
 
-use Zend\Filter\Exception;
-use Zend\Filter\FilterInterface;
+
+use Laminas\Filter\FilterInterface;
 
 class ProperName implements FilterInterface
 {
@@ -31,13 +31,6 @@ class ProperName implements FilterInterface
         $this->limit = $limit;
     }
 
-    /**
-     * Returns the result of filtering $value
-     *
-     * @param mixed $value
-     * @return mixed
-     * @throws Exception\RuntimeException If filtering $value is impossible
-     */
     public function filter($value)
     {
         if (is_null($value)) {

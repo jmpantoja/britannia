@@ -15,13 +15,17 @@ use Sonata\AdminBundle\Route\RouteCollection;
 
 final class CourseAdmin extends AbstractAdmin implements AdminFilterableInterface
 {
+    protected $datagridValues = [
+        '_sort_order' => 'DESC',
+        '_sort_by' => 'timeRange.start',
+    ];
+
     /**
      * @var CourseTools
      */
     private CourseTools $adminTools;
 
-
-    protected $maxPerPage = 50;
+    protected $maxPerPage = 30;
     protected $maxPageLinks = 10;
 
     public function __construct(
@@ -42,11 +46,6 @@ final class CourseAdmin extends AbstractAdmin implements AdminFilterableInterfac
     public function adminTools(): CourseTools
     {
         return $this->adminTools;
-    }
-
-    public function getExportFields()
-    {
-        return ['name', 'status', 'numOfPlaces', 'monthlyPayment', 'numOfStudents' ];
     }
 
     /**

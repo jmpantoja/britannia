@@ -1,7 +1,7 @@
 # Creamos un dominio nuevo
 
 resource "digitalocean_domain" "britannia" {
-  name = "planb.ovh"
+  name = "britannia.ovh"
 }
 
 # Add a record to the domain

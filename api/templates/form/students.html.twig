@@ -1,10 +1,6 @@
-{% block student_has_courses_widget %}
-    {{ block('multiselect') }}
-{% endblock %}
-
-{% block relatives_widget %}
-    {{ block('multiselect') }}
-{% endblock %}
+{#{% block student_has_courses_widget %}#}
+{#    {{ block('multiselect') }}#}
+{#{% endblock %}#}
 
 {% block job_widget %}
 
@@ -30,28 +26,14 @@
 {% endblock %}
 
 {% block payment_widget %}
-
-    <script>
-        {% autoescape 'js' %}
-
-        jQuery(function ($) {
-            $('#sonata-ba-field-container-{{ id }}')
-                .toggle_field({
-                    hide_values: ['CASH'],
-                    children: '.bank_account'
-                })
-        })
-        {% endautoescape %}
-    </script>
-
     <div class="row">
         <div class="col-md-3">
-            {{ form_row(form.mode, {legend: true}) }}
+            {{ form_row(form.mode, {'legend': true, 'attr': {'data-toggle': 'field', 'data-hide-values': '["CASH"]', 'data-target': '.bank_account' } }) }}
         </div>
     </div>
 
     <div class="row col-md-12 bank_account">
-        {{ form_row(form.account, {legend: true}) }}
+        {{ form_row(form.account, {'legend': true}) }}
     </div>
 
 
@@ -85,24 +67,9 @@
 
 
 {% block other_academy_widget %}
-
-    <script>
-        {% autoescape 'js' %}
-
-        jQuery(function ($) {
-            $('#sonata-ba-field-container-{{ id }}')
-                .toggle_field({
-                    hide_values: [''],
-                    children: '.numOfYears'
-                })
-        })
-        {% endautoescape %}
-    </script>
-
-
     <div class="row">
         <div class="col-md-6">
-            {{ form_row(form.academy) }}
+            {{ form_row(form.academy, {'attr': {'data-toggle': 'field', 'data-target': '.numOfYears' } }) }}
         </div>
 
         <div class="col-md-6 numOfYears">
@@ -110,3 +77,62 @@
         </div>
     </div>
 {% endblock %}
+
+{% block alert_widget %}
+    <div id="description-{{ id }}">
+        {{ form_row(form.description) }}
+    </div>
+
+    {% set attr = {
+        'data-toggle': 'field',
+        'data-hide-values': '["0"]',
+        'data-target': '#description-' ~ id
+    } %}
+
+    {{ form_widget(form.alert, {'attr': attr }) }}
+{% endblock %}
+
+{% block photo_widget %}
+    <div class="row">
+
+        <div class="col-md-12">
+            <div class="thumb">
+                <label class="thumb-upload">
+                    {% set path =  form.path.vars.value | default(shape) %}
+                    {% set src =  downloadUrl ~ '/' ~ path %}
+
+                    <img src="{{ src }}" data-upload-listener="thumb"
+                         data-source="#{{ form.upload.vars.id }}"
+                         data-download-url="{{ downloadUrl }}"/>
+
+                    {% set attr = {
+                        'class': 'hidden',
+                        'data-upload': 'image',
+                        'data-path': '#' ~ form.path.vars.id,
+                        'data-upload-url': uploadUrl
+                    } %}
+                    {{ form_widget(form.upload, {'attr': attr}) }}
+
+                    <span class="help-block">click en la foto para cambiar</span>
+                </label>
+            </div>
+            {{ form_widget(form.path) }}
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block document_list_widget %}
+    {% for report in reports %}
+        <div class="row">
+            <div class="col-md-3">
+                <a href="{{ report.href }}" class="btn btn-primary" target="_blank">
+                    <i class="fa fa-download"></i>
+                    <span>{{ report.anchor }}</span>
+                </a>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
+

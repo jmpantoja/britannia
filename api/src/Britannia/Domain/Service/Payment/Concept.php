@@ -104,6 +104,12 @@ class Concept
         return $this->price;
     }
 
+    public static function zero(): self
+    {
+        $price = Price::make(0);
+        return self::normal($price);
+    }
+
     public static function normal(Price $price, ?Percent $discount = null): self
     {
         return new self($price, DiscountType::NONE(), $discount);
@@ -118,6 +124,7 @@ class Concept
     {
         return new self($price, DiscountType::JOB_STATUS(), $discount);
     }
+
 
     /**
      * @return float

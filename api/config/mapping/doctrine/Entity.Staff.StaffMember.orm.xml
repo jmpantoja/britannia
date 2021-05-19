@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                  xmlns:gedmo="http://gediminasm.org/schemas/orm/doctrine-extensions-mapping"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
 
     <entity name="Britannia\Domain\Entity\Staff\StaffMember" table="staff_members"
             repository-class="Britannia\Infraestructure\Doctrine\Repository\StaffMemberRepository">
+
+        <cache usage="NONSTRICT_READ_WRITE" region="day"/>
+        <cache usage="NONSTRICT_READ_WRITE" region="day"/>
 
         <id name="id" type="StaffMemberId" column="id">
             <generator strategy="CUSTOM"/>
@@ -33,14 +35,18 @@
 
         <field name="phoneNumbers" column="phone_numbers" type="phone_number_list"/>
 
-        <field name="roles" column="roles" type="json"/>
+        <field name="status" type="TeacherStatus"/>
 
+        <field name="comment" column="comment" nullable="true" type="text"></field>
+
+        <field name="roles" column="roles" type="json"/>
 
         <field name="createdAt" type="datetime_immutable" nullable="true"/>
         <field name="updatedAt" type="datetime_immutable" nullable="true"/>
 
 
         <many-to-many field="courses" target-entity="Britannia\Domain\Entity\Course\Course" inversed-by="teachers">
+            <cache usage="NONSTRICT_READ_WRITE" region="day"/>
             <join-table name="courses_teachers">
                 <join-columns>
                     <join-column name="teacher_id"/>
@@ -53,6 +59,36 @@
                 <cascade-persist/>
             </cascade>
         </many-to-many>
+
+
+        <one-to-many field="attachments" target-entity="Britannia\Domain\Entity\Staff\Attachment"
+                     mapped-by="staff"
+                     orphan-removal="true">
+            <cache usage="NONSTRICT_READ_WRITE" region="day"/>
+            <order-by>
+                <order-by-field name="createdAt"/>
+
+            </order-by>
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </one-to-many>
+
+        <one-to-one field="photo"
+                    target-entity="Britannia\Domain\Entity\Staff\Photo"
+                    orphan-removal="true">
+            <join-column on-delete="SET NULL"/>
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </one-to-one>
+
+        <one-to-many field="issues" target-entity="Britannia\Domain\Entity\Issue\IssueRecipient"
+                     mapped-by="recipient" orphan-removal="true">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </one-to-many>
 
     </entity>
 

@@ -73,7 +73,7 @@ class FormLoginAuthenticator extends AbstractFormLoginAuthenticator
 
         $user = $this->entityManager->getRepository(StaffMember::class)
             ->loadUserByUsername($credentials['userNameOrEmail']);
-
+        
         if (!$user) {
             throw new CustomUserMessageAuthenticationException('Username or Email could not be found.');
         }
@@ -101,10 +101,9 @@ class FormLoginAuthenticator extends AbstractFormLoginAuthenticator
 
     private function getRedirectPath(TokenInterface $token): string
     {
-        if ($token->getUser()->isTeacher()) {
-            return $this->urlGenerator->generate('admin_britannia_domain_lesson_lesson_list');
-
-        }
+//        if ($token->getUser()->isTeacher()) {
+//            return $this->urlGenerator->generate('admin_britannia_domain_teacher_list');
+//        }
 
         return $this->urlGenerator->generate('sonata_admin_dashboard');
     }

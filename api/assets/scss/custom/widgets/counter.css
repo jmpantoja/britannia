@@ -1,0 +1,43 @@
+.counter.counter-wrapper {
+    /*border: solid 1px #c0c0c0;*/
+    /*overflow: auto;*/
+    overflow: hidden;
+}
+
+.counter .counter-area {
+    resize: none;
+    border: none;
+}
+
+.counter .counter-info {
+    margin: auto;
+    float: right;
+
+    padding: 5px 10px;
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+}
+
+.counter .counter-info.success {
+    background-color: green;
+}
+
+.counter .counter-info.warning {
+    background-color: orange;
+}
+
+.counter .counter-info.error {
+    background-color: firebrick;
+}
+
+
+ul li.select2-disabled {
+    background-color: #EEE;
+    color: #999
+}
+
+.sonata-ba-field-error .trumbowyg-box {
+
+    border: solid 1px firebrick;
+}

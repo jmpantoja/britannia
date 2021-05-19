@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+
+    <entity name="Britannia\Domain\Entity\Notification\Notification" table="notifications"
+            repository-class="Britannia\Infraestructure\Doctrine\Repository\NotificationRepository">
+
+        <id name="id" type="NotificationId" column="id">
+            <generator strategy="CUSTOM"/>
+            <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
+        </id>
+
+        <field name="subject"/>
+        <field name="message" type="text"/>
+
+        <field name="type" type="TypeOfNotification"/>
+        <field name="date" type="date_immutable"/>
+        <field name="createdAt" type="datetime_immutable"/>
+
+        <many-to-one field="author" target-entity="Britannia\Domain\Entity\Staff\StaffMember"/>
+
+        <many-to-one field="student" target-entity="Britannia\Domain\Entity\Student\Student">
+            <join-column on-delete="CASCADE"/>
+            <cascade>
+                <cascade-persist />
+            </cascade>
+        </many-to-one>
+
+        <many-to-one field="course" target-entity="Britannia\Domain\Entity\Course\Course">
+            <join-column on-delete="CASCADE"/>
+        </many-to-one>
+    </entity>
+
+</doctrine-mapping>

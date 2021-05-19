@@ -1,0 +1,28 @@
+{% extends get_admin_template('base_list_field', admin.code) %}
+
+{% block field %}
+    <div class="row">
+        <div class="col-md-12">
+            {{ object.subject | raw }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block student_badge %}
+    {% set adminStudent = admin.configurationPool.adminByAdminCode('admin.student') %}
+    {% if object.student %}
+        <a class="badge badge-warning"
+           href="{{ adminStudent.generateObjectUrl('edit', object.student) }}">
+            <strong>{{ object.student.fullName }}</strong>
+        </a>
+    {% endif %}
+{% endblock %}
+
+{% block course_badge %}
+    {% set adminCourse = admin.configurationPool.adminByAdminCode('admin.course') %}
+    {% if object.course %}
+        <a class="badge badge-info" href="{{ adminCourse.generateObjectUrl('edit', object.course) }}">
+            <strong>{{ object.course.name }}</strong>
+        </a>
+    {% endif %}
+{% endblock %}

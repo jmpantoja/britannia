@@ -17,8 +17,6 @@ namespace PlanB\DDDBundle\Symfony\Form\Type;
 use PlanB\DDD\Domain\VO\Percent;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\FormDataMapper;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 
@@ -30,6 +28,9 @@ class PercentageType extends AbstractSingleType
         $resolver->setDefaults([
             'post_icon' => 'fa fa-percent',
             'data_class' => Percent::class,
+            'attr' => [
+                'style' => 'width:60px;'
+            ]
         ]);
     }
 

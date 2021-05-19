@@ -23,7 +23,6 @@ use PlanB\DDDBundle\Symfony\Form\Type\AbstractCompoundType;
 use Sonata\Form\Type\DatePickerType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -62,6 +61,7 @@ class OtherSkillDefinitionType extends AbstractCompoundType
 
             ])->add('date', DatePickerType::class, [
                 'label' => 'Fecha',
+                'format' => \IntlDateFormatter::LONG,
                 'data' => CarbonImmutable::today()
 
             ])->add('add', ButtonType::class, [

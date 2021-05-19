@@ -15,6 +15,7 @@ namespace Britannia\Infraestructure\Symfony\Importer\Etl;
 
 
 use ApiPlatform\Core\DataPersister\DataPersisterInterface;
+use Britannia\Infraestructure\Symfony\Importer\Builder\BuilderInterface;
 use Britannia\Infraestructure\Symfony\Importer\Console;
 use Britannia\Infraestructure\Symfony\Importer\DataCollector;
 use Britannia\Infraestructure\Symfony\Importer\Report\Reporter;
@@ -81,10 +82,11 @@ abstract class AbstractEtl implements EtlInterface
 
         } catch (Throwable $exception) {
 
-            $id = sprintf('ID: %s', $input['id']);
+            $id = sprintf('ID: %s', $input['id'] ?? null);
             dump($exception->getMessage(), $id);
             $trace = sprintf('%s::%s', $exception->getFile(), $exception->getLine());
-            dump($trace);
+
+            dump($trace, $exception->getTraceAsString());
             die;
         }
 
@@ -122,6 +124,16 @@ abstract class AbstractEtl implements EtlInterface
             $sql = file_get_contents($path);
             $this->default->exec($sql);
         }
+    }
+
+    public function configureDataLoader(QueryBuilder $builder): void
+    {
+
+    }
+
+    public function createBuilder(array $input, EntityManagerInterface $entityManager): BuilderInterface
+    {
+
     }
 
 }

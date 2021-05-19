@@ -1,0 +1,33 @@
+{% extends 'admin/core/CRUD/list.html.twig' %}
+
+{% block no_result_content %}
+
+    <div class="row">
+        <div class="col-md-4 col-md-push-4">
+
+            <h2><i class="fa fa-check text-green"></i>
+                No hay nada nuevo
+            </h2>
+
+            <p>
+                No hemos encontrado ninguna observación que coincida con estos criterios de busqueda
+                <hr />
+                Ahora puedes: <br />
+
+            <ol>
+                <li>
+                    Probar con otros filtros
+                </li>
+                <li>
+                    Volver <a href="{{ path('sonata_admin_dashboard') }}">escritorio</a> para seguir
+                    trabajando
+                </li>
+            </ol>
+
+            </p>
+
+
+        </div>
+
+    </div>
+{% endblock %}

@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\Form\Report\CourseMarks;
 
 
-use Britannia\Application\UseCase\Report\GenerateTermMarks;
+use Britannia\Application\UseCase\CourseReport\GenerateTermMarks;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\VO\CourseInfoData;
 use Britannia\Infraestructure\Symfony\Form\Report\CourseMarks\Validator\CourseMarks;
@@ -40,17 +40,17 @@ class CourseMarksType extends AbstractCompoundType
         $course = $options['data'];
 
         $builder->add('selected', HiddenType::class);
-
         $builder->add('termName', TermNameType::class, [
             'mapped' => false,
             'attr' => [
-                'style' => 'width: 190px'
+                'style' => 'width: 235px'
             ]
         ]);
 
         $builder->add('start', DatePickerType::class, [
             'mapped' => false,
             'format' => \IntlDateFormatter::LONG,
+            'label' => 'Desde',
             'attr' => [
                 'readonly' => true
             ]
@@ -58,11 +58,12 @@ class CourseMarksType extends AbstractCompoundType
 
         $builder->add('end', DatePickerType::class, [
             'mapped' => false,
+            'label' => 'Hasta',
             'format' => \IntlDateFormatter::LONG
         ]);
 
         $builder->add('students', ChooseStudentListType::class, [
-            'label' => 'Alumnos',
+            'label' => false,
             'mapped' => false,
             'data' => $course
         ]);

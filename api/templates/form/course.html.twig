@@ -1,12 +1,8 @@
-{% block course_has_students_widget %}
+{% block books_widget %}
     {{ block('multiselect') }}
 {% endblock %}
 
 {% block teacher_has_courses_widget %}
-    {{ block('multiselect') }}
-{% endblock %}
-
-{% block teachers_widget %}
     {{ block('multiselect') }}
 {% endblock %}
 
@@ -45,76 +41,25 @@
     </div>
 {% endblock %}
 
-{% block attendance_widget %}
-    <div class="row">
-        <div class="col-md-3">
-            <p class="fullName">{{ student.fullName }}</p>
-        </div>
-        <div class="col-md-1 missed">
-            {{ form_row(form.missed) }}
-        </div>
-
-        <div class="col-md-3 reason">
-            {{ form_row(form.reason) }}
-        </div>
-
-        <script>
-            $(function () {
-                var reason = $('#{{ form.reason.vars.id }}').parents('.form-group:first');
-
-                $('#{{ form.missed.vars.id }}').change(function () {
-                    if ($(this).prop('checked')) {
-                        reason.show()
-                    } else {
-                        reason.hide()
-                    }
-                })
-
-                if ($('#{{ form.missed.vars.id }}').prop('checked')) {
-                    reason.show()
-                } else {
-                    reason.hide()
-                }
-            })
-        </script>
-
-    </div>
-{% endblock %}
-
-
-{% block attendance_toggle_widget %}
-    {% set checked = '' %}
-
-    {% if value == "1" %}
-        {% set checked = 'checked' %}
-    {% endif %}
-
-    <input id="{{ id }}" name="{{ full_name }}" {{ checked }} type="checkbox" data-toggle="toggle" data-on="Falta"
-           data-off="Asiste"
-           data-onstyle="danger" data-offstyle="success">
-
-{% endblock %}
-
-{% block discount_widget %}
+{% block job_discount_widget %}
     <div class="row discount">
         <div class="col-md-3">
             <span class="status"> {{ status.value }} </span>
         </div>
 
-        <div class="col-md-2">
+        <div class="col-md-3">
             {{ form_row(form.discount) }}
         </div>
 
-        <div class="col-md-7">
+        <div class="col-md-6">
             {{ form_row(form.freeEnrollment) }}
         </div>
     </div>
-
 {% endblock %}
 
 {% block time_table_widget %}
     {% if form.locked is defined %}
-        {{ form_row(form.locked, {widget: id ~ '-wrapper'}) }}
+        {{ form_row(form.locked, {widget: '#' ~ id ~ '-wrapper'}) }}
     {% endif %}
 
     <div id="{{ id }}-wrapper">
@@ -137,7 +82,7 @@
 {% endblock %}
 
 
-{% block assessment_definition_widget %}
+{% block assessment_widget %}
     {% if form.locked is defined %}
         {{ form_row(form.locked, {widget: id ~ '-wrapper'}) }}
     {% endif %}
@@ -168,4 +113,98 @@
         </div>
     </div>
 
+{% endblock %}
+
+{% block pass_list_widget %}
+    <div id="{{ id }}-wrapper">
+        {{ form_row(form.passes) }}
+    </div>
+{% endblock %}
+
+{% block pass_widget %}
+    {% set attr = {
+        'data-pass': 'hours',
+        'data-lessons': '.pass_lesson',
+        'data-target': '.left_time p.left',
+        'data-start-time': '.start_time input',
+        'data-end-time': '.end_time input',
+    } %}
+
+    <div id="{{ id }}"
+         class="row pass_widget"
+         data-pass="hours"
+         data-hours="#{{ form.hours.vars.id }}"
+         data-lessons=".pass_lesson"
+         data-target=".left_time p.left"
+         data-start-time=".start_time input"
+         data-end-time=".end_time input">
+
+        <div class="col-md-3">
+            {{ form_row(form.hours) }}
+        </div>
+        <div class="col-md-3">
+            {% set attr = {
+                'data-pass': 'date',
+                'data-target': '#'~form.end.vars.id,
+            } %}
+
+            {{ form_row(form.start, {'attr': attr}) }}
+        </div>
+        <div class="col-md-3">
+            {{ form_row(form.end) }}
+        </div>
+
+        <div class="col-md-3">
+            <div class="left_time">
+                <label>Quedan:</label>
+                <p class="left"></p>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <label>Lecciones: </label>
+            {{ form_widget(form.lessons) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block pass_lesson_widget %}
+
+    <div class="row pass_lesson">
+        <div class="col-md-3 day">
+            {{ form_row(form.day) }}
+        </div>
+        <div class="col-md-3 start_time">
+            {{ form_row(form.startTime) }}
+        </div>
+
+        <div class="col-md-3 end_time">
+            {{ form_row(form.endTime) }}
+        </div>
+
+        <div class="col-md-3 classroom">
+            {{ form_row(form.classroomId) }}
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block enrollment_payment_widget %}
+
+    <div class="enrollment_payment">
+        <div style="float: left">
+            <div class="input-group">
+                {{ form_widget(form) }}
+                <span class="input-group-addon"><span class="fa fa-euro"></span></span>
+            </div>
+        </div>
+        {% if show_unlock %}
+            <div style="float: left; padding-left: 0.5em">
+                <span class="btn btn-link"
+                      data-locked-enrollment="#{{ form.vars.id }}">
+                    Desbloquear
+                </span>
+            </div>
+        {% endif %}
+    </div>
 {% endblock %}

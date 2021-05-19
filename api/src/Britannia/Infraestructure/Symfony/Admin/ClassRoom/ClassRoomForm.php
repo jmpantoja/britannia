@@ -27,10 +27,13 @@ final class ClassRoomForm extends AdminForm
 
         $this->group('', ['class' => 'col-md-4'])
             ->add('name', null, [
+                'label' => 'Nombre',
                 'constraints' => [
                     new NotBlank()
                 ]
             ])
-            ->add('capacity', PositiveIntegerType::class);
+            ->add('capacity', PositiveIntegerType::class, [
+                'label' => 'Capacidad',
+            ]);
     }
 }

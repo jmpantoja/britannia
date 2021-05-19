@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xmlns:gedmo="http://gediminasm.org/schemas/orm/doctrine-extensions-mapping"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <embeddable name="Britannia\Domain\VO\Course\Assessment\Assessment">
+        
+        <field name="skills" type="SetOfSkills" nullable="true"></field>
+
+        <field name="otherSkills" type="SkillList" nullable="true"></field>
+
+        <field name="numOfTerms" type="integer" nullable="true"></field>
+
+        <field name="diagnosticTest" type="boolean" nullable="true"></field>
+        <field name="finalTest" type="boolean" nullable="true"></field>
+
+    </embeddable>
+
+</doctrine-mapping>

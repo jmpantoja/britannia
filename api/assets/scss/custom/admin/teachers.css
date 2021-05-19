@@ -1,0 +1,116 @@
+.cell-wrapper {
+    box-sizing: content-box;
+    float: left;
+    height: 335px;
+    width: 220px;
+    text-align: center;
+}
+
+.cell {
+    border-radius: 5px;
+    box-sizing: content-box;
+    border: solid 1px silver;
+    text-align: center;
+    position: relative;
+    width: 190px;
+    margin: auto;
+}
+
+.cell .cell-title,
+.cell .cell-footer {
+    display: block;
+    text-align: center;
+    font-size: 1.1em;
+    padding: 0.5em;
+    margin: 0;
+}
+
+.cell .cell-title {
+    border-bottom: solid 1px silver;
+}
+
+.cell .cell-footer {
+    border-top: solid 1px silver;
+}
+
+.cell .cell-image {
+    width: 150px;
+}
+
+
+.cell.on {
+    border-color: #008d4c;
+    cursor: pointer;
+}
+
+.cell.on .cell-title,
+.cell.on .cell-footer {
+    background-color: #008d4c;
+    color: white;
+}
+
+.cell.off {
+    border-color: #d73925;
+    cursor: pointer;
+}
+
+.cell.off .cell-title,
+.cell.off .cell-footer {
+    background-color: #d73925;
+    color: white;
+}
+
+.cell .cell-alert {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    word-spacing: -5px;
+}
+
+
+.cell.on .cell-alert {
+    bottom: 37px;
+}
+
+.cell.off .cell-alert {
+    bottom: 72px;
+}
+
+.cell .cell-alert span {
+    border-radius: 0;
+    border: solid 1px silver;
+    padding: 0.5em;
+    background-color: white;
+    box-sizing: content-box;
+    opacity: 100%;
+}
+
+.cell .cell-alert span:first-of-type {
+    border-top-left-radius: 20%;
+    border-right: none;
+}
+
+.cell-wrapper-mini {
+    height: 260px;
+    width: 205px;
+}
+
+
+.cell-wrapper-mini .cell .cell-alert {
+    bottom: 0;
+}
+
+.cell-wrapper-mini .cell .cell-alert span:last-of-type {
+    border-bottom-right-radius: 20%;
+}
+
+.cell-wrapper-mini .cell.off {
+    border-color: #999;
+    cursor: pointer;
+}
+
+.cell-wrapper-mini .cell.off .cell-title,
+.cell-wrapper-mini .cell.off .cell-footer {
+    background-color: #999;
+    color: white;
+}

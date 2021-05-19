@@ -24,14 +24,7 @@ final class DownloadFactory
      * @var DebugDownload
      */
     private DebugDownload $debug;
-    /**
-     * @var PdfDownload
-     */
-    private PdfDownload $pdf;
-    /**
-     * @var ZipDownload
-     */
-    private ZipDownload $zip;
+
     /**
      * @var FileDownload
      */
@@ -39,7 +32,6 @@ final class DownloadFactory
 
     public function __construct(DebugDownload $debug, FileDownload $download)
     {
-
         $this->debug = $debug;
         $this->download = $download;
     }
@@ -52,5 +44,4 @@ final class DownloadFactory
 
         return $this->download->createResponse($reportList);
     }
-
 }

@@ -28,9 +28,9 @@ class CourseRepository extends ServiceEntityRepository implements CourseReposito
         $today = CarbonImmutable::now();
 
         $query = $this->createQueryBuilder('o')
-            ->where('o.timeTable.end <= :today and o.status != :finalized')
-            ->orWhere('o.timeTable.start <= :today and o.timeTable.end >= :today and o.status != :active')
-            ->orWhere('o.timeTable.start >= :today and o.status != :pending')
+            ->where('o.timeRange.end <= :today and o.timeRange.status != :finalized')
+            ->orWhere('o.timeRange.start <= :today and o.timeRange.end >= :today and o.timeRange.status != :active')
+            ->orWhere('o.timeRange.start >= :today and o.timeRange.status != :pending')
             ->getQuery();
 
         return $query->execute([

@@ -14,13 +14,18 @@ declare(strict_types=1);
 namespace Britannia\Domain\VO\Discount;
 
 
-use MabeEnum\Enum;
+use PlanB\DDD\Domain\Enum\Enum;
 
+/**
+ * @method static self UPPER()
+ * @method static self LOWER()
+ * @method static self DEFAULT()
+ */
 class FamilyOrder extends Enum
 {
-    public const UPPER = 'Hermano con el curso de mayor precio';
-    public const LOWER = 'Hermano con el curso de menor precio';
-    public const DEFAULT = 'Resto de hermanos';
+    private const UPPER = 'Primer hermano (curso de mayor importe)';
+    private const LOWER = 'Segundo hermano (curso de menor importe)';
+    private const DEFAULT = 'Tercer hermano y siguientes';
 
     public function isUpper(): bool
     {

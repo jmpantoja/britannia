@@ -14,8 +14,16 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Symfony\EventSubscriber;
 
 
+use Britannia\Application\UseCase\Invoice\CreateInvoice;
+use Britannia\Application\UseCase\Lesson\LessonHasBeenAttended;
+use Britannia\Application\UseCase\Student\StudentUpdated;
+use Britannia\Application\UseCase\Student\StudentUpdatedStatus;
 use Britannia\Domain\Entity\Student\StudentHasAttendedLesson;
+use Britannia\Domain\Entity\Student\StudentHasBeenUpdated;
+use Britannia\Domain\Entity\Student\StudentHasJoinedToCourse;
+use Britannia\Domain\Entity\Student\StudentHasLeavedCourse;
 use Britannia\Domain\Entity\Student\StudentHasMissedLesson;
+use Carbon\CarbonImmutable;
 
 class StudentSubscriber extends DomainEventSubscriber
 {
@@ -28,18 +36,45 @@ class StudentSubscriber extends DomainEventSubscriber
         return [
             StudentHasMissedLesson::class => 'onStudentMissedLesson',
             StudentHasAttendedLesson::class => 'onStudentAttendedLesson',
+            StudentHasJoinedToCourse::class => 'onStudentJoinToCourse',
+            StudentHasLeavedCourse::class => 'onStudentLeaveACourse',
+            StudentHasBeenUpdated::class => 'onStudentUpdate',
         ];
+    }
+
+    public function onStudentJoinToCourse(StudentHasJoinedToCourse $event)
+    {
+        $command = StudentUpdatedStatus::make($event->student(), $event->course());
+        $this->handle($command);
+
+        $command = CreateInvoice::update($event->student(), $event->course(), CarbonImmutable::now());
+        $this->handle($command);
+
+    }
+
+    public function onStudentLeaveACourse(StudentHasLeavedCourse $event)
+    {
+        $command = StudentUpdatedStatus::make($event->student(), $event->course());
+        $this->handle($command);
+
+        $command = CreateInvoice::update($event->student(), $event->course(), CarbonImmutable::now());
+        $this->handle($command);
     }
 
     public function onStudentMissedLesson(StudentHasMissedLesson $event)
     {
-
-//        die(__METHOD__);
     }
 
     public function onStudentAttendedLesson(StudentHasAttendedLesson $event)
     {
-//        die(__METHOD__);
+        $command = LessonHasBeenAttended::make($event->attendance());
+        $this->handle($command);
+    }
+
+    public function onStudentUpdate(StudentHasBeenUpdated $event)
+    {
+        $command = StudentUpdated::make($event->student());
+        $this->handle($command);
     }
 
 }
