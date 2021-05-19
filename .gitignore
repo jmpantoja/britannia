@@ -1,4 +1,9 @@
+docker/*
+!docker/docker-compose.build.yml
+!docker/docker-compose.dev.yml
+
+
 /.env
-/docker
 .idea/
+
 
