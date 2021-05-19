@@ -33,7 +33,7 @@
         "select2": "^3.5",
         "select2-bootstrap-css": "^1.4",
         "trumbowyg": "^2.21.0",
-        "urijs": "^1.19.2",
+        "urijs": "^1.19.6",
         "url-loader": "^4.1.0",
         "waypoints": "^4.0",
         "x-editable": "^1.5"
