@@ -14,7 +14,7 @@
         "doctrine/doctrine-fixtures-bundle": "^3.2",
         "doctrine/orm": "^2.7",
         "guzzlehttp/guzzle": "^6.3",
-        "impulze/intervention-image-bundle": "^1.2",
+        "intervention/image": "^2.5",
         "knplabs/knp-snappy-bundle": "^1.6",
         "laminas/laminas-filter": "^2.9",
         "lavary/crunz": "^2.1",

@@ -1,2 +1,2 @@
-impulze_intervention_image:
-    driver: imagick #or imagick, defaults to gd
+#impulze_intervention_image:
+#    driver: imagick #or imagick, defaults to gd

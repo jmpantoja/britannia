@@ -82,6 +82,9 @@
     "doctrine/dbal": {
         "version": "v2.10.1"
     },
+    "doctrine/deprecations": {
+        "version": "v0.5.3"
+    },
     "doctrine/doctrine-bundle": {
         "version": "2.0",
         "recipe": {
@@ -158,6 +161,9 @@
     "egulias/email-validator": {
         "version": "2.1.17"
     },
+    "ezyang/htmlpurifier": {
+        "version": "v4.13.0"
+    },
     "fig/link-util": {
         "version": "1.1.0"
     },
@@ -172,6 +178,9 @@
         "files": [
             ".php_cs.dist"
         ]
+    },
+    "friendsofphp/proxy-manager-lts": {
+        "version": "v1.0.5"
     },
     "friendsofsymfony/ckeditor-bundle": {
         "version": "1.2.0"
@@ -190,9 +199,6 @@
     },
     "guzzlehttp/psr7": {
         "version": "1.6.1"
-    },
-    "impulze/intervention-image-bundle": {
-        "version": "1.2"
     },
     "intervention/image": {
         "version": "2.5.1"
@@ -358,6 +364,9 @@
     },
     "phpspec/prophecy": {
         "version": "v1.10.3"
+    },
+    "phpstan/phpdoc-parser": {
+        "version": "0.5.4"
     },
     "phpunit/php-code-coverage": {
         "version": "8.0.1"
@@ -774,6 +783,9 @@
     },
     "symfony/property-info": {
         "version": "v5.0.6"
+    },
+    "symfony/proxy-manager-bridge": {
+        "version": "v4.4.24"
     },
     "symfony/routing": {
         "version": "4.2",
