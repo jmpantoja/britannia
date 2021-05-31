@@ -67,7 +67,7 @@ final class CourseDataSource extends AdminDataSource
         }
 
         if ($course instanceof School) {
-            $data['schoolCourse'] = $this->parse($course->schoolCourse());
+            $data['schoolCourse'] = $this->parse($course->schoolCourses());
         }
 
         if ($course instanceof Adult) {

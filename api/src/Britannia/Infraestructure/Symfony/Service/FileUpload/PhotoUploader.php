@@ -15,9 +15,8 @@ namespace Britannia\Infraestructure\Symfony\Service\FileUpload;
 
 
 use Britannia\Domain\Entity\Image\Image;
-use Britannia\Domain\Entity\Staff\Photo;
 use Britannia\Domain\VO\Attachment\FileInfo;
-use Impulze\Bundle\InterventionImageBundle\ImageManager;
+use Intervention\Image\ImageManager;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -34,11 +33,11 @@ final class PhotoUploader extends FileUploader
      */
     private UrlGeneratorInterface $router;
 
-    public function __construct(ParameterBagInterface $parameterBag, UrlGeneratorInterface $router, ImageManager $imageManager)
+    public function __construct(ParameterBagInterface $parameterBag, UrlGeneratorInterface $router)
     {
         $this->targetDir = $parameterBag->get('photos_dir');
         $this->router = $router;
-        $this->imageManager = $imageManager;
+        $this->imageManager = new ImageManager(['driver' => 'gd']);
     }
 
     public function targetDir(): string
@@ -67,8 +66,9 @@ final class PhotoUploader extends FileUploader
         ]);
     }
 
-    public function photoUrl(?Image $image): ?string {
-        if(is_null($image)){
+    public function photoUrl(?Image $image): ?string
+    {
+        if (is_null($image)) {
             return $this->downloadUrl('shape.jpg');
         }
 

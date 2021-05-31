@@ -78,7 +78,15 @@ RUN set -eux; \
 		libicu-dev \
 		libzip-dev  \
 		zlib1g-dev  \
+		libpng-dev  \
+		libjpeg-dev  \
+		libxpm-dev  \
+		libfreetype6-dev \
+		vim \
 	;
+
+RUN docker-php-ext-configure gd --with-jpeg=/usr/include/ --with-freetype=/usr/include/ ;
+
 
 RUN	docker-php-ext-install -j$(nproc) \
 		intl \

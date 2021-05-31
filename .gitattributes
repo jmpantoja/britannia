@@ -17,6 +17,11 @@ bin/console text eol=lf
 *.jpg binary
 *.pdf binary
 *.ttf binary
+*.exe binary
+*.otf binary
+*.eot binary
+*.woff binary
+*.woff2 binary
 
 .github export-ignore
 .travis.yml export-ignore

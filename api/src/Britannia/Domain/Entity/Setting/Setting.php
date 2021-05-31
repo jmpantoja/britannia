@@ -202,7 +202,7 @@ class Setting
      */
     public function mail(): string
     {
-        return $this->mail;
+        return (string)$this->mail;
     }
 
     /**
