@@ -22,7 +22,7 @@ final class CalendarRoutes extends AdminRoutes
     protected function configure(): void
     {
         $this->clearExcept(['list', 'batch']);
-        $this->add('calendar.info', '/info');
-        $this->add('calendar.change_status', '/change/status');
+        $this->add('calendar.info', 'info');
+        $this->add('calendar.change_status', 'change/status');
     }
 }
