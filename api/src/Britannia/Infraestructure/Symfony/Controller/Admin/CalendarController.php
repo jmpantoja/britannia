@@ -45,7 +45,6 @@ class CalendarController extends CRUDController
     public function listAction()
     {
         return $this->render('admin/calendar/calendar.html.twig', [
-            // 'classRooms' => json_encode($classRooms),
             'calendar_endpoint' => 'admin_britannia_domain_calendar_calendar_calendar.info',
             'change_status_action' => 'admin_britannia_domain_calendar_calendar_calendar.change_status'
         ]);
