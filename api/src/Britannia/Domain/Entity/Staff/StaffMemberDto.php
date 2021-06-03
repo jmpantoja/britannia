@@ -47,7 +47,8 @@ final class StaffMemberDto extends Dto
     {
         return [
             'courses' => CourseList::collect(),
-            'status'=>Status::NON_PERMANENT()
+            'attachments' => AttachmentList::collect(),
+            'status' => Status::NON_PERMANENT()
         ];
     }
 }

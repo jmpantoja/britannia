@@ -63,7 +63,9 @@ final class XlsxGenerator extends AbstractTemplateFillerOut
     private function load(string $pathToTemplate): Spreadsheet
     {
         $reader = new Reader();
+
         $document = $reader->load($pathToTemplate);
+
         return $document;
     }
 

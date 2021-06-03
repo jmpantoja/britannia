@@ -43,6 +43,7 @@ use PlanB\DDDBundle\Symfony\Form\Type\WYSIWYGType;
 use Sonata\Form\Type\BooleanType;
 use Sonata\Form\Type\DatePickerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 final class StudentForm extends AdminForm
 {
@@ -89,8 +90,11 @@ final class StudentForm extends AdminForm
             ])
             ->add('birthDate', DatePickerType::class, [
                 'label' => 'Fecha de nacimiento',
+                'required' => true,
                 'format' => \IntlDateFormatter::LONG,
-                'required' => false
+                'constraints' => [
+                    new NotBlank(['allowNull' => false])
+                ]
             ]);
 
         if ($isAdult) {
@@ -164,8 +168,7 @@ final class StudentForm extends AdminForm
                     'required' => true,
                     'data' => $student->schoolHistory(),
                     'birthDay' => $student->birthDate()
-                ])
-            ;
+                ]);
         }
     }
 

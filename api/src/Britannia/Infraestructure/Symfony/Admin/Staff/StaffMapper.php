@@ -40,6 +40,7 @@ final class StaffMapper extends AdminMapper
     protected function create(array $values): StaffMember
     {
         $dto = $this->makeDto($values);
+
         return StaffMember::make($dto);
     }
 
@@ -61,7 +62,6 @@ final class StaffMapper extends AdminMapper
      */
     protected function makeDto(array $values): StaffMemberDto
     {
-
         $values['encoder'] = $this->encoderFactory;
         return StaffMemberDto::fromArray($values);
     }
