@@ -39,7 +39,6 @@ final class MarkReportAverageCalculator
 
     public function calcule(): MarkReport
     {
-
         $reports = collect($this->markReports)
             ->map(fn(MarkReport $markReport) => $markReport->toArray())
             ->reduce($this->carry(), []);

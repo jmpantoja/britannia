@@ -42,8 +42,7 @@ final class TermList extends EntityList
         return MarkReportAverageCalculator::collect(...$input)
             ->calcule();
     }
-
-
+    
     public function setLimits(TermName $termName, CarbonImmutable $start, ?CarbonImmutable $end = null): self
     {
         $this->values()

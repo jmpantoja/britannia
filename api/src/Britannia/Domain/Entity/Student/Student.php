@@ -161,6 +161,8 @@ abstract class Student implements Comparable
 
     private $notifications;
 
+    private $shipments = [];
+
     /**
      * @var CarbonImmutable
      */
@@ -310,6 +312,7 @@ abstract class Student implements Comparable
 
     private function setBirthDate(?DateTimeInterface $birthDate): self
     {
+
         if (is_null($birthDate)) {
             $this->birthDate = null;
             $this->birthMonth = null;
@@ -331,11 +334,10 @@ abstract class Student implements Comparable
             return $this;
         }
 
-        $today = CarbonImmutable::today();
-        $age = $this->birthDate->diffInYears($today);
+        $age = $this->birthDate->age;
 
         if ($age < 1) {
-            $this->age = 0;
+            $this->age = null;
             return $this;
         }
         $this->age = PositiveInteger::make($age);

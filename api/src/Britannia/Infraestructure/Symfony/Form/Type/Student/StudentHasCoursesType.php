@@ -65,9 +65,13 @@ class StudentHasCoursesType extends ModelType
 
     public function configureQuery(QueryBuilder $builder, OptionsResolver $resolver, string $alias = 'A')
     {
-
         /** @var Student $student */
         $student = $resolver['student'];
+        if (null === $student->age()) {
+            return;
+        }
+
+
         $age = $student->age()->toInt();
 
         $builder->where('A.timeRange.status != :finalized')

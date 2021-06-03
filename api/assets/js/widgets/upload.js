@@ -66,7 +66,7 @@
 
   Upload.prototype.isValidSize = function (file) {
 
-    if (file.size > this.options.maxSize) {
+    if (file.size > this.$maxsize) {
       alert(this.$invalidSizeError);
       return false;
     }
@@ -95,10 +95,11 @@
 
           this.$element.trigger('uploaded', response)
         } else {
+
           alert("Error al subir el archivo: " + response.message);
         }
       }.bind(this),
-      error: function () {
+      error: function (error) {
         alert('error al subir el archivo');
       }
     });

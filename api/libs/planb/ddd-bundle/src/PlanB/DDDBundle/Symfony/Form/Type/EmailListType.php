@@ -30,7 +30,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *
  * @author Andrej Hudec <pulzarraider@gmail.com>
  */
-
 class EmailListType extends AbstractSingleType
 {
 
@@ -68,8 +67,9 @@ class EmailListType extends AbstractSingleType
 
     public function customMapping($data)
     {
-        return array_map(function ($phoneNumber) {
-            return $this->toEmail($phoneNumber);
+
+        return array_map(function ($email) {
+            return $this->toEmail($email);
         }, $data);
 
     }

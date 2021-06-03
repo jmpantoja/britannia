@@ -72,11 +72,11 @@ class StaffMember implements UserInterface, Serializable, Comparable
     /**
      * @var null|Email[]
      */
-    private $emails;
+    private $emails = [];
     /**
      * @var null|PhoneNumber[]
      */
-    private $phoneNumbers;
+    private $phoneNumbers = [];
     /**
      * @var Collection
      */

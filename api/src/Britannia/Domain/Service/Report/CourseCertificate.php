@@ -37,6 +37,7 @@ final class CourseCertificate extends TemplateBasedPdfReport
      * @var \Britannia\Domain\VO\Assessment\MarkReport
      */
     private \Britannia\Domain\VO\Assessment\MarkReport $marks;
+    private \Britannia\Domain\VO\Assessment\Mark $final;
 
 
     /**
@@ -56,6 +57,9 @@ final class CourseCertificate extends TemplateBasedPdfReport
         $this->course = $studentCourse->course();
         $this->marks = $studentCourse->marks();
         $this->final = $studentCourse->final();
+
+        //¿Que pasa cuando no hay trimestres??
+        $exam = $studentCourse->exam();
 
     }
 
@@ -127,8 +131,8 @@ final class CourseCertificate extends TemplateBasedPdfReport
         if (!$this->availableSkill($name)) {
             return null;
         }
-        $range = $this->marks->get($name)->range()->getValue();
 
+        $range = $this->marks->get($name)->range()->getValue();
         return ucwords(strtolower($range));
     }
 

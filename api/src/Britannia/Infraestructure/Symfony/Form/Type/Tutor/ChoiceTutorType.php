@@ -47,16 +47,6 @@ class ChoiceTutorType extends AbstractCompoundType
     public function customForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-//            ->add('__search', ModelType::class, [
-//                'mapped' => false,
-//                'model_manager' => $this->modelManager,
-//                'class' => Tutor::class,
-//                'label' => false,
-//                'data' => $options['tutor'],
-//                'sonata_help' => 'seleccione un tutor, si ya existe',
-//                'placeholder' => '-- Nuevo Tutor --'
-//            ])
-
             ->add('__search', SelectTutorType::class, [
                 'data' => $options['tutor']
             ])

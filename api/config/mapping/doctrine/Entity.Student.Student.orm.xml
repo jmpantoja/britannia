@@ -52,9 +52,9 @@
 
         <many-to-many field="relatives" target-entity="Student">
             <cache usage="NONSTRICT_READ_WRITE" region="day"/>
-            <cascade>
-                <cascade-all/>
-            </cascade>
+            <!--            <cascade>-->
+            <!--                <cascade-all/>-->
+            <!--            </cascade>-->
         </many-to-many>
 
         <embedded name="payment" class="Britannia\Domain\VO\Payment\Payment"/>
@@ -89,6 +89,10 @@
                 <cascade-persist/>
             </cascade>
         </one-to-one>
+
+        <one-to-many field="shipments" target-entity="Britannia\Domain\Entity\Message\Shipment" mapped-by="student"
+                     orphan-removal="true">
+        </one-to-many>
 
         <field name="academyNumOfYears" column="other_academy_time" type="NumOfYears"/>
         <field name="firstContact" nullable="true"/>
