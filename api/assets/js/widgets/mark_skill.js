@@ -40,13 +40,13 @@
 
   MarkSkill.prototype.update = function (event) {
     let url = $(event.target).val();
-    let date = this.date();
+    let date = this.$date.val();
 
     $.ajax({
       type: 'POST',
       url: url,
       data: {
-        'date': date.format('YYYY-MM-DD'),
+        'date': date,
         'courseId': this.$courseId.val(),
         'uniqId': this.$uniqId.val(),
         'termName': this.$termName.val(),
@@ -60,10 +60,10 @@
       }.bind(this)
     });
   }
-
-  MarkSkill.prototype.date = function () {
-    return this.$date.parent().data('DateTimePicker').getDate();
-  }
+  //
+  // MarkSkill.prototype.date = function () {
+  //   return this.$date.parent().data('DateTimePicker').getDate();
+  // }
 
   MarkSkill.prototype.delete = function (event) {
     let value = this.$date.val()
