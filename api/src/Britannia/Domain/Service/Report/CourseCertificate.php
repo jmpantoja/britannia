@@ -57,10 +57,6 @@ final class CourseCertificate extends TemplateBasedPdfReport
         $this->course = $studentCourse->course();
         $this->marks = $studentCourse->marks();
         $this->final = $studentCourse->final();
-
-        //¿Que pasa cuando no hay trimestres??
-        $exam = $studentCourse->exam();
-
     }
 
     /**

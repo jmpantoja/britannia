@@ -32,22 +32,16 @@
     <div class="row">
         <div class="col-md-8">
             {{ form_row(form.subject) }}
-        </div>
-        <div class="col-md-2">
-            {{ form_row(form.schedule) }}
-        </div>
-        <div class="col-md-2">
-            {{ form_row(form.mailer) }}
-        </div>
-
-        <div class="col-md-8 message">
             {{ form_row(form.message) }}
         </div>
 
-
         <div class="col-md-4">
+            {{ form_row(form.schedule) }}
+
+            {{ form_row(form.mailer) }}
+
             <fieldset class="message-recipients-wrapper">
-                <legend>Enviar a</legend>
+                <legend>Destinatarios:</legend>
                 <div class="col-md-12 message-recipients">
                     <span>Alumnos</span>
                     {{ form_widget(form.students) }}
@@ -57,8 +51,9 @@
                     <span>Cursos</span>
                     {{ form_widget(form.courses) }}
                 </div>
-
             </fieldset>
+
+
         </div>
 
     </div>
@@ -79,7 +74,7 @@
         {{ form_row(form.schedule) }}
 
         <fieldset class="message-recipients-wrapper">
-            <legend>Enviar a</legend>
+            <legend>Destinatarios:</legend>
             <div class="col-md-12 message-recipients">
                 <span>Alumnos</span>
                 {{ form_widget(form.students) }}

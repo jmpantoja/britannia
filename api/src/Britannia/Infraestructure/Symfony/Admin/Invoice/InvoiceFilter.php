@@ -15,6 +15,8 @@ namespace Britannia\Infraestructure\Symfony\Admin\Invoice;
 
 
 use Britannia\Domain\VO\Payment\PaymentMode;
+use Britannia\Infraestructure\Symfony\Form\Type\Date\DateRangeType;
+use Britannia\Infraestructure\Symfony\Form\Type\Date\DateType;
 use PlanB\DDDBundle\Sonata\Admin\AdminFilter;
 use Sonata\Form\Type\DateRangePickerType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -57,19 +59,24 @@ final class InvoiceFilter extends AdminFilter
             'label' => false,
             'field_type' => DateRangePickerType::class,
             'field_options' => [
+                'field_type' => DateType::class,
                 'field_options' => [
-                    'format' => \IntlDateFormatter::LONG
                 ],
-                'field_options_start'=>[
-                    'label'=>'Desde'
+                'field_options_start' => [
+                    'label' => 'Desde',
+                    'required' => false,
+                    'invalid_message' => null,
                 ],
-                'field_options_end'=>[
-                    'label'=>'Hasta'
+                'field_options_end' => [
+                    'label' => 'Hasta',
+                    'required' => false,
+                    'invalid_message' => null,
                 ]
             ],
             'advanced_filter' => false,
             'show_filter' => true
         ]);
+
 
     }
 }

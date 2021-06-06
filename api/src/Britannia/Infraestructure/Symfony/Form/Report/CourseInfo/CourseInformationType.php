@@ -21,14 +21,13 @@ use Britannia\Domain\VO\Discount\StudentDiscount;
 use Britannia\Infraestructure\Symfony\Admin\CourseReport\CourseReportAdmin;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\Discount\FamilyOrderType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\Discount\FreeEnrollmentType;
+use Britannia\Infraestructure\Symfony\Form\Type\Date\DateType;
 use Britannia\Infraestructure\Symfony\Form\Type\Student\JobStatusType;
 use Britannia\Infraestructure\Symfony\Service\Course\BoundariesInformation;
 use Britannia\Infraestructure\Symfony\Validator\FullName;
-use IntlDateFormatter;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractCompoundType;
 use PlanB\DDDBundle\Symfony\Form\Type\PriceType;
-use Sonata\Form\Type\DatePickerType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -57,13 +56,12 @@ class CourseInformationType extends AbstractCompoundType
             ->add('freeEnrollment', FreeEnrollmentType::class)
             ->add('familyOrder', FamilyOrderType::class)
             ->add('jobStatus', JobStatusType::class)
-            ->add('startDate', DatePickerType::class, [
-                'format' => IntlDateFormatter::LONG,
+            ->add('startDate', DateType::class, [
                 'label' => false,
+                'required' => false,
                 'sonata_help' => 'Se incorpora con el curso comenzado'
             ])
             ->add('firstMonth', PriceType::class, [
-                'required' => false,
                 'label' => 'Precio primer mes',
                 'data' => $this->boundaries->firstMonthly($course)
             ])

@@ -62,8 +62,11 @@ final class CourseReportController extends CRUDController
         $firstDay = $courseTerm->start();
         $lastDay = $courseTerm->end();
 
-        $start = date_to_string($firstDay);
-        $end = $lastDay instanceof CarbonImmutable ? date_to_string($lastDay) : null;
+        $start = $firstDay->format('Y-m-d');
+        $end = $lastDay instanceof CarbonImmutable ? $lastDay->format('Y-m-d') : null;
+
+//        $start = date_to_string($firstDay);
+//        $end = $lastDay instanceof CarbonImmutable ? date_to_string($lastDay) : null;
 
         return $this->renderJson([
             'start' => $start,
@@ -129,6 +132,8 @@ final class CourseReportController extends CRUDController
         if (empty($startDate)) {
             return null;
         }
+        return CarbonImmutable::make($startDate);
+
         return string_to_date($startDate);
     }
 }

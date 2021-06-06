@@ -19,11 +19,11 @@ use Britannia\Domain\Entity\Lesson\LessonDto;
 use Britannia\Domain\Repository\ClassRoomRepositoryInterface;
 use Britannia\Domain\VO\Course\Pass\Validator\PassLesson;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\TimeTable\ClassRoomType;
+use Britannia\Infraestructure\Symfony\Form\Type\Date\DateType;
+use Britannia\Infraestructure\Symfony\Form\Type\Date\TimeType;
 use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractCompoundType;
-use Sonata\Form\Type\DatePickerType;
-use Sonata\Form\Type\DateTimePickerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -43,22 +43,14 @@ final class PassLessonType extends AbstractCompoundType
     public function customForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('day', DatePickerType::class, [
+            ->add('day', DateType::class, [
                 'label' => 'Fecha'
             ])
-            ->add('startTime', DateTimePickerType::class, [
+            ->add('startTime', TimeType::class, [
                 'label' => 'Inicio',
-                'dp_pick_date' => false,
-                'dp_pick_time' => true,
-                'format' => 'H:mm',
-                'dp_minute_stepping' => 5
             ])
-            ->add('endTime', DateTimePickerType::class, [
+            ->add('endTime', TimeType::class, [
                 'label' => 'Fin',
-                'dp_pick_date' => false,
-                'dp_pick_time' => true,
-                'format' => 'H:mm',
-                'dp_minute_stepping' => 5
             ])
             ->add('classroomId', ClassRoomType::class, [
                 'required' => true
@@ -90,7 +82,7 @@ final class PassLessonType extends AbstractCompoundType
             'classRoom' => $this->classRoomRepository->find($data['classroomId'])
         ]);
 
-        if($lesson instanceof Lesson){
+        if ($lesson instanceof Lesson) {
             return $lesson->update($dto);
         }
 

@@ -42,11 +42,10 @@ final class MarkRoutes extends AdminRoutes
 
     protected function configure(): void
     {
-
         $this->clearExcept(['edit']);
 
-        $this->add('marks', '/ajax/marks');
-        $this->add('add-skill', '/ajax/add/skill');
-        $this->add('remove-skill', '/ajax/remove/skill');
+        $this->add('marks', 'ajax/marks');
+        $this->add('add-skill', 'ajax/add/skill');
+        $this->add('remove-skill', 'ajax/remove/skill');
     }
 }

@@ -45,7 +45,9 @@ final class IssueForm extends AdminForm
             ->add('message', WYSIWYGType::class, [
                 'label' => 'Mensaje',
                 'required' => false
-            ]);
+            ])
+
+        ;
     }
 
 }

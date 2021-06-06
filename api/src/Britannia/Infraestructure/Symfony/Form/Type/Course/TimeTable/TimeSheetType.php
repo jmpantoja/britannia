@@ -15,13 +15,13 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Course\TimeTable;
 
 
 use Britannia\Domain\VO\Course\TimeTable\TimeSheet;
+use Britannia\Infraestructure\Symfony\Form\Type\Date\TimeType;
 use Britannia\Infraestructure\Symfony\Validator\FullName;
 use Carbon\CarbonImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\FormDataMapper;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractCompoundType;
-use Sonata\Form\Type\DateTimePickerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -47,19 +47,11 @@ class TimeSheetType extends AbstractCompoundType
             ->add('dayOfWeek', DayOfWeekType::class, [
                 'required' => true
             ])
-            ->add('start', DateTimePickerType::class, [
+            ->add('start', TimeType::class, [
                 'label' => 'Inicio',
-                'dp_pick_date' => false,
-                'dp_pick_time' => true,
-                'format' => 'H:mm',
-                'dp_minute_stepping' => 5
             ])
-            ->add('end', DateTimePickerType::class, [
+            ->add('end', TimeType::class, [
                 'label' => 'Fin',
-                'dp_pick_date' => false,
-                'dp_pick_time' => true,
-                'format' => 'H:mm',
-                'dp_minute_stepping' => 5
             ])
             ->add('classroomId', ClassRoomType::class, [
                 'required' => true

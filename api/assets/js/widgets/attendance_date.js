@@ -28,6 +28,7 @@
     this.$btnGoTo.on('click', function () {
       let date = this.date();
       this.goTo(date)
+
     }.bind(this))
 
     this.$btnToday.on('click', function () {
@@ -58,10 +59,10 @@
 
   AttendanceDate.prototype.goTo = function (date) {
     let uri = URI();
-    let formatted = date.format('Y-MM-DD');
+//    let formatted = date.format('Y-MM-DD');
 
     uri.search(function (data) {
-      data.date = formatted;
+      data.date = date;
     });
     window.location = uri.toString()
   }
@@ -71,7 +72,7 @@
     let value = this.$element.val();
     let format = this.options.format;
 
-    return moment(value, format)
+    return value;
   }
 
   function Plugin(option) {

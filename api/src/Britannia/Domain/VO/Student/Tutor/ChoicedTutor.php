@@ -64,6 +64,4 @@ final class ChoicedTutor
     {
         return $this->description;
     }
-
-
 }

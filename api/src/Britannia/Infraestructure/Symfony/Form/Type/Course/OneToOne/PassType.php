@@ -21,12 +21,12 @@ use Britannia\Domain\Entity\Lesson\LessonList;
 use Britannia\Domain\VO\Course\Pass\PassHours;
 use Britannia\Domain\VO\Course\Pass\Validator\Pass as PassConstraint;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\PassHoursType;
+use Britannia\Infraestructure\Symfony\Form\Type\Date\DateType;
 use Britannia\Infraestructure\Symfony\Validator\FullName;
 use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractCompoundType;
 use Sonata\AdminBundle\Form\Type\CollectionType;
-use Sonata\Form\Type\DatePickerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -41,19 +41,13 @@ class PassType extends AbstractCompoundType
         ]);
 
         $today = CarbonImmutable::tomorrow();
-        $defaultStart = date_to_string($today, \IntlDateFormatter::LONG);
-        $defaultEnd = date_to_string($today->lastOfMonth(), \IntlDateFormatter::LONG);
 
-        $builder->add('start', DatePickerType::class, [
+        $builder->add('start', DateType::class, [
             'label' => 'Valido desde',
-            'format' => \IntlDateFormatter::LONG,
-            'dp_default_date' => $defaultStart
         ]);
 
-        $builder->add('end', DatePickerType::class, [
+        $builder->add('end', DateType::class, [
             'label' => 'Valido hasta',
-            'format' => \IntlDateFormatter::LONG,
-            'dp_default_date' => $defaultEnd,
             'disabled' => true
         ]);
 
@@ -65,7 +59,10 @@ class PassType extends AbstractCompoundType
             'allow_delete' => true,
             'prototype' => true,
             'error_bubbling' => false,
-            'entry_type' => PassLessonType::class
+            'entry_type' => PassLessonType::class,
+            'entry_options' => []
+
+
         ]);
     }
 
@@ -77,9 +74,7 @@ class PassType extends AbstractCompoundType
 
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
-
         $hours = $view['hours']->vars['data'];
-
         $view->vars['numOfMinutes'] = 0;
 
         if ($hours instanceof PassHours) {
@@ -100,8 +95,9 @@ class PassType extends AbstractCompoundType
 
     public function customMapping(array $data, ?Pass $pass = null)
     {
+        $lessons = array_filter($data['lessons']);
         $dto = PassDto::fromArray([
-            'lessonList' => LessonList::collect($data['lessons']),
+            'lessonList' => LessonList::collect($lessons),
             'course' => $this->getOption('course'),
             'hours' => $data['hours'],
             'start' => CarbonImmutable::make($data['start']),

@@ -18,6 +18,7 @@ use Britannia\Domain\Entity\Staff\StaffMember;
 use Britannia\Infraestructure\Symfony\Admin\Issue\Filter\IssueFilterType;
 use Britannia\Infraestructure\Symfony\Admin\Issue\Filter\IssueFormType;
 use Britannia\Infraestructure\Symfony\Admin\Issue\Filter\IssueStatusFilter;
+use Britannia\Infraestructure\Symfony\Form\Type\Date\DateType;
 use PlanB\DDDBundle\Sonata\Admin\AdminFilter;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\Form\Type\DateRangePickerType;
@@ -47,13 +48,24 @@ final class IssueFilter extends AdminFilter
             'label' => false,
             'field_type' => DateRangePickerType::class,
             'field_options' => [
+                'field_type' => DateType::class,
                 'field_options' => [
-                    'format' => \IntlDateFormatter::LONG
+                ],
+                'field_options_start' => [
+                    'label' => 'Desde',
+                    'required' => false,
+                    'invalid_message' => null,
+                ],
+                'field_options_end' => [
+                    'label' => 'Hasta',
+                    'required' => false,
+                    'invalid_message' => null,
                 ]
             ],
             'advanced_filter' => false,
             'show_filter' => true
         ]);
+
     }
 
     private function method()

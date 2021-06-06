@@ -83,7 +83,7 @@ final class IssueFormType extends AbstractCompoundType
 
         $user = $this->user();
         if ($user->isManager()) {
-            $choices['Del resto de usuarios'] = 3;
+            $choices['Todos'] = 3;
         }
 
         return $choices;

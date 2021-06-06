@@ -379,7 +379,7 @@
       </trans-unit>
       <trans-unit id="_xzlg02" resname="export_format_xls">
         <source>export_format_xls</source>
-        <target>XLS</target>
+        <target>Exportar .xls</target>
       </trans-unit>
       <trans-unit id="gqVIz5w" resname="loading_information">
         <source>loading_information</source>

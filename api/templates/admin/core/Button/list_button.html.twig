@@ -1,8 +1,13 @@
 {% if admin.hasAccess('list') and admin.hasRoute('list') %}
-
     <li>
+        {% set referer = app.request.server.get('HTTP_REFERER')|default('/') %}
+        {% set list = admin.generateUrl('list') %}
+        {% if list in referer %}
+            {% set list = referer %}
+        {% endif %}
+
         <div class="btn-group">
-            <a class="btn btn-info" href="{{ admin.generateUrl('list') }}">
+            <a class="btn btn-info" href="{{ list }}">
                 {{ 'link_action_list'|trans({}, 'SonataAdminBundle') }}
             </a>
         </div>

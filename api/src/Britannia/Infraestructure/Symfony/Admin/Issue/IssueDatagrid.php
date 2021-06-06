@@ -44,7 +44,8 @@ final class IssueDatagrid extends AdminDataGrid
             'header_style' => 'width:120px',
             'row_align' => 'left',
             'label' => 'Fecha'
-        ]);
+        ])
+        ;
 
 
         return $this;

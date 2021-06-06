@@ -90,14 +90,19 @@
     <div id="{{ id }}-wrapper" class="row unit_definition">
 
         <div class="col-md-3">
-            {{ form_row(form.numOfTerms) }}
-        </div>
-        <div class="col-md-3">
             {{ form_row(form.diagnostic) }}
         </div>
+        {% if is_school %}
+        <div class="col-md-3">
+            {{ form_row(form.numOfTerms) }}
+        </div>
+        {% endif %}
+        {% if is_adult %}
         <div class="col-md-3">
             {{ form_row(form.final) }}
         </div>
+        {% endif %}
+
         <div class="col-md-12">
             <legend class="control-label">
                 Destrezas

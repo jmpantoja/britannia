@@ -17,10 +17,10 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Assessment;
 use Britannia\Domain\VO\Assessment\CourseTerm;
 use Britannia\Domain\VO\Assessment\Skill;
 use Britannia\Infraestructure\Symfony\Admin\Mark\MarkAdmin;
+use Britannia\Infraestructure\Symfony\Form\Type\Date\DateType;
 use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractCompoundType;
-use Sonata\Form\Type\DatePickerType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -59,9 +59,9 @@ class OtherSkillDefinitionType extends AbstractCompoundType
             ])->add('skill', HiddenType::class, [
                 'data' => $options['skill']
 
-            ])->add('date', DatePickerType::class, [
+            ])->add('date', DateType::class, [
                 'label' => 'Fecha',
-                'format' => \IntlDateFormatter::LONG,
+                // 'format' => \IntlDateFormatter::LONG,
                 'data' => CarbonImmutable::today()
 
             ])->add('add', ButtonType::class, [
