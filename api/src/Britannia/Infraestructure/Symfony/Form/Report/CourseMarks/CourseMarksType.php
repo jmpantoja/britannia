@@ -16,14 +16,15 @@ namespace Britannia\Infraestructure\Symfony\Form\Report\CourseMarks;
 
 use Britannia\Application\UseCase\CourseReport\GenerateTermMarks;
 use Britannia\Domain\Entity\Course\Course;
+use Britannia\Domain\Entity\Course\CourseAssessmentInterface;
 use Britannia\Domain\VO\CourseInfoData;
 use Britannia\Infraestructure\Symfony\Form\Report\CourseMarks\Validator\CourseMarks;
 use Britannia\Infraestructure\Symfony\Form\Type\Assessment\TermNameType;
+use Britannia\Infraestructure\Symfony\Form\Type\Date\DateType;
 use Britannia\Infraestructure\Symfony\Validator\FullName;
 use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractCompoundType;
-use Sonata\Form\Type\DatePickerType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -36,30 +37,31 @@ class CourseMarksType extends AbstractCompoundType
     public function customForm(FormBuilderInterface $builder, array $options)
     {
 
-        /** @var Course $course */
+        /** @var CourseAssessmentInterface $course */
         $course = $options['data'];
 
         $builder->add('selected', HiddenType::class);
         $builder->add('termName', TermNameType::class, [
             'mapped' => false,
+            'numOfTerms' => $course->assessment()->numOfTerms(),
             'attr' => [
-                'style' => 'width: 235px'
+                'style' => 'width: 235px;'
             ]
         ]);
 
-        $builder->add('start', DatePickerType::class, [
+        $builder->add('start', DateType::class, [
             'mapped' => false,
-            'format' => \IntlDateFormatter::LONG,
+//            'format' => \IntlDateFormatter::LONG,
             'label' => 'Desde',
             'attr' => [
                 'readonly' => true
             ]
         ]);
 
-        $builder->add('end', DatePickerType::class, [
+        $builder->add('end', DateType::class, [
             'mapped' => false,
             'label' => 'Hasta',
-            'format' => \IntlDateFormatter::LONG
+            //    'format' => \IntlDateFormatter::LONG
         ]);
 
         $builder->add('students', ChooseStudentListType::class, [

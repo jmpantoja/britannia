@@ -79,7 +79,7 @@ class PassValidator extends ConstraintValidator
     {
         $end = $start->lastOfMonth();
 
-        $outOfRange = LessonList::collect($lessons)
+        $outOfRange = LessonList::collect(array_filter($lessons))
             ->values()
             ->reduce(function (bool $carry, Lesson $lesson) use ($start, $end) {
                 return $carry || !$lesson->day()->between($start, $end);

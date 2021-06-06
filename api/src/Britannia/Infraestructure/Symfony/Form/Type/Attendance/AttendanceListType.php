@@ -17,11 +17,11 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Attendance;
 use Britannia\Domain\Entity\Attendance\AttendanceList;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Lesson\Lesson;
+use Britannia\Infraestructure\Symfony\Form\Type\Date\DateType;
 use Britannia\Infraestructure\Symfony\Validator\FullName;
 use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractCompoundType;
-use Sonata\Form\Type\DatePickerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -35,7 +35,7 @@ class AttendanceListType extends AbstractCompoundType
         $lesson = $options['lesson'];
         $date = $options['date'];
 
-        $builder->add('date', DatePickerType::class, [
+        $builder->add('date', DateType::class, [
             'data' => $date,
             'label' => false,
         ]);

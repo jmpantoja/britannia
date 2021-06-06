@@ -19,6 +19,7 @@ use Britannia\Domain\Entity\Student\Child;
 use Britannia\Domain\Entity\Student\Photo;
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Entity\Student\StudentId;
+use Britannia\Infraestructure\Symfony\Form\Type\Date\DateType;
 use Britannia\Infraestructure\Symfony\Form\Type\Photo\PhotoType;
 use Britannia\Infraestructure\Symfony\Form\Type\Student\AlertType;
 use Britannia\Infraestructure\Symfony\Form\Type\Student\AttachmentListType;
@@ -41,9 +42,7 @@ use PlanB\DDDBundle\Symfony\Form\Type\PhoneNumberListType;
 use PlanB\DDDBundle\Symfony\Form\Type\PostalAddressType;
 use PlanB\DDDBundle\Symfony\Form\Type\WYSIWYGType;
 use Sonata\Form\Type\BooleanType;
-use Sonata\Form\Type\DatePickerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Validator\Constraints\NotBlank;
 
 final class StudentForm extends AdminForm
 {
@@ -88,13 +87,9 @@ final class StudentForm extends AdminForm
                 'label' => 'Nombre y apellidos',
                 'required' => true
             ])
-            ->add('birthDate', DatePickerType::class, [
+            ->add('birthDate', DateType::class, [
                 'label' => 'Fecha de nacimiento',
                 'required' => true,
-                'format' => \IntlDateFormatter::LONG,
-                'constraints' => [
-                    new NotBlank(['allowNull' => false])
-                ]
             ]);
 
         if ($isAdult) {
@@ -266,11 +261,9 @@ final class StudentForm extends AdminForm
             ]);
     }
 
-
     private function issuesTab(string $name)
     {
         $this->tab($name);
-
 
         $this->group('¡Cuidado!', ['class' => 'col-md-4'])
             ->add('alert', AlertType::class, [

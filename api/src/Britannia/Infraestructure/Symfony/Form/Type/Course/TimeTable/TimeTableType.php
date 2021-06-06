@@ -18,14 +18,13 @@ use Britannia\Domain\VO\Course\TimeRange\TimeRange;
 use Britannia\Domain\VO\Course\TimeTable\Schedule;
 use Britannia\Domain\VO\Course\TimeTable\TimeTable;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\LockedType;
+use Britannia\Infraestructure\Symfony\Form\Type\Date\DateType;
 use Britannia\Infraestructure\Symfony\Validator\FullName;
 use Carbon\CarbonImmutable;
-use IntlDateFormatter;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\FormDataMapper;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractCompoundType;
 use Sonata\AdminBundle\Form\Type\CollectionType;
-use Sonata\Form\Type\DatePickerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -42,16 +41,16 @@ class TimeTableType extends AbstractCompoundType
 
 
         $builder
-            ->add('start', DatePickerType::class, [
-                'format' => \IntlDateFormatter::LONG,
+            ->add('start', DateType::class, [
+//                'format' => \IntlDateFormatter::LONG,
                 'label' => 'Inicio',
                 'data' => $start,
                 'attr' => [
                     'data-disabled' => $options['course']->isActive()
                 ]
             ])
-            ->add('end', DatePickerType::class, [
-                'format' => \IntlDateFormatter::LONG,
+            ->add('end', DateType::class, [
+                //   'format' => \IntlDateFormatter::LONG,
                 'data' => $end,
                 'label' => 'Fin'
             ])

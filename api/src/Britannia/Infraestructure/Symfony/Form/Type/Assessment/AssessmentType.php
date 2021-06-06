@@ -21,11 +21,20 @@ use PlanB\DDDBundle\Symfony\Form\Type\AbstractCompoundType;
 use PlanB\DDDBundle\Symfony\Form\Type\ToggleType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class AssessmentType extends AbstractCompoundType
 {
+    public function buildView(FormView $view, FormInterface $form, array $options)
+    {
+        $view->vars['is_adult'] = $options['is_adult'];
+        $view->vars['is_school'] = $options['is_school'];
 
+        parent::buildView($view, $form, $options);
+    }
+    
     public function customForm(FormBuilderInterface $builder, array $options)
     {
         /** @var Assessment $assessment */
@@ -75,7 +84,9 @@ class AssessmentType extends AbstractCompoundType
     public function customOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Assessment::class
+            'data_class' => Assessment::class,
+            'is_school' => false,
+            'is_adult' => false,
         ]);
 
     }

@@ -143,6 +143,11 @@ abstract class AbstractSingleType extends AbstractType implements DataTransforme
      */
     public function transform($value)
     {
+//        if (static::class === DateType::class) {
+//            dump($value);
+//            die('sss');
+//        }
+
         $options = $this->getOptions();
 
         $value = $value ?? $options['empty_data'] ?? null;
@@ -174,6 +179,7 @@ abstract class AbstractSingleType extends AbstractType implements DataTransforme
      */
     public function reverseTransform($value)
     {
+
         $this->options = $this->builder->getOptions();
 
         $constraint = $this->buildConstraint($this->options);
@@ -196,6 +202,7 @@ abstract class AbstractSingleType extends AbstractType implements DataTransforme
 
     private function validate($data, Constraint $constraint): bool
     {
+
         $validator = Validation::createValidator();
         $violationList = $validator->validate($data, $constraint);
 

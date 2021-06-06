@@ -53,7 +53,7 @@ final class IssueStatusFilter extends Filter
         }
 
         if ($recipient === 0) {
-            //Todos
+            //Todos los mios
             $builder->andWhere(sprintf('%s.author = :user OR P.recipient = :user', $alias));
         }
 

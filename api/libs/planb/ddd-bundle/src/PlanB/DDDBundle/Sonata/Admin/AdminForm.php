@@ -49,7 +49,6 @@ abstract class AdminForm
 
     public function addViewTransformer($aa)
     {
-
         return $this;
     }
 
@@ -96,6 +95,4 @@ abstract class AdminForm
         }
         $this->isOpened = true;
     }
-
-
 }

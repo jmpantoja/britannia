@@ -20,7 +20,6 @@ use Britannia\Domain\VO\Assessment\Mark;
 use Britannia\Domain\VO\Assessment\MarkReport;
 use Britannia\Domain\VO\Course\TimeRange\TimeRange;
 use Carbon\CarbonImmutable;
-use Doctrine\Persistence\Event\LifecycleEventArgs;
 use PlanB\DDD\Domain\Behaviour\Comparable;
 use PlanB\DDD\Domain\Behaviour\Traits\ComparableTrait;
 use PlanB\DDD\Domain\Model\Traits\AggregateRootTrait;
@@ -146,9 +145,11 @@ class StudentCourse implements Comparable
 
     public function marks(): MarkReport
     {
-        return $this->course->marksByStudent($this->student);
+        if ($this->course instanceof Course\School) {
+            return $this->course->marksByStudent($this->student);
+        }
+        return $this->exam();
     }
-
 
     public function final(): Mark
     {
@@ -165,8 +166,9 @@ class StudentCourse implements Comparable
         ]);
     }
 
-    private function formatDate(?CarbonImmutable $date): string {
-        if(is_null($date)){
+    private function formatDate(?CarbonImmutable $date): string
+    {
+        if (is_null($date)) {
             return '';
         }
 

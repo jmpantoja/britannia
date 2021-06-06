@@ -59,14 +59,15 @@
                     'data-term': 'date',
                     'data-url': url,
                     'data-start': '#%s' | format(form.start.vars.id),
-                    'data-end': '#%s' | format(form.end.vars.id)
+                    'data-end': '#%s' | format(form.end.vars.id),
+                    'style':' width: 230px'
                 } %}
 
                 {{ form_row(form.termName, {'attr': attr}) }}
             </div>
 
             <div class="col-md-4">
-                <div class="col-md-6 no-padding">
+                <div class="col-md-4 no-padding">
                     {{ form_row(form.start) }}
                 </div>
                 <div class="col-md-6 no-padding">

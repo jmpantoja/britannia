@@ -22,9 +22,9 @@ final class NotificationForm extends AdminForm
 {
     public function configure(Notification $notification)
     {
-        $this->add('sasda', TextType::class, [
-            'mapped' => false
-        ]);
+//        $this->add('sasda', TextType::class, [
+//            'mapped' => false
+//        ]);
     }
 
 }

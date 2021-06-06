@@ -15,6 +15,7 @@ namespace Britannia\Infraestructure\Symfony\Admin\Notification;
 
 
 use Britannia\Domain\Entity\Notification\TypeOfNotification;
+use Britannia\Infraestructure\Symfony\Form\Type\Date\DateType;
 use PlanB\DDDBundle\Sonata\Admin\AdminFilter;
 use Sonata\Form\Type\DateRangePickerType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -60,13 +61,22 @@ final class NotificationFilter extends AdminFilter
             'label' => false,
             'field_type' => DateRangePickerType::class,
             'field_options' => [
+                'field_type' => DateType::class,
                 'field_options' => [
-                    'format' => \IntlDateFormatter::LONG
+                ],
+                'field_options_start' => [
+                    'label' => 'Desde',
+                    'required' => false,
+                    'invalid_message' => null,
+                ],
+                'field_options_end' => [
+                    'label' => 'Hasta',
+                    'required' => false,
+                    'invalid_message' => null,
                 ]
             ],
             'advanced_filter' => false,
             'show_filter' => true
         ]);
-
     }
 }

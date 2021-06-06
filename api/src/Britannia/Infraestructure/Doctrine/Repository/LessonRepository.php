@@ -96,21 +96,17 @@ class LessonRepository extends ServiceEntityRepository implements LessonReposito
      */
     public function findByDay(CarbonImmutable $day, ?StaffMember $member = null): array
     {
-        if (!($member instanceof StaffMember)) {
-            return $this->findBy([
-                'day' => $day
-            ]);
-        }
-
         $query = $this->createQueryBuilder('A')
             ->where('A.day = :day')
-            ->andWhere('A.course IN (:courses)')
-            ->getQuery();
+            ->setParameter('day', $day);
 
-        return $query->execute([
-            'day' => $day,
-            'courses' => $member->activeCourses()
-        ]);
+        if ($member instanceof StaffMember) {
+            $query
+                ->andWhere('A.course IN (:courses)')
+                ->setParameter('courses', $member->activeCourses());
+        }
+
+        return $query->getQuery()->execute();
 
     }
 

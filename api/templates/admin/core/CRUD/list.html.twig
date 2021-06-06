@@ -21,6 +21,7 @@
                             <div class="col-sm-12">
                                 <label for="{{ form[filter.formName].children['value'].vars.id }}"
                                        class="control-label">{{ filter.label|trans({}, filter.translationDomain ?: admin.translationDomain) }}</label>
+
                                 {{ form_widget(form[filter.formName].children['value']) }}
                             </div>
                         </div>
@@ -99,9 +100,9 @@
                     {% elseif field_description.getOption('code') == '_select' %}
                         <th class="sonata-ba-list-field-header sonata-ba-list-field-header-select"></th>
                     {% elseif field_description.name == '_action' and app.request.isXmlHttpRequest %}
-                        {#                        Action buttons disabled in ajax view!#}
+                        {# Action buttons disabled in ajax view! #}
                     {% elseif field_description.getOption('ajax_hidden') == true and app.request.isXmlHttpRequest %}
-                        {#                        Disable fields with 'ajax_hidden' option set to true#}
+                        {# Disable fields with 'ajax_hidden' option set to true #}
                     {% elseif field_description.name == '_collapsed' %}
 
 
@@ -182,25 +183,36 @@
     {% set export_formats = export_formats|default(admin.exportFormats) %}
     <div class="nav navbar-nav navbar-right actions-navbar">
         {% if admin.hasRoute('export') and admin.hasAccess('export') and export_formats|length %}
-            <div class="btn-group">
-                <button type="button" class="btn btn-default dropdown-toggle"
-                        data-toggle="dropdown">
-                    <i class="fa fa-share-square-o" aria-hidden="true"></i>
-                    {{ "label_export_download"|trans({}, "SonataAdminBundle") }}
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu">
-                    {% for format in export_formats %}
-                        <li>
-                            <a href="{{ admin.generateUrl('export', admin.modelmanager.paginationparameters(admin.datagrid, 0) + {'format' : format}) }}">
-                                <i class="fa fa-arrow-circle-o-down"
-                                   aria-hidden="true"></i>
-                                {{ ("export_format_" ~ format)|trans({}, 'SonataAdminBundle') }}
-                            </a>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
+            <li>
+                <div class="btn-group">
+                    <a class="btn btn-success"
+                       href="{{ admin.generateUrl('export', admin.modelmanager.paginationparameters(admin.datagrid, 0) + {'format' : 'xls'}) }}">
+                        <i class="fa fa-arrow-down">
+                            Excel
+                        </i>
+                    </a>
+                </div>
+            </li>
+
+            {# <div class="btn-group"> #}
+            {# <button type="button" class="btn btn-default dropdown-toggle" #}
+            {# data-toggle="dropdown"> #}
+            {# <i class="fa fa-share-square-o" aria-hidden="true"></i> #}
+            {# {{ "label_export_download"|trans({}, "SonataAdminBundle") }} #}
+            {# <span class="caret"></span> #}
+            {# </button> #}
+            {# <ul class="dropdown-menu"> #}
+            {# {% for format in export_formats %} #}
+            {# <li> #}
+            {# <a href="{{ admin.generateUrl('export', admin.modelmanager.paginationparameters(admin.datagrid, 0) + {'format' : format}) }}"> #}
+            {# <i class="fa fa-arrow-circle-o-down" #}
+            {# aria-hidden="true"></i> #}
+            {# {{ ("export_format_" ~ format)|trans({}, 'SonataAdminBundle') }} #}
+            {# </a> #}
+            {# </li> #}
+            {# {% endfor %} #}
+            {# </ul> #}
+            {# </div> #}
         {% endif %}
     </div>
 

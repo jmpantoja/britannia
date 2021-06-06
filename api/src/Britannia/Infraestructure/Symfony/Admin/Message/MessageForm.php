@@ -17,13 +17,13 @@ namespace Britannia\Infraestructure\Symfony\Admin\Message;
 use Britannia\Domain\Entity\Message\Message;
 use Britannia\Domain\VO\Course\CourseStatus;
 use Britannia\Infraestructure\Doctrine\Repository\CourseRepository;
+use Britannia\Infraestructure\Symfony\Form\Type\Date\DateTimeType;
+use Britannia\Infraestructure\Symfony\Form\Type\Date\Validator\DateTime;
 use Britannia\Infraestructure\Symfony\Form\Type\Message\MessageEmailType;
 use Britannia\Infraestructure\Symfony\Form\Type\Message\MessageMailerType;
 use Britannia\Infraestructure\Symfony\Form\Type\Message\MessageSmsType;
-use Carbon\CarbonImmutable;
 use Doctrine\ORM\EntityRepository;
 use PlanB\DDDBundle\Sonata\Admin\AdminForm;
-use Sonata\Form\Type\DateTimePickerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -64,15 +64,14 @@ final class MessageForm extends AdminForm
             'admin_code' => 'admin.course'
         ]);
 
-        $this->add('schedule', DateTimePickerType::class, [
+        $this->add('schedule', DateTimeType::class, [
             'disabled' => $disabled,
             'label' => 'Fecha de envio',
-            'format'=>\IntlDateFormatter::LONG,
-            'dp_minute_stepping' => 20,
-            'dp_use_seconds' => false,
-            'data' => $message->schedule() ?? CarbonImmutable::now()->addMinutes(15)->roundMinute(20)
+            'required' => true,
+            'constraints' => [
+                new NotBlank(),
+            ]
         ]);
-
 
         if ($message instanceof Message\Email) {
             $this->add('mailer', MessageMailerType::class, [

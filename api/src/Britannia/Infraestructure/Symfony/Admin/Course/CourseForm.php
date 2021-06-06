@@ -37,7 +37,6 @@ use Britannia\Infraestructure\Symfony\Form\Type\Course\SchoolCourseListType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\SupportType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\TeachersType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\TimeTable\TimeTableType;
-use Carbon\CarbonImmutable;
 use PlanB\DDDBundle\Sonata\Admin\AdminForm;
 use PlanB\DDDBundle\Symfony\Form\Type\PositiveIntegerType;
 use PlanB\DDDBundle\Symfony\Form\Type\PriceType;
@@ -148,7 +147,9 @@ final class CourseForm extends AdminForm
         $this->group('Evaluación', ['class' => 'col-md-6'])
             ->add('assessment', AssessmentType::class, [
                 'label' => false,
-                'data' => $course->assessment()
+                'data' => $course->assessment(),
+                'is_school' => $course instanceof Course\School,
+                'is_adult' => $course instanceof Course\Adult,
             ]);
 
         return $this;
@@ -156,7 +157,7 @@ final class CourseForm extends AdminForm
 
     private function studentsTab(string $name, Course $course): self
     {
-        if(!($course->id() instanceof CourseId)){
+        if (!($course->id() instanceof CourseId)) {
             return $this;
         }
 
@@ -230,7 +231,7 @@ final class CourseForm extends AdminForm
             return $this;
         }
 
-        if(!($course->id() instanceof CourseId)){
+        if (!($course->id() instanceof CourseId)) {
             return $this;
         }
 

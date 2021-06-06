@@ -3,12 +3,14 @@
 
   var CourseInformationDate = function (element, options) {
     this.$element = $(element)
-    this.$datePicker = $('#dp_' + this.$element.attr('id'));
+
+ //   this.$datePicker = $('#dp_' + this.$element.attr('id'));
     this.options = $.extend({}, this.defaults(), options)
 
     this.$firstMonth = $(this.options.firstMonth);
     this.$firstMonthDesc = $(this.options.firstMonthDesc);
     this.$lastMonth = $(this.options.lastMonth);
+
     this.$lastMonthDesc = $(this.options.lastMonthDesc);
 
     this.run()
@@ -25,7 +27,8 @@
   }
 
   CourseInformationDate.prototype.run = function () {
-    this.$datePicker.on('dp.change', this.update.bind(this));
+    this.$element.on('change', this.update.bind(this))
+//    this.$datePicker.on('dp.change', this.update.bind(this));
   }
 
 

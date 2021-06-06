@@ -15,6 +15,7 @@ namespace Britannia\Infraestructure\Symfony\Admin\CourseReport;
 
 
 use Britannia\Domain\Entity\Course\Course;
+use Britannia\Domain\Entity\Course\CourseAssessmentInterface;
 use Britannia\Infraestructure\Symfony\Form\Report\CourseInfo\CourseInformationType;
 use Britannia\Infraestructure\Symfony\Form\Report\CourseMarks\CourseCertificateType;
 use Britannia\Infraestructure\Symfony\Form\Report\CourseMarks\CourseMarksType;
@@ -27,8 +28,15 @@ final class CourseReportForm extends AdminForm
     public function configure(Course $course)
     {
         $this->tabInfo($course);
-        $this->tabMarks($course);
-        $this->tabCertificate($course);
+
+        if ($course instanceof Course\School) {
+            $this->tabMarks($course);
+        }
+
+        if ($course instanceof CourseAssessmentInterface) {
+            $this->tabCertificate($course);
+        }
+
     }
 
     private function tabInfo(Course $course)

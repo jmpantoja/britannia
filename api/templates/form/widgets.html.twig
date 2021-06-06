@@ -1,3 +1,25 @@
+{% block html5_date_widget %}
+    {{ form_widget(form) }}
+{% endblock %}
+
+{% block html5_time_widget %}
+    {{ form_widget(form) }}
+{% endblock %}
+
+{% block html5_datetime_widget %}
+    <ul style="list-style: none; padding: 0">
+        <li style="float: left; margin-right: 1em">
+            {{ form_row(form.date, {attr: attr, 'post_icon': 'fa fa-calendar'}) }}
+        </li>
+        <li style="float: left">
+            {{ form_row(form.time, {attr: attr, 'post_icon': 'fa fa-clock-o'}) }}
+        </li>
+    </ul>
+
+{% endblock %}
+
+
+
 {% block toggle_widget %}
     {% set checked = '' %}
 
@@ -46,17 +68,6 @@
             {{ form_row(form.end) }}
         </div>
     </div>
-
-    {#    <div class="counter counter-wrapper">#}
-    {#        {% set attr = {#}
-    {#            'class': 'counter-area',#}
-    {#            'data-template':'counter',#}
-    {#            'data-label':'.counter-info'#}
-    {#        } %}#}
-
-    {#        {{ form_widget(form, {'attr': attr}) }}#}
-    {#        <p class="counter-info"></p>#}
-    {#    </div>#}
 {% endblock %}
 
 

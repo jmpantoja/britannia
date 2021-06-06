@@ -32,7 +32,7 @@ abstract class MessageDto extends Dto
 
     public StaffMember $createdBy;
 
-    public CarbonImmutable $schedule;
+    public ?CarbonImmutable $schedule;
 
     public ?CarbonImmutable $createdAt = null;
 
