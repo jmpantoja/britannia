@@ -58,10 +58,10 @@ class MaintenanceCommand extends Command implements ContainerAwareInterface
         $io = new SymfonyStyle($input, $output);
         $this->cronLoginService->login();
 
-//        $this->commandBus->handle(UpdateCalendar::make());
-//        $this->commandBus->handle(UpdateStudentAge::make());
+        $this->commandBus->handle(UpdateCalendar::make());
+        $this->commandBus->handle(UpdateStudentAge::make());
         $this->commandBus->handle(UpdateCourseStatus::make());
-//        $this->commandBus->handle(UpdateStudentStatus::make());
+        $this->commandBus->handle(UpdateStudentStatus::make());
 
         return 0;
     }
