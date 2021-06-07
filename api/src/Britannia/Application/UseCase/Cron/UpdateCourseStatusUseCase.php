@@ -15,6 +15,7 @@ namespace Britannia\Application\UseCase\Cron;
 
 
 use ApiPlatform\Core\DataPersister\DataPersisterInterface;
+use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Repository\CourseRepositoryInterface;
 use PlanB\DDD\Application\UseCase\UseCaseInterface;
 
@@ -39,8 +40,10 @@ final class UpdateCourseStatusUseCase implements UseCaseInterface
     {
         $courses = $this->repository->findCoursesForUpdateStatus();
 
+        /** @var Course $course */
         foreach ($courses as $course) {
-            $course->updateStatus();
+            dump($course->status());
+//            $course->updateStatus();
         }
     }
 
