@@ -41,7 +41,6 @@ final class UpdateStudentAgeUseCase implements UseCaseInterface
         $today = CarbonImmutable::today();
         $students = $this->repository->findByBirthDay($today);
 
-
         foreach ($students as $student) {
             $student->updateAge();
         }
