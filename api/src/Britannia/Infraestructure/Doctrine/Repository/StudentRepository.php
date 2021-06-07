@@ -5,6 +5,7 @@ namespace Britannia\Infraestructure\Doctrine\Repository;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Entity\Student\StudentCourse;
+use Britannia\Domain\Entity\Student\StudentId;
 use Britannia\Domain\Repository\StudentRepositoryInterface;
 use Carbon\CarbonImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -36,14 +37,19 @@ class StudentRepository extends ServiceEntityRepository implements StudentReposi
 
     public function findByBirthDay(CarbonImmutable $day): array
     {
+
+        $months = [];
+        for ($step = 0; $step < 3; $step++) {
+            $months[] = $day->get('month');
+            $day = $day->subMonth();
+        }
+
         $query = $this->createQueryBuilder('A')
-            ->where('A.birthMonth = :month')
-            ->andWhere('DAY(A.birthDate) = :day')
+            ->where('A.birthMonth IN (:months)')
             ->getQuery();
 
         return $query->execute([
-            'day' => $day->get('day'),
-            'month' => $day->get('month'),
+            'months' => $months,
         ]);
     }
 
@@ -60,20 +66,21 @@ class StudentRepository extends ServiceEntityRepository implements StudentReposi
 
     public function disableStudentsWithoutActiveCourses()
     {
-        $inactive = $this->getEntityManager()
+        $active = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('C.id')
             ->from(StudentCourse::class, 'A')
             ->innerJoin(Course::class, 'B', Join::WITH, 'A.course = B.id')
             ->innerJoin(Student::class, 'C', Join::WITH, 'A.student = C.id')
-            ->where("B.timeRange.status like 'ACTIVE'")
+            ->where("A.leavedAt is null")
+            ->andWhere("B.timeRange.status like 'ACTIVE'")
             ->getQuery();
 
         $query = $this->createQueryBuilder('A')
             ->update(Student::class, 'A')
             ->set('A.active', 0)
             ->where('A.id NOT in (:list)')
-            ->setParameter('list', $inactive->execute())
+            ->setParameter('list', $active->execute())
             ->getQuery();
 
         return $query->execute();
