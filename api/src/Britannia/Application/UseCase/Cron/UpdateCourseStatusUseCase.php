@@ -42,8 +42,7 @@ final class UpdateCourseStatusUseCase implements UseCaseInterface
 
         /** @var Course $course */
         foreach ($courses as $course) {
-            dump($course->status());
-//            $course->updateStatus();
+            $course->updateStatus();
         }
     }
 
