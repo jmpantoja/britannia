@@ -190,6 +190,12 @@ class StudentCourse implements Comparable
         return is_null($this->leavedAt);
     }
 
+    public function inCourse(): bool
+    {
+        return is_null($this->leavedAt);
+    }
+
+
     public function finish(): self
     {
         $this->leavedAt = CarbonImmutable::today();

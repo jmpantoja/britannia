@@ -76,7 +76,8 @@ trait StudentTrait
 
     public function updateNumOfStudents(): self
     {
-        $this->numOfStudents = $this->courseHasStudentList()->onlyActives()->count();
+        $this->numOfStudents = $this->courseHasStudentList()->onlyInCourse()->count();
+
         return $this;
     }
 

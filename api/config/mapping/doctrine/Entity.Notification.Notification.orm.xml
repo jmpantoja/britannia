@@ -12,7 +12,7 @@
             <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
         </id>
 
-        <field name="subject"/>
+        <field name="subject" length="512"/>
         <field name="message" type="text"/>
 
         <field name="type" type="TypeOfNotification"/>
@@ -24,7 +24,7 @@
         <many-to-one field="student" target-entity="Britannia\Domain\Entity\Student\Student">
             <join-column on-delete="CASCADE"/>
             <cascade>
-                <cascade-persist />
+                <cascade-persist/>
             </cascade>
         </many-to-one>
 

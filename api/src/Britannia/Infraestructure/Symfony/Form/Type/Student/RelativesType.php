@@ -41,7 +41,6 @@ class RelativesType extends ModelType
         ]);
     }
 
-
     public function configureQuery(QueryBuilder $builder, OptionsResolver $resolver, string $alias = 'A')
     {
         return $builder
@@ -57,7 +56,7 @@ class RelativesType extends ModelType
         }
 
         return collect($choices)
-            ->filter(fn(Student $student) => !$student->id()->equals($studentId))
+            ->filter(fn(string $id) => $studentId !== $id)
             ->toArray();
 
     }

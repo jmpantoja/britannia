@@ -17,6 +17,7 @@ namespace Britannia\Infraestructure\Symfony\Form\Type\Student;
 use Britannia\Domain\Entity\School\School;
 use Doctrine\ORM\QueryBuilder;
 use PlanB\DDDBundle\Symfony\Form\Type\ModelType;
+use stdClass;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class SchoolType extends ModelType

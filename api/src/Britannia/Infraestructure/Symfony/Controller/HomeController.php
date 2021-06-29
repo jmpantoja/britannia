@@ -3,20 +3,26 @@
 namespace Britannia\Infraestructure\Symfony\Controller;
 
 
-use Britannia\Domain\Entity\Course\Course;
-use Britannia\Domain\Entity\School\School;
-use Britannia\Domain\Repository\StudentRepositoryInterface;
-use Doctrine\ORM\EntityManagerInterface;
-use PlanB\DDDBundle\Sonata\ModelManager;
+use Carbon\CarbonImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Cache\Adapter\AdapterInterface;
+use Symfony\Contracts\Cache\ItemInterface;
 
 class HomeController extends AbstractController
 {
 
-    public function index()
+    public function index(AdapterInterface $cache)
     {
+        $hola = $cache->get('koko', function (ItemInterface $item) {
+            $item->expiresAfter(60 * 60 * 24);
+            return CarbonImmutable::now();
+        });
+
+        //$cache->delete('koko');
+
+
         return $this->render('home/index.html.twig', [
-            'controller_name' => 'HomeController',
+            'controller_name' => $hola,
         ]);
     }
 

@@ -28,7 +28,6 @@ class SettingRepository extends ServiceEntityRepository implements SettingReposi
             ->setParameter('id', SettingId::ID)
             ->getQuery()
             ->setCacheable(true)
-            //->enableResultCache(WEEK_IN_SECONDS, 'hola')
             ->getOneOrNullResult();
 
         return $setting;

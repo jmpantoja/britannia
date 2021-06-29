@@ -103,6 +103,7 @@ class ChoiceTutorType extends AbstractCompoundType
         $description = $data['description'];
 
         return ChoicedTutor::make($tutor, $description);
+
     }
 
     private function makeTutor(TutorDto $dto, ?Tutor $tutor): Tutor

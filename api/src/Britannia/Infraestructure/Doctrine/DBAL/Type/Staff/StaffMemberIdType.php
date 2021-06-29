@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Britannia\Infraestructure\Doctrine\DBAL\Type\Staff;
 
+use Doctrine\DBAL\Platforms\AbstractPlatform;
 use PlanB\DDDBundle\Doctrine\DBAL\Type\EntityIdType;
 
 class StaffMemberIdType extends EntityIdType

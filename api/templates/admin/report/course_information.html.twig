@@ -386,13 +386,13 @@
         <div class="content">
             <p>
                 <b>Mañanas: </b><br />
-                {{ setting.morning.start | localizeddate('none', 'short')  }} a
-                {{ setting.morning.end | localizeddate('none', 'short')  }}
+                {{ setting.morning.start.date | localizeddate('none', 'short')  }} a
+                {{ setting.morning.end.date | localizeddate('none', 'short')  }}
             </p>
             <p>
                 <b>Tardes: </b><br />
-                {{ setting.afternoon.start | localizeddate('none', 'short')  }} a
-                {{ setting.afternoon.end | localizeddate('none', 'short')  }}
+                {{ setting.afternoon.start.date | localizeddate('none', 'short')  }} a
+                {{ setting.afternoon.end.date | localizeddate('none', 'short')  }}
         </div>
     </div>
 

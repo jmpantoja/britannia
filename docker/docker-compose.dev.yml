@@ -1,19 +1,38 @@
-version: '3.4'
+version: '2.4'
 services:
-  php:
-    environment:
-      - APP_ENV=dev
-      - PHP_IDE_CONFIG=serverName=symfony-demo
-      - XDEBUG_CONFIG=remote_host=192.168.1.128
+    php:
+        environment:
+            APP_ENV: dev
+            APP_DEBUG: 1
+            PHP_IDE_CONFIG: serverName=symfony-demo
+            XDEBUG_CONFIG: remote_host=192.168.1.128
+            BLACKFIRE_SERVER_ID: ${BLACKFIRE_SERVER_ID}
+            BLACKFIRE_SERVER_TOKEN: ${BLACKFIRE_SERVER_TOKEN}
+    db:
+        ports:
+            - "3306:3306"
 
-  db:
-    ports:
-      - "3306:3306"
+    blackfire:
+        image: blackfire/blackfire:2
+        environment:
+            BLACKFIRE_LOG_LEVEL: 4
+            BLACKFIRE_SERVER_ID: ${BLACKFIRE_SERVER_ID}
+            BLACKFIRE_SERVER_TOKEN: ${BLACKFIRE_SERVER_TOKEN}
+            BLACKFIRE_CLIENT_ID: ${BLACKFIRE_CLIENT_ID}
+            BLACKFIRE_CLIENT_TOKEN: ${BLACKFIRE_CLIENT_TOKEN}
 
-  proxy:
-    environment:
-      CLIENT_MAX_BODY_SIZE: 64M
-      DOMAINS: 'www.academiabritannia.local -> http://api:80 #local'
-      #DOMAINS: 'www.academiabritannia.local -> http://cache-proxy:80 #local'
+    proxy:
+        image: steveltn/https-portal:1
+        depends_on:
+            - api
+        ports:
+            - 80:80
+            - 443:443
+        restart: always
+        volumes:
+            - ./docker/ssl_certs:/var/lib/https-portal
 
+        environment:
+            CLIENT_MAX_BODY_SIZE: 64M
+            DOMAINS: 'www.academiabritannia.local -> http://api:80 #local'
 
