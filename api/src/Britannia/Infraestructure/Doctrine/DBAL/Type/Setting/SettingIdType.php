@@ -14,9 +14,10 @@ declare(strict_types=1);
 namespace Britannia\Infraestructure\Doctrine\DBAL\Type\Setting;
 
 
-use PlanB\DDDBundle\Doctrine\DBAL\Type\EntityIdType;
+use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Doctrine\DBAL\Types\Type;
 
-final class SettingIdType extends EntityIdType
+final class SettingIdType extends Type
 {
     public function getName()
     {
@@ -26,5 +27,14 @@ final class SettingIdType extends EntityIdType
     protected function getNamespace()
     {
         return 'Britannia\Domain\Entity\Setting';
+    }
+
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform)
+    {
+        return $platform->getIntegerTypeDeclarationSQL(
+            [
+                'autoincrement' => true
+            ]
+        );
     }
 }

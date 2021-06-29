@@ -76,7 +76,7 @@ class StudentHasCoursesType extends ModelType
 
         $builder->where('A.timeRange.status != :finalized')
             ->setParameter('finalized', CourseStatus::FINALIZED())
-            ->setCacheable(false);
+            ->setCacheable(true);
 
         $types = [];
         if ($age >= 17) {

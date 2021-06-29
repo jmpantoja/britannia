@@ -15,33 +15,29 @@ namespace PlanB\DDDBundle\Doctrine\DBAL\Type;
 
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Ramsey\Uuid\Doctrine\UuidType;
+use Ramsey\Uuid\Doctrine\UuidBinaryType;
 
 
-class EntityIdType extends UuidType
+class EntityIdType extends UuidBinaryType
 {
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
-
-        if(is_null($value)){
-            return $value;
+        $uuid = (string)$value;
+        if (empty($uuid)) {
+            return null;
         }
 
-        if (is_string($value)) {
-            return $value;
-        }
-
-        return (string)$value->id();
+        return parent::convertToDatabaseValue($uuid, $platform);
     }
 
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
-        if(is_null($value)){
-            return $value;
+        $uuid = parent::convertToPHPValue($value, $platform);
+        if (!$uuid) {
+            return null;
         }
 
         $className = $this->getNamespace() . '\\' . $this->getName();
-
-        return new $className($value);
+        return new $className((string)$uuid);
     }
 }

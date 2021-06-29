@@ -30,7 +30,6 @@ abstract class EntityId implements Comparable
      */
     public function __construct($id = null)
     {
-
         if (is_null($id)) {
             $this->id = Uuid::uuid4()->toString();
             return;

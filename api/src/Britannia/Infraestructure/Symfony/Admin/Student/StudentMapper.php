@@ -68,6 +68,7 @@ final class StudentMapper extends AdminMapper
      */
     protected function makeDto(array $values): StudentDto
     {
+
         $firstTutor = $values['firstTutor'] ?? null;
         $values['firstTutor'] = $this->getTutor($firstTutor);
         $values['firstTutorDescription'] = $this->getTutorDescription($firstTutor);
@@ -80,8 +81,12 @@ final class StudentMapper extends AdminMapper
         return $dto;
     }
 
-    private function getTutor(?ChoicedTutor $choicedTutor): ?Tutor
+    private function getTutor($choicedTutor): ?Tutor
     {
+        if($choicedTutor  instanceof Tutor){
+            return $choicedTutor;
+        }
+
         if (!($choicedTutor instanceof ChoicedTutor)) {
             return null;
         }
@@ -89,8 +94,9 @@ final class StudentMapper extends AdminMapper
         return $choicedTutor->tutor();
     }
 
-    private function getTutorDescription(?ChoicedTutor $choicedTutor): ?string
+    private function getTutorDescription($choicedTutor): ?string
     {
+
         if (!($choicedTutor instanceof ChoicedTutor)) {
             return null;
         }

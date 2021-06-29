@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Britannia\Infraestructure\Doctrine\DBAL\Type\Image;
 
+use Doctrine\DBAL\Platforms\AbstractPlatform;
 use PlanB\DDDBundle\Doctrine\DBAL\Type\EntityIdType;
 
 class ImageIdType extends EntityIdType

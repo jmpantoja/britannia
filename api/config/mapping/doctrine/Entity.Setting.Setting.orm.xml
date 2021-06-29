@@ -11,8 +11,9 @@
         <cache usage="NONSTRICT_READ_WRITE" region="month"/>
 
         <id name="id" type="SettingId" column="id">
-            <generator strategy="CUSTOM"/>
-            <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>
+            <!--            <generator strategy="CUSTOM"/>            -->
+            <generator strategy="AUTO"/>
+            <!--            <custom-id-generator class="Ramsey\Uuid\Doctrine\UuidGenerator"/>-->
         </id>
 
         <field name="phone" type="phone_number" nullable="true"/>

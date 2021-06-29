@@ -14,14 +14,36 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Setting;
 
 
-use PlanB\DDD\Domain\Model\EntityId;
+use PlanB\DDD\Domain\Behaviour\Comparable;
 
-final class SettingId extends EntityId
+final class SettingId implements Comparable
 {
-    const ID = '__main__';
+    const ID = 1;
+    private int $id;
 
-    public function __construct($id = null)
+    public function __construct()
     {
-        parent::__construct(self::ID);
+        $this->id = self::ID;
+    }
+
+    public function compareTo(object $other): int
+    {
+        if ($this->equals($other)) {
+            return 0;
+        }
+        return strcmp((string)$this->id, (string)$other->id);
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->id();
+    }
+
+    public function equals(Comparable $other): bool
+    {
+        return $this->id === $other->id;
     }
 }

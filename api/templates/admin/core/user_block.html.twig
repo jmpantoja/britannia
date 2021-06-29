@@ -16,10 +16,10 @@ file that was distributed with this source code.
         {% set _logout_text       = 'user_block_logout'|trans({}, 'SonataUserBundle') %}
         {% set _profile_uri       = url('admin_britannia_domain_staff_staffmember_edit', {id:app.user.id}) %}
         {% set _profile_text      = 'user_block_profile'|trans({}, 'SonataUserBundle') %}
-        {% set _user_image  = photo_uploader.photoUrl(app.user.photo) %}
+{#        {% set _user_image  = photo_uploader.photoUrl(app.user.photo) %}#}
 
         <li class="user-header {{ _bg_class }}">
-            <img src="{{ _user_image }}" class="avatar" alt="Avatar"/>
+{#            <img src="{{ _user_image }}" class="avatar" alt="Avatar"/>#}
             <p>{{ app.user.fullName }}</p>
 
         </li>

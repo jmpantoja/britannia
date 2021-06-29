@@ -5,6 +5,11 @@ services:
     image: docker.io/jmpantoja/britannia-php:7.4
     environment:
       - APP_ENV=prod
+      - BLACKFIRE_LOG_LEVEL=4
+      - BLACKFIRE_SERVER_ID=${BLACKFIRE_SERVER_ID}
+      - BLACKFIRE_SERVER_TOKEN=${BLACKFIRE_SERVER_TOKEN}
+      - BLACKFIRE_CLIENT_ID=${BLACKFIRE_CLIENT_ID}
+      - BLACKFIRE_CLIENT_TOKEN=${BLACKFIRE_CLIENT_TOKEN} 
     depends_on:
       - db
       - redis
@@ -46,8 +51,8 @@ services:
     restart: always
 
   db:
-    image: mysql:5.7
-    command: --max_allowed_packet=32505856
+    image: mysql:8
+#    command: --max_allowed_packet=32505856
     environment:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
@@ -55,6 +60,17 @@ services:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
     volumes:
       - "./docker/mysql:/var/lib/mysql"
+
+
+  blackfire:
+    image: blackfire/blackfire:2
+    ports: ["8307"]
+    environment:
+      BLACKFIRE_LOG_LEVEL: 4      
+      BLACKFIRE_SERVER_ID: ${BLACKFIRE_SERVER_ID}
+      BLACKFIRE_SERVER_TOKEN: ${BLACKFIRE_SERVER_TOKEN}
+      BLACKFIRE_CLIENT_ID: ${BLACKFIRE_CLIENT_ID}
+      BLACKFIRE_CLIENT_TOKEN: ${BLACKFIRE_CLIENT_TOKEN}
 
 
   proxy:
