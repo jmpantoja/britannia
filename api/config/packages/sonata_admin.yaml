@@ -5,22 +5,22 @@ sonata_admin:
 
     options:
         html5_validate: false
-        use_select2:    true
+        use_select2: true
         use_stickyforms: false
         title_mode: 'single_image'
 
     dashboard:
         groups:
-            admin.group.teacher: 
+            admin.group.teacher:
                 label: Teacher's Menu
                 label_catalogue: App
                 icon: "<i class=\"fa fa-tags\"></i>"
-                roles: ['ROLE_TEACHER']
+                roles: [ 'ROLE_TEACHER' ]
                 items:
                     - admin.teacher_course
                     - admin.issue
-                    -   route:        my_planning
-                        label:        Mi Planning
+                    -   route: my_planning
+                        label: Mi Planning
             admin.group.staff:
                 label: Usuarios
                 label_catalogue: App
@@ -32,7 +32,7 @@ sonata_admin:
                 label: Alumnos
                 label_catalogue: App
                 icon: "<i class=\"fa fa-graduation-cap\"></i>"
-                roles: ['ROLE_MANAGER', 'ROLE_RECEPTION']
+                roles: [ 'ROLE_MANAGER', 'ROLE_RECEPTION' ]
                 items:
                     - admin.student
                     - admin.issue
@@ -46,9 +46,9 @@ sonata_admin:
                 icon: "<i class=\"fa fa-book\"></i>"
                 items:
                     - admin.course
-                    -   route:        planning
-                        label:        Planning
-                        roles: ['ROLE_MANAGER']
+                    -   route: planning
+                        label: Planning
+                        roles: [ 'ROLE_MANAGER' ]
                     - admin.classroom
                     - admin.book
 
@@ -74,93 +74,93 @@ sonata_admin:
                 items:
                     -   route: admin_britannia_domain_setting_setting_edit
                         route_params: { id: "__main__" }
-                        label:        Settings
-                        roles: ['ROLE_MANAGER']
+                        label: Settings
+                        roles: [ 'ROLE_MANAGER' ]
 
                     - admin.calendar
 
         blocks:
-            -   class:    col-md-2
+            -   class: col-md-2
                 position: top
-                type:     sonata.admin.block.stats
-                roles: ['ROLE_MANAGER']
+                type: sonata.admin.block.stats
+                roles: [ 'ROLE_MANAGER' ]
                 settings:
-                    code:  admin.staff_member
-                    icon:  fa-user
-                    text:  Profesores
+                    code: admin.staff_member
+                    icon: fa-user
+                    text: Profesores
                     color: bg-aqua
                     filters:
                         rol: { value: 'ROLE_TEACHER' }
 
-            -   class:    col-md-2
+            -   class: col-md-2
                 position: top
-                type:     sonata.admin.block.stats
-                roles: ['ROLE_RECEPTION', 'ROLE_MANAGER']
+                type: sonata.admin.block.stats
+                roles: [ 'ROLE_RECEPTION', 'ROLE_MANAGER' ]
                 settings:
-                    code:  admin.student
-                    icon:  fa-graduation-cap
-                    text:  Alumnos Activos
+                    code: admin.student
+                    icon: fa-graduation-cap
+                    text: Alumnos Activos
                     color: bg-green
                     filters:
                         active: { value: 1 }
 
-            -   class:    col-md-2
+            -   class: col-md-2
                 position: top
-                type:     sonata.admin.block.stats
-                roles: ['ROLE_RECEPTION', 'ROLE_MANAGER']
+                type: sonata.admin.block.stats
+                roles: [ 'ROLE_RECEPTION', 'ROLE_MANAGER' ]
                 settings:
-                    code:  admin.course
-                    icon:  fa-book
-                    text:  Cursos Activos
+                    code: admin.course
+                    icon: fa-book
+                    text: Cursos Activos
                     color: bg-blue
                     filters:
                         status: { value: ACTIVE }
 
-            -   class:    col-md-2
+            -   class: col-md-2
                 position: top
-                type:     sonata.admin.block.stats
-                roles: ['ROLE_RECEPTION', 'ROLE_MANAGER']
+                type: sonata.admin.block.stats
+                roles: [ 'ROLE_RECEPTION', 'ROLE_MANAGER' ]
                 settings:
-                    code:  admin.invoice
-                    icon:  fa-book
-                    text:  Pagos
+                    code: admin.invoice
+                    icon: fa-book
+                    text: Pagos
                     color: bg-olive
                     filters:
                         paid: { value: 2 }
 
-            -   class:    col-md-2
+            -   class: col-md-2
                 position: top
-                type:     sonata.admin.block.stats
-                roles: ['ROLE_RECEPTION', 'ROLE_MANAGER']
+                type: sonata.admin.block.stats
+                roles: [ 'ROLE_RECEPTION', 'ROLE_MANAGER' ]
                 settings:
-                    code:  admin.message
-                    icon:  fa-involve
-                    text:  Mensajeria
+                    code: admin.message
+                    icon: fa-involve
+                    text: Mensajeria
                     color: bg-maroon
                     filters:
                         processed: { value: 2 }
 
-            -   class:    col-md-2
+            -   class: col-md-2
                 position: top
-                type:     sonata.admin.block.stats
+                type: sonata.admin.block.stats
                 #roles: ['ROLE_TEACHER']
                 settings:
-                    code:  admin.issue
-                    icon:  fa-comments
-                    text:  Observaciones
+                    code: admin.issue
+                    icon: fa-comments
+                    text: Observaciones
                     color: bg-purple
                     filters:
-                        status: { value: {status: 1, recipient: 2} }
+                        status: { value: { status: 1, recipient: 2 } }
 
 
-            -   class:    col-md-2
+            -   class: col-md-2
                 position: top
-                type:     sonata.admin.block.stats
-                roles: ['ROLE_TEACHER']
+                type: sonata.admin.block.stats
+                roles: [ 'ROLE_TEACHER' ]
                 settings:
-                    code:  admin.teacher_course
-                    icon:  fa-book
-                    text:  Mis Cursos
+                    code: admin.teacher_course
+                    icon: fa-book
+                    text: Mis Cursos
                     color: bg-orange
                     filters:
                         status: { value: ACTIVE }
@@ -201,11 +201,11 @@ sonata_admin:
             - css/admin/fullcalendar.css
 
             - css/toast/jquery.toast.min.css
-#
-#            - bundles/sonataformatter/markitup/skins/sonata/style.css
-#            - bundles/sonataformatter/markitup/sets/markdown/style.css
-#            - bundles/sonataformatter/markitup/sets/html/style.css
-#            - bundles/sonataformatter/markitup/sets/textile/style.css
+        #
+        #            - bundles/sonataformatter/markitup/skins/sonata/style.css
+        #            - bundles/sonataformatter/markitup/sets/markdown/style.css
+        #            - bundles/sonataformatter/markitup/sets/html/style.css
+        #            - bundles/sonataformatter/markitup/sets/textile/style.css
 
         extra_javascripts:
             - js/admin/multi.js
@@ -229,12 +229,12 @@ sonata_admin:
             - js/admin/issues.js
             - js/admin/teachers.js
             - js/widgets/counter.js
-#
-#            - bundles/fosckeditor/ckeditor.js
-#            - bundles/sonataformatter/vendor/markitup-markitup/markitup/jquery.markitup.js
-#            - bundles/sonataformatter/markitup/sets/markdown/set.js
-#            - bundles/sonataformatter/markitup/sets/html/set.js
-#            - bundles/sonataformatter/markitup/sets/textile/set.js
+    #
+    #            - bundles/fosckeditor/ckeditor.js
+    #            - bundles/sonataformatter/vendor/markitup-markitup/markitup/jquery.markitup.js
+    #            - bundles/sonataformatter/markitup/sets/markdown/set.js
+    #            - bundles/sonataformatter/markitup/sets/html/set.js
+    #            - bundles/sonataformatter/markitup/sets/textile/set.js
 
     security:
         handler: sonata.admin.security.handler.role
@@ -242,4 +242,4 @@ sonata_admin:
 sonata_block:
     blocks:
         sonata.admin.block.admin_list:
-            contexts: [admin]
+            contexts: [ admin ]

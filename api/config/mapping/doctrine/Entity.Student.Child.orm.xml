@@ -8,6 +8,9 @@
 
         <many-to-one field="school" target-entity="Britannia\Domain\Entity\School\School">
             <join-column name="school_id" on-delete="SET NULL"/>
+            <cascade>
+                <cascade-persist/>
+            </cascade>
         </many-to-one>
 
         <field name="schoolHistory" type="SchoolHistory" nullable="true"/>

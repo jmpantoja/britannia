@@ -39,6 +39,7 @@ class StudentHasMissedLesson extends NotificationEvent
     public function witAttendance(Attendance $attendance): self
     {
         $subject = $this->subjectByAttendance($attendance);
+
         $date = $this->dateFromAttendance($attendance);
 
         $this->withSubject($subject);
@@ -66,7 +67,7 @@ class StudentHasMissedLesson extends NotificationEvent
         if (null === $reason) {
             return '';
         }
-        
+
         return sprintf('(%s)', $reason);
     }
 

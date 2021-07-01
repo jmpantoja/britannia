@@ -37,6 +37,7 @@ class ChoicedTutorValidator extends ConstraintValidator
         }
 
         if (empty($description)) {
+            $this->addViolation('ssss');
             $this->addViolationToField('description', 'Este campo es requerido');
         }
     }

@@ -1,10 +1,12 @@
-version: '3.4'
+version: '2.4'
 
 services:
   php:
     image: docker.io/jmpantoja/britannia-php:7.4
     environment:
-      - APP_ENV=prod
+      APP_ENV: pro
+      APP_DEBUG: 0
+
     depends_on:
       - db
       - redis
@@ -29,15 +31,6 @@ services:
     volumes:
       - ./api/public:/srv/api/public:ro
 
-  cache-proxy:
-    image: quay.io/api-platform/varnish
-    depends_on:
-      - api
-    volumes:
-      - ./api/docker/varnish/conf:/usr/local/etc/varnish:ro
-    tmpfs:
-      - /usr/local/var/varnish:exec
-
   redis:
     image: redis
     volumes:
@@ -46,8 +39,7 @@ services:
     restart: always
 
   db:
-    image: mysql:5.7
-    command: --max_allowed_packet=32505856
+    image: mysql:8
     environment:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
@@ -56,21 +48,4 @@ services:
     volumes:
       - "./docker/mysql:/var/lib/mysql"
 
-
-  proxy:
-    image: steveltn/https-portal:1
-    depends_on:
-      - api
-    #      - cache-proxy
-    ports:
-      - 80:80
-      - 443:443
-    restart: always
-    volumes:
-      - ./docker/ssl_certs:/var/lib/https-portal
-
-    environment:
-      CLIENT_MAX_BODY_SIZE: 64M
-      DOMAINS: 'www.academiabritannia.es -> http://api:80 #production'
-#      DOMAINS: 'www.academiabritannia.es -> http://cache-proxy:80 #production'
 

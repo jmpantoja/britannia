@@ -19,7 +19,7 @@
 
         <field name="day" type="date_immutable"/>
 
-        <field name="reason" nullable="true"/>
+        <field name="reason" nullable="true" length="512"/>
 
         <many-to-one field="lesson" target-entity="Britannia\Domain\Entity\Lesson\Lesson" inversed-by="attendances">
             <join-column on-delete="CASCADE"></join-column>

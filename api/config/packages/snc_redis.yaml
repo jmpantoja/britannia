@@ -32,6 +32,17 @@ snc_redis:
                 connection_timeout: 10
                 read_write_timeout: 30
 
+        cache:
+            type: predis
+            alias: cache
+            dsn: "%env(REDIS_URL)%/3"
+            logging: '%kernel.debug%'
+            options:
+                profile: 2.2
+                connection_timeout: 10
+                read_write_timeout: 30
+
+
     session:
         client: session
         prefix: foo

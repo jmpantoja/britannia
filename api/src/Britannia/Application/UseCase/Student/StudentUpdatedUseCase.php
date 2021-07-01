@@ -67,9 +67,21 @@ final class StudentUpdatedUseCase implements UseCaseInterface
         $user = $this->security->getUser();
         $author = $this->ensureEntityIsManaged($user);
 
+        $this->persistIssue($student, $author);
+    }
 
-        $issue = $this->getIssue($student, $author);
+    private function persistIssue(Student $student, ?StaffMember $author)
+    {
+        $main = $this->issueRepository->getMainIssue($student, $author);
+        $dto = $this->makeDto($student, $author);
+
+        if ($this->shouldNotBeUpdated($main, $dto)) {
+            return;
+        }
+
+        $issue = $this->getIssue($dto, $main);
         $this->dataPersister->persist($issue);
+
     }
 
     /**
@@ -77,17 +89,34 @@ final class StudentUpdatedUseCase implements UseCaseInterface
      * @param UserInterface|null $author
      * @return Issue|null
      */
-    private function getIssue(Student $student, ?StaffMember $author)
+    private function getIssue(IssueDto $dto, ?Issue $issue)
     {
-        $issue = $this->issueRepository->getMainIssue($student, $author);
-
-        $dto = $this->makeDto($student, $author);
-
         if ($issue instanceof Issue) {
             return $issue->update($dto);
         }
 
         return Issue::make($dto);
+    }
+
+    private function shouldNotBeUpdated(?Issue $issue, IssueDto $dto): bool
+    {
+        $message = $this->stripMessage($dto->message);
+        if (is_null($issue)) {
+            return empty($message);
+        }
+
+        $current = $this->stripMessage($issue->message());
+
+        return $current === $message;
+    }
+
+    private function stripMessage(?string $subject): ?string
+    {
+        if (is_null($subject)) {
+            return null;
+        }
+
+        return trim(strip_tags($subject));
     }
 
     /**

@@ -88,6 +88,14 @@ final class StudentCourseList extends EntityList
         return StudentCourseList::collect($studentCourses);
     }
 
+    public function onlyInCourse(): self
+    {
+        $studentCourses = $this->values()
+            ->filter(fn(StudentCourse $studentCourse) => $studentCourse->inCourse());
+
+        return StudentCourseList::collect($studentCourses);
+    }
+
     public function onlyActivesOnDate(CarbonImmutable $day): self
     {
         $studentCourses = $this->values()

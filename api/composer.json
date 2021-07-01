@@ -64,7 +64,8 @@
     },
     "autoload": {
         "files": [
-            "libs/planb/ddd-bundle/src/PlanB/DDDBundle/Resources/functions/format.date.php"
+            "libs/planb/ddd-bundle/src/PlanB/DDDBundle/Resources/functions/format.date.php",
+            "libs/planb/ddd-bundle/src/PlanB/DDDBundle/Resources/functions/format.text.php"
         ],
         "psr-4": {
             "Britannia\\": "src/Britannia",

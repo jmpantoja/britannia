@@ -8,15 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 declare(strict_types=1);
 
-namespace Britannia\Domain\Entity\Image;
 
-
-use PlanB\DDD\Domain\Model\EntityId;
-use Ramsey\Uuid\Uuid;
-
-final class ImageId extends EntityId
-{
+if (!function_exists('normalize_key')) {
+    function normalize_key(string $className): string
+    {
+        $className = str_replace('\\', '-', $className);
+        return strtolower($className);
+    }
 }
+
