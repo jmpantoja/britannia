@@ -1,0 +1,11 @@
+version: '2.4'
+services:
+    api:
+        ports:
+            - 48127:80
+    php:
+        environment:
+            APP_ENV: dev
+            APP_DEBUG: 1
+
+

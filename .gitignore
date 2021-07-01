@@ -1,6 +1,8 @@
 docker/*
 !docker/docker-compose.build.yml
 !docker/docker-compose.dev.yml
+!docker/docker-compose.pre.yml
+!docker/docker-compose.pro.yml
 
 
 /.env
