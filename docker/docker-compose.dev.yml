@@ -14,6 +14,12 @@ services:
 
     blackfire:
         image: blackfire/blackfire:2
+        logging:
+           options:
+              max-size: "10m"
+              max-file: "3"
+                
+        restart: always        
         environment:
             BLACKFIRE_LOG_LEVEL: 4
             BLACKFIRE_SERVER_ID: ${BLACKFIRE_SERVER_ID}
@@ -23,6 +29,13 @@ services:
 
     proxy:
         image: steveltn/https-portal:1
+        logging:
+           options:
+              max-size: "10m"
+              max-file: "3"
+                
+        restart: always
+                
         depends_on:
             - api
         ports:
