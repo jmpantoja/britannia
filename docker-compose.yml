@@ -28,7 +28,6 @@ services:
         max-size: "10m"
         max-file: "3"
             
-    restart: always    
     volumes:
       - ./api:/app
     ports:
