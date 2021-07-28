@@ -3,6 +3,12 @@ version: '2.4'
 services:
   php:
     image: docker.io/jmpantoja/britannia-php:7.4
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+            
+    restart: always    
     environment:
       APP_ENV: pro
       APP_DEBUG: 0
@@ -17,6 +23,12 @@ services:
 
   encore:
     image: node:10-alpine
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+            
+    restart: always    
     volumes:
       - ./api:/app
     ports:
@@ -25,6 +37,12 @@ services:
 
   api:
     image: quay.io/api-platform/nginx
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+            
+    restart: always    
     depends_on:
       - php
     # Comment out this volume in production
@@ -33,6 +51,12 @@ services:
 
   redis:
     image: redis
+    restart: always    
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+            
     volumes:
       - ./docker/redis:/data
     entrypoint: redis-server --appendonly yes
@@ -40,6 +64,12 @@ services:
 
   db:
     image: mysql:8
+    restart: always    
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+            
     environment:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
