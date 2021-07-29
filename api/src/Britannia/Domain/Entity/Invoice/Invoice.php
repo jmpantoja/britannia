@@ -215,6 +215,10 @@ class Invoice
         $this->notify(InvoiceHasBeenPaid::make($this));
         return $this;
     }
+
+    public function __toString(){
+        return $this->subject;
+    }
 }
 
 

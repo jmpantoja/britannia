@@ -102,10 +102,19 @@ final class  StudentAdmin extends AbstractAdmin implements AdminFilterableInterf
 
     public function getDataSourceIterator()
     {
-
         return $this->adminTools()
             ->dataSource($this->getDatagrid())
             ->build();
 
+    }
+
+    public function configureActionButtons($action, $object = null)
+    {
+        $list = [];
+
+        $list['issues']['template'] = 'admin/student/student_go_to_issues.html.twig';
+        $list = array_merge($list, parent::configureActionButtons($action, $object));
+
+        return $list;
     }
 }

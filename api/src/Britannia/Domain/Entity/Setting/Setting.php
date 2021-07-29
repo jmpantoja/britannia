@@ -40,6 +40,12 @@ class Setting
     /** @var string */
     private $twitter;
 
+    /** @var string */
+    private $instagram;
+
+    /** @var string */
+    private $flickr;
+
     /** @var Email */
     private $mail;
 
@@ -125,6 +131,9 @@ class Setting
 
         $this->facebook = $dto->facebook;
         $this->twitter = $dto->twitter;
+        $this->instagram = $dto->instagram;
+        $this->flickr = $dto->flickr;
+
         $this->mail = $dto->mail;
         $this->web = $dto->web;
 
@@ -363,4 +372,8 @@ class Setting
         return $this->faqs;
     }
 
+    public function __toString()
+    {
+        return 'Settings';
+    }
 }

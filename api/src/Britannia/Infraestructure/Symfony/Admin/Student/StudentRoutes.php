@@ -21,5 +21,13 @@ final class StudentRoutes extends AdminRoutes
     protected function configure(): void
     {
         $this->add('tutor_form', 'tutor/form');
+
+//        $this
+//            ->add('dummy',
+//                'dummy/{id}',
+//                array('_controller' => 'AcmeDemoBundle:Default:dummy'),
+//                array('id' => '\d+')
+//            )
+//        ;
     }
 }

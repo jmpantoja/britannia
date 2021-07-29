@@ -1,7 +1,7 @@
 {% extends 'base_pdf.html.twig' %}
 
 {% block stylesheets %}
-    {#    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">#}
+    {# <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> #}
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css">
 {% endblock %}
 
@@ -13,45 +13,25 @@
             font-family: 'Open Sans';
         }
 
-        .page {
-            margin: auto;
-            width: 997.033px;
-            height: 1140px;
-        }
-
-        .double_page {
-            margin: auto;
-            width: 997.033px;
-            height: 2280px;
-        }
-
-        .page::after {
-            content: "";
-            background-image: url("{{ assets_base }}/images/admin/watermark.jpg");
-            background-repeat: no-repeat;
-            background-position: 50% 200px;
-            background-size: 700px auto;
-            width: 997.033px;
-            /*height: 1195px;*/
-            top: 0;
-            position: absolute;
-            z-index: -1;
+        .page, .section {
+            /*margin: auto;*/
+            /*width: 997.033px;*/
+            overflow: hidden;
+            page-break-after: always;
         }
 
         .page table {
             width: 100%;
             border-collapse: separate;
             border-spacing: 2px;
-            margin: 0 auto;
-            margin: 0;
         }
-
 
         .num-of-page {
             text-align: center;
             font-size: 22px;
             margin-top: 0.6em
         }
+
 
         .field {
             text-align: left;
@@ -162,18 +142,35 @@
 {% endblock %}
 
 {% block body %}
+    {% set words = setting.generalConsiderationsClause | split(' ') %}
+    {% set sections = words|batch(800) %}
 
     {% if student.adult %}
-        {% with {page:1, total:4} %} {{ block('personal_data_1') }} {% endwith %}
-        {% with {page:2, total:4} %} {{ block('personal_data_2') }} {% endwith %}
-        {% with {page:3, total:4} %} {{ block('general_considerations') }} {% endwith %}
-        {% with {page:4, total:4} %} {{ block('data_protection') }} {% endwith %}
+
+        {% set total = sections|length + 3 %}
+
+        {% with {page:1, total:total} %} {{ block('personal_data_1') }} {% endwith %}
+        {% with {page:2, total:total} %} {{ block('personal_data_2') }} {% endwith %}
+        {% with {page:3, total:total} %} {{ block('data_protection') }} {% endwith %}
+
+        {% for section in sections %}
+            {% set page = 4 + loop.index0 %}
+            {% with {page:page, total:total, section:section, target:'academy'} %} {{ block('general_considerations') }} {% endwith %}
+        {% endfor %}
+
     {% else %}
-        {% with {page:1, total:5} %} {{ block('personal_data_1') }} {% endwith %}
-        {% with {page:2, total:5} %} {{ block('personal_data_2') }} {% endwith %}
-        {% with {page:3, total:5} %} {{ block('image_rights') }} {% endwith %}
-        {% with {page:4, total:5} %} {{ block('data_protection') }} {% endwith %}
-        {% with {page:5, total:5} %} {{ block('general_considerations') }} {% endwith %}
+        {% set total = sections|length + 4 %}
+
+        {% with {page:1, total:total} %} {{ block('personal_data_1') }} {% endwith %}
+        {% with {page:2, total:total} %} {{ block('personal_data_2') }} {% endwith %}
+        {% with {page:3, total:total} %} {{ block('image_rights') }} {% endwith %}
+        {% with {page:4, total:total} %} {{ block('data_protection') }} {% endwith %}
+
+        {% for section in sections %}
+            {% set page = 5 + loop.index0 %}
+            {% with {page:page, total:total, section:section, target:'academy'} %} {{ block('general_considerations') }} {% endwith %}
+        {% endfor %}
+
     {% endif %}
 {% endblock %}
 
@@ -454,254 +451,270 @@
 {% endblock %}
 
 {% block general_considerations %}
-    <div class="page double_page">
-        <table>
-            <tr>
-                <td colspan="4">
-                    {{ block('printed_date') }}
-                    <div class="num-of-page">
-                        {{ _self.title(student, page, total) }}
-                    </div>
-                </td>
-            </tr>
-            <tr class="header">
-                <td colspan="1" class="quarter-col">
-                    {{ block('logo') }}
-                </td>
-                <td colspan="3">
-                    <div class="title-box">
-                        <span class="name">CONSIDERACIONES GENERALES</span>
+<div class="page">
+    <table>
+        <tr>
+            <td colspan="4">
+                {{ block('printed_date') }}
+                <div class="num-of-page">
+                    {{ _self.title(student, page, total) }}
+                </div>
+            </td>
+        </tr>
+        <tr class="header">
+            <td colspan="1" class="quarter-col">
+                {{ block('logo') }}
+            </td>
+            <td colspan="3">
+                <div class="title-box">
+                    <span class="name">CONSIDERACIONES GENERALES</span>
+                    {% if (target == 'academy') %}
                         <span class="type">Ejemplar para la Academia</span>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="4" class="lopd">
-                    <div class="field" style="font-size: 10px">
-                        {{ setting.generalConsiderationsClause | raw }}
-                    </div>
+                    {% elseif(target == 'student') %}
+                        <span class="type">Ejemplar para el Alumno</span>
+                    {% endif %}
+                </div>
+            </td>
+        </tr>
+    </table>
 
-                </td>
-            </tr>
 
-            <tr>
-                <td colspan="4" class="label-to-right">
-                    <span class="label">
-                        He leído y acepto las condiciones..................*
-                        {{ _self.checkbox(assets_base, student.termsOfUseAcademy) }}
-                    </span>
-                </td>
-
-            </tr>
-
-        </table>
+    <div class="section">
+        <div class="field" style="font-size: 10px">
+            {{ section | join(' ') | raw }}
+        </div>
+        <div class="label-to-right">
+                            <span class="label">
+                                He leído y acepto las condiciones..................*
+                                {{ _self.checkbox(assets_base, student.termsOfUseAcademy) }}
+                            </span>
+        </div>
     </div>
-{% endblock %}
+
+    {# {% set words = setting.generalConsiderationsClause | split(' ') %} #}
+    {# {% set sections = words|batch(800) %} #}
+
+    {# {% for section in sections %} #}
+
+    {# <div class="section"> #}
+    {# <div class="field" style="font-size: 10px"> #}
+    {# {{ section | join(' ') | raw }} #}
+    {# </div> #}
+    {# <div class="label-to-right"> #}
+    {# <span class="label"> #}
+    {# He leído y acepto las condiciones..................* #}
+    {# {{ _self.checkbox(assets_base, student.termsOfUseAcademy) }} #}
+    {# </span> #}
+    {# </div> #}
+    {# </div> #}
+    {# {% endfor %} #}
+    {# </div> #}
+    {% endblock %}
 
 
-{% block data_protection %}
-    <div class="page">
-        <table>
-            <tr>
-                <td colspan="4">
-                    {{ block('printed_date') }}
-                    <div class="num-of-page">
-                        {{ _self.title(student, page, total) }}
-                    </div>
-                </td>
-            </tr>
-            <tr class="header">
-                <td colspan="1" class="quarter-col">
-                    {{ block('logo') }}
-                </td>
-                <td colspan="3">
-                    <div class="title-box">
-                        <span class="name">INFORMACIÓN BÁSICA SOBRE PROTECCIÓN DE DATOS</span>
-                        <span class="type">Ejemplar para la Academia</span>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="4" class="lopd">
-                    <div class="field">
-                        {{ setting.personalDataConsentClause | raw }}
-                    </div>
-                </td>
-            </tr>
+    {% block data_protection %}
+        <div class="page">
+            <table>
+                <tr>
+                    <td colspan="4">
+                        {{ block('printed_date') }}
+                        <div class="num-of-page">
+                            {{ _self.title(student, page, total) }}
+                        </div>
+                    </td>
+                </tr>
+                <tr class="header">
+                    <td colspan="1" class="quarter-col">
+                        {{ block('logo') }}
+                    </td>
+                    <td colspan="3">
+                        <div class="title-box">
+                            <span class="name">INFORMACIÓN BÁSICA SOBRE PROTECCIÓN DE DATOS</span>
+                            <span class="type">Ejemplar para la Academia</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4" class="lopd">
+                        <div class="field">
+                            {{ setting.personalDataConsentClause | raw }}
+                        </div>
+                    </td>
+                </tr>
 
-            <tr>
-                <td colspan="4" class="label-to-right">
-                    &nbsp;
-                </td>
+                <tr>
+                    <td colspan="4" class="label-to-right">
+                        &nbsp;
+                    </td>
 
-            </tr>
+                </tr>
 
-        </table>
-    </div>
-{% endblock %}
+            </table>
+        </div>
+    {% endblock %}
 
-{% block image_rights %}
-    <div class="page">
-        <table>
-            <tr>
-                <td colspan="4">
-                    {{ block('printed_date') }}
-                    <div class="num-of-page">
-                        {{ _self.title(student, page, total) }}
-                    </div>
-                </td>
-            </tr>
-            <tr class="header">
-                <td colspan="1" class="quarter-col">
-                    {{ block('logo') }}
-                </td>
-                <td colspan="3">
-                    <div class="title-box">
-                        <span class="name">CONSENTIMIENTO PARA EL USO DE IMÁGENES DE LOS ALUMNOS/AS</span>
-                        <span class="type">Ejemplar para la Academia</span>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="4">
-                    D/Dña <strong>{{ student.firstTutor.fullName }}</strong>, tutor legal del alumno
-                    <strong>{{ student.fullName }}</strong>, con DNI <strong>{{ student.firstTutor.dni }}</strong>
-                    expresa su:
-                    <br/>
-                    <i>(marquese con una cruz lo que proceda)</i>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <p class="labeled-option">
-                        SI CONSIENTO
-                        <span class="box"></span>
-                    </p>
-                </td>
-                <td colspan="2">
-                    <p class="labeled-option">
-                        NO CONSIENTO
-                        <span class="box"></span>
-                    </p>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="4" class="consentClause">
-                    {{ setting.consentClause | raw }}
-                </td>
-            </tr>
-        </table>
-    </div>
-{% endblock %}
-
-
-{% block logo %}
-    <img src="{{ assets_base }}/images/admin/logo_h_300.jpg" width="300" height="65"/>
-{% endblock %}
+    {% block image_rights %}
+        <div class="page">
+            <table>
+                <tr>
+                    <td colspan="4">
+                        {{ block('printed_date') }}
+                        <div class="num-of-page">
+                            {{ _self.title(student, page, total) }}
+                        </div>
+                    </td>
+                </tr>
+                <tr class="header">
+                    <td colspan="1" class="quarter-col">
+                        {{ block('logo') }}
+                    </td>
+                    <td colspan="3">
+                        <div class="title-box">
+                            <span class="name">CONSENTIMIENTO PARA EL USO DE IMÁGENES DE LOS ALUMNOS/AS</span>
+                            <span class="type">Ejemplar para la Academia</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        D/Dña <strong>{{ student.firstTutor.fullName }}</strong>, tutor legal del alumno
+                        <strong>{{ student.fullName }}</strong>, con DNI <strong>{{ student.firstTutor.dni }}</strong>
+                        expresa su:
+                        <br/>
+                        <i>(marquese con una cruz lo que proceda)</i>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <p class="labeled-option">
+                            SI CONSIENTO
+                            <span class="box"></span>
+                        </p>
+                    </td>
+                    <td colspan="2">
+                        <p class="labeled-option">
+                            NO CONSIENTO
+                            <span class="box"></span>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4" class="consentClause">
+                        {{ setting.consentClause | raw }}
+                    </td>
+                </tr>
+            </table>
+        </div>
+    {% endblock %}
 
 
-{% block printed_date %}
-    <div class="printed_date">
-        Academia Britannia a {{ date() | localizeddate('medium', 'none') }}
-    </div>
-{% endblock %}
+    {% block logo %}
+        <img src="{{ assets_base }}/images/admin/logo_h_300.jpg" width="300" height="65"/>
+    {% endblock %}
 
-{% block photo %}
-    {% set photo = student.photo %}
-    <div class="photo">
-        {% if photo %}
-            <img src="{{ path('photo_download', {'path_to_file': photo.path }) }}"/>
+
+    {% block printed_date %}
+        <div class="printed_date">
+            Academia Britannia a {{ date() | localizeddate('medium', 'none') }}
+        </div>
+    {% endblock %}
+
+    {% block photo %}
+        {% set photo = student.photo %}
+        <div class="photo">
+            {% if photo %}
+                <img src="{{ path('photo_download', {'path_to_file': photo.path }) }}"/>
+            {% else %}
+                <span>FOTO</span>
+            {% endif %}
+
+        </div>
+
+
+    {% endblock %}
+
+    {% block tutor %}
+        <tr>
+            <td colspan="2" class="izquierda">Datos del Tutor 1 del alumno:
+                {{ description }}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <span class="label">Primer Apellido</span>
+                {% set lastName = tutor.fullName.lastName | default(null) %}
+                {{ _self.field(lastName) }}
+            </td>
+            <td colspan="2">
+                <span class="label">Nombre</span>
+                {% set firstName = tutor.fullName.firstName | default(null) %}
+                {{ _self.field(firstName) }}
+            </td>
+        </tr>
+        <tr>
+            <td class="quarter-col">
+                <span class="label">Número de documento (DNI)</span>
+                {% set dni = tutor.dni | default(null) %}
+                {{ _self.field(dni) }}
+            </td>
+            <td class="quarter-col">
+                <span class="label">Telf. Contacto 1</span>
+                {{ _self.field(tutor.phoneNumbers.0 | default (null)) }}
+            </td>
+            <td class="quarter-col">
+                <span class="label">Telf. Contacto 2</span>
+                {{ _self.field(tutor.phoneNumbers.1 | default (null)) }}
+            </td>
+            <td class="quarter-col">
+                <span class="label">Telf. Adicional</span>
+                {{ _self.field(tutor.phoneNumbers.2 | default (null)) }}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <span class="label">Correo electronico de Contacto</span>
+                {{ _self.field(tutor.emails.0 | default (null)) }}
+            </td>
+            <td>
+                <span class="label">Situación Laboral</span>
+                {% set job_status = tutor.job.status | default({value:null}) %}
+                {{ _self.field(job_status.value) }}
+            </td>
+            <td>
+                <span class="label">Profesión</span>
+                {% set name = tutor.job.name | default(null) %}
+                {{ _self.field(name ) }}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <span class="label">Domicilio</span>
+                {% set address = tutor.address | default(null) %}
+                {{ _self.field(address ) }}
+            </td>
+            <td>
+                <span class="label">Código Postal</span>
+                {% set postalCode = tutor.address.postalCode | default(null) %}
+                {{ _self.field(postalCode ) }}
+            </td>
+        </tr>
+    {% endblock %}
+
+
+    {% macro title(student, page, total) %}
+        Ficha de Inscripción {{ page }}/{{ total }}
+    {% endmacro %}
+
+    {% macro field(value) %}
+        {# <span class="field">{{ null | default("&nbsp;") | raw }}</span> #}
+        <span class="field">{{ value | default("&nbsp;") | raw }}</span>
+    {% endmacro %}
+
+    {% macro checkbox(assets_base, value) %}
+        {% if value %}
+            <img src="{{ assets_base }}/images/admin/checkbox_yes_20x20.png"/>
         {% else %}
-            <span>FOTO</span>
+            <img src="{{ assets_base }}/images/admin/checkbox_no_20x20.png"/>
         {% endif %}
 
-    </div>
-
-
-{% endblock %}
-
-{% block tutor %}
-    <tr>
-        <td colspan="2" class="izquierda">Datos del Tutor 1 del alumno:
-            {{ description }}
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2">
-            <span class="label">Primer Apellido</span>
-            {% set lastName = tutor.fullName.lastName | default(null) %}
-            {{ _self.field(lastName) }}
-        </td>
-        <td colspan="2">
-            <span class="label">Nombre</span>
-            {% set firstName = tutor.fullName.firstName | default(null) %}
-            {{ _self.field(firstName) }}
-        </td>
-    </tr>
-    <tr>
-        <td class="quarter-col">
-            <span class="label">Número de documento (DNI)</span>
-            {% set dni = tutor.dni | default(null) %}
-            {{ _self.field(dni) }}
-        </td>
-        <td class="quarter-col">
-            <span class="label">Telf. Contacto 1</span>
-            {{ _self.field(tutor.phoneNumbers.0 | default (null)) }}
-        </td>
-        <td class="quarter-col">
-            <span class="label">Telf. Contacto 2</span>
-            {{ _self.field(tutor.phoneNumbers.1 | default (null)) }}
-        </td>
-        <td class="quarter-col">
-            <span class="label">Telf. Adicional</span>
-            {{ _self.field(tutor.phoneNumbers.2 | default (null)) }}
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2">
-            <span class="label">Correo electronico de Contacto</span>
-            {{ _self.field(tutor.emails.0 | default (null)) }}
-        </td>
-        <td>
-            <span class="label">Situación Laboral</span>
-            {% set job_status = tutor.job.status | default({value:null}) %}
-            {{ _self.field(job_status.value) }}
-        </td>
-        <td>
-            <span class="label">Profesión</span>
-            {% set name = tutor.job.name | default(null) %}
-            {{ _self.field(name ) }}
-        </td>
-    </tr>
-    <tr>
-        <td colspan="3">
-            <span class="label">Domicilio</span>
-            {% set address = tutor.address | default(null) %}
-            {{ _self.field(address ) }}
-        </td>
-        <td>
-            <span class="label">Código Postal</span>
-            {% set postalCode = tutor.address.postalCode | default(null) %}
-            {{ _self.field(postalCode ) }}
-        </td>
-    </tr>
-{% endblock %}
-
-
-{% macro title(student, page, total) %}
-    Ficha de Inscripción {{ page }}/{{ total }}
-{% endmacro %}
-
-{% macro field(value) %}
-{#    <span class="field">{{ null | default("&nbsp;") | raw }}</span>#}
-    <span class="field">{{ value | default("&nbsp;") | raw }}</span>
-{% endmacro %}
-
-{% macro checkbox(assets_base, value) %}
-    {% if value %}
-        <img src="{{ assets_base }}/images/admin/checkbox_yes_20x20.png"/>
-    {% else %}
-        <img src="{{ assets_base }}/images/admin/checkbox_no_20x20.png"/>
-    {% endif %}
-
-{% endmacro %}
+    {% endmacro %}

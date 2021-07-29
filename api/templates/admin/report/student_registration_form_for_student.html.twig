@@ -1,29 +1,33 @@
 {% extends 'admin/report/student_registration_form.html.twig' %}
 
-{% block style %}
-    {{ parent() }}
-    <style>
-        .page {
-            margin: auto;
-            width: 997.033px;
-            height: 1561px;
-        }
+{# {% block style %} #}
+{# {{ parent() }} #}
+{# <style> #}
+{# .page { #}
+{# margin: auto; #}
+{# width: 997.033px; #}
+{# height: 1561px; #}
+{# } #}
 
-        .double_page {
-            height: 3122px;
-        }
-    </style>
+{# </style> #}
 
-{% endblock %}
+{# {% endblock %} #}
 
 {% block body %}
 
-    {% with {page:1, total: 2} %} {{ block('general_considerations') }} {% endwith %}
-    {% with {page:2, total: 2} %} {{ block('faqs') }} {% endwith %}
+    {% set words = setting.generalConsiderationsClause | split(' ') %}
+    {% set sections = words|batch(800) %}
+
+    {% set total = sections|length + 1 %}
+
+    {% with {page:1, total: total} %} {{ block('faqs') }} {% endwith %}
+
+    {% for section in sections %}
+        {% set page = 2 + loop.index0 %}
+        {% with {page:page, total:total, section:section, target:'student' } %} {{ block('general_considerations') }} {% endwith %}
+    {% endfor %}
 
 {% endblock %}
-
-
 
 {% block faqs %}
     <div class="page">
@@ -43,7 +47,7 @@
                 <td colspan="3">
                     <div class="title-box">
                         <span class="name">PREGUNTAS FRECUENTES</span>
-                        <span class="type">Ejemplar para la Academia</span>
+                        <span class="type">Ejemplar para el Alumno</span>
                     </div>
                 </td>
             </tr>

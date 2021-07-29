@@ -73,12 +73,9 @@ final class SettingMapper extends AdminMapper
 
     private function toDate($date): DateTimeInterface
     {
-        $date = '1970-01-01T10:30:00.000000Z';
-
-        if(!($date instanceof DateTimeInterface)){
+        if (!($date instanceof DateTimeInterface)) {
             return CarbonImmutable::make($date);
         }
-
         return $date;
     }
 }

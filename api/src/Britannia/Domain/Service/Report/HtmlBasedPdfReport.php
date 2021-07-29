@@ -37,7 +37,8 @@ abstract class HtmlBasedPdfReport implements ReportInterface
         $this->params = $params;
 
         $this->options = array_replace([
-            'footer-html'=>' '
+            'footer-html'=>' ',
+//            'header-html'=>'<br/>'
         ], $options);
     }
 

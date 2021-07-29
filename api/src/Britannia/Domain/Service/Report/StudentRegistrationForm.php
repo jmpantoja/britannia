@@ -34,6 +34,8 @@ final class StudentRegistrationForm extends HtmlBasedPdfReport
         $options = [
             'page-size' => 'A4',
             'orientation' => 'Portrait',
+            //'margin-left' => '20mm',
+            //'header-spacing'=>'1'
         ];
 
         $name = sprintf('ficha-%s-ejemplar-academia', $student);

@@ -76,4 +76,8 @@ abstract class Template
     {
         return $this instanceof EmailTemplate;
     }
+
+    public function __toString(){
+        return $this->name;
+    }
 }

@@ -198,4 +198,8 @@ class Issue
         return $this->createdAt;
     }
 
+    public function __toString(){
+        return $this->subject;
+    }
+
 }
