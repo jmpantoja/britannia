@@ -153,44 +153,33 @@
             padding-right: 1em;
         }
 
-        article.footer {
-            border-top: solid 2px darkblue;
+        .footer {
+            /*border-top: solid 2px darkblue;*/
             overflow: hidden;
             margin: 0;
             padding: 0;
+            font-size: 11px;
         }
 
-        .footer .box {
-            padding-top: 0.5em;
-            margin: 0;
-            width: 27%;
-            float: left;
-        }
 
-        .footer .box:nth-child(2) {
-            border-left: solid 2px darkblue;
-            border-right: solid 2px darkblue;
-            width: 46%;
-        }
-
-        .footer .box .title {
-            font-size: 0.9em;
+        .footer .title {
+            text-align: center;
+            font-size: 13px;
             font-weight: bold;
-            text-align: center;
         }
 
-        .footer .box .content {
-            font-size: 0.8em;
-            padding: 1em;
+        .footer .line {
+            margin-bottom: 0;
         }
 
-        .footer .box .content p.email {
-            font-size: 0.9em;
+        .footer .line strong {
+            display: inline-block;
+            padding-right: 1em;
         }
 
-        .footer .box .content i {
-            text-align: center;
-            font-size: 1em;
+        .footer .line span {
+            display: inline-block;
+            padding-right: 1em;
         }
 
     </style>
@@ -359,43 +348,26 @@
 {% endblock %}
 
 {% block footer %}
-    <div class="box">
-        <h3 class="title">Teléfonos</h3>
-        <div class="content">
-            <p>
-                <i class="fa fa-phone"></i> {{ setting.phone }}
-            </p>
-            <p>
-                <i class="fa fa-mobile"></i> {{ setting.mobile }}
-            </p>
-        </div>
+    <div class="footer">
+        <h3 class="title">Academia Britannia</h3>
+        <p class="line">
+            <strong>Horario: </strong>
+            <span>mañanas de {{ setting.morning.start | localizeddate('none', 'short') }} a {{ setting.morning.end | localizeddate('none', 'short') }} </span>
+            <span>tardes de {{ setting.afternoon.start | localizeddate('none', 'short') }} a {{ setting.afternoon.end | localizeddate('none', 'short') }} </span>
+        </p>
+        <p class="line">
+            <strong>Contacta con nosotros: </strong>
+            <span><i class="fa fa-phone"></i> {{ setting.phone }}</span>
+            <span><i class="fa fa-mobile"></i> {{ setting.mobile }}</span>
+            <span><i class="fa fa-envelope"></i> {{ setting.mail }}</span>
+        </p>
+        <p class="line">
+            <strong>Visitanos en: </strong>
+            <span><i class="fa fa-facebook-f"></i> {{ setting.facebook }} </span>
+            <span><i class="fa fa-twitter"></i> {{ setting.twitter }} </span>
+            <span><i class="fa fa-info"></i> {{ setting.web }}</span>
+        </p>
     </div>
-
-    <div class="box">
-        <div class="content">
-            <p class="facebook"><i class="fa fa-facebook-f"></i> {{ setting.facebook }} </p>
-            <p class="twitter"><i class="fa fa-twitter"></i> {{ setting.twitter }} </p>
-            <p class="email"><i class="fa fa-envelope"></i> {{ setting.mail }}</p>
-            <p class="web"><i class="fa fa-info"></i> {{ setting.web }} </p>
-        </div>
-    </div>
-
-
-    <div class="box">
-        <h3 class="title">Atención al público</h3>
-        <div class="content">
-            <p>
-                <b>Mañanas: </b><br/>
-                {{ setting.morning.start | localizeddate('none', 'short') }} a
-                {{ setting.morning.end | localizeddate('none', 'short') }}
-            </p>
-            <p>
-                <b>Tardes: </b><br/>
-                {{ setting.afternoon.start | localizeddate('none', 'short') }} a
-                {{ setting.afternoon.end | localizeddate('none', 'short') }}
-        </div>
-    </div>
-
 {% endblock %}
 
 
