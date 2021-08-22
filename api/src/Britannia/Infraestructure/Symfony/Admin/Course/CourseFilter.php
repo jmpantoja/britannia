@@ -74,6 +74,7 @@ final class CourseFilter extends AdminFilter
                     "Adultos" => "adult",
                     "Escolar" => "school",
                     "Pre-Escolar" => "pre_school",
+                    "Intensivo" => "intensive",
                     "Apoyo" => "support",
                     "One to One" => "one_to_one",
                 ];
