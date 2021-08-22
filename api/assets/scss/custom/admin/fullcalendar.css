@@ -31,6 +31,11 @@ span.fc-day-number {
     color: red;
 }
 
+.planning-wrapper {
+    max-height: 90vh;
+    overflow: auto;
+}
+
 div[data-calendar=calendar] {
     width: 1000px;
     margin: auto;
