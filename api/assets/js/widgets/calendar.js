@@ -18,7 +18,7 @@
 
 
     $(document).on('click', this.options.prevBtn, this.putHash.bind(this))
-    $(document).on('click', this.options.nextBtn,this.putHash.bind(this))
+    $(document).on('click', this.options.nextBtn, this.putHash.bind(this))
     $(document).on('click', this.options.todayBtn, this.today.bind(this))
   }
 
@@ -56,6 +56,7 @@
 
   MonthCalendar.prototype.calendar = function () {
     return new Calendar(this.$el, {
+      schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
       plugins: [interaction, dayGrid, resourceTimeGrid],
       selectable: true,
       locale: 'es',
@@ -96,6 +97,7 @@
 
       date.setDate(date.getDate() + 1)
       td.removeClass('holiday')
+
       if (data.holiday) {
         td.addClass('holiday')
       }

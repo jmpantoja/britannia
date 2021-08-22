@@ -39,10 +39,6 @@ class Invoice
     private $paid = false;
     private $paymentDate;
     private $details = [];
-    /**
-     * @var CarbonImmutable|null
-     */
-    private ?CarbonImmutable $paidAt;
 
     public static function make(InvoiceDto $dto): self
     {
@@ -68,12 +64,13 @@ class Invoice
         $this->subject = $dto->subject;
         $this->expiredAt = $dto->expiredAt;
 
-        if($dto->paid){
+        if ($dto->paid) {
             $this->markAsPaid();
         }
 
         $this->paid = $dto->paid;
-        $this->paidAt = $dto->paidAt;
+        $this->paymentDate = $dto->paidAt;
+
 
         $this->setDetails($dto->details);
         return $this;
@@ -154,7 +151,6 @@ class Invoice
     }
 
 
-
     /**
      * @return CarbonImmutable|null
      */
@@ -196,6 +192,18 @@ class Invoice
     }
 
     /**
+     * @return mixed
+     */
+    public function month()
+    {
+        $year = intval($this->month / 100);
+        $month = $this->month - $year * 100;
+
+        return CarbonImmutable::createFromDate($year, $month);
+    }
+
+
+    /**
      * @return bool
      */
     public function isPaid(): bool
@@ -216,7 +224,9 @@ class Invoice
         return $this;
     }
 
-    public function __toString(){
+
+    public function __toString()
+    {
         return $this->subject;
     }
 }

@@ -58,6 +58,7 @@ class CalendarController extends CRUDController
         $end = $this->getEnd();
 
         $holidays = $this->holidayService->range($start, $end);
+
         return $this->renderJson($holidays);
     }
 

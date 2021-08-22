@@ -15,6 +15,7 @@ namespace Britannia\Domain\Service\Payment;
 
 
 use Britannia\Domain\Entity\Course\Course;
+use Britannia\Domain\Entity\Student\Adult;
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\VO\Discount\FamilyOrder;
 use Britannia\Domain\VO\Discount\StudentDiscount;
@@ -34,6 +35,7 @@ final class StudentDiscountGenerator
 
     public function generate(Student $student, Course $course): StudentDiscount
     {
+
         return StudentDiscount::make(...[
             $this->getFamilyOrder($student),
             $this->getJobStatus($student),

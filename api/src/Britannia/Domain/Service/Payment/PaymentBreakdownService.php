@@ -15,10 +15,12 @@ namespace Britannia\Domain\Service\Payment;
 
 
 use Britannia\Domain\Entity\Course\Course;
+use Britannia\Domain\Entity\Course\SinglePaymentInterface;
 use Britannia\Domain\Service\Payment\Discount\BoundariesCalculator;
 use Britannia\Domain\Service\Payment\Discount\EnrollmentDiscount;
 use Britannia\Domain\Service\Payment\Discount\MaterialDiscount;
 use Britannia\Domain\Service\Payment\Discount\MonthlyDiscount;
+use Britannia\Domain\Service\Payment\Discount\SinglePaidDiscount;
 use Britannia\Domain\VO\Discount\StudentDiscount;
 use Carbon\CarbonImmutable;
 use Tightenco\Collect\Support\Collection;
@@ -42,18 +44,20 @@ class PaymentBreakdownService
      * @var BoundariesCalculator
      */
     private $boundariesCalculator;
+    private SinglePaidDiscount $singlePaid;
 
     public function __construct(
-        EnrollmentDiscount $enrollment,
-        MaterialDiscount $material,
-        MonthlyDiscount $monthly,
+        EnrollmentDiscount   $enrollment,
+        MaterialDiscount     $material,
+        MonthlyDiscount      $monthly,
+        SinglePaidDiscount   $singlePaid,
         BoundariesCalculator $boundariesCalculator
-
     )
     {
         $this->enrollment = $enrollment;
         $this->material = $material;
         $this->monthly = $monthly;
+        $this->singlePaid = $singlePaid;
 
         $this->boundariesCalculator = $boundariesCalculator;
     }
@@ -113,5 +117,21 @@ class PaymentBreakdownService
 
         return collect($monthlyPayments);
     }
+
+    public function uniquePaid(SinglePaymentInterface $course, StudentDiscount $discount)
+    {
+        return $this->singlePaid->calculeUniquePaid($course, $discount);
+    }
+
+    public function firstPaid(Course $course, StudentDiscount $discount)
+    {
+        return $this->singlePaid->calculeFirstPaid($course, $discount);
+    }
+
+    public function secondPaid(Course $course, StudentDiscount $discount)
+    {
+        return $this->singlePaid->calculeSecondPaid($course, $discount);
+    }
+
 
 }

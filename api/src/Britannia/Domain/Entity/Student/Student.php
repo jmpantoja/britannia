@@ -245,18 +245,16 @@ abstract class Student implements Comparable
         return $this;
     }
 
-    public function removeCourse(Course $course): self
+    public function removeCourse(StudentCourse $joined): self
     {
         $this->studentHasCoursesList()
-            ->studentLeaveACourse($course);
+            ->studentLeaveACourse($joined->course());
 
         return $this;
     }
 
-    public function addCourse(Course $course): self
+    public function addCourse(StudentCourse $joined): self
     {
-        $joined = StudentCourse::make($this, $course);
-
         if ($this->studentHasCoursesList()->hasActive($joined)) {
             return $this;
         }

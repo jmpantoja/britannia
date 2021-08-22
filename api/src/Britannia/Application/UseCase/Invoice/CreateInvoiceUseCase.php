@@ -17,6 +17,7 @@ namespace Britannia\Application\UseCase\Invoice;
 use ApiPlatform\Core\DataPersister\DataPersisterInterface;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Invoice\Invoice;
+use Britannia\Domain\Entity\Invoice\InvoiceList;
 use Britannia\Domain\Service\Invoice\InvoiceGenerator;
 use PlanB\DDD\Application\UseCase\UseCaseInterface;
 use PlanB\DDDBundle\ApiPlattform\DataPersister;
@@ -55,18 +56,36 @@ final class CreateInvoiceUseCase implements UseCaseInterface
          * Para hacer esto, necesito un flag en CreateInvoice $command
          */
 
-        $invoice = $this->getInvoice($command);
+        /** @var InvoiceList $invoiceList */
+        $invoiceList = $this->getInvoiceList($command);
 
-        if ($invoice instanceof Invoice) {
-            $this->dataPersister->persist($invoice);
-        }
+        $invoiceList
+            ->withValueEqualToZero()
+            ->values()
+            ->each(function (Invoice $invoice){
+                $this->dataPersister->remove($invoice);
+            });
+
+
+        $invoiceList
+            ->withValueGreaterThanZero()
+            ->values()
+            ->each(function (Invoice $invoice){
+                $this->dataPersister->persist($invoice);
+            });
+
+//        $invoiceList->values()
+//            ->each(function (Invoice $invoice) {
+//                $this->dataPersister->persist($invoice);
+//            });
+
     }
 
     /**
      * @param CreateInvoice $command
      * @return Invoice|null
      */
-    private function getInvoice(CreateInvoice $command)
+    private function getInvoiceList(CreateInvoice $command): InvoiceList
     {
         $student = $command->student();
         $course = $command->course();

@@ -21,6 +21,7 @@ final class StudentRoutes extends AdminRoutes
     protected function configure(): void
     {
         $this->add('tutor_form', 'tutor/form');
+        $this->add('student_cell', 'student/cell');
 
 //        $this
 //            ->add('dummy',

@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace Britannia\Domain\Entity\Course\Traits;
 
 
+use Britannia\Domain\Entity\Course\CourseAssessmentInterface;
 use Britannia\Domain\Entity\Course\CourseDto;
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Entity\Student\StudentCourse;
 use Britannia\Domain\Entity\Student\StudentCourseList;
-use Britannia\Domain\Entity\Student\StudentList;
 use Doctrine\Common\Collections\Collection;
 use PlanB\DDD\Domain\VO\PositiveInteger;
 
@@ -49,34 +49,37 @@ trait StudentTrait
             $this->setStudents($dto->courseHasStudents);
         }
 
+        if ($this instanceof CourseAssessmentInterface) {
+            $this->changeAssessmentDefinition($dto->assessment, $dto->assessmentGenerator);
+        }
     }
 
-    public function setStudents(StudentList $students): self
+    public function setStudents(StudentCourseList $studentCourseList): self
     {
+
         $this->courseHasStudentList()
-            ->onlyActives()
-            ->toStudentList()
-            ->forRemovedItems($students, [$this, 'removeStudent'])
-            ->forAddedItems($students, [$this, 'addStudent']);
+            ->onlyOnCourse()
+            ->forRemovedItems($studentCourseList, [$this, 'removeStudent'])
+            ->forAddedItems($studentCourseList, [$this, 'addStudent']);
 
         return $this;
     }
 
-    public function removeStudent(Student $student): self
+    public function removeStudent(StudentCourse $studentCourse): self
     {
-        $student->removeCourse($this);
+        $studentCourse->student()->removeCourse($studentCourse);
         return $this;
     }
 
-    public function addStudent(Student $student): self
+    public function addStudent(StudentCourse $studentCourse): self
     {
-        $student->addCourse($this);
+        $studentCourse->student()->addCourse($studentCourse);
         return $this;
     }
 
     public function updateNumOfStudents(): self
     {
-        $this->numOfStudents = $this->courseHasStudentList()->onlyInCourse()->count();
+        $this->numOfStudents = $this->courseHasStudentList()->onlyOnCourse()->count();
 
         return $this;
     }
@@ -86,7 +89,13 @@ trait StudentTrait
      */
     public function courseHasStudents(): array
     {
-        return $this->courseHasStudentList()->toArray();
+        return $this->courseHasStudentList()
+            ->toArray();
+    }
+
+    public function courseHasSingleStudent(Student $student): ?StudentCourse
+    {
+        return $this->courseHasStudentList()->singleStudent($student);
     }
 
     /**

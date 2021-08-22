@@ -16,7 +16,7 @@ namespace Britannia\Domain\Entity\Course;
 
 use Britannia\Domain\Entity\Lesson\UpdateCalendarOrder;
 use Britannia\Domain\Entity\Staff\StaffList;
-use Britannia\Domain\Entity\Student\StudentList;
+use Britannia\Domain\Entity\Student\StudentCourseList;
 use Britannia\Domain\Service\Course\LessonGenerator;
 use Britannia\Domain\VO\Course\Age\Age;
 use Britannia\Domain\VO\Course\Periodicity\Periodicity;
@@ -48,7 +48,7 @@ abstract class CourseDto extends Dto
 
     public StaffList $teachers;
 
-    public StudentList $courseHasStudents;
+    public StudentCourseList $courseHasStudents;
 
     public ?Collection $books = null;
 

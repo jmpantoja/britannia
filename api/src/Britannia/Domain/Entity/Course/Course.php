@@ -28,7 +28,7 @@ use PlanB\DDD\Domain\Behaviour\Traits\ComparableTrait;
 use PlanB\DDD\Domain\Model\Traits\AggregateRootTrait;
 
 
-abstract class Course implements Comparable, CoursePaymentInterface
+abstract class Course implements Comparable
 {
 
     use CourseTrait;

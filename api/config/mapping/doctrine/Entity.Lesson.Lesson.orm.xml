@@ -30,7 +30,11 @@
             </cascade>
         </many-to-one>
 
-        <many-to-one field="classRoom" target-entity="Britannia\Domain\Entity\ClassRoom\ClassRoom"/>
+        <many-to-one field="classRoom" target-entity="Britannia\Domain\Entity\ClassRoom\ClassRoom">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </many-to-one>
 
         <one-to-many field="attendances" target-entity="Britannia\Domain\Entity\Attendance\Attendance" mapped-by="lesson"
                      orphan-removal="true">

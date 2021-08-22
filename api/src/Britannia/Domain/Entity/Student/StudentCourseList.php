@@ -25,7 +25,6 @@ use PlanB\DDD\Domain\Model\EntityList;
 final class StudentCourseList extends EntityList
 {
 
-
     protected function typeName(): string
     {
         return StudentCourse::class;
@@ -34,11 +33,19 @@ final class StudentCourseList extends EntityList
     public static function collect(?iterable $input = []): EntityList
     {
         $input = collect($input)
-            ->sortBy(fn(StudentCourse $studentCourse)=> $studentCourse->student()->name());
+            ->sortBy(fn(StudentCourse $studentCourse) => $studentCourse->student()->name());
 
-       return parent::collect($input);
+        return parent::collect($input);
     }
 
+
+    public function singleStudent(Student $student): ?StudentCourse
+    {
+        return $this->values()
+            ->first(function (StudentCourse $studentCourse) use ($student) {
+                return $studentCourse->student()->equals($student);
+            });
+    }
 
     public static function fromStudent(Student $student): self
     {
@@ -88,10 +95,10 @@ final class StudentCourseList extends EntityList
         return StudentCourseList::collect($studentCourses);
     }
 
-    public function onlyInCourse(): self
+    public function onlyOnCourse(): self
     {
         $studentCourses = $this->values()
-            ->filter(fn(StudentCourse $studentCourse) => $studentCourse->inCourse());
+            ->filter(fn(StudentCourse $studentCourse) => $studentCourse->onCourse());
 
         return StudentCourseList::collect($studentCourses);
     }
@@ -142,7 +149,7 @@ final class StudentCourseList extends EntityList
                 return $studentCourse->course()->equals($course) && $studentCourse->isActive();
             })
             ->each(function (StudentCourse $studentCourse) {
-                $studentCourse->finish();
+                $studentCourse->leaveCourse();
             });
 
         return $this;
@@ -156,4 +163,6 @@ final class StudentCourseList extends EntityList
             })
             ->first();
     }
+
+
 }

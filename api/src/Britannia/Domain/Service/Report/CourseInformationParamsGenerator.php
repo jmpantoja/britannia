@@ -15,6 +15,7 @@ namespace Britannia\Domain\Service\Report;
 
 
 use Britannia\Domain\Entity\Course\Course;
+use Britannia\Domain\Entity\Course\SinglePaymentInterface;
 use Britannia\Domain\Service\Payment\Concept;
 use Britannia\Domain\Service\Payment\PaymentBreakdownService;
 use Britannia\Domain\VO\Discount\StudentDiscount;
@@ -34,11 +35,12 @@ final class CourseInformationParamsGenerator
         $this->breakdown = $breakdown;
     }
 
-    public function generate(Course $course, StudentDiscount $discount = null): array
+    public function monthlyPayment(Course $course, StudentDiscount $discount = null): array
     {
         $monthlyPayments = $this->breakdown->calculeMonthlyPayments($course, $discount);
 
         return [
+            'is_monthly' => true,
             'course' => $course,
             'startDate' => $discount->startDate(),
             'reserve' => $this->calculeReserve($course, $discount, $monthlyPayments),
@@ -106,6 +108,26 @@ final class CourseInformationParamsGenerator
             return null;
         }
         return $monthlyPayments->slice(1, 1)->pop();
+    }
+
+    public function singlePayment(SinglePaymentInterface $course, StudentDiscount $discount, bool $singlePaid)
+    {
+        $params = [
+            'is_monthly' => false,
+            'course' => $course,
+            'singlePaid' => $singlePaid,
+            'discount' => $discount
+        ];
+
+        if ($singlePaid) {
+            $params['uniquePaid'] = $this->breakdown->uniquePaid($course, $discount);
+            return $params;
+        }
+
+        $params['firstPaid'] = $this->breakdown->firstPaid($course, $discount);
+        $params['secondPaid'] = $this->breakdown->secondPaid($course, $discount);
+
+        return $params;
     }
 
 

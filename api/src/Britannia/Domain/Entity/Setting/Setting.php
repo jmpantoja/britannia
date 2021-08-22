@@ -17,6 +17,7 @@ namespace Britannia\Domain\Entity\Setting;
 use Britannia\Domain\VO\Course\Pass\PassPriceList;
 use Britannia\Domain\VO\Discount\FamilyDiscountList;
 use Britannia\Domain\VO\Discount\JobStatusDiscountList;
+use Carbon\CarbonImmutable;
 use PlanB\DDD\Domain\VO\Email;
 use PlanB\DDD\Domain\VO\PhoneNumber;
 use PlanB\DDD\Domain\VO\Price;
@@ -225,9 +226,13 @@ class Setting
     /**
      * @return mixed
      */
-    public function morning()
+    public function morning(): array
     {
-        return $this->morning;
+        return [
+            'start' => CarbonImmutable::make($this->morning['start']),
+            'end' => CarbonImmutable::make($this->morning['end']),
+        ];
+
     }
 
     /**
@@ -235,7 +240,11 @@ class Setting
      */
     public function afternoon()
     {
-        return $this->afternoon;
+        return [
+            'start' => CarbonImmutable::make($this->afternoon['start']),
+            'end' => CarbonImmutable::make($this->afternoon['end']),
+        ];
+
     }
 
     /**

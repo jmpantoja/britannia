@@ -16,6 +16,8 @@ namespace Britannia\Infraestructure\Symfony\Form\Report\CourseInfo;
 
 use Britannia\Application\UseCase\CourseReport\GenerateCourseInformation;
 use Britannia\Domain\Entity\Course\Course;
+use Britannia\Domain\Entity\Course\MonthlyPaymentInterface;
+use Britannia\Domain\Entity\Course\SinglePaymentInterface;
 use Britannia\Domain\VO\CourseInfoData;
 use Britannia\Domain\VO\Discount\StudentDiscount;
 use Britannia\Infraestructure\Symfony\Admin\CourseReport\CourseReportAdmin;
@@ -28,6 +30,7 @@ use Britannia\Infraestructure\Symfony\Validator\FullName;
 use PlanB\DDD\Domain\VO\Validator\Constraint;
 use PlanB\DDDBundle\Symfony\Form\Type\AbstractCompoundType;
 use PlanB\DDDBundle\Symfony\Form\Type\PriceType;
+use PlanB\DDDBundle\Symfony\Form\Type\ToggleType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -60,17 +63,33 @@ class CourseInformationType extends AbstractCompoundType
                 'label' => false,
                 'required' => false,
                 'sonata_help' => 'Se incorpora con el curso comenzado'
-            ])
-            ->add('firstMonth', PriceType::class, [
-                'label' => 'Precio primer mes',
-                'data' => $this->boundaries->firstMonthly($course)
-            ])
-            ->add('lastMonth', PriceType::class, [
-                'required' => false,
-                'label' => 'Precio último mes',
-                'data' => $this->boundaries->lastMonthly($course)
             ]);
+
+        if ($course instanceof MonthlyPaymentInterface) {
+            $builder
+                ->add('firstMonth', PriceType::class, [
+                    'label' => 'Precio primer mes',
+                    'data' => $this->boundaries->firstMonthly($course)
+                ])
+                ->add('lastMonth', PriceType::class, [
+                    'required' => false,
+                    'label' => 'Precio último mes',
+                    'data' => $this->boundaries->lastMonthly($course)
+                ]);
+        }
+
+        if ($course instanceof SinglePaymentInterface) {
+            $builder->add('singlePaid', ToggleType::class, [
+                'label' => 'Num. pagos',
+                'on_text' => 'Pago único',
+                'off_text' => 'Dos pagos',
+                'off_style' => 'success',
+                'data' => true
+            ]);
+        }
+
     }
+
 
     public function customOptions(OptionsResolver $resolver)
     {
@@ -102,16 +121,19 @@ class CourseInformationType extends AbstractCompoundType
         $course = $this->getOption('data');
         $startDate = $data['startDate'];
 
+
         $discount = StudentDiscount::make(...[
             $data['familyOrder'],
             $data['jobStatus'],
             $startDate,
             $data['freeEnrollment'],
-            $data['firstMonth'],
-            $data['lastMonth'],
+            $data['firstMonth'] ?? null,
+            $data['lastMonth'] ?? null,
         ]);
 
-        return GenerateCourseInformation::make($course, $discount);
+        $singlePaid = $data['singlePaid'] ?? true;
+
+        return GenerateCourseInformation::make($course, $discount, $singlePaid);
     }
 
     public function finishView(FormView $view, FormInterface $form, array $options)

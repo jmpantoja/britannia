@@ -1,8 +1,5 @@
 // Globalize jquery
 import jQuery from 'jquery';
-global.$ = jQuery;
-global.jQuery = jQuery;
-
 // Vendors
 import "admin-lte"
 import "bootstrap"
@@ -18,31 +15,8 @@ import "icheck"
 import "waypoints/lib/jquery.waypoints"
 import "waypoints/lib/shortcuts/sticky.min"
 import "select2"
-
-// Loading langugage files for select2
-//let fallbackLocale = window.navigator.language;
-// let languageSelect2 = document.documentElement.getAttribute('select2Locale') || fallbackLocale
-// let languageMoment = document.documentElement.getAttribute('momentLocale') || fallbackLocale
-
-let languageSelect2 = 'es'
-let languageMoment = 'es'
-
-
-import(`select2/select2_locale_${languageSelect2}.js`).then(() => {
-  // set <html lang="{{language}}">
-  document.documentElement.setAttribute('lang', languageSelect2)
-}).catch('failed to import select2 locale')
-
 // Configure momentJS locale
 import moment from "moment"
-moment.locale(languageMoment)
-
-global.moment = moment;
-
-// Load momentJS locale component
-import("moment/locale/" + languageMoment + '.js')
-  .catch('failed to load language component for momentJS')
-
 import "readmore-js"
 import "masonry-layout"
 
@@ -50,31 +24,16 @@ import "eonasdan-bootstrap-datetimepicker"
 import "trumbowyg";
 
 import "jquery-toast-plugin";
-import  "bootstrap-toggle";
+import "bootstrap-toggle";
 
 
-import URI from  "urijs";
-global.URI = URI;
-
-import { Calendar } from "@fullcalendar/core";
-global.Calendar = Calendar;
-
+import URI from "urijs";
+import {Calendar} from "@fullcalendar/core";
 import interaction from "@fullcalendar/interaction";
-global.interaction = interaction;
-
 import timeGrid from "@fullcalendar/timegrid";
-global.timeGrid = timeGrid;
-
-import  resourceTimeGrid from "@fullcalendar/resource-timegrid";
-global.resourceTimeGrid = resourceTimeGrid;
-
+import resourceTimeGrid from "@fullcalendar/resource-timegrid";
 import dayGrid from "@fullcalendar/daygrid";
-global.dayGrid = dayGrid;
-
-import  resourceDayGrid from "@fullcalendar/resource-daygrid";
-global.resourceDayGrid = resourceDayGrid;
-
-
+import resourceDayGrid from "@fullcalendar/resource-daygrid";
 // Custom
 import "./admin/Admin"
 import "./admin/sidebar"
@@ -103,6 +62,7 @@ import "./widgets/pass_hours";
 import "./widgets/pass_date";
 
 import "./widgets/student_check";
+import "./widgets/student_selector";
 import "./widgets/term_date";
 import "./widgets/template_selector";
 import "./widgets/template_counter";
@@ -123,7 +83,47 @@ import "../scss/admin.scss"
 
 import trumbowyg_icons from 'trumbowyg/dist/ui/icons.svg'
 
-$(function() {
+global.$ = jQuery;
+global.jQuery = jQuery;
+
+// Loading langugage files for select2
+//let fallbackLocale = window.navigator.language;
+// let languageSelect2 = document.documentElement.getAttribute('select2Locale') || fallbackLocale
+// let languageMoment = document.documentElement.getAttribute('momentLocale') || fallbackLocale
+
+let languageSelect2 = 'es'
+let languageMoment = 'es'
+
+
+import(`select2/select2_locale_${languageSelect2}.js`).then(() => {
+  // set <html lang="{{language}}">
+  document.documentElement.setAttribute('lang', languageSelect2)
+}).catch('failed to import select2 locale')
+
+moment.locale(languageMoment)
+
+global.moment = moment;
+
+// Load momentJS locale component
+import("moment/locale/" + languageMoment + '.js')
+  .catch('failed to load language component for momentJS')
+
+global.URI = URI;
+
+global.Calendar = Calendar;
+
+global.interaction = interaction;
+
+global.timeGrid = timeGrid;
+
+global.resourceTimeGrid = resourceTimeGrid;
+
+global.dayGrid = dayGrid;
+
+global.resourceDayGrid = resourceDayGrid;
+
+
+$(function () {
   $('[data-toggle="popover"]').popover();
 
 
@@ -133,6 +133,5 @@ $(function() {
     autogrow: true
   });
 
-  console.log('document ready!');
 });
 console.log('Hello Webpack Encore! Edit me in assets/js/app.js');

@@ -93,14 +93,14 @@
             {{ form_row(form.diagnostic) }}
         </div>
         {% if is_school %}
-        <div class="col-md-3">
-            {{ form_row(form.numOfTerms) }}
-        </div>
+            <div class="col-md-3">
+                {{ form_row(form.numOfTerms) }}
+            </div>
         {% endif %}
         {% if is_adult %}
-        <div class="col-md-3">
-            {{ form_row(form.final) }}
-        </div>
+            <div class="col-md-3">
+                {{ form_row(form.final) }}
+            </div>
         {% endif %}
 
         <div class="col-md-12">
@@ -213,3 +213,22 @@
         {% endif %}
     </div>
 {% endblock %}
+
+
+{% block dated_payment_widget %}
+
+    <div class="dated_payment row">
+        <div class="col-md-5">
+            {{ form_row(form.price) }}
+        </div>
+        <div class="col-md-6">
+            {{ form_row(form.deadLine) }}
+        </div>
+
+    </div>
+{% endblock %}
+
+
+
+
+

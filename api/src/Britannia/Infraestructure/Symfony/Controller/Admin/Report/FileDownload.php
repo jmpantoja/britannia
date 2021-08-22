@@ -40,15 +40,15 @@ final class FileDownload
      * @var string
      */
     private string $pathToTempDir;
-    private string  $pathToTemplatesDir;
+    private string $pathToTemplatesDir;
     /**
      * @var XlsxGenerator
      */
     private XlsxGenerator $xlsxGenerator;
 
-    public function __construct(XlsxGenerator $xlsxGenerator,
-                                PdfGenerator $pdfGenerator,
-                                PdfFormFiller $formFiller,
+    public function __construct(XlsxGenerator         $xlsxGenerator,
+                                PdfGenerator          $pdfGenerator,
+                                PdfFormFiller         $formFiller,
                                 ParameterBagInterface $parameterBag)
     {
         $this->xlsxGenerator = $xlsxGenerator;
@@ -93,11 +93,7 @@ final class FileDownload
             return new Response('No hay nada que generar', 404);
         }
 
-        $pathToFile = $files[0];
-        if (count($files) > 1) {
-            $pathToFile = $this->packFilesIntoZip($reportList->name(), $files);
-        }
-
+        $pathToFile = $this->packFilesIntoZip($reportList->name(), $files);
         return $this->createResponseFromFilePath($pathToFile);
     }
 

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Britannia\Domain\Repository;
 
 
+use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Student\Student;
 use Carbon\CarbonImmutable;
 
@@ -44,6 +45,8 @@ interface StudentRepositoryInterface
      * @return Student[]
      */
     public function disableStudentsWithoutActiveCourses();
+
+    public function findStudentsOfTheCorrectAge(Course $course): array;
 
 
 }

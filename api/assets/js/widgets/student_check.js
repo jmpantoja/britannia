@@ -1,7 +1,7 @@
 +function ($) {
   'use strict';
 
-  var AttendanceList = function (element, options) {
+  var StudentList = function (element, options) {
     this.$element = $(element)
     this.options = $.extend({}, this.defaults(), options)
 
@@ -14,7 +14,7 @@
   }
 
 
-  AttendanceList.prototype.defaults = function () {
+  StudentList.prototype.defaults = function () {
     return {
       'input': this.$element.data('input') || 'input.missed',
       'note': this.$element.data('note') || 'input.reason',
@@ -24,7 +24,7 @@
     }
   }
 
-  AttendanceList.prototype.run = function () {
+  StudentList.prototype.run = function () {
     if (this.isDefault()) {
       return;
     }
@@ -37,12 +37,19 @@
     })
 
     this.$element.on('click', function (event) {
+      if ($(event.target).parents('.student_cell_footer__actions').length) {
+        return
+      }
       this.toggle();
     }.bind(this))
-
   }
 
-  AttendanceList.prototype.toggle = function () {
+  StudentList.prototype.toggle = function () {
+
+    if (this.$element.parents('.frozen').length > 0) {
+      return;
+    }
+
     if (this.isOn()) {
       this.off();
       return;
@@ -54,19 +61,19 @@
     }
   }
 
-  AttendanceList.prototype.isDefault = function () {
+  StudentList.prototype.isDefault = function () {
     return this.$status === 'default';
   }
 
-  AttendanceList.prototype.isOn = function () {
+  StudentList.prototype.isOn = function () {
     return this.$status === 'on';
   }
 
-  AttendanceList.prototype.isOff = function () {
+  StudentList.prototype.isOff = function () {
     return this.$status === 'off';
   }
 
-  AttendanceList.prototype.on = function () {
+  StudentList.prototype.on = function () {
     this.$input.val(0);
     this.$element.removeClass('off');
     this.$element.addClass('on');
@@ -75,7 +82,7 @@
     this.$note.addClass('hidden');
   }
 
-  AttendanceList.prototype.off = function () {
+  StudentList.prototype.off = function () {
     this.$input.val(1);
     this.$element.removeClass('on');
     this.$element.addClass('off');
@@ -89,14 +96,14 @@
       var $this = $(this)
       var options = typeof option == 'object' && option
 
-      var data    = $this.data('br.student_check')
-      if (!data) $this.data('br.student_check', (data = new AttendanceList(this, options) ))
+      var data = $this.data('br.student_check')
+      if (!data) $this.data('br.student_check', (data = new StudentList(this, options)))
 
     })
   }
 
   $.fn.studentCheck = Plugin
-  $.fn.studentCheck.Constructor = AttendanceList
+  $.fn.studentCheck.Constructor = StudentList
 
   $(function () {
     $('[data-student-cell]').studentCheck()

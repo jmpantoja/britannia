@@ -44,7 +44,9 @@ services:
         tags:
             - { name: sonata.admin, manager_type: orm, label: Cursos }
         calls:
-            - [setSubClasses, [{adult: Britannia\Domain\Entity\Course\Course\Adult,
+            - [setSubClasses, [{
+                                intensive: Britannia\Domain\Entity\Course\Course\Intensive,    
+                                adult: Britannia\Domain\Entity\Course\Course\Adult,
                                 school: Britannia\Domain\Entity\Course\Course\School,
                                 pre_school: Britannia\Domain\Entity\Course\Course\PreSchool,
                                 support: Britannia\Domain\Entity\Course\Course\Support,

@@ -23,4 +23,24 @@ final class InvoiceList extends EntityList
     {
         return Invoice::class;
     }
+
+    public function withValueEqualToZero(): self
+    {
+        $values = $this->values()
+            ->filter(function (Invoice $invoice) {
+                return $invoice->total()->isZero();
+            });
+
+        return self::collect($values);
+    }
+
+    public function withValueGreaterThanZero()
+    {
+        $values = $this->values()
+            ->filter(function (Invoice $invoice) {
+                return !$invoice->total()->isZero();
+            });
+
+        return self::collect($values);
+    }
 }

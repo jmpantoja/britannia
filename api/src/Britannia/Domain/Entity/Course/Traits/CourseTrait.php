@@ -20,6 +20,7 @@ use Britannia\Domain\Entity\Course\Course\OneToOne;
 use Britannia\Domain\Entity\Course\Course\PreSchool;
 use Britannia\Domain\Entity\Course\Course\School;
 use Britannia\Domain\Entity\Course\Course\Support;
+use Britannia\Domain\Entity\Course\Course\Intensive;
 use Britannia\Domain\Entity\Course\CourseDto;
 use Britannia\Domain\Entity\Course\CourseId;
 use PlanB\DDD\Domain\VO\RGBA;
@@ -100,6 +101,11 @@ trait CourseTrait
     public function isAdult(): bool
     {
         return static::class === Adult::class;
+    }
+
+    public function isIntensive(): bool
+    {
+        return static::class === Intensive::class;
     }
 
     public function isSchool(): bool

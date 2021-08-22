@@ -5,7 +5,6 @@ namespace Britannia\Infraestructure\Doctrine\Repository;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\Entity\Student\StudentCourse;
-use Britannia\Domain\Entity\Student\StudentId;
 use Britannia\Domain\Repository\StudentRepositoryInterface;
 use Carbon\CarbonImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -83,6 +82,27 @@ class StudentRepository extends ServiceEntityRepository implements StudentReposi
             ->setParameter('list', $active->execute())
             ->getQuery();
 
+        return $query->execute();
+    }
+
+    public function findStudentsOfTheCorrectAge(Course $course): array
+    {
+        $builder = $this->createQueryBuilder('A')
+            ->orderBy('A.fullName.lastName', 'ASC');
+
+        if ($course->isAdult()) {
+            $builder->where('A.age >= 17');
+        }
+
+        if ($course->isSchool() or $course->isSupport()) {
+            $builder->where('A.age >= 6 AND A.age <= 20');
+        }
+
+        if ($course->isPreSchool()) {
+            $builder->where('A.age <= 6');
+        }
+
+        $query = $builder->getQuery();
         return $query->execute();
     }
 }
