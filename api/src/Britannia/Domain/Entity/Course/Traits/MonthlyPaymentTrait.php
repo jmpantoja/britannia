@@ -19,7 +19,7 @@ use Britannia\Domain\VO\Discount\JobStatusDiscountList;
 use Doctrine\Common\Collections\Collection;
 use PlanB\DDD\Domain\VO\Price;
 
-trait PaymentTrait
+trait MonthlyPaymentTrait
 {
     /**
      * @var null|Price

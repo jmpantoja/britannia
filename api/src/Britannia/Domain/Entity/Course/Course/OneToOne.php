@@ -16,22 +16,31 @@ namespace Britannia\Domain\Entity\Course\Course;
 
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Course\CourseDto;
-use Britannia\Domain\Entity\Course\CoursePaymentInterface;
 use Britannia\Domain\Entity\Course\Pass\Pass;
 use Britannia\Domain\Entity\Course\Pass\PassList;
+use Britannia\Domain\Entity\Course\PaymentInterface;
 use Britannia\Domain\Entity\Course\Traits\LessonTrait;
-use Britannia\Domain\Entity\Course\Traits\PaymentTrait;
 use Britannia\Domain\VO\Course\Pass\PassPriceList;
 use Britannia\Domain\VO\Course\TimeRange\TimeRange;
+use Britannia\Domain\VO\Discount\JobStatusDiscountList;
 use Carbon\CarbonImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use PlanB\DDD\Domain\VO\Price;
 
-class OneToOne extends Course implements CoursePaymentInterface
+class OneToOne extends Course implements PaymentInterface
 {
-    use PaymentTrait;
+    //use MonthlyPaymentTrait;
     use LessonTrait;
 
+    /**
+     * @var null|Price
+     */
+    private $enrollmentPayment;
+    /**
+     * @var Collection
+     */
+    private $discount;
     /**
      * @var ArrayCollection
      */
@@ -51,6 +60,10 @@ class OneToOne extends Course implements CoursePaymentInterface
         if (isset($dto->timeRange)) {
             $this->timeRange = $dto->timeRange;
         }
+
+        $this->enrollmentPayment = $dto->enrollmentPayment;
+        $this->discount = $dto->discount;
+
         if (isset($dto->passes)) {
             $this->updatePasses($dto->passes);
         }
@@ -109,4 +122,21 @@ class OneToOne extends Course implements CoursePaymentInterface
         return $this->passList()
             ->byDate($date);
     }
+
+    /**
+     * @return Price|null
+     */
+    public function enrollmentPayment(): ?Price
+    {
+        return $this->enrollmentPayment;
+    }
+
+    /**
+     * @return JobStatusDiscountList
+     */
+    public function discount(): JobStatusDiscountList
+    {
+        return $this->discount;
+    }
+
 }

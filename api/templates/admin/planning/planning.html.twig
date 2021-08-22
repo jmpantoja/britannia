@@ -1,12 +1,14 @@
 {% extends get_global_template('layout') %}
 
-{% block content %}
-    <div data-calendar="planning"
-         data-endpoint="{{ path(events_route) }}"
-         data-resources="{{ classRooms }}"
-         data-prev-button=".fc-prev-button span"
-         data-next-button=".fc-next-button span"
-         data-today-button=".fc-today-button"
-    >
+{% block sonata_admin_content %}
+    <div class="sonata-ba-content planning-wrapper">
+        <div data-calendar="planning"
+             data-endpoint="{{ path(events_route) }}"
+             data-resources="{{ classRooms }}"
+             data-prev-button=".fc-prev-button span"
+             data-next-button=".fc-next-button span"
+             data-today-button=".fc-today-button">
+        </div>
     </div>
 {% endblock %}
+

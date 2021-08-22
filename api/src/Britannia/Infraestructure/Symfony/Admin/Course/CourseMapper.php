@@ -17,6 +17,9 @@ namespace Britannia\Infraestructure\Symfony\Admin\Course;
 use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Course\Course\Adult;
 use Britannia\Domain\Entity\Course\Course\AdultDto;
+use Britannia\Domain\Entity\Course\Course\Intensive;
+use Britannia\Domain\Entity\Course\Course\IntensiveDto;
+use Britannia\Domain\Entity\Course\Course\OneToOne;
 use Britannia\Domain\Entity\Course\Course\OneToOneDto;
 use Britannia\Domain\Entity\Course\Course\PreSchool;
 use Britannia\Domain\Entity\Course\Course\PreSchoolDto;
@@ -24,8 +27,8 @@ use Britannia\Domain\Entity\Course\Course\School;
 use Britannia\Domain\Entity\Course\Course\SchoolDto;
 use Britannia\Domain\Entity\Course\Course\Support;
 use Britannia\Domain\Entity\Course\Course\SupportDto;
-use Britannia\Domain\Entity\Course\Course\OneToOne;
 use Britannia\Domain\Entity\Course\CourseDto;
+use Britannia\Domain\Entity\Student\StudentList;
 use Britannia\Domain\Service\Assessment\AssessmentGenerator;
 use Britannia\Domain\Service\Course\LessonGenerator;
 use PlanB\DDDBundle\Sonata\Admin\AdminMapper;
@@ -72,14 +75,13 @@ final class CourseMapper extends AdminMapper
             return PreSchool::make($dto);
         } elseif ($dto instanceof SchoolDto) {
             return School::make($dto);
-        }
-        elseif ($dto instanceof SupportDto){
+        } elseif ($dto instanceof SupportDto) {
             return Support::make($dto);
+        } elseif ($dto instanceof OneToOneDto) {
+            return OneToOne::make($dto);
+        } elseif ($dto instanceof IntensiveDto) {
+            return Intensive::make($dto);
         }
-        elseif ($dto instanceof OneToOneDto){
-            return  OneToOne::make($dto);
-        }
-
 
         return Adult::make($dto);
     }
@@ -105,8 +107,14 @@ final class CourseMapper extends AdminMapper
         $values['lessonCreator'] = $this->lessonCreator;
         $values['assessmentGenerator'] = $this->assessmentGenerator;
 
+//        $values['courseHasStudents'] = StudentList::collect($values['courseHasStudents']);
+
         if ($this->subject instanceof Adult) {
             return AdultDto::fromArray($values);
+        }
+
+        if ($this->subject instanceof Intensive) {
+            return IntensiveDto::fromArray($values);
         }
 
         if ($this->subject instanceof School) {

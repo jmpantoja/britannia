@@ -19,32 +19,46 @@
             </div>
         </div>
 
-        <div class="col-md-12 course_information start_date">
+        {% if form.singlePaid  is defined %}
+        <div class="col-md-12">
             <div class="col-md-12">
-                <h2>Incorporación</h2>
+                <h2>Forma de pago</h2>
             </div>
-
-            <div class="col-md-2">
-                {% set attr = {
-                    'data-course-information': 'date',
-                    'data-endpoint': url,
-                    'data-first-month': '#'~form.firstMonth.vars.id,
-                    'data-first-month-desc': '.start_price .info',
-                    'data-last-month': '#'~form.lastMonth.vars.id,
-                    'data-last-month-desc': '.end_price .info'
-                } %}
-
-                {{ form_row(form.startDate, {'attr': attr}) }}
-            </div>
-            <div class="col-md-2 price start_price">
-                {{ form_row(form.firstMonth) }}
-                <span class="info">{{ first_month_description }}</span>
-            </div>
-            <div class="col-md-2 price end_price">
-                {{ form_row(form.lastMonth) }}
-                <span class="info">{{ last_month_description }}</span>
+            <div class="col-md-2 ">
+                {{ form_row(form.singlePaid) }}
             </div>
         </div>
+        {% endif %}
+
+
+        {% if form.firstMonth  is defined %}
+            <div class="col-md-12 course_information start_date">
+                <div class="col-md-12">
+                    <h2>Incorporación</h2>
+                </div>
+
+                <div class="col-md-2">
+                    {% set attr = {
+                        'data-course-information': 'date',
+                        'data-endpoint': url,
+                        'data-first-month': '#'~form.firstMonth.vars.id,
+                        'data-first-month-desc': '.start_price .info',
+                        'data-last-month': '#'~form.lastMonth.vars.id,
+                        'data-last-month-desc': '.end_price .info'
+                    } %}
+
+                    {{ form_row(form.startDate, {'attr': attr}) }}
+                </div>
+                <div class="col-md-2 price start_price">
+                    {{ form_row(form.firstMonth) }}
+                    <span class="info">{{ first_month_description }}</span>
+                </div>
+                <div class="col-md-2 price end_price">
+                    {{ form_row(form.lastMonth) }}
+                    <span class="info">{{ last_month_description }}</span>
+                </div>
+            </div>
+        {% endif %}
     </div>
 
 {% endblock %}

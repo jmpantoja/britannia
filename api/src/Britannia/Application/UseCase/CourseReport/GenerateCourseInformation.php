@@ -27,16 +27,18 @@ class GenerateCourseInformation implements CourseReportCommandInterface
      * @var StudentDiscount
      */
     private $discount;
+    private bool $singlePaid;
 
     /**
      * GenerateCourseInformation constructor.
      * @param Course $course
      * @param StudentDiscount $discount
      */
-    protected function __construct(Course $course, StudentDiscount $discount)
+    protected function __construct(Course $course, StudentDiscount $discount, bool $singlePaid)
     {
         $this->course = $course;
         $this->discount = $discount;
+        $this->singlePaid = $singlePaid;
     }
 
     /**
@@ -44,9 +46,9 @@ class GenerateCourseInformation implements CourseReportCommandInterface
      * @param StudentDiscount $discount
      * @return static
      */
-    public static function make(Course $course, StudentDiscount $discount): self
+    public static function make(Course $course, StudentDiscount $discount, bool $singlePaid = true): self
     {
-        return new self($course, $discount);
+        return new self($course, $discount, $singlePaid);
     }
 
     /**
@@ -65,5 +67,12 @@ class GenerateCourseInformation implements CourseReportCommandInterface
         return $this->discount;
     }
 
+    /**
+     * @return bool
+     */
+    public function isSinglePaid(): bool
+    {
+        return $this->singlePaid;
+    }
 
 }

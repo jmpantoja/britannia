@@ -5,6 +5,8 @@
 {% block field %}
     {% if object.adult %}
         {% set label = '+18' %}
+    {% elseif object.intensive %}
+        {% set label = 'Intensivo' %}
     {% elseif object.school %}
         {% set label = 'Regular' %}
     {% elseif object.preschool %}

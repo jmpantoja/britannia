@@ -17,10 +17,14 @@ namespace Britannia\Domain\Entity\Book;
 use Britannia\Domain\VO\Course\Book\BookCategory;
 use Carbon\CarbonImmutable;
 use Exception;
+use PlanB\DDD\Domain\Behaviour\Comparable;
+use PlanB\DDD\Domain\Behaviour\Traits\ComparableTrait;
 use PlanB\DDD\Domain\VO\Price;
 
-class Book
+class Book implements Comparable
 {
+    use ComparableTrait;
+
     /**
      * @var TermId
      */
@@ -117,6 +121,5 @@ class Book
     {
         return $this->name();
     }
-
 
 }

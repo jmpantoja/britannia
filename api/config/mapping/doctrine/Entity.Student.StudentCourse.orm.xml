@@ -20,8 +20,10 @@
             <join-column nullable="false" on-delete="CASCADE"/>
         </many-to-one>
 
-        <field name="joinedAt" type="date_immutable"/>
-        <field name="leavedAt" type="date_immutable" nullable="true"/>
+        <field name="singlePaid" type="boolean"/>
+
+        <field name="joinedAt" type="datetime_immutable"/>
+        <field name="leavedAt" type="datetime_immutable" nullable="true"/>
 
         <field name="diagnostic" type="MarkReport"/>
         <field name="exam" type="MarkReport"/>

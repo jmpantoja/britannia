@@ -27,12 +27,9 @@ use Britannia\Domain\VO\Course\Periodicity\Periodicity;
 
 class AdultDto extends CourseDto implements AssessmentDtoInterface
 {
-    public ?Intensive $intensive;
-
     public ?Examiner $examiner = null;
 
     public ?Level $level = null;
-
 
     public Assessment $assessment;
 

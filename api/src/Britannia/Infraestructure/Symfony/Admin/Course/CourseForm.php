@@ -19,13 +19,16 @@ use Britannia\Domain\Entity\Course\Course\OneToOne;
 use Britannia\Domain\Entity\Course\CourseAssessmentInterface;
 use Britannia\Domain\Entity\Course\CourseCalendarInterface;
 use Britannia\Domain\Entity\Course\CourseId;
-use Britannia\Domain\Entity\Course\CoursePaymentInterface;
+use Britannia\Domain\Entity\Course\MonthlyPaymentInterface;
+use Britannia\Domain\Entity\Course\PaymentInterface;
+use Britannia\Domain\Entity\Course\SinglePaymentInterface;
 use Britannia\Domain\Entity\Level\Level;
 use Britannia\Domain\Entity\Setting\Setting;
 use Britannia\Infraestructure\Symfony\Form\Type\Assessment\AssessmentType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\AgeType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\CourseHasBooksType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\CourseHasStudentsType;
+use Britannia\Infraestructure\Symfony\Form\Type\Course\DatedPaymentType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\Discount\JobStatusDiscountListType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\EnrollmentPaymentType;
 use Britannia\Infraestructure\Symfony\Form\Type\Course\ExaminerType;
@@ -55,13 +58,10 @@ final class CourseForm extends AdminForm
      */
     private Setting $setting;
 
-
     public function setSettings(Setting $setting): self
     {
-
         $this->setting = $setting;
         return $this;
-
     }
 
     public function configure(Course $course): self
@@ -74,7 +74,8 @@ final class CourseForm extends AdminForm
         $this->calendarTab('Calendario', $course);
         $this->priceTab('Precio', $course);
         $this->passTab('Bonos', $course);
-        $this->studentsTab('Alumnos y profesores', $course);
+        $this->teachersTab('Profesores', $course);
+        $this->studentsTab('Alumnos', $course);
 
         return $this;
     }
@@ -103,35 +104,23 @@ final class CourseForm extends AdminForm
                 'label' => 'Descripción',
             ]);
 
-        $this->group('Curso', ['class' => 'col-md-3'])
+        $this->group('Curso', ['class' => 'col-md-3 '])
             ->add('numOfPlaces', PositiveIntegerType::class, [
                 'label' => 'Plazas',
                 'required' => true
             ]);
 
-        if ($course->isOnetoOne()) {
-            $this->group('Coste', ['class' => 'col-md-3'])
-                ->add('enrollmentPayment', EnrollmentPaymentType::class, [
-                    'label' => 'Matrícula'
-                ]);
-        }
-
 
         if ($course->isSchool()) {
-            $this->group('Curso', ['class' => 'col-md-3'])
-                ->add('schoolCourses', SchoolCourseListType::class, [
-                    'label' => 'Curso Escolar'
-                ]);
+            $this->add('schoolCourses', SchoolCourseListType::class, [
+                'label' => 'Curso Escolar'
+            ]);
         }
 
-        if ($course->isAdult()) {
-            $this->group('Curso', ['class' => 'col-md-3'])
-                ->add('intensive', IntensiveType::class, [
-                    'label' => 'Intensivo'
-                ])
-                ->add('examiner', ExaminerType::class, [
-                    'label' => 'Examinador'
-                ])
+        if ($course->isAdult() or $course->isIntensive()) {
+            $this->add('examiner', ExaminerType::class, [
+                'label' => 'Examinador'
+            ])
                 ->add('level', LevelType::class, [
                     'required' => false,
                     'label' => 'Nivel',
@@ -142,20 +131,19 @@ final class CourseForm extends AdminForm
             return $this;
         }
 
-        $this->tab($name);
-
         $this->group('Evaluación', ['class' => 'col-md-6'])
             ->add('assessment', AssessmentType::class, [
                 'label' => false,
                 'data' => $course->assessment(),
-                'is_school' => $course instanceof Course\School,
-                'is_adult' => $course instanceof Course\Adult,
+                'is_school' => $course->isSchool(),
+                'is_adult' => $course->isAdult() or $course->isIntensive(),
             ]);
 
         return $this;
     }
 
-    private function studentsTab(string $name, Course $course): self
+
+    private function teachersTab(string $name, Course $course)
     {
         if (!($course->id() instanceof CourseId)) {
             return $this;
@@ -163,19 +151,32 @@ final class CourseForm extends AdminForm
 
         $this->tab($name);
 
-        $this->group('Profesores', ['class' => 'col-md-5'])
+        $this->group('Profesores', ['class' => 'col-md-6'])
             ->add('teachers', TeachersType::class, [
                 'btn_add' => false,
                 'label' => false
             ]);
 
-        $this->group('Alumnos', ['class' => 'col-md-7'])
+        return $this;
+
+    }
+
+    private function studentsTab(string $name, Course $course)
+    {
+        if (!($course->id() instanceof CourseId)) {
+            return $this;
+        }
+
+        $this->tab($name);
+
+        $this->group('Alumnos', ['class' => 'col-md-12'])
             ->add('courseHasStudents', CourseHasStudentsType::class, [
                 'course' => $this->course,
                 'label' => false
             ]);
 
         return $this;
+
     }
 
     private function calendarTab(string $name, Course $course): self
@@ -198,28 +199,44 @@ final class CourseForm extends AdminForm
 
     private function priceTab(string $name, Course $course): self
     {
-        if (!($course instanceof CoursePaymentInterface) or $course instanceof OneToOne) {
+        if (!($course instanceof PaymentInterface)) {
             return $this;
         }
 
         $this->tab($name);
-        $this->group('Coste', ['class' => 'col-md-6'])
+        $this->group('Precio', ['class' => 'col-md-3'])
             ->add('enrollmentPayment', EnrollmentPaymentType::class, [
                 'label' => 'Matrícula',
                 'empty_data' => $this->setting->enrollmentPayment()
-            ])
-            ->add('monthlyPayment', PriceType::class, [
+            ]);
+
+        if ($course instanceof SinglePaymentInterface) {
+            $this->add('singlePayment', DatedPaymentType::class, [
+                'label' => 'Pago único',
+            ]);
+            $this->add('firstPayment', DatedPaymentType::class, [
+                'label' => 'Primer pago',
+            ]);
+            $this->add('secondPayment', DatedPaymentType::class, [
+                'label' => 'Segundo pago',
+            ]);
+        }
+
+        if ($course instanceof MonthlyPaymentInterface) {
+            $this->add('monthlyPayment', PriceType::class, [
                 'label' => 'Mensualidad',
                 'empty_data' => $this->setting->monthlyPayment()
+            ]);
+        }
 
-            ])
+        $this->group('Material', ['class' => 'col-md-5'])
             ->add('books', CourseHasBooksType::class, [
                 'label' => 'Material',
             ]);
 
-        $this->group('Descuentos', ['class' => 'col-md-6'])
+        $this->group('Descuentos', ['class' => 'col-md-4'])
             ->add('discount', JobStatusDiscountListType::class, [
-                'label' => false
+                'label' => 'Descuentos'
             ]);
 
         return $this;

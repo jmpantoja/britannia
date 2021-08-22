@@ -18,19 +18,19 @@ use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Course\CourseAssessmentInterface;
 use Britannia\Domain\Entity\Course\CourseCalendarInterface;
 use Britannia\Domain\Entity\Course\CourseDto;
-use Britannia\Domain\Entity\Course\CoursePaymentInterface;
+use Britannia\Domain\Entity\Course\MonthlyPaymentInterface;
 use Britannia\Domain\Entity\Course\Traits\AssessmentTrait;
 use Britannia\Domain\Entity\Course\Traits\CalendarTrait;
-use Britannia\Domain\Entity\Course\Traits\PaymentTrait;
+use Britannia\Domain\Entity\Course\Traits\MonthlyPaymentTrait;
 use Britannia\Domain\VO\Course\Assessment\Assessment;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
-class School extends Course implements CourseAssessmentInterface, CourseCalendarInterface, CoursePaymentInterface
+class School extends Course implements CourseAssessmentInterface, CourseCalendarInterface, MonthlyPaymentInterface
 {
     use AssessmentTrait;
     use CalendarTrait;
-    use PaymentTrait;
+    use MonthlyPaymentTrait;
 
     /**
      * @var null|string

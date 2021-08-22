@@ -1,0 +1,29 @@
+{% if action == 'edit' %}
+    <li>
+        <div class="btn-group">
+            {% set recipient = 0 %}
+            {% if(app.user.manager) %}
+                {% set recipient = 3 %}
+            {% endif %}
+
+            {% set filter = {
+                student: {
+                    value: app.request.get('id')
+                },
+                status: {
+                    value: {
+                        recipient: recipient,
+                        status: 0
+                    }
+                }
+            } %}
+            {% set url = admin.configurationPool.adminByAdminCode('admin.issue').generateUrl('list', {filter: filter}) %}
+
+            <a class="btn btn-success" href="{{ url }}">
+                <i class="fa fa-id-card"></i> {{ 'Observaciones'|trans({}, 'SonataAdminBundle') }}
+            </a>
+        </div>
+    </li>
+
+{% endif %}
+

@@ -28,7 +28,7 @@ doctrine:
 
                 # With Symfony 3.3, remove the `resolve:` prefix
                 url: '%env(resolve:DATABASE_URL)%'
-                                
+
 
                 mapping_types:
                     #Academy
@@ -52,7 +52,6 @@ doctrine:
                     DayOfWeek: DayOfWeek
                     Examiner: Examiner
                     Level: Level
-                    Intensive: Intensive
                     JobStatusDiscountList: JobStatusDiscountList
                     FamilyDiscountList: FamilyDiscountList
                     PassId: PassId
@@ -121,7 +120,7 @@ doctrine:
 
         types:
             #Academy
-            AcademyId:  Britannia\Infraestructure\Doctrine\DBAL\Type\Academy\AcademyIdType
+            AcademyId: Britannia\Infraestructure\Doctrine\DBAL\Type\Academy\AcademyIdType
 
             #Book
             BookId: Britannia\Infraestructure\Doctrine\DBAL\Type\Book\BookIdType
@@ -140,7 +139,6 @@ doctrine:
             DayOfWeek: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\DayOfWeekType
             Examiner: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\ExaminerType
             Level: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\LevelType
-            Intensive: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\IntensiveType
             CourseStatus: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\CourseStatusType
             CourseId: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\CourseId
             PassId: Britannia\Infraestructure\Doctrine\DBAL\Type\Course\PassId
@@ -170,14 +168,14 @@ doctrine:
             TypeOfNotification: \Britannia\Infraestructure\Doctrine\DBAL\Type\Notification\TypeOfNotificationType
 
             #School
-            SchoolId:  Britannia\Infraestructure\Doctrine\DBAL\Type\School\SchoolIdType
+            SchoolId: Britannia\Infraestructure\Doctrine\DBAL\Type\School\SchoolIdType
 
             #SchoolCourse
-            SchoolHistory:  Britannia\Infraestructure\Doctrine\DBAL\Type\SchoolCourse\SchoolHistoryType
+            SchoolHistory: Britannia\Infraestructure\Doctrine\DBAL\Type\SchoolCourse\SchoolHistoryType
 
             #Staff
-            StaffMemberId:  Britannia\Infraestructure\Doctrine\DBAL\Type\Staff\StaffMemberIdType
-            TeacherStatus:  Britannia\Infraestructure\Doctrine\DBAL\Type\Staff\StatusType
+            StaffMemberId: Britannia\Infraestructure\Doctrine\DBAL\Type\Staff\StaffMemberIdType
+            TeacherStatus: Britannia\Infraestructure\Doctrine\DBAL\Type\Staff\StatusType
 
             #Student
             StudentId: Britannia\Infraestructure\Doctrine\DBAL\Type\Student\StudentIdType

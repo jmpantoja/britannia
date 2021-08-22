@@ -50,6 +50,7 @@ final class BoundariesInformation
 
     public function firstMonthly(Course $course, ?CarbonImmutable $date = null): Price
     {
+
         $discount = $this->getDiscount($date);
         $concept = $this->firstMonthDiscount->calcule($course, $discount);
         return $concept->getPrice();

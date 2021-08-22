@@ -56,8 +56,6 @@ final class StudentForm extends AdminForm
 
         $this->contactTab('Contacto', $student);
         $this->personalTab('Personal', $student);
-
-        $this->coursesTab('Cursos', $student);
         $this->paymentTab('Pago', $student);
 
         if ($student instanceof Child) {
@@ -163,24 +161,6 @@ final class StudentForm extends AdminForm
                     'birthDay' => $student->birthDate()
                 ]);
         }
-    }
-
-    /**
-     * @param Student $student
-     */
-    protected function coursesTab(string $name, Student $student): void
-    {
-        if (!($student->id() instanceof StudentId)) {
-            return;
-        }
-
-        $this->tab($name);
-
-        $this->group('Cursos en Activo ', ['class' => 'col-md-12'])
-            ->add('studentHasCourses', StudentHasCoursesType::class, [
-                'label' => false,
-                'student' => $student
-            ]);
     }
 
     /**

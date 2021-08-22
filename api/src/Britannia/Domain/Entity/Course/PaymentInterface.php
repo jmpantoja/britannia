@@ -15,13 +15,10 @@ namespace Britannia\Domain\Entity\Course;
 
 
 use Britannia\Domain\VO\Discount\JobStatusDiscountList;
-use Doctrine\Common\Collections\Collection;
 use PlanB\DDD\Domain\VO\Price;
 
-interface CoursePaymentInterface
+interface PaymentInterface
 {
-    public function monthlyPayment(): ?Price;
-
     public function enrollmentPayment(): ?Price;
 
     public function discount(): ?JobStatusDiscountList;

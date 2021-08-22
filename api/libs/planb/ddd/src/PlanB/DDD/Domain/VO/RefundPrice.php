@@ -23,5 +23,9 @@ class RefundPrice extends Price
         return static::make($price->toFloat());
     }
 
+    public function isZero(): bool
+    {
+        return $this->toFloat() == 0;
+    }
 
 }

@@ -48,4 +48,15 @@ final class InvoiceDetailList extends EntityList
 
         return RefundPrice::make($total);
     }
+
+    public function removeWithoutPrice(): self
+    {
+        $input = $this->values()
+            ->filter(function (InvoiceDetail $detail) {
+                return !$detail->price()->isZero();
+            });
+
+        return self::collect($input);
+    }
+
 }

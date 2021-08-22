@@ -73,7 +73,7 @@ final class SettingForm extends AdminForm
                 ]
             ])
             ->add('afternoon', DateTimeRangePickerType::class, [
-                'label' => 'Mañana',
+                'label' => 'Tarde',
                 'block_prefix' => 'time_range',
                 'field_options' => [
                     'dp_pick_time' => true,
@@ -93,12 +93,20 @@ final class SettingForm extends AdminForm
 
         $this->group('Redes', ['class' => 'col-md-4'])
             ->add('facebook', TextType::class, [
-                'label' => 'Facebook'
+                'label' => 'Facebook',
+                'required' => false
             ])
             ->add('twitter', TextType::class, [
-                'label' => 'Twitter'
+                'label' => 'Twitter',
+                'required' => false
+            ])
+            ->add('instagram', TextType::class, [
+                'label' => 'Instagram',
+                'required' => false
+            ])->add('flickr', TextType::class, [
+                'label' => 'Flickr',
+                'required' => false
             ]);
-
     }
 
     private function tabSepa(string $tabname)

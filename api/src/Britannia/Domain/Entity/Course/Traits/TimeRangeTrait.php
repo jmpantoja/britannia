@@ -60,13 +60,6 @@ trait TimeRangeTrait
         $status = $this->timeRange->status();
         $this->notify(CourseHasChangedStatus::make($this, $status));
 
-        if($status->isFinalized()){
-            collect($this->courseHasStudents())
-                ->each(function (StudentCourse $studentCourse){
-                    $studentCourse->finish();
-                });
-        }
-
         return $this;
     }
 

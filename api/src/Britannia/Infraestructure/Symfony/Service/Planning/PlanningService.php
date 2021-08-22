@@ -60,7 +60,6 @@ class PlanningService
     public function getEvents(CarbonImmutable $date, ?StaffMember $member = null): array
     {
         $lessons = $this->lessonRepository->findByDay($date, $member);
-
         $data = [];
 
         foreach ($lessons as $lesson) {

@@ -18,23 +18,21 @@ use Britannia\Domain\Entity\Course\Course;
 use Britannia\Domain\Entity\Course\CourseAssessmentInterface;
 use Britannia\Domain\Entity\Course\CourseCalendarInterface;
 use Britannia\Domain\Entity\Course\CourseDto;
-use Britannia\Domain\Entity\Course\CoursePaymentInterface;
+use Britannia\Domain\Entity\Course\MonthlyPaymentInterface;
 use Britannia\Domain\Entity\Course\Traits\AssessmentTrait;
 use Britannia\Domain\Entity\Course\Traits\CalendarTrait;
-use Britannia\Domain\Entity\Course\Traits\PaymentTrait;
+use Britannia\Domain\Entity\Course\Traits\MonthlyPaymentTrait;
 use Britannia\Domain\VO\Course\Assessment\Assessment;
 use Britannia\Domain\VO\Course\Examiner\Examiner;
 use Britannia\Domain\VO\Course\Intensive\Intensive;
 use Britannia\Domain\VO\Course\Level\Level;
 use Doctrine\Common\Collections\ArrayCollection;
 
-class Adult extends Course implements CourseAssessmentInterface,  CourseCalendarInterface, CoursePaymentInterface
+class Adult extends Course implements CourseAssessmentInterface,  CourseCalendarInterface, MonthlyPaymentInterface
 {
-
     use AssessmentTrait;
     use CalendarTrait;
-    use PaymentTrait;
-
+    use MonthlyPaymentTrait;
 
     /**
      * @var null|Intensive
@@ -65,7 +63,6 @@ class Adult extends Course implements CourseAssessmentInterface,  CourseCalendar
     {
         $this->examiner = $dto->examiner;
         $this->level = $dto->level;
-        $this->intensive = $dto->intensive;
 
         $this->updateAssessment($dto);
         $this->changeCalendar($dto->timeTable, $dto->lessonCreator);
@@ -74,15 +71,6 @@ class Adult extends Course implements CourseAssessmentInterface,  CourseCalendar
         parent::update($dto);
         return $this;
     }
-
-    /**
-     * @return Intensive|null
-     */
-    public function intensive(): ?Intensive
-    {
-        return $this->intensive;
-    }
-
 
     /**
      * @return Examiner|null

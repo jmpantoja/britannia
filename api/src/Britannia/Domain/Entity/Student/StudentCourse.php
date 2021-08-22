@@ -24,6 +24,7 @@ use PlanB\DDD\Domain\Behaviour\Comparable;
 use PlanB\DDD\Domain\Behaviour\Traits\ComparableTrait;
 use PlanB\DDD\Domain\Model\Traits\AggregateRootTrait;
 
+
 class StudentCourse implements Comparable
 {
     use AggregateRootTrait;
@@ -60,6 +61,11 @@ class StudentCourse implements Comparable
      * @var CarbonImmutable
      */
     private $leavedAt;
+
+    /**
+     * @var bool
+     */
+    private $singlePaid = true;
 
 
     public static function make(Student $student, Course $course): self
@@ -177,12 +183,7 @@ class StudentCourse implements Comparable
 
     public function isActive(): bool
     {
-
         $course = $this->course();
-        if ($course->isPending()) {
-            return true;
-        }
-
         if ($course->isFinalized()) {
             return false;
         }
@@ -190,16 +191,18 @@ class StudentCourse implements Comparable
         return is_null($this->leavedAt);
     }
 
-    public function inCourse(): bool
+    public function onCourse(): bool
     {
         return is_null($this->leavedAt);
     }
 
-
-    public function finish(): self
+    public function leaveCourse(): self
     {
-        $this->leavedAt = CarbonImmutable::today();
+        if (!$this->onCourse()) {
+            return $this;
+        }
 
+        $this->leavedAt = CarbonImmutable::now();
         $event = StudentHasLeavedCourse::make($this);
         $this->notify($event);
 
@@ -210,7 +213,6 @@ class StudentCourse implements Comparable
     {
         if ($lesson->course()->equals($this->course())) {
             return $this->isActiveOnDate($lesson->day());
-
         }
         return false;
     }
@@ -224,4 +226,24 @@ class StudentCourse implements Comparable
 
         return $date->isAfter($this->joinedAt);
     }
+
+    public function compareByJoinDate(StudentCourse $other): int
+    {
+        return $this->joinedAt->timestamp <=> $other->joinedAt->timestamp;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSinglePaid(): bool
+    {
+        return $this->singlePaid;
+    }
+
+    public function setSinglePaid(bool $singlePaid): self
+    {
+        $this->singlePaid = $singlePaid;
+        return $this;
+    }
+
 }

@@ -189,5 +189,4 @@ abstract class EntityList implements Countable, IteratorAggregate
         return $this->values();
     }
 
-
 }

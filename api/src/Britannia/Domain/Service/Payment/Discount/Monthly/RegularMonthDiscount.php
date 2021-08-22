@@ -23,8 +23,9 @@ use Britannia\Domain\VO\Discount\FamilyDiscountList;
 use Britannia\Domain\VO\Discount\StudentDiscount;
 use Britannia\Domain\VO\Student\Job\JobStatus;
 use PlanB\DDD\Domain\VO\Percent;
+use PlanB\DDD\Domain\VO\Price;
 
-final class RegularMonthDiscount
+class RegularMonthDiscount
 {
 
     /**
@@ -36,7 +37,7 @@ final class RegularMonthDiscount
      */
     private CourseDiscountCalculator $discountCalculator;
 
-    public function __construct(Setting $setting,
+    public function __construct(Setting                  $setting,
                                 CourseDiscountCalculator $discountCalculator)
     {
         $this->familyDiscountList = $setting->familyDiscount();
@@ -46,7 +47,17 @@ final class RegularMonthDiscount
     public function calcule(Course $course, StudentDiscount $discount): Concept
     {
         $price = $course->monthlyPayment();
+        return $this->calculeFromPrice($price, $discount, $course);
+    }
 
+    /**
+     * @param Price $price
+     * @param StudentDiscount $discount
+     * @param Course $course
+     * @return Concept
+     */
+    protected function calculeFromPrice(Price $price, StudentDiscount $discount, Course $course): Concept
+    {
         if ($discount->applyJobStatusDiscount()) {
             $percent = $this->getJobStausPercent($course, $discount->jobStatus());
             return Concept::jobStatus($price, $percent);
@@ -63,7 +74,7 @@ final class RegularMonthDiscount
      * @param StudentDiscount $discount
      * @return mixed
      */
-    private function getJobStausPercent(Course $course, ?JobStatus $jobStatus): Percent
+    protected function getJobStausPercent(Course $course, ?JobStatus $jobStatus): Percent
     {
         $courseDiscount = $this->discountCalculator->calculate($course, $jobStatus);
         return $courseDiscount->getDiscount();
@@ -73,9 +84,10 @@ final class RegularMonthDiscount
      * @param $order
      * @return Percent
      */
-    private function getFamlilyPercent($order): Percent
+    protected function getFamlilyPercent($order): Percent
     {
-
         return $this->familyDiscountList->getByFamilyOrder($order);
     }
+
+
 }

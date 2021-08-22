@@ -20,6 +20,10 @@
 
         <field name="facebook" nullable="true"/>
         <field name="twitter" nullable="true"/>
+        <field name="instagram" nullable="true"/>
+        <field name="flickr" nullable="true"/>
+
+
         <field name="mail" type="email" nullable="true"/>
         <field name="web" nullable="true"/>
 

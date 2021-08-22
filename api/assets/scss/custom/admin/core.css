@@ -5,7 +5,7 @@
     max-width: 160px;
 }
 
-.logo span{
+.logo span {
     font-family: 'Open Sans', Helvetica, Arial, sans-serif;
     font-weight: 400;
     font-style: italic;
@@ -17,7 +17,7 @@
     height: 120px;
 }
 
-.skin-black .main-header .logo, .skin-black .main-header .navbar{
+.skin-black .main-header .logo, .skin-black .main-header .navbar {
     background-color: #3c8dbc;
 }
 
@@ -35,6 +35,16 @@
     color: gainsboro;
 }
 
+.skin-black .wrapper {
+    max-height: 100vh;
+    overflow: auto;
+}
+
+.skin-black .content-wrapper {
+    height: 900px;
+}
+
+
 .breadcrumb > .active {
     color: #333;
 }
@@ -48,12 +58,21 @@
     padding: 10px;
 }
 
-.content-header .container-fluid .navbar-collapse{
+.content-header .container-fluid .navbar-collapse {
     padding: 0;
 }
 
 .content-header .actions-navbar .btn-group {
     margin-left: 8px;
+}
+
+.content-wrapper {
+    overflow-y: hidden;
+    /*overflow-y: auto;*/
+}
+
+.content {
+    padding-bottom: 0;
 }
 
 .navbar > .container-fluid .navbar-brand {
@@ -76,3 +95,10 @@
     overflow: hidden;
 }
 
+.box {
+    margin-bottom: 0;
+}
+
+.box-body {
+    padding-bottom: 0;
+}

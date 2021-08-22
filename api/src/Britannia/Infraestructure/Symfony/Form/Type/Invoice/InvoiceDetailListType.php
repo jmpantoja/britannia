@@ -34,6 +34,7 @@ final class InvoiceDetailListType extends AbstractSingleType
      */
     public function customOptions(OptionsResolver $resolver)
     {
+
         $resolver->setDefaults([
             'required' => true,
             'by_reference' => false,

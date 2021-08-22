@@ -16,14 +16,10 @@ namespace PlanB\DDDBundle\Sonata;
 
 use ApiPlatform\Core\DataPersister\DataPersisterInterface;
 use Doctrine\Common\Persistence\ManagerRegistry;
-use Doctrine\Common\Util\ClassUtils;
-use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Types\Type;
 use League\Tactician\CommandBus;
-use PlanB\DDDBundle\Doctrine\DBAL\Type\EntityIdType;
-use Ramsey\Uuid\Uuid;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager as ORMModelManager;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
+use Symfony\Contracts\Cache\TagAwareCacheInterface;
 
 class ModelManager extends ORMModelManager
 {
@@ -40,10 +36,10 @@ class ModelManager extends ORMModelManager
      */
     private $dataPersister;
 
-    /** @var AdapterInterface */
+    /** @var TagAwareCacheInterface */
     private $adapter;
 
-    public function __construct(ManagerRegistry $registry, DataPersisterInterface $dataPersister, AdapterInterface $cache)
+    public function __construct(ManagerRegistry $registry, DataPersisterInterface $dataPersister, TagAwareCacheInterface $cache)
     {
         $this->dataPersister = $dataPersister;
 
@@ -76,7 +72,9 @@ class ModelManager extends ORMModelManager
     {
         $className = get_class($object);
         do {
-            $this->adapter->delete(normalize_key($className));
+            $key = normalize_key($className);
+            $this->adapter->delete($key);
+            $this->adapter->invalidateTags([$key]);
             $className = get_parent_class($className);
         } while ($className);
     }

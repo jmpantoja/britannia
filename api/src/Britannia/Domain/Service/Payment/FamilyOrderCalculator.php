@@ -15,6 +15,7 @@ namespace Britannia\Domain\Service\Payment;
 
 
 use Britannia\Domain\Entity\Course\Course;
+use Britannia\Domain\Entity\Course\SinglePaymentInterface;
 use Britannia\Domain\Entity\Setting\Setting;
 use Britannia\Domain\Entity\Student\Student;
 use Britannia\Domain\VO\Course\Pass\PassPriceList;
@@ -95,6 +96,10 @@ final class FamilyOrderCalculator
     {
         if ($course instanceof Course\OneToOne) {
             return $course->priceOfTheMonth($this->passPriceList);
+        }
+
+        if ($course instanceof SinglePaymentInterface) {
+            return $course->singlePayment()->price();
         }
 
         return $course->monthlyPayment();

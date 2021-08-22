@@ -41,9 +41,10 @@ class GenerateCourseInformationUseCase implements UseCaseInterface
     {
         $course = $command->course();
         $discount = $command->discount();
+        $singlePaid = $command->isSinglePaid();
 
         return ReportList::make($course->name(), [
-            CourseInformation::make($course, $discount, $this->generator, $this->setting)
+            CourseInformation::make($course, $discount, $this->generator, $singlePaid, $this->setting)
         ]);
 
     }

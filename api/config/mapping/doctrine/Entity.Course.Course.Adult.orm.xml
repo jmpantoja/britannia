@@ -6,7 +6,6 @@
 
     <entity name="Britannia\Domain\Entity\Course\Course\Adult" table="course_adult">
 
-        <field name="intensive" type="Intensive"/>
         <field name="schedule" type="object"/>
 
         <field name="monthlyPayment" type="price"/>

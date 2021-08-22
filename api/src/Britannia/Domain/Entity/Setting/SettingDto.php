@@ -28,6 +28,9 @@ final class SettingDto extends Dto
 
     public ?string $facebook;
     public ?string $twitter;
+    public ?string $instagram;
+    public ?string $flickr;
+
     public ?string $mail;
     public ?string $web;
 

@@ -45,8 +45,10 @@
   }
 
   Planning.prototype.calendar = function () {
+
     return new Calendar(this.$el, {
-      plugins: [resourceTimeGrid],
+      schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
+      plugins: [interaction, dayGrid, resourceTimeGrid],
       locale: 'es',
       timeZone: 'local',
       titleFormat: {year: 'numeric', month: 'long', day: 'numeric', weekday: 'long'},
@@ -56,7 +58,7 @@
       minTime: '09:00:00',
       maxTime: '23:00:00',
       allDaySlot: false,
-      slotDuration: '00:05:00',
+      slotDuration: '00:15:00',
       slotLabelFormat: {
         hour: 'numeric',
         minute: '2-digit',
@@ -82,16 +84,21 @@
   }
 
   Planning.prototype.eventRender = function (info) {
-    var data = info.event.extendedProps;
-    var attendances = $('<div class="attendance_sumary"><br/></div>');
 
-    $.each(data.attendances, (index, attendance) => {
-      attendances.append(`<span class=${attendance.status} title="${attendance.student}"></span>`);
-    });
-
-    $(info.el).find('.fc-time').html(data.schedule);
-    $(info.el).find('.fc-title').html(`<p>${info.event.title}</p>`);
-    $(info.el).find('.fc-title').append(attendances);
+    console.log(info.event.start)
+    console.log(info.event.end)
+    console.log(info.el)
+    //return info
+    // var data = info.event.extendedProps;
+    // var attendances = $('<div class="attendance_sumary"><br/></div>');
+    //
+    // $.each(data.attendances, (index, attendance) => {
+    //   attendances.append(`<span class=${attendance.status} title="${attendance.student}"></span>`);
+    // });
+    //
+    // $(info.el).find('.fc-time').html(data.schedule);
+    // $(info.el).find('.fc-title').html(`<p>${info.event.title}</p>`);
+    // $(info.el).find('.fc-title').append(attendances);
 
   }
 

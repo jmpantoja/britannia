@@ -206,7 +206,6 @@ abstract class AbstractCompoundType extends AbstractType implements DataMapperIn
      */
     public function mapFormsToData($forms, &$data): void
     {
-
         $forms = iterator_to_array($forms);
 
         $values = array_map(function ($form) {
@@ -232,7 +231,6 @@ abstract class AbstractCompoundType extends AbstractType implements DataMapperIn
 
         if ($this->validate($values, $forms, $constraint)) {
             $data = $this->customMapping($values, $original);
-            return;
         }
     }
 
