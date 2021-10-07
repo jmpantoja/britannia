@@ -4,6 +4,7 @@ twig:
     strict_variables: '%kernel.debug%'
 
     globals:
+        public_dir: '%kernel.project_dir%/public'
         attendances: '@Britannia\Infraestructure\Symfony\Service\Attendance\AttendanceService'
         schedule: '@Britannia\Infraestructure\Symfony\Service\Schedule\ScheduleService'
         skill_marks: '@Britannia\Infraestructure\Symfony\Service\Assessment\SkillMarkService'
