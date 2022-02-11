@@ -25,7 +25,7 @@
         "masonry": "^0.0.2",
         "masonry-layout": "^4.2",
         "moment": "^2.10",
-        "node-sass": "^4.11.0",
+        "node-sass": "^7.0.0",
         "path": "^0.12.7",
         "readmore-js": "^2.2.1",
         "respond.js": "^1.4.2",
