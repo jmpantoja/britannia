@@ -30,7 +30,7 @@
         "readmore-js": "^2.2.1",
         "respond.js": "^1.4.2",
         "sass-loader": "^7.0.1",
-        "select2": "^3.5",
+        "select2": "^4.0",
         "select2-bootstrap-css": "^1.4",
         "trumbowyg": "^2.21.0",
         "urijs": "^1.19.2",
