@@ -24,7 +24,7 @@
         "jquery.scrollto": "^1.4",
         "masonry": "^0.0.2",
         "masonry-layout": "^4.2",
-        "moment": "^2.10",
+        "moment": "^2.29",
         "node-sass": "^4.11.0",
         "path": "^0.12.7",
         "readmore-js": "^2.2.1",
